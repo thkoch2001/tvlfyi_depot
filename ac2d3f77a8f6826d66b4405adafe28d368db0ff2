@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9395aee1_ab518e22",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-25T00:30:39Z",
+      "side": 1,
+      "message": "@flokli@flokli.de Before I go and invent a solution, please take a look, read carefully and let me know how you envision this in the architecture in your mind.",
+      "revId": "ac2d3f77a8f6826d66b4405adafe28d368db0ff2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f670e304_5a99ae6c",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-25T00:30:39Z",
+      "side": 1,
+      "message": "@flokli@flokli.de Same for this check.",
+      "revId": "ac2d3f77a8f6826d66b4405adafe28d368db0ff2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
