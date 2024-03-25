@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12c0472c_601283f6",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1594,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-25T17:28:52Z",
+      "side": 1,
+      "message": "\"a\"?",
+      "range": {
+        "startLine": 1594,
+        "startChar": 59,
+        "endLine": 1594,
+        "endChar": 61
+      },
+      "revId": "747f877f4306e8b1498017905d0cc53a9f881328",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf20bbdf_12c21132",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1598,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-25T17:28:52Z",
+      "side": 1,
+      "message": "elem?",
+      "range": {
+        "startLine": 1598,
+        "startChar": 22,
+        "endLine": 1598,
+        "endChar": 25
+      },
+      "revId": "747f877f4306e8b1498017905d0cc53a9f881328",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96021aab_f6435ee8",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1601,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-25T17:28:52Z",
+      "side": 1,
+      "message": "What about adding `into_iter()` to NixContext, describing this transformation here with a map, and then  assigning it?",
+      "revId": "747f877f4306e8b1498017905d0cc53a9f881328",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
