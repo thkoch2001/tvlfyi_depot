@@ -26,6 +26,7 @@ members = [
   "eval/builtin-macros",
   "glue",
   "nix-compat",
+  "py-nix-compat",
   "serde",
   "store",
 ]
