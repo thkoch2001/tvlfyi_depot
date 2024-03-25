@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b5e710a8_c2e3b674",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-25T17:32:18Z",
+      "side": 1,
+      "message": "Why do we only need the invariant checks for this builtin, and not others too?\n\n`appendContext` lives in `tvix-eval`, not `tvix-glue`, so the only way it could check this is through `EvalIO`, but this has other implications (aka triggering builds and blocking on them), so I need to understand the reasoning behind these invariant checks.",
+      "parentUuid": "9395aee1_ab518e22",
+      "revId": "ac2d3f77a8f6826d66b4405adafe28d368db0ff2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f670e304_5a99ae6c",
         "filename": "tvix/eval/src/builtins/mod.rs",
         "patchSetId": 1
