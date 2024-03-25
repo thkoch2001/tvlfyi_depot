@@ -692,6 +692,66 @@ mod pure_builtins {
         Ok(Value::attrs(NixAttrs::from_iter(elements)))
     }
 
+    #[builtin("appendContext")]
+    #[allow(non_snake_case)]
+    async fn builtin_appendContext(
+        co: GenCo,
+        origin: Value,
+        added_context: Value,
+    ) -> Result<Value, ErrorKind> {
+        let mut ctx_elements: HashSet<NixContextElement> = HashSet::new();
+        let span = generators::request_span(&co).await;
+        let origin = origin
+            .coerce_to_string(
+                co,
+                CoercionKind {
+                    strong: true,
+                    import_paths: true,
+                },
+                span,
+            )
+            .await?;
+        let mut origin = origin.to_contextful_str()?;
+
+        let added_context = added_context.to_attrs()?;
+        for (context_key, context_element) in added_context.into_iter() {
+            // Invariant checks:
+            // - TODO: context_key must be a valid store path.
+            // - force `context_element` to attrs.
+            let context_element = context_element.to_attrs()?;
+            if let Some(path) = context_element.select("path") {
+                if path.as_bool()? {
+                    ctx_elements.insert(NixContextElement::Plain(context_key.to_string()));
+                }
+            }
+            if let Some(all_outputs) = context_element.select("allOutputs") {
+                if all_outputs.as_bool()? {
+                    // TODO: check if `context_key` is a derivation in addition.
+                    ctx_elements.insert(NixContextElement::Derivation(context_key.to_string()));
+                }
+            }
+            if let Some(some_outputs) = context_element.select("outputs") {
+                let some_outputs = some_outputs.to_list()?;
+                // TODO: check if `context_key` is a derivation.
+                for output in some_outputs.into_iter() {
+                    let output = output.to_str()?;
+                    ctx_elements.insert(NixContextElement::Single {
+                        derivation: context_key.to_string(),
+                        name: output.to_string(),
+                    });
+                }
+            }
+        }
+
+        if let Some(origin_ctx) = origin.context_mut() {
+            // FUTUREWORK(performance): avoid this clone
+            // and extend in-place.
+            *origin_ctx = origin_ctx.clone().join(&mut ctx_elements.into());
+        }
+
+        Ok(origin.into())
+    }
+
     #[builtin("hashString")]
     #[allow(non_snake_case)]
     async fn builtin_hashString(co: GenCo, algo: Value, s: Value) -> Result<Value, ErrorKind> {
