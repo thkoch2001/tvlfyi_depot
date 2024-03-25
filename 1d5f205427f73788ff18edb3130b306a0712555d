@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28d6901e_a9994083",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-25T11:04:05Z",
+      "side": 1,
+      "message": "op_number",
+      "revId": "1d5f205427f73788ff18edb3130b306a0712555d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0af5cf66_7fd4e664",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-25T11:04:05Z",
+      "side": 1,
+      "message": "It\u0027d make sense to include the parsed op number in the error message.",
+      "revId": "1d5f205427f73788ff18edb3130b306a0712555d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3897863_9af8d359",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-25T11:04:05Z",
+      "side": 1,
+      "message": "how could this fail? Every enum kind has a number...",
+      "revId": "1d5f205427f73788ff18edb3130b306a0712555d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
