@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e29db688_7b2df4c6",
+        "filename": "tvix/eval/src/builtins/hash.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-03-26T16:04:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "099d2e78_f52ef172",
+      "revId": "08e71941a849b088f39937bdf743fd40a06cf0f1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3eefde0c_bf380e6b",
@@ -48,6 +66,24 @@
       "writtenOn": "2024-03-24T08:30:09Z",
       "side": 1,
       "message": "… and maybe either have a `HashAlgo::new_hasher()` returning you the hash function, or a `hash_bytes(r: impl std::io::Read) -\u003e Vec\u003cu8\u003e` function does accept a reader.\n\nThis should get rid of some of the algo-specific reflection here.",
+      "revId": "08e71941a849b088f39937bdf743fd40a06cf0f1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2bcf523c_4bc4e465",
+        "filename": "tvix/eval/src/builtins/hash.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-03-26T16:04:24Z",
+      "side": 1,
+      "message": "Went with the latter, it\u0027s challenging to do `new_hasher` because we\u0027d need to return like a `Box\u003cdyn Digest\u003e` but Digest needs to define its output size which is different between the algos.",
+      "parentUuid": "3eefde0c_bf380e6b",
       "revId": "08e71941a849b088f39937bdf743fd40a06cf0f1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -69,6 +105,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cb52422c_7d42393e",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-03-26T16:04:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76ebe73c_f148d99a",
+      "revId": "08e71941a849b088f39937bdf743fd40a06cf0f1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f6858257_aa559d33",
@@ -82,6 +136,24 @@
       "writtenOn": "2024-03-24T18:00:02Z",
       "side": 1,
       "message": "should be removed",
+      "revId": "08e71941a849b088f39937bdf743fd40a06cf0f1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f22db533_1b0ad53c",
+        "filename": "tvix/eval/src/io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-03-26T16:04:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6858257_aa559d33",
       "revId": "08e71941a849b088f39937bdf743fd40a06cf0f1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -103,6 +175,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "13047539_d27369b6",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-03-26T16:04:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef20d841_63e5a42b",
+      "revId": "08e71941a849b088f39937bdf743fd40a06cf0f1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7958c30d_86716530",
@@ -120,6 +210,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "67c108d9_f323faa1",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-03-26T16:04:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7958c30d_86716530",
+      "revId": "08e71941a849b088f39937bdf743fd40a06cf0f1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c11ee06_e2d9b9d1",
@@ -133,6 +241,24 @@
       "writtenOn": "2024-03-24T08:30:09Z",
       "side": 1,
       "message": "maybe add a comment that the VMResponse wants a sync reader here",
+      "revId": "08e71941a849b088f39937bdf743fd40a06cf0f1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21a8000d_97e5ec34",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 504,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-03-26T16:04:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2c11ee06_e2d9b9d1",
       "revId": "08e71941a849b088f39937bdf743fd40a06cf0f1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
