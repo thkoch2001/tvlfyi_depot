@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c5eb8ab_be11aed7",
+        "filename": "tvix/eval/Cargo.toml",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-26T16:17:08Z",
+      "side": 1,
+      "message": "we don\u0027t want to link nix-compat into tvix-eval.\n\nI assume this is due to hashFile / hashString now using HashAlgo from there. Let\u0027s move the builtin to tvix-glue.",
+      "revId": "e791b3d4ae00766b6d1e5eb3da38248670aff670",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba3b7467_75db57c5",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-26T16:17:08Z",
+      "side": 1,
+      "message": "read_to_end, it\u0027s perfectly fine to read files that are not valid utf8.\n\n(and let\u0027s add a test for this)",
+      "revId": "e791b3d4ae00766b6d1e5eb3da38248670aff670",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79af33a5_9df94ac1",
+        "filename": "tvix/eval/src/compiler/import.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-26T16:17:08Z",
+      "side": 1,
+      "message": "read_to_end. or does rnix only support strings?",
+      "revId": "e791b3d4ae00766b6d1e5eb3da38248670aff670",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3b6d0bc_e6bb3193",
+        "filename": "tvix/eval/src/io.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-26T16:17:08Z",
+      "side": 1,
+      "message": "Hnmh, there\u0027s hashFile now too, maybe more. wonder if this list still makes sense.",
+      "revId": "e791b3d4ae00766b6d1e5eb3da38248670aff670",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
