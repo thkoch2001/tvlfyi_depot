@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2b1edde6_01cff586",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-03-26T15:39:32Z",
+      "side": 1,
+      "message": "I couldn\u0027t find any way to cast an u64 into an enum represented as u64 😞",
+      "parentUuid": "f2cd8c50_65f20075",
+      "revId": "1d5f205427f73788ff18edb3130b306a0712555d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "28d6901e_a9994083",
         "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
         "patchSetId": 5
@@ -31,6 +49,24 @@
       "writtenOn": "2024-03-25T11:04:05Z",
       "side": 1,
       "message": "op_number",
+      "revId": "1d5f205427f73788ff18edb3130b306a0712555d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81bd3838_38001ce6",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-03-26T15:39:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28d6901e_a9994083",
       "revId": "1d5f205427f73788ff18edb3130b306a0712555d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cf7345a_a9204c9a",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-03-26T15:39:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0af5cf66_7fd4e664",
+      "revId": "1d5f205427f73788ff18edb3130b306a0712555d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d3897863_9af8d359",
@@ -65,6 +119,24 @@
       "writtenOn": "2024-03-25T11:04:05Z",
       "side": 1,
       "message": "how could this fail? Every enum kind has a number...",
+      "revId": "1d5f205427f73788ff18edb3130b306a0712555d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cafe24a0_c4ba34ac",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-03-26T15:39:32Z",
+      "side": 1,
+      "message": "This API is coming from the enum_primitive_derivte crate.\n\nThe idea behind this is that you could end up in a situation where the enum is larger than the integer type we\u0027re trying to cast it into.\n\nIn our situation, indeed, it shouldn\u0027t fail, we could unwrap that.\n\nBut I prefer having an explicit error for this unlikely event. We need a io::Result for the write operation anyways. I guess this comes from my Haskell brain injury :)",
+      "parentUuid": "d3897863_9af8d359",
       "revId": "1d5f205427f73788ff18edb3130b306a0712555d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }

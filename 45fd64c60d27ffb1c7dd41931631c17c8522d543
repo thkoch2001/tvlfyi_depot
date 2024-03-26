@@ -16,6 +16,24 @@
       "message": "I know it\u0027s a bit of a big ask, but what does \"obsolete\" mean for each of these? Just because current Nix Stable doesn\u0027t use it (anymore) in its communication, we should still properly support everything Nix 2.3 emits. And if we know some successor / preferred way for doint this, note it in the comment.",
       "revId": "45fd64c60d27ffb1c7dd41931631c17c8522d543",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cacf433a_0a938825",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-03-26T15:39:32Z",
+      "side": 1,
+      "message": "There\u0027s no such direct mapping documented in the Nix source code.\n\nDoing this would require a loooooong git spelunking session. I\u0027m not really up to do that right away.\n\nMaybe let\u0027s do that along the way when implementing the operations?",
+      "parentUuid": "238a3403_b69ee35f",
+      "revId": "45fd64c60d27ffb1c7dd41931631c17c8522d543",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
