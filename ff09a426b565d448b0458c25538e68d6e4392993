@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d0f38ed_b0ea2611",
+        "filename": "tvix/store/src/pathinfoservice/tests/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T11:55:26Z",
+      "side": 1,
+      "message": "stray todo",
+      "revId": "ff09a426b565d448b0458c25538e68d6e4392993",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4315719_fa890efe",
+        "filename": "tvix/store/src/pathinfoservice/tests/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T11:55:26Z",
+      "side": 1,
+      "message": "Missing grpc example",
+      "revId": "ff09a426b565d448b0458c25538e68d6e4392993",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e6f10a1_896434f9",
+        "filename": "tvix/store/src/pathinfoservice/tests/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T11:55:26Z",
+      "side": 1,
+      "message": "TODO: add more tests (rejections for invalid pathinfo messages). Maybe a subclass of PathInfoServices should also ensure referenced castore items and output paths in references exist.",
+      "revId": "ff09a426b565d448b0458c25538e68d6e4392993",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af3e8ae8_1ab20c42",
+        "filename": "tvix/store/src/pathinfoservice/tests/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T11:55:26Z",
+      "side": 1,
+      "message": "remove TODO,`00000000000000000000000000000000` indeed is `[0; 20]` if nixbase32-decoded.",
+      "revId": "ff09a426b565d448b0458c25538e68d6e4392993",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3750dc49_755d6672",
+        "filename": "tvix/store/src/pathinfoservice/tests/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T11:55:26Z",
+      "side": 1,
+      "message": "elaborate in the future/for some stores, more sigs would be ok",
+      "revId": "ff09a426b565d448b0458c25538e68d6e4392993",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
