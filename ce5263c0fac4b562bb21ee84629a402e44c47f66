@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c07a158e_3d3f0f78",
+        "filename": "tvix/store/src/tests/fixtures.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T11:55:56Z",
+      "side": 1,
+      "message": "remove comment",
+      "revId": "ce5263c0fac4b562bb21ee84629a402e44c47f66",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
