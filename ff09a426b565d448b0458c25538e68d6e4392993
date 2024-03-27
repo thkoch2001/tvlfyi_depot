@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd4d7ed6_196f68d1",
+        "filename": "tvix/store/src/pathinfoservice/tests/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T12:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5d0f38ed_b0ea2611",
+      "revId": "ff09a426b565d448b0458c25538e68d6e4392993",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a4315719_fa890efe",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-03-27T11:55:26Z",
       "side": 1,
       "message": "Missing grpc example",
+      "revId": "ff09a426b565d448b0458c25538e68d6e4392993",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9e04d17_35eb7aab",
+        "filename": "tvix/store/src/pathinfoservice/tests/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T12:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a4315719_fa890efe",
       "revId": "ff09a426b565d448b0458c25538e68d6e4392993",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "01afe3cf_153514b5",
+        "filename": "tvix/store/src/pathinfoservice/tests/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T12:33:42Z",
+      "side": 1,
+      "message": "Added a FUTUREWORK.",
+      "parentUuid": "1e6f10a1_896434f9",
+      "revId": "ff09a426b565d448b0458c25538e68d6e4392993",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "af3e8ae8_1ab20c42",
@@ -69,6 +123,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d512738a_7bf2fa4d",
+        "filename": "tvix/store/src/pathinfoservice/tests/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T12:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af3e8ae8_1ab20c42",
+      "revId": "ff09a426b565d448b0458c25538e68d6e4392993",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3750dc49_755d6672",
@@ -82,6 +154,24 @@
       "writtenOn": "2024-03-27T11:55:26Z",
       "side": 1,
       "message": "elaborate in the future/for some stores, more sigs would be ok",
+      "revId": "ff09a426b565d448b0458c25538e68d6e4392993",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f4e0bc5_4bae4118",
+        "filename": "tvix/store/src/pathinfoservice/tests/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T12:33:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3750dc49_755d6672",
       "revId": "ff09a426b565d448b0458c25538e68d6e4392993",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
