@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "944ca27a_10aa8098",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T20:19:39Z",
+      "side": 1,
+      "message": "this can be abandoned, as we learnt there\u0027s no u32s being written, it\u0027s all u64, and callsites can always \"as u64\" if they\u0027re using usize or smaller than u64 u*.",
+      "revId": "aa36bf9b0a8cec2a940fd7d8f7e7b8d6f50cd58d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
