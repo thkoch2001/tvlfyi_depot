@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "253dc120_5b16a238",
+        "filename": "tvix/nix-compat/src/wire/bytes.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T14:29:33Z",
+      "side": 1,
+      "message": "aligned",
+      "revId": "1a6b0df415b11b924fbb964b039ab68f8804a5ba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e70236d_29fd569b",
+        "filename": "tvix/nix-compat/src/wire/bytes.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T14:29:33Z",
+      "side": 1,
+      "message": "I\u0027d name this function `padding_len(payload_len: u64) -\u003e u8`.\n\nreasoning below:\n\nfunction/argument name: It returns the length of padding for a given payload length length, not the padding itself.\n\nu64 in argument type: Even though `read_bytes` limits us to reading 4GiB of data at once, we still want to reuse this helper function to calculate the amount of padding on larger byte fields.\n\nu8 as return value: We know 7 even fits in a u8, and it being laughably small makes it even more clear what this is from just the function signature. It\u0027s quite trivial to \"as usize\" at the callsites, if a u8 doesn\u0027t work there directly.",
+      "revId": "1a6b0df415b11b924fbb964b039ab68f8804a5ba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
