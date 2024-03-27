@@ -52,6 +52,24 @@
       "parentUuid": "cacf433a_0a938825",
       "revId": "45fd64c60d27ffb1c7dd41931631c17c8522d543",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5e45a398_bb507014",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T10:31:26Z",
+      "side": 1,
+      "message": "Ok, thanks. We can check which operations are still used in Nix 2.3 as a followup.",
+      "parentUuid": "cacf433a_0a938825",
+      "revId": "45fd64c60d27ffb1c7dd41931631c17c8522d543",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
