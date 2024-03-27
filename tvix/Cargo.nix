@@ -12955,6 +12955,14 @@ rec {
         ];
         devDependencies = [
           {
+            name = "rstest";
+            packageId = "rstest";
+          }
+          {
+            name = "rstest_reuse";
+            packageId = "rstest_reuse";
+          }
+          {
             name = "tempfile";
             packageId = "tempfile";
           }
