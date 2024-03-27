@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1285c0af_48f1a210",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T10:00:54Z",
+      "side": 1,
+      "message": "Ok",
+      "parentUuid": "2b1edde6_01cff586",
+      "revId": "1d5f205427f73788ff18edb3130b306a0712555d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "28d6901e_a9994083",
@@ -137,6 +155,24 @@
       "side": 1,
       "message": "This API is coming from the enum_primitive_derivte crate.\n\nThe idea behind this is that you could end up in a situation where the enum is larger than the integer type we\u0027re trying to cast it into.\n\nIn our situation, indeed, it shouldn\u0027t fail, we could unwrap that.\n\nBut I prefer having an explicit error for this unlikely event. We need a io::Result for the write operation anyways. I guess this comes from my Haskell brain injury :)",
       "parentUuid": "d3897863_9af8d359",
+      "revId": "1d5f205427f73788ff18edb3130b306a0712555d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a25c010c_ba14e7f0",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T10:00:54Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "cafe24a0_c4ba34ac",
       "revId": "1d5f205427f73788ff18edb3130b306a0712555d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
