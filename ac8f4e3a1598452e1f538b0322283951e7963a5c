@@ -16,6 +16,24 @@
       "message": "We might still want to keep some test covering that specific behaviour.",
       "revId": "ac8f4e3a1598452e1f538b0322283951e7963a5c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fa2e5dc_31f62cb5",
+        "filename": "tvix/castore/src/directoryservice/grpc.rs",
+        "patchSetId": 15
+      },
+      "lineNbr": 375,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T17:26:07Z",
+      "side": 0,
+      "message": "Thinking about this more, let\u0027s drop this. All that matters is that we end up getting an error back at some point, and the rstest-based tests do account for this.\n\nI extended the comment at `upload_reject_failing_validation` a bit.",
+      "parentUuid": "2db24f6b_857b2396",
+      "revId": "ac8f4e3a1598452e1f538b0322283951e7963a5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
