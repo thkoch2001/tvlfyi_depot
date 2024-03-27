@@ -8,7 +8,7 @@ pub const DUMMY_NAME: &str = "00000000000000000000000000000000-dummy";
 
 lazy_static! {
     // output hash
-    pub static ref DUMMY_OUTPUT_HASH: bytes::Bytes = vec![0; 20].into();
+    pub static ref DUMMY_OUTPUT_HASH: [u8; 20] = [0; 20];
 
     /// The NAR representation of a symlink pointing to `/nix/store/somewhereelse`
     pub static ref NAR_CONTENTS_SYMLINK: Vec<u8> = vec![
@@ -104,7 +104,7 @@ lazy_static! {
                 size: 0,
             })),
         }),
-        references: vec![DUMMY_OUTPUT_HASH.clone()],
+        references: vec![DUMMY_OUTPUT_HASH.to_vec().into()],
         narinfo: None,
     };
 

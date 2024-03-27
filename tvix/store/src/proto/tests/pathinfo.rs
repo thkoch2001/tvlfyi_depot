@@ -274,7 +274,7 @@ fn validate_valid_deriver() {
     let narinfo = path_info.narinfo.as_mut().unwrap();
     narinfo.deriver = Some(crate::proto::StorePath {
         name: "foo".to_string(),
-        digest: DUMMY_OUTPUT_HASH.clone(),
+        digest: Bytes::from(DUMMY_OUTPUT_HASH.to_vec()),
     });
 
     path_info.validate().expect("must validate");
