@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59e8e0e0_c2bf9e54",
+        "filename": "tvix/nix-compat/src/wire/bytes.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T11:06:52Z",
+      "side": 1,
+      "message": "As discussed elsewhere, let\u0027s make the `RangeBounds` use u32.\n\nThe `Vec\u003cu8\u003e` can\u0027t hold more than 2**32 bytes on 32 bit systems (and we don\u0027t want to bleed architecture-specifics in).\n\nThat will restrict allowed input sizes on the input arguments type level.\n\n```\n    // read the length field\n    let len \u003d match u32::try_from(primitive::read_u64(r).await?) {\n        Err(e) \u003d\u003e None,\n        Ok(len) if !allowed_size.contains(\u0026len) \u003d\u003e None,\n        Ok(len) \u003d\u003e Some(len),\n    }\n    .ok_or_else(|| {\n        std::io::Error::new(\n            std::io::ErrorKind::InvalidData,\n            \"signalled package size not in allowed range\",\n        )\n    })?;\n```",
+      "revId": "faeda9479f647840696ca4251750889f6c80a7fa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a54d1b04_10e563d5",
+        "filename": "tvix/nix-compat/src/wire/bytes.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T11:06:52Z",
+      "side": 1,
+      "message": "exceed",
+      "range": {
+        "startLine": 107,
+        "startChar": 55,
+        "endLine": 107,
+        "endChar": 62
+      },
+      "revId": "faeda9479f647840696ca4251750889f6c80a7fa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
