@@ -16,6 +16,24 @@
       "message": "Can this become a regular const now? And then you can do `Bytes::from(DUMMY_OUTPUT_HASH.as_slice())` instead of using `to_vec()`",
       "revId": "f24b329c07a81d75b4b83d92ac18d6abb73b9b37",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0e226f1_fbeebc40",
+        "filename": "tvix/store/src/tests/fixtures.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T16:27:03Z",
+      "side": 1,
+      "message": "Indeed, and I could now also directly use the const in some other places too. Thanks!",
+      "parentUuid": "04d4da9c_7fdef9a1",
+      "revId": "f24b329c07a81d75b4b83d92ac18d6abb73b9b37",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
