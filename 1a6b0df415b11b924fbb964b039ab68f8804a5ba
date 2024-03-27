@@ -69,6 +69,24 @@
       "parentUuid": "9e70236d_29fd569b",
       "revId": "1a6b0df415b11b924fbb964b039ab68f8804a5ba",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ede3221_0aa3f257",
+        "filename": "tvix/nix-compat/src/wire/bytes.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-27T20:28:24Z",
+      "side": 1,
+      "message": "Not done, function name and argument name stayed the same.",
+      "parentUuid": "9a1f606d_a00adf6b",
+      "revId": "1a6b0df415b11b924fbb964b039ab68f8804a5ba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
