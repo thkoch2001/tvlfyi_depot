@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9c0a559_c0f78a25",
+        "filename": "tvix/glue/src/builtins/errors.rs",
+        "patchSetId": 57
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-28T23:48:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8b179de9_28ce7191",
+      "revId": "a8d7e8cd619154d2c8819ab708848581b013add6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0d45e8bd_416fca42",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-03-28T22:05:08Z",
       "side": 1,
       "message": "node_to_pathinfo is named confusingly - this was only meant for root nodes imported in sha256 nar/recursive mode.\n\nas discussed elsewhere, let\u0027s dissolve this helper function and copy its contents to the callsite.\n\nwe need to have two code paths here determining the store path, one for recursive, one for non-recursive.",
+      "revId": "a8d7e8cd619154d2c8819ab708848581b013add6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5b7286a_93265a91",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 57
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-28T23:48:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d45e8bd_416fca42",
       "revId": "a8d7e8cd619154d2c8819ab708848581b013add6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
