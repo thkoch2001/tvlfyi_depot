@@ -70,6 +70,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a5cae4f_4d0bfe33",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 57
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-28T23:47:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "75bdf6bf_bcbe0184",
+      "revId": "a8d7e8cd619154d2c8819ab708848581b013add6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3132d065_c538ec16",
@@ -106,6 +124,48 @@
         "endLine": 349,
         "endChar": 52
       },
+      "revId": "a8d7e8cd619154d2c8819ab708848581b013add6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9dd99687_dbeaa49e",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 57
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-28T23:47:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2230af2f_5ac366e4",
+      "range": {
+        "startLine": 349,
+        "startChar": 48,
+        "endLine": 349,
+        "endChar": 52
+      },
+      "revId": "a8d7e8cd619154d2c8819ab708848581b013add6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "602e976a_10ca6b9b",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 57
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-28T23:47:45Z",
+      "side": 1,
+      "message": "Resolving because it\u0027s under the misunderstanding assumption.",
+      "parentUuid": "3132d065_c538ec16",
       "revId": "a8d7e8cd619154d2c8819ab708848581b013add6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
