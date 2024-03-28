@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0d45e8bd_416fca42",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 57
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-28T22:05:08Z",
+      "side": 1,
+      "message": "node_to_pathinfo is named confusingly - this was only meant for root nodes imported in sha256 nar/recursive mode.\n\nas discussed elsewhere, let\u0027s dissolve this helper function and copy its contents to the callsite.\n\nwe need to have two code paths here determining the store path, one for recursive, one for non-recursive.",
+      "revId": "a8d7e8cd619154d2c8819ab708848581b013add6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4a80e0b3_14eb59e0",
         "filename": "tvix/glue/src/builtins/import.rs",
         "patchSetId": 57
@@ -31,6 +48,24 @@
       "writtenOn": "2024-03-28T20:54:26Z",
       "side": 1,
       "message": "I\u0027m not sure I understand the logic here. You already have the nar hash n path_info.narinfo.nar_sha256. Why calculate it again in the else case?",
+      "revId": "a8d7e8cd619154d2c8819ab708848581b013add6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75bdf6bf_bcbe0184",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 57
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-28T22:05:08Z",
+      "side": 1,
+      "message": "There\u0027s some confusion here. the else branch should do flat hashing, the helper function does NOT do blob to NarHash, but blob to sha256. clarified elsewhere, the helper will get renamed.",
+      "parentUuid": "4a80e0b3_14eb59e0",
       "revId": "a8d7e8cd619154d2c8819ab708848581b013add6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
