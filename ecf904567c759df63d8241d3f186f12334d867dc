@@ -16,6 +16,24 @@
       "message": "```suggestion\n#[case::sled(make_path_info_service(\"sled://\").await)]\n```",
       "revId": "ecf904567c759df63d8241d3f186f12334d867dc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5dd3984_aa54cff4",
+        "filename": "tvix/store/src/pathinfoservice/tests/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-28T06:22:13Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "514d1328_1b286885",
+      "revId": "ecf904567c759df63d8241d3f186f12334d867dc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
