@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4a80e0b3_14eb59e0",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 57
+      },
+      "lineNbr": 218,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-28T20:54:26Z",
+      "side": 1,
+      "message": "I\u0027m not sure I understand the logic here. You already have the nar hash n path_info.narinfo.nar_sha256. Why calculate it again in the else case?",
+      "revId": "a8d7e8cd619154d2c8819ab708848581b013add6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3132d065_c538ec16",
         "filename": "tvix/glue/src/tvix_store_io.rs",
         "patchSetId": 57
