@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "22f96101_0e90b153",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-28T19:35:05Z",
+      "side": 1,
+      "message": "This is a safe builtin to produce context, the other builtin doing that is derivation and we do those invariant checks because we produce the valid store paths…\n\nIf we don\u0027t do those invariant checks, we are implementing `unsafeAppendContext` not `appendContext`, please read the documentation of `appendContext`.",
+      "parentUuid": "b5e710a8_c2e3b674",
+      "revId": "ac2d3f77a8f6826d66b4405adafe28d368db0ff2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f670e304_5a99ae6c",
         "filename": "tvix/eval/src/builtins/mod.rs",
         "patchSetId": 1
@@ -49,6 +67,24 @@
       "writtenOn": "2024-03-25T00:30:39Z",
       "side": 1,
       "message": "@flokli@flokli.de Same for this check.",
+      "revId": "ac2d3f77a8f6826d66b4405adafe28d368db0ff2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2f048ab5_66f42e4f",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-28T19:35:05Z",
+      "side": 1,
+      "message": "See answer above.",
+      "parentUuid": "f670e304_5a99ae6c",
       "revId": "ac2d3f77a8f6826d66b4405adafe28d368db0ff2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
