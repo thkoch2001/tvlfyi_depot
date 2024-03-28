@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7598747d_8b8ab381",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1594,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-28T22:12:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "12c0472c_601283f6",
+      "range": {
+        "startLine": 1594,
+        "startChar": 59,
+        "endLine": 1594,
+        "endChar": 61
+      },
+      "revId": "747f877f4306e8b1498017905d0cc53a9f881328",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf20bbdf_12c21132",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-03-25T17:28:52Z",
       "side": 1,
       "message": "elem?",
+      "range": {
+        "startLine": 1598,
+        "startChar": 22,
+        "endLine": 1598,
+        "endChar": 25
+      },
+      "revId": "747f877f4306e8b1498017905d0cc53a9f881328",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "233f8fc8_8c3e4e9a",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1598,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-28T22:12:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf20bbdf_12c21132",
       "range": {
         "startLine": 1598,
         "startChar": 22,
@@ -78,6 +126,24 @@
       "side": 1,
       "message": "ctx is `\u0026mut T`, so it wouldn\u0027t buy us so much, I will leave this as the futurework for optimizations.",
       "parentUuid": "96021aab_f6435ee8",
+      "revId": "747f877f4306e8b1498017905d0cc53a9f881328",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d362e919_ff101973",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1601,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-28T22:12:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a02c97be_62448696",
       "revId": "747f877f4306e8b1498017905d0cc53a9f881328",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
