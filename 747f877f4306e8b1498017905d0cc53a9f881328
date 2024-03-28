@@ -62,6 +62,24 @@
       "message": "What about adding `into_iter()` to NixContext, describing this transformation here with a map, and then  assigning it?",
       "revId": "747f877f4306e8b1498017905d0cc53a9f881328",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a02c97be_62448696",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1601,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-28T21:55:07Z",
+      "side": 1,
+      "message": "ctx is `\u0026mut T`, so it wouldn\u0027t buy us so much, I will leave this as the futurework for optimizations.",
+      "parentUuid": "96021aab_f6435ee8",
+      "revId": "747f877f4306e8b1498017905d0cc53a9f881328",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
