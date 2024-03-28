@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b179de9_28ce7191",
+        "filename": "tvix/glue/src/builtins/errors.rs",
+        "patchSetId": 57
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-28T20:52:53Z",
+      "side": 1,
+      "message": "can the last two be NixHash, or just `[u8; 32]` if it has to be sha256? I assume we parse to them…",
+      "revId": "a8d7e8cd619154d2c8819ab708848581b013add6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3132d065_c538ec16",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 57
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-28T20:52:53Z",
+      "side": 1,
+      "message": "Better than using `AsyncIoBridge` (and having to thread through AsyncIoBridge etc):\n\nConstruct a FileNode with an empty name and the passed digest, call `self.pathinfoservice.calculate_nar` with that as root node.\n\nThe sha256 digest is in the second element of the tuple in the OK case.",
+      "revId": "a8d7e8cd619154d2c8819ab708848581b013add6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2230af2f_5ac366e4",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 57
+      },
+      "lineNbr": 349,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-28T20:52:53Z",
+      "side": 1,
+      "message": "blob_digest",
+      "range": {
+        "startLine": 349,
+        "startChar": 48,
+        "endLine": 349,
+        "endChar": 52
+      },
+      "revId": "a8d7e8cd619154d2c8819ab708848581b013add6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
