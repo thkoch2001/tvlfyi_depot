@@ -70,6 +70,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b59d2e98_bca7c418",
+        "filename": "tvix/eval/src/compiler/import.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-29T15:15:05Z",
+      "side": 1,
+      "message": "Huh, interesting.",
+      "parentUuid": "c2095138_7f35efa1",
+      "revId": "e791b3d4ae00766b6d1e5eb3da38248670aff670",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3b6d0bc_e6bb3193",
