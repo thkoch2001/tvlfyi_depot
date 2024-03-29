@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "562ee4e3_b069bbb0",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-29T15:09:21Z",
+      "side": 1,
+      "message": "// This is public so builtins can put PathInfos directly.",
+      "revId": "084bf07d1b8669971aec98536baa54a6b9010b70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f6c0c2f_badf56ee",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-29T15:09:21Z",
+      "side": 1,
+      "message": "Well, strictly speaking we could delay this until we need to serialize a NARInfo (which only happens for nar-bridge). We don\u0027t *need* this for other hashing schemes for output path calculation.\n\nI\u0027d probably have even entirely removed this helper function, rather than adding another parameter - considering we know we need *more parameters* and more logic branches (toFile needs references). Anyways, I can deal with this in a followup, no need to block this CL.",
+      "revId": "084bf07d1b8669971aec98536baa54a6b9010b70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
