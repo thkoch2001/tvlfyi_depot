@@ -4,8 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-tvix-store = { path = "../../../tvix/store/" }
-nix-compat = { path = "../../../tvix/nix-compat/" }
+nix-compat = { path = "../../../tvix/nix-compat/", features = ["async"] }
 tokio-listener = "0.3.1"
 tokio = { version = "1.36.0", features = ["full"] }
 tracing-subscriber = "0.3.18"
