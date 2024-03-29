@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "52f9be08_553c80c3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-29T14:39:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9237bfa2_4400b7e1",
+      "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "51ecfe83_6e276f56",
@@ -103,6 +121,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34c90afc_bf16093f",
+        "filename": "tvix/castore/src/directoryservice/bigtable.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 162,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-29T14:39:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4a74c539_a89326db",
+      "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "92715471_a9ffbe1f",
@@ -120,6 +156,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80163446_aaec470d",
+        "filename": "tvix/castore/src/directoryservice/bigtable.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-29T14:39:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "92715471_a9ffbe1f",
+      "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "77f42364_9e6eb7b8",
@@ -133,6 +187,24 @@
       "writtenOn": "2024-03-19T22:19:09Z",
       "side": 1,
       "message": "TODO: do some tests with cbtemulator.",
+      "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7260531_8823e976",
+        "filename": "tvix/castore/src/directoryservice/bigtable.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-29T14:39:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77f42364_9e6eb7b8",
       "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },

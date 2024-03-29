@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2db0f21e_cb56d67f",
+        "filename": "tvix/castore/src/directoryservice/bigtable.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-29T14:39:57Z",
+      "side": 1,
+      "message": "The idea was that once we do bucketing, there\u0027ll be more columns, one for each directory, each keyed with its individual digest. Or is this a problem cardinality-wise?",
+      "parentUuid": "912060e7_a2f2364c",
+      "revId": "b0b8f3b8758a86fa04fd24a88fa26a2d6642df38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f7c358d4_31c2db36",
         "filename": "tvix/castore/src/directoryservice/from_addr.rs",
         "patchSetId": 3
@@ -31,6 +49,24 @@
       "writtenOn": "2024-03-20T15:55:23Z",
       "side": 1,
       "message": "This sounds reasonable to me",
+      "revId": "b0b8f3b8758a86fa04fd24a88fa26a2d6642df38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "caa4eb45_9ca1cb16",
+        "filename": "tvix/castore/src/directoryservice/from_addr.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-29T14:39:57Z",
+      "side": 1,
+      "message": "Updated. I think it\u0027s fine if we don\u0027t have the endpoint here, but use `BIGTABLE_EMULATOR_HOST` env var for this instead.",
+      "parentUuid": "f7c358d4_31c2db36",
       "revId": "b0b8f3b8758a86fa04fd24a88fa26a2d6642df38",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
