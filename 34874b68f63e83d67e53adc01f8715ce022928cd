@@ -38,6 +38,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "d03d4d30_31727686",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-29T15:33:05Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "118ce4a8_015f9a68",
+      "revId": "34874b68f63e83d67e53adc01f8715ce022928cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "69057426_9448388a",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 1
@@ -100,6 +118,24 @@
       "writtenOn": "2024-01-20T06:20:34Z",
       "side": 1,
       "message": "SourceCode is a pub struct SourceCode(Rc\u003cRefCell\u003cCodeMap\u003e\u003e), deriving a (cheap) clone already.",
+      "revId": "34874b68f63e83d67e53adc01f8715ce022928cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aaff0f2e_010286da",
+        "filename": "tvix/eval/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-29T15:33:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f879562e_1fb39b9c",
       "revId": "34874b68f63e83d67e53adc01f8715ce022928cd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
