@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c49e40b7_6ff2ea54",
+        "filename": "web/panettone/src/migrations/3920286378-add-issue-tsv.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-30T20:11:37Z",
+      "side": 1,
+      "message": "Wouldn\u0027t it make more sense to have the `subject` have a higher weight?\n\nAlso can `subject` or `body` be null (I guess not due to `coltype`?). If that\u0027s the case postgres recommends to use `coalesce`.",
+      "range": {
+        "startLine": 4,
+        "startChar": 74,
+        "endLine": 4,
+        "endChar": 120
+      },
+      "revId": "a5038dc348b5bdeb6fe02d88c417010d83390458",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a88f061b_1f691953",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-30T20:11:37Z",
+      "side": 1,
+      "message": "can\u0027t you use `AND-WHERE*` for this?",
+      "range": {
+        "startLine": 410,
+        "startChar": 6,
+        "endLine": 417,
+        "endChar": 6
+      },
+      "revId": "a5038dc348b5bdeb6fe02d88c417010d83390458",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "057a3232_8279f9d8",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-30T20:11:37Z",
+      "side": 1,
+      "message": "This is the same as the screenreader only submit button…",
+      "revId": "a5038dc348b5bdeb6fe02d88c417010d83390458",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
