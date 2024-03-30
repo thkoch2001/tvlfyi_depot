@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cac69dc4_f285e7b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-30T19:28:49Z",
+      "side": 1,
+      "message": "Does anything further up the chain depend on postgresql 16 being used?",
+      "revId": "7370a7557c9937db917fe8484823237c31de5589",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
