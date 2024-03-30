@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "88a2868a_35dec92c",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-30T20:35:08Z",
+      "side": 1,
+      "message": "@tvl@lahfa.xyz The check done is extremely simple: It seems we only check that the \"store path\" has the prefix `builtins.storeDir` (checked by `isStorePath`) followed by 32 nix base32 valid chars (checked by the `StorePath` constructor). You can actually have completely bogus context:\n\n    nix-instantiate --eval --readonly-mode -E \u0027builtins.getContext (builtins.appendContext \"\" { \"/nix/store/feededefbeef00000000000000000000\" \u003d {\n path \u003d true; }; })\u0027\n \nAlso `/nix/store/feededefbeef00000000000000000000.drv` passes the `isDerivation` check.\n \nSuch context will only cause a failure when the evaluator requests the context to be realised for whatever reason, e.g. when we try to build a derivation that stems from such a context. (In C++ Nix `ensurePath` is only called if the evaluator is not in read-only mode. I don\u0027t think we need to copy this necessarily, though? I guess the consequence of this is that it is impossible to create a derivation with such bogus dependencies, but we can probably also prevent that by pushing the check to something we talk to via RPC?)",
+      "parentUuid": "22f96101_0e90b153",
+      "revId": "ac2d3f77a8f6826d66b4405adafe28d368db0ff2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f670e304_5a99ae6c",
         "filename": "tvix/eval/src/builtins/mod.rs",
         "patchSetId": 1
@@ -85,6 +103,24 @@
       "side": 1,
       "message": "See answer above.",
       "parentUuid": "f670e304_5a99ae6c",
+      "revId": "ac2d3f77a8f6826d66b4405adafe28d368db0ff2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2bacc076_7b6729ba",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-30T20:35:08Z",
+      "side": 1,
+      "message": "As mentioned, the derivation check is basically the store path check mentioned above plus a check of the extension.\n\nI think these checks could be implemented in the evaluator by adding a way to `EvalIO` for getting the store dir and the store drv extension (plus i guess hash format checks but sounds complicated?). They are purely textual!",
+      "parentUuid": "2f048ab5_66f42e4f",
       "revId": "ac2d3f77a8f6826d66b4405adafe28d368db0ff2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }

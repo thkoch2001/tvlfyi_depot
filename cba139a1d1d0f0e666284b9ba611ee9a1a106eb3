@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "efdf87a6_8aca7692",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-30T20:35:08Z",
+      "side": 1,
+      "message": "Your code is correct in that you can have multiple types of context at once. Not sure how that would work in the end though?",
+      "revId": "cba139a1d1d0f0e666284b9ba611ee9a1a106eb3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
