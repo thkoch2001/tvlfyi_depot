@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f75342f1_13e9db2d",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 11
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-30T19:27:44Z",
+      "side": 0,
+      "message": "I think this can be removed now?",
+      "revId": "a427270fef5705aba67829cc87fa413bca32bb91",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
