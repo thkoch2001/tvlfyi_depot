@@ -12,15 +12,38 @@ in
 {
   haskellPackages = super.haskellPackages.override {
     overrides = hsSelf: hsSuper: {
+      punycode = haskellLib.appendPatch
+        (self.fetchpatch {
+          name = "punycode-mtl-2.3.patch";
+          url = "https://github.com/litherum/punycode/pull/5/commits/41e55c8b7cef14563e6d04a7190dbabff5a77886.patch";
+          sha256 = "03kgmy4z36jv16ffp5jrig2gr8ydc8cl1iscc7difisaq88mxvqc";
+        })
+        hsSuper.punycode;
+
+      # Build with deprecated ansi-wl-pprint is broken now, use HEAD which switched to
+      # prettyprinter
+      tmp-postgres = haskellLib.overrideSrc
+        {
+          version = "unstable-2023-08-08";
+          src = self.fetchFromGitHub {
+            owner = "jfischoff";
+            repo = "tmp-postgres";
+            rev = "7f2467a6d6d5f6db7eed59919a6773fe006cf22b";
+            sha256 = "0l1gdx5s8ximgawd3yzfy47pv5pgwqmjqp8hx5rbrq68vr04wkbl";
+          };
+        }
+        (hsSuper.tmp-postgres.override {
+          ansi-wl-pprint = hsSelf.prettyprinter;
+        });
 
       ihp-hsx = lib.pipe hsSuper.ihp-hsx [
         (haskellLib.overrideSrc {
-          version = "1.1.0";
+          version = "unstable-2023-03-28";
           src = "${self.fetchFromGitHub {
             owner = "digitallyinduced";
             repo = "ihp";
-            rev = "b5d47963c998ccd779aa5c3d46484338fd621f0d";
-            sha256 = "sha256-M22W8VX4sRaeU2yVraR0S2t2VOwWGmoteD/M8TahdoE=";
+            rev = "ab4ecd05f4e7b6b3c4b74b82d39fc6c5cc48766b";
+            sha256 = "1fj5q9lygnmvqqv2fwqdj12sv63gkdfv5ha6fi190sv07dp9n9an";
           }}/ihp-hsx";
         })
         haskellLib.doJailbreak
