@@ -47,6 +47,9 @@ rec {
 
   # Create build command for an attribute path pointing to a derivation.
   mkBuildCommand = { attrPath, drvPath, outLink ? "result" }: concatStringsSep " " [
+    # Prevents realpath from being executed with no arguments if the build fails
+    "set -o pipefail; "
+
     # First try to realise the drvPath of the target so we don't evaluate twice.
     # Nix has no concept of depending on a derivation file without depending on
     # at least one of its `outPath`s, so we need to discard the string context
