@@ -15,7 +15,7 @@ let
     libraryHaskellDepends = [
       pkgs.haskellPackages.pa-prelude
       pkgs.haskellPackages.pa-label
-      pkgs.haskellPackages.ihp-hsx
+      pkgs.haskellPackages.crypton
       pkgs.haskellPackages.wai
       pkgs.haskellPackages.warp
       pkgs.haskellPackages.sqlite-simple
