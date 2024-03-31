@@ -10,4 +10,13 @@ let
     rev = "6eb21bd3429535646da4aa396bb0c1f81a9b72c6";
   };
 in
-pkgs.callPackage "${src}/package.nix" { }
+(pkgs.callPackage "${src}/package.nix" { }).overrideAttrs (old: {
+  # Definition doesn't work with current nixpkgs due to use of removed vendorSha256.
+  # This could be fixed by updating, but it is unclear to me (sterni) if the pinned
+  # commit was chosen for any specific reason.
+  meta = old.meta or { } // {
+    ci = old.meta.ci or { } // {
+      skip = true;
+    };
+  };
+})
