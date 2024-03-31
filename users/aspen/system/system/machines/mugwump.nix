@@ -73,7 +73,7 @@ with lib;
 
   nix.gc.dates = "monthly";
 
-  users.users.grfn.openssh.authorizedKeys.keys = [
+  users.users.aspen.openssh.authorizedKeys.keys = [
     depot.users.aspen.keys.whitby
   ];
 

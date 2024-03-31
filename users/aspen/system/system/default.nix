@@ -16,7 +16,7 @@ rec {
     # Use the same nixpkgs as everything else
     home-manager.useGlobalPkgs = true;
 
-    home-manager.users.grfn = { config, lib, ... }: {
+    home-manager.users.aspen = { config, lib, ... }: {
       imports = [ ../home/machines/roswell.nix ];
       lib.depot = depot;
     };

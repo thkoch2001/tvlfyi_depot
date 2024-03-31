@@ -33,7 +33,7 @@ with lib;
   imports = [
     ./lib/zshFunctions.nix
     ./development/kube.nix
-    # TODO(grfn): agda build is broken in the nixpkgs checkout
+    # TODO(aspen): agda build is broken in the nixpkgs checkout
     # ./development/agda.nix
     ./development/rust.nix
   ];
@@ -68,7 +68,7 @@ with lib;
 
     nodePackages.prettier
   ] ++ optionals (stdenv.isLinux) [
-    # TODO(grfn): replace with stable again once the current julia debacle
+    # TODO(aspen): replace with stable again once the current julia debacle
     # is resolved upstream, see https://github.com/NixOS/nixpkgs/pull/121114
     julia_16-bin
     valgrind

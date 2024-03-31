@@ -290,14 +290,14 @@ in
                   }
 
                   external_script inbox {
-                      script_path = '${emacsclient "(grfn/num-inbox-items-message)"}'
+                      script_path = '${emacsclient "(aspen/num-inbox-items-message)"}'
                       format = 'Inbox: {output}'
                       cache_timeout = 120
                       color = "#93a1a1"
                   }
 
                   external_script current_task {
-                      script_path = '${emacsclient "(grfn/org-current-clocked-in-task-message)"}'
+                      script_path = '${emacsclient "(aspen/org-current-clocked-in-task-message)"}'
                       # format = '{output}'
                       cache_timeout = 60
                       color = "#93a1a1"

@@ -14,12 +14,12 @@
     ../modules/lib/cloneRepo.nix
   ];
 
-  home.username = "grfn";
-  home.homeDirectory = "/home/grfn";
+  home.username = "aspen";
+  home.homeDirectory = "/home/aspen";
 
   programs.password-store.enable = true;
 
-  grfn.impure.clonedRepos.passwordStore = {
+  aspen.impure.clonedRepos.passwordStore = {
     github = "glittershark/pass";
     path = ".local/share/password-store";
   };

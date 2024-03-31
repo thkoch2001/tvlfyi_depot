@@ -38,7 +38,7 @@ in
     pandoc
     barrier
     depot.tools.nsfv-setup
-    gimp # TODO(grfn): use glimpse once it build again
+    gimp # TODO(aspen): use glimpse once it build again
 
     # System utilities
     powertop
@@ -55,7 +55,7 @@ in
     keybase
     openssl
     yubikey-manager
-    # TODO(grfn): lagging behind yubikey-manager and doesn't support cryptography >= 39
+    # TODO(aspen): lagging behind yubikey-manager and doesn't support cryptography >= 39
     # yubikey-manager-qt
 
     # Spotify...etc

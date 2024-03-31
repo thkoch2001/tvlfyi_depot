@@ -76,7 +76,7 @@ in
         );
       };
 
-      grfn.impure.clonedRepos = {
+      aspen.impure.clonedRepos = {
         orgClubhouse = {
           github = "glittershark/org-clubhouse";
           path = "code/org-clubhouse";

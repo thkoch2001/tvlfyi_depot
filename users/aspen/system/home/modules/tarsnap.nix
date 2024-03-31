@@ -9,10 +9,10 @@
     ### Recommended options
 
     # Tarsnap cache directory
-    cachedir /home/grfn/.cache/tarsnap
+    cachedir /home/aspen/.cache/tarsnap
 
     # Tarsnap key file
-    keyfile /home/grfn/.private/tarsnap.key
+    keyfile /home/aspen/.private/tarsnap.key
 
     # Don't archive files which have the nodump flag set.
     nodump
