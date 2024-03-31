@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac82f9ea_93b29ff4",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 61
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-31T12:37:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ebd6a2bc_0671533f",
+      "revId": "7d33cbc8f1e2c5eb43bff71dba376d59652e3380",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fbac1089_a4af7ddf",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-03-29T15:31:56Z",
       "side": 1,
       "message": "Can you structure this a bit differently?\n\nstart with `let ca: CAHash \u003d if recursive_ingestion …`, and have the match case from here become the else part of this - however it can be a B3Digest, not Option\u003eB3Digest\u003e and `return Err(ImportError::FlatImportOfNonFile(path.to_string_lossy().to_string()))` directly in the `_` arm.",
+      "revId": "7d33cbc8f1e2c5eb43bff71dba376d59652e3380",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1763031a_f177da85",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 61
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-31T12:37:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fbac1089_a4af7ddf",
       "revId": "7d33cbc8f1e2c5eb43bff71dba376d59652e3380",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
