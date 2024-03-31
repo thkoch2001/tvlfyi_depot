@@ -8,7 +8,7 @@ let
   # URL handler to open `tg://` URLs in telega.el
   telega-launcher = pkgs.writeShellScriptBin "telega-launcher" ''
     echo "Opening ''${1} in telega.el ..."
-    ${pkgs.emacs-unstable}/bin/emacsclient -e "(telega-browse-url \"''${1}\")"
+    ${depot.users.tazjin.emacs.emacs}/bin/emacsclient -e "(telega-browse-url \"''${1}\")"
   '';
 in
 {
