@@ -16,8 +16,9 @@ that it can be successfully decoded by the `BASE64' package"
 
 (defun and-where (clauses)
   "Combine all non-nil clauses in CLAUSES into a single S-SQL WHERE form"
-  (if (null clauses) t
-      (reduce (lambda (x y) `(:and ,x ,y)) clauses)))
+  (let ((clauses (remove nil clauses)))
+    (if (null clauses) t
+        (reduce (lambda (x y) `(:and ,x ,y)) clauses))))
 
 (defun and-where* (&rest clauses)
   "Combine all non-nil clauses in CLAUSES into a single S-SQL WHERE form"
@@ -27,7 +28,7 @@ that it can be successfully decoded by the `BASE64' package"
     (name value-if-not-in-build &optional (doc nil))
   `(defvar ,name
      (or (when-let ((package (find-package :build)))
-           (let ((sym (find-symbol ,(symbol-name name))))
+           (let ((sym (find-symbol ,(symbol-name name) package)))
              (when (boundp sym) (symbol-value sym))))
          ,value-if-not-in-build)
      ,doc))

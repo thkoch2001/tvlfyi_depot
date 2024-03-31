@@ -27,10 +27,11 @@ depot.nix.buildLisp.program {
     (pkgs.writeText "build.lisp" ''
       (defpackage build
         (:use :cl :alexandria)
-        (:export :*migrations-dir*))
+        (:export :*migrations-dir* :*static-dir*))
       (in-package :build)
       (declaim (optimize (safety 3)))
       (defvar *migrations-dir* "${./src/migrations}")
+      (defvar *static-dir* "${./src/static}")
     '')
     ./src/util.lisp
     ./src/css.lisp
