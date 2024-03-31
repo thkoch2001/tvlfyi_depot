@@ -128,7 +128,7 @@
    ("nw" "Next @Work" tags-todo "@work&next")
    ("nt" "Next tooling" tags-todo "tooling")
 
-   ("p" . "Project...")
+   ;; ("p" . "Project...")
    ;; ,@(aspen/org-projects->agenda-commands (aspen/org-projects))
    )
 
