@@ -1,15 +1,22 @@
 { config, lib, pkgs, ... }:
 
 {
-  imports = [
-    ./reusable/battery.nix
-  ];
+  services.logind = {
+    powerKey = "hibernate";
+    powerKeyLongPress = "poweroff";
+    lidSwitch = "hybrid-sleep";
+    lidSwitchExternalPower = "ignore";
+  };
 
-  laptop.onLowBattery.enable = true;
-
-  services.logind.extraConfig = ''
-    HandlePowerKey=hibernate
+  systemd.sleep.extraConfig = ''
+    HibernateDelaySec=30m
+    SuspendState=mem
   '';
 
   services.tlp.enable = true;
+
+  services.upower = {
+    enable = true;
+    criticalPowerAction = "Hibernate";
+  };
 }
