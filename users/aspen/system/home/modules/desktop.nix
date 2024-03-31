@@ -5,8 +5,6 @@
 {
   imports = [
     ./i3.nix
-    ./obs.nix
-    ./games.nix
   ];
 
   home.packages = with pkgs; [
