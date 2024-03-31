@@ -46,16 +46,6 @@ let
 
 in
 mkMerge [
-  {
-    home.packages = [
-      crawl
-      xonotic
-    ];
-  }
-  (mkIf stdenv.isLinux {
-    home.packages = [
-      df
-      prismlauncher
-    ];
-  })
+  { home.packages = [ crawl ]; }
+  (mkIf stdenv.isLinux { home.packages = [ df prismlauncher ]; })
 ]
