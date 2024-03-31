@@ -7,6 +7,8 @@
 # End:
 
 #+title: Emacs Config
+#+PROPERTY: header-args:emacs-lisp :results silent
+#+PROPERTY: header-args:elisp :results silent
 
 #+begin_src emacs-lisp :tangle yes
 ;; -*- lexical-binding: t; -*-
@@ -42,15 +44,9 @@
    `(and symbol-start (group (or ,@words)) symbol-end)))
 #+end_src
 
-#+RESULTS:
-: rx-words
-
 #+begin_src elisp :tangle no :results example
 (average (list 1 2 3 4))
 #+end_src
-
-#+RESULTS:
-: 2
 
 ** Text editing utils
 *** Reading strings
@@ -112,8 +108,6 @@ Returns nil if the regex did not match, non-nil otherwise"
   (match-beginning 1))
 #+end_src
 
-#+RESULTS:
-: 3
 *** Changing file contents
 #+begin_src elisp :tangle yes
 (defmacro saving-excursion (&rest body)
@@ -144,17 +138,11 @@ Returns nil if the regex did not match, non-nil otherwise"
                        ,@(when ignore-case (list ignore-case)))))
 #+end_src
 
-#+RESULTS:
-: s-contains--pcase-macroexpander
-
 #+begin_src elisp :tangle no
 (pcase "foo"
   ((s-contains "bar") 1)
   ((s-contains "o") 2))
 #+end_src
-
-#+RESULTS:
-: 2
 
 ** Evil utils
 #+begin_src elisp :tangle yes
@@ -179,17 +167,11 @@ Returns nil if the regex did not match, non-nil otherwise"
        (evil-insert count vcount skip-empty-lines))))
 #+end_src
 
-#+RESULTS:
-: define-move-and-insert
-
 * Name and email
 #+begin_src emacs-lisp
 (setq user-full-name "Aspen Smith"
       user-mail-address "root@gws.fyi")
 #+end_src
-
-#+RESULTS:
-: root@gws.fyi
 
 * Visual style
 #+begin_src elisp :tangle yes
@@ -210,17 +192,11 @@ Returns nil if the regex did not match, non-nil otherwise"
       doom-modeline-height 12)
 #+end_src
 
-#+RESULTS:
-: 12
-
 #+begin_src elisp :tangle yes
 (setq whitespace-style '(face lines-tail))
 (global-whitespace-mode t)
 (add-hook 'org-mode-hook (lambda () (whitespace-mode -1)) t)
 #+end_src
-
-#+RESULTS:
-| er/add-org-mode-expansions | +aspen/org-setup | +lookup--init-org-mode-handlers-h | (closure (t) (&rest _) (add-hook 'before-save-hook 'org-encrypt-entries nil t)) | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-fold-show-all append local] 5] | #[0 \301\211\207 [imenu-create-index-function org-imenu-get-tree] 2] | doom-disable-show-paren-mode-h | doom-disable-show-trailing-whitespace-h | +org-make-last-point-visible-h | org-appear-mode | org-fancy-priorities-mode | org-superstar-mode | evil-org-mode | toc-org-enable | #[0 \300\301\302\303\304$\207 [add-hook change-major-mode-hook org-babel-show-result-all append local] 5] | org-babel-result-hide-spec | org-babel-hide-all-hashes | flyspell-mode | embrace-org-mode-hook | org-eldoc-load | +literate-enable-recompile-h | (lambda nil (whitespace-mode -1)) |
 
 ** Theme
 [[https://davidjohnstone.net/lch-lab-colour-gradient-picker][LAB colour gradient picker]] is a good tool for trying to find "halfway points" between two colours
@@ -229,9 +205,6 @@ Returns nil if the regex did not match, non-nil otherwise"
 #+begin_src elisp :tangle no
 (rainbow-mode)
 #+end_src
-
-#+RESULTS:
-: t
 
 #+name: solarized-vars
 #+begin_src elisp :tangle yes
@@ -280,9 +253,6 @@ Returns nil if the regex did not match, non-nil otherwise"
       +solarized-green-d   "#546E00"
       +solarized-green-l   "#B4C342")
 #+end_src
-
-#+RESULTS: solarized-vars
-: #B4C342
 
 *** Overrides
 
@@ -336,9 +306,6 @@ Returns nil if the regex did not match, non-nil otherwise"
   )
   #+end_src
 
-#+RESULTS: overrides-for-solarized-light
-| doom--customize-themes-h-91 | doom--customize-themes-h-92 | doom--customize-themes-h-93 | doom--customize-themes-h-94 | doom--customize-themes-h-95 | doom--customize-themes-h-96 | doom--customize-themes-h-97 | doom--customize-themes-h-98 |
-
 * Keybindings and navigation
 Get the hell out of here, snipe!
 #+begin_src elisp :tangle yes
@@ -352,9 +319,6 @@ Get the hell out of here, snipe!
   "r" #'consult-recent-file))
 #+end_src
 
-#+RESULTS:
-: consult-recent-file
-
 ** Flycheck
 #+begin_src elisp :tangle yes
 (evil-set-command-property 'flycheck-next-error :repeat nil)
@@ -366,8 +330,6 @@ Get the hell out of here, snipe!
   :m  "]e" #'flycheck-next-error
   :m  "[e" #'flycheck-previous-error))
 #+end_src
-
-#+RESULTS:
 
 ** Smerge
 #+begin_src elisp :tangle yes
@@ -385,9 +347,6 @@ Get the hell out of here, snipe!
    :desc "Keep Lower"   :n "l" #'smerge-keep-lower)))
 t
  #+end_src
-
-#+RESULTS:
-: t
 
 ** Vinegar-style dired
 #+begin_src elisp :tangle yes
@@ -408,8 +367,6 @@ t
        "-" #'aspen/dired-minus))
 #+end_src
 
-#+RESULTS:
-
 ** Lisp mappings
 *** Use paxedit
 #+begin_src elisp :tangle yes
@@ -418,9 +375,6 @@ t
          (clojure-mode . paxedit-mode)
          (common-lisp-mode . paxedit-mode)))
 #+end_src
-
-#+RESULTS:
-| paxedit-mode |
 
 *** Paxedit functions
 
@@ -453,9 +407,6 @@ t
       (paxedit-sexp-kill n)
       (message paxedit-message-kill)))
 #+end_src
-
-#+RESULTS:
-: aspen/paxedit-kill
 
 *** Paxedit mappings
 #+begin_src elisp :tangle yes
@@ -495,8 +446,6 @@ t
         ;; "a" 'grfn/insert-at-form-start
         ))
 #+end_src
-
-#+RESULTS:
 
 *** Eval functions
 #+begin_src elisp :tangle yes
@@ -598,8 +547,6 @@ If invoked with a prefix ARG eval the expression after inserting it"
 ;;;
 #+end_src
 
-#+RESULTS:
-: fireplace-eval-context
 *** Eval bindings
 fireplace-esque eval binding
 
@@ -668,8 +615,6 @@ fireplace-esque eval binding
 
 #+end_src
 
-#+RESULTS:
-
 ** Coerce
 
 #+begin_src elisp :tangle yes
@@ -689,9 +634,6 @@ fireplace-esque eval binding
               )))
 #+end_src
 
-#+RESULTS:
-: t
-
 * Mode-specific config
 ** org-mode
 #+begin_src elisp :tangle yes
@@ -700,8 +642,6 @@ fireplace-esque eval binding
   (load! "org-query"))
 #+end_src
 
-#+RESULTS:
-: t
 *** Theme overrides
 
 #+begin_src elisp :tangle yes
@@ -733,9 +673,6 @@ fireplace-esque eval binding
   `(org-level-7 :foreground ,+solarized-magenta)
   `(org-level-8 :foreground ,+solarized-blue))
 #+end_src
-
-#+RESULTS:
-| doom--customize-themes-h-91 | doom--customize-themes-h-92 | doom--customize-themes-h-93 | doom--customize-themes-h-94 | doom--customize-themes-h-95 | doom--customize-themes-h-96 | doom--customize-themes-h-97 | doom--customize-themes-h-98 | doom--customize-themes-h-99 |
 
 *** Commands
 #+begin_src elisp :tangle yes
@@ -787,8 +724,6 @@ fireplace-esque eval binding
    :n "g \\"  #'org-captue-refile)))
 #+end_src
 
-#+RESULTS:
-
 ** magit
 #+begin_src elisp :tangle yes
 (after! magit
@@ -824,8 +759,6 @@ fireplace-esque eval binding
     (list "o" "Reset HEAD@{1}" #'magit-reset-head-previous)))
 #+end_src
 
-#+RESULTS:
-
 ** elisp
 *** Org config mode
 The minor-mode for *this file*!
@@ -843,9 +776,6 @@ The minor-mode for *this file*!
   (sp-update-local-pairs 'org-config-mode))
 #+end_src
 
-#+RESULTS:
-| keymap |
-
 *** Bindings
 #+begin_src elisp :tangle yes
 (map!
@@ -853,8 +783,6 @@ The minor-mode for *this file*!
   :n "g SPC" #'eval-buffer
   :n "g RET" (λ! () (ert t)) ))
 #+end_src
-
-#+RESULTS:
 
 ** tuareg
 *** Config
@@ -890,14 +818,10 @@ The minor-mode for *this file*!
 nil
     #+end_src
 
-#+RESULTS:
-
 #+begin_src elisp :tangle yes
 (after! dune-mode
   (add-hook 'dune-mode-hook 'paxedit-mode))
 #+end_src
-
-#+RESULTS:
 
 *** Bindings
 #+begin_src elisp :tangle yes
@@ -909,8 +833,6 @@ nil
   :n "g y" #'merlin-locate-type
   "C-c C-f" (λ! () (compile "dune fmt"))))
 #+end_src
-
-#+RESULTS:
 
 *** Theme overrides
 #+begin_src elisp :tangle yes
@@ -928,9 +850,6 @@ nil
   `(vertico-group-title :foreground ,+solarized-s-base1)
   `(vertico-group-header :foreground ,+solarized-s-base1))
 #+end_src
-
-#+RESULTS:
-| doom--customize-themes-h-30 | doom--customize-themes-h-31 | doom--customize-themes-h-32 | doom--customize-themes-h-33 | doom--customize-themes-h-34 | doom--customize-themes-h-35 | doom--customize-themes-h-52 |
 
 ** clojure
 
@@ -991,8 +910,6 @@ nil
 nil
 #+end_src
 
-#+RESULTS:
-
 *** Commands
 
 #+begin_src elisp :tangle yes
@@ -1032,9 +949,6 @@ nil
 
 #+end_src
 
-#+RESULTS:
-: cider-copy-last-result
-
 *** Bindings
 
 
@@ -1071,8 +985,6 @@ nil
    :n "g \\" 'cider-switch-to-last-clojure-buffer)))
  #+end_src
 
- #+RESULTS:
-
 ** rust
 #+begin_src elisp :tangle yes
 (defun aspen/rust-setup ()
@@ -1083,9 +995,6 @@ nil
 
 (add-hook 'rust-mode-hook #'aspen/rust-setup)
 #+end_src
-
-#+RESULTS:
-| aspen/rust-setup | grfn/rust-setup | doom-modeline-env-setup-rust |
 
 *** Bindings
 
@@ -1100,16 +1009,11 @@ nil
    "m" #'lsp-rust-analyzer-expand-macro)))
 #+end_src
 
-#+RESULTS:
-
 *** Theme overrides
 #+begin_src elisp :tangle yes
 (custom-set-faces!
   `(rust-unsafe :foreground ,+solarized-red))
 #+end_src
-
-#+RESULTS:
-| doom--customize-themes-h-30 | doom--customize-themes-h-31 | doom--customize-themes-h-32 | doom--customize-themes-h-33 | doom--customize-themes-h-54 |
 
 ** common-lisp
 *** Commands
@@ -1140,9 +1044,6 @@ nil
     (select-window orig-window)))
 #+end_src
 
-#+RESULTS:
-: sly-run-tests
-
 *** Bindings
 
 #+begin_src emacs-lisp :tangle yes
@@ -1158,8 +1059,6 @@ nil
   "C-k" #'sly-mrepl-previous-prompt
   "C-r" #'isearch-backward))
 #+end_src
-
-#+RESULTS:
 
 * Completion
 ** Corfu
@@ -1186,9 +1085,6 @@ nil
         :i [backtab] #'corfu-previous))
 #+end_src
 
-#+RESULTS:
-: t
-
 ** Fuzzy search
 #+begin_src emacs-lisp :tangle yes
 (use-package! hotfuzz
@@ -1197,9 +1093,6 @@ nil
   (setopt completion-styles '(hotfuzz basic)
           completion-ignore-case t))
 #+end_src
-
-#+RESULTS:
-: t
 
 * Email
 #+begin_src elisp :tangle yes
@@ -1251,8 +1144,6 @@ nil
       :n "g SPC" #'aspen/notmuch-sync)
 #+end_src
 
-#+RESULTS:
-
 ** Bindings
 #+begin_src emacs-lisp :tangle yes
 (map!
@@ -1260,10 +1151,6 @@ nil
   :desc "Email" :n "o m" #'notmuch-jump-search
   :desc "Search email" "s M" #'consult-notmuch))
 #+end_src
-
-#+RESULTS:
-: notmuch-jump-search
-
 
 ** Theme
 
@@ -1273,15 +1160,11 @@ nil
     :background ,+solarized-halfway-highlight))
 #+end_src
 
-#+RESULTS:
-| doom--customize-themes-h-91 | doom--customize-themes-h-92 | doom--customize-themes-h-93 | doom--customize-themes-h-94 | doom--customize-themes-h-95 | doom--customize-themes-h-96 | doom--customize-themes-h-97 | doom--customize-themes-h-98 | doom--customize-themes-h-99 | doom--customize-themes-h-100 |
-
 * Misc
 ** TVL
 #+begin_src emacs-lisp :tangle yes
 (require 'tvl)
 #+end_src
-
 
 ** Matchit
 #+begin_src elisp :tangle yes
@@ -1324,16 +1207,10 @@ nil
     (call-interactively #'irc-connect)))
 #+end_src
 
-#+RESULTS:
-: aspen/switch-to-erc-buffer-or-connect
-
 #+begin_src elisp :tangle yes
 (map! :leader "o I" #'irc-connect
       :leader "o i" #'aspen/switch-to-erc-buffer-or-connect)
 #+end_src
-
-#+RESULTS:
-: aspen/switch-to-erc-buffer-or-connect
 
 *** IRC alerts
 #+begin_src elisp :tangle yes
@@ -1438,9 +1315,6 @@ If the buffer is currently not visible, makes it sticky."
 (add-hook 'erc-connect-pre-hook 'my-erc-define-alerts)
 #+end_src
 
-#+RESULTS:
-| my-erc-define-alerts |
-
 *** Don't send ~:q~, etc, to the server
 #+begin_src elisp :tangle yes
 (defun fix-irc-message (msg)
@@ -1449,16 +1323,11 @@ If the buffer is currently not visible, makes it sticky."
 (advice-add #'erc-user-input :filter-return #'fix-irc-message)
 #+end_src
 
-#+RESULTS:
-
 *** Theme overrides
 #+begin_src elisp :tangle yes
 (custom-set-faces!
   `(erc-button :foreground ,+solarized-blue))
 #+end_src
-
-#+RESULTS:
-| doom--customize-themes-h-30 | doom--customize-themes-h-31 | doom--customize-themes-h-32 | doom--customize-themes-h-43 | doom--customize-themes-h-47 | doom--customize-themes-h-48 | doom--customize-themes-h-49 | doom--customize-themes-h-50 | doom--customize-themes-h-51 | doom--customize-themes-h-52 | doom--customize-themes-h-53 | doom--customize-themes-h-54 | doom--customize-themes-h-56 | doom--customize-themes-h-57 | doom--customize-themes-h-58 | doom--customize-themes-h-59 | doom--customize-themes-h-60 | doom--customize-themes-h-61 | doom--customize-themes-h-62 | doom--customize-themes-h-63 | doom--customize-themes-h-64 |
 
 *** TODO Nick rainbow colors
 Stole this from https://github.com/jtdaugherty/emacs-config/blob/master/common/erc-nick-colors.el.
@@ -1517,14 +1386,8 @@ you'll change the colors used for nicks."
 (add-hook 'erc-insert-modify-hook 'erc-insert-nick-colors)
 #+end_src
 
-#+RESULTS:
-| erc-insert-nick-colors | erc-controls-highlight | erc-fill | my-erc-hook | erc-button-add-buttons | erc-match-message | erc-add-timestamp |
-
 * Hacks
 Not having this breaks elisp documentation :(
 #+begin_src elisp :tangle yes
 (defvar elisp-demos-user-files nil)
 #+end_src
-
-#+RESULTS:
-: elisp-demos-user-files
