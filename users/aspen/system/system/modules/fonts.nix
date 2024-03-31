@@ -5,6 +5,7 @@
       nerdfonts
       noto-fonts-emoji
       twitter-color-emoji
+      weather-icons
     ];
 
     fontconfig.defaultFonts.emoji = [ "Twitter Color Emoji" ];
