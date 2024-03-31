@@ -52,6 +52,7 @@ with lib;
     jsonnet
     ngrok
     amber
+    ocamlPackages.patdiff
 
     gdb
     lldb
