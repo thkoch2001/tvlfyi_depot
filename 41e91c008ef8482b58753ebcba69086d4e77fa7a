@@ -41,6 +41,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ec60b91_099ca85a",
+        "filename": "web/panettone/default.nix",
+        "patchSetId": 11
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-03-31T19:13:01Z",
+      "side": 1,
+      "message": "You\u0027ll want to change it after startup during local dev (to move away from the nix store directory)",
+      "parentUuid": "1209185e_4d828ee9",
+      "range": {
+        "startLine": 33,
+        "startChar": 14,
+        "endLine": 33,
+        "endChar": 30
+      },
+      "revId": "41e91c008ef8482b58753ebcba69086d4e77fa7a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dac770d5_2e8f944c",
@@ -54,6 +78,24 @@
       "writtenOn": "2024-03-30T19:27:44Z",
       "side": 1,
       "message": "Can you add a comment above along the lines of „options starting with this will be ignored by connect-to-db“?",
+      "revId": "41e91c008ef8482b58753ebcba69086d4e77fa7a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d410e954_22e41ef8",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 11
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-03-31T19:13:01Z",
+      "side": 1,
+      "message": "I mean... this is just \"connect-to-db isn\u0027t pooled\", which is kinda the whole point.",
+      "parentUuid": "dac770d5_2e8f944c",
       "revId": "41e91c008ef8482b58753ebcba69086d4e77fa7a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -109,6 +151,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca09eb3b_23d0652d",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 11
+      },
+      "lineNbr": 367,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-03-31T19:13:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ccb030c_ca4bc4c6",
+      "revId": "41e91c008ef8482b58753ebcba69086d4e77fa7a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce8a7304_21980ec1",
@@ -122,6 +182,24 @@
       "writtenOn": "2024-03-30T19:27:44Z",
       "side": 1,
       "message": "Isn\u0027t this already covered in the comment at the end of the file?",
+      "revId": "41e91c008ef8482b58753ebcba69086d4e77fa7a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c76b02c_0134290a",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 11
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-03-31T19:13:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce8a7304_21980ec1",
       "revId": "41e91c008ef8482b58753ebcba69086d4e77fa7a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
