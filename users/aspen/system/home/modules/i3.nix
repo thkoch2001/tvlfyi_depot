@@ -1,5 +1,7 @@
 { config, lib, pkgs, ... }:
 let
+  inherit (config.lib) depot;
+
   mod = "Mod4";
   solarized = import ../common/solarized.nix;
   # TODO pull this out into lib
@@ -8,16 +10,112 @@ let
       msg=$(emacsclient --eval '${eval}' 2>&1)
       echo "''${msg:1:-1}"
     '';
-  screenlayout = {
-    home = pkgs.writeShellScript "screenlayout_home.sh" ''
-      xrandr \
-        --output eDP-1 --mode 1920x1200 --pos 0x960 --rotate normal \
-        --output DP-3 --primary --mode 3840x2160 --pos 1920x0 --rotate normal \
-        --output DP-1 --off \
-        --output DP-2 --off \
-        --output DP-4 --off
-    '';
-  };
+
+  i3status-conf = pkgs.writeText "i3status.conf" ''
+    general {
+        output_format = i3bar
+        colors = true
+        color_good = "#859900"
+
+        interval = 1
+    }
+
+    order += "external_script current_task"
+    order += "external_script inbox"
+    order += "spotify"
+    order += "weather_owm"
+    order += "volume_status"
+    order += "wireless ${config.system.machine.wirelessInterface}"
+    # order += "ethernet enp3s0f0"
+    order += "cpu_usage"
+    ${lib.optionalString (!isNull config.system.machine.battery) ''
+      order += "battery ${toString config.system.machine.battery}"
+    ''}
+    # order += "volume master"
+    order += "time"
+    order += "tztime utc"
+
+    mpd {
+        format = "%artist - %album - %title"
+    }
+
+    wireless ${config.system.machine.wirelessInterface} {
+        format_up = "W: (%quality - %essid - %bitrate) %ip"
+        format_down = "W: -"
+    }
+
+    ethernet enp3s0f0 {
+        format_up = "E: %ip"
+        format_down = "E: -"
+    }
+
+    battery ${toString config.system.machine.battery} {
+        format = "%status %percentage (%remaining)"
+        path = "/sys/class/power_supply/BAT%d/uevent"
+        low_threshold = 10
+    }
+
+    cpu_usage {
+        format = "CPU: %usage"
+    }
+
+    load {
+        format = "%5min"
+    }
+
+    time {
+        format = "    %a %h %d ⌚   %I:%M     "
+    }
+
+    spotify {
+        color_playing = "#fdf6e3"
+        color_paused = "#93a1a1"
+        format_stopped = ""
+        format_down = ""
+        format = "{title} - {artist} ({album})"
+    }
+
+    external_script inbox {
+        script_path = '${emacsclient "(grfn/num-inbox-items-message)"}'
+        format = 'Inbox: {output}'
+        cache_timeout = 120
+        color = "#93a1a1"
+    }
+
+    external_script current_task {
+        script_path = '${
+          emacsclient "(grfn/org-current-clocked-in-task-message)"
+        }'
+        # format = '{output}'
+        cache_timeout = 60
+        color = "#93a1a1"
+    }
+
+    tztime utc {
+        timezone = "UTC"
+        format = "    %H·%M    "
+    }
+
+    volume_status {
+        format = "☊ {percentage}"
+        format_muted = "☊ X"
+        # device = "default"
+        # mixer_idx = 0
+    }
+
+    weather_owm {
+        api_key = '@owmApiKey@'
+        unit_temperature = 'c'
+        format = '{icon} {temperature}[ {rain}]'
+    }
+  '';
+
+  i3status-command = pkgs.writeShellScript "i3status.sh" ''
+    sed -s "s/@owmApiKey@/$(pass owm-api-key)/" \
+      < ${i3status-conf} \
+      > /tmp/i3status.conf
+    py3status -c /tmp/i3status.conf
+  '';
 
   inherit (builtins) map;
   inherit (lib) mkMerge range;
@@ -58,7 +156,7 @@ in {
     home.packages = with pkgs; [
       rofi
       rofi-pass
-      python3Packages.py3status
+      depot.users.aspen.pkgs.py3status
       i3lock
       i3status
       dconf # for gtk
@@ -179,12 +277,6 @@ in {
 
           # Screen Layout
           "${mod}+Shift+t" = "exec xrandr --auto";
-          "${mod}+t" = "exec ${screenlayout.home}";
-          "${mod}+Ctrl+t" = "exec ${
-              pkgs.writeShellScript "fix_term.sh" ''
-                xrandr --output eDP-1 --off && ${screenlayout.home}
-              ''
-            }";
 
           # Notifications
           "${mod}+Shift+n" = "exec killall -SIGUSR1 .dunst-wrapped";
@@ -224,101 +316,7 @@ in {
         };
 
         bars = [{
-          statusCommand = let
-            i3status-conf = pkgs.writeText "i3status.conf" ''
-              general {
-                  output_format = i3bar
-                  colors = true
-                  color_good = "#859900"
-
-                  interval = 1
-              }
-
-              order += "external_script current_task"
-              order += "external_script inbox"
-              order += "spotify"
-              order += "volume_status"
-              order += "wireless ${config.system.machine.wirelessInterface}"
-              # order += "ethernet enp3s0f0"
-              order += "cpu_usage"
-              ${lib.optionalString (!isNull config.system.machine.battery) ''
-                order += "battery ${toString config.system.machine.battery}"
-              ''}
-              # order += "volume master"
-              order += "time"
-              order += "tztime utc"
-
-              mpd {
-                  format = "%artist - %album - %title"
-              }
-
-              wireless ${config.system.machine.wirelessInterface} {
-                  format_up = "W: (%quality - %essid - %bitrate) %ip"
-                  format_down = "W: -"
-              }
-
-              ethernet enp3s0f0 {
-                  format_up = "E: %ip"
-                  format_down = "E: -"
-              }
-
-              battery ${toString config.system.machine.battery} {
-                  format = "%status %percentage"
-                  path = "/sys/class/power_supply/BAT%d/uevent"
-                  low_threshold = 10
-              }
-
-              cpu_usage {
-                  format = "CPU: %usage"
-              }
-
-              load {
-                  format = "%5min"
-              }
-
-              time {
-                  format = "    %a %h %d ⌚   %I:%M     "
-              }
-
-              spotify {
-                  color_playing = "#fdf6e3"
-                  color_paused = "#93a1a1"
-                  format_stopped = ""
-                  format_down = ""
-                  format = "{title} - {artist} ({album})"
-              }
-
-              external_script inbox {
-                  script_path = '${
-                    emacsclient "(grfn/num-inbox-items-message)"
-                  }'
-                  format = 'Inbox: {output}'
-                  cache_timeout = 120
-                  color = "#93a1a1"
-              }
-
-              external_script current_task {
-                  script_path = '${
-                    emacsclient "(grfn/org-current-clocked-in-task-message)"
-                  }'
-                  # format = '{output}'
-                  cache_timeout = 60
-                  color = "#93a1a1"
-              }
-
-              tztime utc {
-                  timezone = "UTC"
-                  format = "    %H·%M    "
-              }
-
-              volume_status {
-                  format = "☊ {percentage}"
-                  format_muted = "☊ X"
-                  # device = "default"
-                  # mixer_idx = 0
-              }
-            '';
-          in "py3status -c ${i3status-conf}";
+          statusCommand = "${i3status-command}";
           inherit fonts;
           position = "top";
           colors = with solarized; rec {
