@@ -324,6 +324,7 @@ in the context of a database transaction and should perform the migration."
 (defun migrate ()
   "Migrate the database, running all migrations that have not yet been run"
   (ensure-migrations-table)
+  (format t "Running migrations from ~A...~%" *migrations-dir*)
   (let* ((all-migrations (load-migrations))
          (already-run (migrations-already-run))
          (num-migrations-run 0))
@@ -350,7 +351,7 @@ in the context of a database transaction and should perform the migration."
         ;; otherwise, run the migration
         (run-migration migration))
       (incf num-migrations-run))
-    (format nil "Ran ~A migration~:P" num-migrations-run)))
+    (format t "Ran ~A migration~:P~%" num-migrations-run)))
 
 ;;;
 ;;; Querying
