@@ -13,6 +13,11 @@ let
   gcScript = pkgs.writeShellScript "automatic-nix-gc" ''
     set -ueo pipefail
 
+    if [ -e /run/stop-automatic-gc ]; then
+      echo "GC is disabled through /run/stop-automatic-gc"
+      exit 0
+    fi
+
     readonly MIN_THRESHOLD_KIB="${toString (GiBtoKiB cfg.diskThreshold)}"
     readonly MAX_FREED_BYTES="${toString (GiBtoBytes cfg.maxFreed)}"
     readonly GEN_THRESHOLD="${cfg.preserveGenerations}"
