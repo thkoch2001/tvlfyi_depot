@@ -39,9 +39,9 @@ in
       };
 
       battery = mkOption {
-        description = "Does this system have a battery?";
-        default = true;
-        type = types.bool;
+        description = "Battery index for this system's battery";
+        default = 0;
+        type = types.nullOr types.int;
       };
     };
   };
@@ -242,8 +242,8 @@ in
                   order += "wireless ${config.system.machine.wirelessInterface}"
                   # order += "ethernet enp3s0f0"
                   order += "cpu_usage"
-                  ${lib.optionalString (config.system.machine.battery) ''
-                      order += "battery 0"
+                  ${lib.optionalString (!isNull config.system.machine.battery) ''
+                    order += "battery ${toString config.system.machine.battery}"
                   ''}
                   # order += "volume master"
                   order += "time"
@@ -263,7 +263,7 @@ in
                       format_down = "E: -"
                   }
 
-                  battery 0 {
+                  battery ${toString config.system.machine.battery} {
                       format = "%status %percentage"
                       path = "/sys/class/power_supply/BAT%d/uevent"
                       low_threshold = 10
