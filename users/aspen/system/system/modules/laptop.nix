@@ -4,7 +4,7 @@
   services.logind = {
     powerKey = "hibernate";
     powerKeyLongPress = "poweroff";
-    lidSwitch = "hybrid-sleep";
+    lidSwitch = "suspend-then-hibernate";
     lidSwitchExternalPower = "ignore";
   };
 
@@ -18,5 +18,6 @@
   services.upower = {
     enable = true;
     criticalPowerAction = "Hibernate";
+    percentageAction = 3;
   };
 }
