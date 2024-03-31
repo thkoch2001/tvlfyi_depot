@@ -23,7 +23,7 @@ in
   system.machine = {
     wirelessInterface = "wlp4s0";
     i3FontSize = 9;
-    battery = false;
+    battery = null;
   };
 
   home.packages = with pkgs; [
