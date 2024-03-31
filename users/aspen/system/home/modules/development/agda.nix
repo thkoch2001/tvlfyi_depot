@@ -29,7 +29,7 @@ in
       ]))
   ];
 
-  grfn.impure.clonedRepos = {
+  aspen.impure.clonedRepos = {
     agda-stdlib = {
       github = "agda/agda-stdlib";
       path = "code/agda-stdlib";
@@ -51,8 +51,8 @@ in
   '';
 
   home.file.".agda/libraries".text = ''
-    /home/grfn/code/agda-stdlib/standard-library.agda-lib
-    /home/grfn/code/agda-categories/agda-categories.agda-lib
+    /home/aspen/code/agda-stdlib/standard-library.agda-lib
+    /home/aspen/code/agda-categories/agda-categories.agda-lib
   '';
 
 }

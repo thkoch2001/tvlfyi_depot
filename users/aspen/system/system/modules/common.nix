@@ -49,7 +49,7 @@ with lib;
     settings = { X11Forwarding = true; };
   };
 
-  users.users.grfn.openssh.authorizedKeys.keys =
+  users.users.aspen.openssh.authorizedKeys.keys =
     [ depot.users.aspen.keys.main ];
 
   programs.ssh.startAgent = true;
@@ -59,7 +59,7 @@ with lib;
   users.mutableUsers = true;
   programs.zsh.enable = true;
   environment.pathsToLink = [ "/share/zsh" ];
-  users.users.grfn = {
+  users.users.aspen = {
     isNormalUser = true;
     initialPassword = "password";
     extraGroups = [
@@ -71,7 +71,7 @@ with lib;
   };
 
   nix = {
-    settings.trusted-users = [ "grfn" ];
+    settings.trusted-users = [ "aspen" ];
     distributedBuilds = true;
 
     gc = {

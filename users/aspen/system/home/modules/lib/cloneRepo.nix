@@ -2,7 +2,7 @@
 with lib;
 {
   options = {
-    grfn.impure.clonedRepos = mkOption {
+    aspen.impure.clonedRepos = mkOption {
       description = "Repositories to clone";
       default = { };
       type = with types; attrsOf (
@@ -71,6 +71,6 @@ with lib;
               fi
             fi
           '')
-        config.grfn.impure.clonedRepos;
+        config.aspen.impure.clonedRepos;
   };
 }

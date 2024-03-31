@@ -38,8 +38,8 @@
   gtk = {
     enable = true;
     gtk3.bookmarks = [
-      "file:///home/grfn/code"
-      "file:///home/grfn/notes"
+      "file:///home/aspen/code"
+      "file:///home/aspen/notes"
     ];
   };
 }
