@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "557aaddc_7233d27e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-31T15:22:08Z",
+      "side": 1,
+      "message": "u-root needs to use an older version of the go compiler (or u-root itself bumped).",
+      "revId": "c0dfc989e4ea09bc54997dd6dd02372f47b518de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
