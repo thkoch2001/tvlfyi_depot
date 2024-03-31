@@ -345,7 +345,8 @@ stringToText = Data.Text.pack
 --
 -- ATTN: Don’t use `String` in code if you can avoid it, prefer `Text` instead.
 stringToBytesUtf8 :: String -> ByteString
-stringToBytesUtf8 = GHC.utf8EncodeString
+-- TODO(Profpatsch): use a stable interface
+stringToBytesUtf8 = GHC.utf8EncodeByteString
 
 -- | Like `show`, but generate a 'Text'
 --

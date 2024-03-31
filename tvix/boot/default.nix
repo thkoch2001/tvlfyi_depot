@@ -33,12 +33,12 @@ rec {
   # A build framework for minimal initrds
   uroot = pkgs.buildGoModule {
     pname = "u-root";
-    version = "unstable-2023-09-20";
+    version = "unstable-2024-03-28";
     src = pkgs.fetchFromGitHub {
       owner = "u-root";
       repo = "u-root";
-      rev = "72921548ce2e88c4c5b62e83c717cbd834b58067";
-      hash = "sha256-fEoUGqh6ZXprtSpJ55MeuSFe7L5A/rkIIVLCwxbPHzE=";
+      rev = "ee0e19c416de05fcd25a378c1bf1718fff9d6fd3";
+      sha256 = "139fbxnmp1y993vhs894zy517qqmkwhln1rr1xcisq14ki0ay9d6";
     };
     vendorHash = null;
 
