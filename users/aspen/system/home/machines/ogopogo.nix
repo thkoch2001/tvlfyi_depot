@@ -10,6 +10,8 @@ in
     ../platforms/linux.nix
     ../modules/common.nix
     ../modules/desktop.nix
+    ../modules/games.nix
+    ../modules/obs.nix
     ../modules/development/agda.nix
     ../modules/development/readyset.nix
     ../modules/development/ocaml.nix
