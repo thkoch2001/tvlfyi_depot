@@ -1,4 +1,5 @@
 # Local variables:
+# lexical-binding: t
 # eval: (paxedit-mode 1)
 # eval: (display-line-numbers-mode 1)
 # eval: (flyspell-mode -1)
@@ -6,6 +7,10 @@
 # End:
 
 #+title: Emacs Config
+
+#+begin_src emacs-lisp :tangle yes
+;; -*- lexical-binding: t; -*-
+#+end_src
 
 * Utils
 #+begin_src elisp :tangle yes
@@ -191,7 +196,7 @@ Returns nil if the regex did not match, non-nil otherwise"
 (let ((font-family (pcase system-type
                      ('darwin "MesloLGSDZ NF")
                      ('gnu/linux "Meslo LGSDZ Nerd Font"))))
-  (setq doom-font (font-spec :family font-family :size 14)
+  (setq doom-font (font-spec :family font-family :height 113)
         doom-big-font (font-spec :family font-family :size 24)
         doom-big-font-increment 5
         doom-variable-pitch-font (font-spec :family font-family)
@@ -339,6 +344,16 @@ Get the hell out of here, snipe!
 #+begin_src elisp :tangle yes
 (remove-hook 'doom-first-input-hook #'evil-snipe-mode)
 #+end_src
+
+#+begin_src emacs-lisp :tangle yes
+(map!
+ (:leader
+  "b" #'consult-buffer
+  "r" #'consult-recent-file))
+#+end_src
+
+#+RESULTS:
+: consult-recent-file
 
 ** Flycheck
 #+begin_src elisp :tangle yes
@@ -681,7 +696,8 @@ fireplace-esque eval binding
 ** org-mode
 #+begin_src elisp :tangle yes
 (after! org
-  (load! "org-config"))
+  (load! "org-config")
+  (load! "org-query"))
 #+end_src
 
 #+RESULTS:
@@ -763,11 +779,16 @@ fireplace-esque eval binding
 (map!
  (:after org
   :n "C-c C-x C-o" #'org-clock-out
+  (:leader
+   "n k" #'org-archive-subtree-default)
 
   (:map org-capture-mode-map
    :n "g RET" #'org-capture-finalize
    :n "g \\"  #'org-captue-refile)))
 #+end_src
+
+#+RESULTS:
+
 ** magit
 #+begin_src elisp :tangle yes
 (after! magit
@@ -1058,11 +1079,7 @@ nil
   (interactive)
   (+evil-embrace-angle-bracket-modes-hook-h)
   (setq-local whitespace-line-column 100
-              fill-column 100)
-  (setq lsp-rust-analyzer-cargo-watch-command "clippy"
-        lsp-rust-analyzer-cargo-watch-args ["--target-dir" "/home/grfn/code/readyset/readyset/target/rust-analyzer"]
-        rustic-format-trigger 'on-save
-        lsp-ui-doc-enable t))
+              fill-column 100))
 
 (add-hook 'rust-mode-hook #'aspen/rust-setup)
 #+end_src
@@ -1094,11 +1111,91 @@ nil
 #+RESULTS:
 | doom--customize-themes-h-30 | doom--customize-themes-h-31 | doom--customize-themes-h-32 | doom--customize-themes-h-33 | doom--customize-themes-h-54 |
 
-* Fuzzy search
+** common-lisp
+*** Commands
+#+begin_src emacs-lisp :tangle yes
+(defun aspen/sly-panettone ()
+  (interactive)
+  (sly
+   (concat
+    (s-trim
+     (shell-command-to-string
+      "nix-build -o sbcl -E 'with import ~/code/depot {}; nix.buildLisp.sbclWith [web.panettone]'"))
+    "/bin/sbcl")))
+
+(defun aspen/setup-lisp ()
+  (interactive)
+  (rainbow-delimiters-mode)
+  (paxedit-mode 1)
+  (flycheck-mode -1))
+
+(add-hook 'common-lisp-mode-hook #'aspen/setup-lisp)
+
+(defun sly-run-tests ()
+  (interactive)
+  ;; TODO: handle other test frameworks
+  (let ((orig-window (get-buffer-window)))
+    (sly-eval '(fiveam:run!))
+    (funcall-interactively #'sly-mrepl-sync)
+    (select-window orig-window)))
+#+end_src
+
+#+RESULTS:
+: sly-run-tests
+
+*** Bindings
+
+#+begin_src emacs-lisp :tangle yes
+(map!
+ (:map sly-mode-map
+  :n "g \\" #'sly-mrepl-sync
+  :n "g d" #'sly-edit-definition
+  :n "K" #'sly-documentation
+  :n "g SPC" #'sly-compile-and-load-file
+  :n "g RET" #'sly-run-tests)
+
+ (:map sly-mrepl-mode-map
+  "C-k" #'sly-mrepl-previous-prompt
+  "C-r" #'isearch-backward))
+#+end_src
+
+#+RESULTS:
+
+* Completion
+** Corfu
+#+begin_src emacs-lisp :tangle yes
+(setopt +corfu-want-ret-to-confirm nil)
+
+(use-package! corfu
+  :demand t
+  :bind (:map corfu-map
+              ("TAB" . corfu-next)
+              ([tab] . corfu-next)
+              ("S-TAB" . corfu-previous)
+              ([backtab] . corfu-previous))
+  :init (setopt corfu-on-exact-match 'insert
+                corfu-preselect 'prompt
+                completion-cycle-threshold 1
+                corfu-quit-no-match t
+                corfu-quit-at-boundary t)
+  :config
+  (map! :map corfu-map
+        :i "TAB" #'corfu-next
+        :i [tab] #'corfu-next
+        :i "S-TAB" #'corfu-previous
+        :i [backtab] #'corfu-previous))
+#+end_src
+
+#+RESULTS:
+: t
+
+** Fuzzy search
 #+begin_src emacs-lisp :tangle yes
 (use-package! hotfuzz
+  :after (orderless corfu)
   :config
-  (setopt completion-styles '(hotfuzz)))
+  (setopt completion-styles '(hotfuzz basic)
+          completion-ignore-case t))
 #+end_src
 
 #+RESULTS:
@@ -1121,10 +1218,40 @@ nil
         message-sendmail-f-is-evil 't
         message-sendmail-envelope-from 'header
         message-sendmail-extra-arguments '("--read-envelope-from")))
+
+(defun aspen/notmuch-sync ()
+  (interactive)
+  (let* ((search-buffer (current-buffer))
+         (proc (start-process-shell-command
+                "notmuch-sync"
+                "*notmuch-sync*"
+                "cd ~/mail/personal/ && gmi sync"))
+         (buf (process-buffer proc)))
+
+    (set-process-sentinel
+     proc
+     (lambda (proc msg)
+       (internal-default-process-sentinel proc msg)
+       (when (and (string= msg "finished\n"))
+         (kill-buffer buf)
+         (with-current-buffer search-buffer
+           (when (eq major-mode 'notmuch-search-mode)
+             (notmuch-refresh-this-buffer))))))
+
+    (with-current-buffer buf
+      (+popup-buffer-mode))
+    (display-buffer buf '(display-buffer-at-bottom . ()))))
+
+(set-popup-rule!
+  "^\\*notmuch-sync\\*$"
+  :select nil
+  :quit 'other)
+
+(map! :map notmuch-search-mode-map
+      :n "g SPC" #'aspen/notmuch-sync)
 #+end_src
 
 #+RESULTS:
-| --read-envelope-from |
 
 ** Bindings
 #+begin_src emacs-lisp :tangle yes
@@ -1150,13 +1277,6 @@ nil
 | doom--customize-themes-h-91 | doom--customize-themes-h-92 | doom--customize-themes-h-93 | doom--customize-themes-h-94 | doom--customize-themes-h-95 | doom--customize-themes-h-96 | doom--customize-themes-h-97 | doom--customize-themes-h-98 | doom--customize-themes-h-99 | doom--customize-themes-h-100 |
 
 * Misc
-** Make underscores word chars
-#+begin_src elisp :tangle yes
-(modify-syntax-entry ?_ "w")
-#+end_src
-
-#+RESULTS:
-
 ** Matchit
 #+begin_src elisp :tangle yes
 (use-package! evil-matchit)

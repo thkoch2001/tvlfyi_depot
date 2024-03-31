@@ -5,6 +5,7 @@
 (package! paxedit)
 (package! predd
   :recipe (:host github :repo "skeeto/predd"))
+(package! direnv)
 (package! alert)
 (package! flycheck-clojure)
 (package! evil-matchit)
