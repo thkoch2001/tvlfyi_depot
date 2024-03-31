@@ -34,6 +34,24 @@
       "parentUuid": "901d02cd_303e7094",
       "revId": "525ca87c76fa526a6781870d7d55f8021191bcef",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "579e2191_f02ab148",
+        "filename": "third_party/nix-snapshotter/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-03-31T19:10:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "465d7c30_6f6c7806",
+      "revId": "525ca87c76fa526a6781870d7d55f8021191bcef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
