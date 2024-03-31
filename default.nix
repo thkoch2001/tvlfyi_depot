@@ -110,19 +110,6 @@ readTree.fix (self: (readDepot {
     # xanthous and related targets are disabled until cl/9186 is submitted
     self.users.aspen.xanthous
     self.users.aspen.system.system.mugwumpSystem
-
-    # Temporarily disabled after cl/11289. Hopefully these failures are transient
-    # and will disappear with the next channel bump.
-    self.users.aspen.system.home.ogopogoHome
-    self.users.aspen.system.home.luscaHome
-    self.users.aspen.system.home.yerenHome
-    self.users.aspen.system.system.roswellSystem
-    self.users.flokli.nixos.archeologyEc2System
-    self.users.flokli.nixos.deploy-archeology-ec2
-    self.users.wpcarro.nixos.avaSystem
-    self.users.wpcarro.nixos.kyokoSystem
-    self.users.wpcarro.nixos.marcusSystem
-    self.users.wpcarro.nixos.tarascoSystem
   ];
 
   # List of all buildable targets, for CI purposes.
