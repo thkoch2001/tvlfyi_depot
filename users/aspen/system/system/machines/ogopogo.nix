@@ -96,48 +96,6 @@
     };
   };
 
-  services.buildkite-agents.ogopogo-1 = rec {
-    enable = true;
-    tokenPath = config.age.secretsDir + "/buildkite-token";
-    privateSshKeyPath = config.age.secretsDir + "/buildkite-ssh-key";
-    runtimePackages = with pkgs; [
-      docker
-      nix
-      gnutar
-      gzip
-      bash
-    ];
-    tags = {
-      queue = "ogopogo";
-    };
-    dataDir = "/home/grfn/buildkite-agent";
-
-    hooks.environment = ''
-      export BUILDKITE_AGENT_HOME=${dataDir}
-    '';
-  };
-  systemd.services.buildkite-agent-ogopogo-1.serviceConfig.User =
-    lib.mkForce "grfn";
-  users.users.grfn.extraGroups = [ "keys" ];
-
-  age.secrets =
-    let
-      secret = name: depot.users.aspen.secrets."${name}.age";
-    in
-    {
-      buildkite-ssh-key = {
-        file = secret "buildkite-ssh-key";
-        group = "keys";
-        mode = "0440";
-      };
-
-      buildkite-token = {
-        file = secret "buildkite-token";
-        group = "keys";
-        mode = "0440";
-      };
-    };
-
   nix.settings.substituters = [ "ssh://grfn@172.16.0.5" ];
   nix.settings.trusted-substituters = [ "ssh://grfn@172.16.0.5" ];
   programs.ssh.knownHosts.mugwump = {
