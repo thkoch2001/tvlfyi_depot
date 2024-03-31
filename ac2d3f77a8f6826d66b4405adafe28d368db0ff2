@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f274b768_757bcf48",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-03-31T12:38:38Z",
+      "side": 1,
+      "message": "@sternenseemann@systemli.org Whew, Nix is really stupid on that. :/\nI don\u0027t know if we need to be dumber than Nix on that, but given the situation, we can keep it in eval, perform store path checks and move on.\n\n@flokli@flokli.de Is that okay with you?\n\nEither way, my intention is still to have a \"stricter\" mode of operations where we do those invariant checks so that we can do \"stricter\" evaluation in nixpkgs and ensure no fuckery is going on (and not waiting for realization to show that).",
+      "parentUuid": "88a2868a_35dec92c",
+      "revId": "ac2d3f77a8f6826d66b4405adafe28d368db0ff2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f670e304_5a99ae6c",
         "filename": "tvix/eval/src/builtins/mod.rs",
         "patchSetId": 1
