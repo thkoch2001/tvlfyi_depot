@@ -34,6 +34,24 @@
       "parentUuid": "557aaddc_7233d27e",
       "revId": "c0dfc989e4ea09bc54997dd6dd02372f47b518de",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "467313ae_e198db31",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-31T17:31:27Z",
+      "side": 1,
+      "message": "This gets fixed by bumping u-root itself, which is what https://cl.tvl.fyi/c/depot/+/11291 does now, so you can just rebase on top of that.",
+      "parentUuid": "557aaddc_7233d27e",
+      "revId": "c0dfc989e4ea09bc54997dd6dd02372f47b518de",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
