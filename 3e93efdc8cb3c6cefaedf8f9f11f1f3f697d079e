@@ -1,0 +1,136 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7bd1335f_d6dbe677",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-03-31T10:50:24Z",
+      "side": 1,
+      "message": "Better late than never...",
+      "revId": "3e93efdc8cb3c6cefaedf8f9f11f1f3f697d079e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66e5b119_2dc2f989",
+        "filename": "tvix/eval/docs/catchable-errors.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-03-31T10:50:24Z",
+      "side": 1,
+      "message": "Wow this is a much better name; I hope you make this change.  \"Triable error\" is a much more accurate description of what this thing is.",
+      "range": {
+        "startLine": 28,
+        "startChar": 0,
+        "endLine": 28,
+        "endChar": 66
+      },
+      "revId": "3e93efdc8cb3c6cefaedf8f9f11f1f3f697d079e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72aac572_026cb5e1",
+        "filename": "tvix/eval/docs/catchable-errors.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-03-31T10:50:24Z",
+      "side": 1,
+      "message": "If the goal was to hide the `Value::Catchable` variant you could just change `EvaluationResult::value` from `Option\u003cValue\u003e` to `Option\u003cResult\u003cValue,CatchableErrorKind\u003e\u003e`.",
+      "range": {
+        "startLine": 93,
+        "startChar": 14,
+        "endLine": 93,
+        "endChar": 58
+      },
+      "revId": "3e93efdc8cb3c6cefaedf8f9f11f1f3f697d079e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02e559b3_98b48d86",
+        "filename": "tvix/eval/docs/catchable-errors.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-03-31T10:50:24Z",
+      "side": 1,
+      "message": "Let\u0027s compare against `abort` instead of laziness.\n\nRust 1.0 didn\u0027t have the awesome `?`-syntax.  If tvix-eval had been written in Rust 1.0, `abort` would cause as much noise as `Value::Triable` currently causes.  The only reason it doesn\u0027t is that we got lucky: Rust\u0027s magic `?`-syntax does exactly the right thing for non-triable errors.\n\nUnfortunately as we all know, Rust\u0027s `?`-syntax does the wrong thing for triable errors.\n\nI guess I\u0027m not disagreeing here -- I just want to point out that if not for the `?`-syntax we would have this problem twice instead of only once with triable errors.  Rust 1.0 had a `try!()` macro instead of the `?` syntax.  It was clunky, but better than nothing.  I probably should have added something like that for `Value::Catchable`.",
+      "range": {
+        "startLine": 101,
+        "startChar": 7,
+        "endLine": 106,
+        "endChar": 31
+      },
+      "revId": "3e93efdc8cb3c6cefaedf8f9f11f1f3f697d079e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d7f2eae4_5ee697cb",
+        "filename": "tvix/eval/docs/catchable-errors.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-03-31T10:50:24Z",
+      "side": 1,
+      "message": "I\u0027m not sure I\u0027ve seen stack traces work properly in *any* lazy language, but I get what you mean 😊",
+      "range": {
+        "startLine": 123,
+        "startChar": 26,
+        "endLine": 123,
+        "endChar": 59
+      },
+      "revId": "3e93efdc8cb3c6cefaedf8f9f11f1f3f697d079e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0790e912_27ca2ec7",
+        "filename": "tvix/eval/docs/catchable-errors.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-03-31T10:50:24Z",
+      "side": 1,
+      "message": "This will probably work, at the cost of relying on async/`await` for more than just \"not overflowing the stack\".  I think that ship has probably sailed; at this point, getting back to a non-async evaluator would be almost as much work as switching from a stack-based interpreter to a tagless G-machine... but with significantly less benefit.",
+      "range": {
+        "startLine": 125,
+        "startChar": 30,
+        "endLine": 126,
+        "endChar": 35
+      },
+      "revId": "3e93efdc8cb3c6cefaedf8f9f11f1f3f697d079e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
