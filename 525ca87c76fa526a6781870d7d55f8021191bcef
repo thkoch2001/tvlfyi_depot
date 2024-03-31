@@ -16,6 +16,24 @@
       "message": "cc @tazjin@tvl.su, I think you packaged this initially?",
       "revId": "525ca87c76fa526a6781870d7d55f8021191bcef",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "465d7c30_6f6c7806",
+        "filename": "third_party/nix-snapshotter/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-31T17:45:13Z",
+      "side": 1,
+      "message": "We can just switch to the nixpkgs expression and drop this here - see cl/11295.",
+      "parentUuid": "901d02cd_303e7094",
+      "revId": "525ca87c76fa526a6781870d7d55f8021191bcef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
