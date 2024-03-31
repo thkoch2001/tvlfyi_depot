@@ -16,6 +16,24 @@
       "message": "Does anything further up the chain depend on postgresql 16 being used?",
       "revId": "7370a7557c9937db917fe8484823237c31de5589",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e58325c_742fe806",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-03-31T19:13:01Z",
+      "side": 1,
+      "message": "No, this is only necessary for the GENERATED ALWAYS AS...STORED that\u0027s being used for tsearch. Mentioned that in the commit message.",
+      "parentUuid": "cac69dc4_f285e7b8",
+      "revId": "7370a7557c9937db917fe8484823237c31de5589",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
