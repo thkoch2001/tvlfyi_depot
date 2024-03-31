@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed4a4eff_f355ba37",
+        "filename": "web/panettone/src/migrations/3920286378-add-issue-tsv.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-03-31T19:13:01Z",
+      "side": 1,
+      "message": "\u003e Wouldn\u0027t it make more sense to have the `subject` have a higher weight?\n\nMight do that in a follow-up if it seems necessary, but for now we have so few issues that I think even weight ought to be fine\n\n\u003e Also can `subject` or `body` be null (I guess not due to `coltype`?). If that\u0027s the case postgres recommends to use `coalesce`.\n\nNo (note the `not null`):\n\n```\nlocalhost/panettone\u003d# \\d issues\n                                                                      Table \"public.issues\"\n   Column   │            Type             │ Collation │ Nullable │                                            Default\n════════════╪═════════════════════════════╪═══════════╪══════════╪════════════════════════════════════════════════════════════════════════════════════════════════\n created_at │ timestamp without time zone │           │ not null │ now()\n id         │ integer                     │           │ not null │ nextval(\u0027issues_id_seq\u0027::regclass)\n subject    │ text                        │           │ not null │\n body       │ text                        │           │ not null │ \u0027\u0027::text\n author_dn  │ text                        │           │ not null │\n status     │ issue_status                │           │ not null │ \u0027open\u0027::issue_status\n tsv        │ tsvector                    │           │          │ generated always as (to_tsvector(\u0027english\u0027::regconfig, (subject || \u0027 \u0027::text) || body)) stored\nIndexes:\n    \"issues_pkey\" PRIMARY KEY, btree (id)\n    \"issues_tsv_index\" gin (tsv)\nReferenced by:\n    TABLE \"issue_comments\" CONSTRAINT \"issue_comments_issues_issue_id_foreign\" FOREIGN KEY (issue_id) REFERENCES issues(id) ON UPDATE CASCADE ON DELETE CASCADE\n    TABLE \"issue_events\" CONSTRAINT \"issue_events_issues_issue_id_foreign\" FOREIGN KEY (issue_id) REFERENCES issues(id) ON UPDATE CASCADE ON DELETE CASCADE\n```",
+      "parentUuid": "c49e40b7_6ff2ea54",
+      "range": {
+        "startLine": 4,
+        "startChar": 74,
+        "endLine": 4,
+        "endChar": 120
+      },
+      "revId": "a5038dc348b5bdeb6fe02d88c417010d83390458",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a88f061b_1f691953",
@@ -47,6 +71,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd39449b_0220d02e",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 417,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-03-31T19:13:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a88f061b_1f691953",
+      "range": {
+        "startLine": 410,
+        "startChar": 6,
+        "endLine": 417,
+        "endChar": 6
+      },
+      "revId": "a5038dc348b5bdeb6fe02d88c417010d83390458",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "057a3232_8279f9d8",
@@ -60,6 +108,24 @@
       "writtenOn": "2024-03-30T20:11:37Z",
       "side": 1,
       "message": "This is the same as the screenreader only submit button…",
+      "revId": "a5038dc348b5bdeb6fe02d88c417010d83390458",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2d78f15_44eaaa19",
+        "filename": "web/panettone/src/panettone.lisp",
+        "patchSetId": 2
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-03-31T19:13:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "057a3232_8279f9d8",
       "revId": "a5038dc348b5bdeb6fe02d88c417010d83390458",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
