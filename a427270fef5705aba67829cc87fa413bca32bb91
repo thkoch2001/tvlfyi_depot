@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d32a09c9_353d4659",
+        "filename": "third_party/lisp/cl-change-case.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-03-31T19:13:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4cfee682_d0c38868",
+      "revId": "a427270fef5705aba67829cc87fa413bca32bb91",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1495866d_531734f4",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-03-30T15:29:58Z",
       "side": 1,
       "message": "Also has a test suite using fiveam.",
+      "revId": "a427270fef5705aba67829cc87fa413bca32bb91",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b427bacc_4c47413e",
+        "filename": "third_party/lisp/str.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-03-31T19:13:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1495866d_531734f4",
       "revId": "a427270fef5705aba67829cc87fa413bca32bb91",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
