@@ -44,7 +44,13 @@ with lib;
   documentation.dev.enable = true;
   documentation.man.generateCaches = true;
 
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    settings = { X11Forwarding = true; };
+  };
+
+  users.users.grfn.openssh.authorizedKeys.keys =
+    [ depot.users.aspen.keys.main ];
 
   programs.ssh.startAgent = true;
 

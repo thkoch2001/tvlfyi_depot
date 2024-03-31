@@ -12,10 +12,6 @@
 
   networking.hostName = "roswell";
 
-  users.users.grfn.openssh.authorizedKeys.keys = [
-    depot.users.aspen.keys.main
-  ];
-
   boot.loader.systemd-boot.enable = lib.mkForce false;
   boot.loader.efi.canTouchEfiVariables = lib.mkForce false;
 
