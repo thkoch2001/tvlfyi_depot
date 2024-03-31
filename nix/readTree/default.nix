@@ -323,4 +323,23 @@ in
         };
       };
     };
+
+  # Takes an attribute set and sets `meta.ci.skip = true` while preserving the
+  # rest of the attribute / meta set. If the given derivation supports
+  # overrideAttrs, that is used to set the new meta field (so that it won't be
+  # reverted by e.g. `merge`).
+  skipTarget = attrs:
+    let
+      addSkip = attrs:
+        {
+          meta = attrs.meta or { } // {
+            ci = attrs.meta.ci or { } // {
+              skip = true;
+            };
+          };
+        };
+    in
+    if attrs ? overrideAttrs
+    then attrs.overrideAttrs addSkip
+    else attrs // addSkip attrs;
 }
