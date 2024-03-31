@@ -22,6 +22,30 @@
       },
       "revId": "c65c2fee15197f26bb8767c1cff3a97f7079682b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "eaa90b11_12d3be60",
+        "filename": "web/panettone/src/authentication.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-03-31T19:13:01Z",
+      "side": 1,
+      "message": "the code in this comment is setting it though... and it can be changed.",
+      "parentUuid": "36e26f43_0c71f9fb",
+      "range": {
+        "startLine": 46,
+        "startChar": 7,
+        "endLine": 46,
+        "endChar": 28
+      },
+      "revId": "c65c2fee15197f26bb8767c1cff3a97f7079682b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
