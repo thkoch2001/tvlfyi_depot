@@ -1277,6 +1277,12 @@ nil
 | doom--customize-themes-h-91 | doom--customize-themes-h-92 | doom--customize-themes-h-93 | doom--customize-themes-h-94 | doom--customize-themes-h-95 | doom--customize-themes-h-96 | doom--customize-themes-h-97 | doom--customize-themes-h-98 | doom--customize-themes-h-99 | doom--customize-themes-h-100 |
 
 * Misc
+** TVL
+#+begin_src emacs-lisp :tangle yes
+(require 'tvl)
+#+end_src
+
+
 ** Matchit
 #+begin_src elisp :tangle yes
 (use-package! evil-matchit)
