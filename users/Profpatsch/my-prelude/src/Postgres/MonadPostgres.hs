@@ -8,7 +8,6 @@ module Postgres.MonadPostgres where
 import AtLeast (AtLeast)
 import Control.Exception
 import Control.Foldl qualified as Fold
-import Control.Monad.Except
 import Control.Monad.Logger.CallStack (MonadLogger, logDebug, logWarn)
 import Control.Monad.Reader (MonadReader (ask), ReaderT (..))
 import Control.Monad.Trans.Resource

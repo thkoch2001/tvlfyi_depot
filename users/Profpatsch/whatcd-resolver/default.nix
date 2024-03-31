@@ -31,7 +31,6 @@ let
       pkgs.haskellPackages.pa-run-command
       pkgs.haskellPackages.aeson-better-errors
       pkgs.haskellPackages.blaze-html
-      pkgs.haskellPackages.dlist
       pkgs.haskellPackages.hs-opentelemetry-sdk
       pkgs.haskellPackages.http-conduit
       pkgs.haskellPackages.http-types
@@ -39,7 +38,6 @@ let
       pkgs.haskellPackages.monad-logger
       pkgs.haskellPackages.resource-pool
       pkgs.haskellPackages.postgresql-simple
-      pkgs.haskellPackages.selective
       pkgs.haskellPackages.tmp-postgres
       pkgs.haskellPackages.unliftio
       pkgs.haskellPackages.wai-extra
