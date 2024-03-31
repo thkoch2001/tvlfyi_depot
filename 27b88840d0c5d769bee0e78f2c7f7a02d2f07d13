@@ -53,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "544187ff_ab8366ba",
+        "filename": "tvix/castore/src/directoryservice/bigtable.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-31T16:19:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51ecfe83_6e276f56",
+      "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aca5c8c5_902084b5",
@@ -66,6 +84,24 @@
       "writtenOn": "2024-03-20T12:07:09Z",
       "side": 1,
       "message": "`debug_assert!` or report error to caller?",
+      "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2670434_c85ea071",
+        "filename": "tvix/castore/src/directoryservice/bigtable.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-31T16:19:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aca5c8c5_902084b5",
       "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -87,6 +123,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d0e6737_921b8abb",
+        "filename": "tvix/castore/src/directoryservice/bigtable.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-31T16:19:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bfe67b2c_41d04c9b",
+      "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "deec2164_df8c4840",
@@ -100,6 +154,24 @@
       "writtenOn": "2024-03-20T12:07:09Z",
       "side": 1,
       "message": "same as above",
+      "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc437afd_3a6ef812",
+        "filename": "tvix/castore/src/directoryservice/bigtable.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-31T16:19:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "deec2164_df8c4840",
       "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -222,6 +294,30 @@
       "writtenOn": "2024-03-20T12:07:09Z",
       "side": 1,
       "message": "long term: see `query_pairs()` as a structure to deserialize over something like serde",
+      "range": {
+        "startLine": 70,
+        "startChar": 63,
+        "endLine": 70,
+        "endChar": 74
+      },
+      "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4cfa950a_7091d551",
+        "filename": "tvix/castore/src/directoryservice/from_addr.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-03-31T16:19:08Z",
+      "side": 1,
+      "message": "Acknowledged, but out of scope for this CL.",
+      "parentUuid": "6a7ce109_29f919f3",
       "range": {
         "startLine": 70,
         "startChar": 63,
