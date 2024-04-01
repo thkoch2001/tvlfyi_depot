@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c905bcdf_5035e763",
+        "filename": "tvix/build/src/buildservice/oci.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-01T18:33:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5661f36d_a418b260",
+      "revId": "9b553c1cf391d4f17a25fee78d3d027f3d39e6c6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b6e20e4b_c4b63da6",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "Ah I see, yeah that would be helpful",
       "parentUuid": "486cf9c5_a0c49ba8",
+      "revId": "9b553c1cf391d4f17a25fee78d3d027f3d39e6c6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1276afb3_ea079864",
+        "filename": "tvix/build/src/buildservice/oci.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-01T18:33:44Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "b311cb7b_ae23f9c7",
       "revId": "9b553c1cf391d4f17a25fee78d3d027f3d39e6c6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
