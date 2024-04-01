@@ -34,6 +34,24 @@
       "parentUuid": "efdf87a6_8aca7692",
       "revId": "cba139a1d1d0f0e666284b9ba611ee9a1a106eb3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "602ce983_77f7a006",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-04-01T15:56:56Z",
+      "side": 1,
+      "message": "`builtins.appendContext { \"/nix/store/…-foo.drv\" \u003d { allOutputs \u003d true; outputs \u003d [ \"lib\" ]; path \u003d true; }; }` is valid and is even preserved for some bizarre reason…",
+      "parentUuid": "327c8f0b_e480ee9b",
+      "revId": "cba139a1d1d0f0e666284b9ba611ee9a1a106eb3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
