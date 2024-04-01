@@ -16,6 +16,24 @@
       "message": "Your code is correct in that you can have multiple types of context at once. Not sure how that would work in the end though?",
       "revId": "cba139a1d1d0f0e666284b9ba611ee9a1a106eb3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "327c8f0b_e480ee9b",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 744,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-01T12:34:21Z",
+      "side": 1,
+      "message": "Hmm, not sure what is your remark about, multiple type of context at once is always possible in C++ Nix too? You just need to do things like `derivation { name \u003d \"abc\"; env1 \u003d \"${some-drv}\"; env2 \u003d \"${some-drv.drvPath}\"; env3 \u003d \"${some-src}\"; }` no?",
+      "parentUuid": "efdf87a6_8aca7692",
+      "revId": "cba139a1d1d0f0e666284b9ba611ee9a1a106eb3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
