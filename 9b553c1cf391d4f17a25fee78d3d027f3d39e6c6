@@ -51,6 +51,24 @@
       "parentUuid": "b6e20e4b_c4b63da6",
       "revId": "9b553c1cf391d4f17a25fee78d3d027f3d39e6c6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b311cb7b_ae23f9c7",
+        "filename": "tvix/build/src/buildservice/oci.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-01T15:51:29Z",
+      "side": 1,
+      "message": "Ah I see, yeah that would be helpful",
+      "parentUuid": "486cf9c5_a0c49ba8",
+      "revId": "9b553c1cf391d4f17a25fee78d3d027f3d39e6c6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
