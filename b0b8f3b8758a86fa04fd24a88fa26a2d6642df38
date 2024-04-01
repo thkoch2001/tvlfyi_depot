@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d3c1547_5c233ae0",
+        "filename": "tvix/castore/src/directoryservice/bigtable.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-01T16:00:50Z",
+      "side": 1,
+      "message": "Chatted with someone more familiar with BigTable and they don\u0027t think this will cause problems. I think this schema makes sense.",
+      "parentUuid": "2db0f21e_cb56d67f",
+      "revId": "b0b8f3b8758a86fa04fd24a88fa26a2d6642df38",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7c358d4_31c2db36",
