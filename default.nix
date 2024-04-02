@@ -117,8 +117,6 @@ readTree.fix (self: (readDepot {
     self.users.aspen.system.home.luscaHome
     self.users.aspen.system.home.yerenHome
     self.users.aspen.system.system.roswellSystem
-    self.users.flokli.nixos.archeologyEc2System
-    self.users.flokli.nixos.deploy-archeology-ec2
     self.users.wpcarro.nixos.avaSystem
     self.users.wpcarro.nixos.kyokoSystem
     self.users.wpcarro.nixos.marcusSystem
