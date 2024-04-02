@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f17ded97_9f5a645d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-02T13:13:51Z",
+      "side": 1,
+      "message": "Needs more commit message",
+      "revId": "156a3bd08e29910fab9bed968f6b21bd62eca3fa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9123360_e25788d1",
+        "filename": "tvix/glue/Cargo.toml",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-02T13:13:51Z",
+      "side": 1,
+      "message": "Let\u0027s not call this debugger, but dumper ;-)",
+      "revId": "156a3bd08e29910fab9bed968f6b21bd62eca3fa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "677f9286_9a8853f8",
+        "filename": "tvix/glue/Cargo.toml",
+        "patchSetId": 4
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-02T13:13:51Z",
+      "side": 1,
+      "message": "```suggestion\n# to diff them with what Nix produces.\n```",
+      "revId": "156a3bd08e29910fab9bed968f6b21bd62eca3fa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9508451e_3158a028",
+        "filename": "tvix/glue/src/builtins/derivation.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-02T13:13:51Z",
+      "side": 1,
+      "message": "Can you thread this through to the CLI, in addition to it being featureflagged? Add an Option\u003cPath\u003e field to TvixStoreIO, if it\u0027s not none, call `dump_drv_to_path` with that path?\n\nAnd maybe allow the user to set this.",
+      "revId": "156a3bd08e29910fab9bed968f6b21bd62eca3fa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0685f507_295cc625",
+        "filename": "tvix/glue/src/builtins/derivation_debugger.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-02T13:13:51Z",
+      "side": 1,
+      "message": "Please drop. Whether it\u0027s a tempdir or something more persistent should be up to how we call it.",
+      "revId": "156a3bd08e29910fab9bed968f6b21bd62eca3fa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43d7221d_d2c877a1",
+        "filename": "tvix/glue/src/builtins/derivation_debugger.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-02T13:13:51Z",
+      "side": 1,
+      "message": "I think I\u0027d prefer this code to just take a AsRef\u003cPath\u003e and write the .drv into there.\n\nAlso, `dump_drv_to_path` feels more appropriate, we don\u0027t dump into the store here.",
+      "revId": "156a3bd08e29910fab9bed968f6b21bd62eca3fa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb03e5e4_88e5813b",
+        "filename": "tvix/glue/src/builtins/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-02T13:13:51Z",
+      "side": 1,
+      "message": "derivation_dumper",
+      "revId": "156a3bd08e29910fab9bed968f6b21bd62eca3fa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
