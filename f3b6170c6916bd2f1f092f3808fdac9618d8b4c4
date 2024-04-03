@@ -16,6 +16,24 @@
       "message": "A bit verbose, you can probably just make the `verbosity` field be a `Option\u003cLevel\u003e` and add a docstring (which will be printed with `--help` to show possible options).",
       "revId": "f3b6170c6916bd2f1f092f3808fdac9618d8b4c4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8995837_6af506cf",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-03T11:20:28Z",
+      "side": 1,
+      "message": "🤯\n\nI did not expect this to work. THis is sooo cool!",
+      "parentUuid": "8d4907c2_2ac42163",
+      "revId": "f3b6170c6916bd2f1f092f3808fdac9618d8b4c4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
