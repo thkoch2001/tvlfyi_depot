@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "42a4757f_a6fce52a",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-03T10:06:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4997b33a_2c875548",
+      "revId": "db0165782fb6de695d2d01377df067d007713032",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "13e7930e_1dd16a65",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-03-27T20:31:02Z",
       "side": 1,
       "message": "write_u64",
+      "revId": "db0165782fb6de695d2d01377df067d007713032",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5af3d8e_a006d90a",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-03T10:06:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13e7930e_1dd16a65",
       "revId": "db0165782fb6de695d2d01377df067d007713032",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
