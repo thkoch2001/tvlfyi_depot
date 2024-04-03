@@ -86,7 +86,7 @@ where
     &'a mut R: AsyncReadExt + AsyncWriteExt + Unpin + std::fmt::Debug,
 {
     let mut magic_hello = vec![0; 8];
-    conn.read(&mut magic_hello).await?;
+    conn.read_exact(&mut magic_hello).await?;
     debug!("Hello read");
     if magic_hello != primitive::MAGIC_HELLO {
         Err(anyhow!(
@@ -95,8 +95,8 @@ where
             primitive::MAGIC_HELLO
         ))
     } else {
-        conn.write(&primitive::MAGIC_HELLO_RESPONSE).await?;
-        conn.write(&primitive::PROTOCOL_VERSION).await?;
+        conn.write_all(&primitive::MAGIC_HELLO_RESPONSE).await?;
+        conn.write_all(&primitive::PROTOCOL_VERSION).await?;
         conn.flush().await?;
         debug!("Hello responded");
         let client_version = primitive::read_u64(&mut conn).await?;
