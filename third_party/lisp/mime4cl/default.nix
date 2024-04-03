@@ -10,6 +10,7 @@ depot.nix.buildLisp.library {
     depot.third_party.lisp.npg
     depot.third_party.lisp.trivial-gray-streams
     depot.third_party.lisp.qbase64
+    { sbcl = depot.nix.buildLisp.bundled "sb-posix"; }
   ];
 
   srcs = [
