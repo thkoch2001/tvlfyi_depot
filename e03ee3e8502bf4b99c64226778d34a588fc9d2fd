@@ -52,6 +52,24 @@
       "parentUuid": "5b44016e_33bae183",
       "revId": "e03ee3e8502bf4b99c64226778d34a588fc9d2fd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2a57210_7fdf78e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2024-04-03T12:45:41Z",
+      "side": 1,
+      "message": "Sorry for the delay.\n\nYes, I think having a more precise target names would be great, I was thinking myself of something like `build.nix`\n\nIt would be even more intuitive to have them aligned with `mg {CMD}`, so that we have `mg build`, `mg shell` and most interesting is potentially `mg deploy` if we eventually bring build-n-deploy functionality in place.",
+      "parentUuid": "8f3fe5c0_c3b6a87a",
+      "revId": "e03ee3e8502bf4b99c64226778d34a588fc9d2fd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
