@@ -16,6 +16,40 @@
       "message": "@flokli@flokli.de PTAL",
       "revId": "f725ad048d313b058a1ffed7b99f9775e3d23daa",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bacdd074_8a94f6e0",
+        "filename": "tvix/nix-compat/src/wire/bytes.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-03T10:25:38Z",
+      "side": 1,
+      "message": "Can you convert the result of padding_Len to u64 directly, not usize, or what\u0027s the idea behind that?",
+      "revId": "f725ad048d313b058a1ffed7b99f9775e3d23daa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dffc5983_a8e7ce79",
+        "filename": "tvix/nix-compat/src/wire/bytes.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-03T10:25:38Z",
+      "side": 1,
+      "message": "```suggestion\n/// 2. Raw payload.\n```",
+      "revId": "f725ad048d313b058a1ffed7b99f9775e3d23daa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
