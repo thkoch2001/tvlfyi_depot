@@ -90,7 +90,7 @@ where
         conn.write(&primitive::PROTOCOL_VERSION).await?;
         conn.flush().await?;
         debug!("Hello responded");
-        let client_version = primitive::read_u32(&mut conn).await?;
+        let client_version = primitive::read_u64(&mut conn).await?;
         debug!("Version read");
         if client_version < 0x10a {
             return Err(anyhow!("The nix client version is too old"));
@@ -101,7 +101,7 @@ where
         if protocol_minor >= 14 {
             debug!("read cpu affinity");
             // Obsolete CPU affinity.
-            let read_affinity = primitive::read_u32(&mut conn).await?;
+            let read_affinity = primitive::read_u64(&mut conn).await?;
             if read_affinity != 0 {
                 skip_8_bytes(&mut conn).await?;
             };
