@@ -87,6 +87,24 @@
       "parentUuid": "9a1f606d_a00adf6b",
       "revId": "1a6b0df415b11b924fbb964b039ab68f8804a5ba",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44acf5b4_85aa9d34",
+        "filename": "tvix/nix-compat/src/wire/bytes.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-03T09:59:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3ede3221_0aa3f257",
+      "revId": "1a6b0df415b11b924fbb964b039ab68f8804a5ba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

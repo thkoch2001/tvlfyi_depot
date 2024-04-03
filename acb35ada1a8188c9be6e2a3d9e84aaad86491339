@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "db60926b_531b8bc3",
+        "filename": "tvix/nix-compat/src/wire/bytes.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-03T09:59:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39b1246b_115eba0c",
+      "revId": "acb35ada1a8188c9be6e2a3d9e84aaad86491339",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb1cc85d_4d454344",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-03-27T20:28:24Z",
       "side": 1,
       "message": "There\u0027s no read_u32, we only read u64, LE encoded. this should be dropped.",
+      "revId": "acb35ada1a8188c9be6e2a3d9e84aaad86491339",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca9ff9e4_b73281d9",
+        "filename": "tvix/nix-compat/src/wire/primitive.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-03T09:59:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bb1cc85d_4d454344",
       "revId": "acb35ada1a8188c9be6e2a3d9e84aaad86491339",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
