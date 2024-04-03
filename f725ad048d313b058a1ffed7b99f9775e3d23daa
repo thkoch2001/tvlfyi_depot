@@ -68,6 +68,24 @@
       "message": "```suggestion\n/// 2. Raw payload.\n```",
       "revId": "f725ad048d313b058a1ffed7b99f9775e3d23daa",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7535266e_eb892332",
+        "filename": "tvix/nix-compat/src/wire/bytes.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-03T11:22:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dffc5983_a8e7ce79",
+      "revId": "f725ad048d313b058a1ffed7b99f9775e3d23daa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
