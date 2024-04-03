@@ -32,6 +32,8 @@
 
 (defpackage :mime4cl-ex-sclf
   (:use :common-lisp)
+  (:import-from :sb-posix :stat :stat-size)
+
   (:export
    #:aif
    #:awhen
@@ -62,8 +64,6 @@
    #:save-file-excursion
    #:read-file
 
-   #:unix-file-stat
-   #:unix-stat
    #:file-size
 
    #:promise
@@ -275,51 +275,12 @@ ELEMENT-TYPE."
   #-sbcl (let (#+cmu (lisp::*ignore-wildcards* t))
            (namestring pathname)))
 
-(defstruct (unix-file-stat (:conc-name stat-))
-  device
-  inode
-  links
-  atime
-  mtime
-  ctime
-  size
-  blksize
-  blocks
-  uid
-  gid
-  mode)
-
-(defun unix-stat (pathname)
-  ;; this could be different depending on the unix systems
-  (multiple-value-bind (ok? device inode mode links uid gid rdev
-                            size atime mtime ctime
-                            blksize blocks)
-      (#+cmu unix:unix-lstat
-       #+sbcl sb-unix:unix-lstat
-       ;; TODO(sterni): ECL, CCL
-       (if (stringp pathname)
-           pathname
-           (native-namestring pathname)))
-    (declare (ignore rdev))
-    (when ok?
-      (make-unix-file-stat :device device
-                           :inode inode
-                           :links links
-                           :atime atime
-                           :mtime mtime
-                           :ctime ctime
-                           :size size
-                           :blksize blksize
-                           :blocks blocks
-                           :uid uid
-                           :gid gid
-                           :mode mode))))
-
 ;; FILE-LENGTH is a bit idiosyncratic in this respect.  Besides, Unix
 ;; allows to get to know the file size without being able to open a
 ;; file; just ask politely.
 (defun file-size (pathname)
-  (stat-size (unix-stat pathname)))
+  #+sbcl (stat-size (unix-stat pathname))
+  #-sbcl (error "nyi"))
 
 ;; LAZY
 
