@@ -16,6 +16,24 @@
       "message": "Nit: you might want to add a target for this, so CI flags it whenever you reintroduce something clippy wants to complain about - check the `clippy` target in `tvix/default.nix` for inspiration.",
       "revId": "c26bb52f2bf87be9a8f0b5d8ab6f099007b123a6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "de26e930_efead379",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-03T12:12:30Z",
+      "side": 1,
+      "message": "Let\u0027s do this in a followup, there\u0027s no need to delay this.",
+      "parentUuid": "69921ec2_85ad9fa1",
+      "revId": "c26bb52f2bf87be9a8f0b5d8ab6f099007b123a6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
