@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c03d3c6a_31031c94",
+        "filename": "tvix/nix-compat/src/wire/bytes.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-03T11:20:17Z",
+      "side": 1,
+      "message": "You\u0027re right, r.take is taking a u64, not a usize. This doesn\u0027t make sense.\n\nChanged.",
+      "parentUuid": "bacdd074_8a94f6e0",
+      "revId": "f725ad048d313b058a1ffed7b99f9775e3d23daa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dffc5983_a8e7ce79",
