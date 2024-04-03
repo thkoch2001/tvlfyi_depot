@@ -86,6 +86,24 @@
       "message": "Let\u0027s keep only write_u64 here, and leave it up to the caller to write `u as u64` if they have a smaller type. Inflating these is safe.",
       "revId": "acb35ada1a8188c9be6e2a3d9e84aaad86491339",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3e9b57f7_fdded0b8",
+        "filename": "tvix/nix-compat/src/wire/primitive.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-03T11:12:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02218a99_ec1f5586",
+      "revId": "acb35ada1a8188c9be6e2a3d9e84aaad86491339",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
