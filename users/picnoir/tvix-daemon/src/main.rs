@@ -2,7 +2,7 @@ use anyhow::anyhow;
 use clap::Parser;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio_listener::{self, SystemOptions, UserOptions};
-use tracing::{debug, error, info, instrument};
+use tracing::{debug, error, info, instrument, Level};
 
 use nix_compat::wire::{bytes, primitive, worker_protocol};
 
@@ -11,14 +11,23 @@ struct Cli {
     /// Listening unix socket path
     #[arg(short, long)]
     socket: Option<String>,
+    /// Log verbosity level. Can be "error", "warn", "info", "debug", "trace", or a number 1-5
+    #[arg(short, long, env)]
+    verbosity: Option<Level>,
 }
 
 #[tokio::main]
 #[instrument()]
 async fn main() {
-    tracing_subscriber::fmt().compact().try_init().unwrap();
     let args = Cli::parse();
-
+    tracing_subscriber::fmt()
+        .compact()
+        .with_max_level(
+            args.verbosity
+                .unwrap_or_else(|| panic!("Can't parse log verbosity")),
+        )
+        .try_init()
+        .unwrap();
     info!("Started Tvix daemon");
     let addr = args
         .socket
