@@ -191,6 +191,24 @@
       "message": "```suggestion\n// NOTE: There\u0027s no such test anymore. `rstest` does not handle empty directories, so, we\n```\n\nI guess who commented that out is visible from the git blame ;-)",
       "revId": "f70fd27eaf4a5fd11b9ce12da6e4266593a372ef",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f096357_18cf11bc",
+        "filename": "tvix/glue/src/tests/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-04T17:08:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2408b6d6_e0fb2c57",
+      "revId": "f70fd27eaf4a5fd11b9ce12da6e4266593a372ef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
