@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "70496d25_e91d63fe",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-04T11:16:08Z",
+      "side": 1,
+      "message": "Prose: write an overview of what is this function, what does it deal with (valid and sane context elements) and compare to what Nix does \"generally\".",
+      "revId": "ac2d3f77a8f6826d66b4405adafe28d368db0ff2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9395aee1_ab518e22",
         "filename": "tvix/eval/src/builtins/mod.rs",
         "patchSetId": 1
@@ -92,6 +109,41 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "579f0b2c_ac9a04e3",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-04T11:16:08Z",
+      "side": 1,
+      "message": "Prose TODO:\n- Decompress \"What Nix is doing in terms of checks that Tvix is not currently checking.\"",
+      "revId": "ac2d3f77a8f6826d66b4405adafe28d368db0ff2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56c79315_ea8e979d",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-04T11:16:08Z",
+      "side": 1,
+      "message": "Meeting with @flokli@flokli.de we decided to write more prose in the TODO items to explain what we are doing, what Nix is doing.",
+      "parentUuid": "f274b768_757bcf48",
+      "revId": "ac2d3f77a8f6826d66b4405adafe28d368db0ff2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f670e304_5a99ae6c",
         "filename": "tvix/eval/src/builtins/mod.rs",
         "patchSetId": 1
@@ -139,6 +191,24 @@
       "side": 1,
       "message": "As mentioned, the derivation check is basically the store path check mentioned above plus a check of the extension.\n\nI think these checks could be implemented in the evaluator by adding a way to `EvalIO` for getting the store dir and the store drv extension (plus i guess hash format checks but sounds complicated?). They are purely textual!",
       "parentUuid": "2f048ab5_66f42e4f",
+      "revId": "ac2d3f77a8f6826d66b4405adafe28d368db0ff2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ac74722_ac6f6335",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 729,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-04T11:16:08Z",
+      "side": 1,
+      "message": "Resolved, see above.",
+      "parentUuid": "2bacc076_7b6729ba",
       "revId": "ac2d3f77a8f6826d66b4405adafe28d368db0ff2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
