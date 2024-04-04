@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "07ed02f3_0dfb230d",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T21:15:55Z",
+      "side": 1,
+      "message": "@me@griff.name thanks for the hints, they allowed to significantly simplify the code.\n\nI restored the loop, and also added one to poll_flush version. There\u0027s no more waker interaction, and we still manage to do all state transitions.\n\npoll_shutdown also got rid of most of its code, thanks to now being able to call out to poll_flush.",
+      "revId": "760ecbe85371bf47ec45e607abca62af774bc5ae",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
