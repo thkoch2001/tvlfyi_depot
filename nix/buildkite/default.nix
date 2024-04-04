@@ -46,7 +46,7 @@ rec {
     else false;
 
   # Create build command for an attribute path pointing to a derivation.
-  mkBuildCommand = { attrPath, drvPath, outLink ? "result" }: concatStringsSep " " [
+  mkBuildCommand = { attrPath, drvPath, outLink ? "result" }: concatStringsSep " " ([
     # If the nix build fails, the Nix command's exit status should be used.
     "set -o pipefail;"
 
@@ -64,7 +64,9 @@ rec {
     # garbage collector. In that case we can reevaluate and build the attribute
     # using nix-build.
     "|| (test ! -f '${drvPath}' && nix-build -E '${mkBuildExpr attrPath}' --show-trace --out-link '${outLink}')"
-  ];
+  ]
+  # Inject additional logic after nix build process is over.
+  ++ lib.optional (target ? meta.ci.postBuild) "&& ${mkPostBuildScript target}");
 
   # Attribute path of a target relative to the depot root. Needs to take into
   # account whether the target is a physical target (which corresponds to a path
@@ -72,6 +74,12 @@ rec {
   targetAttrPath = target:
     target.__readTree
     ++ lib.optionals (target ? __subtarget) [ target.__subtarget ];
+
+  # Each CI target might have post build script that is an attribute
+  # specified in `meta.ci.postBuild`. The post build script is only
+  # executed if nix build succeeds.
+  mkPostBuildScript = target:
+    pkgs.writeShellScript "${target.name}-postBuild" target.meta.ci.postBuild;
 
   # Create a pipeline step from a single target.
   mkStep = { headBranch, parentTargetMap, target, cancelOnBuildFailing }:
