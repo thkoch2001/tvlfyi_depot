@@ -46,7 +46,7 @@ rec {
     else false;
 
   # Create build command for an attribute path pointing to a derivation.
-  mkBuildCommand = { attrPath, drvPath, outLink ? "result" }: concatStringsSep " " [
+  mkBuildCommand = { attrPath, drvPath, outLink ? "result", postBuild ? null }: concatStringsSep " " ([
     # If the nix build fails, the Nix command's exit status should be used.
     "set -o pipefail;"
 
@@ -64,7 +64,9 @@ rec {
     # garbage collector. In that case we can reevaluate and build the attribute
     # using nix-build.
     "|| (test ! -f '${drvPath}' && nix-build -E '${mkBuildExpr attrPath}' --show-trace --out-link '${outLink}')"
-  ];
+  ]
+  # Inject additional logic after nix build process is over.
+  ++ lib.optional (!builtins.isNull postBuild) "&& ${postBuild}");
 
   # Attribute path of a target relative to the depot root. Needs to take into
   # account whether the target is a physical target (which corresponds to a path
@@ -72,6 +74,12 @@ rec {
   targetAttrPath = target:
     target.__readTree
     ++ lib.optionals (target ? __subtarget) [ target.__subtarget ];
+
+  # Each CI target might have post build script that is an attribute
+  # specified in `meta.ci.postBuild`. The post build script is only
+  # executed if nix build succeeds.
+  mkPostBuildScript = target:
+    pkgs.writeShellScript "${target.name}-postBuild" target.meta.ci.postBuild;
 
   # Create a pipeline step from a single target.
   mkStep = { headBranch, parentTargetMap, target, cancelOnBuildFailing }:
@@ -83,12 +91,16 @@ rec {
       label = ":nix: " + label;
       key = hashString "sha1" label;
       skip = shouldSkip { inherit label drvPath parentTargetMap; };
-      command = mkBuildCommand {
-        attrPath = targetAttrPath target;
-        inherit drvPath;
-      };
       env.READTREE_TARGET = label;
       cancel_on_build_failing = cancelOnBuildFailing;
+
+      command = mkBuildCommand
+        {
+          attrPath = targetAttrPath target;
+          inherit drvPath;
+        } // lib.optionalAttrs (target ? meta.ci.postBuild) {
+        postBuild = mkPostBuildScript target.meta.ci.postBuild;
+      };
 
       # Add a dependency on the initial static pipeline step which
       # always runs. This allows build steps uploaded in batches to
