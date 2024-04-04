@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "5205c499_6df6ced3",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T22:07:15Z",
+      "side": 1,
+      "message": "fixed",
+      "parentUuid": "31619912_903dcf8f",
+      "revId": "760ecbe85371bf47ec45e607abca62af774bc5ae",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "07ed02f3_0dfb230d",
         "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
         "patchSetId": 6
@@ -48,6 +66,24 @@
       "writtenOn": "2024-04-04T22:02:49Z",
       "side": 1,
       "message": "return is redundant here",
+      "revId": "760ecbe85371bf47ec45e607abca62af774bc5ae",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23074534_39592633",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T22:07:15Z",
+      "side": 1,
+      "message": "huh, why did clippy not spot this? anyways, fixed.",
+      "parentUuid": "b7464f83_6c79166f",
       "revId": "760ecbe85371bf47ec45e607abca62af774bc5ae",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
