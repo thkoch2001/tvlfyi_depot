@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcb36ff1_640b4ae2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T16:59:38Z",
+      "side": 1,
+      "message": "[…] full of TODOs, but passes all of Nix\u0027s context strings tests, so turn them on.",
+      "revId": "f70fd27eaf4a5fd11b9ce12da6e4266593a372ef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d87acae_c25b814c",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 703,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T16:59:38Z",
+      "side": 1,
+      "message": "```suggestion\n        // It cannot remove a context element, neither replace a piece of its contents.\n```",
+      "revId": "f70fd27eaf4a5fd11b9ce12da6e4266593a372ef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cb04265_8e7d4609",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T16:59:38Z",
+      "side": 1,
+      "message": "```suggestion\n        // to inexistent derivations, output paths or output names.\n```",
+      "revId": "f70fd27eaf4a5fd11b9ce12da6e4266593a372ef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ca897ed_b622786a",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 714,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T16:59:38Z",
+      "side": 1,
+      "message": "```suggestion\n        // starting with the same prefix as `builtins.storeDir`, or ending with `.drv`.\n```",
+      "revId": "f70fd27eaf4a5fd11b9ce12da6e4266593a372ef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "565081f6_6c558205",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 716,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T16:59:38Z",
+      "side": 1,
+      "message": "```suggestion\n        // will realize some paths and ensures they are present in the store.\n```",
+      "revId": "f70fd27eaf4a5fd11b9ce12da6e4266593a372ef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2408b6d6_e0fb2c57",
+        "filename": "tvix/glue/src/tests/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T16:59:38Z",
+      "side": 1,
+      "message": "```suggestion\n// NOTE: There\u0027s no such test anymore. `rstest` does not handle empty directories, so, we\n```\n\nI guess who commented that out is visible from the git blame ;-)",
+      "revId": "f70fd27eaf4a5fd11b9ce12da6e4266593a372ef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
