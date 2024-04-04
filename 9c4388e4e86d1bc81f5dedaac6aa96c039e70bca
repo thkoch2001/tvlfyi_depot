@@ -51,6 +51,24 @@
       "message": "TODO",
       "revId": "9c4388e4e86d1bc81f5dedaac6aa96c039e70bca",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db54767b_95dfe5c5",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 389,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T21:31:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5dca4d19_d8581566",
+      "revId": "9c4388e4e86d1bc81f5dedaac6aa96c039e70bca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
