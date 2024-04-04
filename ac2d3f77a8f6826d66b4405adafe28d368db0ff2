@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a7c96f89_b785e6ae",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 702,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-04T16:47:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70496d25_e91d63fe",
+      "revId": "ac2d3f77a8f6826d66b4405adafe28d368db0ff2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9395aee1_ab518e22",
@@ -138,6 +156,24 @@
       "side": 1,
       "message": "Meeting with @flokli@flokli.de we decided to write more prose in the TODO items to explain what we are doing, what Nix is doing.",
       "parentUuid": "f274b768_757bcf48",
+      "revId": "ac2d3f77a8f6826d66b4405adafe28d368db0ff2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c37c9911_dd9bd795",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 719,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-04T16:47:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "579f0b2c_ac9a04e3",
       "revId": "ac2d3f77a8f6826d66b4405adafe28d368db0ff2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
