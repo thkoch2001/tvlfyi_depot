@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd475385_525c8132",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-04T19:16:19Z",
+      "side": 1,
+      "message": "```suggestion\n                if let Poll::Ready(resp) \u003d this.inner.as_mut().poll_write(cx, \u0026size_field[pos..]) {\n```\n\nYou should be able to do the above to get around the loop problem.\n\nOtherwise you can do what AsyncWriteExt does for all its methods and simply require the W to be AsyncWrite + Unpin and use ```Pin::new(\u0026mut self.inner).poll_write```",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3439d96e_51678bd2",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-04T19:16:19Z",
+      "side": 1,
+      "message": "This is a hack and should be done with a loop instead.\n\nIf you insist on not using a loop it needs to be moved into the if statement above otherwise when ```poll_write``` returns ```Poll::Pending``` you will still get woken up and will in effect cause a busywaiting loop.",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19fab421_c1aa10b9",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-04T19:16:19Z",
+      "side": 1,
+      "message": "The match can be replaced with the ```std::task::ready!``` macro that works like ? for ```Poll``` returning early when result is ```Poll::Pending```.",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7020583_e9b32621",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-04T19:16:19Z",
+      "side": 1,
+      "message": "Here might be a good place to call ```poll_flush``` on the underlying writer instead. Because while this writer has no more to flush that might not be true of the underlying writer.",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ee9e004_fc9354ce",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-04T19:16:19Z",
+      "side": 1,
+      "message": "Some are above. It is a hack and should be a loop. And causes busywaiting.",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "120aafaf_8db4cff8",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-04T19:16:19Z",
+      "side": 1,
+      "message": "Also a good place to call poll_flush on the underlying writer.",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ffa4d2be_33069267",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-04T19:16:19Z",
+      "side": 1,
+      "message": "Also good place to call poll_flush.",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b67a53f_cce2ef59",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-04T19:16:19Z",
+      "side": 1,
+      "message": "Also good place to call poll_flush.",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4220608c_7ff498a6",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-04T19:16:19Z",
+      "side": 1,
+      "message": "Causes busywaiting and should at least be in if statement or implemented with a loop.",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1597ed2f_df3dcb3e",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-04T19:16:19Z",
+      "side": 1,
+      "message": "This needs to be either removed if you use a loop or moved one line up. Otherwise you will cause busywaiting.",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d120ff6a_9bd32f85",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-04T19:16:19Z",
+      "side": 1,
+      "message": "This wake is redundant and will cause busywaiting. ```poll_shutdown``` will already have registered a waker and we are not trying to hack our way around a loop in this situation.",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
