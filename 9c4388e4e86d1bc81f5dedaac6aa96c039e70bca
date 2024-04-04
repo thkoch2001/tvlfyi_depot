@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7577385c_13e0a807",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 368,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T16:53:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1eb918b2_a4915018",
+      "revId": "9c4388e4e86d1bc81f5dedaac6aa96c039e70bca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5dca4d19_d8581566",
