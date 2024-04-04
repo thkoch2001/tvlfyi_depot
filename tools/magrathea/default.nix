@@ -36,4 +36,9 @@ stdenv.mkDerivation {
   fixupPhase = ''
     wrapProgram $out/bin/mg --prefix PATH ${lib.makeBinPath [ nix ]}
   '';
+
+  meta.ci.postBuild = ''
+    echo wow, what a great change!
+    exit 1
+  '';
 }
