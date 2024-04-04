@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fdb571e7_77536f88",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T21:09:38Z",
+      "side": 1,
+      "message": "Nice, that did the trick. restored the loop.",
+      "parentUuid": "cd475385_525c8132",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3439d96e_51678bd2",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-04-04T19:16:19Z",
       "side": 1,
       "message": "This is a hack and should be done with a loop instead.\n\nIf you insist on not using a loop it needs to be moved into the if statement above otherwise when ```poll_write``` returns ```Poll::Pending``` you will still get woken up and will in effect cause a busywaiting loop.",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1df59ee2_f438d305",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 95,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T21:09:38Z",
+      "side": 1,
+      "message": "The loop worked, so I dropped this.",
+      "parentUuid": "3439d96e_51678bd2",
       "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "35417976_494b29ec",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 106,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T21:09:38Z",
+      "side": 1,
+      "message": "Nice, thanks, done.",
+      "parentUuid": "19fab421_c1aa10b9",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f7020583_e9b32621",
@@ -65,6 +119,24 @@
       "writtenOn": "2024-04-04T19:16:19Z",
       "side": 1,
       "message": "Here might be a good place to call ```poll_flush``` on the underlying writer instead. Because while this writer has no more to flush that might not be true of the underlying writer.",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27decd1f_511fc2ea",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T21:09:38Z",
+      "side": 1,
+      "message": "Done. I essentially had the same problem here as above - not being able to call more than one `poll_*` due to the missing `as_mut()`.\n\nNow that this works, I added a flush at the end of this function, after doing any other necessary writing work.",
+      "parentUuid": "f7020583_e9b32621",
       "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -86,6 +158,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e6bab1f_090f1ef5",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T21:09:38Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "8ee9e004_fc9354ce",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "120aafaf_8db4cff8",
@@ -99,6 +189,24 @@
       "writtenOn": "2024-04-04T19:16:19Z",
       "side": 1,
       "message": "Also a good place to call poll_flush on the underlying writer.",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a886d89b_4ee7f944",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T21:09:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "120aafaf_8db4cff8",
       "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -120,6 +228,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ada5d0c3_5931ac74",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T21:09:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ffa4d2be_33069267",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4b67a53f_cce2ef59",
@@ -133,6 +259,24 @@
       "writtenOn": "2024-04-04T19:16:19Z",
       "side": 1,
       "message": "Also good place to call poll_flush.",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1b80ef9_13ba2068",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T21:09:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4b67a53f_cce2ef59",
       "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -154,6 +298,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53d60874_e694eabc",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T21:09:38Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4220608c_7ff498a6",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1597ed2f_df3dcb3e",
@@ -171,6 +333,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "578501d4_eda8ca8a",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 204,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T21:09:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1597ed2f_df3dcb3e",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d120ff6a_9bd32f85",
@@ -184,6 +364,24 @@
       "writtenOn": "2024-04-04T19:16:19Z",
       "side": 1,
       "message": "This wake is redundant and will cause busywaiting. ```poll_shutdown``` will already have registered a waker and we are not trying to hack our way around a loop in this situation.",
+      "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e18752e0_172e865f",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-04T21:09:38Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d120ff6a_9bd32f85",
       "revId": "80d2bbd7894e033edf515fca93cd707b24b7baf3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
