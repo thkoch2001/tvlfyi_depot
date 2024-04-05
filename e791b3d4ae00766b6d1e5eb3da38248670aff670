@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eb24bdf4_d5e52b81",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-05T23:35:08Z",
+      "side": 1,
+      "message": "Ah right, in eval we only have these .nix / .exp-based tests, and didn\u0027t really deal with fixture files. mhhm, yeah, let\u0027s do something similar as glue. But this can be a followup CL, we currently also only support strings.",
+      "parentUuid": "ccee455d_2c910b7e",
+      "revId": "e791b3d4ae00766b6d1e5eb3da38248670aff670",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "79af33a5_9df94ac1",
         "filename": "tvix/eval/src/compiler/import.rs",
         "patchSetId": 5

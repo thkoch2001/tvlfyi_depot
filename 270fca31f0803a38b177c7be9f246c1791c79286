@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea9ee939_a6f21b84",
+        "filename": "tvix/nix-compat/src/nixhash/algos.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-05T23:35:08Z",
+      "side": 1,
+      "message": "Hmmh, I was thinking more about a helper function returning some Box\u003cdyn Digest\u003e for a given HashAlgo, rather than a method I pass in a reader. But let\u0027s move this out of this CL.",
+      "revId": "270fca31f0803a38b177c7be9f246c1791c79286",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0279778a_4b30cb87",
+        "filename": "tvix/nix-compat/src/nixhash/algos.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-05T23:35:08Z",
+      "side": 1,
+      "message": "This is probably independent from the hash / hash_bytes stuff introduced above, let\u0027s move that into a separate CL and get it in.",
+      "revId": "270fca31f0803a38b177c7be9f246c1791c79286",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
