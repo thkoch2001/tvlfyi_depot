@@ -4,7 +4,10 @@ use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio_listener::{self, SystemOptions, UserOptions};
 use tracing::{debug, error, info, instrument, Level};
 
-use nix_compat::wire::{bytes, primitive, worker_protocol};
+use nix_compat::wire::{
+    bytes, primitive,
+    worker_protocol::{self, ClientSettings},
+};
 
 #[derive(Parser, Debug)]
 struct Cli {
@@ -14,6 +17,15 @@ struct Cli {
     /// Log verbosity level. Can be "error", "warn", "info", "debug", "trace", or a number 1-5
     #[arg(short, long, env)]
     verbosity: Option<Level>,
+}
+
+/// Structure used to hold the client socket connection and some
+/// metadata about the connection.
+#[derive(Debug)]
+struct ClientConnection<R: AsyncReadExt + AsyncWriteExt + Unpin> {
+    conn: R,
+    version_minor: u64,
+    client_settings: Option<ClientSettings>,
 }
 
 #[tokio::main]
@@ -58,20 +70,45 @@ where
     R: AsyncReadExt + AsyncWriteExt + Unpin + std::fmt::Debug,
 {
     match perform_init_handshake(&mut conn).await {
-        Ok(_) => {
-            info!("Client hanshake succeeded");
+        Ok(mut client_connection) => {
+            debug!("Client hanshake succeeded");
             // TODO: implement logging. For now, we'll just send
             // STDERR_LAST, which is good enough to get Nix respond to
             // us.
-            primitive::write_u64(&mut conn, worker_protocol::STDERR_LAST)
+            primitive::write_u64(&mut client_connection.conn, worker_protocol::STDERR_LAST)
                 .await
                 .unwrap();
-            //
-            let op = worker_protocol::read_op(&mut conn).await.unwrap();
-            info!(op = ?op, "Operation received");
+            loop {
+                let op = worker_protocol::read_op(&mut client_connection.conn)
+                    .await
+                    .unwrap();
+                match op {
+                    worker_protocol::Operation::SetOptions => {
+                        let settings = op_set_options(&mut client_connection).await.unwrap();
+                        client_connection.client_settings = Some(settings);
+                        debug!(settings = ?client_connection.client_settings, "Received client settings");
+                    }
+                    _ => {
+                        error!(op = ?op, "Unimplemented operation");
+                        break;
+                    }
+                }
+            }
         }
         Err(e) => error!("Client handshake failed: {}", e),
     }
+}
+
+async fn op_set_options<R>(conn: &mut ClientConnection<R>) -> std::io::Result<ClientSettings>
+where
+    R: AsyncReadExt + AsyncWriteExt + Unpin + std::fmt::Debug,
+{
+    let settings =
+        worker_protocol::read_client_settings(&mut conn.conn, conn.version_minor).await?;
+    // The client expects us to send some logs when we're processing
+    // the settings. Sending STDERR_LAST signal we're done processing.
+    primitive::write_u64(&mut conn.conn, worker_protocol::STDERR_LAST).await?;
+    Ok(settings)
 }
 
 /// Performs the initial handshake. During the handshake, the client
@@ -81,7 +118,9 @@ where
 /// We then retrieve the client version, and discard a bunch of now
 /// obsolete data.
 #[instrument()]
-async fn perform_init_handshake<'a, R: 'a>(mut conn: &'a mut R) -> anyhow::Result<()>
+async fn perform_init_handshake<'a, R: 'a>(
+    mut conn: &'a mut R,
+) -> anyhow::Result<ClientConnection<&'a mut R>>
 where
     &'a mut R: AsyncReadExt + AsyncWriteExt + Unpin + std::fmt::Debug,
 {
@@ -134,7 +173,11 @@ where
                 .await?;
             info!("Trust sent");
         }
-        Ok(())
+        Ok(ClientConnection {
+            conn,
+            version_minor: protocol_minor,
+            client_settings: None,
+        })
     }
 }
 
