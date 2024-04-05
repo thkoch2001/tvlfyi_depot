@@ -25,12 +25,14 @@ in
 (depot.tvix.crates.workspaceMembers.tvix-store.build.override {
   runTests = true;
   testPreRun = ''
-    export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt;
+    export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
+    export PATH="$PATH:${pkgs.lib.makeBinPath [pkgs.cbtemulator pkgs.google-cloud-bigtable-tool]}"
   '';
 
-  # virtiofs feature currently fails to build on Darwin.
-  # we however can ship it for non-darwin.
-  features = if pkgs.stdenv.isDarwin then [ "default" ] else [ "default" "virtiofs" ];
+  # enable some optional features.
+  features = [ "default" "cloud" ]
+    # virtiofs feature currently fails to build on Darwin.
+    ++ pkgs.lib.optional pkgs.stdenv.isLinux "virtiofs";
 }).overrideAttrs (_: {
   meta.ci.extraSteps = {
     import-docs = (mkImportCheck "tvix/store/docs" ./docs);
