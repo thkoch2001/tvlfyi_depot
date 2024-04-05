@@ -14473,6 +14473,11 @@ rec {
             packageId = "async-stream";
           }
           {
+            name = "bigtable_rs";
+            packageId = "bigtable_rs";
+            optional = true;
+          }
+          {
             name = "blake3";
             packageId = "blake3";
             features = [ "rayon" "std" ];
@@ -14629,6 +14634,10 @@ rec {
         ];
         devDependencies = [
           {
+            name = "async-process";
+            packageId = "async-process";
+          }
+          {
             name = "rstest";
             packageId = "rstest";
           }
@@ -14650,7 +14659,7 @@ rec {
           }
         ];
         features = {
-          "cloud" = [ "tvix-castore/cloud" ];
+          "cloud" = [ "dep:bigtable_rs" "tvix-castore/cloud" ];
           "default" = [ "cloud" "fuse" "otlp" "tonic-reflection" ];
           "fuse" = [ "tvix-castore/fuse" ];
           "otlp" = [ "dep:opentelemetry" "dep:opentelemetry-otlp" "dep:opentelemetry_sdk" ];
