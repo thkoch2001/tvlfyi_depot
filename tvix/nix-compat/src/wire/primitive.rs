@@ -2,7 +2,14 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
+use std::{
+    io::{Error, ErrorKind},
+    ops::RangeBounds,
+};
+
 use tokio::io::{AsyncRead, AsyncReadExt, AsyncWrite, AsyncWriteExt};
+
+use super::bytes::read_bytes;
 
 // LE-encoded nixc on 64 bits. Because why not.
 pub static MAGIC_HELLO: [u8; 8] = *b"cxin\0\0\0\0";
@@ -32,6 +39,21 @@ pub async fn read_bool<R: AsyncRead + Unpin>(r: &mut R) -> std::io::Result<bool>
 /// Write a boolean to the AsyncWrite, encoded as u64 (>0 is true).
 pub async fn write_bool<W: AsyncWrite + Unpin>(w: &mut W, v: bool) -> std::io::Result<()> {
     write_u64(w, if v { 1u64 } else { 0u64 }).await
+}
+
+/// Read a Nix daemon string from the AsyncWrite, encoded as utf8.
+/// Rejects reading more than `allowed_size` bytes
+///
+/// A Nix daemon string is made up of two distincts parts:
+/// 1. Its lenght, LE-encoded on 64 bits.
+/// 2. Its content. 0-padded on 64 bits.
+pub async fn read_string<R, S>(r: &mut R, allowed_size: S) -> std::io::Result<String>
+where
+    R: AsyncReadExt + Unpin,
+    S: RangeBounds<u64>,
+{
+    let bytes = read_bytes(r, allowed_size).await?;
+    String::from_utf8(bytes).map_err(|e| Error::new(ErrorKind::InvalidData, e))
 }
 
 #[cfg(test)]
