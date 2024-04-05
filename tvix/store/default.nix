@@ -25,7 +25,8 @@ in
 (depot.tvix.crates.workspaceMembers.tvix-store.build.override {
   runTests = true;
   testPreRun = ''
-    export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt;
+    export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
+    export PATH="$PATH:${pkgs.lib.makeBinPath [pkgs.cbtemulator pkgs.google-cloud-bigtable-tool]}"
   '';
 
   # virtiofs feature currently fails to build on Darwin.

@@ -15,6 +15,9 @@ use crate::tests::fixtures::DUMMY_OUTPUT_HASH;
 mod utils;
 use self::utils::make_grpc_path_info_service_client;
 
+#[cfg(feature = "cloud")]
+use self::utils::make_bigtable;
+
 /// Convenience type alias batching all three servives together.
 #[allow(clippy::upper_case_acronyms)]
 type BSDSPS = (
@@ -51,6 +54,7 @@ pub async fn make_path_info_service(uri: &str) -> BSDSPS {
 #[case::memory(make_path_info_service("memory://").await)]
 #[case::grpc(make_grpc_path_info_service_client().await)]
 #[case::sled(make_path_info_service("sled://").await)]
+#[cfg_attr(feature = "cloud", case::bigtable(make_bigtable().await))]
 pub fn path_info_services(
     #[case] services: (
         impl BlobService,
