@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "297b7b79_53d2a0db",
+        "filename": "tvix/store/src/pathinfoservice/tests/utils.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-05T23:19:03Z",
+      "side": 1,
+      "message": "starting the emulator, waiting for the unix socket, creating table and family via cbt, as well as creating a bigtable connection to the emulator listening on this socket is something we already do in the castore make_bigtable too.\n\nThis should be moved to a helper function, which we use in both places.",
+      "revId": "bd98d6cce488852181beaca4460209a8ce24f70b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
