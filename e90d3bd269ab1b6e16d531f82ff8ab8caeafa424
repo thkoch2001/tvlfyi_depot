@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc4b8a8b_3aec232f",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-05T09:54:56Z",
+      "side": 1,
+      "message": "TODO: add a test using data extracted from sockdump.\n\n(tested this through the integration test 🙈)",
+      "revId": "e90d3bd269ab1b6e16d531f82ff8ab8caeafa424",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0f5f525b_64c9b8b1",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-05T09:54:56Z",
+      "side": 1,
+      "message": "TODO: Explain what client_version is.\n\nMaybe, move the handshake from tvix-daemon to a function in nix-compat and re-use client version datatype.",
+      "revId": "e90d3bd269ab1b6e16d531f82ff8ab8caeafa424",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
