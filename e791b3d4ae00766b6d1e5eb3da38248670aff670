@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a56e801_75a2b0c2",
+        "filename": "tvix/eval/Cargo.toml",
+        "patchSetId": 5
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-05T23:09:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c5eb8ab_be11aed7",
+      "revId": "e791b3d4ae00766b6d1e5eb3da38248670aff670",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ba3b7467_75db57c5",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-03-26T16:17:08Z",
       "side": 1,
       "message": "read_to_end, it\u0027s perfectly fine to read files that are not valid utf8.\n\n(and let\u0027s add a test for this)",
+      "revId": "e791b3d4ae00766b6d1e5eb3da38248670aff670",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccee455d_2c910b7e",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-05T23:09:46Z",
+      "side": 1,
+      "message": "Looks like we don\u0027t have a test mod for builtins in tvix-eval like we do for glue. Should we add a similar thing here?",
+      "parentUuid": "ba3b7467_75db57c5",
       "revId": "e791b3d4ae00766b6d1e5eb3da38248670aff670",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -101,6 +137,24 @@
       "writtenOn": "2024-03-26T16:17:08Z",
       "side": 1,
       "message": "Hnmh, there\u0027s hashFile now too, maybe more. wonder if this list still makes sense.",
+      "revId": "e791b3d4ae00766b6d1e5eb3da38248670aff670",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6eb9f5b2_e6b48c48",
+        "filename": "tvix/eval/src/io.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-05T23:09:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a3b6d0bc_e6bb3193",
       "revId": "e791b3d4ae00766b6d1e5eb3da38248670aff670",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
