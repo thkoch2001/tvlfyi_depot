@@ -16,6 +16,24 @@
       "message": "We still need to filter by family here too.",
       "revId": "0b83ad79712157529ad28716c00fe18a26c00465",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f86cca77_f8a39564",
+        "filename": "tvix/castore/src/directoryservice/bigtable.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-05T23:15:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f2f7881a_143eff5f",
+      "revId": "0b83ad79712157529ad28716c00fe18a26c00465",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
