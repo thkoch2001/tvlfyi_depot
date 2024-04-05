@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2f7881a_143eff5f",
+        "filename": "tvix/castore/src/directoryservice/bigtable.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-05T16:24:32Z",
+      "side": 1,
+      "message": "We still need to filter by family here too.",
+      "revId": "0b83ad79712157529ad28716c00fe18a26c00465",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
