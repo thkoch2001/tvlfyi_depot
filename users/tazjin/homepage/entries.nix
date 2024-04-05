@@ -6,6 +6,16 @@ let
 in
 [
   {
+    class = "project";
+    title = "VolgaSprint - Nix hacking in Kazan";
+    url = "https://volgasprint.org/";
+    date = 1712307024;
+    description = ''
+      Hacking on Nix projects for a week in Kazan, Russia, in August
+      2024. Come join us!
+    '';
+  }
+  {
     class = "misc";
     title = "@tazlog on Telegram";
     url = "https://t.me/tazlog";
