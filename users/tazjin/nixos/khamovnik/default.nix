@@ -116,6 +116,8 @@ in
   # Try to work around Intel CPU throttling bugs
   services.throttled.enable = true;
 
+  virtualisation.docker.enable = true;
+
   hardware.bluetooth.enable = true;
   users.users.tazjin.extraGroups = [ "tss" ];
 
