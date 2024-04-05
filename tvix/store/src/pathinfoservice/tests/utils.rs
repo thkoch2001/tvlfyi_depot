@@ -1,6 +1,9 @@
 use std::sync::Arc;
 
-use tonic::transport::{Endpoint, Server, Uri};
+
+use tonic::{
+    transport::{Endpoint, Server, Uri},
+};
 
 use crate::{
     pathinfoservice::{GRPCPathInfoService, MemoryPathInfoService, PathInfoService},
@@ -10,6 +13,8 @@ use crate::{
     },
     tests::fixtures::{blob_service, directory_service},
 };
+
+
 
 /// Constructs and returns a gRPC PathInfoService.
 /// We also return memory-based {Blob,Directory}Service,
