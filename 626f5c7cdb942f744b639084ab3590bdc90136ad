@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb5b3368_a2568819",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-06T12:20:38Z",
+      "side": 1,
+      "message": "Discussed this out of bound.\n\nRiiiight, you can chain .writes here and don\u0027t have to keep the whole file in memory. Makes sense.",
+      "parentUuid": "3ce1e4ba_ed87c777",
+      "revId": "626f5c7cdb942f744b639084ab3590bdc90136ad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "187ca35a_2db7c74e",
