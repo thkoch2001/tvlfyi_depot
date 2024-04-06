@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ce1e4ba_ed87c777",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-06T12:14:39Z",
+      "side": 1,
+      "message": "Overall, I\u0027m confused. I have trouble understanding what this thing is doing on top of `asyncwriteext::write_all`.\n\nLooking at the documentation:\n\n\u003e         /// Attempts to write an entire buffer into this writer.\n        ///\n        /// Equivalent to:\n        ///\n        /// ```ignore\n        /// async fn write_all(\u0026mut self, buf: \u0026[u8]) -\u003e io::Result\u003c()\u003e;\n        /// ```\n        ///\n        /// This method will continuously call [`write`] until there is no more data\n        /// to be written. This method will not return until the entire buffer\n        /// has been successfully written or such an error occurs. The first\n        /// error generated from this method will be returned.\n        /// # Errors\n        ///\n        /// This function will return the first error that [`write`] returns.\n\nLooks pretty in line with what you implemented.\n\nI\u0027m probably missing the obvious, meaning we should probably explicitly document why is this thing needed and why the bare `write_all`-based `write_bytes` function is not good enough.",
+      "revId": "626f5c7cdb942f744b639084ab3590bdc90136ad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "187ca35a_2db7c74e",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-06T12:14:39Z",
+      "side": 1,
+      "message": "Explain the motivation behind this, why we need this and can\u0027t directly write to the underlying writer.",
+      "revId": "626f5c7cdb942f744b639084ab3590bdc90136ad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6186493_ba33f8d6",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-06T12:14:39Z",
+      "side": 1,
+      "message": "NIT: No need to discard the size of the slice.\n\n```suggestion\n                    let size_field \u003d \u0026this.payload_len.to_le_bytes();\n```",
+      "revId": "626f5c7cdb942f744b639084ab3590bdc90136ad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7d832eb_9819f0eb",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-06T12:14:39Z",
+      "side": 1,
+      "message": "From the `poll_write` documentation:\n\n\u003e On success, returns Poll::Ready(Ok(num_bytes_written)). If successful,\nthen it must be guaranteed that n \u003c\u003d buf.len(). A return value of 0\ntypically means that the underlying object is no longer able to accept\nbytes and will likely not be able to in the future as well, or that the\nbuffer provided is empty.\n\nIt\u0027d probably make sense to give up if the writer returns 0. Provided that `pos..` is not 0 ofc.",
+      "revId": "626f5c7cdb942f744b639084ab3590bdc90136ad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38eec469_37398f7a",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-06T12:14:39Z",
+      "side": 1,
+      "message": "NIT: duplicated code w/ `poll_write`",
+      "revId": "626f5c7cdb942f744b639084ab3590bdc90136ad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
