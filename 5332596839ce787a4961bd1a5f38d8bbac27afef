@@ -16,6 +16,24 @@
       "message": "can you re-enable parquet-tools in archeology-ec2 (from cl/11347?) This should be fixed in nixpkgs.",
       "revId": "5332596839ce787a4961bd1a5f38d8bbac27afef",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd29df7f_66826115",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-04-06T16:10:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7bdc7c87_b83067c0",
+      "revId": "5332596839ce787a4961bd1a5f38d8bbac27afef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
