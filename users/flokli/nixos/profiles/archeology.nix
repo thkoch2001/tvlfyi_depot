@@ -27,8 +27,7 @@
   environment.systemPackages = [
     pkgs.awscli
     pkgs.duckdb
-    # Temporarily disabled until https://github.com/NixOS/nixpkgs/pull/301032
-    # pkgs.parquet-tools
+    pkgs.parquet-tools
     pkgs.helix
     pkgs.htop
     pkgs.kakoune
