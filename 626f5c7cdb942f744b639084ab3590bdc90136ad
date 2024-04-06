@@ -53,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "887c78a6_b5dfa557",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-06T14:03:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "187ca35a_2db7c74e",
+      "revId": "626f5c7cdb942f744b639084ab3590bdc90136ad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a6186493_ba33f8d6",
@@ -66,6 +84,24 @@
       "writtenOn": "2024-04-06T12:14:39Z",
       "side": 1,
       "message": "NIT: No need to discard the size of the slice.\n\n```suggestion\n                    let size_field \u003d \u0026this.payload_len.to_le_bytes();\n```",
+      "revId": "626f5c7cdb942f744b639084ab3590bdc90136ad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca8c322a_d7726e7a",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-06T14:03:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6186493_ba33f8d6",
       "revId": "626f5c7cdb942f744b639084ab3590bdc90136ad",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -87,6 +123,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa306d94_c48b6062",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-06T14:03:46Z",
+      "side": 1,
+      "message": "Regarding `pos..` ranging over an empty slice, `BytesWriterState::Size(8)` (or larger) is an illegal state, so this doesn\u0027t occur.\n\nYou\u0027re right about having to deal with 0 written bytes, we might loop endlessly because we don\u0027t advance the state.\n\nWe must at least break and bubble this up as an error to the caller.",
+      "parentUuid": "f7d832eb_9819f0eb",
+      "revId": "626f5c7cdb942f744b639084ab3590bdc90136ad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38eec469_37398f7a",
@@ -100,6 +154,24 @@
       "writtenOn": "2024-04-06T12:14:39Z",
       "side": 1,
       "message": "NIT: duplicated code w/ `poll_write`",
+      "revId": "626f5c7cdb942f744b639084ab3590bdc90136ad",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c15a342_35da9f1c",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-06T14:03:46Z",
+      "side": 1,
+      "message": "Yes, and here we also should handle the underlying writer returning 0 written bytes here too.\n\nAfter some out-of-band discussion, we agreed not factoring out the writing of size field, but have a `ensure_nonzero_bytes_written` helper function dealing with the underlying writer accepting 0 bytes.",
+      "parentUuid": "38eec469_37398f7a",
       "revId": "626f5c7cdb942f744b639084ab3590bdc90136ad",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
