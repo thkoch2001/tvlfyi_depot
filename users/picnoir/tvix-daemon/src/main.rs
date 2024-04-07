@@ -165,7 +165,7 @@ where
             // good idea.
             debug!("write version");
             // Plain str padded to 64 bits.
-            bytes::write_bytes(&mut conn, "2.3.17".as_bytes()).await?;
+            bytes::write_bytes(&mut conn, "2.3.17").await?;
             conn.flush().await?;
         }
         if protocol_minor >= 35 {
