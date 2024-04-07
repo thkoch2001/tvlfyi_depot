@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8a03e2b2_8c1ae79d",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-07T15:26:19Z",
+      "side": 1,
+      "message": "Nit: I don\u0027t think you need to globally have `std::fmt::Debug` in your trait bounds, only in the function that actually prints out `conn` (if you do this at all).",
+      "revId": "39bb761a0c533bf185d23e26827a65923f1b3964",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aca757a3_90e55750",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-07T15:26:19Z",
+      "side": 1,
+      "message": "```suggestion\n    // The client expects us to sent some logs when\n```",
+      "range": {
+        "startLine": 108,
+        "startChar": 37,
+        "endLine": 108,
+        "endChar": 39
+      },
+      "revId": "39bb761a0c533bf185d23e26827a65923f1b3964",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "990a347d_6ef9c83c",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-07T15:26:19Z",
+      "side": 1,
+      "message": "```suggestion\n    // STDERR_LAST to signal we\u0027re done processing.\n```",
+      "revId": "39bb761a0c533bf185d23e26827a65923f1b3964",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
