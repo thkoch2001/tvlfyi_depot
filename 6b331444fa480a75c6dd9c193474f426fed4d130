@@ -34,6 +34,24 @@
       "parentUuid": "9c4aed81_a0de5725",
       "revId": "6b331444fa480a75c6dd9c193474f426fed4d130",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfc542c6_92a900f7",
+        "filename": "tvix/nix-compat/src/wire/bytes.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-07T21:50:30Z",
+      "side": 1,
+      "message": "I updated the comment, PTAL.",
+      "parentUuid": "9917ae46_5a1fc271",
+      "revId": "6b331444fa480a75c6dd9c193474f426fed4d130",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
