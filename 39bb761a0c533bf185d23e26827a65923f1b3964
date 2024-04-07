@@ -41,6 +41,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1bf053f_899f842a",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-07T19:36:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aca757a3_90e55750",
+      "range": {
+        "startLine": 108,
+        "startChar": 37,
+        "endLine": 108,
+        "endChar": 39
+      },
+      "revId": "39bb761a0c533bf185d23e26827a65923f1b3964",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "990a347d_6ef9c83c",
@@ -54,6 +78,24 @@
       "writtenOn": "2024-04-07T15:26:19Z",
       "side": 1,
       "message": "```suggestion\n    // STDERR_LAST to signal we\u0027re done processing.\n```",
+      "revId": "39bb761a0c533bf185d23e26827a65923f1b3964",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b1763470_bd9d3ecd",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-07T19:36:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "990a347d_6ef9c83c",
       "revId": "39bb761a0c533bf185d23e26827a65923f1b3964",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
