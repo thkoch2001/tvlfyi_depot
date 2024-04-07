@@ -326,6 +326,30 @@
       },
       "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6e3621d_5c6e1394",
+        "filename": "tvix/castore/src/directoryservice/from_addr.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-07T14:36:59Z",
+      "side": 1,
+      "message": "I now ended up implementing this as well, making other things configurable where I still had TODOs in the code too.",
+      "parentUuid": "4cfa950a_7091d551",
+      "range": {
+        "startLine": 70,
+        "startChar": 63,
+        "endLine": 70,
+        "endChar": 74
+      },
+      "revId": "27b88840d0c5d769bee0e78f2c7f7a02d2f07d13",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
