@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "91148800_91e8fc86",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-07T15:20:39Z",
+      "side": 1,
+      "message": "add a `// FUTUREWORK: write serialization`.\n\nShould probably be a\n\n```\nimpl ClientSettings {\n    pub fn into_wire_bytes(self, client_version: u64) -\u003e Vec\u003cu8\u003e {\n    }\n}\n```\n\nThere\u0027s no need to do more granular writes, we can just prepare this in a Vec and write it out as once.\n\n(And we might want to derive `Clone` on `ClientSettings` so it\u0027s possible to do it on a copy if you want to keep the client settings around).",
+      "revId": "969327846c3b9b9245ea27e2c39fa00e9afa1595",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "171c7e07_6a3515d6",
         "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
         "patchSetId": 2
