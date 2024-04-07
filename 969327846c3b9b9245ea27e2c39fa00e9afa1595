@@ -1,0 +1,203 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "117b8865_4a748ba7",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-07T15:13:22Z",
+      "side": 1,
+      "message": "I think we can be a bit stricter here, make this a `Vec\u003cString, String\u003e`.\n\nWe should probably add a `read_string` method that uses `read_bytes` under the hood, attempts to parse it as a `String`, and throws an error if it cannot, so we don\u0027t end up with all the error handling on all things that want strings.",
+      "revId": "969327846c3b9b9245ea27e2c39fa00e9afa1595",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "171c7e07_6a3515d6",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-07T15:13:22Z",
+      "side": 1,
+      "message": "```suggestion\n            ErrorKind::InvalidData,\n```",
+      "range": {
+        "startLine": 128,
+        "startChar": 12,
+        "endLine": 128,
+        "endChar": 28
+      },
+      "revId": "969327846c3b9b9245ea27e2c39fa00e9afa1595",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a3a07296_0bf5509e",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-07T15:13:22Z",
+      "side": 1,
+      "message": "Can you add comments\n\n - \"// skip obsolute useBuildHook\"\n - \"// skip obsolute logType\"\n - \"// skip obsolute printBuildTrace\"\n\nso we keep that info also found in the nix codebase.",
+      "revId": "969327846c3b9b9245ea27e2c39fa00e9afa1595",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a5beb42_f0365bd2",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-07T15:13:22Z",
+      "side": 1,
+      "message": "```suggestion\n        let num_overrides \u003d primitive::read_u64(r).await?;\n```",
+      "revId": "969327846c3b9b9245ea27e2c39fa00e9afa1595",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b11b5661_af9fe600",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-07T15:13:22Z",
+      "side": 1,
+      "message": "```suggestion\n        for _ in 0..num_overrides {\n```",
+      "revId": "969327846c3b9b9245ea27e2c39fa00e9afa1595",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b04c90c_287d0fb7",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-07T15:13:22Z",
+      "side": 1,
+      "message": "does Nix also only allow a length of 1024 here, or is this a restriction you added?\n\nIn any case, this number should be in a constant.",
+      "range": {
+        "startLine": 144,
+        "startChar": 40,
+        "endLine": 144,
+        "endChar": 44
+      },
+      "revId": "969327846c3b9b9245ea27e2c39fa00e9afa1595",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "886b4ce7_ea5fd4ca",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-07T15:13:22Z",
+      "side": 1,
+      "message": "InvalidData here too, missed that during an earlier review.",
+      "revId": "969327846c3b9b9245ea27e2c39fa00e9afa1595",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95017fba_b4bb871c",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-07T15:13:22Z",
+      "side": 1,
+      "message": "This is only client setting bits, not the full handshake correct?\n\nMaybe update the comment saying that (\"Client setting bits captured…\").",
+      "revId": "969327846c3b9b9245ea27e2c39fa00e9afa1595",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "251f2a96_c1d58cf2",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-07T15:13:22Z",
+      "side": 1,
+      "message": "```suggestion\n            .expect(\"should parse\");\n```",
+      "revId": "969327846c3b9b9245ea27e2c39fa00e9afa1595",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f01fe90f_24b72f13",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-07T15:13:22Z",
+      "side": 1,
+      "message": "same",
+      "revId": "969327846c3b9b9245ea27e2c39fa00e9afa1595",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc9a2336_9d75fbf8",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-07T15:13:22Z",
+      "side": 1,
+      "message": "same",
+      "revId": "969327846c3b9b9245ea27e2c39fa00e9afa1595",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
