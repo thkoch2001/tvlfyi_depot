@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f294fc9_b7347fa7",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-07T22:29:45Z",
+      "side": 1,
+      "message": "This should probably be a u64 (with comment), and we use write_u64 in perform_init_handshake.\n\nI\u0027d assume we want to be able to handshake with different protocol versions?",
+      "revId": "05673117627865cd9a9fcf80a73619f57448a486",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
