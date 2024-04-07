@@ -127,15 +127,17 @@ where
     let mut magic_hello = vec![0; 8];
     conn.read_exact(&mut magic_hello).await?;
     debug!("Hello read");
-    if magic_hello != primitive::MAGIC_HELLO {
+    if magic_hello != worker_protocol::MAGIC_HELLO {
         Err(anyhow!(
             "Invalid client hello received: {:?}, expected {:?}",
             magic_hello,
-            primitive::MAGIC_HELLO
+            worker_protocol::MAGIC_HELLO
         ))
     } else {
-        conn.write_all(&primitive::MAGIC_HELLO_RESPONSE).await?;
-        conn.write_all(&primitive::PROTOCOL_VERSION).await?;
+        conn.write_all(&worker_protocol::MAGIC_HELLO_RESPONSE[..])
+            .await?;
+        conn.write_all(&worker_protocol::PROTOCOL_VERSION[..])
+            .await?;
         conn.flush().await?;
         debug!("Hello responded");
         let client_version = primitive::read_u64(&mut conn).await?;
@@ -192,16 +194,16 @@ where
 
 #[cfg(test)]
 mod integration_tests {
-    use nix_compat::wire::primitive;
+    use nix_compat::wire::worker_protocol;
     #[tokio::test]
     async fn test_init_handshake() {
         let mut test_conn = tokio_test::io::Builder::new()
-            .read(&primitive::MAGIC_HELLO)
-            .write(&primitive::MAGIC_HELLO_RESPONSE)
-            .write(&primitive::PROTOCOL_VERSION)
+            .read(&worker_protocol::MAGIC_HELLO)
+            .write(&worker_protocol::MAGIC_HELLO_RESPONSE)
+            .write(&worker_protocol::PROTOCOL_VERSION)
             // Let's say the client is in sync with the daemon
             // protocol-wise
-            .read(&primitive::PROTOCOL_VERSION)
+            .read(&worker_protocol::PROTOCOL_VERSION)
             // cpu affinity
             .read(&vec![0; 8])
             // reservespace
