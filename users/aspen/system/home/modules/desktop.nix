@@ -8,10 +8,6 @@
   ];
 
   home.packages = with pkgs; [
-    (ntfy.override {
-      # Slack support is broken as of 2023-06-15
-      withSlack = false;
-    })
     (writeShellApplication {
       name = "edit-input";
 
