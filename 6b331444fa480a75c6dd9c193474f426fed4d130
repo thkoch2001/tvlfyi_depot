@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c4aed81_a0de5725",
+        "filename": "tvix/nix-compat/src/wire/bytes.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-07T21:37:36Z",
+      "side": 1,
+      "message": "Unrelated to this particular CL but I just realized we have a massive bug, or at least UX annoyance here.\n\nIf we realize the byte frame is too large for us, we won\u0027t read any of them from the reader. However, we already read the size of the frame. As soon as we leave this function, we lose the size we read (it\u0027s only stored in this future).\n\nMeaning: the reader becomes unusable as soon as we trigger this Err :/",
+      "revId": "6b331444fa480a75c6dd9c193474f426fed4d130",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
