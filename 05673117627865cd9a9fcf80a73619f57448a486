@@ -34,6 +34,24 @@
       "parentUuid": "8f294fc9_b7347fa7",
       "revId": "05673117627865cd9a9fcf80a73619f57448a486",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f988b353_e569e127",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-08T06:33:11Z",
+      "side": 1,
+      "message": "\u003e If you prefer moving that to more opaque a u64, why not though, I won\u0027t die on this hill.\n\nFYI, Nix uses a different trick to make the version number explicit:\n\n#define PROTOCOL_VERSION (1 \u003c\u003c 8 | 37)",
+      "parentUuid": "15ad161e_2699f32f",
+      "revId": "05673117627865cd9a9fcf80a73619f57448a486",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
