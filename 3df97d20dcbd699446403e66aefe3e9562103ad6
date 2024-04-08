@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1f4c0e89_7ababd19",
+        "filename": "tvix/nix-compat/src/wire/bytes_reader.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-08T21:55:34Z",
+      "side": 1,
+      "message": "TODO",
+      "revId": "3df97d20dcbd699446403e66aefe3e9562103ad6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
