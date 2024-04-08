@@ -124,20 +124,17 @@ async fn perform_init_handshake<'a, R: 'a>(
 where
     &'a mut R: AsyncReadExt + AsyncWriteExt + Unpin + std::fmt::Debug,
 {
-    let mut magic_hello = vec![0; 8];
-    conn.read_exact(&mut magic_hello).await?;
+    let worker_magic_1 = primitive::read_u64(&mut conn).await?;
     debug!("Hello read");
-    if magic_hello != worker_protocol::MAGIC_HELLO {
+    if worker_magic_1 != worker_protocol::WORKER_MAGIC_1 {
         Err(anyhow!(
             "Invalid client hello received: {:?}, expected {:?}",
-            magic_hello,
-            worker_protocol::MAGIC_HELLO
+            worker_magic_1,
+            worker_protocol::WORKER_MAGIC_1
         ))
     } else {
-        conn.write_all(&worker_protocol::MAGIC_HELLO_RESPONSE[..])
-            .await?;
-        conn.write_all(&worker_protocol::PROTOCOL_VERSION[..])
-            .await?;
+        primitive::write_u64(&mut conn, worker_protocol::WORKER_MAGIC_2).await?;
+        primitive::write_u64(&mut conn, worker_protocol::PROTOCOL_VERSION).await?;
         conn.flush().await?;
         debug!("Hello responded");
         let client_version = primitive::read_u64(&mut conn).await?;
@@ -198,12 +195,12 @@ mod integration_tests {
     #[tokio::test]
     async fn test_init_handshake() {
         let mut test_conn = tokio_test::io::Builder::new()
-            .read(&worker_protocol::MAGIC_HELLO)
-            .write(&worker_protocol::MAGIC_HELLO_RESPONSE)
-            .write(&worker_protocol::PROTOCOL_VERSION)
+            .read(&worker_protocol::WORKER_MAGIC_1.to_le_bytes())
+            .write(&worker_protocol::WORKER_MAGIC_2.to_le_bytes())
+            .write(&worker_protocol::PROTOCOL_VERSION.to_le_bytes())
             // Let's say the client is in sync with the daemon
             // protocol-wise
-            .read(&worker_protocol::PROTOCOL_VERSION)
+            .read(&worker_protocol::PROTOCOL_VERSION.to_le_bytes())
             // cpu affinity
             .read(&vec![0; 8])
             // reservespace
