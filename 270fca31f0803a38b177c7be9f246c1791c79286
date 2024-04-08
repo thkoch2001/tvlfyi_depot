@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1940dac7_e2189b5e",
+        "filename": "tvix/nix-compat/src/nixhash/algos.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-08T15:47:38Z",
+      "side": 1,
+      "message": "I\u0027m not sure this will work because Box\u003cdyn Digest\u003e has an associated constant for `OutputSize` which is different depending on the algo. Going to revert the nix-compat changes anyways since they aren\u0027t actually used anymore since we don\u0027t want to bring nix-compat into `eval`",
+      "parentUuid": "ea9ee939_a6f21b84",
+      "revId": "270fca31f0803a38b177c7be9f246c1791c79286",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0279778a_4b30cb87",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-04-05T23:35:08Z",
       "side": 1,
       "message": "This is probably independent from the hash / hash_bytes stuff introduced above, let\u0027s move that into a separate CL and get it in.",
+      "revId": "270fca31f0803a38b177c7be9f246c1791c79286",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f0b3ee6_bd3831b6",
+        "filename": "tvix/nix-compat/src/nixhash/algos.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-08T15:47:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0279778a_4b30cb87",
       "revId": "270fca31f0803a38b177c7be9f246c1791c79286",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
