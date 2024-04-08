@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "443e226e_3e24c954",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-08T17:03:22Z",
+      "side": 1,
+      "message": "We don\u0027t need to mention nix-compat here (anymore), it\u0027s not touched.",
+      "revId": "48a00cba3a8f0c0dec919a059138a79f2603a547",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bf23917_3e0d0428",
+        "filename": "tvix/eval/src/builtins/hash.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-08T17:03:22Z",
+      "side": 1,
+      "message": "/// Reads through all data from the passed reader, and returns the resulting Digest.\n/// The exact hash function used is left generic over all `Digest`.",
+      "revId": "48a00cba3a8f0c0dec919a059138a79f2603a547",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b25bd445_50f80fed",
+        "filename": "tvix/eval/src/builtins/hash.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-08T17:03:22Z",
+      "side": 1,
+      "message": "/// For a given algo \"string\" and reader for data, calculate the digest\n/// and return it as a hexlower encoded String.",
+      "revId": "48a00cba3a8f0c0dec919a059138a79f2603a547",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73296dc1_11821c3e",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-08T17:03:22Z",
+      "side": 1,
+      "message": "I recall we had a discussion on why this still needs to be a String, and can\u0027t be a `Vec\u003cu8\u003e` yet, but I don\u0027t remember anymore. Can you add a TODO for this, providing some breadcrumbs?",
+      "revId": "48a00cba3a8f0c0dec919a059138a79f2603a547",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2500e6b7_21d834d0",
+        "filename": "tvix/eval/src/compiler/import.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-08T17:03:22Z",
+      "side": 1,
+      "message": "same as above, why is this still a String",
+      "revId": "48a00cba3a8f0c0dec919a059138a79f2603a547",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
