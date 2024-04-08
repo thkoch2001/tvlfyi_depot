@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88f1b746_b854a906",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-08T12:32:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8fb3601d_44f81954",
+      "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "da7b45bb_81982f7a",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-04-08T11:13:30Z",
       "side": 1,
       "message": "```suggestion\n/// Performs the initial handshake the server is sending to a connecting client.\n/// During the handshake, the client …\n```",
+      "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7733ed0_2dff21c4",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-08T12:32:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "da7b45bb_81982f7a",
       "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -69,6 +105,42 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f0fee22_d0222c80",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-08T12:32:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82a0a96a_ca9777fc",
+      "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e86e249_7cdf7a0f",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-08T12:32:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b0927e37_33890427",
+      "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f70b0040_29d75639",
@@ -82,6 +154,24 @@
       "writtenOn": "2024-04-08T11:13:30Z",
       "side": 1,
       "message": "This should just return version_minor in the success case, not a more complicated struct with the (set to None in this library code) client_setting, nor the connection (which the caller already has).",
+      "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "031752e6_a82c8d43",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-08T12:32:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f70b0040_29d75639",
       "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -103,6 +193,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b35ed117_321d58bf",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-08T12:32:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "acc4bd2f_860f926a",
+      "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f183e724_2110e9b6",
@@ -120,6 +228,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c714f3d6_2a890f24",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-08T12:32:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f183e724_2110e9b6",
+      "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f097f740_baa27eea",
@@ -133,6 +259,24 @@
       "writtenOn": "2024-04-08T11:13:30Z",
       "side": 1,
       "message": "We don\u0027t need it, see above.",
+      "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b91ea12b_b511d353",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-08T12:32:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f097f740_baa27eea",
       "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -168,6 +312,42 @@
       "side": 1,
       "message": "erf, s/client_connection.conn/conn/ in the comment above.",
       "parentUuid": "891fda01_f7c0af2c",
+      "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46451d71_28c35fe6",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-08T12:32:14Z",
+      "side": 1,
+      "message": "Discussed this out of band.",
+      "parentUuid": "9f499bf9_f83a34a5",
+      "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "75ad031e_4217467d",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-08T12:32:14Z",
+      "side": 1,
+      "message": "You can\u0027t await? here, this is a void return type function (passed to tokio::spawn), hence the match.",
+      "parentUuid": "9f499bf9_f83a34a5",
       "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
