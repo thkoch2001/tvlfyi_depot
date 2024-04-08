@@ -16,6 +16,24 @@
       "message": "This should probably be a u64 (with comment), and we use write_u64 in perform_init_handshake.\n\nI\u0027d assume we want to be able to handshake with different protocol versions?",
       "revId": "05673117627865cd9a9fcf80a73619f57448a486",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15ad161e_2699f32f",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000096
+      },
+      "writtenOn": "2024-04-08T06:31:51Z",
+      "side": 1,
+      "message": "I used that notation because the minor version used (0x23) is pretty explicit that way.\n\nIf you prefer moving that to more opaque a u64, why not though, I won\u0027t die on this hill.\n\n\u003e I\u0027d assume we want to be able to handshake with different protocol versions?\n\nThis is the daemon version. The daemon is backward-compatible. On the client side, this information is used to see what kind of option the daemon supports. See https://github.com/NixOS/nix/blob/50cb14fcf9be3568b36d3bc16f3c12153022da99/src/libstore/remote-store.cc#L88\n\nTL;DR: we use a single daemon protocol version, except if we want to support Guix as a client who uses a different version number system.",
+      "parentUuid": "8f294fc9_b7347fa7",
+      "revId": "05673117627865cd9a9fcf80a73619f57448a486",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
