@@ -79,6 +79,8 @@ let
     eval-nixpkgs-stdenv-drvpath = (mkNixpkgsEvalTest "stdenv.drvPath" pkgs.stdenv.drvPath);
     eval-nixpkgs-stdenv-outpath = (mkNixpkgsEvalTest "stdenv.outPath" pkgs.stdenv.outPath);
     eval-nixpkgs-hello-outpath = (mkNixpkgsEvalTest "hello.outPath" pkgs.hello.outPath);
+    eval-nixpkgs-acl2-outpath = (mkNixpkgsEvalTest "acl2.outPath" pkgs.acl2.outPath);
+    eval-nixpkgs-acl2-drvpath = (mkNixpkgsEvalTest "acl2.drvPath" pkgs.acl2.drvPath);
     eval-nixpkgs-firefox-outpath = (mkNixpkgsEvalTest "firefox.outPath" pkgs.firefox.outPath);
     eval-nixpkgs-firefox-drvpath = (mkNixpkgsEvalTest "firefox.drvPath" pkgs.firefox.drvPath);
     eval-nixpkgs-cross-stdenv-outpath = (mkNixpkgsEvalTest "pkgsCross.aarch64-multiplatform.stdenv.outPath" pkgs.pkgsCross.aarch64-multiplatform.stdenv.outPath);
