@@ -1,12 +1,11 @@
-use anyhow::anyhow;
 use clap::Parser;
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio_listener::{self, SystemOptions, UserOptions};
 use tracing::{debug, error, info, instrument, Level};
 
 use nix_compat::wire::{
-    bytes, primitive,
-    worker_protocol::{self, ClientSettings},
+    primitive,
+    worker_protocol::{self, perform_init_handshake, ClientConnection, ClientSettings, Trust},
 };
 
 #[derive(Parser, Debug)]
@@ -17,15 +16,6 @@ struct Cli {
     /// Log verbosity level. Can be "error", "warn", "info", "debug", "trace", or a number 1-5
     #[arg(short, long, env)]
     verbosity: Option<Level>,
-}
-
-/// Structure used to hold the client socket connection and some
-/// metadata about the connection.
-#[derive(Debug)]
-struct ClientConnection<R: AsyncReadExt + AsyncWriteExt + Unpin> {
-    conn: R,
-    version_minor: u64,
-    client_settings: Option<ClientSettings>,
 }
 
 #[tokio::main]
@@ -69,7 +59,7 @@ async fn worker<R>(mut conn: R)
 where
     R: AsyncReadExt + AsyncWriteExt + Unpin + std::fmt::Debug,
 {
-    match perform_init_handshake(&mut conn).await {
+    match perform_init_handshake(&mut conn, "2.18.2", Trust::Trusted).await {
         Ok(mut client_connection) => {
             debug!("Client hanshake succeeded");
             // TODO: implement logging. For now, we'll just send
@@ -109,109 +99,4 @@ where
     // the settings. Sending STDERR_LAST signal we're done processing.
     primitive::write_u64(&mut conn.conn, worker_protocol::STDERR_LAST).await?;
     Ok(settings)
-}
-
-/// Performs the initial handshake. During the handshake, the client
-/// will first send a magic u64, to which the daemon needs to respond
-/// with another magic u64.
-///
-/// We then retrieve the client version, and discard a bunch of now
-/// obsolete data.
-#[instrument()]
-async fn perform_init_handshake<'a, R: 'a>(
-    mut conn: &'a mut R,
-) -> anyhow::Result<ClientConnection<&'a mut R>>
-where
-    &'a mut R: AsyncReadExt + AsyncWriteExt + Unpin + std::fmt::Debug,
-{
-    let worker_magic_1 = primitive::read_u64(&mut conn).await?;
-    debug!("Hello read");
-    if worker_magic_1 != worker_protocol::WORKER_MAGIC_1 {
-        Err(anyhow!(
-            "Invalid client hello received: {:?}, expected {:?}",
-            worker_magic_1,
-            worker_protocol::WORKER_MAGIC_1
-        ))
-    } else {
-        primitive::write_u64(&mut conn, worker_protocol::WORKER_MAGIC_2).await?;
-        primitive::write_u64(&mut conn, worker_protocol::PROTOCOL_VERSION).await?;
-        conn.flush().await?;
-        debug!("Hello responded");
-        let client_version = primitive::read_u64(&mut conn).await?;
-        debug!("Version read");
-        if client_version < 0x10a {
-            return Err(anyhow!("The nix client version is too old"));
-        }
-        let protocol_minor = client_version & 0x00ff;
-        let protocol_major = client_version & 0xff00;
-        debug!(client.version = %client_version, client.minor = %protocol_minor, client.major = %protocol_major);
-        if protocol_minor >= 14 {
-            debug!("read cpu affinity");
-            // Obsolete CPU affinity.
-            let read_affinity = primitive::read_u64(&mut conn).await?;
-            if read_affinity != 0 {
-                skip_8_bytes(&mut conn).await?;
-            };
-        }
-        if protocol_minor >= 11 {
-            // Obsolete reserveSpace
-            debug!("read reservespace");
-            skip_8_bytes(&mut conn).await?;
-        }
-        if protocol_minor >= 33 {
-            // Nix version. We're plain lying, we're not Nix, but eh…
-            // Setting it to the 2.3 lineage. Not 100% sure this is a
-            // good idea.
-            debug!("write version");
-            // Plain str padded to 64 bits.
-            bytes::write_bytes(&mut conn, "2.3.17").await?;
-            conn.flush().await?;
-        }
-        if protocol_minor >= 35 {
-            worker_protocol::write_worker_trust_level(&mut conn, worker_protocol::Trust::Trusted)
-                .await?;
-            info!("Trust sent");
-        }
-        Ok(ClientConnection {
-            conn,
-            version_minor: protocol_minor,
-            client_settings: None,
-        })
-    }
-}
-
-async fn skip_8_bytes<R>(conn: &mut R) -> anyhow::Result<()>
-where
-    R: AsyncReadExt + Unpin + std::fmt::Debug,
-{
-    let mut _discard_buffer = [0; 8];
-    conn.read_exact(&mut _discard_buffer).await?;
-    Ok(())
-}
-
-#[cfg(test)]
-mod integration_tests {
-    use nix_compat::wire::worker_protocol;
-    #[tokio::test]
-    async fn test_init_handshake() {
-        let mut test_conn = tokio_test::io::Builder::new()
-            .read(&worker_protocol::WORKER_MAGIC_1.to_le_bytes())
-            .write(&worker_protocol::WORKER_MAGIC_2.to_le_bytes())
-            .write(&worker_protocol::PROTOCOL_VERSION.to_le_bytes())
-            // Let's say the client is in sync with the daemon
-            // protocol-wise
-            .read(&worker_protocol::PROTOCOL_VERSION.to_le_bytes())
-            // cpu affinity
-            .read(&vec![0; 8])
-            // reservespace
-            .read(&vec![0; 8])
-            // version (size)
-            .write(&vec![0x06, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
-            // version (data == 2.2.17 + padding)
-            .write(&vec![50, 46, 51, 46, 49, 55, 0, 0])
-            // Trusted (1 == client trusted
-            .write(&vec![1, 0, 0, 0, 0, 0, 0, 0])
-            .build();
-        crate::perform_init_handshake(&mut test_conn).await.unwrap();
-    }
 }
