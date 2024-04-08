@@ -16,6 +16,23 @@
       "message": "TODO",
       "revId": "3df97d20dcbd699446403e66aefe3e9562103ad6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa63c273_d1dd6f19",
+        "filename": "tvix/nix-compat/src/wire/bytes_writer.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-08T22:21:08Z",
+      "side": 1,
+      "message": "TODO: have a bytes/mod.rs, documenting the bytes packet and containing the {read, write}_bytes function, bytes/{reader,writer}.rs containing reader and writer, respectively.\n\nThings like LEN_SIZE and the state enum then don\u0027t need to be public for the whole crate anymore.\n\nalso, ensure read_bytes docstring is updated.",
+      "revId": "3df97d20dcbd699446403e66aefe3e9562103ad6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
