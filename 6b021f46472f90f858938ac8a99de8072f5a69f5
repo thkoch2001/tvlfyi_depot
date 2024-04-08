@@ -1,0 +1,157 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8fb3601d_44f81954",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-08T11:13:30Z",
+      "side": 1,
+      "message": "As written below, I don\u0027t think we should have this struct here.\n\n`perform_init_handshake` can simply return `version_minor` of the client.\n\nThe caller already has `conn` (it called the function with it, after all),\nand `client_settings` is also not populated here.\n\nIt\u0027ll make lifetime tracking and individual testing easier, and we don\u0027t force a user to structure its state tracking using this struct.",
+      "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da7b45bb_81982f7a",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-08T11:13:30Z",
+      "side": 1,
+      "message": "```suggestion\n/// Performs the initial handshake the server is sending to a connecting client.\n/// During the handshake, the client …\n```",
+      "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82a0a96a_ca9777fc",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-08T11:13:30Z",
+      "side": 1,
+      "message": "Can we call this \"RW\" (read/write) or just \"C\" (for Channel, borrowing from tonic naming)?\n\nR suggests Read, but we read and write.",
+      "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b0927e37_33890427",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-08T11:13:30Z",
+      "side": 1,
+      "message": "```suggestion\npub async fn server_handshake_client\u003c\u0027a, R: \u0027a\u003e(\n```",
+      "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f70b0040_29d75639",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-08T11:13:30Z",
+      "side": 1,
+      "message": "This should just return version_minor in the success case, not a more complicated struct with the (set to None in this library code) client_setting, nor the connection (which the caller already has).",
+      "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "acc4bd2f_860f926a",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 228,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-08T11:13:30Z",
+      "side": 1,
+      "message": "`let _read_affinity \u003d primitive::read_u64(\u0026mut conn).await?;`\n\nThis is also just a number (or something representable as u64), we just decide to ignore it.",
+      "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f183e724_2110e9b6",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-08T11:13:30Z",
+      "side": 1,
+      "message": "`let _reserve_space \u003d primitive::read_u64(\u0026mut conn).await?;`\n\nThis is also just a number (or something representable as u64), we just decide to ignore it.",
+      "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f097f740_baa27eea",
+        "filename": "tvix/nix-compat/src/wire/worker_protocol.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-08T11:13:30Z",
+      "side": 1,
+      "message": "We don\u0027t need it, see above.",
+      "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "891fda01_f7c0af2c",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-08T11:13:30Z",
+      "side": 1,
+      "message": "```\nlet client_protocol_version \u003d server_handshake_client(\u0026mut conn, \"2.18.2\", Trust::Trusted).await?;\n\ndebug!(\"Client handshake succeeded\");\nprimitive::write_u64(\u0026mut client_connection.conn, worker_protocol::STDERR_LAST)\n                .await\n                .unwrap();\n```",
+      "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
