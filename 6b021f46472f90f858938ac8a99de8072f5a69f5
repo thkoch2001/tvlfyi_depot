@@ -152,6 +152,24 @@
       "message": "```\nlet client_protocol_version \u003d server_handshake_client(\u0026mut conn, \"2.18.2\", Trust::Trusted).await?;\n\ndebug!(\"Client handshake succeeded\");\nprimitive::write_u64(\u0026mut client_connection.conn, worker_protocol::STDERR_LAST)\n                .await\n                .unwrap();\n```",
       "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f499bf9_f83a34a5",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-08T11:20:01Z",
+      "side": 1,
+      "message": "erf, s/client_connection.conn/conn/ in the comment above.",
+      "parentUuid": "891fda01_f7c0af2c",
+      "revId": "6b021f46472f90f858938ac8a99de8072f5a69f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
