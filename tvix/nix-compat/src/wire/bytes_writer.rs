@@ -190,7 +190,7 @@ where
                         let bytes_written = ensure_nonzero_bytes_written(ready!(this
                             .inner
                             .as_mut()
-                            .poll_write(cx, &EMPTY_BYTES[..total_padding_len]))?)?;
+                            .poll_write(cx, &EMPTY_BYTES[pos..total_padding_len]))?)?;
                         *this.state = BytesPacketPosition::Padding(pos + bytes_written);
                     } else {
                         // everything written, break
@@ -356,6 +356,25 @@ mod tests {
         assert_ok!(w.write_all(&payload[4..]).await);
         assert_ok!(w.flush().await);
         assert_ok!(w.shutdown().await);
+    }
+
+    /// Write a 9 bytes packet, but cause the writer to only accept half of the
+    /// padding, ensuring we correctly write the rest of the padding later.
+    #[tokio::test]
+    async fn write_9b_write_padding_2steps() {
+        let payload = &hex!("000102030405060708");
+        let exp_bytes = produce_exp_bytes(payload).await;
+
+        let mut mock = Builder::new()
+            .write(&exp_bytes[0..8]) // size
+            .write(&exp_bytes[8..17]) // payload
+            .write(&exp_bytes[17..19]) // padding (1)
+            .write(&exp_bytes[19..]) // padding (2)
+            .build();
+
+        let mut w = BytesWriter::new(&mut mock, payload.len() as u64);
+        assert_ok!(w.write_all(&payload[..]).await);
+        assert_ok!(w.flush().await);
     }
 
     /// Write a larger bytes packet
