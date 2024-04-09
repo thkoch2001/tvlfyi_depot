@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "26801ae3_736a198f",
+        "filename": "tvix/store/src/pathinfoservice/bigtable.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-09T17:28:44Z",
+      "side": 1,
+      "message": "Sounds good!",
+      "parentUuid": "7fe0f71b_022347c7",
+      "revId": "1e71aecdc3559a2037383d578bfee60fa0c10c54",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91a35b16_0326473b",
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "If you want to call this function, yes. But if something else has already calculated that data, you don\u0027t need to call it.\n\nFor example, you can use nix-copy-closure through nar-bridge connected to this store and upload a closure.\n\nnar-bridge will only call put with the resulting `PathInfo` structs (at least IIRC).\nAs far as validating the NarHash matches, it already does do this while ingesting the NAR: https://cs.tvl.fyi/depot/-/blob/tvix/nar-bridge/pkg/importer/importer.go?L45",
       "parentUuid": "8d2e3712_81a5ecdf",
+      "revId": "1e71aecdc3559a2037383d578bfee60fa0c10c54",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ee56154_725b47eb",
+        "filename": "tvix/store/src/pathinfoservice/bigtable.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-09T17:28:44Z",
+      "side": 1,
+      "message": "Cool, as long as this works with nar-bridge ingestion I think we\u0027re good!",
+      "parentUuid": "a2d785df_c941de36",
       "revId": "1e71aecdc3559a2037383d578bfee60fa0c10c54",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
