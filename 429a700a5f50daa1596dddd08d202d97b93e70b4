@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7357cf27_4573752d",
+        "filename": "tvix/nix-compat/src/wire/bytes_reader.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-09T14:33:44Z",
+      "side": 1,
+      "message": "We can\u0027t use ? here because if this fails we need to make sure we reset any filled state in buf before returning the error.",
+      "revId": "429a700a5f50daa1596dddd08d202d97b93e70b4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "773ae012_050b15b0",
+        "filename": "tvix/nix-compat/src/wire/bytes_reader.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-09T14:33:44Z",
+      "side": 1,
+      "message": "Reset any filled state in buf before returning error.",
+      "revId": "429a700a5f50daa1596dddd08d202d97b93e70b4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

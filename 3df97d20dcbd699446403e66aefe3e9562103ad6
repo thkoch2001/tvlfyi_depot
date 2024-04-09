@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb0cd0b0_daf995bf",
+        "filename": "tvix/nix-compat/src/wire/bytes_reader.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-09T14:33:44Z",
+      "side": 1,
+      "message": "```suggestion\n                        let mut padding_buf \u003d padding_buf.take(padding_len_left);\n```",
+      "revId": "3df97d20dcbd699446403e66aefe3e9562103ad6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1f4c0e89_7ababd19",
         "filename": "tvix/nix-compat/src/wire/bytes_reader.rs",
         "patchSetId": 2
