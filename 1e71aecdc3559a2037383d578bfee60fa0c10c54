@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b698ada_d868888f",
+        "filename": "tvix/store/src/pathinfoservice/bigtable.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-09T16:19:19Z",
+      "side": 1,
+      "message": "Might be nice to share some of this `cbtemulator` setup code with the directory service",
+      "revId": "1e71aecdc3559a2037383d578bfee60fa0c10c54",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "91a35b16_0326473b",
+        "filename": "tvix/store/src/pathinfoservice/bigtable.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-09T16:19:19Z",
+      "side": 1,
+      "message": "should we check `is_read_only` and error out before attempting to write? (same thing for directory service)",
+      "revId": "1e71aecdc3559a2037383d578bfee60fa0c10c54",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d2e3712_81a5ecdf",
+        "filename": "tvix/store/src/pathinfoservice/bigtable.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-09T16:19:19Z",
+      "side": 1,
+      "message": "What\u0027s the plan here? Do we need store composition before this works?",
+      "revId": "1e71aecdc3559a2037383d578bfee60fa0c10c54",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
