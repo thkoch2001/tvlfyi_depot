@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "135d09e1_77f1f43f",
+        "filename": "tvix/nix-compat/src/wire/bytes_reader.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-09T13:53:33Z",
+      "side": 1,
+      "message": "```suggestion\n                    buf.advance(bytes_read);\n```\n\nThis does the same but avoids having to keep track of existing data in buffer.",
+      "revId": "5e167889fc1fcde2af54f7b9d747abb8ce52937d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6b615400_31364254",
         "filename": "tvix/nix-compat/src/wire/bytes_reader.rs",
         "patchSetId": 1
