@@ -107,6 +107,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22642643_cf69a768",
+        "filename": "tvix/store/src/pathinfoservice/bigtable.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-09T19:40:05Z",
+      "side": 1,
+      "message": "Ok, so bigtable-rs only creates a client with different scopes.\n\nSo we still send out HTTP requests, and it makes sense to check for this. Let\u0027s do it in a followup though, for both backends.",
+      "parentUuid": "3ba311e3_3c5a3038",
+      "revId": "1e71aecdc3559a2037383d578bfee60fa0c10c54",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d2e3712_81a5ecdf",
