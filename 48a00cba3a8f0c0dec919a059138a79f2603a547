@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fddd2708_b9222405",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 10
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-09T15:24:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "443e226e_3e24c954",
+      "revId": "48a00cba3a8f0c0dec919a059138a79f2603a547",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9bf23917_3e0d0428",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-04-08T17:03:22Z",
       "side": 1,
       "message": "/// Reads through all data from the passed reader, and returns the resulting Digest.\n/// The exact hash function used is left generic over all `Digest`.",
+      "revId": "48a00cba3a8f0c0dec919a059138a79f2603a547",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5dcea1aa_fe527bf7",
+        "filename": "tvix/eval/src/builtins/hash.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-09T15:24:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9bf23917_3e0d0428",
       "revId": "48a00cba3a8f0c0dec919a059138a79f2603a547",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff262f9a_78ff3a76",
+        "filename": "tvix/eval/src/builtins/hash.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-09T15:24:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b25bd445_50f80fed",
+      "revId": "48a00cba3a8f0c0dec919a059138a79f2603a547",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "73296dc1_11821c3e",
@@ -69,6 +123,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "febbac53_f18f67bd",
+        "filename": "tvix/eval/src/builtins/impure.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-09T15:24:55Z",
+      "side": 1,
+      "message": "Oops, this can be a `Vec\u003cu8\u003e` with `read_to_end`, might\u0027ve lost this change along the way.",
+      "parentUuid": "73296dc1_11821c3e",
+      "revId": "48a00cba3a8f0c0dec919a059138a79f2603a547",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2500e6b7_21d834d0",
@@ -82,6 +154,24 @@
       "writtenOn": "2024-04-08T17:03:22Z",
       "side": 1,
       "message": "same as above, why is this still a String",
+      "revId": "48a00cba3a8f0c0dec919a059138a79f2603a547",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4529d91a_43682846",
+        "filename": "tvix/eval/src/compiler/import.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-09T15:24:55Z",
+      "side": 1,
+      "message": "Added comment, rnix only supports string sources",
+      "parentUuid": "2500e6b7_21d834d0",
       "revId": "48a00cba3a8f0c0dec919a059138a79f2603a547",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
