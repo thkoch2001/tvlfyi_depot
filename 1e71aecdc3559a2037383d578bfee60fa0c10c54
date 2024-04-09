@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7fe0f71b_022347c7",
+        "filename": "tvix/store/src/pathinfoservice/bigtable.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-09T17:25:49Z",
+      "side": 1,
+      "message": "Yes, though it\u0027s strictly speaking neither something that castore nor store should publicly expose. I\u0027ll ask upstream if they\u0027re interested in this, there\u0027s an issue about integration tests already. If not, I\u0027d probably rather keep the duplication than moving it into our own crate (rule of three)",
+      "parentUuid": "2b698ada_d868888f",
+      "revId": "1e71aecdc3559a2037383d578bfee60fa0c10c54",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "91a35b16_0326473b",
         "filename": "tvix/store/src/pathinfoservice/bigtable.rs",
         "patchSetId": 8
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3ba311e3_3c5a3038",
+        "filename": "tvix/store/src/pathinfoservice/bigtable.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 279,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-09T17:25:49Z",
+      "side": 1,
+      "message": "I assumed the server would already fail, or even the bigtable-rs plumbing.\n\nIt would be nice if we\u0027d catch this client-side somewhere though. let me check :-)",
+      "parentUuid": "91a35b16_0326473b",
+      "revId": "1e71aecdc3559a2037383d578bfee60fa0c10c54",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8d2e3712_81a5ecdf",
         "filename": "tvix/store/src/pathinfoservice/bigtable.rs",
         "patchSetId": 8
@@ -48,6 +84,24 @@
       "writtenOn": "2024-04-09T16:19:19Z",
       "side": 1,
       "message": "What\u0027s the plan here? Do we need store composition before this works?",
+      "revId": "1e71aecdc3559a2037383d578bfee60fa0c10c54",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a2d785df_c941de36",
+        "filename": "tvix/store/src/pathinfoservice/bigtable.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 335,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-09T17:25:49Z",
+      "side": 1,
+      "message": "If you want to call this function, yes. But if something else has already calculated that data, you don\u0027t need to call it.\n\nFor example, you can use nix-copy-closure through nar-bridge connected to this store and upload a closure.\n\nnar-bridge will only call put with the resulting `PathInfo` structs (at least IIRC).\nAs far as validating the NarHash matches, it already does do this while ingesting the NAR: https://cs.tvl.fyi/depot/-/blob/tvix/nar-bridge/pkg/importer/importer.go?L45",
+      "parentUuid": "8d2e3712_81a5ecdf",
       "revId": "1e71aecdc3559a2037383d578bfee60fa0c10c54",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
