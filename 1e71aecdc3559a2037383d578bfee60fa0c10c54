@@ -54,6 +54,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c885fa8d_b3bace3e",
+        "filename": "tvix/store/src/pathinfoservice/bigtable.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-09T19:06:57Z",
+      "side": 1,
+      "message": "asked in https://github.com/liufuyang/bigtable_rs/issues/36#issuecomment-2045886817.",
+      "parentUuid": "26801ae3_736a198f",
+      "revId": "1e71aecdc3559a2037383d578bfee60fa0c10c54",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91a35b16_0326473b",
