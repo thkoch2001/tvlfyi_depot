@@ -149,4 +149,5 @@ mod tests {
             assert!(from_addr(uri_str).await.is_err(), "should fail");
         }
     }
+    // TODO: move all 3 from_addr to rstest. TODO: check other test_case usages
 }
