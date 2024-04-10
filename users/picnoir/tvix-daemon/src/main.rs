@@ -4,7 +4,7 @@ use tokio_listener::{self, SystemOptions, UserOptions};
 use tracing::{debug, error, info, instrument, Level};
 
 use nix_compat::wire::{
-    primitive,
+    self,
     worker_protocol::{self, server_handshake_client, ClientSettings, Trust},
 };
 
@@ -80,7 +80,7 @@ where
             // TODO: implement logging. For now, we'll just send
             // STDERR_LAST, which is good enough to get Nix respond to
             // us.
-            primitive::write_u64(&mut client_connection.conn, worker_protocol::STDERR_LAST)
+            wire::write_u64(&mut client_connection.conn, worker_protocol::STDERR_LAST)
                 .await
                 .unwrap();
             loop {
@@ -112,6 +112,6 @@ where
         worker_protocol::read_client_settings(&mut conn.conn, conn.version_minor).await?;
     // The client expects us to send some logs when we're processing
     // the settings. Sending STDERR_LAST signal we're done processing.
-    primitive::write_u64(&mut conn.conn, worker_protocol::STDERR_LAST).await?;
+    wire::write_u64(&mut conn.conn, worker_protocol::STDERR_LAST).await?;
     Ok(settings)
 }

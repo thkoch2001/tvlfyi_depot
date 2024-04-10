@@ -3,7 +3,7 @@ use std::task::{ready, Poll};
 
 use tokio::io::AsyncWrite;
 
-use super::bytes::EMPTY_BYTES;
+use super::EMPTY_BYTES;
 
 /// The length of the size field, in bytes is always 8.
 pub(crate) const LEN_SIZE: usize = 8;

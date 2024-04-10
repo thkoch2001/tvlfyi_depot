@@ -8,7 +8,7 @@ use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use super::primitive;
 
 /// 8 null bytes, used to write out padding.
-pub(crate) const EMPTY_BYTES: &[u8; 8] = &[0u8; 8];
+const EMPTY_BYTES: &[u8; 8] = &[0u8; 8];
 
 #[allow(dead_code)]
 /// Read a "bytes wire packet" from the AsyncRead.
