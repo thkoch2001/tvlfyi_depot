@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa9a3ffc_9d6f0845",
+        "filename": "tvix/nix-compat/src/wire/bytes_reader.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-10T16:53:50Z",
+      "side": 1,
+      "message": "Nice catch! Applied.",
+      "parentUuid": "dfc69a36_ecfe5ea0",
+      "revId": "4f0d194cd0c4748017005d3464758aaf3fc025f2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7c88c943_effa91f5",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-04-10T14:24:10Z",
       "side": 1,
       "message": "```suggestion\n                    buf.advannce(bytes_read);\n```",
+      "revId": "4f0d194cd0c4748017005d3464758aaf3fc025f2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cb96d80_527aef73",
+        "filename": "tvix/nix-compat/src/wire/bytes_reader.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-10T16:53:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c88c943_effa91f5",
       "revId": "4f0d194cd0c4748017005d3464758aaf3fc025f2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
