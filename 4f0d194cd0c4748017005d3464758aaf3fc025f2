@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfc69a36_ecfe5ea0",
+        "filename": "tvix/nix-compat/src/wire/bytes_reader.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-10T14:24:10Z",
+      "side": 1,
+      "message": "If you use advance you don\u0027t need this.",
+      "revId": "4f0d194cd0c4748017005d3464758aaf3fc025f2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c88c943_effa91f5",
+        "filename": "tvix/nix-compat/src/wire/bytes_reader.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 153,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-10T14:24:10Z",
+      "side": 1,
+      "message": "```suggestion\n                    buf.advannce(bytes_read);\n```",
+      "revId": "4f0d194cd0c4748017005d3464758aaf3fc025f2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
