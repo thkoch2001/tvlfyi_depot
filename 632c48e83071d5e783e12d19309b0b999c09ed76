@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a8add773_8178acbd",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2024-04-10T08:05:07Z",
+      "side": 1,
+      "message": "Restricting by parent agent would work, but practically the agents could differ as far as extra step has access to the build output of the parent step. More than that, it\u0027s probably fine and desirable to run extra steps in parallel.\n\nThis problem is relevant if we decide to scale the CI with multiple build servers (as we\u0027re trying here in Resoptima). With current nix implementation we end up with multiple isolated nix stores so extra steps can\u0027t be used in the way how they are now.\n\nFrom Buildkite documentation I can see that it\u0027s possible abuse agent meta-data (https://buildkite.com/docs/agent/v3/cli-meta-data) to store unique name tags and then fetch them in runtime. But there\u0027s no easy way to inherit parent\u0027s agent out of the box.",
+      "parentUuid": "61d1e9f0_e8515829",
+      "range": {
+        "startLine": 14,
+        "startChar": 54,
+        "endLine": 14,
+        "endChar": 58
+      },
+      "revId": "632c48e83071d5e783e12d19309b0b999c09ed76",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c30d3620_3cdf8ecb",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 4
@@ -37,6 +61,24 @@
       "writtenOn": "2024-04-09T15:30:37Z",
       "side": 1,
       "message": "It would be nicer if we could force the extraSteps to use the same agent instead somehow?",
+      "revId": "632c48e83071d5e783e12d19309b0b999c09ed76",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4eede4bf_44aee4b7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000038
+      },
+      "writtenOn": "2024-04-10T08:05:07Z",
+      "side": 1,
+      "message": "Replied in the comment below",
+      "parentUuid": "c30d3620_3cdf8ecb",
       "revId": "632c48e83071d5e783e12d19309b0b999c09ed76",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
