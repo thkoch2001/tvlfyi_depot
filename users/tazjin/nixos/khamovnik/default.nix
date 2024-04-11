@@ -72,6 +72,7 @@ in
   hardware.opengl.extraPackages = with pkgs; [
     intel-compute-runtime
     intel-media-driver
+    intel-vaapi-driver
   ];
 
   # from generated configuration.nix
