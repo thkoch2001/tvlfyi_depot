@@ -5,7 +5,7 @@ use data_encoding::BASE64;
 // https://github.com/hyperium/tonic/issues/1056
 use nix_compat::{
     narinfo::Flags,
-    nixhash::{CAHash, NixHash},
+    nixhash::{self, CAHash, NixHash},
     store_path::{self, StorePathRef},
 };
 use thiserror::Error;
@@ -239,6 +239,50 @@ impl PathInfo {
             compression: Some("none"),
             file_hash: None,
             file_size: None,
+        })
+    }
+
+    /// With self and its store path name a given StorePathRef, this creates a
+    /// [nix_compat::path_info::PathInfo].
+    ///
+    /// It assumes self to be validated first, and will only return None if the
+    /// `narinfo` field is unpopulated.
+    ///
+    /// It does very little allocation (one single Vec for `references`), the
+    /// rest points to data owned elsewhere.
+    ///
+    /// Keep in mind some data is not contained and will be unpopulated (`None`)
+    /// afterwards, like `closure_size`, `registration_time`, `ultimate` and
+    /// `valid` fields.
+    pub fn to_nix_pathinfo<'a>(
+        &'a self,
+        store_path: store_path::StorePathRef<'a>,
+    ) -> Option<nix_compat::path_info::PathInfo> {
+        let narinfo = &self.narinfo.as_ref()?;
+
+        Some(nix_compat::path_info::PathInfo {
+            closure_size: None,
+            deriver: narinfo
+                .deriver
+                .map(|e| StorePathRef::from_absolute_path(e).expect("invalid deriver")),
+            nar_sha256: narinfo
+                .nar_sha256
+                .clone()
+                .try_into()
+                .expect("invalid nar_sha256"),
+            nar_size: narinfo.nar_size,
+            path: store_path,
+            references: narinfo
+                .reference_names
+                .iter()
+                .map(|ref_name| {
+                    // This shouldn't pass validation
+                    StorePathRef::from_bytes(ref_name.as_bytes()).expect("invalid reference")
+                })
+                .collect(),
+            registration_time: None,
+            ultimate: None,
+            valid: None,
         })
     }
 }
