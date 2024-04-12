@@ -28,7 +28,6 @@ pub struct ExportedPathInfo<'a> {
     /// The list of other Store Paths this Store Path refers to.
     /// StorePathRef does Ord by the nixbase32-encoded string repr, so this is correct.
     pub references: BTreeSet<StorePathRef<'a>>,
-
     // more recent versions of Nix also have a `valid: true` field here, Nix 2.3 doesn't,
     // and nothing seems to use it.
 }
