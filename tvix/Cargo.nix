@@ -14552,6 +14552,10 @@ rec {
             features = [ "derive" ];
           }
           {
+            name = "serde_json";
+            packageId = "serde_json";
+          }
+          {
             name = "serde_qs";
             packageId = "serde_qs";
           }
