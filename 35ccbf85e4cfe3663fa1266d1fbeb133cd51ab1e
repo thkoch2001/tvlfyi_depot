@@ -16,6 +16,24 @@
       "message": "Apparently Nix uses two different ways to encode narHash as string (`sha256:${nixbase32 digest}` for the exportReferenceGraph mechanism, `sha256:${base64 digest}` for the output from `nix path-info`. \n\nSo trying to represent this in the same struct is gonna get messy. Let\u0027s better make it two different ones.",
       "revId": "35ccbf85e4cfe3663fa1266d1fbeb133cd51ab1e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96db88e1_93b467ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-12T15:29:23Z",
+      "side": 1,
+      "message": "Renamed the struct to `ExportedPathInfo`, it now only has the fields used in `exportReferencesGraph`.",
+      "parentUuid": "7fa9017b_e9340f5e",
+      "revId": "35ccbf85e4cfe3663fa1266d1fbeb133cd51ab1e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
