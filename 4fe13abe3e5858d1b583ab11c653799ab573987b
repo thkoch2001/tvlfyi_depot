@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e40358bb_bf2149af",
+        "filename": "tvix/boot/tests/default.nix",
+        "patchSetId": 9
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-12T18:24:46Z",
+      "side": 1,
+      "message": "@tvl@lahfa.xyz \n\nThere seems to be a bug lurking in the ingestion code somewhere, causing not all directories to be properly traversed (?).\n\nThe validation infra we now have in DirectoryPutter complains about unseen child dirs, and there\u0027s some log lines about directory_putter.close() being called without uploading dirs, even though we have a check and should only call it if we expected to.",
+      "revId": "4fe13abe3e5858d1b583ab11c653799ab573987b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
