@@ -42,6 +42,11 @@
    :migrate
    :*pg-spec*
 
+   :create-table-if-not-exists
+
+   :user
+   :sub :username :email
+
    :user-settings
    :user-dn :enable-email-notifications-p :settings-for-user
    :update-user-settings :enable-email-notifications

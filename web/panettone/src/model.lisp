@@ -39,6 +39,22 @@ initialised at launch time.")
 ;;; Schema
 ;;;
 
+(defclass user ()
+  ((sub :col-type uuid :initarg :sub :accessor sub
+        :documentation
+        "ID for the user in the authentication provider. Taken from the `:SUB'
+        field in the JWT when the user first logged in")
+   (username :col-type string :initarg :username :accessor username)
+   (email :col-type string :initarg :email :accessor email))
+  (:metaclass dao-class)
+  (:keys sub)
+  (:table-name users)
+  (:documentation
+   "Panettone users. Uses an external authentication provider."))
+
+(deftable (user "users")
+  (!dao-def))
+
 (defclass user-settings ()
   ((user-dn :col-type string :initarg :user-dn :accessor user-dn)
    (enable-email-notifications
@@ -218,6 +234,17 @@ its new value will be formatted using ~A into NEW-VALUE"))
   (:table-name migrations)
   (:documentation "Migration scripts that have been run on the database"))
 (deftable migration (!dao-def))
+
+;;;
+;;; Utils
+;;;
+
+(defun create-table-if-not-exists (name)
+  " Takes the name of a dao-class and creates the table identified by symbol by
+executing all forms in its definition as found in the *tables* list, if it does
+not already exist."
+  (unless (table-exists-p (dao-table-name name))
+    (create-table name)))
 
 ;;;
 ;;; Migrations
@@ -571,8 +598,9 @@ explicitly subscribing to / unsubscribing from individual issues."
 
  ;; Creating new migrations
  (setq *migrations-dir* (merge-pathnames "migrations/"))
- (generate-migration "add-issue-tsv"
-                     :documentation "Add tsvector for full-text search of issues")
+ (generate-migration "create-users-table"
+                     :documentation "Add a table to store information about users")
+ (load-migrations)
 
  ;; Running migrations
  (with-connection *pg-spec*
