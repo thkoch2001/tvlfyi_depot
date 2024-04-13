@@ -100,16 +100,7 @@ depot.nix.readTree.drvTargets {
     subPackages = [ "cmd/emulator" ];
 
     patches = [
-      (super.fetchpatch {
-        url = "https://github.com/googleapis/google-cloud-go/pull/9665/commits/7b716627fae4d8b28f175eff968090d27d4477eb.patch";
-        hash = "sha256-nEVB7DjafByGHspfDYPcCRHMVHBjeSQ5MBVd6eeo4ls=";
-        stripLen = 1;
-      })
-      (super.fetchpatch {
-        url = "https://github.com/googleapis/google-cloud-go/pull/9665/commits/a65bc68f49bd340040f836e890f1fd4d781f6f2a.patch";
-        hash = "sha256-Zu1JXym+IK9pWp7HKJiGUv2HG776hUat8Qlty9/PsQs=";
-        stripLen = 1;
-      })
+      ./patches/cbtemulator-uds.patch
     ];
 
     postInstall = ''
