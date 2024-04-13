@@ -34,6 +34,24 @@
       "parentUuid": "393fb45b_7e1652b0",
       "revId": "600cf8197674ea7cd7d5734755cd1d820e7f365c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e3756cf_b477c8f0",
+        "filename": "tvix/nix-compat/src/wire/bytes_reader.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-13T11:22:24Z",
+      "side": 1,
+      "message": "cl/11403.",
+      "parentUuid": "7945a5e3_dea292a5",
+      "revId": "600cf8197674ea7cd7d5734755cd1d820e7f365c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ],
   "submitRequirementResults": []
