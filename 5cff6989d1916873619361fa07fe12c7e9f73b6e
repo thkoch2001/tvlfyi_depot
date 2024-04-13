@@ -16,6 +16,24 @@
       "message": "Lemme add a link to the PR still",
       "revId": "5cff6989d1916873619361fa07fe12c7e9f73b6e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "af845287_179e7429",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-13T09:11:18Z",
+      "side": 1,
+      "message": "Ah, it already is at the top of the expression. nvm then.",
+      "parentUuid": "85b215c5_02019054",
+      "revId": "5cff6989d1916873619361fa07fe12c7e9f73b6e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
