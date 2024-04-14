@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "957d44cc_5db3b4b2",
+        "filename": "web/panettone/src/model.lisp",
+        "patchSetId": 1
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-04-14T23:18:26Z",
+      "side": 1,
+      "message": "Nit: Superfluous Whitespace.",
+      "range": {
+        "startLine": 243,
+        "startChar": 3,
+        "endLine": 243,
+        "endChar": 4
+      },
+      "revId": "16be252a6c6cbf6ea9982ccb78f4ff82e4738aa7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
