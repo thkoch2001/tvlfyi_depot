@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5de2c316_5d6f06e4",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 658,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-14T16:53:27Z",
+      "side": 1,
+      "message": "This can probably also just be ENODATA, without any warning.",
+      "revId": "c279cfedb6916fa9259f5bb87d0536709d4811f3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "501514c7_aa123326",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 667,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-14T16:53:27Z",
+      "side": 1,
+      "message": "digest.to_string()",
+      "revId": "c279cfedb6916fa9259f5bb87d0536709d4811f3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "92d94f7a_575be1bf",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 673,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-14T16:53:27Z",
+      "side": 1,
+      "message": "same",
+      "revId": "c279cfedb6916fa9259f5bb87d0536709d4811f3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
