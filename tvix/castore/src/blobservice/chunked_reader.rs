@@ -1,4 +1,4 @@
-use futures::TryStreamExt;
+use futures::{ready, TryStreamExt};
 use pin_project_lite::pin_project;
 use tokio::io::{AsyncRead, AsyncSeekExt};
 use tokio_stream::StreamExt;
@@ -6,7 +6,7 @@ use tokio_util::io::{ReaderStream, StreamReader};
 use tracing::warn;
 
 use crate::B3Digest;
-use std::{cmp::Ordering, pin::Pin, task::Poll};
+use std::{cmp::Ordering, pin::Pin};
 
 use super::{BlobReader, BlobService};
 
@@ -60,15 +60,12 @@ where
         let filled_before = buf.filled().len();
 
         let this = self.project();
-        match this.r.poll_read(cx, buf) {
-            Poll::Ready(a) => {
-                let bytes_read = buf.filled().len() - filled_before;
-                *this.pos += bytes_read as u64;
 
-                Poll::Ready(a)
-            }
-            Poll::Pending => Poll::Pending,
-        }
+        ready!(this.r.poll_read(cx, buf))?;
+        let bytes_read = buf.filled().len() - filled_before;
+        *this.pos += bytes_read as u64;
+
+        Ok(()).into()
     }
 }
 
