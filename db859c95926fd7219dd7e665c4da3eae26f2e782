@@ -72,6 +72,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "656c9c43_93892c73",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-15T13:10:36Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "dd1e3da3_90ecd48a",
+      "revId": "db859c95926fd7219dd7e665c4da3eae26f2e782",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f0bbc7f1_0e4e1c17",
