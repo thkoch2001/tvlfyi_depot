@@ -460,11 +460,6 @@ where
                 })?;
 
                 let name = root_node.get_name();
-                let ty = match root_node {
-                    Node::Directory(_) => libc::S_IFDIR,
-                    Node::File(_) => libc::S_IFREG,
-                    Node::Symlink(_) => libc::S_IFLNK,
-                };
 
                 // obtain the inode, or allocate a new one.
                 let ino = self.get_inode_for_root_name(name).unwrap_or_else(|| {
@@ -475,13 +470,10 @@ where
                     ino
                 });
 
-                #[cfg(target_os = "macos")]
-                let ty = ty as u32;
-
                 let written = add_entry(fuse_backend_rs::api::filesystem::DirEntry {
                     ino,
                     offset: offset + i as u64 + 1,
-                    type_: ty,
+                    type_: as_fuse_type_for_node(&root_node),
                     name,
                 })?;
                 // If the buffer is full, add_entry will return `Ok(0)`.
@@ -501,17 +493,7 @@ where
             let written = add_entry(fuse_backend_rs::api::filesystem::DirEntry {
                 ino: *ino,
                 offset: offset + i as u64 + 1,
-                type_: match child_node {
-                    #[allow(clippy::unnecessary_cast)]
-                    // libc::S_IFDIR is u32 on Linux and u16 on MacOS
-                    Node::Directory(_) => libc::S_IFDIR as u32,
-                    #[allow(clippy::unnecessary_cast)]
-                    // libc::S_IFDIR is u32 on Linux and u16 on MacOS
-                    Node::File(_) => libc::S_IFREG as u32,
-                    #[allow(clippy::unnecessary_cast)]
-                    // libc::S_IFDIR is u32 on Linux and u16 on MacOS
-                    Node::Symlink(_) => libc::S_IFLNK as u32,
-                },
+                type_: as_fuse_type_for_node(child_node),
                 name: child_node.get_name(),
             })?;
             // If the buffer is full, add_entry will return `Ok(0)`.
@@ -563,12 +545,7 @@ where
                 })?;
 
                 let name = root_node.get_name();
-                let ty = match root_node {
-                    Node::Directory(_) => libc::S_IFDIR,
-                    Node::File(_) => libc::S_IFREG,
-                    Node::Symlink(_) => libc::S_IFLNK,
-                };
-
+                let ty = as_fuse_type_for_node(&root_node);
                 let inode_data: InodeData = (&root_node).into();
 
                 // obtain the inode, or allocate a new one.
@@ -576,12 +553,9 @@ where
                     // insert the (sparse) inode data and register in
                     // self.root_nodes.
                     let ino = self.inode_tracker.write().put(inode_data.clone());
-                    self.root_nodes.write().insert(name.into(), ino);
+                    self.root_nodes.write().insert(name.to_vec(), ino);
                     ino
                 });
-
-                #[cfg(target_os = "macos")]
-                let ty = ty as u32;
 
                 let written = add_entry(
                     fuse_backend_rs::api::filesystem::DirEntry {
@@ -605,23 +579,14 @@ where
         Span::current().record("directory.digest", parent_digest.to_string());
 
         for (i, (ino, child_node)) in children.iter().skip(offset as usize).enumerate() {
+            let ty = as_fuse_type_for_node(&child_node);
             let inode_data: InodeData = child_node.into();
             // the second parameter will become the "offset" parameter on the next call.
             let written = add_entry(
                 fuse_backend_rs::api::filesystem::DirEntry {
                     ino: *ino,
                     offset: offset + i as u64 + 1,
-                    type_: match child_node {
-                        #[allow(clippy::unnecessary_cast)]
-                        // libc::S_IFDIR is u32 on Linux and u16 on MacOS
-                        Node::Directory(_) => libc::S_IFDIR as u32,
-                        #[allow(clippy::unnecessary_cast)]
-                        // libc::S_IFDIR is u32 on Linux and u16 on MacOS
-                        Node::File(_) => libc::S_IFREG as u32,
-                        #[allow(clippy::unnecessary_cast)]
-                        // libc::S_IFDIR is u32 on Linux and u16 on MacOS
-                        Node::Symlink(_) => libc::S_IFLNK as u32,
-                    },
+                    type_: ty,
                     name: child_node.get_name(),
                 },
                 inode_data.as_fuse_entry(*ino),
@@ -893,4 +858,18 @@ where
             Ok(ListxattrReply::Names(xattrs_names.to_vec()))
         }
     }
+}
+
+/// Returns the u32 for a given [Node] type.
+fn as_fuse_type_for_node(node: &Node) -> u32 {
+    let ty = match node {
+        Node::Directory(_) => libc::S_IFDIR,
+        Node::File(_) => libc::S_IFREG,
+        Node::Symlink(_) => libc::S_IFLNK,
+    };
+    // libc::S_IFDIR is u32 on Linux and u16 on MacOS
+    #[cfg(target_os = "macos")]
+    let ty = ty as u32;
+
+    ty
 }
