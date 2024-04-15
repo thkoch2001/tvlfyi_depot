@@ -16,6 +16,24 @@
       "message": "doesn\u0027t tell me the reasoning though",
       "revId": "5496488dd389549092dd4847e8d79e44b84ffd9f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cfb99870_c2c2abb8",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-15T13:10:13Z",
+      "side": 1,
+      "message": "It\u0027s not new, this code is just moved, and I don\u0027t know their reasoning either. I only know it might be the error code causing the least of problems ;-)",
+      "parentUuid": "e5d2db52_9f2bfe9a",
+      "revId": "5496488dd389549092dd4847e8d79e44b84ffd9f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

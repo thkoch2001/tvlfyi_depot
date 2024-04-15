@@ -20,6 +20,42 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dd1e3da3_90ecd48a",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-15T13:10:13Z",
+      "side": 1,
+      "message": "This is still in flux, see",
+      "parentUuid": "d7c10785_3ff4292a",
+      "revId": "db859c95926fd7219dd7e665c4da3eae26f2e782",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b598f31f_1dee5553",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-15T13:10:13Z",
+      "side": 1,
+      "message": "This is still in flux, see cl/11429. Long-term I\u0027d probably like to put both `dir_handles` and `file_handles` into some generic container struct that also deals with the next handle allocation.\n\nI\u0027ll add a FUTUREWORK comment.",
+      "parentUuid": "d7c10785_3ff4292a",
+      "revId": "db859c95926fd7219dd7e665c4da3eae26f2e782",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f0bbc7f1_0e4e1c17",
         "filename": "tvix/castore/src/fs/mod.rs",
         "patchSetId": 4
@@ -31,6 +67,24 @@
       "writtenOn": "2024-04-15T12:42:22Z",
       "side": 1,
       "message": "should be constantified with a proper name",
+      "revId": "db859c95926fd7219dd7e665c4da3eae26f2e782",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "660fb30d_c8a307e2",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-15T13:10:13Z",
+      "side": 1,
+      "message": "The size you mean? Done.",
+      "parentUuid": "f0bbc7f1_0e4e1c17",
       "revId": "db859c95926fd7219dd7e665c4da3eae26f2e782",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +106,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19af731d_2e5d0782",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-15T13:10:13Z",
+      "side": 1,
+      "message": "This is just copied from the file_handle thing, I didn\u0027t think more about it.\n\nThe same reasoning will probably apply to both though, so it makes sense to deal with it in a separate CL.",
+      "parentUuid": "3e5e5ffc_be059db7",
+      "revId": "db859c95926fd7219dd7e665c4da3eae26f2e782",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f2e3f86b_796a4d5a",
@@ -65,6 +137,24 @@
       "writtenOn": "2024-04-15T12:42:22Z",
       "side": 1,
       "message": "still needed?",
+      "revId": "db859c95926fd7219dd7e665c4da3eae26f2e782",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9165fc4e_0172846a",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-15T13:10:13Z",
+      "side": 1,
+      "message": "Removed here and for file handles in a separate CL (Iac22bbef96a2afa0416f011d073934b52b19975d)",
+      "parentUuid": "f2e3f86b_796a4d5a",
       "revId": "db859c95926fd7219dd7e665c4da3eae26f2e782",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -86,6 +176,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "32b2967a_ccb0868c",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-15T13:10:13Z",
+      "side": 1,
+      "message": "The kernel is not gonna read the error message to us. The only place that could send it would be the logging/tracing infrastructure. Though in that specific case, if other parts of the binary providing the FUSE filesystem were already panicking we\u0027re kinda in a bad situation anyways, and there\u0027s no guarantee this gets sent out anyways…\n\nI\u0027ll add some more `err` inside the `#[instrument(…)]` macros but I\u0027ll do this in another pass on this in a followup CL. THis should be done for more than the functions touched here.",
+      "parentUuid": "94106c70_b64b296f",
+      "revId": "db859c95926fd7219dd7e665c4da3eae26f2e782",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "413c92f0_ad8475bb",
@@ -103,6 +211,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e170e4a1_5eac3893",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-15T13:10:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "413c92f0_ad8475bb",
+      "revId": "db859c95926fd7219dd7e665c4da3eae26f2e782",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d84e6669_a8152514",
@@ -116,6 +242,24 @@
       "writtenOn": "2024-04-15T12:42:22Z",
       "side": 1,
       "message": "warn?",
+      "revId": "db859c95926fd7219dd7e665c4da3eae26f2e782",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3cec9591_ada42d64",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-15T13:10:13Z",
+      "side": 1,
+      "message": "Addressed in cl/11427.",
+      "parentUuid": "d84e6669_a8152514",
       "revId": "db859c95926fd7219dd7e665c4da3eae26f2e782",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
