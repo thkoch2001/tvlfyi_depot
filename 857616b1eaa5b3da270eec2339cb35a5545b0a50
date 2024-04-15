@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c25bdf11_53a0fee5",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 892,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-15T14:00:47Z",
+      "side": 1,
+      "message": "nit: missing comment on this one?",
+      "revId": "857616b1eaa5b3da270eec2339cb35a5545b0a50",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
