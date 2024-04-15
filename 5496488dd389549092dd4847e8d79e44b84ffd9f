@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5d2db52_9f2bfe9a",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-15T12:43:58Z",
+      "side": 1,
+      "message": "doesn\u0027t tell me the reasoning though",
+      "revId": "5496488dd389549092dd4847e8d79e44b84ffd9f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
