@@ -100,14 +100,21 @@ pub struct TvixStoreFs<BS, DS, RN> {
     /// This holds all opendir handles (for the root inode)
     /// They point to the rx part of the channel producing the listing.
     #[allow(clippy::type_complexity)]
-    dir_handles:
-        RwLock<HashMap<u64, Arc<Mutex<mpsc::Receiver<(usize, Result<Node, crate::Error>)>>>>>,
+    dir_handles: RwLock<
+        HashMap<
+            u64,
+            (
+                Span,
+                Arc<Mutex<mpsc::Receiver<(usize, Result<Node, crate::Error>)>>>,
+            ),
+        >,
+    >,
 
     next_dir_handle: AtomicU64,
 
     /// This holds all open file handles
     #[allow(clippy::type_complexity)]
-    file_handles: RwLock<HashMap<u64, Arc<Mutex<Box<dyn BlobReader>>>>>,
+    file_handles: RwLock<HashMap<u64, (Span, Arc<Mutex<Box<dyn BlobReader>>>)>>,
 
     next_file_handle: AtomicU64,
 
@@ -417,7 +424,7 @@ where
             debug!("add dir handle {}", dh);
             self.dir_handles
                 .write()
-                .insert(dh, Arc::new(Mutex::new(rx)));
+                .insert(dh, (Span::current(), Arc::new(Mutex::new(rx))));
 
             return Ok((
                 Some(dh),
@@ -428,7 +435,7 @@ where
         Ok((None, OpenOptions::empty()))
     }
 
-    #[tracing::instrument(skip_all, fields(rq.inode = inode, rq.handle = handle, rq.offset = offset))]
+    #[tracing::instrument(skip_all, fields(rq.inode = inode, rq.handle = handle, rq.offset = offset), parent = self.dir_handles.read().get(&handle).and_then(|x| x.0.id()))]
     fn readdir(
         &self,
         _ctx: &Context,
@@ -446,7 +453,7 @@ where
             }
 
             // get the handle from [self.dir_handles]
-            let rx = match self.dir_handles.read().get(&handle) {
+            let (_span, rx) = match self.dir_handles.read().get(&handle) {
                 Some(rx) => rx.clone(),
                 None => {
                     warn!("dir handle {} unknown", handle);
@@ -528,7 +535,7 @@ where
         Ok(())
     }
 
-    #[tracing::instrument(skip_all, fields(rq.inode = inode, rq.handle = handle))]
+    #[tracing::instrument(skip_all, fields(rq.inode = inode, rq.handle = handle), parent = self.dir_handles.read().get(&handle).and_then(|x| x.0.id()))]
     fn readdirplus(
         &self,
         _ctx: &Context,
@@ -549,7 +556,7 @@ where
             }
 
             // get the handle from [self.dir_handles]
-            let rx = match self.dir_handles.read().get(&handle) {
+            let (_span, rx) = match self.dir_handles.read().get(&handle) {
                 Some(rx) => rx.clone(),
                 None => {
                     warn!("dir handle {} unknown", handle);
@@ -652,7 +659,7 @@ where
         Ok(())
     }
 
-    #[tracing::instrument(skip_all, fields(rq.inode = inode, rq.handle = handle))]
+    #[tracing::instrument(skip_all, fields(rq.inode = inode, rq.handle = handle), parent = self.dir_handles.read().get(&handle).and_then(|x| x.0.id()))]
     fn releasedir(
         &self,
         _ctx: &Context,
@@ -723,7 +730,7 @@ where
                         debug!("add file handle {}", fh);
                         self.file_handles
                             .write()
-                            .insert(fh, Arc::new(Mutex::new(blob_reader)));
+                            .insert(fh, (Span::current(), Arc::new(Mutex::new(blob_reader))));
 
                         Ok((
                             Some(fh),
@@ -735,7 +742,7 @@ where
         }
     }
 
-    #[tracing::instrument(skip_all, fields(rq.inode = inode, rq.handle = handle))]
+    #[tracing::instrument(skip_all, fields(rq.inode = inode, rq.handle = handle), parent = self.file_handles.read().get(&handle).and_then(|x| x.0.id()))]
     fn release(
         &self,
         _ctx: &Context,
@@ -758,7 +765,7 @@ where
         Ok(())
     }
 
-    #[tracing::instrument(skip_all, fields(rq.inode = inode, rq.offset = offset, rq.size = size))]
+    #[tracing::instrument(skip_all, fields(rq.inode = inode, rq.offset = offset, rq.size = size), parent = self.file_handles.read().get(&handle).and_then(|x| x.0.id()))]
     fn read(
         &self,
         _ctx: &Context,
@@ -775,7 +782,7 @@ where
         // We need to take out the blob reader from self.file_handles, so we can
         // interact with it in the separate task.
         // On success, we pass it back out of the task, so we can put it back in self.file_handles.
-        let blob_reader = self
+        let (_span, blob_reader) = self
             .file_handles
             .read()
             .get(&handle)
