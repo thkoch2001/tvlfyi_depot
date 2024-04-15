@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dcaa0ad6_8818836b",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-15T14:31:13Z",
+      "side": 1,
+      "message": "Yes, this is essentially the same as the now-removed\n\n```\n    // unreachable, we already bailed out before if root doesn\u0027t exist.\n    unreachable!(\"Tvix bug: no root node emitted during ingestion\")\n```\n\nat the end of the loop. I added a comment.",
+      "parentUuid": "8f878f47_5719f5ba",
+      "revId": "e4c74cdf2490091756687e798f275db397b9dd10",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef2476bf_f8382c27",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-04-15T14:15:12Z",
       "side": 1,
       "message": "Could use `Option::get_or_insert_with` https://doc.rust-lang.org/stable/std/option/enum.Option.html#method.get_or_insert_with",
+      "revId": "e4c74cdf2490091756687e798f275db397b9dd10",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf41e089_e3b3fe03",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-15T14:31:13Z",
+      "side": 1,
+      "message": "Indeed, thanks!",
+      "parentUuid": "ef2476bf_f8382c27",
       "revId": "e4c74cdf2490091756687e798f275db397b9dd10",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
