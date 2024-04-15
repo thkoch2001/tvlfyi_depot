@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b84f1a2c_548911bd",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-15T14:29:54Z",
+      "side": 1,
+      "message": "Why do we clone here when we also clone on L208?",
+      "revId": "7aaad8587d041749553c6a56a5863686d91a2990",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
