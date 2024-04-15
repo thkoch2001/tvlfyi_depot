@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f878f47_5719f5ba",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 242,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-15T14:15:12Z",
+      "side": 1,
+      "message": "Is this because we always expect the final entry of the stream to have `depth \u003d\u003d 0`?",
+      "revId": "e4c74cdf2490091756687e798f275db397b9dd10",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef2476bf_f8382c27",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-15T14:15:12Z",
+      "side": 1,
+      "message": "Could use `Option::get_or_insert_with` https://doc.rust-lang.org/stable/std/option/enum.Option.html#method.get_or_insert_with",
+      "revId": "e4c74cdf2490091756687e798f275db397b9dd10",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
