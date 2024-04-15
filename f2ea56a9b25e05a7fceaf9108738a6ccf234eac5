@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af195137_668f3075",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-15T09:06:58Z",
+      "side": 1,
+      "message": "`std::sync::Mutex`, not the `tokio` one\nI was confused by `use sync Mutex` as in `use sync::Mutex` and not `synchronous Mutex`.",
+      "revId": "f2ea56a9b25e05a7fceaf9108738a6ccf234eac5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
