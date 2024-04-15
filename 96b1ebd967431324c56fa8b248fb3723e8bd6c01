@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "855a7e4e_d379c7c5",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-15T09:04:13Z",
+      "side": 1,
+      "message": "FUTUREWORK: seems like we need a feature structure to enable/disable things IMHO.",
+      "revId": "96b1ebd967431324c56fa8b248fb3723e8bd6c01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
