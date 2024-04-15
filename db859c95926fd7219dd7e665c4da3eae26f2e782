@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7c10785_3ff4292a",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-15T12:42:22Z",
+      "side": 1,
+      "message": "maybe let\u0027s have type aliases here?",
+      "revId": "db859c95926fd7219dd7e665c4da3eae26f2e782",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0bbc7f1_0e4e1c17",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 398,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-15T12:42:22Z",
+      "side": 1,
+      "message": "should be constantified with a proper name",
+      "revId": "db859c95926fd7219dd7e665c4da3eae26f2e782",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e5e5ffc_be059db7",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 418,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-15T12:42:22Z",
+      "side": 1,
+      "message": "I\u0027d like to see a justification for the strong sequential constant, otherwise, it seems like to me that Relaxed would work here, there\u0027s no requirement on the ordering between multiple threads here.",
+      "revId": "db859c95926fd7219dd7e665c4da3eae26f2e782",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2e3f86b_796a4d5a",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 420,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-15T12:42:22Z",
+      "side": 1,
+      "message": "still needed?",
+      "revId": "db859c95926fd7219dd7e665c4da3eae26f2e782",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94106c70_b64b296f",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 462,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-15T12:42:22Z",
+      "side": 1,
+      "message": "can you put the context, e.g. \"in readdir\" or something?",
+      "revId": "db859c95926fd7219dd7e665c4da3eae26f2e782",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "413c92f0_ad8475bb",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-15T12:42:22Z",
+      "side": 1,
+      "message": "why is it EPERM here and not EIO?",
+      "revId": "db859c95926fd7219dd7e665c4da3eae26f2e782",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d84e6669_a8152514",
+        "filename": "tvix/castore/src/fs/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-15T12:42:22Z",
+      "side": 1,
+      "message": "warn?",
+      "revId": "db859c95926fd7219dd7e665c4da3eae26f2e782",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
