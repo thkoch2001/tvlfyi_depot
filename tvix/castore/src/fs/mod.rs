@@ -476,7 +476,7 @@ where
 
                 let written = add_entry(fuse_backend_rs::api::filesystem::DirEntry {
                     ino,
-                    offset: offset + i as u64 + 1,
+                    offset: offset + (i as u64) + 1,
                     type_: as_fuse_type_for_node(&root_node),
                     name,
                 })?;
@@ -496,7 +496,7 @@ where
             // the second parameter will become the "offset" parameter on the next call.
             let written = add_entry(fuse_backend_rs::api::filesystem::DirEntry {
                 ino: *ino,
-                offset: offset + i as u64 + 1,
+                offset: offset + (i as u64) + 1,
                 type_: as_fuse_type_for_node(child_node),
                 name: child_node.get_name(),
             })?;
@@ -562,7 +562,7 @@ where
                 let written = add_entry(
                     fuse_backend_rs::api::filesystem::DirEntry {
                         ino,
-                        offset: offset + i as u64 + 1,
+                        offset: offset + (i as u64) + 1,
                         type_: as_fuse_type_for_node(&root_node),
                         name,
                     },
@@ -585,7 +585,7 @@ where
             let written = add_entry(
                 fuse_backend_rs::api::filesystem::DirEntry {
                     ino: *ino,
-                    offset: offset + i as u64 + 1,
+                    offset: offset + (i as u64) + 1,
                     type_: as_fuse_type_for_node(&child_node),
                     name: child_node.get_name(),
                 },
