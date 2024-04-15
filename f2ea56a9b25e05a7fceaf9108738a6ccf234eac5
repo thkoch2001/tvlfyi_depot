@@ -16,6 +16,24 @@
       "message": "`std::sync::Mutex`, not the `tokio` one\nI was confused by `use sync Mutex` as in `use sync::Mutex` and not `synchronous Mutex`.",
       "revId": "f2ea56a9b25e05a7fceaf9108738a6ccf234eac5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82d2facd_891c54b9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-15T09:26:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "af195137_668f3075",
+      "revId": "f2ea56a9b25e05a7fceaf9108738a6ccf234eac5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
