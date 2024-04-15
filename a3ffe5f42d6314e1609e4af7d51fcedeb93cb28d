@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b699149_8d5995d1",
+        "filename": "tvix/castore/src/fs/inodes.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-15T14:02:31Z",
+      "side": 1,
+      "message": "Your commit message says don\u0027t clone in From but then you haven\u0027t removed the clone.",
+      "revId": "a3ffe5f42d6314e1609e4af7d51fcedeb93cb28d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79ec83ea_236b4e3b",
+        "filename": "tvix/castore/src/fs/inodes.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-15T14:02:31Z",
+      "side": 1,
+      "message": "This clone can also be removed.",
+      "revId": "a3ffe5f42d6314e1609e4af7d51fcedeb93cb28d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "80b50c68_0fd1d586",
+        "filename": "tvix/castore/src/fs/inodes.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-15T14:02:31Z",
+      "side": 1,
+      "message": "This clone can also be removed.",
+      "revId": "a3ffe5f42d6314e1609e4af7d51fcedeb93cb28d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
