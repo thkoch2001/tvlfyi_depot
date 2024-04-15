@@ -464,11 +464,6 @@ where
                 })?;
 
                 let name = root_node.get_name();
-                let ty = match root_node {
-                    Node::Directory(_) => libc::S_IFDIR,
-                    Node::File(_) => libc::S_IFREG,
-                    Node::Symlink(_) => libc::S_IFLNK,
-                };
 
                 // obtain the inode, or allocate a new one.
                 let ino = self.get_inode_for_root_name(name).unwrap_or_else(|| {
@@ -479,13 +474,10 @@ where
                     ino
                 });
 
-                #[cfg(target_os = "macos")]
-                let ty = ty as u32;
-
                 let written = add_entry(fuse_backend_rs::api::filesystem::DirEntry {
                     ino,
                     offset: offset + i as u64 + 1,
-                    type_: ty,
+                    type_: as_fuse_type_for_node(&root_node),
                     name,
                 })?;
                 // If the buffer is full, add_entry will return `Ok(0)`.
@@ -505,17 +497,7 @@ where
             let written = add_entry(fuse_backend_rs::api::filesystem::DirEntry {
                 ino: *ino,
                 offset: offset + i as u64 + 1,
-                type_: match child_node {
-                    #[allow(clippy::unnecessary_cast)]
-                    // libc::S_IFDIR is u32 on Linux and u16 on MacOS
-                    Node::Directory(_) => libc::S_IFDIR as u32,
-                    #[allow(clippy::unnecessary_cast)]
-                    // libc::S_IFDIR is u32 on Linux and u16 on MacOS
-                    Node::File(_) => libc::S_IFREG as u32,
-                    #[allow(clippy::unnecessary_cast)]
-                    // libc::S_IFDIR is u32 on Linux and u16 on MacOS
-                    Node::Symlink(_) => libc::S_IFLNK as u32,
-                },
+                type_: as_fuse_type_for_node(child_node),
                 name: child_node.get_name(),
             })?;
             // If the buffer is full, add_entry will return `Ok(0)`.
@@ -567,34 +549,24 @@ where
                 })?;
 
                 let name = root_node.get_name();
-                let ty = match root_node {
-                    Node::Directory(_) => libc::S_IFDIR,
-                    Node::File(_) => libc::S_IFREG,
-                    Node::Symlink(_) => libc::S_IFLNK,
-                };
-
-                let inode_data: InodeData = (&root_node).into();
 
                 // obtain the inode, or allocate a new one.
                 let ino = self.get_inode_for_root_name(name).unwrap_or_else(|| {
                     // insert the (sparse) inode data and register in
                     // self.root_nodes.
-                    let ino = self.inode_tracker.write().put(inode_data.clone());
+                    let ino = self.inode_tracker.write().put((&root_node).into());
                     self.root_nodes.write().insert(name.into(), ino);
                     ino
                 });
-
-                #[cfg(target_os = "macos")]
-                let ty = ty as u32;
 
                 let written = add_entry(
                     fuse_backend_rs::api::filesystem::DirEntry {
                         ino,
                         offset: offset + i as u64 + 1,
-                        type_: ty,
+                        type_: as_fuse_type_for_node(&root_node),
                         name,
                     },
-                    inode_data.as_fuse_entry(ino),
+                    as_fuse_entry(&root_node, ino),
                 )?;
                 // If the buffer is full, add_entry will return `Ok(0)`.
                 if written == 0 {
@@ -609,26 +581,15 @@ where
         Span::current().record("directory.digest", parent_digest.to_string());
 
         for (i, (ino, child_node)) in children.iter().skip(offset as usize).enumerate() {
-            let inode_data: InodeData = child_node.into();
             // the second parameter will become the "offset" parameter on the next call.
             let written = add_entry(
                 fuse_backend_rs::api::filesystem::DirEntry {
                     ino: *ino,
                     offset: offset + i as u64 + 1,
-                    type_: match child_node {
-                        #[allow(clippy::unnecessary_cast)]
-                        // libc::S_IFDIR is u32 on Linux and u16 on MacOS
-                        Node::Directory(_) => libc::S_IFDIR as u32,
-                        #[allow(clippy::unnecessary_cast)]
-                        // libc::S_IFDIR is u32 on Linux and u16 on MacOS
-                        Node::File(_) => libc::S_IFREG as u32,
-                        #[allow(clippy::unnecessary_cast)]
-                        // libc::S_IFDIR is u32 on Linux and u16 on MacOS
-                        Node::Symlink(_) => libc::S_IFLNK as u32,
-                    },
+                    type_: as_fuse_type_for_node(&child_node),
                     name: child_node.get_name(),
                 },
-                inode_data.as_fuse_entry(*ino),
+                as_fuse_entry(child_node, *ino),
             )?;
             // If the buffer is full, add_entry will return `Ok(0)`.
             if written == 0 {
@@ -895,5 +856,45 @@ where
         } else {
             Ok(ListxattrReply::Names(xattrs_names.to_vec()))
         }
+    }
+}
+
+/// Returns the u32 for a given [Node] type.
+fn as_fuse_type_for_node(node: &Node) -> u32 {
+    #[allow(clippy::let_and_return)]
+    let ty = match node {
+        Node::Directory(_) => libc::S_IFDIR,
+        Node::File(_) => libc::S_IFREG,
+        Node::Symlink(_) => libc::S_IFLNK,
+    };
+    // libc::S_IFDIR is u32 on Linux and u16 on MacOS
+    #[cfg(target_os = "macos")]
+    let ty = ty as u32;
+
+    ty
+}
+
+/// Returns the fuse_backend_rs::abi::fuse_abi::Attr for a [&Node].
+fn as_fuse_file_attr(node: &Node, inode: u64) -> fuse_backend_rs::abi::fuse_abi::Attr {
+    fuse_backend_rs::abi::fuse_abi::Attr {
+        ino: inode,
+        // FUTUREWORK: play with this numbers, as it affects read sizes for client applications.
+        blocks: 1024,
+        size: match node {
+            Node::Directory(directory_node) => directory_node.size,
+            Node::File(file_node) => file_node.size,
+            Node::Symlink(symlink_node) => symlink_node.target.len() as u64,
+        },
+        ..Default::default()
+    }
+}
+
+fn as_fuse_entry(node: &Node, inode: u64) -> fuse_backend_rs::api::filesystem::Entry {
+    fuse_backend_rs::api::filesystem::Entry {
+        inode,
+        attr: as_fuse_file_attr(node, inode).into(),
+        attr_timeout: Duration::MAX,
+        entry_timeout: Duration::MAX,
+        ..Default::default()
     }
 }
