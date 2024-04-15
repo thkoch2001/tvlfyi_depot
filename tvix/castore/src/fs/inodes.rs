@@ -57,8 +57,8 @@ pub enum DirectoryInodeData {
     Populated(B3Digest, Vec<(u64, castorepb::node::Node)>), // [(child_inode, node)]
 }
 
-impl From<&castorepb::node::Node> for InodeData {
-    fn from(value: &castorepb::node::Node) -> Self {
+impl From<castorepb::node::Node> for InodeData {
+    fn from(value: castorepb::node::Node) -> Self {
         match value {
             castorepb::node::Node::Directory(directory_node) => directory_node.into(),
             castorepb::node::Node::File(file_node) => file_node.into(),
@@ -67,14 +67,14 @@ impl From<&castorepb::node::Node> for InodeData {
     }
 }
 
-impl From<&castorepb::SymlinkNode> for InodeData {
-    fn from(value: &castorepb::SymlinkNode) -> Self {
+impl From<castorepb::SymlinkNode> for InodeData {
+    fn from(value: castorepb::SymlinkNode) -> Self {
         InodeData::Symlink(value.target.clone())
     }
 }
 
-impl From<&castorepb::FileNode> for InodeData {
-    fn from(value: &castorepb::FileNode) -> Self {
+impl From<castorepb::FileNode> for InodeData {
+    fn from(value: castorepb::FileNode) -> Self {
         InodeData::Regular(
             value.digest.clone().try_into().unwrap(),
             value.size,
@@ -84,8 +84,8 @@ impl From<&castorepb::FileNode> for InodeData {
 }
 
 /// Converts a DirectoryNode to a sparsely populated InodeData::Directory.
-impl From<&castorepb::DirectoryNode> for InodeData {
-    fn from(value: &castorepb::DirectoryNode) -> Self {
+impl From<castorepb::DirectoryNode> for InodeData {
+    fn from(value: castorepb::DirectoryNode) -> Self {
         InodeData::Directory(DirectoryInodeData::Sparse(
             value.digest.clone().try_into().unwrap(),
             value.size,
