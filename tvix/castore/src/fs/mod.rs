@@ -618,7 +618,7 @@ where
         }
     }
 
-    #[tracing::instrument(skip_all, fields(rq.inode = inode, fh = handle))]
+    #[tracing::instrument(skip_all, fields(rq.inode = inode, rq.handle = handle))]
     fn release(
         &self,
         _ctx: &Context,
@@ -629,13 +629,12 @@ where
         _flock_release: bool,
         _lock_owner: Option<u64>,
     ) -> io::Result<()> {
-        // remove and get ownership on the blob reader
         match self.file_handles.write().remove(&handle) {
-            // drop it, which will close it.
+            // drop the blob reader, which will close it.
             Some(blob_reader) => drop(blob_reader),
             None => {
                 // These might already be dropped if a read error occured.
-                debug!("file_handle {} not found", handle);
+                debug!("file handle not found");
             }
         }
 
