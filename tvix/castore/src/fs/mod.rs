@@ -200,9 +200,9 @@ where
                     let mut inode_tracker = self.inode_tracker.write();
 
                     let children: Vec<(u64, castorepb::node::Node)> = directory
-                        .nodes()
+                        .nodes() // FUTUREWORK: into_nodes() to avoid cloning here
                         .map(|child_node| {
-                            let child_ino = inode_tracker.put((&child_node).into());
+                            let child_ino = inode_tracker.put(child_node.to_owned().into());
                             (child_ino, child_node)
                         })
                         .collect();
@@ -263,7 +263,7 @@ where
             // the root node doesn't exist, so the file doesn't exist.
             Ok(None) => Err(io::Error::from_raw_os_error(libc::ENOENT)),
             // The root node does exist
-            Ok(Some(ref root_node)) => {
+            Ok(Some(root_node)) => {
                 // The name must match what's passed in the lookup, otherwise this is also a ENOENT.
                 if root_node.get_name() != name.to_bytes() {
                     debug!(root_node.name=?root_node.get_name(), found_node.name=%name.to_string_lossy(), "node name mismatch");
@@ -286,9 +286,10 @@ where
 
                 // insert the (sparse) inode data and register in
                 // self.root_nodes.
+                let name = root_node.get_name().to_owned();
                 let inode_data: InodeData = root_node.into();
                 let ino = inode_tracker.put(inode_data.clone());
-                root_nodes.insert(name.to_bytes().into(), ino);
+                root_nodes.insert(name, ino);
 
                 Ok((ino, Arc::new(inode_data)))
             }
@@ -469,8 +470,9 @@ where
                 let ino = self.get_inode_for_root_name(name).unwrap_or_else(|| {
                     // insert the (sparse) inode data and register in
                     // self.root_nodes.
-                    let ino = self.inode_tracker.write().put((&root_node).into());
-                    self.root_nodes.write().insert(name.into(), ino);
+                    let name = name.to_owned();
+                    let ino = self.inode_tracker.write().put(root_node.to_owned().into());
+                    self.root_nodes.write().insert(name, ino);
                     ino
                 });
 
@@ -549,14 +551,13 @@ where
                 })?;
 
                 let name = root_node.get_name();
-                let ty = as_fuse_type_for_node(&root_node);
-                let inode_data: InodeData = (&root_node).into();
 
                 // obtain the inode, or allocate a new one.
                 let ino = self.get_inode_for_root_name(name).unwrap_or_else(|| {
                     // insert the (sparse) inode data and register in
                     // self.root_nodes.
-                    let ino = self.inode_tracker.write().put(inode_data.clone());
+                    let inode_data: InodeData = root_node.clone().into();
+                    let ino = self.inode_tracker.write().put(inode_data);
                     self.root_nodes.write().insert(name.to_vec(), ino);
                     ino
                 });
@@ -565,10 +566,10 @@ where
                     fuse_backend_rs::api::filesystem::DirEntry {
                         ino,
                         offset: offset + i as u64 + 1,
-                        type_: ty,
+                        type_: as_fuse_type_for_node(&root_node),
                         name,
                     },
-                    inode_data.as_fuse_entry(ino),
+                    as_fuse_entry(&root_node, ino),
                 )?;
                 // If the buffer is full, add_entry will return `Ok(0)`.
                 if written == 0 {
@@ -583,17 +584,15 @@ where
         Span::current().record("directory.digest", parent_digest.to_string());
 
         for (i, (ino, child_node)) in children.iter().skip(offset as usize).enumerate() {
-            let ty = as_fuse_type_for_node(&child_node);
-            let inode_data: InodeData = child_node.into();
             // the second parameter will become the "offset" parameter on the next call.
             let written = add_entry(
                 fuse_backend_rs::api::filesystem::DirEntry {
                     ino: *ino,
                     offset: offset + i as u64 + 1,
-                    type_: ty,
+                    type_: as_fuse_type_for_node(&child_node),
                     name: child_node.get_name(),
                 },
-                inode_data.as_fuse_entry(*ino),
+                as_fuse_entry(child_node, *ino),
             )?;
             // If the buffer is full, add_entry will return `Ok(0)`.
             if written == 0 {
@@ -875,4 +874,29 @@ fn as_fuse_type_for_node(node: &Node) -> u32 {
     let ty = ty as u32;
 
     ty
+}
+
+/// Returns the fuse_backend_rs::abi::fuse_abi::Attr for a [&Node].
+fn as_fuse_file_attr(node: &Node, inode: u64) -> fuse_backend_rs::abi::fuse_abi::Attr {
+    fuse_backend_rs::abi::fuse_abi::Attr {
+        ino: inode,
+        // FUTUREWORK: play with this numbers, as it affects read sizes for client applications.
+        blocks: 1024,
+        size: match node {
+            Node::Directory(directory_node) => directory_node.size,
+            Node::File(file_node) => file_node.size,
+            Node::Symlink(symlink_node) => symlink_node.target.len() as u64,
+        },
+        ..Default::default()
+    }
+}
+
+fn as_fuse_entry(node: &Node, inode: u64) -> fuse_backend_rs::api::filesystem::Entry {
+    fuse_backend_rs::api::filesystem::Entry {
+        inode,
+        attr: as_fuse_file_attr(node, inode).into(),
+        attr_timeout: Duration::MAX,
+        entry_timeout: Duration::MAX,
+        ..Default::default()
+    }
 }
