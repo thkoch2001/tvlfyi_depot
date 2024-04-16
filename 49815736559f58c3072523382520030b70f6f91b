@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f35c3ae7_69c8f747",
+        "filename": "tvix/castore/src/blobservice/naive_seeker.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-16T15:19:22Z",
+      "side": 1,
+      "message": "maybe constantify?",
+      "revId": "49815736559f58c3072523382520030b70f6f91b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
