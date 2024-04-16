@@ -16,6 +16,24 @@
       "message": "you simply cannot do that, you always need a rootfs in NixOS\nif you want tmpfs: `virtualisation.diskImage \u003d null;`",
       "revId": "d29aa29dba2bf04325446f73efbcbc26d0f39386",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e756ba53_815693f0",
+        "filename": "tvix/boot/tests/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-16T15:13:43Z",
+      "side": 1,
+      "message": "It will still fail eval with a \"error: The option `virtualisation.diskImage\u0027 does not exist. Definition values:\", so this won\u0027t help. I updated the fstab entry to mount /dev/root as tmpfs, which seems to work.",
+      "parentUuid": "954fd915_500e5f6a",
+      "revId": "d29aa29dba2bf04325446f73efbcbc26d0f39386",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
