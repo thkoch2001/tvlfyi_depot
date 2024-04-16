@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2ff7d392_cd8a5002",
+        "filename": "tvix/boot/tests/default.nix",
+        "patchSetId": 15
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-16T15:23:40Z",
+      "side": 1,
+      "message": "This, you cannot. We don\u0027t have support for rootless NixOS systems.",
+      "revId": "65ed7145c35c1179a995641a240dfa74dccba70c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
