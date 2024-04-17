@@ -23,7 +23,15 @@ pkgs.lib.fix (self: {
 
   buildkite = import ./buildkite {
     inherit pkgs;
-    depot.nix.readTree = self.readTree;
+    depot.nix = {
+      inherit (self) readTree dependency-analyzer;
+    };
+  };
+
+  dependency-analyzer = import ./dependency-analyzer {
+    inherit pkgs;
+    inherit (pkgs) lib;
+    nix.stateMonad = self.stateMonad;
   };
 
   checks = import ./checks { inherit pkgs; };
@@ -33,4 +41,5 @@ pkgs.lib.fix (self: {
   };
   magrathea = import ./magrathea { inherit pkgs; };
   readTree = import ./readTree { };
+  stateMonad = import ./stateMonad { };
 })
