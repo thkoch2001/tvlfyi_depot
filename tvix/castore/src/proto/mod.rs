@@ -179,6 +179,42 @@ impl Ord for node::Node {
     }
 }
 
+impl PartialOrd for FileNode {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for FileNode {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.get_name().cmp(other.get_name())
+    }
+}
+
+impl PartialOrd for SymlinkNode {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for SymlinkNode {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.get_name().cmp(other.get_name())
+    }
+}
+
+impl PartialOrd for DirectoryNode {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
+impl Ord for DirectoryNode {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        self.get_name().cmp(other.get_name())
+    }
+}
+
 /// Accepts a name, and a mutable reference to the previous name.
 /// If the passed name is larger than the previous one, the reference is updated.
 /// If it's not, an error is returned.
@@ -302,6 +338,41 @@ impl Directory {
             i_files: self.files.iter().peekable(),
             i_symlinks: self.symlinks.iter().peekable(),
         };
+    }
+
+    pub fn add(&mut self, node: node::Node) -> Option<node::Node> {
+        match node {
+            node::Node::File(node) => match self.files.binary_search(&node) {
+                Ok(pos) => Some(node::Node::File(std::mem::replace(
+                    &mut self.files[pos],
+                    node,
+                ))),
+                Err(pos) => {
+                    self.files.insert(pos, node);
+                    None
+                }
+            },
+            node::Node::Directory(node) => match self.directories.binary_search(&node) {
+                Ok(pos) => Some(node::Node::Directory(std::mem::replace(
+                    &mut self.directories[pos],
+                    node,
+                ))),
+                Err(pos) => {
+                    self.directories.insert(pos, node);
+                    None
+                }
+            },
+            node::Node::Symlink(node) => match self.symlinks.binary_search(&node) {
+                Ok(pos) => Some(node::Node::Symlink(std::mem::replace(
+                    &mut self.symlinks[pos],
+                    node,
+                ))),
+                Err(pos) => {
+                    self.symlinks.insert(pos, node);
+                    None
+                }
+            },
+        }
     }
 }
 
