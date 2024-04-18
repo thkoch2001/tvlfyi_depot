@@ -51,6 +51,24 @@
       "message": "Tested evaluation locally, seems ok.",
       "revId": "1958f99fb2ac257dbc9c295d8bad9df1f79af25a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19bd56b8_7c9604c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-04-18T13:23:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d6ecca87_d7f9518d",
+      "revId": "1958f99fb2ac257dbc9c295d8bad9df1f79af25a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
