@@ -24,7 +24,6 @@ in
         users.tazjin.chase-geese
         config.tazjin.emacs
         third_party.agenix.cli
-        third_party.josh
       ]) ++
 
       # programs from nixpkgs
@@ -50,6 +49,7 @@ in
         hyperfine
         iftop
         imagemagick
+        josh
         jq
         lieer
         maim
