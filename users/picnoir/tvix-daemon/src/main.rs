@@ -3,8 +3,8 @@ use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio_listener::{self, SystemOptions, UserOptions};
 use tracing::{debug, error, info, instrument, Level};
 
-use nix_compat::wire;
 use nix_compat::worker_protocol::{self, server_handshake_client, ClientSettings, Trust};
+use nix_compat::{wire, ProtocolVersion};
 
 #[derive(Parser, Debug)]
 struct Cli {
@@ -55,7 +55,7 @@ async fn main() {
 #[derive(Debug)]
 struct ClientConnection<R: AsyncReadExt + AsyncWriteExt + Unpin> {
     pub conn: R,
-    pub version_minor: u64,
+    pub version: ProtocolVersion,
     pub client_settings: Option<ClientSettings>,
 }
 
@@ -70,7 +70,7 @@ where
         Ok(client_protocol_version) => {
             let mut client_connection = ClientConnection {
                 conn,
-                version_minor: client_protocol_version,
+                version: client_protocol_version,
                 client_settings: None,
             };
             debug!("Client hanshake succeeded");
@@ -106,8 +106,7 @@ async fn op_set_options<R>(conn: &mut ClientConnection<R>) -> std::io::Result<Cl
 where
     R: AsyncReadExt + AsyncWriteExt + Unpin + std::fmt::Debug,
 {
-    let settings =
-        worker_protocol::read_client_settings(&mut conn.conn, conn.version_minor).await?;
+    let settings = worker_protocol::read_client_settings(&mut conn.conn, conn.version).await?;
     // The client expects us to send some logs when we're processing
     // the settings. Sending STDERR_LAST signal we're done processing.
     wire::write_u64(&mut conn.conn, worker_protocol::STDERR_LAST).await?;
