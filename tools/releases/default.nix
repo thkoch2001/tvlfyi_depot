@@ -17,7 +17,7 @@ in
 
     command = pkgs.writeShellScript "${sanitizeDerivationName filter}-push" ''
       set -e
-      export PATH="${makeBinPath [ pkgs.git depot.third_party.josh ]}:$PATH"
+      export PATH="${makeBinPath [ pkgs.git pkgs.josh ]}:$PATH"
 
       echo 'Filtering depot through ${filter}'
       josh-filter '${filter}'
