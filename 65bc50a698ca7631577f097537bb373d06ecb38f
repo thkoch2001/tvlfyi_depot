@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a4e96b1_96aee528",
+        "filename": "third_party/josh/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-04-18T13:25:59Z",
+      "side": 0,
+      "message": "@tazjin@tvl.su Is this still needed, do we need to reflect that in our overlay?",
+      "revId": "65bc50a698ca7631577f097537bb373d06ecb38f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
