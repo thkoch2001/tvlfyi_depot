@@ -28,4 +28,12 @@ in
   };
 
   services.depot.nixery.enable = true;
+
+  # Automatically collect garbage from the Nix store.
+  services.depot.automatic-gc = {
+    enable = true;
+    interval = "1 hour";
+    diskThreshold = 25; # GiB
+    preserveGenerations = "30d";
+  };
 }
