@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc14d4a7_ca6fced8",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-18T20:43:56Z",
+      "side": 1,
+      "message": "We don\u0027t need to sort, As Directory.add() can deal with elements being inserted in unsorted order.",
+      "revId": "35fd27887023c70930a7f0b7f4f07d190f803d4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3732264_621a7b6a",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-18T20:43:56Z",
+      "side": 1,
+      "message": "Let\u0027s merge that function together with the one below.",
+      "revId": "35fd27887023c70930a7f0b7f4f07d190f803d4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "795e0171_30aee276",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-18T20:43:56Z",
+      "side": 1,
+      "message": "Don\u0027t we want to pass the parent of the path we\u0027re ingesting here (and then rename this just \"prefix\"? that should keep the name on the root node itself.",
+      "revId": "35fd27887023c70930a7f0b7f4f07d190f803d4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f265a639_236460ff",
+        "filename": "tvix/castore/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-18T20:43:56Z",
+      "side": 1,
+      "message": "Please put this into a separate CL.",
+      "revId": "35fd27887023c70930a7f0b7f4f07d190f803d4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc75cb8e_3c3bf7e5",
+        "filename": "tvix/castore/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-18T20:43:56Z",
+      "side": 1,
+      "message": "This needs a docstring, and tests.",
+      "revId": "35fd27887023c70930a7f0b7f4f07d190f803d4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
