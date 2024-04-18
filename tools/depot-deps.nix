@@ -11,6 +11,7 @@ depot.nix.lazy-deps {
   gerrit-update.attr = "tools.gerrit-update";
   gerrit.attr = "tools.gerrit-cli";
   hash-password.attr = "tools.hash-password";
+  josh-filter.attr = "third_party.nixpkgs.josh";
   mg.attr = "tools.magrathea";
   nint.attr = "nix.nint";
   niv.attr = "third_party.nixpkgs.niv";
