@@ -8,9 +8,6 @@ use std::sync::Arc;
 use tempfile::TempDir;
 
 #[cfg(target_family = "unix")]
-use std::os::unix::ffi::OsStrExt;
-
-#[cfg(target_family = "unix")]
 #[tokio::test]
 async fn symlink() {
     let blob_service = blobservice::from_addr("memory://").await.unwrap();
@@ -35,7 +32,7 @@ async fn symlink() {
 
     assert_eq!(
         proto::node::Node::Symlink(proto::SymlinkNode {
-            name: "doesntmatter".into(),
+            name: "".into(),
             target: "/nix/store/somewhereelse".into(),
         }),
         root_node,
@@ -62,7 +59,7 @@ async fn single_file() {
 
     assert_eq!(
         proto::node::Node::File(proto::FileNode {
-            name: "root".into(),
+            name: "".into(),
             digest: HELLOWORLD_BLOB_DIGEST.clone().into(),
             size: HELLOWORLD_BLOB_CONTENTS.len() as u64,
             executable: false,
@@ -99,13 +96,7 @@ async fn complicated() {
     // ensure root_node matched expectations
     assert_eq!(
         proto::node::Node::Directory(proto::DirectoryNode {
-            name: tmpdir
-                .path()
-                .file_name()
-                .unwrap()
-                .as_bytes()
-                .to_owned()
-                .into(),
+            name: "".into(),
             digest: DIRECTORY_COMPLICATED.digest().into(),
             size: DIRECTORY_COMPLICATED.size(),
         }),

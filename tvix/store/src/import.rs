@@ -112,7 +112,7 @@ pub async fn import_path_as_nar_ca<BS, DS, PS, P>(
 ) -> Result<StorePath, std::io::Error>
 where
     P: AsRef<Path> + std::fmt::Debug,
-    BS: AsRef<dyn BlobService> + Clone,
+    BS: AsRef<dyn BlobService> + Clone + Send + Sync,
     DS: AsRef<dyn DirectoryService>,
     PS: AsRef<dyn PathInfoService>,
 {

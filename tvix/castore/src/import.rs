@@ -6,11 +6,14 @@ use crate::proto::Directory;
 use crate::proto::DirectoryNode;
 use crate::proto::FileNode;
 use crate::proto::SymlinkNode;
+use crate::B3Digest;
 use crate::Error as CastoreError;
-use async_stream::stream;
-use futures::pin_mut;
+use futures::stream::BoxStream;
+use futures::Future;
 use futures::{Stream, StreamExt};
 use std::fs::FileType;
+use std::os::unix::fs::MetadataExt;
+use std::pin::Pin;
 use tracing::Level;
 
 #[cfg(target_family = "unix")]
@@ -25,9 +28,6 @@ use std::{
 use tracing::instrument;
 use walkdir::DirEntry;
 use walkdir::WalkDir;
-
-#[cfg(debug_assertions)]
-use std::collections::HashSet;
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
@@ -48,6 +48,9 @@ pub enum Error {
 
     #[error("unsupported file {0} type: {1:?}")]
     UnsupportedFileType(PathBuf, FileType),
+
+    #[error("io error: {0}")]
+    IOError(#[from] std::io::Error),
 }
 
 impl From<CastoreError> for Error {
@@ -76,56 +79,109 @@ impl From<Error> for std::io::Error {
 ///
 /// This function will walk the filesystem using `walkdir` and will consume
 /// `O(#number of entries)` space.
-#[instrument(fields(path), err)]
-pub fn walk_path_for_ingestion<P>(path: P) -> Result<Vec<Vec<DirEntry>>, Error>
+#[instrument(fields(path), skip(blob_service))]
+pub fn walk_path_for_ingestion<'a, BS, P>(
+    blob_service: BS,
+    path: P,
+) -> BoxStream<'a, Result<IngestionEntry<'a>, Error>>
 where
+    BS: AsRef<dyn BlobService> + Clone + Send + 'a,
     P: AsRef<Path> + std::fmt::Debug,
 {
-    let mut entries_per_depths: Vec<Vec<DirEntry>> = vec![Vec::new()];
-    for entry in WalkDir::new(path.as_ref())
+    let path = path.as_ref().to_path_buf();
+    let iter = WalkDir::new(&path)
         .follow_links(false)
         .follow_root_links(false)
-        .contents_first(false)
+        .contents_first(true)
         .sort_by_file_name()
-        .into_iter()
-    {
-        // Entry could be a NotFound, if the root path specified does not exist.
-        let entry = entry.map_err(|e| {
-            Error::UnableToOpen(
-                PathBuf::from(path.as_ref()),
-                e.into_io_error().expect("walkdir err must be some"),
-            )
-        })?;
+        .into_iter();
 
-        if entry.depth() >= entries_per_depths.len() {
-            debug_assert!(
-                entry.depth() == entries_per_depths.len(),
-                "Received unexpected entry with depth {} during descent, previously at {}",
-                entry.depth(),
-                entries_per_depths.len()
-            );
-
-            entries_per_depths.push(vec![entry]);
-        } else {
-            entries_per_depths[entry.depth()].push(entry);
-        }
-    }
-
-    Ok(entries_per_depths)
+    dir_entry_iter_to_ingestion_stream(blob_service, iter, path.to_owned())
 }
 
-/// Convert a leveled-key vector of filesystem entries into a stream of
-/// [DirEntry] in a way that honors the Merkle invariant, i.e. from bottom to top.
-pub fn leveled_entries_to_stream(
-    entries_per_depths: Vec<Vec<DirEntry>>,
-) -> impl Stream<Item = DirEntry> {
-    stream! {
-        for level in entries_per_depths.into_iter().rev() {
-            for entry in level.into_iter() {
-                yield entry;
-            }
-        }
+pub fn dir_entry_iter_to_ingestion_stream<'a, BS, I>(
+    blob_service: BS,
+    iter: I,
+    root_path: PathBuf,
+) -> BoxStream<'a, Result<IngestionEntry<'a>, Error>>
+where
+    BS: AsRef<dyn BlobService> + Clone + Send + 'a,
+    I: Iterator<Item = Result<DirEntry, walkdir::Error>> + Send + 'a,
+{
+    let iter = iter.map(move |entry| match entry {
+        Ok(entry) => dir_entry_to_ingestion_entry(blob_service.clone(), &entry, &root_path),
+        Err(error) => Err(Error::IOError(
+            error.into_io_error().expect("walkdir err must be some"),
+        )),
+    });
+
+    Box::pin(futures::stream::iter(iter))
+}
+
+pub fn dir_entry_to_ingestion_entry<'a, BS>(
+    blob_service: BS,
+    entry: &DirEntry,
+    root_path: &Path,
+) -> Result<IngestionEntry<'a>, Error>
+where
+    BS: AsRef<dyn BlobService> + Clone + Send + 'a,
+{
+    let file_type = entry.file_type();
+
+    let path = entry
+        .path()
+        .strip_prefix(root_path)
+        .expect("Tvix bug: failed to strip root path prefix")
+        .to_path_buf();
+
+    if file_type.is_dir() {
+        Ok(IngestionEntry::Dir { path })
+    } else if file_type.is_symlink() {
+        let target = std::fs::read_link(entry.path())
+            .map_err(|e| Error::UnableToStat(entry.path().to_path_buf(), e))?;
+
+        Ok(IngestionEntry::Symlink { path, target })
+    } else if file_type.is_file() {
+        let metadata = entry
+            .metadata()
+            .map_err(|e| Error::UnableToStat(entry.path().to_path_buf(), e.into()))?;
+
+        // TODO: In the future, for small files, hash right away and upload async.
+        let blob_service = blob_service.clone();
+        let digest = Box::pin(upload_blob(blob_service.clone(), entry.clone()));
+
+        Ok(IngestionEntry::Regular {
+            path,
+            size: metadata.size(),
+            executable: metadata.permissions().mode() & 64 != 0,
+            digest,
+        })
+    } else {
+        Ok(IngestionEntry::Unknown { path, file_type })
     }
+}
+
+#[instrument(skip(blob_service), fields(path=?entry.path()), err)]
+async fn upload_blob<'a, BS>(blob_service: BS, entry: DirEntry) -> Result<B3Digest, Error>
+where
+    BS: AsRef<dyn BlobService> + Send + 'a,
+{
+    let mut file = tokio::fs::File::open(entry.path())
+        .await
+        .map_err(|e| Error::UnableToOpen(entry.path().to_path_buf(), e))?;
+
+    let mut writer = blob_service.as_ref().open_write().await;
+
+    if let Err(e) = tokio::io::copy(&mut file, &mut writer).await {
+        return Err(Error::UnableToRead(entry.path().to_path_buf(), e));
+    };
+
+    let digest = writer
+        .close()
+        .await
+        .map_err(|e| Error::UnableToRead(entry.path().to_path_buf(), e))?;
+
+    Ok(digest)
 }
 
 /// Ingests the contents at a given path into the tvix store, interacting with a [BlobService] and
@@ -133,100 +189,34 @@ pub fn leveled_entries_to_stream(
 ///
 /// It does not follow symlinks at the root, they will be ingested as actual symlinks.
 #[instrument(skip(blob_service, directory_service), fields(path), err)]
-pub async fn ingest_path<'a, BS, DS, P>(
+pub async fn ingest_path<BS, DS, P>(
     blob_service: BS,
     directory_service: DS,
     path: P,
 ) -> Result<Node, Error>
 where
     P: AsRef<Path> + std::fmt::Debug,
-    BS: AsRef<dyn BlobService>,
+    BS: AsRef<dyn BlobService> + Clone + Send,
     DS: AsRef<dyn DirectoryService>,
 {
-    // produce the leveled-key vector of DirEntry.
-    let entries_per_depths = walk_path_for_ingestion(path)?;
-    let direntry_stream = leveled_entries_to_stream(entries_per_depths);
-    pin_mut!(direntry_stream);
-
-    ingest_entries(blob_service, directory_service, direntry_stream).await
-}
-
-/// The Merkle invariant checker is an internal structure to perform bookkeeping of all directory
-/// entries we are ingesting and verifying we are ingesting them in the right order.
-///
-/// That is, whenever we process an entry `L`, we would like to verify if we didn't process earlier
-/// an entry `P` such that `P` is an **ancestor** of `L`.
-///
-/// If such a thing happened, it means that we have processed something like:
-///
-///```no_trust
-///        A
-///       / \
-///      B   C
-///     / \   \
-///    G  F    P <--------- processed before this one
-///           / \                                  |
-///          D  E                                  |
-///              \                                 |
-///               L  <-----------------------------+
-/// ```
-///
-/// This is exactly what must never happen.
-///
-/// Note: this checker is local, it can only see what happens on our side, not on the remote side,
-/// i.e. the different remote services.
-#[derive(Default)]
-#[cfg(debug_assertions)]
-struct MerkleInvariantChecker {
-    seen: HashSet<PathBuf>,
-}
-
-#[cfg(debug_assertions)]
-impl MerkleInvariantChecker {
-    /// See a directory entry and remember it.
-    fn see(&mut self, node: &DirEntry) {
-        self.seen.insert(node.path().to_owned());
-    }
-
-    /// Returns a potential ancestor already seen for that directory entry.
-    fn find_ancestor<'a>(&self, node: &'a DirEntry) -> Option<&'a Path> {
-        node.path().ancestors().find(|p| self.seen.contains(*p))
-    }
+    let entry_stream = walk_path_for_ingestion(blob_service, path);
+    ingest_entries(directory_service, entry_stream).await
 }
 
 /// Ingests elements from the given stream of [`DirEntry`] into a the passed [`BlobService`] and
 /// [`DirectoryService`].
 /// It does not follow symlinks at the root, they will be ingested as actual symlinks.
+///
+/// On success, returns the root node with an empty name.
 #[instrument(skip_all, ret(level = Level::TRACE), err)]
-pub async fn ingest_entries<'a, BS, DS, S>(
-    blob_service: BS,
+pub async fn ingest_entries<'a, DS, S>(
     directory_service: DS,
     #[allow(unused_mut)] mut direntry_stream: S,
 ) -> Result<Node, Error>
 where
-    BS: AsRef<dyn BlobService>,
     DS: AsRef<dyn DirectoryService>,
-    S: Stream<Item = DirEntry> + std::marker::Unpin,
+    S: Stream<Item = Result<IngestionEntry<'a>, Error>> + Send + std::marker::Unpin,
 {
-    #[cfg(debug_assertions)]
-    let mut invariant_checker: MerkleInvariantChecker = Default::default();
-
-    #[cfg(debug_assertions)]
-    let mut direntry_stream = direntry_stream.inspect(|e| {
-        // If we find an ancestor before we see this entry, this means that the caller
-        // broke the contract, refer to the documentation of the invariant checker to
-        // understand the reasoning here.
-        if let Some(ancestor) = invariant_checker.find_ancestor(e) {
-            panic!(
-                "Tvix bug: merkle invariant checker discovered that {} was processed before {}!",
-                ancestor.display(),
-                e.path().display()
-            );
-        }
-
-        invariant_checker.see(e);
-    });
-
     // For a given path, this holds the [Directory] structs as they are populated.
     let mut directories: HashMap<PathBuf, Directory> = HashMap::default();
     let mut maybe_directory_putter: Option<Box<dyn DirectoryPutter>> = None;
@@ -237,100 +227,86 @@ where
 
     let root_node = loop {
         let entry = match direntry_stream.next().await {
-            Some(entry) => entry,
+            Some(entry) => entry?,
             None => {
                 // The last entry of the stream must have depth 0, after which
                 // we break the loop manually.
                 panic!("Tvix bug: unexpected end of stream");
             }
         };
-        let file_type = entry.file_type();
 
-        let node = if file_type.is_dir() {
-            // If the entry is a directory, we traversed all its children (and
-            // populated it in `directories`).
-            // If we don't have it in there, it's an empty directory.
-            let directory = directories
-                .remove(entry.path())
-                // In that case, it contained no children
-                .unwrap_or_default();
+        let name = entry
+            .path()
+            .file_name()
+            // If this is the root node, it will have an empty name.
+            .unwrap_or_default()
+            .as_bytes()
+            .to_owned()
+            .into();
 
-            let directory_size = directory.size();
-            let directory_digest = directory.digest();
+        let parent = entry.path().parent().map(|path| path.to_owned());
 
-            // Use the directory_putter to upload the directory.
-            // If we don't have one yet (as that's the first one to upload),
-            // initialize the putter.
-            maybe_directory_putter
-                .get_or_insert_with(|| directory_service.as_ref().put_multiple_start())
-                .put(directory)
-                .await?;
+        let node = match entry {
+            IngestionEntry::Dir { .. } => {
+                // If the entry is a directory, we traversed all its children (and
+                // populated it in `directories`).
+                // If we don't have it in there, it's an empty directory.
+                let directory = directories
+                    .remove(entry.path())
+                    // In that case, it contained no children
+                    .unwrap_or_default();
 
-            Node::Directory(DirectoryNode {
-                name: entry.file_name().as_bytes().to_owned().into(),
-                digest: directory_digest.into(),
-                size: directory_size,
-            })
-        } else if file_type.is_symlink() {
-            let target: bytes::Bytes = std::fs::read_link(entry.path())
-                .map_err(|e| Error::UnableToStat(entry.path().to_path_buf(), e))?
-                .as_os_str()
-                .as_bytes()
-                .to_owned()
-                .into();
+                let directory_size = directory.size();
+                let directory_digest = directory.digest();
 
-            Node::Symlink(SymlinkNode {
-                name: entry.file_name().as_bytes().to_owned().into(),
-                target,
-            })
-        } else if file_type.is_file() {
-            let metadata = entry
-                .metadata()
-                .map_err(|e| Error::UnableToStat(entry.path().to_path_buf(), e.into()))?;
+                // Use the directory_putter to upload the directory.
+                // If we don't have one yet (as that's the first one to upload),
+                // initialize the putter.
+                maybe_directory_putter
+                    .get_or_insert_with(|| directory_service.as_ref().put_multiple_start())
+                    .put(directory)
+                    .await?;
 
-            let mut file = tokio::fs::File::open(entry.path())
-                .await
-                .map_err(|e| Error::UnableToOpen(entry.path().to_path_buf(), e))?;
-
-            let mut writer = blob_service.as_ref().open_write().await;
-
-            if let Err(e) = tokio::io::copy(&mut file, &mut writer).await {
-                return Err(Error::UnableToRead(entry.path().to_path_buf(), e));
-            };
-
-            let digest = writer
-                .close()
-                .await
-                .map_err(|e| Error::UnableToRead(entry.path().to_path_buf(), e))?;
-
-            Node::File(FileNode {
-                name: entry.file_name().as_bytes().to_vec().into(),
-                digest: digest.into(),
-                size: metadata.len(),
-                // If it's executable by the user, it'll become executable.
-                // This matches nix's dump() function behaviour.
-                executable: metadata.permissions().mode() & 64 != 0,
-            })
-        } else {
-            return Err(Error::UnsupportedFileType(
-                entry.path().to_path_buf(),
-                file_type,
-            ));
+                Node::Directory(DirectoryNode {
+                    name,
+                    digest: directory_digest.into(),
+                    size: directory_size,
+                })
+            }
+            IngestionEntry::Symlink { ref target, .. } => Node::Symlink(SymlinkNode {
+                name,
+                target: target.as_os_str().as_bytes().to_owned().into(),
+            }),
+            IngestionEntry::Regular {
+                size,
+                executable,
+                digest,
+                ..
+            } => {
+                Node::File(FileNode {
+                    name,
+                    digest: digest.await?.into(),
+                    size,
+                    // If it's executable by the user, it'll become executable.
+                    // This matches nix's dump() function behaviour.
+                    // executable: metadata.permissions().mode() & 64 != 0,
+                    executable,
+                })
+            }
+            IngestionEntry::Unknown { path, file_type } => {
+                return Err(Error::UnsupportedFileType(path, file_type));
+            }
         };
 
-        if entry.depth() == 0 {
-            break node;
-        } else {
-            // calculate the parent path, and make sure we register the node there.
-            // NOTE: entry.depth() > 0
-            let parent_path = entry.path().parent().unwrap().to_path_buf();
+        match parent {
+            None => break node,
+            Some(parent) => {
+                // calculate the parent path, and make sure we register the node there.
+                // NOTE: entry.depth() > 0
+                let parent_path = parent.to_path_buf();
 
-            // record node in parent directory, creating a new [proto:Directory] if not there yet.
-            let parent_directory = directories.entry(parent_path).or_default();
-            match node {
-                Node::Directory(e) => parent_directory.directories.push(e),
-                Node::File(e) => parent_directory.files.push(e),
-                Node::Symlink(e) => parent_directory.symlinks.push(e),
+                // record node in parent directory, creating a new [proto:Directory] if not there yet.
+                directories.entry(parent_path).or_default().add(node);
             }
         }
     };
@@ -358,4 +334,37 @@ where
     };
 
     Ok(root_node)
+}
+
+type BlobFut<'a> = Pin<Box<dyn Future<Output = Result<B3Digest, Error>> + Send + 'a>>;
+
+pub enum IngestionEntry<'a> {
+    Regular {
+        path: PathBuf,
+        size: u64,
+        executable: bool,
+        digest: BlobFut<'a>,
+    },
+    Symlink {
+        path: PathBuf,
+        target: PathBuf,
+    },
+    Dir {
+        path: PathBuf,
+    },
+    Unknown {
+        path: PathBuf,
+        file_type: FileType,
+    },
+}
+
+impl<'a> IngestionEntry<'a> {
+    fn path(&self) -> &Path {
+        match self {
+            IngestionEntry::Regular { path, .. } => &path,
+            IngestionEntry::Symlink { path, .. } => &path,
+            IngestionEntry::Dir { path } => &path,
+            IngestionEntry::Unknown { path, .. } => &path,
+        }
+    }
 }
