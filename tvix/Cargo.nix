@@ -14674,10 +14674,6 @@ rec {
             packageId = "tempfile";
           }
           {
-            name = "test-case";
-            packageId = "test-case";
-          }
-          {
             name = "tokio-retry";
             packageId = "tokio-retry";
           }
