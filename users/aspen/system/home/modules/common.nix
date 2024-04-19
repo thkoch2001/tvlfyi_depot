@@ -72,14 +72,13 @@
     (writeShellScriptBin "rebuild-home" ''
       set -eo pipefail
       cd ~/code/depot
-      nix build -f . users.aspen.system.home.$(hostname)Home -o /tmp/home
-      /tmp/home/activate
+      home=$(nix-build -A users.aspen.system.home.$(hostname)Home -o /tmp/home)
+      nix-env -p /nix/var/nix/per-user/aspen/home --set $home
+      $home/activate
     '')
   ];
 
-  programs.ssh = {
-    enable = true;
-  };
+  programs.ssh = { enable = true; };
 
   programs.direnv = {
     enable = true;
