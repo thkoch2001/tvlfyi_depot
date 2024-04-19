@@ -1,4 +1,4 @@
-use clap::Parser;
+use clap::{Parser, ValueEnum};
 use rustyline::{error::ReadlineError, Editor};
 use std::rc::Rc;
 use std::str::FromStr;
@@ -15,6 +15,14 @@ use tvix_glue::tvix_io::TvixIO;
 use tvix_glue::tvix_store_io::TvixStoreIO;
 use tvix_glue::{builtins::add_derivation_builtins, configure_nix_path};
 
+#[derive(Debug, Clone, Copy, ValueEnum)]
+enum LogFormat {
+    Full,
+    Compact,
+    Pretty,
+    Json,
+}
+
 #[derive(Parser)]
 struct Args {
     /// Level at which to log events. Supports full EnvFilter syntax - see [the EnvFilter
@@ -23,6 +31,12 @@ struct Args {
     /// [0]: https://docs.rs/tracing-subscriber/latest/tracing_subscriber/filter/struct.EnvFilter.html
     #[arg(long, default_value = "info", env = "LOG_LEVEL")]
     log_level: String,
+
+    /// Format to use for logging. See the [tracing docs][0] for more info
+    ///
+    /// [0]: https://docs.rs/tracing-subscriber/latest/tracing_subscriber/fmt/index.html#formatters
+    #[arg(long, default_value = "full", env = "LOG_FORMAT")]
+    log_format: LogFormat,
 
     /// Path to a script to evaluate
     script: Option<PathBuf>,
@@ -224,20 +238,33 @@ fn lint(code: &str, path: Option<PathBuf>, args: &Args) -> bool {
     result.errors.is_empty()
 }
 
+fn configure_logging(args: &Args) {
+    macro_rules! init {
+        ($($format:ident)?) => {{
+            tracing_subscriber::registry()
+                .with(
+                    tracing_subscriber::fmt::Layer::new()
+                        .with_writer(std::io::stderr)
+                        $(.$format())?,
+                )
+                .with(EnvFilter::from_str(&args.log_level).unwrap())
+                .try_init()
+                .expect("unable to set up tracing subscriber");
+        }};
+    }
+
+    match args.log_format {
+        LogFormat::Full => init!(),
+        LogFormat::Compact => init!(compact),
+        LogFormat::Pretty => init!(pretty),
+        LogFormat::Json => init!(json),
+    }
+}
+
 fn main() {
     let args = Args::parse();
 
-    // configure log settings
-    let subscriber = tracing_subscriber::registry()
-        .with(
-            tracing_subscriber::fmt::Layer::new()
-                .with_writer(std::io::stderr)
-                .compact(),
-        )
-        .with(EnvFilter::from_str(&args.log_level).unwrap());
-    subscriber
-        .try_init()
-        .expect("unable to set up tracing subscriber");
+    configure_logging(&args);
 
     if let Some(file) = &args.script {
         run_file(file.clone(), &args)
