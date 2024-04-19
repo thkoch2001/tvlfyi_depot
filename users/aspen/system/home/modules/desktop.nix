@@ -5,6 +5,7 @@
 {
   imports = [
     ./i3.nix
+    ./alacritty.nix
   ];
 
   home.packages = with pkgs; [
