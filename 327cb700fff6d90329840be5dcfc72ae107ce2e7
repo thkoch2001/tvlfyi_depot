@@ -16,6 +16,24 @@
       "message": "```suggestion\n    /// This assumes the [Directory] to be sorted prior to adding the node.\n```",
       "revId": "327cb700fff6d90329840be5dcfc72ae107ce2e7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38181d1c_4497e618",
+        "filename": "tvix/castore/src/proto/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-19T19:46:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51ff7269_6cee747e",
+      "revId": "327cb700fff6d90329840be5dcfc72ae107ce2e7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
