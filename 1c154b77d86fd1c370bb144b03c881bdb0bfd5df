@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae12ff12_fb67b0d2",
+        "filename": "tvix/cli/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 231,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-19T20:03:53Z",
+      "side": 0,
+      "message": "We had a recent discussion around log formats in the tvix-store CLI (where this code is partially coming from).\n\nWe were leaning towards ditching the JSON format and related CLI options, and only have a single one to present to CLI users. Detailed machine-readable logs can be collected via the OTLP tracing events, there\u0027s less reason to send out tons of JSON here to then parse it in.\n\nWhat\u0027s your opinion on using \"Full\" for all CLIs and make it not configurable?",
+      "revId": "1c154b77d86fd1c370bb144b03c881bdb0bfd5df",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
