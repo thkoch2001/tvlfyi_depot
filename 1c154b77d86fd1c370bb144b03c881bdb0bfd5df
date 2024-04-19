@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "679d5e95_a35d59de",
+        "filename": "tvix/cli/src/main.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 237,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-19T20:05:02Z",
+      "side": 1,
+      "message": "Check https://cs.tvl.fyi/depot/-/blob/tvix/store/src/bin/tvix-store.rs?L218 and below, we should unify this to one place.",
+      "revId": "1c154b77d86fd1c370bb144b03c881bdb0bfd5df",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
