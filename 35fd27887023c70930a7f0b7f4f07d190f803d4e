@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bffa948f_b1e1c7f2",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-19T19:24:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc14d4a7_ca6fced8",
+      "revId": "35fd27887023c70930a7f0b7f4f07d190f803d4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f3732264_621a7b6a",
@@ -53,6 +71,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f3c9933_d92947c3",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-19T19:24:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc8ecd09_e94e886e",
+      "revId": "35fd27887023c70930a7f0b7f4f07d190f803d4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "795e0171_30aee276",
@@ -66,6 +102,24 @@
       "writtenOn": "2024-04-18T20:43:56Z",
       "side": 1,
       "message": "Don\u0027t we want to pass the parent of the path we\u0027re ingesting here (and then rename this just \"prefix\"? that should keep the name on the root node itself.",
+      "revId": "35fd27887023c70930a7f0b7f4f07d190f803d4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1907cb21_d9d8180c",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-19T19:24:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "795e0171_30aee276",
       "revId": "35fd27887023c70930a7f0b7f4f07d190f803d4e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -87,6 +141,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "004a52d3_8a845fbf",
+        "filename": "tvix/castore/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-19T19:24:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f265a639_236460ff",
+      "revId": "35fd27887023c70930a7f0b7f4f07d190f803d4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bc75cb8e_3c3bf7e5",
@@ -100,6 +172,24 @@
       "writtenOn": "2024-04-18T20:43:56Z",
       "side": 1,
       "message": "This needs a docstring, and tests.",
+      "revId": "35fd27887023c70930a7f0b7f4f07d190f803d4e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1cf5078e_f2d9deb8",
+        "filename": "tvix/castore/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 343,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-19T19:24:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc75cb8e_3c3bf7e5",
       "revId": "35fd27887023c70930a7f0b7f4f07d190f803d4e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
