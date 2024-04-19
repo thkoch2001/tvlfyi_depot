@@ -19,7 +19,7 @@ use std::{
 };
 use tokio::io::AsyncBufRead;
 use tokio_util::io::{InspectReader, SyncIoBridge};
-use tracing::{error, instrument, warn, Level};
+use tracing::{error, info, instrument, warn, Level};
 use tvix_build::buildservice::BuildService;
 use tvix_eval::{ErrorKind, EvalIO, FileType, StdIO};
 use tvix_store::utils::AsyncIoBridge;
@@ -378,6 +378,7 @@ impl TvixStoreIO {
     }
 
     async fn download<'a>(&self, url: &str) -> Result<impl AsyncBufRead + Unpin + 'a, ErrorKind> {
+        info!(%url, "Downloading URL");
         let resp = self
             .http_client
             .get(url)
