@@ -5,6 +5,7 @@ use bstr::ByteSlice;
 use nix_compat::nixhash::{self, CAHash};
 use nix_compat::store_path::{build_ca_path, StorePathRef};
 use std::rc::Rc;
+use tracing::debug;
 use tvix_eval::builtin_macros::builtins;
 use tvix_eval::generators::GenCo;
 use tvix_eval::{CatchableErrorKind, ErrorKind, NixContextElement, NixString, Value};
@@ -170,7 +171,9 @@ async fn fetch(
     };
 
     if let Some(store_path) = args.store_path()? {
+        debug!(%store_path, "Checking for preexisting store path");
         if state.store_path_exists(store_path).await? {
+            debug!(%store_path, "Store path already exists, not fetching");
             return Ok(string_from_store_path(store_path).into());
         }
     }
