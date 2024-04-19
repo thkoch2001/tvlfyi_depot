@@ -26,7 +26,9 @@ in
     battery = 1;
   };
 
-  home.packages = with pkgs; [ discord steam tdesktop ];
+  programs.alacritty.settings.font.size = lib.mkForce 5.5;
+
+  home.packages = with pkgs; [ discord steam tdesktop slack ];
 
   xsession.windowManager.i3.config.keybindings.XF86AudioMedia = "exec lock";
 }
