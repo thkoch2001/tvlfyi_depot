@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d52ac6f6_dc78b510",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-19T20:07:57Z",
+      "side": 1,
+      "message": "Ugh. OK for a debug commit, but I think we should have another strategy to communicate the fact things are happening to the user, at least clean this up soon.",
+      "revId": "c2752232441b2e008a0e628cc44650b9a57b3439",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
