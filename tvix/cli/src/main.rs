@@ -1,9 +1,9 @@
 use clap::Parser;
 use rustyline::{error::ReadlineError, Editor};
 use std::rc::Rc;
+use std::str::FromStr;
 use std::{fs, path::PathBuf};
-use tracing::Level;
-use tracing_subscriber::fmt::writer::MakeWriterExt;
+use tracing_subscriber::EnvFilter;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use tvix_build::buildservice;
 use tvix_eval::builtins::impure_builtins;
@@ -17,8 +17,12 @@ use tvix_glue::{builtins::add_derivation_builtins, configure_nix_path};
 
 #[derive(Parser)]
 struct Args {
-    #[arg(long)]
-    log_level: Option<Level>,
+    /// Level at which to log events. Supports full EnvFilter syntax - see [the EnvFilter
+    /// docs][0] for more info
+    ///
+    /// [0]: https://docs.rs/tracing-subscriber/latest/tracing_subscriber/filter/struct.EnvFilter.html
+    #[arg(long, default_value = "info", env = "LOG_LEVEL")]
+    log_level: String,
 
     /// Path to a script to evaluate
     script: Option<PathBuf>,
@@ -224,13 +228,13 @@ fn main() {
     let args = Args::parse();
 
     // configure log settings
-    let level = args.log_level.unwrap_or(Level::INFO);
-
-    let subscriber = tracing_subscriber::registry().with(
-        tracing_subscriber::fmt::Layer::new()
-            .with_writer(std::io::stderr.with_max_level(level))
-            .pretty(),
-    );
+    let subscriber = tracing_subscriber::registry()
+        .with(
+            tracing_subscriber::fmt::Layer::new()
+                .with_writer(std::io::stderr)
+                .compact(),
+        )
+        .with(EnvFilter::from_str(&args.log_level).unwrap());
     subscriber
         .try_init()
         .expect("unable to set up tracing subscriber");
