@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c980173_3ce06514",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 407,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-04-19T16:22:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a61bfd0e_7812aa83",
+      "revId": "224bfaae7792fd129bf9c507eced14bf3705dcb9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ffff69ec_f6f9c8ae",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0ef41c0_8940a188",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 422,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-04-19T16:22:53Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ffff69ec_f6f9c8ae",
+      "revId": "224bfaae7792fd129bf9c507eced14bf3705dcb9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a3df68f_0b5fe62f",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-03-11T11:53:19Z",
       "side": 1,
       "message": "I assume this is missing some code here still, but do I see right it\u0027s supposed to take the Symlink or Directory nodes from the map above, and shape them into individual `Directory` nodes that are then uploaded through the `directory_putter`?\n\nFeels like this is something we should move into a helper function.\n\nThere\u0027s some of this stuff in tvix/castore/src/import.rs (`ingest_entries`), and leveled_entries_to_stream, though it\u0027s using DirEntry as stream elements. Maybe this can be refactored out to be usable for this case too.",
+      "revId": "224bfaae7792fd129bf9c507eced14bf3705dcb9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0d90720_8c0cb9b7",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-04-19T16:22:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9a3df68f_0b5fe62f",
       "revId": "224bfaae7792fd129bf9c507eced14bf3705dcb9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
