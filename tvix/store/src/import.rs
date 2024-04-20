@@ -117,7 +117,8 @@ where
     PS: AsRef<dyn PathInfoService>,
 {
     let root_node =
-        tvix_castore::import::ingest_path(blob_service, directory_service, path.as_ref()).await?;
+        tvix_castore::import::fs::ingest_path(blob_service, directory_service, path.as_ref())
+            .await?;
 
     // Ask the PathInfoService for the NAR size and sha256
     let (nar_size, nar_sha256) = path_info_service.as_ref().calculate_nar(&root_node).await?;
