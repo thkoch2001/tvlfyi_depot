@@ -1,6 +1,12 @@
 { depot, pkgs, lib, ... }:
 
+(depot.tvix.crates.workspaceMembers.tvix-cli.build.override {
+  runTests = true;
+}).overrideAttrs (finalAttrs: previousAttrs:
+
 let
+  tvix-cli = finalAttrs.finalPackage;
+
   benchmark-gnutime-format-string =
     description:
     "Benchmark: " +
@@ -11,15 +17,6 @@ let
         user = "%U";
       };
     });
-
-in
-
-(depot.tvix.crates.workspaceMembers.tvix-cli.build.override {
-  runTests = true;
-}).overrideAttrs (finalAttrs: previousAttrs:
-
-let
-  tvix-cli = finalAttrs.finalPackage;
 
   # You can run the benchmark with a simple `nix run`, like:
   #
