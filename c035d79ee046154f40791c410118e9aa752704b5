@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b762ebe3_5a479e39",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-20T21:52:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22ad355e_00b4a1cb",
+      "revId": "c035d79ee046154f40791c410118e9aa752704b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "74593ff0_46b4deb5",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-04-20T21:32:02Z",
       "side": 1,
       "message": "… and disconnected from its children",
+      "revId": "c035d79ee046154f40791c410118e9aa752704b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e70f0881_0b02b9bc",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-20T21:52:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74593ff0_46b4deb5",
       "revId": "c035d79ee046154f40791c410118e9aa752704b5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1c9986c9_7ee6a081",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-20T21:52:39Z",
+      "side": 1,
+      "message": "This recursively calls `self.add` until it hits the root node.",
+      "parentUuid": "ee828799_bcb18b54",
+      "revId": "c035d79ee046154f40791c410118e9aa752704b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6f737e2c_be136b26",
         "filename": "tvix/castore/src/import/archive.rs",
         "patchSetId": 6
@@ -65,6 +119,30 @@
       "writtenOn": "2024-04-20T21:32:02Z",
       "side": 1,
       "message": "post",
+      "range": {
+        "startLine": 147,
+        "startChar": 35,
+        "endLine": 147,
+        "endChar": 39
+      },
+      "revId": "c035d79ee046154f40791c410118e9aa752704b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "084062c9_1582f042",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-20T21:52:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f737e2c_be136b26",
       "range": {
         "startLine": 147,
         "startChar": 35,
@@ -94,6 +172,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c2965e2a_cacc112c",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-20T21:52:39Z",
+      "side": 1,
+      "message": "I\u0027m not sure that would help, the initial node may not be the `root_node`",
+      "parentUuid": "44b7f250_f159b024",
+      "revId": "c035d79ee046154f40791c410118e9aa752704b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a716ed50_d58ba0f7",
         "filename": "tvix/castore/src/import/archive.rs",
         "patchSetId": 6
@@ -105,6 +201,24 @@
       "writtenOn": "2024-04-20T21:32:02Z",
       "side": 1,
       "message": "Something about \"to disconnect them\". This is only ever gonna get called with a non-directory, right? Should probably be added to the comment (and a debug assertion).",
+      "revId": "c035d79ee046154f40791c410118e9aa752704b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "42c8e4ab_c6add495",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-20T21:52:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a716ed50_d58ba0f7",
       "revId": "c035d79ee046154f40791c410118e9aa752704b5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
