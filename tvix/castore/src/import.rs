@@ -227,10 +227,7 @@ where
 ///
 /// On success, returns the root node.
 #[instrument(skip_all, ret(level = Level::TRACE), err)]
-pub async fn ingest_entries<'a, DS, S>(
-    directory_service: DS,
-    #[allow(unused_mut)] mut direntry_stream: S,
-) -> Result<Node, Error>
+pub async fn ingest_entries<'a, DS, S>(directory_service: DS, mut entries: S) -> Result<Node, Error>
 where
     DS: AsRef<dyn DirectoryService>,
     S: Stream<Item = Result<IngestionEntry<'a>, Error>> + Send + std::marker::Unpin,
@@ -240,7 +237,7 @@ where
     let mut maybe_directory_putter: Option<Box<dyn DirectoryPutter>> = None;
 
     let root_node = loop {
-        let mut entry = direntry_stream
+        let mut entry = entries
             .next()
             .await
             // The last entry of the stream must have 1 path component, after which
