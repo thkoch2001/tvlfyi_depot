@@ -451,7 +451,7 @@ impl TvixStoreIO {
         let data = self.download(url).await?;
         let data = DecompressedReader::new(data);
         let archive = tokio_tar::Archive::new(data);
-        let node = ingest_archive(&self.blob_service, &self.directory_service, archive)
+        let node = ingest_archive(self.blob_service.clone(), &self.directory_service, archive)
             .await
             .map_err(|e| std::io::Error::new(io::ErrorKind::Other, e))?;
 
