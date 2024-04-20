@@ -1,0 +1,112 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22ad355e_00b4a1cb",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-20T21:32:02Z",
+      "side": 1,
+      "message": "Can we move these paths, rather than cloning?",
+      "revId": "c035d79ee046154f40791c410118e9aa752704b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74593ff0_46b4deb5",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-20T21:32:02Z",
+      "side": 1,
+      "message": "… and disconnected from its children",
+      "revId": "c035d79ee046154f40791c410118e9aa752704b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee828799_bcb18b54",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-20T21:32:02Z",
+      "side": 1,
+      "message": "Don\u0027t you need a loop here, to create multiple parents?\n\nThough I don\u0027t understand how the `implicit_directories` testcase currently creates DIR_A…",
+      "revId": "c035d79ee046154f40791c410118e9aa752704b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f737e2c_be136b26",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-20T21:32:02Z",
+      "side": 1,
+      "message": "post",
+      "range": {
+        "startLine": 147,
+        "startChar": 35,
+        "endLine": 147,
+        "endChar": 39
+      },
+      "revId": "c035d79ee046154f40791c410118e9aa752704b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44b7f250_f159b024",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-20T21:32:02Z",
+      "side": 1,
+      "message": "Can you simply have a constructor that takes a single element to start with?\n\nThat way you won\u0027t have this problem…",
+      "revId": "c035d79ee046154f40791c410118e9aa752704b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a716ed50_d58ba0f7",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-20T21:32:02Z",
+      "side": 1,
+      "message": "Something about \"to disconnect them\". This is only ever gonna get called with a non-directory, right? Should probably be added to the comment (and a debug assertion).",
+      "revId": "c035d79ee046154f40791c410118e9aa752704b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
