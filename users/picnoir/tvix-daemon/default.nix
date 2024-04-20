@@ -20,9 +20,10 @@ in
   shell = (import ./shell.nix { inherit pkgs; });
   tvix-daemon = crate2nix.rootCrate.build;
   clippy = pkgs.stdenv.mkDerivation {
-    src = ./.;
-    cargoDeps = crate2nix.allWorkspaceMembers;
     name = "tvix-daemon-clippy";
+    # The cleaned sources.
+    src = depot.third_party.gitignoreSource ./.;
+    cargoDeps = crate2nix.allWorkspaceMembers;
 
     nativeBuildInputs = with pkgs; [
       cargo
