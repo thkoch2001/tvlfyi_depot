@@ -222,4 +222,8 @@ impl<'a> IngestionEntry<'a> {
             IngestionEntry::Unknown { path, .. } => path,
         }
     }
+
+    fn is_dir(&self) -> bool {
+        matches!(self, IngestionEntry::Dir { .. })
+    }
 }

@@ -30,6 +30,9 @@ pub enum Error {
 
     #[error("unsupported tar entry {0} type: {1:?}")]
     UnsupportedTarEntry(PathBuf, tokio_tar::EntryType),
+
+    #[error("symlink missing target {0}")]
+    MissingSymlinkTarget(PathBuf),
 }
 
 impl From<CastoreError> for Error {
