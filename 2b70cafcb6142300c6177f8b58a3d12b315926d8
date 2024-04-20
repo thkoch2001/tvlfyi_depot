@@ -33,6 +33,23 @@
       "message": "I think its possible to keep `prefix` as a `\u0026Path` and avoid cloning here. I was able to make it pass the borrow checker.",
       "revId": "2b70cafcb6142300c6177f8b58a3d12b315926d8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "420ddb58_7b6432c6",
+        "filename": "tvix/castore/src/import/fs.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-20T18:25:38Z",
+      "side": 1,
+      "message": "I think we can remove `\u0027a` here",
+      "revId": "2b70cafcb6142300c6177f8b58a3d12b315926d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
