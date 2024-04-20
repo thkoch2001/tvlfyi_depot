@@ -143,23 +143,21 @@ where
 
     // if there were directories uploaded, make sure we flush the putter, so
     // they're all persisted to the backend.
+    #[cfg(debug_assertions)]
     if let Some(mut directory_putter) = maybe_directory_putter {
         let root_directory_digest = directory_putter.close().await?;
 
-        #[cfg(debug_assertions)]
-        {
-            if let Node::Directory(directory_node) = &root_node {
-                debug_assert_eq!(
-                    root_directory_digest,
-                    directory_node
-                        .digest
-                        .to_vec()
-                        .try_into()
-                        .expect("invalid digest len")
-                )
-            } else {
-                unreachable!("Tvix bug: directory putter initialized but no root directory node");
-            }
+        if let Node::Directory(directory_node) = &root_node {
+            debug_assert_eq!(
+                root_directory_digest,
+                directory_node
+                    .digest
+                    .to_vec()
+                    .try_into()
+                    .expect("invalid digest len")
+            )
+        } else {
+            unreachable!("Tvix bug: directory putter initialized but no root directory node");
         }
     };
 
