@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3678a04c_4fcb9310",
+        "filename": "tvix/castore/src/import.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 464,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-20T11:50:11Z",
+      "side": 1,
+      "message": "Why not order it with the ancestor equivalence relation? This avoids the pop dance later on.",
+      "revId": "14bb27de916502d4218e29e96d7aea286c4df7f4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a89e5af8_10119d4e",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 481,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-20T11:50:11Z",
+      "side": 1,
+      "message": "can we change TODO by something that is clearer?",
+      "revId": "14bb27de916502d4218e29e96d7aea286c4df7f4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
