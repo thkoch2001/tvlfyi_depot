@@ -1,21 +1,16 @@
-#[cfg(target_family = "unix")]
-use std::os::unix::ffi::OsStrExt;
-use std::{
-    collections::HashMap,
-    path::{Path, PathBuf},
-};
+use std::cmp::Ordering;
+use std::path::Path;
+use std::{collections::HashMap, path::PathBuf};
 
 use tokio::io::AsyncRead;
 use tokio_stream::StreamExt;
 use tokio_tar::Archive;
 use tracing::{instrument, Level};
 
-use crate::{
-    blobservice::BlobService,
-    directoryservice::{DirectoryPutter, DirectoryService},
-    import::Error,
-    proto::{node::Node, Directory, DirectoryNode, FileNode, SymlinkNode},
-};
+use crate::blobservice::BlobService;
+use crate::directoryservice::DirectoryService;
+use crate::import::{ingest_entries, Error, IngestionEntry};
+use crate::proto::node::Node;
 
 /// Ingests elements from the given tar [`Archive`] into a the passed [`BlobService`] and
 /// [`DirectoryService`].
@@ -35,23 +30,32 @@ where
     // contents and entries to meet the requires of the castore.
 
     // In the first phase, collect up all the regular files and symlinks.
-    let mut paths = HashMap::new();
-    let mut entries = archive.entries().map_err(Error::Archive)?;
-    while let Some(mut entry) = entries.try_next().await.map_err(Error::Archive)? {
-        let path = entry.path().map_err(Error::Archive)?.into_owned();
-        let name = path
-            .file_name()
-            .ok_or_else(|| {
-                Error::Archive(std::io::Error::new(
-                    std::io::ErrorKind::InvalidInput,
-                    "invalid filename in archive",
-                ))
-            })?
-            .as_bytes()
-            .to_vec()
-            .into();
+    let mut entries = HashMap::new();
 
-        let node = match entry.header().entry_type() {
+    // Adds the directory and all of its ancestors to the entries map.
+    fn add_dir_all(entries: &mut HashMap<PathBuf, IngestionEntry>, path: &Path) {
+        if entries
+            .get(path)
+            .map(|entry| entry.is_dir())
+            .unwrap_or(false)
+        {
+            return;
+        }
+        if let Some(parent) = path.parent() {
+            add_dir_all(entries, parent);
+        }
+        entries.insert(path.into(), IngestionEntry::Dir { path: path.into() });
+    }
+
+    let mut entries_iter = archive.entries().map_err(Error::Archive)?;
+    while let Some(mut entry) = entries_iter.try_next().await.map_err(Error::Archive)? {
+        let path: PathBuf = entry.path().map_err(Error::Archive)?.into();
+
+        if let Some(parent) = path.parent() {
+            add_dir_all(&mut entries, parent);
+        }
+
+        let entry = match entry.header().entry_type() {
             tokio_tar::EntryType::Regular
             | tokio_tar::EntryType::GNUSparse
             | tokio_tar::EntryType::Continuous => {
@@ -62,140 +66,55 @@ where
                     .await
                     .map_err(Error::Archive)?;
                 let digest = writer.close().await.map_err(Error::Archive)?;
-                Node::File(FileNode {
-                    name,
-                    digest: digest.into(),
+
+                IngestionEntry::Regular {
+                    path: path.clone(),
                     size,
                     executable: entry.header().mode().map_err(Error::Archive)? & 64 != 0,
-                })
+                    digest: Box::pin(async { Ok(digest) }),
+                }
             }
-            tokio_tar::EntryType::Symlink => Node::Symlink(SymlinkNode {
-                name,
+            tokio_tar::EntryType::Symlink => IngestionEntry::Symlink {
+                path: path.clone(),
                 target: entry
                     .link_name()
                     .map_err(Error::Archive)?
-                    .expect("symlink missing target")
-                    .as_os_str()
-                    .as_bytes()
-                    .to_vec()
+                    .ok_or_else(|| Error::MissingSymlinkTarget(path.clone()))?
                     .into(),
-            }),
+            },
             // Push a bogus directory marker so we can make sure this directoy gets
             // created. We don't know the digest and size until after reading the full
             // tarball.
-            tokio_tar::EntryType::Directory => Node::Directory(DirectoryNode {
-                name,
-                digest: Default::default(),
-                size: 0,
-            }),
+            tokio_tar::EntryType::Directory => IngestionEntry::Dir { path: path.clone() },
 
             tokio_tar::EntryType::XGlobalHeader | tokio_tar::EntryType::XHeader => continue,
 
             entry_type => return Err(Error::UnsupportedTarEntry(path, entry_type)),
         };
 
-        paths.insert(path, node);
+        entries.insert(path, entry);
     }
 
-    // In the second phase, construct all of the directories.
+    // Sort the entries such that:
+    // - Symlinks and regular files appear before all directories
+    // - Directories are sorted by path length descending so that child directories
+    //   appear before parent directories.
+    let mut entries = entries.into_values().collect::<Vec<_>>();
+    entries.sort_by(
+        |a: &IngestionEntry, b: &IngestionEntry| match (a.is_dir(), b.is_dir()) {
+            // Directories should be sorted by path length in descending order.
+            (true, true) => b.path().as_os_str().len().cmp(&a.path().as_os_str().len()),
+            // Non-directories should appear before directories.
+            (true, false) => Ordering::Greater,
+            (false, true) => Ordering::Less,
+            // Ordering between non-directories does not matter.
+            (false, false) => Ordering::Equal,
+        },
+    );
 
-    // Collect into a list and then sort so all entries in the same directory
-    // are next to each other.
-    // We can detect boundaries between each directories to determine
-    // when to construct or push directory entries.
-    let mut ordered_paths = paths.into_iter().collect::<Vec<_>>();
-    ordered_paths.sort_by(|a, b| a.0.cmp(&b.0));
-
-    let mut directory_putter = directory_service.as_ref().put_multiple_start();
-
-    // Start with an initial directory at the root.
-    let mut dir_stack = vec![(PathBuf::from(""), Directory::default())];
-
-    async fn pop_directory(
-        dir_stack: &mut Vec<(PathBuf, Directory)>,
-        directory_putter: &mut Box<dyn DirectoryPutter>,
-    ) -> Result<DirectoryNode, Error> {
-        let (path, directory) = dir_stack.pop().unwrap();
-
-        directory
-            .validate()
-            .map_err(|e| Error::InvalidDirectory(path.to_path_buf(), e))?;
-
-        let dir_node = DirectoryNode {
-            name: path
-                .file_name()
-                .unwrap_or_default()
-                .as_bytes()
-                .to_vec()
-                .into(),
-            digest: directory.digest().into(),
-            size: directory.size(),
-        };
-
-        if let Some((_, parent)) = dir_stack.last_mut() {
-            parent.directories.push(dir_node.clone());
-        }
-
-        directory_putter.put(directory).await?;
-
-        Ok(dir_node)
-    }
-
-    fn push_directories(path: &Path, dir_stack: &mut Vec<(PathBuf, Directory)>) {
-        if path == dir_stack.last().unwrap().0 {
-            return;
-        }
-        if let Some(parent) = path.parent() {
-            push_directories(parent, dir_stack);
-        }
-        dir_stack.push((path.to_path_buf(), Directory::default()));
-    }
-
-    for (path, node) in ordered_paths.into_iter() {
-        // Pop stack until the top dir is an ancestor of this entry.
-        loop {
-            let top = dir_stack.last().unwrap();
-            if path.ancestors().any(|ancestor| ancestor == top.0) {
-                break;
-            }
-
-            pop_directory(&mut dir_stack, &mut directory_putter).await?;
-        }
-
-        // For directories, just ensure the directory node exists.
-        if let Node::Directory(_) = node {
-            push_directories(&path, &mut dir_stack);
-            continue;
-        }
-
-        // Push all ancestor directories onto the stack.
-        push_directories(path.parent().unwrap(), &mut dir_stack);
-
-        let top = dir_stack.last_mut().unwrap();
-        debug_assert_eq!(Some(top.0.as_path()), path.parent());
-
-        match node {
-            Node::File(n) => top.1.files.push(n),
-            Node::Symlink(n) => top.1.symlinks.push(n),
-            // We already handled directories above.
-            Node::Directory(_) => unreachable!(),
-        }
-    }
-
-    let mut root_node = None;
-    while !dir_stack.is_empty() {
-        // If the root directory only has 1 directory entry, we return the child entry
-        // instead... weeeee
-        if dir_stack.len() == 1 && dir_stack.last().unwrap().1.directories.len() == 1 {
-            break;
-        }
-        root_node = Some(pop_directory(&mut dir_stack, &mut directory_putter).await?);
-    }
-    let root_node = root_node.expect("no root node");
-
-    let root_digest = directory_putter.close().await?;
-
-    debug_assert_eq!(root_digest.as_slice(), &root_node.digest);
-
-    Ok(Node::Directory(root_node))
+    ingest_entries(
+        directory_service,
+        futures::stream::iter(entries.into_iter().map(Ok)),
+    )
+    .await
 }
