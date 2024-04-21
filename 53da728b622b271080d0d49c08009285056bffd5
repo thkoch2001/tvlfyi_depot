@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b785b3fb_d3c49ab7",
+        "filename": "tvix/castore/src/import/error.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-21T17:16:37Z",
+      "side": 1,
+      "message": "We should split these archive specific errors out, but I\u0027ll do so as a followup CL.",
+      "revId": "53da728b622b271080d0d49c08009285056bffd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
