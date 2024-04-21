@@ -16,6 +16,24 @@
       "message": "Ugh. OK for a debug commit, but I think we should have another strategy to communicate the fact things are happening to the user, at least clean this up soon.",
       "revId": "c2752232441b2e008a0e628cc44650b9a57b3439",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b73f56fa_9e00f6db",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 381,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-21T09:15:56Z",
+      "side": 1,
+      "message": "Let\u0027s deal with this in a followup.",
+      "parentUuid": "d52ac6f6_dc78b510",
+      "revId": "c2752232441b2e008a0e628cc44650b9a57b3439",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
