@@ -124,6 +124,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7ca0a039_d76a431b",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-21T17:15:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2632430_6acd9c68",
+      "revId": "c035d79ee046154f40791c410118e9aa752704b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f737e2c_be136b26",
@@ -220,6 +238,24 @@
       "side": 1,
       "message": "I see. I guess returning an empty Vec here if we don\u0027t know about the root node (yet) is Ok.\n\nMaybe we should add a `warn!` in here though.",
       "parentUuid": "c2965e2a_cacc112c",
+      "revId": "c035d79ee046154f40791c410118e9aa752704b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db0ab293_fd048f1f",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-21T17:15:44Z",
+      "side": 1,
+      "message": "This is now reported as an error to match Nix\u0027s behavior. Test included.",
+      "parentUuid": "d4dbdced_b65213c5",
       "revId": "c035d79ee046154f40791c410118e9aa752704b5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
