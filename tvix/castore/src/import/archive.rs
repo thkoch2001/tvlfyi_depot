@@ -15,7 +15,7 @@ use tracing::{instrument, warn, Level};
 
 use crate::blobservice::BlobService;
 use crate::directoryservice::DirectoryService;
-use crate::import::{ingest_entries, Error, IngestionEntry};
+use crate::import::{ingest_entries, Error as ImportError, IngestionEntry};
 use crate::proto::node::Node;
 use crate::B3Digest;
 
@@ -26,6 +26,21 @@ const CONCURRENT_BLOB_UPLOAD_THRESHOLD: u64 = 1024 * 1024;
 /// The maximum amount of bytes allowed to be buffered in memory to perform async blob uploads.
 const MAX_TARBALL_BUFFER_SIZE: usize = 128 * 1024 * 1024;
 
+#[derive(Debug, thiserror::Error)]
+pub enum Error {
+    #[error("error reading archive entry: {0}")]
+    UnableToReadEntry(std::io::Error),
+
+    #[error("unsupported tar entry {0} type: {1:?}")]
+    UnsupportedTarEntry(PathBuf, tokio_tar::EntryType),
+
+    #[error("symlink missing target {0}")]
+    MissingSymlinkTarget(PathBuf),
+
+    #[error("unexpected number of top level directory entries")]
+    UnexpectedNumberOfTopLevelEntries,
+}
+
 /// Ingests elements from the given tar [`Archive`] into a the passed [`BlobService`] and
 /// [`DirectoryService`].
 #[instrument(skip_all, ret(level = Level::TRACE), err)]
@@ -33,7 +48,7 @@ pub async fn ingest_archive<BS, DS, R>(
     blob_service: BS,
     directory_service: DS,
     mut archive: Archive<R>,
-) -> Result<Node, Error>
+) -> Result<Node, ImportError>
 where
     BS: BlobService + Clone + 'static,
     DS: AsRef<dyn DirectoryService>,
@@ -49,16 +64,20 @@ where
     let semaphore = Arc::new(Semaphore::new(MAX_TARBALL_BUFFER_SIZE));
     let mut async_blob_uploads: JoinSet<Result<(), Error>> = JoinSet::new();
 
-    let mut entries_iter = archive.entries().map_err(Error::Archive)?;
-    while let Some(mut entry) = entries_iter.try_next().await.map_err(Error::Archive)? {
-        let path: PathBuf = entry.path().map_err(Error::Archive)?.into();
+    let mut entries_iter = archive.entries().map_err(Error::UnableToReadEntry)?;
+    while let Some(mut entry) = entries_iter
+        .try_next()
+        .await
+        .map_err(Error::UnableToReadEntry)?
+    {
+        let path: PathBuf = entry.path().map_err(Error::UnableToReadEntry)?.into();
 
         let header = entry.header();
         let entry = match header.entry_type() {
             tokio_tar::EntryType::Regular
             | tokio_tar::EntryType::GNUSparse
             | tokio_tar::EntryType::Continuous => {
-                let header_size = header.size().map_err(Error::Archive)?;
+                let header_size = header.size().map_err(Error::UnableToReadEntry)?;
 
                 // If the blob is small enough, read it off the wire, compute the digest,
                 // and upload it to the [BlobService] in the background.
@@ -79,7 +98,7 @@ where
                         .unwrap();
                     let size = tokio::io::copy(&mut reader, &mut buffer)
                         .await
-                        .map_err(Error::Archive)?;
+                        .map_err(Error::UnableToReadEntry)?;
 
                     let digest: B3Digest = hasher.finalize().as_bytes().into();
 
@@ -92,9 +111,10 @@ where
 
                                 tokio::io::copy(&mut Cursor::new(buffer), &mut writer)
                                     .await
-                                    .map_err(Error::Archive)?;
+                                    .map_err(Error::UnableToReadEntry)?;
 
-                                let blob_digest = writer.close().await.map_err(Error::Archive)?;
+                                let blob_digest =
+                                    writer.close().await.map_err(Error::UnableToReadEntry)?;
 
                                 assert_eq!(digest, blob_digest, "Tvix bug: blob digest mismatch");
 
@@ -112,9 +132,9 @@ where
 
                     let size = tokio::io::copy(&mut entry, &mut writer)
                         .await
-                        .map_err(Error::Archive)?;
+                        .map_err(Error::UnableToReadEntry)?;
 
-                    let digest = writer.close().await.map_err(Error::Archive)?;
+                    let digest = writer.close().await.map_err(Error::UnableToReadEntry)?;
 
                     (size, digest)
                 };
@@ -122,14 +142,14 @@ where
                 IngestionEntry::Regular {
                     path,
                     size,
-                    executable: entry.header().mode().map_err(Error::Archive)? & 64 != 0,
+                    executable: entry.header().mode().map_err(Error::UnableToReadEntry)? & 64 != 0,
                     digest,
                 }
             }
             tokio_tar::EntryType::Symlink => IngestionEntry::Symlink {
                 target: entry
                     .link_name()
-                    .map_err(Error::Archive)?
+                    .map_err(Error::UnableToReadEntry)?
                     .ok_or_else(|| Error::MissingSymlinkTarget(path.clone()))?
                     .into(),
                 path,
@@ -141,7 +161,7 @@ where
 
             tokio_tar::EntryType::XGlobalHeader | tokio_tar::EntryType::XHeader => continue,
 
-            entry_type => return Err(Error::UnsupportedTarEntry(path, entry_type)),
+            entry_type => return Err(Error::UnsupportedTarEntry(path, entry_type).into()),
         };
 
         nodes.add(entry)?;
