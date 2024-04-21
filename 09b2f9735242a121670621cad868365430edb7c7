@@ -33,6 +33,24 @@
       "message": "replace with an expect(\"task panicked\")",
       "revId": "09b2f9735242a121670621cad868365430edb7c7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a144b79_46b51b4e",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-21T17:18:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "856a64f0_e27d3f71",
+      "revId": "09b2f9735242a121670621cad868365430edb7c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
