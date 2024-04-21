@@ -108,6 +108,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a2632430_6acd9c68",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-21T09:13:28Z",
+      "side": 1,
+      "message": "Oh lol, yes indeed, I somehow didn\u0027t spot the recursion. Can you add a comment, either here, or in the docstring, describing the behaviour a bit more?\n\n// Recursively add the parent node until it hits the root node.",
+      "parentUuid": "1c9986c9_7ee6a081",
+      "revId": "c035d79ee046154f40791c410118e9aa752704b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6f737e2c_be136b26",
         "filename": "tvix/castore/src/import/archive.rs",
         "patchSetId": 6
@@ -184,6 +202,24 @@
       "side": 1,
       "message": "I\u0027m not sure that would help, the initial node may not be the `root_node`",
       "parentUuid": "44b7f250_f159b024",
+      "revId": "c035d79ee046154f40791c410118e9aa752704b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4dbdced_b65213c5",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-21T09:13:28Z",
+      "side": 1,
+      "message": "I see. I guess returning an empty Vec here if we don\u0027t know about the root node (yet) is Ok.\n\nMaybe we should add a `warn!` in here though.",
+      "parentUuid": "c2965e2a_cacc112c",
       "revId": "c035d79ee046154f40791c410118e9aa752704b5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
