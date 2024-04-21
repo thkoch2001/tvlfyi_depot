@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "09b73566_29544303",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-21T22:44:28Z",
+      "side": 1,
+      "message": "I changed the semaphore to be weighted based on the number of bytes that will need to be buffered.\n\nAgree that it would be nice to figure out how to do this in a more general way. It would be possible to extract this out to a struct that could be shared between different sources, but that doesn\u0027t really address the desired concurrency of the different `BlobService` implementations.",
+      "parentUuid": "df105b2c_9439d169",
+      "revId": "09b2f9735242a121670621cad868365430edb7c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "856a64f0_e27d3f71",
