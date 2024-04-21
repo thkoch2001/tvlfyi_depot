@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df105b2c_9439d169",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-21T09:08:14Z",
+      "side": 1,
+      "message": "Hmmh, this would also become a problem when processing any other linear stream of data - like reading a NAR off a http request, or received through the daemon protocol.\n\nWe\u0027ll end up duplicating parts of this logic over and over again.\n\nAt least the part blocking concurrency of simultaneous blob uploads would be something I\u0027d entirely leave up to the individual BlobService. These numbers can be much higher for local ones, compared to remote ones.\n\nFor example, for gRPC we can limit the concurrency while establishing the connection: https://docs.rs/tonic/latest/tonic/transport/index.html#client.\n\nI\u0027d assume we\u0027d see this as the blob_writer staying pending on the first write to it.\n\nDon\u0027t want to block this CL unnecessarily, but what about keeping `ASYNC_UPLOAD_THRESHOLD`, but simplifying the rest of the logic to a `MAX_TARBALL_BUFFER_SIZE` semaphore, from which we acquire a blob-sized amount of permits if the blob is smaller than `ASYNC_UPLOAD_THRESHOLD`, and then spawn off the actual copying?\n\nThat way we would still set a limit to the total number of bytes in flight for a given tarball to limit memory consumption, but don\u0027t do artificial restrictions on the number of concurrent blob uploads.",
+      "revId": "09b2f9735242a121670621cad868365430edb7c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "856a64f0_e27d3f71",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-21T09:08:14Z",
+      "side": 1,
+      "message": "replace with an expect(\"task panicked\")",
+      "revId": "09b2f9735242a121670621cad868365430edb7c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
