@@ -1,4 +1,4 @@
-//! Contains builtins that fetch paths from the Internet
+//! Contains builtins that fetch paths from the Internet, or local filesystem.
 
 use super::utils::select_string;
 use crate::{
@@ -64,6 +64,9 @@ async fn extract_fetch_args(
 #[allow(unused_variables)] // for the `state` arg, for now
 #[builtins(state = "Rc<TvixStoreIO>")]
 pub(crate) mod fetcher_builtins {
+    use crate::builtins::FetcherError;
+    use url::Url;
+
     use super::*;
 
     /// Consumes a fetch.
@@ -112,13 +115,17 @@ pub(crate) mod fetcher_builtins {
         co: GenCo,
         args: Value,
     ) -> Result<Value, ErrorKind> {
-        let (url, name, exp_sha256) = match extract_fetch_args(&co, args).await? {
+        let (url_str, name, exp_sha256) = match extract_fetch_args(&co, args).await? {
             Ok((url, name, exp_sha256)) => (url, name, exp_sha256),
             Err(cek) => return Ok(Value::from(cek)),
         };
 
         // Derive the name from the URL basename if not set explicitly.
-        let name = name.unwrap_or_else(|| url_basename(&url).to_owned());
+        let name = name.unwrap_or_else(|| url_basename(&url_str).to_owned());
+
+        // Parse the URL.
+        let url = Url::parse(&url_str)
+            .map_err(|e| ErrorKind::TvixError(Rc::new(FetcherError::InvalidUrl(e))))?;
 
         fetch_lazy(
             state,
@@ -133,13 +140,17 @@ pub(crate) mod fetcher_builtins {
         co: GenCo,
         args: Value,
     ) -> Result<Value, ErrorKind> {
-        let (url, name, exp_sha256) = match extract_fetch_args(&co, args).await? {
+        let (url_str, name, exp_sha256) = match extract_fetch_args(&co, args).await? {
             Ok((url, name, nix_hash)) => (url, name, nix_hash),
             Err(cek) => return Ok(Value::from(cek)),
         };
 
         // Name defaults to "source" if not set explicitly.
         let name = name.unwrap_or_else(|| "source".to_owned());
+
+        // Parse the URL.
+        let url = Url::parse(&url_str)
+            .map_err(|e| ErrorKind::TvixError(Rc::new(FetcherError::InvalidUrl(e))))?;
 
         fetch_lazy(state, name, Fetch::Tarball(url, exp_sha256))
     }
