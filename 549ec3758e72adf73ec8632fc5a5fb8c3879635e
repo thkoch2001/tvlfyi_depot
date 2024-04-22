@@ -107,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ec72d12c_10ae055b",
+        "filename": "tvix/glue/src/fetchers.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-22T21:02:47Z",
+      "side": 1,
+      "message": "ah, the function doesn\u0027t need to return [u8; Digest::output_size()] anymore it can return NixHash now. This should work, yes.",
+      "parentUuid": "677b1dac_c1a3613b",
+      "revId": "549ec3758e72adf73ec8632fc5a5fb8c3879635e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4cde91f1_0e39eb39",
         "filename": "tvix/glue/src/fetchers.rs",
         "patchSetId": 5
