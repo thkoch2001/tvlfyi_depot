@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a61b2ec6_4d44f7c9",
+        "filename": "tvix/glue/src/fetchers.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-22T19:40:19Z",
+      "side": 1,
+      "message": "use https://docs.rs/url/latest/url/struct.Url.html#method.to_file_path",
+      "revId": "a5114d1a5de9251a2168e7e7e2586b0ba992eb74",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
