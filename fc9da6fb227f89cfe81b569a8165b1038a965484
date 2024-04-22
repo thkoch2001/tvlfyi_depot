@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed68cf78_a8eb2c46",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-22T14:41:40Z",
+      "side": 1,
+      "message": "if you add an `#[into]` in here, you don\u0027t need to litter the `.map_err(Error::UnableToReadEntry)?` everywhere, you only need the `?` - the same way you did in `tvix/castore/src/import/error.rs`.\n\nOr is there a specific reason not to do this, did you mean to add a field specifying the path inside the archive?",
+      "revId": "fc9da6fb227f89cfe81b569a8165b1038a965484",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
