@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bf383fc_be979a8f",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-22T20:57:17Z",
+      "side": 1,
+      "message": "semi-nit: given the ambient complexity, please add a type alias here",
+      "revId": "549ec3758e72adf73ec8632fc5a5fb8c3879635e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08f17e61_609ae3f5",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-22T20:57:17Z",
+      "side": 1,
+      "message": "contextless string, not contextful ones",
+      "revId": "549ec3758e72adf73ec8632fc5a5fb8c3879635e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ec655ef_81981cf8",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-22T20:57:17Z",
+      "side": 1,
+      "message": "extract this to a constant",
+      "revId": "549ec3758e72adf73ec8632fc5a5fb8c3879635e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c918e71_8e7c6c44",
+        "filename": "tvix/glue/src/fetchers.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-22T20:57:17Z",
+      "side": 1,
+      "message": "all this is repeated and i don\u0027t see a fundamental reason for why\nyou could have a generic helper in the hash and promote it into a NixHash automatically",
+      "revId": "549ec3758e72adf73ec8632fc5a5fb8c3879635e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cde91f1_0e39eb39",
+        "filename": "tvix/glue/src/fetchers.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-22T20:57:17Z",
+      "side": 1,
+      "message": "I think it should be renamed to a better suited name, `self.fetch(fetch)` is really weird",
+      "revId": "549ec3758e72adf73ec8632fc5a5fb8c3879635e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
