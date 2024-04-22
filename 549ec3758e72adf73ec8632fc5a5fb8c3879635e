@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "677b1dac_c1a3613b",
+        "filename": "tvix/glue/src/fetchers.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-22T20:59:15Z",
+      "side": 1,
+      "message": "I wasn\u0027t able to access Digest::Size in a generic function signature over all possible digests.\n\nI\u0027d be more than happy to be proven wrong ;-)",
+      "parentUuid": "7c918e71_8e7c6c44",
+      "revId": "549ec3758e72adf73ec8632fc5a5fb8c3879635e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4cde91f1_0e39eb39",
         "filename": "tvix/glue/src/fetchers.rs",
         "patchSetId": 5
