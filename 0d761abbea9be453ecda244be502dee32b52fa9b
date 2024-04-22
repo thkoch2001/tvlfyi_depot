@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0cc836f6_e097be03",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-22T20:59:12Z",
+      "side": 1,
+      "message": "nit: `queue_fetch`",
+      "revId": "0d761abbea9be453ecda244be502dee32b52fa9b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
