@@ -67,7 +67,7 @@ rec {
   # Start a `tvix-store` virtiofs daemon from $PATH, then a cloud-hypervisor
   # pointed to it.
   # Supports the following env vars (and defaults)
-  # CH_NUM_CPUS=1
+  # CH_NUM_CPUS=2
   # CH_MEM_SIZE=512M
   # CH_CMDLINE=""
   runVM = pkgs.writers.writeBashBin "run-tvix-vm" ''
@@ -89,7 +89,7 @@ rec {
     # Wait for the socket to exist.
     until [ -e $tempdir/tvix.sock ]; do sleep 0.1; done
 
-    CH_NUM_CPUS="''${CH_NUM_CPUS:-1}"
+    CH_NUM_CPUS="''${CH_NUM_CPUS:-2}"
     CH_MEM_SIZE="''${CH_MEM_SIZE:-512M}"
     CH_CMDLINE="''${CH_CMDLINE:-}"
 
@@ -102,7 +102,7 @@ rec {
      --kernel ${kernel.dev}/vmlinux \
      --initramfs ${initrd} \
      --cmdline "console=ttyS0 $CH_CMDLINE" \
-     --fs tag=tvix,socket=$tempdir/tvix.sock,num_queues=1,queue_size=512
+     --fs tag=tvix,socket=$tempdir/tvix.sock,num_queues=''${CH_NUM_CPU},queue_size=512
   '';
 
   meta.ci.targets = [
