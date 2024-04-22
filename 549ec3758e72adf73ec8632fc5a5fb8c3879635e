@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9e748795_f459d597",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-22T21:00:23Z",
+      "side": 1,
+      "message": "I don\u0027t understand. Can you clarify / propose a change?",
+      "parentUuid": "08f17e61_609ae3f5",
+      "revId": "549ec3758e72adf73ec8632fc5a5fb8c3879635e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "9ec655ef_81981cf8",
         "filename": "tvix/glue/src/builtins/fetchers.rs",
         "patchSetId": 5
