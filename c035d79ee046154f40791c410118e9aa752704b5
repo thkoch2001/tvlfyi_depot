@@ -260,6 +260,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d48fc476_8ef9a8ff",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-22T14:37:40Z",
+      "side": 1,
+      "message": "Thanks!",
+      "parentUuid": "db0ab293_fd048f1f",
+      "revId": "c035d79ee046154f40791c410118e9aa752704b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a716ed50_d58ba0f7",
