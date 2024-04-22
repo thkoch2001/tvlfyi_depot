@@ -18,6 +18,7 @@ use tvix_store::{pathinfoservice::PathInfoService, proto::PathInfo};
 use crate::{builtins::FetcherError, decompression::DecompressedReader};
 
 /// Representing options for doing a fetch.
+#[derive(Clone, Debug, PartialEq, Eq)]
 pub enum Fetch {
     /// Fetch a literal file from the given URL, with an optional expected
     /// NixHash of it.
