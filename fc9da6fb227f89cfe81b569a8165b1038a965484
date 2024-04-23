@@ -16,6 +16,24 @@
       "message": "if you add an `#[into]` in here, you don\u0027t need to litter the `.map_err(Error::UnableToReadEntry)?` everywhere, you only need the `?` - the same way you did in `tvix/castore/src/import/error.rs`.\n\nOr is there a specific reason not to do this, did you mean to add a field specifying the path inside the archive?",
       "revId": "fc9da6fb227f89cfe81b569a8165b1038a965484",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c57f786_c33af509",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-23T15:29:21Z",
+      "side": 1,
+      "message": "`#[into]` doesn\u0027t work here because `ingest_archive` returns an `import::Error` not a `archive::Error`.\n\nMaybe we should make `ingest_archive` return an `archive::Error` which can include an `import` error. And then we wouldn\u0027t need a `Archive` variant on the `import::Error`?",
+      "parentUuid": "ed68cf78_a8eb2c46",
+      "revId": "fc9da6fb227f89cfe81b569a8165b1038a965484",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
