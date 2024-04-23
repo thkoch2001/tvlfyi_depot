@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d82d6382_38155dd6",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-23T12:20:11Z",
+      "side": 1,
+      "message": "I even made it a struct, so we can name these arguments. PTAL.",
+      "parentUuid": "7bf383fc_be979a8f",
+      "revId": "549ec3758e72adf73ec8632fc5a5fb8c3879635e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "08f17e61_609ae3f5",
         "filename": "tvix/glue/src/builtins/fetchers.rs",
         "patchSetId": 5
@@ -71,6 +89,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "84d75436_139ae3de",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-23T12:20:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc1ccaa7_51d582bb",
+      "revId": "549ec3758e72adf73ec8632fc5a5fb8c3879635e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9ec655ef_81981cf8",
@@ -84,6 +120,24 @@
       "writtenOn": "2024-04-22T20:57:17Z",
       "side": 1,
       "message": "extract this to a constant",
+      "revId": "549ec3758e72adf73ec8632fc5a5fb8c3879635e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fafdb749_62e8bd21",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-23T12:20:11Z",
+      "side": 1,
+      "message": "A bit silly as it\u0027s really local to there, but done.",
+      "parentUuid": "9ec655ef_81981cf8",
       "revId": "549ec3758e72adf73ec8632fc5a5fb8c3879635e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -143,6 +197,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ec93f286_42535edd",
+        "filename": "tvix/glue/src/fetchers.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-23T12:20:11Z",
+      "side": 1,
+      "message": "I added a private `hash` function to this file, and changed this match to be over the `NixHash::algo` from the `exp_nixhash`. PTAL.",
+      "parentUuid": "ec72d12c_10ae055b",
+      "revId": "549ec3758e72adf73ec8632fc5a5fb8c3879635e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4cde91f1_0e39eb39",
         "filename": "tvix/glue/src/fetchers.rs",
         "patchSetId": 5
@@ -154,6 +226,24 @@
       "writtenOn": "2024-04-22T20:57:17Z",
       "side": 1,
       "message": "I think it should be renamed to a better suited name, `self.fetch(fetch)` is really weird",
+      "revId": "549ec3758e72adf73ec8632fc5a5fb8c3879635e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1b3ba9f_6ec34dad",
+        "filename": "tvix/glue/src/fetchers.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 249,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-23T12:20:11Z",
+      "side": 1,
+      "message": "I renamed `fetch` to `ingest`, and `fetch_and_persist` to `ingest_and_persist`.\n\n`ingest` is similar to the naming scheme in `tvix-castore`, and `ingest` is only dealing with the castore parts, while `ingest_and_persist` does also deal with the `PathInfoService` bits. I think that\u0027s as good as it can get for now.\n\nOnce we can come up with an even  better naming scheme we can revisit this.",
+      "parentUuid": "4cde91f1_0e39eb39",
       "revId": "549ec3758e72adf73ec8632fc5a5fb8c3879635e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
