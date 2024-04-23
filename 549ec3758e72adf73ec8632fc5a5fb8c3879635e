@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dd9ab75f_cbc44c68",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-23T12:30:30Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d82d6382_38155dd6",
+      "revId": "549ec3758e72adf73ec8632fc5a5fb8c3879635e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "08f17e61_609ae3f5",
@@ -209,6 +227,24 @@
       "side": 1,
       "message": "I added a private `hash` function to this file, and changed this match to be over the `NixHash::algo` from the `exp_nixhash`. PTAL.",
       "parentUuid": "ec72d12c_10ae055b",
+      "revId": "549ec3758e72adf73ec8632fc5a5fb8c3879635e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f00f25c_0bc885ad",
+        "filename": "tvix/glue/src/fetchers.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-04-23T12:30:30Z",
+      "side": 1,
+      "message": "That\u0027s much better IMHO, I doubt we can do better.",
+      "parentUuid": "ec93f286_42535edd",
       "revId": "549ec3758e72adf73ec8632fc5a5fb8c3879635e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
