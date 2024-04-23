@@ -52,6 +52,24 @@
       "parentUuid": "5c57f786_c33af509",
       "revId": "fc9da6fb227f89cfe81b569a8165b1038a965484",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ad0c76b_cb88d5f6",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-23T17:12:14Z",
+      "side": 1,
+      "message": "Done. We can do this for fs ingestion as a followup",
+      "parentUuid": "cfc5c2fa_afaae892",
+      "revId": "fc9da6fb227f89cfe81b569a8165b1038a965484",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
