@@ -16,6 +16,24 @@
       "message": "nit: `queue_fetch`",
       "revId": "0d761abbea9be453ecda244be502dee32b52fa9b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c856ce21_ed1120a7",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-23T12:40:29Z",
+      "side": 1,
+      "message": "I disagree - this is consistent with `add_derivation`. This \"adds\" a fetch to the known paths tracking. There\u0027s no queuing happening, it\u0027s all currently done as late as possible inside TvixStoreIO.",
+      "parentUuid": "0cc836f6_e097be03",
+      "revId": "0d761abbea9be453ecda244be502dee32b52fa9b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
