@@ -34,6 +34,24 @@
       "parentUuid": "ed68cf78_a8eb2c46",
       "revId": "fc9da6fb227f89cfe81b569a8165b1038a965484",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cfc5c2fa_afaae892",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-23T16:09:31Z",
+      "side": 1,
+      "message": "Yes having ingestion-type specific errors returned by these entrypoints, rather than having to extend a generic import error wrapper error enum sounds like the right idea.\n\nSimilarly, we should have a dedicated error type for the error case of tvix_castore::import::fs::ingest_path function (and once we get there, NAR-specific errors for the async NAR reader)\n\nI looked at the error cases for `ingest_entries`. Since it now doesn\u0027t poll blob futures anymore, there\u0027s little reason for it to return most of the errors too.\n\nIf we now drop the `IngestionEntry::Unknown` enum kind (as sockets and other stuff are only representable in a real FS, and never in castore), the only error it would return is those returned from the directoryservice backend, which sounds much cleaner.",
+      "parentUuid": "5c57f786_c33af509",
+      "revId": "fc9da6fb227f89cfe81b569a8165b1038a965484",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
