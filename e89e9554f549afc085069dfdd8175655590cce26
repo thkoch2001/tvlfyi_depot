@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "548e7bad_19f8f1fd",
+        "filename": "tvix/glue/src/fetchers.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-23T12:20:11Z",
+      "side": 1,
+      "message": "URL is always Some. The debug output of nixhash isn\u0027t too useful.",
+      "parentUuid": "7c281943_54a449c2",
+      "revId": "e89e9554f549afc085069dfdd8175655590cce26",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb58a928_d355d09c",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-04-22T21:13:29Z",
       "side": 1,
       "message": "seems a useless comment to me",
+      "revId": "e89e9554f549afc085069dfdd8175655590cce26",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49e1cd11_dc5dcfd6",
+        "filename": "tvix/glue/src/fetchers.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-23T12:20:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb58a928_d355d09c",
       "revId": "e89e9554f549afc085069dfdd8175655590cce26",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
