@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1df6fd59_4f8f1f53",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-23T15:50:57Z",
+      "side": 1,
+      "message": "Let\u0027s make CONCURRENT_BLOB_UPLOAD_THRESHOLD a u32 const, add a comment it\u0027s u32 because acquire_many_owned takes a u32.\n\nAnd convert header_size to u32 inside this match (referring to CONCURRENT_BLOB_UPLOAD_THRESHOLD being u32).\n\nI don\u0027t want the argument to acquire_many_owned to overflow unnoticed.",
+      "revId": "e5bc26d16ca4b4989bbfdbba53c04016e50715ec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
