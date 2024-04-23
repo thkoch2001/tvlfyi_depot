@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c68fdf93_84590661",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 13
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-23T15:21:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b5c5c65_b981b765",
+      "revId": "a80048b6ad108eb98a4d5ed251df76a4be9a5251",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd9cdf47_ee38bdef",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-04-22T14:37:40Z",
       "side": 1,
       "message": "We probably want to log a `warn!` here, with the path, old and new node as fields.",
+      "revId": "a80048b6ad108eb98a4d5ed251df76a4be9a5251",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4d20bac_b0ab771e",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 13
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-04-23T15:21:44Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd9cdf47_ee38bdef",
       "revId": "a80048b6ad108eb98a4d5ed251df76a4be9a5251",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
