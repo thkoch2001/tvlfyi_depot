@@ -298,10 +298,16 @@ where
         let store_path = build_ca_path(name, &ca_hash, Vec::<String>::new(), false)?;
 
         // Rename the node name to match the Store Path.
-        if let Node::File(file_node) = &mut node {
-            file_node.name = store_path.to_string().into();
-        } else {
-            unreachable!("Tvix bug: do_fetch for URL returned non-FileNode");
+        match &mut node {
+            Node::Directory(directory_node) => {
+                directory_node.name = store_path.to_string().into();
+            }
+            Node::File(file_node) => {
+                file_node.name = store_path.to_string().into();
+            }
+            Node::Symlink(symlink_node) => {
+                symlink_node.name = store_path.to_string().into();
+            }
         }
 
         // If the resulting hash is not a CAHash::Nar, we also need to invoke
