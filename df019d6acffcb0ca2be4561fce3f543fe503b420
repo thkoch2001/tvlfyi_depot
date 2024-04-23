@@ -16,6 +16,24 @@
       "message": "Can you use `node.rename(store_path.to_string().into())`?",
       "revId": "df019d6acffcb0ca2be4561fce3f543fe503b420",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0338067_a707504b",
+        "filename": "tvix/glue/src/fetchers.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-23T14:34:01Z",
+      "side": 1,
+      "message": "I somehow forgot about this 😊 Updated, thanks!",
+      "parentUuid": "dbf003df_149cd5ec",
+      "revId": "df019d6acffcb0ca2be4561fce3f543fe503b420",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
