@@ -142,6 +142,7 @@ in
       scan-interval = 5;
       scan-at-start-enabled = true;
       podcast-path = [ "/tmp/fake-podcasts" ];
+      playlists-path = [ "/tmp/fake-playlists" ];
       music-path = [ "/var/lib/geesefs/tazjins-files/music" ];
     };
   };

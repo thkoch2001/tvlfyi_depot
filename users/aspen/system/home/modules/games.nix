@@ -22,7 +22,7 @@ let
   '';
 
   d_init = runCommand "d_init.txt" { } ''
-    substitute "${df-orig}/data/init/d_init.txt" $out \
+    substitute "${df-orig}/data/init/d_init_default.txt" $out \
       --replace "[AUTOSAVE:NONE]" "[AUTOSAVE:SEASONAL]" \
       --replace "[AUTOSAVE_PAUSE:NO]" "[AUTOSAVE_PAUSE:YES]" \
       --replace "[INITIAL_SAVE:NO]" "[INITIAL_SAVE:YES]" \
