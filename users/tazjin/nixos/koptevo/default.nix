@@ -129,10 +129,11 @@ in
     '';
   };
 
-  # I don't use the podcast feature, but I *have to* supply podcasts
-  # to gonic ...
+  # I don't use the podcast nor playlist feature,
+  # but I *have to* supply podcasts to gonic ...
   systemd.tmpfiles.rules = [
     "d /tmp/fake-podcasts 0555 nobody nobody -"
+    "d /tmp/fake-playlists 0555 nobody nobody -"
   ];
 
   services.gonic = {
@@ -142,6 +143,7 @@ in
       scan-interval = 5;
       scan-at-start-enabled = true;
       podcast-path = [ "/tmp/fake-podcasts" ];
+      playlists-path = [ "/tmp/fake-playlists" ];
       music-path = [ "/var/lib/geesefs/tazjins-files/music" ];
     };
   };
