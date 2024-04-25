@@ -1,4 +1,22 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86ae2e5d_d8118a42",
+        "filename": "tvix/nix-compat/src/wire/bytes/reader/trailer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-25T23:50:52Z",
+      "side": 1,
+      "message": "TrailerReader feels more like a Future than an AsyncRead.\nI am not 100% what the return type of that future is since I don\u0027t think \u0026[u8] works but the functionally doesn\u0027t fit with AsyncRead (i.e. a type where you can read a stream of bytes from) it feels more like tokio::io::ReadU64 (i.e. a future that reads 8 bytes from a reader and returns the bytes).",
+      "revId": "904cc454fbb4122f100138ed3d83cede9e207033",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ],
   "submitRequirementResults": []
 }
