@@ -61,6 +61,21 @@ where
             state: BytesPacketPosition::Size(0),
         }
     }
+
+    /// Construct a new BytesReader with a known, and already-read size.
+    pub fn with_size(r: R, size: u64) -> Self {
+        // TODO: write tests
+        Self {
+            inner: r,
+            allowed_size: size..=size,
+            payload_size: u64::to_le_bytes(size),
+            state: if size != 0 {
+                BytesPacketPosition::Payload(0)
+            } else {
+                BytesPacketPosition::Padding(0)
+            },
+        }
+    }
 }
 /// Returns an error if the passed usize is 0.
 #[inline]
