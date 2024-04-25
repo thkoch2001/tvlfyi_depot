@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e567280_52c2c020",
+        "filename": "tvix/nix-compat/src/wire/bytes/reader/trailer.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-25T23:12:31Z",
+      "side": 1,
+      "message": "TODO",
+      "revId": "cf2f57489cb4524a0664ae3dc0eb3c369060c88e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
