@@ -224,4 +224,9 @@
     email = "espes@pequalsnp.com";
     password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$eXeFrbNxuKn/JCpQr5VmxA$NtMNBceNg/JtqMfHk/qHxEHsEVsTWmHJbpq4ve/+XYg";
   }
+  {
+    username = "caralice";
+    email = "tvl@alice-carroll.pet";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$mt/0RzKw4RHxm7ybpMHP5Q$P/SDBMv5si9D98NFO/eZgh2+InlByqYxqAvQWhl+p0c";
+  }
 ]
