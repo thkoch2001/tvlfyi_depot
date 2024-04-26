@@ -31,21 +31,12 @@ struct ArchiveReader<'a, 'r> {
     status: ArchiveReaderStatus<'a>,
 }
 
-macro_rules! poison {
-    ($it:expr) => {
-        #[cfg(debug_assertions)]
-        {
-            $it.status.poison();
-        }
-    };
-}
-
 macro_rules! try_or_poison {
     ($it:expr, $ex:expr) => {
         match $ex {
             Ok(x) => x,
             Err(e) => {
-                poison!($it);
+                $it.status.poison();
                 return Err(e.into());
             }
         }
@@ -88,15 +79,12 @@ impl<'a, 'r> Node<'a, 'r> {
                     try_or_poison!(reader, read::bytes(reader.inner, wire::MAX_TARGET_LEN));
 
                 if target.is_empty() || target.contains(&0) {
-                    poison!(reader);
+                    reader.status.poison();
                     return Err(InvalidData.into());
                 }
 
                 try_or_poison!(reader, read::token(reader.inner, &wire::TOK_PAR));
-                #[cfg(debug_assertions)]
-                {
-                    reader.status.ready_parent(); // Immediately allow reading from parent again
-                }
+                reader.status.ready_parent(); // Immediately allow reading from parent again
 
                 Node::Symlink { target }
             }
@@ -138,10 +126,7 @@ impl<'a, 'r> FileReader<'a, 'r> {
         // already reached semantic EOF by definition.
         if len == 0 {
             read::token(reader.inner, &wire::TOK_PAR)?;
-            #[cfg(debug_assertions)]
-            {
-                reader.status.ready_parent();
-            }
+            reader.status.ready_parent();
         }
 
         Ok(Self {
@@ -175,7 +160,7 @@ impl FileReader<'_, '_> {
         let mut buf = try_or_poison!(self.reader, self.reader.inner.fill_buf());
 
         if buf.is_empty() {
-            poison!(self.reader);
+            self.reader.status.poison();
             return Err(UnexpectedEof.into());
         }
 
@@ -237,7 +222,7 @@ impl Read for FileReader<'_, '_> {
         self.len -= n as u64;
 
         if n == 0 {
-            poison!(self.reader);
+            self.reader.status.poison();
             return Err(UnexpectedEof.into());
         }
 
@@ -260,18 +245,15 @@ impl FileReader<'_, '_> {
             try_or_poison!(self.reader, self.reader.inner.read_exact(&mut buf[pad..]));
 
             if buf != [0; 8] {
-                poison!(self.reader);
+                self.reader.status.poison();
                 return Err(InvalidData.into());
             }
         }
 
         try_or_poison!(self.reader, read::token(self.reader.inner, &wire::TOK_PAR));
 
-        #[cfg(debug_assertions)]
-        {
-            // Done with reading this file, allow going back up the chain of readers
-            self.reader.status.ready_parent();
-        }
+        // Done with reading this file, allow going back up the chain of readers
+        self.reader.status.ready_parent();
 
         Ok(())
     }
@@ -321,10 +303,7 @@ impl<'a, 'r> DirReader<'a, 'r> {
         // Determine if there are more entries to follow
         if let wire::Entry::None = try_or_poison!(self.reader, read::tag(self.reader.inner)) {
             // We've reached the end of this directory.
-            #[cfg(debug_assertions)]
-            {
-                self.reader.status.ready_parent();
-            }
+            self.reader.status.ready_parent();
             return Ok(None);
         }
 
@@ -339,7 +318,7 @@ impl<'a, 'r> DirReader<'a, 'r> {
             || name == b"."
             || name == b".."
         {
-            poison!(self.reader);
+            self.reader.status.poison();
             return Err(InvalidData.into());
         }
 
@@ -350,7 +329,7 @@ impl<'a, 'r> DirReader<'a, 'r> {
             }
             Some(prev_name) => {
                 if *prev_name >= name {
-                    poison!(self.reader);
+                    self.reader.status.poison();
                     return Err(InvalidData.into());
                 }
 
@@ -373,12 +352,12 @@ impl<'a, 'r> DirReader<'a, 'r> {
 ///     so we can check they are abandoned when an error occurs
 ///   * Make sure only the most recently created object is read from, and is fully exhausted
 ///     before anything it was created from is used again.
-#[cfg(debug_assertions)]
 enum ArchiveReaderStatus<'a> {
-    StackTop {
-        poisoned: bool,
-        ready: bool,
-    },
+    #[cfg(not(debug_assertions))]
+    None(PhantomData<&'a ()>),
+    #[cfg(debug_assertions)]
+    StackTop { poisoned: bool, ready: bool },
+    #[cfg(debug_assertions)]
     StackChild {
         poisoned: &'a mut bool,
         parent_ready: &'a mut bool,
@@ -386,12 +365,15 @@ enum ArchiveReaderStatus<'a> {
     },
 }
 
-#[cfg(debug_assertions)]
 impl ArchiveReaderStatus<'_> {
     /// Poison all the objects sharing the same reader, to be used when an error occurs
     fn poison(&mut self) {
         match self {
+            #[cfg(not(debug_assertions))]
+            ArchiveReaderStatus::None(_) => {}
+            #[cfg(debug_assertions)]
             ArchiveReaderStatus::StackTop { poisoned: x, .. } => *x = true,
+            #[cfg(debug_assertions)]
             ArchiveReaderStatus::StackChild { poisoned: x, .. } => **x = true,
         }
     }
@@ -399,10 +381,14 @@ impl ArchiveReaderStatus<'_> {
     /// Mark the parent as ready, allowing it to be used again and preventing this reference to the reader being used again.
     fn ready_parent(&mut self) {
         match self {
-            Self::StackTop { ready, .. } => {
+            #[cfg(not(debug_assertions))]
+            ArchiveReaderStatus::None(_) => {}
+            #[cfg(debug_assertions)]
+            ArchiveReaderStatus::StackTop { ready, .. } => {
                 *ready = false;
             }
-            Self::StackChild {
+            #[cfg(debug_assertions)]
+            ArchiveReaderStatus::StackChild {
                 ready,
                 parent_ready,
                 ..
@@ -415,15 +401,23 @@ impl ArchiveReaderStatus<'_> {
 
     fn poisoned(&self) -> bool {
         match self {
-            Self::StackTop { poisoned, .. } => *poisoned,
-            Self::StackChild { poisoned, .. } => **poisoned,
+            #[cfg(not(debug_assertions))]
+            ArchiveReaderStatus::None(_) => false,
+            #[cfg(debug_assertions)]
+            ArchiveReaderStatus::StackTop { poisoned, .. } => *poisoned,
+            #[cfg(debug_assertions)]
+            ArchiveReaderStatus::StackChild { poisoned, .. } => **poisoned,
         }
     }
 
     fn ready(&self) -> bool {
         match self {
-            Self::StackTop { ready, .. } => *ready,
-            Self::StackChild { ready, .. } => *ready,
+            #[cfg(not(debug_assertions))]
+            ArchiveReaderStatus::None(_) => true,
+            #[cfg(debug_assertions)]
+            ArchiveReaderStatus::StackTop { ready, .. } => *ready,
+            #[cfg(debug_assertions)]
+            ArchiveReaderStatus::StackChild { ready, .. } => *ready,
         }
     }
 }
@@ -462,16 +456,13 @@ impl<'a, 'r> ArchiveReader<'a, 'r> {
     /// Only does anything when debug assertions are on.
     #[inline(always)]
     fn check_correct(&self) {
-        #[cfg(debug_assertions)]
-        {
-            debug_assert!(
-                !self.status.poisoned(),
-                "Archive reader used after it was meant to be abandoned!"
-            );
-            debug_assert!(
-                self.status.ready(),
-                "Non-ready archive reader used! (Should've been reading from something else)"
-            )
-        }
+        assert!(
+            !self.status.poisoned(),
+            "Archive reader used after it was meant to be abandoned!"
+        );
+        assert!(
+            self.status.ready(),
+            "Non-ready archive reader used! (Should've been reading from something else)"
+        );
     }
 }
