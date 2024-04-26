@@ -1,4 +1,5 @@
 use std::{
+    fmt::Debug,
     future::Future,
     marker::PhantomData,
     ops::Deref,
@@ -33,7 +34,7 @@ pub(crate) trait Tag {
     /// Suitably sized buffer for reading [Self::PATTERN]
     ///
     /// HACK: This is a workaround for const generics limitations.
-    type Buf: AsRef<[u8]> + AsMut<[u8]> + Unpin;
+    type Buf: AsRef<[u8]> + AsMut<[u8]> + Debug + Unpin;
 
     /// Make an instance of [Self::Buf]
     fn make_buf() -> Self::Buf;
@@ -131,19 +132,19 @@ impl<R: AsyncRead + Unpin, T: Tag> Future for ReadTrailer<R, T> {
 }
 
 #[derive(Debug)]
-pub(crate) enum TrailerReader<R> {
-    Reading(ReadTrailer<R, Pad>),
+pub(crate) enum TrailerReader<R, T: Tag> {
+    Reading(ReadTrailer<R, T>),
     Releasing { off: u8, data: Trailer },
     Done,
 }
 
-impl<R: AsyncRead + Unpin> TrailerReader<R> {
+impl<R: AsyncRead + Unpin, T: Tag> TrailerReader<R, T> {
     pub fn new(reader: R, data_len: u8) -> Self {
         Self::Reading(read_trailer(reader, data_len))
     }
 }
 
-impl<R: AsyncRead + Unpin> AsyncRead for TrailerReader<R> {
+impl<R: AsyncRead + Unpin, T: Tag> AsyncRead for TrailerReader<R, T> {
     fn poll_read(
         mut self: Pin<&mut Self>,
         cx: &mut task::Context,
@@ -196,7 +197,7 @@ mod tests {
             .read(&[0xef, 0x00])
             .build();
 
-        let mut reader = TrailerReader::new(reader, 2);
+        let mut reader = TrailerReader::<_, Pad>::new(reader, 2);
 
         let mut buf = vec![];
         assert_eq!(
@@ -214,7 +215,7 @@ mod tests {
             .wait(Duration::ZERO)
             .build();
 
-        let mut reader = TrailerReader::new(reader, 2);
+        let mut reader = TrailerReader::<_, Pad>::new(reader, 2);
 
         let mut buf = vec![];
         assert_eq!(
@@ -233,7 +234,7 @@ mod tests {
             .read(&[0x00, 0x00, 0x00, 0x00, 0x00])
             .build();
 
-        let mut reader = TrailerReader::new(reader, 2);
+        let mut reader = TrailerReader::<_, Pad>::new(reader, 2);
 
         let mut buf = vec![];
         reader.read_to_end(&mut buf).await.unwrap();
@@ -244,7 +245,7 @@ mod tests {
     #[tokio::test]
     async fn no_padding() {
         let reader = tokio_test::io::Builder::new().build();
-        let mut reader = TrailerReader::new(reader, 0);
+        let mut reader = TrailerReader::<_, Pad>::new(reader, 0);
 
         let mut buf = vec![];
         reader.read_to_end(&mut buf).await.unwrap();

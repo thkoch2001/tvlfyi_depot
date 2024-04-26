@@ -13,6 +13,8 @@ use std::io::{
 // Required reading for understanding this module.
 use crate::nar::wire;
 
+pub mod r#async;
+
 mod read;
 #[cfg(test)]
 mod test;
@@ -40,6 +42,7 @@ macro_rules! poison {
     };
 }
 
+// TODO: change the poisoning system to poison on method *entry*, and un-poison on successful exit
 macro_rules! try_or_poison {
     ($it:expr, $ex:expr) => {
         match $ex {
