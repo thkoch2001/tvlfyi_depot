@@ -6,7 +6,9 @@ use std::{
 };
 use tokio::io::{AsyncRead, ReadBuf};
 
-use trailer::TrailerReader;
+pub(crate) use trailer::Tag;
+use trailer::{Pad, TrailerReader};
+
 mod trailer;
 
 /// Reads a "bytes wire packet" from the underlying reader.
@@ -27,12 +29,14 @@ mod trailer;
 /// In case of an error due to size constraints, or in case of not reading
 /// all the way to the end (and getting a EOF), the underlying reader is no
 /// longer usable and might return garbage.
-pub struct BytesReader<R> {
-    state: State<R>,
+///
+// TODO: document T: Tag parameter
+pub struct BytesReader<R, T: Tag = Pad> {
+    state: State<R, T>,
 }
 
 #[derive(Debug)]
-enum State<R> {
+enum State<R, T: Tag> {
     Size {
         reader: Option<R>,
         /// Minimum length (inclusive)
@@ -47,10 +51,10 @@ enum State<R> {
         consumed: u64,
         user_len: u64,
     },
-    Trailer(TrailerReader<R>),
+    Trailer(TrailerReader<R, T>),
 }
 
-impl<R> BytesReader<R>
+impl<R, T: Tag> BytesReader<R, T>
 where
     R: AsyncRead + Unpin,
 {
@@ -91,7 +95,7 @@ where
     }
 }
 
-impl<R: AsyncRead + Unpin> AsyncRead for BytesReader<R> {
+impl<R: AsyncRead + Unpin, T: Tag> AsyncRead for BytesReader<R, T> {
     fn poll_read(
         mut self: Pin<&mut Self>,
         cx: &mut task::Context,
@@ -249,7 +253,7 @@ mod tests {
             .read(&produce_packet_bytes(payload).await)
             .build();
 
-        let mut r = BytesReader::new(&mut mock, ..=LARGE_PAYLOAD.len() as u64);
+        let mut r = BytesReader::<_, Pad>::new(&mut mock, ..=LARGE_PAYLOAD.len() as u64);
         let mut buf = Vec::new();
         r.read_to_end(&mut buf).await.expect("must succeed");
 
@@ -276,7 +280,7 @@ mod tests {
 
         let mut mock = Builder::new().read(&packet[8..]).build();
 
-        let mut r = BytesReader::with_size(&mut mock, size);
+        let mut r = BytesReader::<_, Pad>::with_size(&mut mock, size);
         let mut buf = Vec::new();
         r.read_to_end(&mut buf).await.expect("must succeed");
 
@@ -291,7 +295,7 @@ mod tests {
             .read(&produce_packet_bytes(payload).await[0..8]) // We stop reading after the size packet
             .build();
 
-        let mut r = BytesReader::new(&mut mock, ..2048);
+        let mut r = BytesReader::<_, Pad>::new(&mut mock, ..2048);
         let mut buf = Vec::new();
         assert_err!(r.read_to_end(&mut buf).await);
     }
@@ -304,7 +308,7 @@ mod tests {
             .read(&produce_packet_bytes(payload).await[0..8]) // We stop reading after the size packet
             .build();
 
-        let mut r = BytesReader::new(&mut mock, 1024..2048);
+        let mut r = BytesReader::<_, Pad>::new(&mut mock, 1024..2048);
         let mut buf = Vec::new();
         assert_err!(r.read_to_end(&mut buf).await);
     }
@@ -318,7 +322,7 @@ mod tests {
         packet_bytes[12] = 0xff;
         let mut mock = Builder::new().read(&packet_bytes).build(); // We stop reading after the faulty bit
 
-        let mut r = BytesReader::new(&mut mock, ..MAX_LEN);
+        let mut r = BytesReader::<_, Pad>::new(&mut mock, ..MAX_LEN);
         let mut buf = Vec::new();
 
         r.read_to_end(&mut buf).await.expect_err("must fail");
@@ -335,7 +339,7 @@ mod tests {
             .read(&produce_packet_bytes(payload).await[..4])
             .build();
 
-        let mut r = BytesReader::new(&mut mock, ..MAX_LEN);
+        let mut r = BytesReader::<_, Pad>::new(&mut mock, ..MAX_LEN);
         let mut buf = [0u8; 1];
 
         assert_eq!(
@@ -357,7 +361,7 @@ mod tests {
             .read(&produce_packet_bytes(payload).await[..8 + 4])
             .build();
 
-        let mut r = BytesReader::new(&mut mock, ..MAX_LEN);
+        let mut r = BytesReader::<_, Pad>::new(&mut mock, ..MAX_LEN);
         let mut buf = [0; 9];
 
         r.read_exact(&mut buf[..4]).await.expect("must succeed");
@@ -384,7 +388,7 @@ mod tests {
             .read(&produce_packet_bytes(payload).await[..offset])
             .build();
 
-        let mut r = BytesReader::new(&mut mock, ..MAX_LEN);
+        let mut r = BytesReader::<_, Pad>::new(&mut mock, ..MAX_LEN);
 
         // read_exact of the payload *body* will succeed, but a subsequent read will
         // return UnexpectedEof error.
@@ -411,7 +415,7 @@ mod tests {
             .read_error(std::io::Error::new(std::io::ErrorKind::Other, "foo"))
             .build();
 
-        let mut r = BytesReader::new(&mut mock, ..MAX_LEN);
+        let mut r = BytesReader::<_, Pad>::new(&mut mock, ..MAX_LEN);
         let mut buf = Vec::new();
 
         let err = r.read_to_end(&mut buf).await.expect_err("must fail");
@@ -438,7 +442,7 @@ mod tests {
             .read_error(std::io::Error::new(std::io::ErrorKind::Other, "foo"))
             .build();
 
-        let mut r = BytesReader::new(&mut mock, ..MAX_LEN);
+        let mut r = BytesReader::<_, Pad>::new(&mut mock, ..MAX_LEN);
         let mut buf = Vec::new();
 
         r.read_to_end(&mut buf).await.expect("must succeed");
@@ -462,7 +466,7 @@ mod tests {
             .read(&produce_packet_bytes(payload).await[offset..])
             .build();
 
-        let mut r = BytesReader::new(&mut mock, ..=LARGE_PAYLOAD.len() as u64);
+        let mut r = BytesReader::<_, Pad>::new(&mut mock, ..=LARGE_PAYLOAD.len() as u64);
         let mut buf = Vec::new();
         r.read_to_end(&mut buf).await.expect("must succeed");
 
