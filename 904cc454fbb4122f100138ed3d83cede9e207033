@@ -16,6 +16,24 @@
       "message": "TrailerReader feels more like a Future than an AsyncRead.\nI am not 100% what the return type of that future is since I don\u0027t think \u0026[u8] works but the functionally doesn\u0027t fit with AsyncRead (i.e. a type where you can read a stream of bytes from) it feels more like tokio::io::ReadU64 (i.e. a future that reads 8 bytes from a reader and returns the bytes).",
       "revId": "904cc454fbb4122f100138ed3d83cede9e207033",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec38e74e_d1eb6064",
+        "filename": "tvix/nix-compat/src/wire/bytes/reader/trailer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-04-26T00:42:23Z",
+      "side": 1,
+      "message": "Hmm, that\u0027s fair. We could refactor it to be more that kind of shape, and separate out the part that gives out the body bytes. That might help with the variation that also reads nar::wire::TOK_PAR in addition to the padding before handing back the data, which we\u0027ve been considering so that we can ship an async NAR reader without the contortions my current WIP version has.",
+      "parentUuid": "86ae2e5d_d8118a42",
+      "revId": "904cc454fbb4122f100138ed3d83cede9e207033",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ],
   "submitRequirementResults": []
