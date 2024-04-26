@@ -34,6 +34,24 @@
       "parentUuid": "86ae2e5d_d8118a42",
       "revId": "904cc454fbb4122f100138ed3d83cede9e207033",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b65b4b8_e7dc4049",
+        "filename": "tvix/nix-compat/src/wire/bytes/reader/trailer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-04-26T08:14:51Z",
+      "side": 1,
+      "message": "Implemented in https://cl.tvl.fyi/c/depot/+/11522, thanks for the suggestion. We should even be able to fold the TrailerReader into BytesReader quite easily now 😊",
+      "parentUuid": "ec38e74e_d1eb6064",
+      "revId": "904cc454fbb4122f100138ed3d83cede9e207033",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ],
   "submitRequirementResults": []
