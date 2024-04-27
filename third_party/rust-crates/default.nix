@@ -304,8 +304,8 @@ depot.nix.readTree.drvTargets rec{
 
   libgit2-sys = buildRustCrate {
     pname = "libgit2-sys";
-    version = "0.16.1+1.7.1";
-    sha256 = "05ci61iw5nqhilxmmdpdc5ra8zpawablh2ap1g0lbgzvzmrdncb0";
+    version = "0.16.2+1.7.2";
+    sha256 = "0bs446idbmg8s13jvb0ck6qmrskcdn2mp3d4mn9ggxbmiw4ryd3g";
     dependencies = [
       libc
       libz-sys
