@@ -58,7 +58,6 @@ in
     };
 
     environment.systemPackages = [
-      pkgs.weechat
       pkgs.wget
       pkgs.git
       pkgs.stow
