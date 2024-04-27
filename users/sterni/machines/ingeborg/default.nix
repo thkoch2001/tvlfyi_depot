@@ -17,6 +17,7 @@
     ./http/code.sterni.lv.nix
     ./http/flipdot.openlab-augsburg.de.nix
     ./tv.nix
+    ./quassel.nix
 
     # Inactive:
     # ./http/likely-music.sterni.lv.nix
