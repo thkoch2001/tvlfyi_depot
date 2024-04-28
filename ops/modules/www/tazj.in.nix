@@ -33,6 +33,11 @@
           return 302 https://predlozhnik.ru;
         }
 
+        # redirect for easier entry on a TV
+        location = /tv {
+          return 302 https://tazj.in/blobs/play.html
+        }
+
         # Temporary place for serving static files.
         location /blobs/ {
           alias /var/lib/tazjins-blobs/;
