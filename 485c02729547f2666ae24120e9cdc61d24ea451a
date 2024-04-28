@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d77ff31_cfb8cdc9",
+        "filename": "nix/readTree/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-04-28T06:33:31Z",
+      "side": 1,
+      "message": "Maybe I\u0027m misreading this, but it doesn\u0027t seem quite true.\n\nIf `parent` is a set (lets say you have a default.nix with `_: {a \u003d 15;}` in it), and you have a child folder `b` with `_: 42` in its default.nix, then you would get an attribute set like this:\n\n  {\n    a \u003d 15;\n    b \u003d 42;\n  }\n\nThat is, the child is merged using its name as a key. Maybe merged is actually just a bad word here, and this should be written more explicitly as \"the child will be added to the set, using its name as the key\".",
+      "range": {
+        "startLine": 99,
+        "startChar": 48,
+        "endLine": 99,
+        "endChar": 63
+      },
+      "revId": "485c02729547f2666ae24120e9cdc61d24ea451a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
