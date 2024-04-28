@@ -22,6 +22,30 @@
       },
       "revId": "d84d3ba785de5b49a336adf11680b9d9602c9a2a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c854090b_7a8f801b",
+        "filename": "users/tazjin/nixos/koptevo/default.nix",
+        "patchSetId": 7
+      },
+      "lineNbr": 135,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-04-28T15:26:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6368076f_b1683b5c",
+      "range": {
+        "startLine": 135,
+        "startChar": 0,
+        "endLine": 135,
+        "endChar": 47
+      },
+      "revId": "d84d3ba785de5b49a336adf11680b9d9602c9a2a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
