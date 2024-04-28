@@ -16,6 +16,24 @@
       "message": "@tazjin@tvl.su Is this still needed, do we need to reflect that in our overlay?",
       "revId": "65bc50a698ca7631577f097537bb373d06ecb38f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "097a53d7_5bfcdcae",
+        "filename": "third_party/josh/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-04-28T15:18:59Z",
+      "side": 0,
+      "message": "likely not needed",
+      "parentUuid": "8a4e96b1_96aee528",
+      "revId": "65bc50a698ca7631577f097537bb373d06ecb38f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
