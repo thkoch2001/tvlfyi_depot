@@ -6,7 +6,7 @@ use tokio::io::{AsyncRead, AsyncReadExt, AsyncWrite, AsyncWriteExt};
 
 #[allow(dead_code)]
 /// Read a u64 from the AsyncRead (little endian).
-pub async fn read_u64<R: AsyncReadExt + Unpin>(r: &mut R) -> std::io::Result<u64> {
+pub async fn read_u64<R: AsyncReadExt + Unpin + ?Sized>(r: &mut R) -> std::io::Result<u64> {
     r.read_u64_le().await
 }
 
