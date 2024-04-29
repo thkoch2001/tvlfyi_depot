@@ -93,6 +93,30 @@
       },
       "revId": "485c02729547f2666ae24120e9cdc61d24ea451a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9d4c837_b2314ab6",
+        "filename": "nix/readTree/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-04-29T01:45:14Z",
+      "side": 1,
+      "message": "\u003e Maybe merged is actually just a bad word here\n\nI agree with this but didn\u0027t want to change the wording too much.\n\nDo you have an alternative word that could be used?\n\nI have a successor CL for this which makes `merge` an optional argument to `readTree`.  It will be a while before I know if it\u0027s worth submitting.  I\u0027m currently experimenting with using `infuse.nix` as the implementation of `merge`.  So it would be nice if there were a term for this operation.  But yeah `merge` is probably not a good choice for that term.",
+      "parentUuid": "38bbd9cb_9c409154",
+      "range": {
+        "startLine": 99,
+        "startChar": 48,
+        "endLine": 99,
+        "endChar": 63
+      },
+      "revId": "485c02729547f2666ae24120e9cdc61d24ea451a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
