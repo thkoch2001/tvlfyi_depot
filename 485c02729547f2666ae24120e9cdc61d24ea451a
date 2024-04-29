@@ -69,6 +69,30 @@
       },
       "revId": "485c02729547f2666ae24120e9cdc61d24ea451a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38bbd9cb_9c409154",
+        "filename": "nix/readTree/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-04-29T01:44:33Z",
+      "side": 1,
+      "message": "\u003e If `parent` is a set (lets say you have a default.nix with `_: {a \u003d 15;}` in it), and you have a child folder `b` with `_: 42` in its default.nix, then you would get an attribute set like this:\n\u003e \n\u003e   {\n\u003e     a \u003d 15;\n\u003e     b \u003d 42;\n\u003e   }\n\nGood point!\n\nLet me work on the wording a bit in order to explain that.",
+      "parentUuid": "5d77ff31_cfb8cdc9",
+      "range": {
+        "startLine": 99,
+        "startChar": 48,
+        "endLine": 99,
+        "endChar": 63
+      },
+      "revId": "485c02729547f2666ae24120e9cdc61d24ea451a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
