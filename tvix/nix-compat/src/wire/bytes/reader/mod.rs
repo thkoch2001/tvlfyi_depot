@@ -5,7 +5,7 @@ use std::{
     pin::Pin,
     task::{self, ready, Poll},
 };
-use tokio::io::{AsyncRead, ReadBuf};
+use tokio::io::{AsyncBufRead, AsyncRead, ReadBuf};
 
 use crate::wire::read_u64;
 
@@ -130,12 +130,12 @@ impl<R: AsyncRead + Unpin, T: Tag> AsyncRead for BytesReader<R, T> {
                         *this = State::ReadTrailer(read_trailer(reader, user_len));
                         continue;
                     } else {
-                        reader.as_mut().unwrap()
+                        Pin::new(reader.as_mut().unwrap())
                     };
 
                     let mut bytes_read = 0;
                     ready!(with_limited(buf, remaining, |buf| {
-                        let ret = Pin::new(reader).poll_read(cx, buf);
+                        let ret = reader.poll_read(cx, buf);
                         bytes_read = buf.initialized().len();
                         ret
                     }))?;
@@ -164,6 +164,90 @@ impl<R: AsyncRead + Unpin, T: Tag> AsyncRead for BytesReader<R, T> {
 
                     return Ok(()).into();
                 }
+            }
+        }
+    }
+}
+
+#[allow(private_bounds)]
+impl<R: AsyncBufRead + Unpin, T: Tag> AsyncBufRead for BytesReader<R, T> {
+    fn poll_fill_buf(self: Pin<&mut Self>, cx: &mut task::Context) -> Poll<io::Result<&[u8]>> {
+        let this = &mut self.get_mut().state;
+
+        loop {
+            match this {
+                State::Body {
+                    reader,
+                    consumed,
+                    user_len,
+                } if {
+                    let body_len = *user_len & !7;
+                    let remaining = body_len - *consumed;
+
+                    remaining == 0
+                } =>
+                {
+                    let reader = reader.take().unwrap();
+                    let user_len = (*user_len & 7) as u8;
+
+                    *this = State::ReadTrailer(read_trailer(reader, user_len));
+                    continue;
+                }
+                State::Body {
+                    reader,
+                    consumed,
+                    user_len,
+                } => {
+                    let body_len = *user_len & !7;
+                    let remaining = body_len - *consumed;
+
+                    let reader = Pin::new(reader.as_mut().unwrap());
+
+                    match ready!(reader.poll_fill_buf(cx))? {
+                        &[] => {
+                            return Err(io::ErrorKind::UnexpectedEof.into()).into();
+                        }
+                        mut buf => {
+                            if buf.len() as u64 > remaining {
+                                buf = &buf[..remaining as usize];
+                            }
+
+                            return Ok(buf).into();
+                        }
+                    }
+                }
+                State::ReadTrailer(fut) => {
+                    *this = State::ReleaseTrailer {
+                        consumed: 0,
+                        data: ready!(Pin::new(fut).poll(cx))?,
+                    };
+                }
+                State::ReleaseTrailer { consumed, data } => {
+                    return Ok(&data[*consumed as usize..]).into();
+                }
+            }
+        }
+    }
+
+    fn consume(mut self: Pin<&mut Self>, amt: usize) {
+        match &mut self.state {
+            State::Body {
+                consumed, user_len, ..
+            } => {
+                let body_len = *user_len & !7;
+
+                *consumed = consumed
+                    .checked_add(amt as u64)
+                    .filter(|&consumed| consumed <= body_len)
+                    .expect("consumed out of bounds");
+            }
+            State::ReadTrailer(_) => unreachable!(),
+            State::ReleaseTrailer { consumed, .. } => {
+                *consumed = amt
+                    .try_into()
+                    .ok()
+                    .and_then(|amt| consumed.checked_add(amt))
+                    .expect("consumed out of bounds");
             }
         }
     }
