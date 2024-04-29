@@ -35,7 +35,7 @@ const LEN_SIZE: usize = 8;
 ///
 /// This buffers the entire payload into memory,
 /// a streaming version is available at [crate::wire::bytes::BytesReader].
-pub async fn read_bytes<R, S>(r: &mut R, allowed_size: S) -> std::io::Result<Vec<u8>>
+pub async fn read_bytes<R: ?Sized, S>(r: &mut R, allowed_size: S) -> std::io::Result<Vec<u8>>
 where
     R: AsyncReadExt + Unpin,
     S: RangeBounds<u64>,
