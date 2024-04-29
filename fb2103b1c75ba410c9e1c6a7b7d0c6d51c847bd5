@@ -16,6 +16,24 @@
       "message": "Wondering if we could move the ArchiveReaderStuff into a `poison.rs`, then this import wouldn\u0027t be far up here while only being used 300 lines later.\n\nConsidering we\u0027re planning to use the same thing for the async version too, it might be not a bad idea.",
       "revId": "fb2103b1c75ba410c9e1c6a7b7d0c6d51c847bd5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39addbd5_614a017f",
+        "filename": "tvix/nix-compat/src/nar/reader/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-04-29T13:32:29Z",
+      "side": 1,
+      "message": "ACK, will cover this in followup",
+      "parentUuid": "932ec15d_a1b06020",
+      "revId": "fb2103b1c75ba410c9e1c6a7b7d0c6d51c847bd5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
