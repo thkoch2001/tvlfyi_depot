@@ -33,6 +33,24 @@
       "message": "```suggestion\n                    .canonicalize() // needed on MacOS\n```",
       "revId": "ec528f0c4ca471d454f9e1d7ffc03c505e2596f5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c81a82a6_962f1146",
+        "filename": "tvix/eval/tests/nix_oracle.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000104
+      },
+      "writtenOn": "2024-04-29T19:24:22Z",
+      "side": 1,
+      "message": "This is needed on any system where `std::env::temp_dir()` has a symlink somewhere in the path. MacOS always has a `/tmp` -\u003e `/private/tmp` symlink, but you can reproduce the issue by setting `TMPDIR` to something similarly behaving on Linux.",
+      "parentUuid": "70274796_9a90c135",
+      "revId": "ec528f0c4ca471d454f9e1d7ffc03c505e2596f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
