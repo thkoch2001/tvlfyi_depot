@@ -35,7 +35,7 @@
 
         # redirect for easier entry on a TV
         location = /tv {
-          return 302 https://tazj.in/blobs/play.html
+          return 302 https://tazj.in/blobs/play.html;
         }
 
         # Temporary place for serving static files.
