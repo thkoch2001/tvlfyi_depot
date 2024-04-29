@@ -16,6 +16,24 @@
       "message": "Should this be `exp_hash` instead of `exp_nhash`?",
       "revId": "3d5f14ac0ea29f603e4b62bef265945a57441553",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d32fc8a3_04e6a354",
+        "filename": "tvix/glue/src/fetchers/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-29T17:51:06Z",
+      "side": 1,
+      "message": "Yes, thanks!",
+      "parentUuid": "b1b7dbef_74c50648",
+      "revId": "3d5f14ac0ea29f603e4b62bef265945a57441553",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
