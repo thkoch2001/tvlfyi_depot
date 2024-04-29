@@ -6,7 +6,7 @@ use std::{
     pin::Pin,
     task::{self, ready, Poll},
 };
-use tokio::io::{AsyncRead, AsyncReadExt, ReadBuf};
+use tokio::io::{AsyncBufRead, AsyncRead, AsyncReadExt, ReadBuf};
 
 use trailer::{read_trailer, ReadTrailer, Trailer};
 
@@ -143,12 +143,12 @@ impl<R: AsyncRead + Unpin, T: Tag> AsyncRead for BytesReader<R, T> {
                         *this = State::ReadTrailer(read_trailer(reader, tail_len));
                         continue;
                     } else {
-                        reader.as_mut().unwrap()
+                        Pin::new(reader.as_mut().unwrap())
                     };
 
                     let mut bytes_read = 0;
                     ready!(with_limited(buf, remaining, |buf| {
-                        let ret = Pin::new(reader).poll_read(cx, buf);
+                        let ret = reader.poll_read(cx, buf);
                         bytes_read = buf.initialized().len();
                         ret
                     }))?;
@@ -177,6 +177,94 @@ impl<R: AsyncRead + Unpin, T: Tag> AsyncRead for BytesReader<R, T> {
 
                     return Ok(()).into();
                 }
+            }
+        }
+    }
+}
+
+#[allow(private_bounds)]
+impl<R: AsyncBufRead + Unpin, T: Tag> AsyncBufRead for BytesReader<R, T> {
+    fn poll_fill_buf(self: Pin<&mut Self>, cx: &mut task::Context) -> Poll<io::Result<&[u8]>> {
+        let this = &mut self.get_mut().state;
+
+        loop {
+            match this {
+                State::Body {
+                    reader,
+                    consumed,
+                    user_len,
+                } if {
+                    let (body_len, _) = split_user_len(*user_len);
+                    let remaining = body_len - *consumed;
+
+                    remaining == 0
+                } =>
+                {
+                    let reader = reader.take().unwrap();
+                    let (_, tail_len) = split_user_len(*user_len);
+
+                    *this = State::ReadTrailer(read_trailer(reader, tail_len));
+                    continue;
+                }
+                State::Body {
+                    reader,
+                    consumed,
+                    user_len,
+                } => {
+                    let (body_len, _) = split_user_len(*user_len);
+                    let remaining = body_len - *consumed;
+
+                    let reader = Pin::new(reader.as_mut().unwrap());
+
+                    match ready!(reader.poll_fill_buf(cx))? {
+                        &[] => {
+                            return Err(io::ErrorKind::UnexpectedEof.into()).into();
+                        }
+                        mut buf => {
+                            if buf.len() as u64 > remaining {
+                                buf = &buf[..remaining as usize];
+                            }
+
+                            return Ok(buf).into();
+                        }
+                    }
+                }
+                State::ReadTrailer(fut) => {
+                    *this = State::ReleaseTrailer {
+                        consumed: 0,
+                        data: ready!(Pin::new(fut).poll(cx))?,
+                    };
+                }
+                State::ReleaseTrailer { consumed, data } => {
+                    return Ok(&data[*consumed as usize..]).into();
+                }
+            }
+        }
+    }
+
+    fn consume(mut self: Pin<&mut Self>, amt: usize) {
+        match &mut self.state {
+            State::Body {
+                reader,
+                consumed,
+                user_len,
+            } => {
+                let reader = Pin::new(reader.as_mut().unwrap());
+                let (body_len, _) = split_user_len(*user_len);
+
+                *consumed = consumed
+                    .checked_add(amt as u64)
+                    .filter(|&consumed| consumed <= body_len)
+                    .expect("consumed out of bounds");
+
+                reader.consume(amt);
+            }
+            State::ReadTrailer(_) => unreachable!(),
+            State::ReleaseTrailer { consumed, data } => {
+                *consumed = amt
+                    .checked_add(*consumed as usize)
+                    .filter(|&consumed| consumed <= data.len())
+                    .expect("consumed out of bounds") as u8;
             }
         }
     }
