@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ee729b5a_399e54ab",
+        "filename": "tvix/castore/src/fs/inodes.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-29T17:39:28Z",
+      "side": 1,
+      "message": "That custom dance is necessary, otherwise clippy on linux complains about an unnecessary cast.\n\nWhat\u0027s the error you\u0027re getting?",
+      "revId": "ec528f0c4ca471d454f9e1d7ffc03c505e2596f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70274796_9a90c135",
+        "filename": "tvix/eval/tests/nix_oracle.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-29T17:39:28Z",
+      "side": 1,
+      "message": "```suggestion\n                    .canonicalize() // needed on MacOS\n```",
+      "revId": "ec528f0c4ca471d454f9e1d7ffc03c505e2596f5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
