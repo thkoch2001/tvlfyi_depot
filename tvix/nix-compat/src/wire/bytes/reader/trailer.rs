@@ -16,6 +16,12 @@ pub(crate) struct Trailer {
     buf: [u8; 7],
 }
 
+impl Trailer {
+    pub(crate) fn len(&self) -> u8 {
+        self.data_len
+    }
+}
+
 impl Deref for Trailer {
     type Target = [u8];
 
