@@ -14275,6 +14275,11 @@ rec {
             packageId = "anyhow";
           }
           {
+            name = "async-compression";
+            packageId = "async-compression";
+            features = [ "tokio" "gzip" "bzip2" "xz" ];
+          }
+          {
             name = "async-recursion";
             packageId = "async-recursion";
           }
@@ -14443,10 +14448,6 @@ rec {
           {
             name = "walkdir";
             packageId = "walkdir";
-          }
-          {
-            name = "xz2";
-            packageId = "xz2";
           }
         ];
         buildDependencies = [
