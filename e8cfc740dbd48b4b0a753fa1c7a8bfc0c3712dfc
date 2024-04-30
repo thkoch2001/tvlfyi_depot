@@ -16,6 +16,24 @@
       "message": "Null-freeness is guaranteed by filesystems (I think), but can tar names include null bytes? Ideally some piece of general ingestion infrastructure covers this, so we don\u0027t have to check this case-by-case.",
       "revId": "e8cfc740dbd48b4b0a753fa1c7a8bfc0c3712dfc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31d04243_59c39559",
+        "filename": "tvix/castore/src/import/archive.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-30T13:17:59Z",
+      "side": 1,
+      "message": "We already check for this case, it\u0027ll fail the `Directory` validation on `put()` otherwise.",
+      "parentUuid": "113bfb55_2ab8d93d",
+      "revId": "e8cfc740dbd48b4b0a753fa1c7a8bfc0c3712dfc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
