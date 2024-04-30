@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0e0af2b4_b77ea756",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-04-30T09:52:30Z",
+      "side": 1,
+      "message": "As discussed in chat, it\u0027s a bit ugly that we now bleed back endianness in consumers.\n\nThough these two invocations (or whatever this will evolve into) should probably live in nix-compat long-term anyways, and then it\u0027ll be a non-issue.",
+      "revId": "19e8d443fcaf064eb18adcd8591005a1344b5d68",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
