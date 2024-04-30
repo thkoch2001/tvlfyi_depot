@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbf09764_ab77a9ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 8
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-30T15:24:24Z",
+      "side": 1,
+      "message": "Other than my two comments, and agreeing with flokli that it needs at least one testcase, it looks good to me.",
+      "revId": "21f32edd4c5c09aa5cecfec11ac9a3fa8dd2f9e2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e779177e_3927beab",
+        "filename": "tvix/nix-compat/src/wire/bytes/reader/mod.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-30T15:24:24Z",
+      "side": 1,
+      "message": "This seems unrelated to AsyncBufRead implementation. Why is it there?",
+      "revId": "21f32edd4c5c09aa5cecfec11ac9a3fa8dd2f9e2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e943adc4_d7bac1c2",
+        "filename": "tvix/nix-compat/src/wire/bytes/reader/mod.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-04-30T15:24:24Z",
+      "side": 1,
+      "message": "This seems unrelated to AsyncBufRead implementation. Why is it there?",
+      "revId": "21f32edd4c5c09aa5cecfec11ac9a3fa8dd2f9e2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
