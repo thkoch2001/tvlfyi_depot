@@ -6,7 +6,7 @@
 
 use crate::directoryservice::DirectoryPutter;
 use crate::directoryservice::DirectoryService;
-use crate::path::PathBuf;
+use crate::path::{Path, PathBuf};
 use crate::proto::node::Node;
 use crate::proto::Directory;
 use crate::proto::DirectoryNode;
