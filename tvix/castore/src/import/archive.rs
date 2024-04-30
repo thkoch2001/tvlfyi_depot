@@ -150,7 +150,8 @@ where
                 target: entry
                     .link_name()?
                     .ok_or_else(|| Error::MissingSymlinkTarget(path.clone()))?
-                    .into(),
+                    .into()
+                    .into_vec(),
                 path,
             },
             // Push a bogus directory marker so we can make sure this directoy gets
