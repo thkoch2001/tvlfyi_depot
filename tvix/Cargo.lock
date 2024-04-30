@@ -4434,6 +4434,7 @@ name = "tvix-store"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "async-compression",
  "async-process",
  "async-recursion",
  "async-stream",
@@ -4479,7 +4480,6 @@ dependencies = [
  "tvix-castore",
  "url",
  "walkdir",
- "xz2",
 ]
 
 [[package]]
