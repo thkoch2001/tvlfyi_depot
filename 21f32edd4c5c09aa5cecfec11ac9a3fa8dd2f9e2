@@ -53,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8340d7e9_7a819548",
+        "filename": "tvix/nix-compat/src/wire/bytes/reader/mod.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-05-01T12:21:17Z",
+      "side": 1,
+      "message": "I am blind and read the code wrong. Sorry for the noise/inconvenience.",
+      "parentUuid": "ad91d01e_d0d7e8f9",
+      "revId": "21f32edd4c5c09aa5cecfec11ac9a3fa8dd2f9e2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e943adc4_d7bac1c2",
