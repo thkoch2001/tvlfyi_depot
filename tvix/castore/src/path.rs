@@ -57,6 +57,13 @@ impl Path<'_> {
     pub fn as_slice(&self) -> &[u8] {
         self.inner
     }
+
+    /// Returns an owned [PathBuf], copying the data.
+    pub fn to_owned(&self) -> PathBuf {
+        PathBuf {
+            inner: self.inner.to_vec(),
+        }
+    }
 }
 
 /// Represents a owned PathBuf in the castore model.
