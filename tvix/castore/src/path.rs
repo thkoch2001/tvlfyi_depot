@@ -227,6 +227,72 @@ impl PathBuf {
         PathBuf { inner: bytes }
     }
 
+    /// Convert from a [&std::path::Path] to [Self].
+    ///
+    /// - Self uses `/` as path separator.
+    /// - Absolute paths are always rejected, are are these with custom prefixes.
+    /// - Repeated separators are deduplicated.
+    /// - Occurrences of `.` are normalized away.
+    /// - A trailing slash is normalized away.
+    ///
+    /// A `canonicalize_dotdot` boolean controls whether `..` will get
+    /// canonicalized if possible, or should return an error.
+    ///
+    /// For more exotic paths, this conversion might produce different results
+    /// on different platforms, due to different underlying byte representations.
+    pub fn from_host_path(
+        host_path: &std::path::Path,
+        canonicalize_dotdot: bool,
+    ) -> Result<Self, std::io::Error> {
+        let mut p = PathBuf::with_capacity(host_path.as_os_str().len());
+
+        for component in host_path.components() {
+            match component {
+                std::path::Component::Prefix(_) | std::path::Component::RootDir => {
+                    return Err(std::io::Error::new(
+                        std::io::ErrorKind::InvalidData,
+                        "found disallowed prefix or rootdir",
+                    ))
+                }
+                std::path::Component::CurDir => continue, // ignore
+                std::path::Component::ParentDir => {
+                    if canonicalize_dotdot {
+                        // Try popping the last element from the path being constructed.
+                        // FUTUREWORK: pop method?
+                        p = p
+                            .parent()
+                            .ok_or_else(|| {
+                                std::io::Error::new(
+                                    std::io::ErrorKind::InvalidData,
+                                    "found .. going too far up",
+                                )
+                            })?
+                            .to_owned();
+                    } else {
+                        return Err(std::io::Error::new(
+                            std::io::ErrorKind::InvalidData,
+                            "found disallowed ..",
+                        ));
+                    }
+                }
+                std::path::Component::Normal(s) => {
+                    // if s.as_encoded_bytes() == "." {
+
+                    // }
+                    // append the new component to the path being constructed.
+                    p.try_push(s.as_encoded_bytes()).map_err(|_| {
+                        std::io::Error::new(
+                            std::io::ErrorKind::InvalidData,
+                            "encountered invalid node in sub_path component",
+                        )
+                    })?
+                }
+            }
+        }
+
+        Ok(p)
+    }
+
     pub fn into_boxed_path(self) -> Box<Path> {
         // SAFETY: Box<[u8]> and Box<Path> have the same representation,
         // and PathBuf always contains a valid Path.
@@ -339,5 +405,42 @@ mod test {
                 .map(|x| x.to_str().unwrap())
                 .collect::<Vec<_>>()
         );
+    }
+
+    #[rstest]
+    #[case::empty("", "", false)]
+    #[case::path("a", "a", false)]
+    #[case::path2("a/b", "a/b", false)]
+    #[case::double_slash_middle("a//b", "a/b", false)]
+    #[case::dot(".", "", false)]
+    #[case::dot_start("./a/b", "a/b", false)]
+    #[case::dot_middle("a/./b", "a/b", false)]
+    #[case::dot_end("a/b/.", "a/b", false)]
+    #[case::trailing_slash("a/b/", "a/b", false)]
+    #[case::dotdot_canonicalize("a/..", "", true)]
+    #[case::dotdot_canonicalize2("a/../b", "b", true)]
+    pub fn from_host_path(
+        #[case] host_path: std::path::PathBuf,
+        #[case] exp_path: PathBuf,
+        #[case] canonicalize_dotdot: bool,
+    ) {
+        let p = PathBuf::from_host_path(&host_path, canonicalize_dotdot).expect("must succeed");
+
+        assert_eq!(exp_path, p);
+    }
+
+    #[rstest]
+    #[case::absolute("/", false)]
+    #[case::dotdot_root("..", false)]
+    #[case::dotdot_root_canonicalize("..", true)]
+    #[case::dotdot_root_no_canonicalize("a/..", false)]
+    #[case::invalid_name("foo/bar\0", false)]
+    #[cfg_attr(windows, case::prefix("\\nix-store", false))]
+    #[cfg_attr(windows, case::letter("C:\\foo.txt", false))]
+    pub fn from_host_path_fail(
+        #[case] host_path: std::path::PathBuf,
+        #[case] canonicalize_dotdot: bool,
+    ) {
+        PathBuf::from_host_path(&host_path, canonicalize_dotdot).expect_err("must fail");
     }
 }
