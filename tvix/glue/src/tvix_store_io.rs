@@ -7,6 +7,7 @@ use nix_compat::nixhash::NixHash;
 use nix_compat::store_path::StorePathRef;
 use nix_compat::{nixhash::CAHash, store_path::StorePath};
 use sha2::{Digest, Sha256};
+use std::os::unix::ffi::OsStrExt;
 use std::{
     cell::RefCell,
     collections::BTreeSet,
@@ -305,6 +306,43 @@ impl TvixStoreIO {
         };
 
         // now with the root_node and sub_path, descend to the node requested.
+        // We canonicalize sub_path to the castore model here.
+        // TODO: move this to a reusable function (but not a TryInto)?
+        let sub_path = {
+            let mut p = tvix_castore::PathBuf::with_capacity(sub_path.as_os_str().len());
+            for component in sub_path.components() {
+                match component {
+                    std::path::Component::Prefix(_) => panic!("Tvix bug: found prefix in sub_path"),
+                    std::path::Component::RootDir => {
+                        panic!("Tvix bug: found absolute path in sub_path")
+                    }
+                    std::path::Component::CurDir => break, // ignore
+                    std::path::Component::ParentDir => {
+                        // Try popping the current component from the path being constructed.
+                        // TODO: pop method
+                        p = p
+                            .parent()
+                            .ok_or_else(|| {
+                                io::Error::new(
+                                    io::ErrorKind::InvalidData,
+                                    ".. in sub_path escape root",
+                                )
+                            })?
+                            .to_owned();
+                    }
+                    std::path::Component::Normal(s) => {
+                        // append the new component to the path being constructed.
+                        p.try_push(s.as_bytes()).map_err(|_| {
+                            io::Error::new(
+                                io::ErrorKind::InvalidData,
+                                "encountered invalid node in sub_path component",
+                            )
+                        })?
+                    }
+                }
+            }
+            p
+        };
         directoryservice::descend_to(&self.directory_service, root_node, sub_path)
             .await
             .map_err(|e| std::io::Error::new(io::ErrorKind::Other, e))
