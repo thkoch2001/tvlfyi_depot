@@ -1,6 +1,12 @@
 //! Contains data structures to deal with Paths in the tvix-castore model.
 
-use std::{borrow::Borrow, mem, ops::Deref, str::FromStr};
+use std::{
+    borrow::Borrow,
+    fmt::{self, Display},
+    mem,
+    ops::Deref,
+    str::FromStr,
+};
 
 use bstr::ByteSlice;
 
@@ -86,6 +92,12 @@ impl Path {
     }
 }
 
+impl Display for Path {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        Display::fmt(self.inner.as_bstr(), f)
+    }
+}
+
 /// Represents a owned PathBuf in the castore model.
 /// These are always relative, and platform-independent, which distinguishes
 /// them from the ones provided in the standard library.
@@ -132,6 +144,12 @@ impl FromStr for PathBuf {
         Ok(Path::from_bytes(s.as_bytes())
             .ok_or(std::io::ErrorKind::InvalidData)?
             .to_owned())
+    }
+}
+
+impl Display for PathBuf {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        Display::fmt(&&*self, f)
     }
 }
 
