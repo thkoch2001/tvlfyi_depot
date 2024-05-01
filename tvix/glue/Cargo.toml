@@ -56,3 +56,6 @@ nix_tests = []
 [[bench]]
 name = "eval"
 harness = false
+
+[lints]
+workspace = true
