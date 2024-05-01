@@ -66,6 +66,12 @@ impl Path<'_> {
     }
 }
 
+impl std::fmt::Display for Path<'_> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.inner.to_str_lossy())
+    }
+}
+
 /// Represents a owned PathBuf in the castore model.
 /// These are always relative, and platform-independent, which distinguishes
 /// them from the ones provided in the standard library.
@@ -111,6 +117,12 @@ impl PathBuf {
     pub fn as_slice(&self) -> &[u8] {
         // TODO(edef): get rid of the duplication
         self.inner.as_slice()
+    }
+}
+
+impl std::fmt::Display for PathBuf {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        self.as_ref().fmt(f)
     }
 }
 
