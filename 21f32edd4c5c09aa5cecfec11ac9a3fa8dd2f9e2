@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad91d01e_d0d7e8f9",
+        "filename": "tvix/nix-compat/src/wire/bytes/reader/mod.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-05-01T02:17:23Z",
+      "side": 1,
+      "message": "Just matching style with the new code, it\u0027s literally just moving the Pin::new earlier.",
+      "parentUuid": "e779177e_3927beab",
+      "revId": "21f32edd4c5c09aa5cecfec11ac9a3fa8dd2f9e2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e943adc4_d7bac1c2",
@@ -48,6 +66,24 @@
       "writtenOn": "2024-04-30T15:24:24Z",
       "side": 1,
       "message": "This seems unrelated to AsyncBufRead implementation. Why is it there?",
+      "revId": "21f32edd4c5c09aa5cecfec11ac9a3fa8dd2f9e2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0d132ea_a1208512",
+        "filename": "tvix/nix-compat/src/wire/bytes/reader/mod.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 136,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-05-01T02:17:23Z",
+      "side": 1,
+      "message": "See other comment.",
+      "parentUuid": "e943adc4_d7bac1c2",
       "revId": "21f32edd4c5c09aa5cecfec11ac9a3fa8dd2f9e2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
