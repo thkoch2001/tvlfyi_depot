@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "006f9b7e_9eaff88e",
+        "filename": "tvix/castore/src/path.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 439,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-05-01T23:53:29Z",
+      "side": 1,
+      "message": "Probably worth testing that these *work* on Unix.",
+      "revId": "ba71a2d8b9d35878ee8cbe31441a6f62b1afc782",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
