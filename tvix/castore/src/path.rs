@@ -86,8 +86,12 @@ impl Path {
         self.components().last()
     }
 
-    pub fn as_slice(&self) -> &[u8] {
+    pub fn as_bytes(&self) -> &[u8] {
         &self.inner
+    }
+
+    pub fn into_boxed_bytes(&self) -> Box<[u8]> {
+        self.inner.to_vec().into_boxed_slice()
     }
 }
 
@@ -164,6 +168,12 @@ impl Display for PathBuf {
     }
 }
 
+impl PathBuf {
+    pub fn into_bytes(self) -> Vec<u8> {
+        self.inner
+    }
+}
+
 #[cfg(test)]
 mod test {
     use super::PathBuf;
@@ -187,7 +197,7 @@ mod test {
     pub fn from_str(#[case] s: &str, #[case] num_components: usize) {
         let p: PathBuf = s.parse().expect("must parse");
 
-        assert_eq!(s.as_bytes(), p.as_slice(), "inner bytes mismatch");
+        assert_eq!(s.as_bytes(), p.as_bytes(), "inner bytes mismatch");
         assert_eq!(
             num_components,
             p.components().count(),
