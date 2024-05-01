@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1df036bf_827c28ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-01T18:59:48Z",
+      "side": 1,
+      "message": "After cherry-picking and rebasing this, I realized there\u0027s nothing left to be done here - this only introduces new code, and the already existing `inode_data.as_fuse_entry(ino)` is more suitable for this. Closing.",
+      "revId": "857616b1eaa5b3da270eec2339cb35a5545b0a50",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c25bdf11_53a0fee5",
