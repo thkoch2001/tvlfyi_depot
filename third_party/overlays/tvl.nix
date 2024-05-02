@@ -97,44 +97,12 @@ depot.nix.readTree.drvTargets {
     ];
   });
 
-  crate2nix = super.rustPlatform.buildRustPackage rec {
-    pname = "crate2nix";
-    version = "0.13.0";
-
-    src = super.fetchFromGitHub {
-      owner = "nix-community";
-      repo = "crate2nix";
-      rev = "ceb06eb7e76afb9e01a5f069aae136f97df72730";
-      hash = "sha256-JTMe8GViCQt51WUiaaoIPmWtwEeeYrl6pBxo2DNuKig=";
-    };
-
-    patches = [
+  crate2nix = super.crate2nix.overrideAttrs (old: {
+    patches = old.patches or [ ] ++ [
+      # https://github.com/nix-community/crate2nix/pull/301
       ./patches/crate2nix-tests-debug.patch
-      ./patches/crate2nix-run-tests-in-build-source.patch
     ];
-
-    sourceRoot = "${src.name}/crate2nix";
-
-    cargoHash = "sha256-dhlSXY1CJE+JJt+6Y7W1MVMz36nwr6ny543py1TcjyY=";
-
-    nativeBuildInputs = [ super.makeWrapper ];
-
-    # Tests use nix(1), which tries (and fails) to set up /nix/var inside the
-    # sandbox
-    doCheck = false;
-
-    postFixup = ''
-      wrapProgram $out/bin/crate2nix \
-          --suffix PATH ":" ${lib.makeBinPath (with self; [ cargo nix_latest nix-prefetch-git ])}
-
-      rm -rf $out/lib $out/bin/crate2nix.d
-      mkdir -p \
-        $out/share/bash-completion/completions \
-        $out/share/zsh/vendor-completions
-      $out/bin/crate2nix completions -s 'bash' -o $out/share/bash-completion/completions
-      $out/bin/crate2nix completions -s 'zsh' -o $out/share/zsh/vendor-completions
-    '';
-  };
+  });
 
   evans = super.evans.overrideAttrs (old: {
     patches = old.patches or [ ] ++ [
