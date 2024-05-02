@@ -16,6 +16,24 @@
       "message": "I still wanna move this out to an explicit conversion function in path.rs, rather than having it here. We\u0027ll also need it for tarball sanitization, and probably a more strict variant for local filesystem ingestion (as getting `.` and `..` there would be a bug in walkdir)?!",
       "revId": "a0ab04847d93a7a199baca3d936a2e27bc8fd552",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a746468_7b91ca4b",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-02T05:40:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b3c3882_434c39cb",
+      "revId": "a0ab04847d93a7a199baca3d936a2e27bc8fd552",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
