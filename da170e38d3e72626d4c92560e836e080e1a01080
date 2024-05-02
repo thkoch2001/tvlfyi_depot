@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "766ad414_28276f31",
+        "filename": "tvix/castore/src/path.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 442,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-02T10:29:40Z",
+      "side": 1,
+      "message": "I opted to explicitly keep this around for future reference (and also kept the unix cases up there unix-specific, even though the function is now unix-only).\n\nThis is valuable context, once we revisit other platforms, including Windows.",
+      "revId": "da170e38d3e72626d4c92560e836e080e1a01080",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
