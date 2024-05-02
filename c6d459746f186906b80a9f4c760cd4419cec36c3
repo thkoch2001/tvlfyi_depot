@@ -22,6 +22,30 @@
       },
       "revId": "c6d459746f186906b80a9f4c760cd4419cec36c3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15eb26c9_07137bc1",
+        "filename": "tvix/castore/src/path.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-02T08:19:05Z",
+      "side": 1,
+      "message": "Oh, I did not see. nvm, I\u0027ll just abandon this one then.",
+      "parentUuid": "6be2d26f_37b60554",
+      "range": {
+        "startLine": 276,
+        "startChar": 4,
+        "endLine": 276,
+        "endChar": 35
+      },
+      "revId": "c6d459746f186906b80a9f4c760cd4419cec36c3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
