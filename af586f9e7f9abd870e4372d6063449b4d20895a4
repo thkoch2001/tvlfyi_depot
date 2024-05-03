@@ -112,6 +112,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a03f062c_997e7a30",
+        "filename": "tvix/eval/docs/bindings.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-03T12:15:33Z",
+      "side": 1,
+      "message": "I\u0027m going to unresolve this just to make sure @sterni and @tazjin see it.  No action required.\n\nI feel like gerrit is kind of missing some middle ground between \"this needs you to take action\" and \"you can ignore this\".  The UI tends to hide submitted-already-resolved comments so I sometimes wonder if things submitted that way never get read at all.  Maybe I\u0027m just using it wrong.\n\nI do really like the new \"suggest changes\" though!",
+      "parentUuid": "2514ed84_94bba797",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 40
+      },
+      "revId": "af586f9e7f9abd870e4372d6063449b4d20895a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "23f6502c_9f40ac4c",
         "filename": "tvix/eval/docs/bindings.md",
         "patchSetId": 1
