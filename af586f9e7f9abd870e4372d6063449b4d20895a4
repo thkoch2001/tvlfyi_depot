@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "46b62f51_282d23da",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-03T12:11:36Z",
+      "side": 1,
+      "message": "I am so glad to see this.\n\nI wish this had been around when I first tried to navigate `src/compiler/`!",
+      "revId": "af586f9e7f9abd870e4372d6063449b4d20895a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bfd92b93_ea30bfa4",
@@ -19,6 +36,190 @@
         "startChar": 0,
         "endLine": 4,
         "endChar": 8
+      },
+      "revId": "af586f9e7f9abd870e4372d6063449b4d20895a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13c844e8_211f409e",
+        "filename": "tvix/eval/docs/bindings.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-03T12:11:36Z",
+      "side": 1,
+      "message": "```suggestion\nCompilation of Nix bindings is one of the most mind-bending parts of Nix evaluation.\n```",
+      "range": {
+        "startLine": 4,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 7
+      },
+      "revId": "af586f9e7f9abd870e4372d6063449b4d20895a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6724854_b81ea27f",
+        "filename": "tvix/eval/docs/bindings.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-03T12:11:36Z",
+      "side": 1,
+      "message": "```suggestion\nIn short, any attribute set or `let`-expression.\n\nAlthough destructuring abstractions (`{fred, bob?fred}: ...`) do in fact bind identifiers in the scope of the function, tvix does not refer to these as \"bindings\".\n```\n\n... although I\u0027m not entirely sure why.  Is there a reason why no code is shared between `let` and destructuring abstraction?  They involve a lot of similarities.  Destructuring abstraction is much more complicated; it seems like the compilation of `let` and `rec { ... }` are simpler special-cases of what goes on there.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 48
+      },
+      "revId": "af586f9e7f9abd870e4372d6063449b4d20895a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2514ed84_94bba797",
+        "filename": "tvix/eval/docs/bindings.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-03T12:11:36Z",
+      "side": 1,
+      "message": "This is one of the most awesome features of `tvix-eval`, and is a big part of what sets it apart from anything else in the Nix world.\n\nGHC does this using a source-to-source transformation called \"the renamer\" which is, interestingly, totally independent of the rest of the compiler since its input and output are both Haskell surface syntax.  GHC has been through several major overhauls of its internal languages (CoreSyn and Stg) that didn\u0027t have to touch the renamer.\n\nI wonder if this could be implemented as an AST-to-AST transformation, like GHC does.  That would make this awesomeness independent of the rest of the compiler.  Right now it\u0027s sort of tangled up in the particular VM choice (stack interpreter).\n\nJust an idea I wanted to note; not really an action item for this CL.",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 26,
+        "endChar": 40
+      },
+      "revId": "af586f9e7f9abd870e4372d6063449b4d20895a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23f6502c_9f40ac4c",
+        "filename": "tvix/eval/docs/bindings.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-03T12:11:36Z",
+      "side": 1,
+      "message": "```suggestion\n1. An initial compilation phase *only* for plain inherit statements (i.e.\n   `inherit name;`), *not* for namespaced inherits (i.e. `inherit (from) name;`).\n```",
+      "range": {
+        "startLine": 30,
+        "startChar": 68,
+        "endLine": 31,
+        "endChar": 53
+      },
+      "revId": "af586f9e7f9abd870e4372d6063449b4d20895a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0852f453_15f4f3e0",
+        "filename": "tvix/eval/docs/bindings.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-03T12:11:36Z",
+      "side": 1,
+      "message": "It would be so awesome if there were a follow-up CL with a document that states the rules for what must be where on the stack, and when.",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 74,
+        "endChar": 30
+      },
+      "revId": "af586f9e7f9abd870e4372d6063449b4d20895a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2948a06_66a4f390",
+        "filename": "tvix/eval/docs/bindings.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-03T12:11:36Z",
+      "side": 1,
+      "message": "```suggestion\n`let`-bindings a final operation is emitted that removes these locals from the stack when the\n```",
+      "range": {
+        "startLine": 76,
+        "startChar": 49,
+        "endLine": 76,
+        "endChar": 74
+      },
+      "revId": "af586f9e7f9abd870e4372d6063449b4d20895a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "21db7f44_3b75f15b",
+        "filename": "tvix/eval/docs/bindings.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-03T12:11:36Z",
+      "side": 1,
+      "message": "We should probably be removing each local, individually, once the interpreter has passed the last instruction which mentions it.  This will greatly reduce the burden on the garbage collector (when we get one of those).  Unlike Rust we don\u0027t need to wait for a variable to go out of scope because there\u0027s no `.drop()` method, so the programmer has no way of noticing if we release things earlier than the end of the scope.\n\n(Please ack this if I\u0027ve understood the tvix situation correctly, or explain if I have misunderstood)",
+      "range": {
+        "startLine": 77,
+        "startChar": 0,
+        "endLine": 77,
+        "endChar": 10
+      },
+      "revId": "af586f9e7f9abd870e4372d6063449b4d20895a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6be1fab0_2db89d9a",
+        "filename": "tvix/eval/docs/bindings.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-03T12:11:36Z",
+      "side": 1,
+      "message": "I would love it if the term \"slot\" were given a definition somewhere.  Maybe this document is not the right place though.",
+      "range": {
+        "startLine": 94,
+        "startChar": 57,
+        "endLine": 94,
+        "endChar": 61
       },
       "revId": "af586f9e7f9abd870e4372d6063449b4d20895a4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
