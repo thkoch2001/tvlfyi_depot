@@ -6,7 +6,7 @@
 
 use crate::directoryservice::DirectoryPutter;
 use crate::directoryservice::DirectoryService;
-use crate::path::PathBuf;
+use crate::path::{Path, PathBuf};
 use crate::proto::node::Node;
 use crate::proto::Directory;
 use crate::proto::DirectoryNode;
@@ -120,15 +120,14 @@ where
             }),
         };
 
-        if entry.path().components().count() == 1 {
+        if entry.path() == crate::Path::ROOT {
             break node;
         }
 
         // record node in parent directory, creating a new [Directory] if not there yet.
-        directories
-            .entry(entry.path().parent().unwrap().to_owned())
-            .or_default()
-            .add(node);
+        if let Some(parent) = entry.path().parent() {
+            directories.entry(parent.to_owned()).or_default().add(node);
+        }
     };
 
     assert!(
@@ -183,7 +182,7 @@ pub enum IngestionEntry {
 }
 
 impl IngestionEntry {
-    fn path(&self) -> &PathBuf {
+    fn path(&self) -> &Path {
         match self {
             IngestionEntry::Regular { path, .. } => path,
             IngestionEntry::Symlink { path, .. } => path,
