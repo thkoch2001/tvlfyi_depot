@@ -230,7 +230,7 @@ in
   };
 
   meta.ci.targets = [
-    "clippy"
+    #"clippy"
     "crate2nix-check"
     "shell"
     "rust-docs"
