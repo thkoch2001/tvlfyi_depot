@@ -4,14 +4,11 @@
 //! In the case of recursive scopes these cases share almost all of their
 //! (fairly complex) logic.
 
-use std::iter::Peekable;
-
-use rnix::ast::HasEntry;
-use rowan::ast::AstChildren;
+use super::syn::{
+    AttrName, AttrPath, AttrPathValue, AttrSet, Expr, HasEntries, Ident, Inherit, LetIn,
+};
 
 use super::*;
-
-type PeekableAttrs = Peekable<AstChildren<ast::Attr>>;
 
 /// What kind of bindings scope is being compiled?
 #[derive(Clone, Copy, PartialEq)]
@@ -32,122 +29,115 @@ impl BindingsKind {
     }
 }
 
-// Internal representation of an attribute set used for merging sets, or
-// inserting nested keys.
-#[derive(Clone)]
-struct AttributeSet {
-    /// Original span at which this set was first encountered.
-    span: Span,
+/// A single binding (excluding the key being bound, except for `Syntax::Inherit`).
+enum Binding<Syntax>
+where
+    Syntax: syn::Syntax,
+{
+    /// `inherit (namespace) name`
+    Inherit(Syntax::Inherit),
 
-    /// Tracks the kind of set (rec or not).
-    kind: BindingsKind,
+    /// `key = /*expr*/;` -- note: this representation is redundant with Set
+    Plain { expr: Syntax::Expr },
 
-    /// All inherited entries
-    inherits: Vec<ast::Inherit>,
+    /// `key = { ... };`
+    Set {
+        /// Original span at which this set was first encountered.
+        span: Span,
 
-    /// All internal entries
-    entries: Vec<(Span, PeekableAttrs, ast::Expr)>,
+        /// Tracks the kind of set (rec or not).
+        kind: BindingsKind,
+
+        /// All inherited entries
+        inherits: Vec<Syntax::Inherit>,
+
+        /// All "path=value" entries
+        entries: Vec<Syntax::AttrPathValue>,
+    },
 }
 
-impl ToSpan for AttributeSet {
-    fn span_for(&self, _: &codemap::File) -> Span {
-        self.span
-    }
-}
-
-impl AttributeSet {
-    fn from_ast(c: &Compiler, node: &ast::AttrSet) -> Self {
-        AttributeSet {
-            span: c.span_for(node),
-
-            // Kind of the attrs depends on the first time it is
-            // encountered. We actually believe this to be a Nix
-            // bug: https://github.com/NixOS/nix/issues/7111
-            kind: if node.rec_token().is_some() {
-                BindingsKind::RecAttrs
-            } else {
-                BindingsKind::Attrs
-            },
-
-            inherits: ast::HasEntry::inherits(node).collect(),
-
-            entries: ast::HasEntry::attrpath_values(node)
-                .map(|entry| {
-                    let span = c.span_for(&entry);
-                    (
-                        span,
-                        entry.attrpath().unwrap().attrs().peekable(),
-                        entry.value().unwrap(),
-                    )
-                })
-                .collect(),
+impl<Syntax> ToSpan for Binding<Syntax>
+where
+    Syntax: syn::Syntax,
+{
+    fn span_for(&self, f: &codemap::File) -> Span {
+        use Binding::*;
+        match self {
+            Inherit(inherit_from) => inherit_from.span_for(f),
+            Plain { expr, .. } => expr.span_for(f),
+            Set { span, .. } => *span,
         }
     }
 }
 
-// Data structures to track the bindings observed in the second pass, and
-// forward the information needed to compile their value.
-enum Binding {
-    InheritFrom {
-        namespace: ast::Expr,
-        name: SmolStr,
-        span: Span,
-    },
+impl<Syntax> HasEntries<Syntax> for Binding<Syntax>
+where
+    Syntax: syn::Syntax + 'static,
+{
+    fn inherits(&self, _c: &mut Compiler) -> impl Iterator<Item = Syntax::Inherit> {
+        (match self {
+            Binding::Set { inherits, .. } => Some(inherits.clone().into_iter()),
+            _ => None,
+        })
+        .into_iter()
+        .flatten()
+    }
 
-    Plain {
-        expr: ast::Expr,
-    },
-
-    Set(AttributeSet),
+    fn attributes<'a>(&self, _c: &'a mut Compiler) -> impl Iterator<Item = Syntax::AttrPathValue> {
+        (match self {
+            Binding::Set { entries, .. } => Some(entries.clone().into_iter()),
+            _ => None,
+        })
+        .into_iter()
+        .flatten()
+    }
 }
 
-impl Binding {
-    /// Merge the provided value into the current binding, or emit an
-    /// error if this turns out to be impossible.
+impl<Syntax> Binding<Syntax>
+where
+    Syntax: syn::Syntax,
+{
+    /// Merge value into self, or emit an error if this turns out to be
+    /// impossible.
     fn merge(
         &mut self,
         c: &mut Compiler,
         span: Span,
-        mut remaining_path: PeekableAttrs,
-        value: ast::Expr,
+        mut remaining_path: Syntax::AttrPath,
+        value: Syntax::Expr,
     ) {
         match self {
-            Binding::InheritFrom { name, ref span, .. } => {
-                c.emit_error(span, ErrorKind::UnmergeableInherit { name: name.clone() })
-            }
+            Binding::Inherit(inherit_from) => c.emit_error(
+                &inherit_from.span_for(c.file),
+                ErrorKind::UnmergeableInherit {
+                    name: "fixme".into(),
+                },
+            ),
 
             // If the value is not yet a nested binding, flip the representation
             // and recurse.
-            Binding::Plain { expr } => match expr {
-                ast::Expr::AttrSet(existing) => {
-                    let nested = AttributeSet::from_ast(c, existing);
-                    *self = Binding::Set(nested);
+            Binding::Plain { expr } => {
+                if let Some(existing) = expr.clone().as_attrset(c) {
+                    *self = Binding::from_attrset(c, existing);
                     self.merge(c, span, remaining_path, value);
+                } else {
+                    c.emit_error(&value, ErrorKind::UnmergeableValue)
                 }
-
-                _ => c.emit_error(&value, ErrorKind::UnmergeableValue),
-            },
+            }
 
             // If the value is nested further, it is simply inserted into the
             // bindings with its full path and resolved recursively further
             // down.
-            Binding::Set(existing) if remaining_path.peek().is_some() => {
-                existing.entries.push((span, remaining_path, value))
+            Binding::Set { entries, .. } if remaining_path.first().is_some() => {
+                entries.push(Syntax::AttrPathValue::new(span, remaining_path, value))
             }
 
-            Binding::Set(existing) => {
-                if let ast::Expr::AttrSet(new) = value {
-                    existing.inherits.extend(ast::HasEntry::inherits(&new));
-                    existing
-                        .entries
-                        .extend(ast::HasEntry::attrpath_values(&new).map(|entry| {
-                            let span = c.span_for(&entry);
-                            (
-                                span,
-                                entry.attrpath().unwrap().attrs().peekable(),
-                                entry.value().unwrap(),
-                            )
-                        }));
+            Binding::Set {
+                inherits, entries, ..
+            } => {
+                if let Some(attrset) = value.as_attrset(c) {
+                    inherits.extend(attrset.inherits(c));
+                    entries.extend(attrset.attributes(c));
                 } else {
                     // This branch is unreachable because in cases where the
                     // path is empty (i.e. there is no further nesting), the
@@ -162,44 +152,80 @@ impl Binding {
             }
         }
     }
+    fn from_attrset(c: &mut Compiler, attrset: Syntax::AttrSet) -> Self {
+        Binding::Set {
+            span: c.span_for(&attrset),
+
+            // Kind of the attrs depends on the first time it is
+            // encountered. We actually believe this to be a Nix
+            // bug: https://github.com/NixOS/nix/issues/7111
+            kind: if attrset.is_rec() {
+                BindingsKind::RecAttrs
+            } else {
+                BindingsKind::Attrs
+            },
+
+            inherits: attrset.inherits(c).collect(),
+            entries: attrset.attributes(c).collect(),
+        }
+    }
 }
 
-enum KeySlot {
+enum KeySlot<Syntax>
+where
+    Syntax: syn::Syntax + 'static,
+{
     /// There is no key slot (`let`-expressions do not emit their key).
     None { name: SmolStr },
 
-    /// The key is statically known and has a slot.
-    Static { slot: LocalIdx, name: SmolStr },
-
-    /// The key is dynamic, i.e. only known at runtime, and must be compiled
-    /// into its slot.
-    Dynamic { slot: LocalIdx, attr: ast::Attr },
+    Attr {
+        slot: LocalIdx,
+        attr: <Syntax as syn::Syntax>::AttrName,
+    },
 }
 
-struct TrackedBinding {
-    key_slot: KeySlot,
+struct TrackedBinding<Syntax>
+where
+    Syntax: syn::Syntax + 'static,
+{
+    key_slot: KeySlot<Syntax>,
     value_slot: LocalIdx,
-    binding: Binding,
+    binding: Binding<Syntax>,
 }
 
-impl TrackedBinding {
+impl<Syntax> TrackedBinding<Syntax>
+where
+    Syntax: syn::Syntax + 'static,
+{
     /// Does this binding match the given key?
     ///
     /// Used to determine which binding to merge another one into.
     fn matches(&self, key: &str) -> bool {
         match &self.key_slot {
             KeySlot::None { name } => name == key,
-            KeySlot::Static { name, .. } => name == key,
-            KeySlot::Dynamic { .. } => false,
+            KeySlot::Attr { slot: _, attr } => {
+                if let Some(s) = attr.as_static() {
+                    let s: String = s.ident().into();
+                    s == key
+                } else {
+                    false
+                }
+            }
         }
     }
 }
 
-struct TrackedBindings {
-    bindings: Vec<TrackedBinding>,
+struct TrackedBindings<Syntax>
+where
+    Syntax: syn::Syntax + 'static,
+{
+    bindings: Vec<TrackedBinding<Syntax>>,
 }
 
-impl TrackedBindings {
+impl<Syntax> TrackedBindings<Syntax>
+where
+    Syntax: syn::Syntax + 'static,
+{
     fn new() -> Self {
         TrackedBindings { bindings: vec![] }
     }
@@ -214,28 +240,29 @@ impl TrackedBindings {
         &mut self,
         c: &mut Compiler,
         span: Span,
-        name: &ast::Attr,
-        mut remaining_path: PeekableAttrs,
-        value: ast::Expr,
+        attr: &<Syntax as syn::Syntax>::AttrName,
+        mut remaining_path: Syntax::AttrPath,
+        value: Syntax::Expr,
     ) -> bool {
         // If the path has no more entries, and if the entry is not an
         // attribute set literal, the entry can not be merged.
-        if remaining_path.peek().is_none() && !matches!(value, ast::Expr::AttrSet(_)) {
+        if remaining_path.first().is_none() && !value.is_attrset() {
             return false;
         }
 
         // If the first element of the path is not statically known, the entry
         // can not be merged.
-        let name = match expr_static_attr_str(name) {
-            Some(name) => name,
-            None => return false,
+        let name = if let Some(name) = attr.as_static() {
+            name
+        } else {
+            return false;
         };
 
         // If there is no existing binding with this key, the entry can not be
         // merged.
         // TODO: benchmark whether using a map or something is useful over the
         // `find` here
-        let binding = match self.bindings.iter_mut().find(|b| b.matches(&name)) {
+        let binding = match self.bindings.iter_mut().find(|b| b.matches(name.ident())) {
             Some(b) => b,
             None => return false,
         };
@@ -247,7 +274,12 @@ impl TrackedBindings {
     }
 
     /// Add a completely new binding to the tracked bindings.
-    fn track_new(&mut self, key_slot: KeySlot, value_slot: LocalIdx, binding: Binding) {
+    fn track_new(
+        &mut self,
+        key_slot: KeySlot<Syntax>,
+        value_slot: LocalIdx,
+        binding: Binding<Syntax>,
+    ) {
         self.bindings.push(TrackedBinding {
             key_slot,
             value_slot,
@@ -256,104 +288,54 @@ impl TrackedBindings {
     }
 }
 
-/// Wrapper around the `ast::HasEntry` trait as that trait can not be
-/// implemented for custom types.
-trait HasEntryProxy {
-    fn inherits(&self) -> Box<dyn Iterator<Item = ast::Inherit>>;
-
-    fn attributes<'a>(
-        &self,
-        file: &'a codemap::File,
-    ) -> Box<dyn Iterator<Item = (Span, PeekableAttrs, ast::Expr)> + 'a>;
-}
-
-impl<N: HasEntry> HasEntryProxy for N {
-    fn inherits(&self) -> Box<dyn Iterator<Item = ast::Inherit>> {
-        Box::new(ast::HasEntry::inherits(self))
-    }
-
-    fn attributes<'a>(
-        &self,
-        file: &'a codemap::File,
-    ) -> Box<dyn Iterator<Item = (Span, PeekableAttrs, ast::Expr)> + 'a> {
-        Box::new(ast::HasEntry::attrpath_values(self).map(move |entry| {
-            (
-                entry.span_for(file),
-                entry.attrpath().unwrap().attrs().peekable(),
-                entry.value().unwrap(),
-            )
-        }))
-    }
-}
-
-impl HasEntryProxy for AttributeSet {
-    fn inherits(&self) -> Box<dyn Iterator<Item = ast::Inherit>> {
-        Box::new(self.inherits.clone().into_iter())
-    }
-
-    fn attributes<'a>(
-        &self,
-        _: &'a codemap::File,
-    ) -> Box<dyn Iterator<Item = (Span, PeekableAttrs, ast::Expr)> + 'a> {
-        Box::new(self.entries.clone().into_iter())
-    }
-}
-
 /// AST-traversing functions related to bindings.
 impl Compiler<'_, '_> {
     /// Compile all inherits of a node with entries that do *not* have a
     /// namespace to inherit from, and return the remaining ones that do.
-    fn compile_plain_inherits<N>(
+    fn compile_plain_inherits<N, Syntax>(
         &mut self,
         slot: LocalIdx,
         kind: BindingsKind,
         count: &mut usize,
         node: &N,
-    ) -> Vec<(ast::Expr, SmolStr, Span)>
+    ) -> Vec<Syntax::Inherit>
     where
-        N: ToSpan + HasEntryProxy,
+        Syntax: syn::Syntax + 'static,
+        N: ToSpan + HasEntries<Syntax>,
     {
         // Pass over all inherits, resolving only those without namespaces.
         // Since they always resolve in a higher scope, we can just compile and
         // declare them immediately.
         //
         // Inherits with namespaces are returned to the caller.
-        let mut inherit_froms: Vec<(ast::Expr, SmolStr, Span)> = vec![];
+        let mut inherit_froms: Vec<Syntax::Inherit> = vec![];
 
-        for inherit in node.inherits() {
-            if inherit.attrs().peekable().peek().is_none() {
-                self.emit_warning(&inherit, WarningKind::EmptyInherit);
+        for inherit in node.inherits(self).collect::<Vec<_>>().iter() {
+            if inherit.attrs().next().is_none() {
+                self.emit_warning(inherit, WarningKind::EmptyInherit);
                 continue;
             }
 
-            match inherit.from() {
+            match inherit.namespace() {
                 // Within a `let` binding, inheriting from the outer scope is a
                 // no-op *if* there are no dynamic bindings.
                 None if !kind.is_attrs() && !self.has_dynamic_ancestor() => {
-                    self.emit_warning(&inherit, WarningKind::UselessInherit);
+                    self.emit_warning(inherit, WarningKind::UselessInherit);
                     continue;
                 }
 
                 None => {
-                    for attr in inherit.attrs() {
-                        let name = match expr_static_attr_str(&attr) {
-                            Some(name) => name,
-                            None => {
-                                self.emit_error(&attr, ErrorKind::DynamicKeyInScope("inherit"));
-                                continue;
-                            }
-                        };
-
+                    for name in inherit.attrs() {
                         // If the identifier resolves statically in a `let`, it
                         // has precedence over dynamic bindings, and the inherit
                         // is useless.
                         if kind == BindingsKind::LetIn
                             && matches!(
-                                self.scope_mut().resolve_local(&name),
+                                self.scope_mut().resolve_local(name.ident()),
                                 LocalPosition::Known(_)
                             )
                         {
-                            self.emit_warning(&attr, WarningKind::UselessInherit);
+                            self.emit_warning(inherit, WarningKind::UselessInherit);
                             continue;
                         }
 
@@ -361,24 +343,25 @@ impl Compiler<'_, '_> {
 
                         // Place key on the stack when compiling attribute sets.
                         if kind.is_attrs() {
-                            self.emit_constant(name.as_str().into(), &attr);
-                            let span = self.span_for(&attr);
+                            let span = self.span_for(inherit);
+                            self.emit_constant(name.ident().into(), &span);
                             self.scope_mut().declare_phantom(span, true);
                         }
 
                         // Place the value on the stack. Note that because plain
                         // inherits are always in the outer scope, the slot of
                         // *this* scope itself is used.
-                        self.compile_identifier_access(slot, &name, &attr);
+                        let span = self.span_for(inherit);
+                        self.compile_identifier_access(slot, name.ident().into(), &span);
 
                         // In non-recursive attribute sets, the key slot must be
                         // a phantom (i.e. the identifier can not be resolved in
                         // this scope).
                         let idx = if kind == BindingsKind::Attrs {
-                            let span = self.span_for(&attr);
+                            let span = self.span_for(name);
                             self.scope_mut().declare_phantom(span, false)
                         } else {
-                            self.declare_local(&attr, name)
+                            self.declare_local(&span, name.ident())
                         };
 
                         self.scope_mut().mark_initialised(idx);
@@ -387,16 +370,16 @@ impl Compiler<'_, '_> {
 
                 Some(from) => {
                     for attr in inherit.attrs() {
-                        let name = match expr_static_attr_str(&attr) {
-                            Some(name) => name,
-                            None => {
-                                self.emit_error(&attr, ErrorKind::DynamicKeyInScope("inherit"));
-                                continue;
-                            }
-                        };
-
                         *count += 1;
-                        inherit_froms.push((from.expr().unwrap(), name, self.span_for(&attr)));
+                        inherit_froms.push(Syntax::Inherit::new(
+                            Some(from.clone()),
+                            Some(Syntax::Ident::new(
+                                attr.ident().to_string(),
+                                self.span_for(attr),
+                            ))
+                            .into_iter(),
+                            self.span_for(attr),
+                        ));
                     }
                 }
             }
@@ -411,64 +394,81 @@ impl Compiler<'_, '_> {
     /// This only ensures that the locals stack is aware of the inherits, it
     /// does not yet emit bytecode that places them on the stack. This is up to
     /// the owner of the `bindings` vector, which this function will populate.
-    fn declare_namespaced_inherits(
+    fn declare_namespaced_inherits<Syntax>(
         &mut self,
         kind: BindingsKind,
-        inherit_froms: Vec<(ast::Expr, SmolStr, Span)>,
-        bindings: &mut TrackedBindings,
-    ) {
-        for (from, name, span) in inherit_froms {
-            let key_slot = if kind.is_attrs() {
-                // In an attribute set, the keys themselves are placed on the
-                // stack but their stack slot is inaccessible (it is only
-                // consumed by `OpAttrs`).
-                KeySlot::Static {
-                    slot: self.scope_mut().declare_phantom(span, false),
-                    name: name.clone(),
-                }
-            } else {
-                KeySlot::None { name: name.clone() }
-            };
+        inherit_froms: Vec<Syntax::Inherit>,
+        bindings: &mut TrackedBindings<Syntax>,
+    ) where
+        Syntax: syn::Syntax + 'static,
+    {
+        for inherit in inherit_froms {
+            let namespace = inherit.namespace();
+            for attr in inherit.attrs() {
+                let span = inherit.span_for(self.file);
+                let key_slot = if kind.is_attrs() {
+                    // In an attribute set, the keys themselves are placed on the
+                    // stack but their stack slot is inaccessible (it is only
+                    // consumed by `OpAttrs`).
+                    KeySlot::Attr {
+                        slot: self.scope_mut().declare_phantom(span, false),
+                        attr: attr.clone().into(),
+                    }
+                } else {
+                    KeySlot::None {
+                        name: attr.ident().into(),
+                    }
+                };
 
-            let value_slot = match kind {
-                // In recursive scopes, the value needs to be accessible on the
-                // stack.
-                BindingsKind::LetIn | BindingsKind::RecAttrs => {
-                    self.declare_local(&span, name.clone())
-                }
+                let value_slot = match kind {
+                    // In recursive scopes, the value needs to be accessible on the
+                    // stack.
+                    BindingsKind::LetIn | BindingsKind::RecAttrs => {
+                        self.declare_local(&span, attr.ident())
+                    }
 
-                // In non-recursive attribute sets, the value is inaccessible
-                // (only consumed by `OpAttrs`).
-                BindingsKind::Attrs => self.scope_mut().declare_phantom(span, false),
-            };
+                    // In non-recursive attribute sets, the value is inaccessible
+                    // (only consumed by `OpAttrs`).
+                    BindingsKind::Attrs => self.scope_mut().declare_phantom(span, false),
+                };
 
-            bindings.track_new(
-                key_slot,
-                value_slot,
-                Binding::InheritFrom {
-                    namespace: from,
-                    name,
-                    span,
-                },
-            );
+                bindings.track_new(
+                    key_slot,
+                    value_slot,
+                    Binding::Inherit(Syntax::Inherit::new(
+                        namespace.clone(),
+                        Some(attr.clone()).into_iter(),
+                        span,
+                    )),
+                );
+            }
         }
     }
 
     /// Declare all regular bindings (i.e. `key = value;`) in a bindings scope,
     /// but do not yet compile their values.
-    fn declare_bindings<N>(
+    fn declare_bindings<N, Syntax>(
         &mut self,
         kind: BindingsKind,
         count: &mut usize,
-        bindings: &mut TrackedBindings,
+        bindings: &mut TrackedBindings<Syntax>,
         node: &N,
     ) where
-        N: ToSpan + HasEntryProxy,
+        Syntax: syn::Syntax + 'static,
+        N: ToSpan + HasEntries<Syntax>,
     {
-        for (span, mut path, value) in node.attributes(self.file) {
-            let key = path.next().unwrap();
+        for entry in node.attributes(self).collect::<Vec<_>>().iter() {
+            let mut remaining_path = entry.path();
+            let value = entry.value();
+            let key = remaining_path.take_first().unwrap();
 
-            if bindings.try_merge(self, span, &key, path.clone(), value.clone()) {
+            if bindings.try_merge(
+                self,
+                entry.span_for(self.file),
+                &key,
+                remaining_path.clone(),
+                value.clone(),
+            ) {
                 // Binding is nested, or already exists and was merged, move on.
                 continue;
             }
@@ -476,38 +476,45 @@ impl Compiler<'_, '_> {
             *count += 1;
 
             let key_span = self.span_for(&key);
-            let key_slot = match expr_static_attr_str(&key) {
-                Some(name) if kind.is_attrs() => KeySlot::Static {
-                    name,
-                    slot: self.scope_mut().declare_phantom(key_span, false),
-                },
-
-                Some(name) => KeySlot::None { name },
-
-                None if kind.is_attrs() => KeySlot::Dynamic {
+            let key_slot = if let Some(ref name) = key.as_static() {
+                if kind.is_attrs() {
+                    KeySlot::Attr {
+                        attr: key,
+                        slot: self.scope_mut().declare_phantom(key_span, false),
+                    }
+                } else {
+                    KeySlot::None {
+                        name: name.ident().into(),
+                    }
+                }
+            } else if kind.is_attrs() {
+                KeySlot::Attr {
                     attr: key,
                     slot: self.scope_mut().declare_phantom(key_span, false),
-                },
-
-                None => {
-                    self.emit_error(&key, ErrorKind::DynamicKeyInScope("let-expression"));
-                    continue;
                 }
+            } else {
+                self.emit_error(&key, ErrorKind::DynamicKeyInScope("let-expression"));
+                continue;
             };
 
             let value_slot = match kind {
                 BindingsKind::LetIn | BindingsKind::RecAttrs => match &key_slot {
                     // In recursive scopes, the value needs to be accessible on the
                     // stack if it is statically known
-                    KeySlot::None { name } | KeySlot::Static { name, .. } => {
-                        self.declare_local(&key_span, name.as_str())
-                    }
+                    KeySlot::None { name } => self.declare_local(&key_span, name.as_str()),
 
                     // Dynamic values are never resolvable (as their names are
                     // of course only known at runtime).
                     //
                     // Note: This branch is unreachable in `let`-expressions.
-                    KeySlot::Dynamic { .. } => self.scope_mut().declare_phantom(key_span, false),
+                    KeySlot::Attr { slot: _, attr } => {
+                        let attr: &<Syntax as syn::Syntax>::AttrName = attr;
+                        if let Some(name) = attr.as_static() {
+                            self.declare_local(&key_span, name.ident())
+                        } else {
+                            self.scope_mut().declare_phantom(key_span, false)
+                        }
+                    }
                 },
 
                 // In non-recursive attribute sets, the value is inaccessible
@@ -515,13 +522,17 @@ impl Compiler<'_, '_> {
                 BindingsKind::Attrs => self.scope_mut().declare_phantom(key_span, false),
             };
 
-            let binding = if path.peek().is_some() {
-                Binding::Set(AttributeSet {
-                    span,
+            let binding = if remaining_path.first().is_some() {
+                Binding::Set {
+                    span: entry.span_for(self.file),
                     kind: BindingsKind::Attrs,
                     inherits: vec![],
-                    entries: vec![(span, path, value)],
-                })
+                    entries: vec![Syntax::AttrPathValue::new(
+                        entry.span_for(self.file),
+                        remaining_path,
+                        value,
+                    )],
+                }
             } else {
                 Binding::Plain { expr: value }
             };
@@ -538,18 +549,22 @@ impl Compiler<'_, '_> {
     /// 1. Keys can be dynamically constructed through interpolation.
     /// 2. Keys can refer to nested attribute sets.
     /// 3. Attribute sets can (optionally) be recursive.
-    pub(super) fn compile_attr_set(&mut self, slot: LocalIdx, node: &ast::AttrSet) {
+    pub(super) fn compile_attr_set<Syntax>(&mut self, slot: LocalIdx, node: &Syntax::AttrSet)
+    where
+        Syntax: syn::Syntax + 'static,
+        Syntax::AttrSet: HasEntries<Syntax>,
+    {
         // Open a scope to track the positions of the temporaries used by the
         // `OpAttrs` instruction.
         self.scope_mut().begin_scope();
 
-        let kind = if node.rec_token().is_some() {
+        let kind = if node.is_rec() {
             BindingsKind::RecAttrs
         } else {
             BindingsKind::Attrs
         };
 
-        self.compile_bindings(slot, kind, node);
+        self.compile_bindings::<_, Syntax>(slot, kind, node);
 
         // Remove the temporary scope, but do not emit any additional cleanup
         // (OpAttrs consumes all of these locals).
@@ -558,7 +573,10 @@ impl Compiler<'_, '_> {
 
     /// Actually binds all tracked bindings by emitting the bytecode that places
     /// them in their stack slots.
-    fn bind_values(&mut self, bindings: TrackedBindings) {
+    fn bind_values<Syntax>(&mut self, bindings: TrackedBindings<Syntax>)
+    where
+        Syntax: syn::Syntax + 'static,
+    {
         let mut value_indices: Vec<LocalIdx> = vec![];
 
         for binding in bindings.bindings.into_iter() {
@@ -566,49 +584,56 @@ impl Compiler<'_, '_> {
 
             match binding.key_slot {
                 KeySlot::None { .. } => {} // nothing to do here
-
-                KeySlot::Static { slot, name } => {
-                    let span = self.scope()[slot].span;
-                    self.emit_constant(name.as_str().into(), &span);
-                    self.scope_mut().mark_initialised(slot);
+                KeySlot::Attr { slot, attr } => {
+                    if let Some(name) = attr.as_static() {
+                        let span = self.scope()[slot].span;
+                        self.emit_constant(name.ident().into(), &span);
+                        self.scope_mut().mark_initialised(slot);
+                    } else if let Some(expr) = attr.as_dynamic() {
+                        let expr = expr.clone().to_cst();
+                        self.compile(slot, expr.clone());
+                        self.emit_force(&expr);
+                        self.scope_mut().mark_initialised(slot);
+                    } else {
+                        unreachable!()
+                    }
                 }
-
-                KeySlot::Dynamic { slot, attr } => {
-                    self.compile_attr(slot, &attr);
-                    self.scope_mut().mark_initialised(slot);
-                }
-            }
+            };
 
             match binding.binding {
                 // This entry is an inherit (from) expr. The value is placed on
                 // the stack by selecting an attribute.
-                Binding::InheritFrom {
-                    namespace,
-                    name,
-                    span,
-                } => {
-                    // Create a thunk wrapping value (which may be one as well)
-                    // to avoid forcing the from expr too early.
-                    self.thunk(binding.value_slot, &namespace, |c, s| {
-                        c.compile(s, namespace.clone());
-                        c.emit_force(&namespace);
-
-                        c.emit_constant(name.as_str().into(), &span);
-                        c.push_op(OpCode::OpAttrsSelect, &span);
-                    })
+                Binding::Inherit(inherit_from) => {
+                    if let Some(namespace) = inherit_from.namespace() {
+                        // Create a thunk wrapping value (which may be one as well)
+                        // to avoid forcing the from expr too early.
+                        self.thunk(binding.value_slot, &namespace, |c, s| {
+                            let mut attrs = inherit_from.attrs();
+                            let name = attrs.next().unwrap().clone().ident().into();
+                            assert!(attrs.next().is_none());
+                            c.compile(s, namespace.clone().to_cst());
+                            c.emit_force(&namespace);
+                            c.emit_constant(name, &inherit_from.span_for(c.file));
+                            c.push_op(OpCode::OpAttrsSelect, &inherit_from.span_for(c.file));
+                        })
+                    } else {
+                        unimplemented!()
+                    }
                 }
 
                 // Binding is "just" a plain expression that needs to be
                 // compiled.
-                Binding::Plain { expr } => self.compile(binding.value_slot, expr),
+                Binding::Plain { expr } => self.compile(binding.value_slot, expr.to_cst()),
 
                 // Binding is a merged or nested attribute set, and needs to be
                 // recursively compiled as another binding.
-                Binding::Set(set) => self.thunk(binding.value_slot, &set, |c, _| {
-                    c.scope_mut().begin_scope();
-                    c.compile_bindings(binding.value_slot, set.kind, &set);
-                    c.scope_mut().end_scope();
-                }),
+                ref set @ Binding::Set { kind, .. } => {
+                    self.thunk(binding.value_slot, set, |c, _| {
+                        c.scope_mut().begin_scope();
+                        c.compile_bindings::<_, Syntax>(binding.value_slot, kind, set);
+                        c.scope_mut().end_scope();
+                    })
+                }
             }
 
             // Any code after this point will observe the value in the right
@@ -626,18 +651,20 @@ impl Compiler<'_, '_> {
         }
     }
 
-    fn compile_bindings<N>(&mut self, slot: LocalIdx, kind: BindingsKind, node: &N)
+    fn compile_bindings<N, Syntax>(&mut self, slot: LocalIdx, kind: BindingsKind, node: &N)
     where
-        N: ToSpan + HasEntryProxy,
+        Syntax: syn::Syntax + 'static,
+        N: ToSpan + HasEntries<Syntax>,
     {
         let mut count = 0;
         self.scope_mut().begin_scope();
 
         // Vector to track all observed bindings.
-        let mut bindings = TrackedBindings::new();
+        let mut bindings: TrackedBindings<Syntax> = TrackedBindings::new();
 
-        let inherit_froms = self.compile_plain_inherits(slot, kind, &mut count, node);
+        let inherit_froms = self.compile_plain_inherits::<_, Syntax>(slot, kind, &mut count, node);
         self.declare_namespaced_inherits(kind, inherit_froms, &mut bindings);
+
         self.declare_bindings(kind, &mut count, &mut bindings, node);
 
         // Check if we can bail out on empty bindings
@@ -668,18 +695,24 @@ impl Compiler<'_, '_> {
     ///
     /// Unless in a non-standard scope, the encountered values are simply pushed
     /// on the stack and their indices noted in the entries vector.
-    pub(super) fn compile_let_in(&mut self, slot: LocalIdx, node: &ast::LetIn) {
-        self.compile_bindings(slot, BindingsKind::LetIn, node);
+    pub(super) fn compile_let_in<Syntax>(&mut self, slot: LocalIdx, node: &Syntax::LetIn)
+    where
+        Syntax: syn::Syntax + 'static,
+    {
+        self.compile_bindings::<_, Syntax>(slot, BindingsKind::LetIn, node);
 
         // Deal with the body, then clean up the locals afterwards.
-        self.compile(slot, node.body().unwrap());
+        self.compile(slot, node.clone().body().clone().to_cst());
         self.cleanup_scope(node);
     }
 
-    pub(super) fn compile_legacy_let(&mut self, slot: LocalIdx, node: &ast::LegacyLet) {
+    pub(super) fn compile_legacy_let<Syntax>(&mut self, slot: LocalIdx, node: &Syntax::LegacyLet)
+    where
+        Syntax: syn::Syntax + 'static,
+    {
         self.emit_warning(node, WarningKind::DeprecatedLegacyLet);
         self.scope_mut().begin_scope();
-        self.compile_bindings(slot, BindingsKind::RecAttrs, node);
+        self.compile_bindings::<_, Syntax>(slot, BindingsKind::RecAttrs, node);
 
         // Remove the temporary scope, but do not emit any additional cleanup
         // (OpAttrs consumes all of these locals).
@@ -698,12 +731,7 @@ impl Compiler<'_, '_> {
     }
 
     /// Resolve and compile access to an identifier in the scope.
-    fn compile_identifier_access<N: ToSpan + Clone>(
-        &mut self,
-        slot: LocalIdx,
-        ident: &str,
-        node: &N,
-    ) {
+    fn compile_identifier_access<N: ToSpan>(&mut self, slot: LocalIdx, ident: &str, node: &N) {
         match self.scope_mut().resolve_local(ident) {
             LocalPosition::Unknown => {
                 // Are we possibly dealing with an upvalue?
@@ -758,9 +786,11 @@ impl Compiler<'_, '_> {
         };
     }
 
-    pub(super) fn compile_ident(&mut self, slot: LocalIdx, node: &ast::Ident) {
-        let ident = node.ident_token().unwrap();
-        self.compile_identifier_access(slot, ident.text(), node);
+    pub(super) fn compile_ident<Syntax>(&mut self, slot: LocalIdx, node: &Syntax::Ident)
+    where
+        Syntax: syn::Syntax + 'static,
+    {
+        self.compile_identifier_access(slot, node.ident(), node);
     }
 }
 
