@@ -8383,6 +8383,37 @@ rec {
           "web_spin_lock" = [ "dep:wasm_sync" ];
         };
       };
+      "redb" = rec {
+        crateName = "redb";
+        version = "2.1.0";
+        edition = "2021";
+        sha256 = "1fz3zxb5p0v5n505c1kp9pxv3sfa9hw40rdmj0i6p6x4jbk0hxgd";
+        type = [ "cdylib" "rlib" ];
+        authors = [
+          "Christopher Berner <christopherberner@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "libc";
+            packageId = "libc";
+            target = { target, features }: (target."unix" or false);
+          }
+        ];
+        devDependencies = [
+          {
+            name = "libc";
+            packageId = "libc";
+            target = { target, features }: (!("wasi" == target."os" or null));
+          }
+        ];
+        features = {
+          "log" = [ "dep:log" ];
+          "logging" = [ "log" ];
+          "pyo3" = [ "dep:pyo3" ];
+          "pyo3-build-config" = [ "dep:pyo3-build-config" ];
+          "python" = [ "pyo3" "pyo3-build-config" ];
+        };
+      };
       "redox_syscall 0.2.16" = rec {
         crateName = "redox_syscall";
         version = "0.2.16";
@@ -13587,6 +13618,10 @@ rec {
           {
             name = "prost";
             packageId = "prost";
+          }
+          {
+            name = "redb";
+            packageId = "redb";
           }
           {
             name = "reqwest";
