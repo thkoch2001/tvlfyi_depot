@@ -16,6 +16,24 @@
       "message": "You need `configure_nix_path(\u0026mut eval, \u0026None)` too.",
       "revId": "ad20ad169bf3afb8447fd0ad10b69a38f6b512d1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9da2a8d4_edd602c6",
+        "filename": "tvix/glue/tests/nix_oracle.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-05-04T20:12:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "85295f1d_139edb91",
+      "revId": "ad20ad169bf3afb8447fd0ad10b69a38f6b512d1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
