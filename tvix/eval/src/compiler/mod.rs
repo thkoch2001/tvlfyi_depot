@@ -17,6 +17,7 @@ mod bindings;
 mod import;
 mod optimiser;
 mod scope;
+mod syn;
 
 use codemap::Span;
 use rnix::ast::{self, AstToken};
@@ -26,6 +27,7 @@ use std::path::{Path, PathBuf};
 use std::rc::{Rc, Weak};
 
 use crate::chunk::Chunk;
+use crate::compiler::syn::{cst, FromCst, Syntax};
 use crate::errors::{CatchableErrorKind, Error, ErrorKind, EvalResult};
 use crate::observer::CompilerObserver;
 use crate::opcode::{CodeIdx, ConstantIdx, Count, JumpOffset, OpCode, UpvalueIdx};
@@ -312,7 +314,10 @@ impl Compiler<'_, '_> {
             ast::Expr::List(list) => self.thunk(slot, list, move |c, s| c.compile_list(s, list)),
 
             ast::Expr::AttrSet(attrs) => {
-                self.thunk(slot, attrs, move |c, s| c.compile_attr_set(s, attrs))
+                let attrs = &FromCst::from_cst(self, attrs.clone());
+                self.thunk(slot, attrs, move |c, s| {
+                    c.compile_attr_set::<cst::SyntaxImpl>(s, attrs)
+                })
             }
 
             ast::Expr::Select(select) => {
@@ -327,10 +332,16 @@ impl Compiler<'_, '_> {
             }
 
             ast::Expr::LetIn(let_in) => {
-                self.thunk(slot, let_in, move |c, s| c.compile_let_in(s, let_in))
+                let let_in = &FromCst::from_cst(self, let_in.clone());
+                self.thunk(slot, let_in, move |c, s| {
+                    c.compile_let_in::<cst::SyntaxImpl>(s, let_in)
+                })
             }
 
-            ast::Expr::Ident(ident) => self.compile_ident(slot, ident),
+            ast::Expr::Ident(ident) => {
+                let ident = &FromCst::from_cst(self, ident.clone());
+                self.compile_ident::<cst::SyntaxImpl>(slot, ident)
+            }
             ast::Expr::With(with) => self.thunk(slot, with, |c, s| c.compile_with(s, with)),
             ast::Expr::Lambda(lambda) => self.thunk(slot, lambda, move |c, s| {
                 c.compile_lambda_or_thunk(false, s, lambda, |c, s| c.compile_lambda(s, lambda))
@@ -343,9 +354,13 @@ impl Compiler<'_, '_> {
             // their value on the stack.
             ast::Expr::Paren(paren) => self.compile(slot, paren.expr().unwrap()),
 
-            ast::Expr::LegacyLet(legacy_let) => self.thunk(slot, legacy_let, move |c, s| {
-                c.compile_legacy_let(s, legacy_let)
-            }),
+            ast::Expr::LegacyLet(legacy_let) => {
+                let legacy_let: &<cst::SyntaxImpl as Syntax>::LegacyLet =
+                    &FromCst::from_cst(self, legacy_let.clone());
+                self.thunk(slot, legacy_let, move |c, s| {
+                    c.compile_legacy_let::<cst::SyntaxImpl>(s, legacy_let)
+                })
+            }
 
             ast::Expr::Root(_) => unreachable!("there cannot be more than one root"),
             ast::Expr::Error(_) => unreachable!("compile is only called on validated trees"),
