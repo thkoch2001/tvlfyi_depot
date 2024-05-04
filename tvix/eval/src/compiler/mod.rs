@@ -17,6 +17,7 @@ mod bindings;
 mod import;
 mod optimiser;
 mod scope;
+mod syn;
 
 use codemap::Span;
 use rnix::ast::{self, AstToken};
