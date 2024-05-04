@@ -1,8 +1,6 @@
-use async_stream::try_stream;
-use nix_compat::nar::reader::r#async::{
-    self as nar_reader, DirReader, Entry as ReaderEntry, Node as ReaderNode,
-};
-use tokio::io::AsyncBufRead;
+use async_recursion::async_recursion;
+use nix_compat::nar::reader::r#async as nar_reader;
+use tokio::{io::AsyncBufRead, sync::mpsc, try_join};
 use tvix_castore::{
     blobservice::BlobService,
     directoryservice::DirectoryService,
@@ -25,86 +23,74 @@ where
     DS: DirectoryService,
 {
     // open the NAR for reading.
-    // The NAR reader emits node in DFS preorder.
+    // The NAR reader emits nodes in DFS preorder.
     let root_node = nar_reader::open(r).await.map_err(|e| Error::IO(e))?;
 
-    // maintain a stack of all partially read dir_readers and their path.
-    let mut stack: Vec<(PathBuf, DirReader)> = Vec::new();
+    let (tx, rx) = mpsc::channel(1);
+    let rx = tokio_stream::wrappers::ReceiverStream::new(rx);
 
-    let entries = try_stream! {
-        match root_node {
-            nar_reader::Node::Symlink { target } => {
-                yield IngestionEntry::Symlink {
-                    path: PathBuf::default(),
-                    target,
-                }
-            }
-            nar_reader::Node::File { executable, mut reader } => {
-                let (digest, size) = {
-                    let mut blob_writer = blob_service.open_write().await;
-                    let size = tokio::io::copy_buf(&mut reader, &mut blob_writer).await?;
+    let produce = async move {
+        let res = produce_nar_inner(blob_service, root_node, PathBuf::default(), tx.clone()).await;
 
-                    (blob_writer.close().await?.into(), size)
-                };
+        tx.send(res).await;
 
-                yield IngestionEntry::Regular {
-                    path: PathBuf::default(),
-                    size,
-                    executable,
-                    digest
-                }
-            }
-            nar_reader::Node::Directory(dir_reader) => {
-                // push root dir to stack.
-                stack.push((PathBuf::default(), dir_reader));
-            }
-        }
-
-
-        loop {
-            // check if there's still something on the stack
-            let (parent_path, mut dir_reader) = match stack.pop() {
-                Some((parent_path,dir_reader)) => (parent_path, dir_reader),
-                None => break,
-            };
-
-            // consume entries from the dir_reader.
-            loop {
-                if let Some(ReaderEntry { name, node }) = dir_reader.next().await? {
-                    let path = parent_path.try_join(&name).expect("Tvix bug: failed to join name");
-                    match node {
-                        ReaderNode::Directory(child_dir_reader) => {
-                            // another child directory. push back what we popped from the stack, push the child, then continue.
-                            stack.push((parent_path.clone(), dir_reader));
-                            stack.push((path, child_dir_reader));
-                        },
-                        ReaderNode::Symlink { target } => {
-                            yield IngestionEntry::Symlink { path, target: target };
-                        },
-                        ReaderNode::File {
-                            executable, mut reader
-                        } => {
-                                let (digest, size) = {
-                                    let mut blob_writer = blob_service.open_write().await;
-                                    let size = tokio::io::copy_buf(&mut reader, &mut blob_writer).await?;
-
-                                    (blob_writer.close().await?.into(), size)
-                                };
-
-                                yield IngestionEntry::Regular { path, size, executable, digest  }
-                        }
-                    }
-                } else {
-                    // we're done with this directory, emit the IngestionEntry for it.
-                    yield IngestionEntry::Dir {
-                        path: parent_path.clone(),
-                    };
-                }
-            }
-        }
+        Ok(())
     };
 
-    Ok(ingest_entries(directory_service, Box::pin(entries)).await?)
+    let consume = ingest_entries(directory_service, rx);
+
+    let (_, node) = try_join!(produce, consume)?;
+    Ok(node)
+}
+
+#[async_recursion]
+async fn produce_nar_inner<'a: 'async_recursion, 'r: 'async_recursion, BS>(
+    blob_service: BS,
+    node: nar_reader::Node<'a, 'r>,
+    path: PathBuf,
+    tx: mpsc::Sender<Result<IngestionEntry, Error>>,
+) -> Result<IngestionEntry, Error>
+where
+    BS: BlobService + Clone,
+{
+    Ok(match node {
+        nar_reader::Node::Symlink { target } => IngestionEntry::Symlink { path, target },
+        nar_reader::Node::File {
+            executable,
+            mut reader,
+        } => {
+            let (digest, size) = {
+                let mut blob_writer = blob_service.open_write().await;
+                // TODO(edef): fix the AsyncBufRead implementation of nix_compat::wire::BytesReader
+                let size = tokio::io::copy(&mut reader, &mut blob_writer).await?;
+
+                (blob_writer.close().await?.into(), size)
+            };
+
+            IngestionEntry::Regular {
+                path,
+                size,
+                executable,
+                digest,
+            }
+        }
+        nar_reader::Node::Directory(mut dir_reader) => {
+            while let Some(entry) = dir_reader.next().await? {
+                let mut path = path.clone();
+
+                // valid NAR names are valid castore names
+                path.try_push(&entry.name)
+                    .expect("Tvix bug: failed to join name");
+
+                let entry =
+                    produce_nar_inner(blob_service.clone(), entry.node, path, tx.clone()).await?;
+
+                tx.send(Ok(entry)).await;
+            }
+
+            IngestionEntry::Dir { path }
+        }
+    })
 }
 
 #[derive(Debug, thiserror::Error)]
