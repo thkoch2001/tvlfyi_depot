@@ -6,6 +6,7 @@ use rstest::*;
 use rstest_reuse::{self, *};
 
 use super::PathInfoService;
+use crate::pathinfoservice::redb::RedbPathInfoService;
 use crate::pathinfoservice::MemoryPathInfoService;
 use crate::pathinfoservice::SledPathInfoService;
 use crate::proto::PathInfo;
@@ -25,6 +26,7 @@ use self::utils::make_bigtable_path_info_service;
     let (_, _, svc) = make_grpc_path_info_service_client().await;
     svc
 })]
+#[case::redb(RedbPathInfoService::new_temporary().unwrap())]
 #[case::sled(SledPathInfoService::new_temporary().unwrap())]
 #[cfg_attr(all(feature = "cloud",feature="integration"), case::bigtable(make_bigtable_path_info_service().await))]
 pub fn path_info_services(#[case] svc: impl PathInfoService) {}

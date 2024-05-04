@@ -2,7 +2,7 @@ use crate::proto::path_info_service_client::PathInfoServiceClient;
 
 use super::{
     GRPCPathInfoService, MemoryPathInfoService, NixHTTPPathInfoService, PathInfoService,
-    SledPathInfoService,
+    RedbPathInfoService, SledPathInfoService,
 };
 
 use nix_compat::narinfo;
@@ -48,6 +48,27 @@ pub async fn from_addr(
                 return Err(Error::StorageError("invalid url".to_string()));
             }
             Box::<MemoryPathInfoService>::default()
+        }
+        "redb" => {
+            // we don't support hosts, and we don't support paths (yet)
+            if url.has_host() {
+                return Err(Error::StorageError("no host allowed".to_string()));
+            }
+
+            if url.path() == "/" {
+                return Err(Error::StorageError(
+                    "cowardly refusing to open / with redb".to_string(),
+                ));
+            }
+
+            Box::new(if url.path().is_empty() {
+                RedbPathInfoService::new_temporary()
+                    .map_err(|e| Error::StorageError(e.to_string()))?
+            } else {
+                RedbPathInfoService::open(url.path())
+                    .await
+                    .map_err(|e| Error::StorageError(e.to_string()))?
+            })
         }
         "sled" => {
             // sled doesn't support host, and a path can be provided (otherwise
@@ -157,6 +178,8 @@ mod tests {
     lazy_static! {
         static ref TMPDIR_SLED_1: TempDir = TempDir::new().unwrap();
         static ref TMPDIR_SLED_2: TempDir = TempDir::new().unwrap();
+        static ref TMPDIR_REDB_1: TempDir = TempDir::new().unwrap();
+        static ref TMPDIR_REDB_2: TempDir = TempDir::new().unwrap();
     }
 
     // the gRPC tests below don't fail, because we connect lazily.
@@ -194,6 +217,14 @@ mod tests {
     #[case::correct_nix_https_with_trusted_public_key("nix+https://cache.nixos.org?trusted-public-keys=cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=", true)]
     /// Correct Scheme for the cache.nixos.org binary cache, and two correct trusted public keys set
     #[case::correct_nix_https_with_two_trusted_public_keys("nix+https://cache.nixos.org?trusted-public-keys=cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=%20foo:jp4fCEx9tBEId/L0ZsVJ26k0wC0fu7vJqLjjIGFkup8=", true)]
+    /// redb with a host, and a valid path path, which should fail.
+    #[case::redb_invalid_host_with_valid_path(&format!("redb://foo.example{}", &TMPDIR_REDB_1.path().to_str().unwrap()), false)]
+    /// redb with / as path, which should fail.
+    #[case::redb_invalid_root("redb:///", false)]
+    /// redb with / as path, which should succeed.
+    #[case::redb_valid_path(&format!("redb://{}", &TMPDIR_REDB_2.path().join("foo").to_str().unwrap()), true)]
+    /// redb using the in-memory backend, which should succeed.
+    #[case::redb_valid_in_memory("redb://", true)]
     /// Correct scheme to connect to a unix socket.
     #[case::grpc_valid_unix_socket("grpc+unix:///path/to/somewhere", true)]
     /// Correct scheme for unix socket, but setting a host too, which is invalid.
