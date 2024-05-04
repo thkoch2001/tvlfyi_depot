@@ -4,6 +4,7 @@ mod grpc;
 mod lru;
 mod memory;
 mod nix_http;
+mod redb;
 mod sled;
 
 #[cfg(any(feature = "fuse", feature = "virtiofs"))]
@@ -24,6 +25,7 @@ pub use self::grpc::GRPCPathInfoService;
 pub use self::lru::LruPathInfoService;
 pub use self::memory::MemoryPathInfoService;
 pub use self::nix_http::NixHTTPPathInfoService;
+pub use self::redb::RedbPathInfoService;
 pub use self::sled::SledPathInfoService;
 
 #[cfg(feature = "cloud")]
