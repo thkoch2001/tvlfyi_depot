@@ -14,7 +14,6 @@ sure noone is working on this, or has some specific design in mind already.
    - Parts requiring test fixtures need some special convention.
      Some of these also cannot be checked into the repo, like the import tests
      adding special files to test filtering.
- - add `nix_oracle` mechanism from `tvix-eval` to `tvix-glue`.
 
 ## Fixes towards correctness
  - `builtins.toXML` is missing string context. See b/398.
