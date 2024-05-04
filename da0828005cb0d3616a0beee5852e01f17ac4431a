@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be572316_b2aad42e",
+        "filename": "tvix/nix-compat/src/nar/reader/async/mod.rs",
+        "patchSetId": 17
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-04T21:34:04Z",
+      "side": 1,
+      "message": "docstring",
+      "revId": "da0828005cb0d3616a0beee5852e01f17ac4431a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "90840e2d_b0b2fc31",
+        "filename": "tvix/nix-compat/src/nar/reader/async/mod.rs",
+        "patchSetId": 17
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-04T21:34:04Z",
+      "side": 1,
+      "message": "Note to self: add individual tests, not just through ingest_nar",
+      "revId": "da0828005cb0d3616a0beee5852e01f17ac4431a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
