@@ -43,7 +43,7 @@ pub trait Syntax {
     type AttrPath: AttrPath<Self>;
     type AttrPathValue: AttrPathValue<Self> + Entry<Self>;
     type AttrSet: AttrSet<Self> + HasEntries<Self>;
-    type Entry: Entry<Self>;
+    type Entry: Entry<Self> /* TODO(amjoseph): HasEntries<Self> */;
     type LetIn: LetIn<Self> + HasEntries<Self>;
     type LegacyLet: LegacyLet<Self> + HasEntries<Self>;
     type Expr: Expr<Self>;
