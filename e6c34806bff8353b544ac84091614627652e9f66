@@ -24,6 +24,47 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c5f44f4_39d3d754",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-05T19:48:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eb37600e_f7588c1d",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 3
+      },
+      "revId": "e6c34806bff8353b544ac84091614627652e9f66",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5f95ed28_e4dfdaf5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-05T19:48:25Z",
+      "side": 1,
+      "message": "@sterni you should probably copy your excellent comment from https://cl.tvl.fyi/c/depot/+/10373/comment/944e74d8_11f39ffb/ into something in tvix/eval/docs; it\u0027s worth putting it somewhere less ephemeral than gerrit comments.",
+      "revId": "e6c34806bff8353b544ac84091614627652e9f66",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "944e74d8_11f39ffb",
@@ -47,6 +88,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "67a1c3f4_4d53809c",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 346,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-05T19:48:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "944e74d8_11f39ffb",
+      "range": {
+        "startLine": 345,
+        "startChar": 19,
+        "endLine": 346,
+        "endChar": 58
+      },
+      "revId": "e6c34806bff8353b544ac84091614627652e9f66",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "532c82a3_bc3f3545",
@@ -60,6 +125,24 @@
       "writtenOn": "2023-12-16T11:31:29Z",
       "side": 1,
       "message": "We could also add here that only thunking the argument would require non-tail-calls which we don\u0027t have.",
+      "revId": "e6c34806bff8353b544ac84091614627652e9f66",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cac2620a_40d520b6",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-05T19:48:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "532c82a3_bc3f3545",
       "revId": "e6c34806bff8353b544ac84091614627652e9f66",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
