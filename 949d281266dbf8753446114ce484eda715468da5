@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0def6e2f_6dcdb34b",
+        "filename": "tvix/glue/tests/nix_oracle.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-05T08:00:04Z",
+      "side": 1,
+      "message": "I don\u0027t quite get it. Shouldn\u0027t this (and the counterpart in tvix-eval) be expressed by the existing `.nix`/`.exp` mechanism, and the verification that the .exp on disk equals to what Nix produces covered by `verify-lang-tests/default.nix` (which would need to be extended to multiple test roots)?",
+      "revId": "949d281266dbf8753446114ce484eda715468da5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63dfec0a_da0f6db7",
+        "filename": "tvix/glue/tests/nix_oracle.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-05T08:00:04Z",
+      "side": 1,
+      "message": "Hmmh, I think the non-stable string output is one of the reasons why the testsuite uses XML format in some cases.\n\nIn cl/10687 (and following) I extended the test suite to actually compare these outputs - I\u0027d prefer this comparison to live there.",
+      "revId": "949d281266dbf8753446114ce484eda715468da5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
