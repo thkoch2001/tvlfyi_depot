@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e294df7_f16b4fc0",
+        "filename": "tvix/store/src/nar/import.rs",
+        "patchSetId": 13
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-06T15:24:05Z",
+      "side": 1,
+      "message": "It\u0027s because of lifetime issues. If you describe this in a loop, Rust can\u0027t prove you\u0027re not using both the \"parent\" and \"child\" nar reader objects, both holding mutable references to the underlying async reader. Hence the channel and sending things while recursing.",
+      "parentUuid": "1f6f4213_46f0c857",
+      "revId": "268ad788a7df61d65b0bcb8bfd9980cb7136a545",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b05e1467_9d044a89",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fe8deab_622cbae1",
+        "filename": "tvix/store/src/nar/import.rs",
+        "patchSetId": 13
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-06T15:24:05Z",
+      "side": 1,
+      "message": "I think we even have Rust 1.77. Though there\u0027s other places using async_recursion too, I guess we can do that in a followup CL.",
+      "parentUuid": "b05e1467_9d044a89",
+      "revId": "268ad788a7df61d65b0bcb8bfd9980cb7136a545",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "40a56824_7be73334",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-05-06T15:09:37Z",
       "side": 1,
       "message": "NarSize for consistency",
+      "revId": "268ad788a7df61d65b0bcb8bfd9980cb7136a545",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d48c258f_12eaf666",
+        "filename": "tvix/store/src/pathinfoservice/nix_http.rs",
+        "patchSetId": 13
+      },
+      "lineNbr": 224,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-06T15:24:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40a56824_7be73334",
       "revId": "268ad788a7df61d65b0bcb8bfd9980cb7136a545",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
