@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5fcd552b_9041c8dc",
+        "filename": "tvix/docs/src/nix-daemon/changelog.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-06T14:20:22Z",
+      "side": 1,
+      "message": "Can you wire this into the listing (`SUMMARY.md`).\n\nIt should be visible by a `mdbook serve --open` then.",
+      "revId": "ef990aa2a4e2580e655f988696f3eead0ea5fd04",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f716e5d1_71a55000",
+        "filename": "tvix/docs/src/nix-daemon/logging.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-06T14:20:22Z",
+      "side": 1,
+      "message": "stray whitespace (should also probably just be a bullet point listing?)",
+      "revId": "ef990aa2a4e2580e655f988696f3eead0ea5fd04",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
