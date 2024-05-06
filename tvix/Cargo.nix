@@ -698,35 +698,6 @@ rec {
         ];
 
       };
-      "async-recursion" = rec {
-        crateName = "async-recursion";
-        version = "1.0.5";
-        edition = "2018";
-        sha256 = "1l2vlgyaa9a2dd0y1vbqyppzsvpdr1y4rar4gn1qi68pl5dmmmaz";
-        procMacro = true;
-        authors = [
-          "Robert Usher <266585+dcchut@users.noreply.github.com>"
-        ];
-        dependencies = [
-          {
-            name = "proc-macro2";
-            packageId = "proc-macro2";
-            usesDefaultFeatures = false;
-          }
-          {
-            name = "quote";
-            packageId = "quote";
-            usesDefaultFeatures = false;
-          }
-          {
-            name = "syn";
-            packageId = "syn 2.0.48";
-            usesDefaultFeatures = false;
-            features = [ "full" "parsing" "printing" "proc-macro" "clone-impls" ];
-          }
-        ];
-
-      };
       "async-signal" = rec {
         crateName = "async-signal";
         version = "0.2.5";
@@ -14078,10 +14049,6 @@ rec {
             features = [ "tokio" "gzip" "bzip2" "xz" ];
           }
           {
-            name = "async-recursion";
-            packageId = "async-recursion";
-          }
-          {
             name = "bstr";
             packageId = "bstr";
           }
@@ -14273,10 +14240,6 @@ rec {
           {
             name = "anyhow";
             packageId = "anyhow";
-          }
-          {
-            name = "async-recursion";
-            packageId = "async-recursion";
           }
           {
             name = "async-stream";
