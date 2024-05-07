@@ -20,6 +20,8 @@ Some valid queries:
   tomorrow 5PM
   -22h
   -7h10m
+  Mar 15
+  Sep 3 18:00
 
 For now a single timestamp and a single duration (which is added either to the
 current time, or the given time) is supported.`
@@ -30,17 +32,53 @@ func printTime(t time.Time) {
 	fmt.Println("UNIX: ", t.Unix())
 }
 
-func setTime(this time.Time, that time.Time) time.Time {
-	return time.Date(
-		this.Year(),
-		this.Month(),
-		this.Day(),
-		that.Hour(),
-		that.Minute(),
-		that.Second(),
-		0,
-		this.Location(),
-	)
+type FieldSet uint8
+
+const (
+	SetYear FieldSet = 1 << iota
+	SetDay
+	SetMonth
+	SetHour
+	SetMinute
+	SetSecond
+	SetLocation
+)
+
+const (
+	SetDate  = SetYear | SetDay | SetMonth
+	SetClock = SetHour | SetMinute | SetSecond
+)
+
+// mergeTimes returns a new time.Time with all fields in this overridden with the
+// specified fields from that.
+func mergeTimes(this time.Time, that time.Time, set FieldSet) time.Time {
+	year, month, day := this.Date()
+	hour, min, sec := this.Clock()
+	loc := this.Location()
+
+	if set&SetYear == SetYear {
+		year = that.Year()
+	}
+	if set&SetMonth == SetMonth {
+		month = that.Month()
+	}
+	if set&SetDay == SetDay {
+		day = that.Day()
+	}
+	if set&SetHour == SetHour {
+		hour = that.Hour()
+	}
+	if set&SetMinute == SetMinute {
+		min = that.Minute()
+	}
+	if set&SetSecond == SetSecond {
+		sec = that.Second()
+	}
+	if set&SetLocation == SetLocation {
+		loc = that.Location()
+	}
+
+	return time.Date(year, month, day, hour, min, sec, 0, loc)
 }
 
 func parseTime(input string) (time.Time, error) {
@@ -61,22 +99,41 @@ func parseTime(input string) (time.Time, error) {
 
 	if t, err := time.Parse(time.Kitchen, input); err == nil {
 		now := time.Now()
-		return setTime(now, t), nil
+		return mergeTimes(now, t, SetClock), nil
 	}
 
 	if t, err := time.Parse(time.TimeOnly, input); err == nil {
 		now := time.Now()
-		return setTime(now, t), nil
+		return mergeTimes(now, t, SetClock), nil
 	}
 
 	if t, err := time.Parse("15:04", input); err == nil {
 		now := time.Now()
-		return setTime(now, t), nil
+		return mergeTimes(now, t, SetClock), nil
 	}
 
 	if t, err := time.Parse("3PM", input); err == nil {
 		now := time.Now()
-		return setTime(now, t), nil
+		return mergeTimes(now, t, SetClock), nil
+	}
+
+	if t, err := time.Parse(time.DateTime, input); err == nil {
+		return t, nil
+	}
+
+	if t, err := time.Parse(time.Stamp, input); err == nil {
+		now := time.Now()
+		return mergeTimes(t, now, SetYear|SetLocation), nil
+	}
+
+	if t, err := time.Parse("Jan _2 15:04", input); err == nil {
+		now := time.Now()
+		return mergeTimes(t, now, SetYear|SetLocation), nil
+	}
+
+	if t, err := time.Parse("Jan _2", input); err == nil {
+		now := time.Now()
+		return mergeTimes(t, now, SetYear|SetLocation), nil
 	}
 
 	return time.Time{}, fmt.Errorf("could not parse time: %q", input)
