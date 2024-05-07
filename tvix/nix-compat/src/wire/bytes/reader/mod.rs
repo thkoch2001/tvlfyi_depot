@@ -76,10 +76,17 @@ where
         }
 
         Ok(Self {
-            state: State::Body {
-                reader: Some(reader),
-                consumed: 0,
-                user_len: size,
+            state: if size != 0 {
+                State::Body {
+                    reader: Some(reader),
+                    consumed: 0,
+                    user_len: size,
+                }
+            } else {
+                State::ReleaseTrailer {
+                    consumed: 0,
+                    data: read_trailer::<R, T>(reader, 0).await?,
+                }
             },
         })
     }
@@ -275,6 +282,23 @@ mod tests {
                 .kind(),
             io::ErrorKind::InvalidData
         );
+    }
+
+    /// Read the trailer immediately if there is no payload.
+    #[tokio::test]
+    async fn read_trailer_immediately() {
+        use crate::nar::wire::PadPar;
+
+        let mut mock = Builder::new()
+            .read(&[0; 8])
+            .read(&PadPar::PATTERN[8..])
+            .build();
+
+        BytesReader::<_, PadPar>::new_internal(&mut mock, ..)
+            .await
+            .unwrap();
+
+        // The mock reader will panic if dropped without reading all data.
     }
 
     /// Fail if the padding is not all zeroes
