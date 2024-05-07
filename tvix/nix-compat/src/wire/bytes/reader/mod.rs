@@ -76,10 +76,17 @@ where
         }
 
         Ok(Self {
-            state: State::Body {
-                reader: Some(reader),
-                consumed: 0,
-                user_len: size,
+            state: if size != 0 {
+                State::Body {
+                    reader: Some(reader),
+                    consumed: 0,
+                    user_len: size,
+                }
+            } else {
+                State::ReleaseTrailer {
+                    consumed: 0,
+                    data: read_trailer(reader, 0).await?,
+                }
             },
         })
     }
