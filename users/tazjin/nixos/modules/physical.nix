@@ -24,6 +24,7 @@ in
         users.tazjin.chase-geese
         config.tazjin.emacs
         third_party.agenix.cli
+        tools.when
       ]) ++
 
       # programs from nixpkgs
