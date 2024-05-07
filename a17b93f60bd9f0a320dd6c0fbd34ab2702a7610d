@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7b8ee673_c0ddc2bf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-07T09:48:17Z",
+      "side": 1,
+      "message": "s/If/As/? I assumed we require the underlying reader to be buffered now?",
+      "revId": "a17b93f60bd9f0a320dd6c0fbd34ab2702a7610d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
