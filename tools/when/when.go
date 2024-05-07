@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -106,6 +107,13 @@ func main() {
 	var t time.Time
 	var err error
 	var haveTime, haveDuration bool
+
+	// Try to parse entire input as one full thing, before getting more
+	// clever.
+	if t, err = parseTime(strings.Join(os.Args[1:], " ")); err == nil {
+		printTime(t)
+		return
+	}
 
 	for _, arg := range os.Args[1:] {
 		if !haveTime {
