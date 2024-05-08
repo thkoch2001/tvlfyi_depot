@@ -16,6 +16,24 @@
       "message": "This needs a testcase ;-)",
       "revId": "732ca17ac1f9a269c946a084d2a6ab00980afe78",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6854b00d_39f09f2c",
+        "filename": "tvix/nix-compat/src/wire/bytes/reader/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 254,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-08T05:55:51Z",
+      "side": 1,
+      "message": "I added some test cases.",
+      "parentUuid": "38ef62b9_d8b9c56b",
+      "revId": "732ca17ac1f9a269c946a084d2a6ab00980afe78",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
