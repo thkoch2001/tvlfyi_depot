@@ -51,6 +51,24 @@
       "message": "I get that having AsyncBufRead propergate down through readers is useful but was there a reason that Reader type is `dyn AsyncBufRead` and not a generic?",
       "revId": "a17b93f60bd9f0a320dd6c0fbd34ab2702a7610d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd59fbd7_4c9d527c",
+        "filename": "tvix/nix-compat/src/nar/reader/async/mod.rs",
+        "patchSetId": 18
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-05-08T14:02:06Z",
+      "side": 1,
+      "message": "I ask because aside from the copy_buf use you introduce in this CL there is nothing in the implementation of the nar reader that requires the underlying reader be AsyncBufRead. If a generic was used instead of `dyn AsyncBufRead` the underlying reader could be agnostic to the whole issue of needing FileReader to implement AsyncBufRead. So that if you need FileReader to implement AsyncBufRead you have to ennsure that the underlying reader supports AsyncBufRead. While if you don\u0027t have that requirement you can still use the nar reader with a normal AsyncRead.",
+      "parentUuid": "8081230c_796a05ee",
+      "revId": "a17b93f60bd9f0a320dd6c0fbd34ab2702a7610d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
