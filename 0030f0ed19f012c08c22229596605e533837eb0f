@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "049ea0e1_cd023a6d",
+        "filename": "tvix/tools/crunch-v2/src/main.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-08T11:36:33Z",
+      "side": 1,
+      "message": "This can now probably just be `tvix_store::nar::ingest_nar` (async).",
+      "revId": "0030f0ed19f012c08c22229596605e533837eb0f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
