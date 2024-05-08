@@ -34,6 +34,23 @@
       "parentUuid": "7b8ee673_c0ddc2bf",
       "revId": "a17b93f60bd9f0a320dd6c0fbd34ab2702a7610d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8081230c_796a05ee",
+        "filename": "tvix/nix-compat/src/nar/reader/async/mod.rs",
+        "patchSetId": 18
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-05-08T13:58:06Z",
+      "side": 1,
+      "message": "I get that having AsyncBufRead propergate down through readers is useful but was there a reason that Reader type is `dyn AsyncBufRead` and not a generic?",
+      "revId": "a17b93f60bd9f0a320dd6c0fbd34ab2702a7610d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
