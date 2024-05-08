@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd787072_42376f9d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-08T03:55:01Z",
+      "side": 1,
+      "message": "stray whitespace",
+      "revId": "d6286278b82083ce5d37225033340b159627dca4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6361d91_aa68a08f",
+        "filename": "tvix/nix-compat/src/wire/bytes/reader/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-08T03:55:01Z",
+      "side": 1,
+      "message": "docstring, explain how this splits, and why.",
+      "revId": "d6286278b82083ce5d37225033340b159627dca4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00d967b9_e3781cfa",
+        "filename": "tvix/nix-compat/src/wire/bytes/reader/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-08T03:55:01Z",
+      "side": 1,
+      "message": "tail or trailer?",
+      "revId": "d6286278b82083ce5d37225033340b159627dca4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ab12b70_ddc131fe",
+        "filename": "tvix/nix-compat/src/wire/bytes/reader/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-08T03:55:01Z",
+      "side": 1,
+      "message": "trailer or tail?",
+      "revId": "d6286278b82083ce5d37225033340b159627dca4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
