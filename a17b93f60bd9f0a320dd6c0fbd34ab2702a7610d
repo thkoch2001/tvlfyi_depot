@@ -87,6 +87,24 @@
       "parentUuid": "cd59fbd7_4c9d527c",
       "revId": "a17b93f60bd9f0a320dd6c0fbd34ab2702a7610d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45bebbe3_27203582",
+        "filename": "tvix/nix-compat/src/nar/reader/async/mod.rs",
+        "patchSetId": 18
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-05-08T16:03:38Z",
+      "side": 1,
+      "message": "An AsyncRead can also be buffered and the only thing AsyncBufRead provides is access to that buffer. The problem I have with it is when I want to layer AsyncRead streams on top each other (like for the nix daemon) I now have to make sure each layer supports AsyncBufRead (because I assume the lowest layer is at least buffered and anything else is as you say shooting myself in the foot) or wrap to get an ekstra buffer just to call the nar reader interface. It reduces my flexibility as a user of the API when nothing in the code requires the extra methods in AsyncBufRead and it just functions as a marker saying \"reader needs to be buffered\".\n\nWhen ingesting a nar into twix that is all fine because it now uses copy_buf and so require AsyncBufRead but one of the things I want to use the nix daemon protocol for is as a proxy where I am more just moving a nar from one port to the other. I need the nar reader for this because to find the end of the stream where the nar is I have to parse the damn thing.",
+      "parentUuid": "70fd7193_3bd51fa8",
+      "revId": "a17b93f60bd9f0a320dd6c0fbd34ab2702a7610d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
