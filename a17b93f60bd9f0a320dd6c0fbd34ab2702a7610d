@@ -105,6 +105,24 @@
       "parentUuid": "70fd7193_3bd51fa8",
       "revId": "a17b93f60bd9f0a320dd6c0fbd34ab2702a7610d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "658b9cf1_d12ee5d6",
+        "filename": "tvix/nix-compat/src/nar/reader/async/mod.rs",
+        "patchSetId": 18
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-05-08T17:51:06Z",
+      "side": 1,
+      "message": "Even if you\u0027re just copying, you\u0027ll need an internal buffer *somewhere*. `write()` takes a buffer, after all. Regular `copy()` just allocates an internal buffer for this purpose, and then throws it away immediately, to be reallocated on the next copy. In other words, an allocation cycle for every file.\n\nI\u0027d honestly recommend just wrapping the stream and using `copy_buf`. The other wire protocol code being laxer in its trait bounds isn\u0027t particularly honest either, since the NAR reader really is the only thing that actually does large contiguous reads.",
+      "parentUuid": "45bebbe3_27203582",
+      "revId": "a17b93f60bd9f0a320dd6c0fbd34ab2702a7610d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
