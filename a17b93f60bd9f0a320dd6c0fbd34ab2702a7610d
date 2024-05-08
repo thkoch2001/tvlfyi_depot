@@ -16,6 +16,24 @@
       "message": "s/If/As/? I assumed we require the underlying reader to be buffered now?",
       "revId": "a17b93f60bd9f0a320dd6c0fbd34ab2702a7610d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9811fb7_835712e8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 18
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-05-08T01:23:52Z",
+      "side": 1,
+      "message": "No, that\u0027s only the case for the NAR reader, which takes `\u0026mut dyn AsyncBufRead`. You can still use BytesReader with an unbuffered underlying reader if so desired.",
+      "parentUuid": "7b8ee673_c0ddc2bf",
+      "revId": "a17b93f60bd9f0a320dd6c0fbd34ab2702a7610d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
