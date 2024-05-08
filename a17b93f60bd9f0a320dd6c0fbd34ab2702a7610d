@@ -69,6 +69,24 @@
       "parentUuid": "8081230c_796a05ee",
       "revId": "a17b93f60bd9f0a320dd6c0fbd34ab2702a7610d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "70fd7193_3bd51fa8",
+        "filename": "tvix/nix-compat/src/nar/reader/async/mod.rs",
+        "patchSetId": 18
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-05-08T14:48:17Z",
+      "side": 1,
+      "message": "The AsyncBufRead requirement is intentional. We rely on performing many small reads to be cheap, and anytime you provide an unbuffered reader you are almost certainly shooting yourself in the foot.\n\nUsing a generic here causes a lot of code blowup and makes all the types more complicated (it would propagate into the Node type), for little gain. That too is intentional.",
+      "parentUuid": "cd59fbd7_4c9d527c",
+      "revId": "a17b93f60bd9f0a320dd6c0fbd34ab2702a7610d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
