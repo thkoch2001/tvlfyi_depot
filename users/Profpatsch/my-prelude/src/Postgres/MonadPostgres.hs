@@ -460,7 +460,7 @@ executeManyImpl ::
   NonEmpty params ->
   Transaction m (Label "numberOfRowsAffected" Natural)
 executeManyImpl zoomTools zoomDebugLogDatabaseQueries qry params =
-  Otel.inSpan' "Postgres Query (execute)" Otel.defaultSpanArguments $ \span -> do
+  Otel.inSpan' "Postgres Query (executeMany)" Otel.defaultSpanArguments $ \span -> do
     tools <- lift @Transaction zoomTools
     logDatabaseQueries <- lift @Transaction zoomDebugLogDatabaseQueries
     traceQueryIfEnabled tools span logDatabaseQueries qry (HasMultiParams params)
@@ -489,7 +489,7 @@ executeManyReturningWithImpl ::
   Transaction m [r]
 {-# INLINE executeManyReturningWithImpl #-}
 executeManyReturningWithImpl zoomTools zoomDebugLogDatabaseQueries qry params (Decoder fromRow) = do
-  Otel.inSpan' "Postgres Query (execute)" Otel.defaultSpanArguments $ \span -> do
+  Otel.inSpan' "Postgres Query (executeManyReturning)" Otel.defaultSpanArguments $ \span -> do
     tools <- lift @Transaction zoomTools
     logDatabaseQueries <- lift @Transaction zoomDebugLogDatabaseQueries
     traceQueryIfEnabled tools span logDatabaseQueries qry (HasMultiParams params)
@@ -582,7 +582,7 @@ queryWithImpl ::
   Transaction m [r]
 {-# INLINE queryWithImpl #-}
 queryWithImpl zoomTools zoomDebugLogDatabaseQueries qry params (Decoder fromRow) = do
-  Otel.inSpan' "Postgres Query (execute)" Otel.defaultSpanArguments $ \span -> do
+  Otel.inSpan' "Postgres Query (queryWith)" Otel.defaultSpanArguments $ \span -> do
     tools <- lift @Transaction zoomTools
     logDatabaseQueries <- lift @Transaction zoomDebugLogDatabaseQueries
     traceQueryIfEnabled tools span logDatabaseQueries qry (HasSingleParam params)
