@@ -55,7 +55,6 @@ import System.Directory qualified as Xdg
 import System.Environment qualified as Env
 import System.FilePath ((</>))
 import Text.Blaze.Html (Html)
-import Text.Blaze.Html.Renderer.Pretty qualified as Html.Pretty
 import Text.Blaze.Html.Renderer.Utf8 qualified as Html
 import Text.Blaze.Html5 qualified as Html
 import Tool (readTool, readTools)
@@ -313,10 +312,6 @@ runHandlers ::
   (Wai.Response -> IO ResponseReceived) ->
   m ResponseReceived
 runHandlers debug defaultHandler handlers req respond = withRunInIO $ \runInIO -> do
-  let renderHtml =
-        if debug
-          then Html.Pretty.renderHtml >>> stringToText >>> textToBytesUtf8 >>> toLazyBytes
-          else Html.renderHtml
   let hh route act =
         Otel.inSpan'
           [fmt|Route {route}|]
@@ -329,7 +324,7 @@ runHandlers debug defaultHandler handlers req respond = withRunInIO $ \runInIO -
           )
           ( \span -> do
               res <- act span
-              liftIO $ respond . Wai.responseLBS Http.ok200 ([("Content-Type", "text/html")] <> res.extraHeaders) . renderHtml $ res.html
+              liftIO $ respond . Wai.responseLBS Http.ok200 ([("Content-Type", "text/html")] <> res.extraHeaders) . Html.renderHtml $ res.html
           )
   let h route act = hh route (\span -> act span <&> (\html -> T2 (label @"html" html) (label @"extraHeaders" [])))
 
