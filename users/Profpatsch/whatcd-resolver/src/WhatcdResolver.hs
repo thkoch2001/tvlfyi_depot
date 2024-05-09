@@ -319,7 +319,7 @@ runHandlers debug defaultHandler handlers req respond = withRunInIO $ \runInIO -
           else Html.renderHtml
   let hh route act =
         Otel.inSpan'
-          [fmt|Route {route }|]
+          [fmt|Route {route}|]
           ( Otel.defaultSpanArguments
               { Otel.attributes =
                   HashMap.fromList
@@ -333,7 +333,7 @@ runHandlers debug defaultHandler handlers req respond = withRunInIO $ \runInIO -
           )
   let h route act = hh route (\span -> act span <&> (\html -> T2 (label @"html" html) (label @"extraHeaders" [])))
 
-  let path = (req & Wai.pathInfo & Text.intercalate "/")
+  let path = [fmt|/{req & Wai.pathInfo & Text.intercalate "/"}|]
   let handlerResponses =
         ( T2
             (label @"h" (h path))
