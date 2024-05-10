@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8dbb3ddb_5acabb1b",
+        "filename": "tvix/docs/src/nix-daemon/changelog.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-05-10T22:07:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5fcd552b_9041c8dc",
+      "revId": "ef990aa2a4e2580e655f988696f3eead0ea5fd04",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f716e5d1_71a55000",
