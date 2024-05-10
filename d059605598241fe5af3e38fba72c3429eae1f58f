@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e261e271_d4421cd2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-05-10T18:31:12Z",
+      "side": 1,
+      "message": "I wonder if a sync parking lot lock makes sense here as well? As long as we don\u0027t need to hold across awaits.",
+      "revId": "d059605598241fe5af3e38fba72c3429eae1f58f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
