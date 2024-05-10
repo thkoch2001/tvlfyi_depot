@@ -33,6 +33,24 @@
       "message": "Can we get away with a synchronous parking lot RwLock? Those are lower overhead and preferable to async locks as long as we don\u0027t need to hold the lock across awaits.",
       "revId": "749e2cf5e5533e014d30aac15046af4ca4c3bc50",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61aaa4fd_1fbe4379",
+        "filename": "tvix/store/src/pathinfoservice/lru.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-10T21:29:44Z",
+      "side": 1,
+      "message": "We need to, for the listing at least, as the parking_lot RwLock is not Send.",
+      "parentUuid": "7c66ff42_8624db33",
+      "revId": "749e2cf5e5533e014d30aac15046af4ca4c3bc50",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
