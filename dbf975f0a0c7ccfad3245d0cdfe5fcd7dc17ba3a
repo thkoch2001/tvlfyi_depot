@@ -16,6 +16,24 @@
       "message": "What changed here? Is this effectively different from before?",
       "revId": "dbf975f0a0c7ccfad3245d0cdfe5fcd7dc17ba3a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89e1e149_ad0f5069",
+        "filename": "tvix/store/src/pathinfoservice/sled.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-10T21:27:02Z",
+      "side": 1,
+      "message": "Yes, this is probably still not correct - the iterator might take some time to give the next value, during which this is blocked. We probably need a blocking task to write into a channel, and return the RX side of it?",
+      "parentUuid": "cc264ca8_28e3937a",
+      "revId": "dbf975f0a0c7ccfad3245d0cdfe5fcd7dc17ba3a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
