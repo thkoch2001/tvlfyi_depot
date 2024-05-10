@@ -33,6 +33,24 @@
       "message": "stray whitespace (should also probably just be a bullet point listing?)",
       "revId": "ef990aa2a4e2580e655f988696f3eead0ea5fd04",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "231f6042_ea565f5f",
+        "filename": "tvix/docs/src/nix-daemon/logging.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-10T22:04:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f716e5d1_71a55000",
+      "revId": "ef990aa2a4e2580e655f988696f3eead0ea5fd04",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
