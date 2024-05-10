@@ -51,6 +51,24 @@
       "parentUuid": "7c66ff42_8624db33",
       "revId": "749e2cf5e5533e014d30aac15046af4ca4c3bc50",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65b44cab_6ee94b6a",
+        "filename": "tvix/store/src/pathinfoservice/lru.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-10T21:52:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61aaa4fd_1fbe4379",
+      "revId": "749e2cf5e5533e014d30aac15046af4ca4c3bc50",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
