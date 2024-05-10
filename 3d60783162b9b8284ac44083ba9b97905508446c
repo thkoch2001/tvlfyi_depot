@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e9ce73a5_094d7382",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-10T21:13:35Z",
+      "side": 1,
+      "message": "This is totally epic!  I think tvix is now the authoritative source of documentation on the worker protocol.",
+      "revId": "3d60783162b9b8284ac44083ba9b97905508446c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac8b91ae_d78adfb7",
+        "filename": "tvix/docs/src/nix-daemon/serialization.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-10T21:13:35Z",
+      "side": 1,
+      "message": "The deserialization of strings is totally wacky; see this PR that fixed gorgon\u0027s handling of them:\n\nhttps://codeberg.org/gorgon/gorgon/pulls/26\n\nIf null characters appear in the (length-prefixed) byte array, the string will be silently truncated before the null byte during deserialization.  The cppnix source code actually has a test case for this!  Anyways, it\u0027s gross, but it is what it is.",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 2
+      },
+      "revId": "3d60783162b9b8284ac44083ba9b97905508446c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
