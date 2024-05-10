@@ -52,6 +52,24 @@
       "parentUuid": "89e1e149_ad0f5069",
       "revId": "dbf975f0a0c7ccfad3245d0cdfe5fcd7dc17ba3a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "952715b1_1da6d827",
+        "filename": "tvix/store/src/pathinfoservice/sled.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-10T21:52:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48ae220c_9680d6aa",
+      "revId": "dbf975f0a0c7ccfad3245d0cdfe5fcd7dc17ba3a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
