@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d3362d3_66b34d82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-05-10T18:23:56Z",
+      "side": 1,
+      "message": "very simple, nice!",
+      "revId": "749e2cf5e5533e014d30aac15046af4ca4c3bc50",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c66ff42_8624db33",
+        "filename": "tvix/store/src/pathinfoservice/lru.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-05-10T18:23:56Z",
+      "side": 1,
+      "message": "Can we get away with a synchronous parking lot RwLock? Those are lower overhead and preferable to async locks as long as we don\u0027t need to hold the lock across awaits.",
+      "revId": "749e2cf5e5533e014d30aac15046af4ca4c3bc50",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
