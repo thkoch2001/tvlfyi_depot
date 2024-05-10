@@ -109,15 +109,10 @@ depot.nix.readTree.drvTargets
     path = ../../docs;
     importPathName = "docs";
   });
-  docs-sled = (mkBootTest {
-    blobServiceAddr = "sled://$PWD/blobs.sled";
+  docs-persistent = (mkBootTest {
+    blobServiceAddr = "objectstore+file://$PWD/blobs";
     directoryServiceAddr = "sled://$PWD/directories.sled";
     pathInfoServiceAddr = "sled://$PWD/pathinfo.sled";
-    path = ../../docs;
-    importPathName = "docs";
-  });
-  docs-objectstore-local = (mkBootTest {
-    blobServiceAddr = "objectstore+file://$PWD/blobs";
     path = ../../docs;
     importPathName = "docs";
   });
