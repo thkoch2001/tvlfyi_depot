@@ -118,9 +118,9 @@ htmlUi = do
       let handlers :: Handlers (AppT IO)
           handlers respond =
             Map.fromList
-              [ ("", respond.h (mainHtml uniqueRunId)),
+              [ ("", respond.html (mainHtml uniqueRunId)),
                 ( "snips/redacted/search",
-                  respond.h $
+                  respond.html $
                     \span -> do
                       dat <-
                         mp
@@ -131,12 +131,12 @@ htmlUi = do
                       snipsRedactedSearch dat
                 ),
                 ( "snips/redacted/torrentDataJson",
-                  respond.h $ \span -> do
+                  respond.html $ \span -> do
                     dat <- torrentIdMp span
                     Html.mkVal <$> (runTransaction $ getTorrentById dat)
                 ),
                 ( "snips/redacted/getTorrentFile",
-                  respond.h $ \span -> do
+                  respond.html $ \span -> do
                     dat <- torrentIdMp span
                     runTransaction $ do
                       inserted <- redactedGetTorrentFileAndInsert dat
@@ -156,7 +156,7 @@ htmlUi = do
                 ),
                 -- TODO: this is bad duplication??
                 ( "snips/redacted/startTorrentFile",
-                  respond.h $ \span -> do
+                  respond.html $ \span -> do
                     dat <- torrentIdMp span
                     runTransaction $ do
                       file <-
@@ -179,7 +179,7 @@ htmlUi = do
                           "Starting"
                 ),
                 ( "snips/transmission/getTorrentState",
-                  respond.h $ \span -> do
+                  respond.html $ \span -> do
                     dat <- mp span $ label @"torrentHash" <$> Multipart.field "torrent-hash" Field.utf8
                     status <-
                       doTransmissionRequest'
@@ -198,7 +198,7 @@ htmlUi = do
                         Just _torrent -> [hsx|Running|]
                 ),
                 ( "snips/jsonld/render",
-                  respond.h $ \span -> do
+                  respond.html $ \span -> do
                     qry <-
                       parseQueryArgs
                         span
@@ -233,7 +233,7 @@ htmlUi = do
       runInIO $
         runHandlers
           debug
-          (\respond -> respond.h $ (mainHtml uniqueRunId))
+          (\respond -> respond.html $ (mainHtml uniqueRunId))
           handlers
           req
           respond
@@ -301,7 +301,12 @@ htmlUi = do
 
 type Handlers m = HandlerResponses m -> Map Text (m ResponseReceived)
 
-type HandlerResponses m = T2 "h" ((Otel.Span -> m Html) -> m ResponseReceived) "plain" (m Wai.Response -> m ResponseReceived)
+data HandlerResponses m = HandlerResponses
+  { -- | render html
+    html :: ((Otel.Span -> m Html) -> m ResponseReceived),
+    -- | render a plain wai response
+    plain :: (m Wai.Response -> m ResponseReceived)
+  }
 
 runHandlers ::
   (MonadOtel m) =>
@@ -330,9 +335,10 @@ runHandlers debug defaultHandler handlers req respond = withRunInIO $ \runInIO -
 
   let path = [fmt|/{req & Wai.pathInfo & Text.intercalate "/"}|]
   let handlerResponses =
-        ( T2
-            (label @"h" (h path))
-            (label @"plain" (\m -> liftIO $ runInIO m >>= respond))
+        ( HandlerResponses
+            { html = h path,
+              plain = (\m -> liftIO $ runInIO m >>= respond)
+            }
         )
   let handler =
         (handlers handlerResponses)
