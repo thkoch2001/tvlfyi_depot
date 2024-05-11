@@ -1,0 +1,4 @@
+# this is to prevent nixpkgs-fmt from screwing up the horizontal alignment
+# in the test cases -- being able to \{halign} like maths people do is
+# way too useful
+default.nix
