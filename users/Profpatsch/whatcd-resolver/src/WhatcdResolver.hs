@@ -306,7 +306,7 @@ htmlUi = do
     |]
 
 artistPage :: (HasField "dbId" dat Text, Applicative m) => dat -> m Html
-artistPage dat =
+artistPage dat = do
   pure
     [hsx|
     Artist ID: {dat.dbId}
@@ -438,7 +438,7 @@ getBestTorrentsTable ::
   ) =>
   Transaction m Html
 getBestTorrentsTable = do
-  bestStale :: [TorrentData ()] <- getBestTorrents
+  bestStale :: [TorrentData ()] <- getBestTorrents (label @"onlyDownloaded" False)
   actual <-
     getAndUpdateTransmissionTorrentsStatus
       ( bestStale
