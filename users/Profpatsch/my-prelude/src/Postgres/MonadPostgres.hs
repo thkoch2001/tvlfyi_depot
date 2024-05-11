@@ -718,10 +718,9 @@ traceQueryIfEnabled tools span logDatabaseQueries qry params = do
           $ HashMap.fromList
           $ ( ("_.postgres.query", Otel.toAttribute @Text errs.query)
                 : ( errs.explain
-                      & foldMap
-                        ( \ex ->
-                            [("_.postgres.explain", Otel.toAttribute @Text ex)]
-                        )
+                      & \case
+                        Nothing -> []
+                        Just ex -> [("_.postgres.explain", Otel.toAttribute @Text ex)]
                   )
             )
   let doExplain = do
