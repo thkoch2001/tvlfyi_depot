@@ -216,7 +216,7 @@ htmlUi = do
                         ( label @"dbId"
                             <$> (singleQueryArgument "db_id" Field.utf8)
                         )
-                    pure $ [fmt|Artist ID: {qry.dbId}|]
+                    artistPage qry
                 ),
                 ( "autorefresh",
                   respond.plain $ do
@@ -304,6 +304,13 @@ htmlUi = do
         />
       </body>
     |]
+
+artistPage :: (HasField "dbId" dat Text, Applicative m) => dat -> m Html
+artistPage dat =
+  pure
+    [hsx|
+    Artist ID: {dat.dbId}
+  |]
 
 type Handlers m = HandlerResponses m -> Map Text (m ResponseReceived)
 
