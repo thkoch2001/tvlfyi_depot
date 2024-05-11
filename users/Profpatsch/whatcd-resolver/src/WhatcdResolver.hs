@@ -312,26 +312,24 @@ runHandlers ::
   (Wai.Response -> IO ResponseReceived) ->
   m ResponseReceived
 runHandlers defaultHandler handlers req respond = withRunInIO $ \runInIO -> do
-  let hh route act =
-        Otel.inSpan'
-          [fmt|Route {route}|]
-          ( Otel.defaultSpanArguments
-              { Otel.attributes =
-                  HashMap.fromList
-                    [ ("server.path", Otel.toAttribute @Text route)
-                    ]
-              }
-          )
-          ( \span -> do
-              res <- act span <&> (\html -> T2 (label @"html" html) (label @"extraHeaders" []))
-              liftIO $ respond . Wai.responseLBS Http.ok200 ([("Content-Type", "text/html")] <> res.extraHeaders) . Html.renderHtml $ res.html
-          )
-
   let path = [fmt|/{req & Wai.pathInfo & Text.intercalate "/"}|]
   let handlerResponses =
         ( HandlerResponses
-            { html = hh path,
-              plain = (\m -> liftIO $ runInIO m >>= respond)
+            { plain = (\m -> liftIO $ runInIO m >>= respond),
+              html = \act ->
+                Otel.inSpan'
+                  [fmt|Route {path}|]
+                  ( Otel.defaultSpanArguments
+                      { Otel.attributes =
+                          HashMap.fromList
+                            [ ("server.path", Otel.toAttribute @Text path)
+                            ]
+                      }
+                  )
+                  ( \span -> do
+                      res <- act span <&> (\html -> T2 (label @"html" html) (label @"extraHeaders" []))
+                      liftIO $ respond . Wai.responseLBS Http.ok200 ([("Content-Type", "text/html")] <> res.extraHeaders) . Html.renderHtml $ res.html
+                  )
             }
         )
   let handler =
