@@ -312,13 +312,13 @@ runHandlers ::
   (Wai.Response -> IO ResponseReceived) ->
   m ResponseReceived
 runHandlers defaultHandler handlers req respond = withRunInIO $ \runInIO -> do
-  let path = [fmt|/{req & Wai.pathInfo & Text.intercalate "/"}|]
+  let path = req & Wai.pathInfo & Text.intercalate "/"
   let handlerResponses =
         ( HandlerResponses
             { plain = (\m -> liftIO $ runInIO m >>= respond),
               html = \act ->
                 Otel.inSpan'
-                  [fmt|Route {path}|]
+                  [fmt|Route /{path}|]
                   ( Otel.defaultSpanArguments
                       { Otel.attributes =
                           HashMap.fromList
