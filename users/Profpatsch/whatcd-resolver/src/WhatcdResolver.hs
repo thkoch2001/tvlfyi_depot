@@ -75,7 +75,6 @@ main =
 
 htmlUi :: AppT IO ()
 htmlUi = do
-  let debug = True
   uniqueRunId <-
     runTransaction $
       querySingleRowWith
@@ -231,7 +230,6 @@ htmlUi = do
               ]
       runInIO $
         runHandlers
-          debug
           (\respond -> respond.html $ (mainHtml uniqueRunId))
           handlers
           req
@@ -308,13 +306,12 @@ data HandlerResponses m = HandlerResponses
 
 runHandlers ::
   (MonadOtel m) =>
-  Bool ->
   (HandlerResponses m -> m ResponseReceived) ->
   (HandlerResponses m -> Map Text (m ResponseReceived)) ->
   Wai.Request ->
   (Wai.Response -> IO ResponseReceived) ->
   m ResponseReceived
-runHandlers debug defaultHandler handlers req respond = withRunInIO $ \runInIO -> do
+runHandlers defaultHandler handlers req respond = withRunInIO $ \runInIO -> do
   let hh route act =
         Otel.inSpan'
           [fmt|Route {route}|]
