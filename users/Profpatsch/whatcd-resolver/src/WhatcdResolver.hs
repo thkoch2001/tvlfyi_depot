@@ -323,15 +323,14 @@ runHandlers defaultHandler handlers req respond = withRunInIO $ \runInIO -> do
               }
           )
           ( \span -> do
-              res <- act span
+              res <- act span <&> (\html -> T2 (label @"html" html) (label @"extraHeaders" []))
               liftIO $ respond . Wai.responseLBS Http.ok200 ([("Content-Type", "text/html")] <> res.extraHeaders) . Html.renderHtml $ res.html
           )
-  let h route act = hh route (\span -> act span <&> (\html -> T2 (label @"html" html) (label @"extraHeaders" [])))
 
   let path = [fmt|/{req & Wai.pathInfo & Text.intercalate "/"}|]
   let handlerResponses =
         ( HandlerResponses
-            { html = h path,
+            { html = hh path,
               plain = (\m -> liftIO $ runInIO m >>= respond)
             }
         )
