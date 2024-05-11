@@ -382,8 +382,8 @@ getTorrentById dat = do
     >>= ensureSingleRow
 
 -- | Find the best torrent for each torrent group (based on the seeding_weight)
-getBestTorrents :: (MonadPostgres m) => Transaction m [TorrentData ()]
-getBestTorrents = do
+getBestTorrents :: (MonadPostgres m, HasField "onlyDownloaded" opts Bool) => opts -> Transaction m [TorrentData ()]
+getBestTorrents opts = do
   queryWith
     [sql|
       SELECT * FROM (
@@ -393,15 +393,18 @@ getBestTorrents = do
           seeding_weight,
           t.full_json_result AS torrent_json,
           tg.full_json_result AS torrent_group_json,
-          t.torrent_file IS NOT NULL,
+          t.torrent_file IS NOT NULL as has_torrent_file,
           t.transmission_torrent_hash
         FROM redacted.torrents t
         JOIN redacted.torrent_groups tg ON tg.id = t.torrent_group
         ORDER BY group_id, seeding_weight DESC
       ) as _
+      WHERE
+        -- onlyDownloaded
+        ((NOT ?::bool) OR has_torrent_file)
       ORDER BY seeding_weight DESC
     |]
-    ()
+    (Only opts.onlyDownloaded :: Only Bool)
     ( do
         groupId <- Dec.fromField @Int
         torrentId <- Dec.fromField @Int
