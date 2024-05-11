@@ -36,7 +36,6 @@ import Network.HTTP.Types
 import Network.HTTP.Types qualified as Http
 import Network.URI (URI)
 import Network.URI qualified
-import Network.URI qualified as URI
 import Network.Wai (ResponseReceived)
 import Network.Wai qualified as Wai
 import Network.Wai.Handler.Warp qualified as Warp
@@ -243,12 +242,12 @@ htmlUi = do
 
     mainHtml :: Text -> Otel.Span -> AppT IO Html
     mainHtml uniqueRunId _span = runTransaction $ do
-      jsonld <-
-        httpGetJsonLd
-          ( URI.parseURI "https://musicbrainz.org/work/92000fd4-d304-406d-aeb4-6bdbeed318ec" & annotate "not an URI" & unwrapError,
-            "https://musicbrainz.org/work/92000fd4-d304-406d-aeb4-6bdbeed318ec"
-          )
-          <&> renderJsonld
+      -- jsonld <-
+      --   httpGetJsonLd
+      --     ( URI.parseURI "https://musicbrainz.org/work/92000fd4-d304-406d-aeb4-6bdbeed318ec" & annotate "not an URI" & unwrapError,
+      --       "https://musicbrainz.org/work/92000fd4-d304-406d-aeb4-6bdbeed318ec"
+      --     )
+      --     <&> renderJsonld
       bestTorrentsTable <- getBestTorrentsTable
       -- transmissionTorrentsTable <- lift @Transaction getTransmissionTorrentsTable
       pure $
@@ -270,7 +269,6 @@ htmlUi = do
         </style>
       </head>
       <body>
-        {jsonld}
         <form
           hx-post="/snips/redacted/search"
           hx-target="#redacted-search-results">
