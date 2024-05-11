@@ -660,7 +660,9 @@ pgFormatQueryByteString tools queryBytes = do
     (exitCode, stdout, stderr) <-
       Process.readProcessWithExitCode
         tools.pgFormat.toolPath
-        ["-"]
+        [ "--no-rcfile",
+          "-"
+        ]
         (queryBytes & bytesToTextUtf8Lenient & textToString)
     case exitCode of
       ExitSuccess -> pure (stdout & stringToText)
