@@ -84,13 +84,13 @@ htmlUi = do
         ()
         (Dec.fromField @Text)
 
-  withRunInIO $ \runInIO -> Warp.run 9093 $ \req respond -> do
+  withRunInIO $ \runInIO -> Warp.run 9093 $ \req respondOrig -> do
     let catchAppException act =
           try act >>= \case
             Right a -> pure a
             Left (AppException err) -> do
               runInIO (logError err)
-              respond (Wai.responseLBS Http.status500 [] "")
+              respondOrig (Wai.responseLBS Http.status500 [] "")
 
     catchAppException $ do
       let mp span parser =
@@ -233,7 +233,7 @@ htmlUi = do
           (\respond -> respond.html $ (mainHtml uniqueRunId))
           handlers
           req
-          respond
+          respondOrig
   where
     everySecond :: Text -> Enc -> Html -> Html
     everySecond call extraData innerHtml = [hsx|<div hx-trigger="every 1s" hx-swap="outerHTML" hx-post={call} hx-vals={Enc.encToBytesUtf8 extraData}>{innerHtml}</div>|]
