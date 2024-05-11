@@ -208,6 +208,16 @@ htmlUi = do
                     jsonld <- httpGetJsonLd (qry.target)
                     pure $ renderJsonld jsonld
                 ),
+                ( "artist",
+                  respond.html $ \span -> do
+                    qry <-
+                      parseQueryArgs
+                        span
+                        ( label @"dbId"
+                            <$> (singleQueryArgument "db_id" Field.utf8)
+                        )
+                    pure $ [fmt|Artist ID: {qry.dbId}|]
+                ),
                 ( "autorefresh",
                   respond.plain $ do
                     qry <-
@@ -455,11 +465,16 @@ getBestTorrentsTable = do
         fresh
           & foldMap
             ( \b -> do
+                let artistLink :: Text = [fmt|/artist?db_id={b.groupId}|]
                 [hsx|
                   <tr>
                   <td>{localTorrent b}</td>
                   <td>{Html.toHtml @Int b.groupId}</td>
-                  <td>{Html.toHtml @Text b.torrentGroupJson.artist}</td>
+                  <td>
+                    <a href={artistLink}>
+                      {Html.toHtml @Text b.torrentGroupJson.artist}
+                    </a>
+                  </td>
                   <td>{Html.toHtml @Text b.torrentGroupJson.groupName}</td>
                   <td>{Html.toHtml @Int b.seedingWeight}</td>
                   <td><details hx-trigger="toggle once" hx-post="snips/redacted/torrentDataJson" hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentId)]}></details></td>
