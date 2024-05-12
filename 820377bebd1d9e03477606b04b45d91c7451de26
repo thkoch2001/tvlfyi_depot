@@ -26,6 +26,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "9add1df1_2da12297",
+        "filename": "tvix/eval/src/compiler/syn/cst.rs",
+        "patchSetId": 29
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-12T21:43:38Z",
+      "side": 1,
+      "message": "I was able to work around the first issue by using Span::merge().  The second problem remains, and is more fundamental since it comes from the language rather than our span library.",
+      "parentUuid": "5b2e371e_ff7c4772",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 4
+      },
+      "revId": "820377bebd1d9e03477606b04b45d91c7451de26",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "cbb2b7f1_1a819ed5",
         "filename": "tvix/eval/src/compiler/syn/mod.rs",
         "patchSetId": 29
