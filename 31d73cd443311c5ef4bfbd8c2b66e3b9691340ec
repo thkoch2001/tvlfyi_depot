@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a026e94_e8b08002",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 27
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-12T06:53:43Z",
+      "side": 0,
+      "message": "`struct AttributeSet` is no longer needed!",
+      "range": {
+        "startLine": 38,
+        "startChar": 0,
+        "endLine": 38,
+        "endChar": 19
+      },
+      "revId": "31d73cd443311c5ef4bfbd8c2b66e3b9691340ec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e72f3f12_e3db4bd2",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 27
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-12T06:53:43Z",
+      "side": 0,
+      "message": "This tuple always bothered me; it\u0027s so hard to figure out what it is supposed to be.  Turns out that it is just an `Inherit`!  But because rnix doesn\u0027t let you create new syntax nodes we couldn\u0027t reuse `rnix::ast::Inherit`.",
+      "range": {
+        "startLine": 312,
+        "startChar": 13,
+        "endLine": 312,
+        "endChar": 39
+      },
+      "revId": "31d73cd443311c5ef4bfbd8c2b66e3b9691340ec",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

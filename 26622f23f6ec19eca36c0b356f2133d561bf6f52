@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81c73b18_dc5bdda5",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 27
+      },
+      "lineNbr": 319,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-12T06:53:43Z",
+      "side": 1,
+      "message": "This noise will go away once compiler/mod.rs is converted over to compiler::syn -- Compiler::compile() will become generic over \u003cSyntax\u003e and the type parameter won\u0027t be ambiguous anymore, so rustc will infer it automatically.",
+      "range": {
+        "startLine": 319,
+        "startChar": 38,
+        "endLine": 319,
+        "endChar": 57
+      },
+      "revId": "26622f23f6ec19eca36c0b356f2133d561bf6f52",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dedb06f3_6c290a85",
+        "filename": "tvix/eval/src/compiler/syn/cst.rs",
+        "patchSetId": 27
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-12T06:53:43Z",
+      "side": 1,
+      "message": "This file is entirely boilerplate; there\u0027s nothing interesting in here at all.\n\nIn a follow-up CL I will write macros to generate this from something short enough to read comfortably.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 4
+      },
+      "revId": "26622f23f6ec19eca36c0b356f2133d561bf6f52",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1178648b_8b302a24",
+        "filename": "tvix/eval/src/compiler/syn/mod.rs",
+        "patchSetId": 27
+      },
+      "lineNbr": 168,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-12T06:53:43Z",
+      "side": 1,
+      "message": "Since `let..in` cannot contain dynamic attributes (i.e. `let ${fred} \u003d ...` is not allowed) this type could be tightened to \"make the impossible unrepresentable\".\n\nI\u0027ll leave this for a follow-up CL.",
+      "range": {
+        "startLine": 168,
+        "startChar": 70,
+        "endLine": 168,
+        "endChar": 88
+      },
+      "revId": "26622f23f6ec19eca36c0b356f2133d561bf6f52",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
