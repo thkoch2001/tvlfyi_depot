@@ -22,6 +22,29 @@
       },
       "revId": "9e51c56603312b1b1f79be35f79f53e5680735d7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "495c94e2_8119fcb1",
+        "filename": "tvix/eval/src/compiler/syn/mod.rs",
+        "patchSetId": 31
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-05-12T22:23:31Z",
+      "side": 1,
+      "message": "(asking to understand design choices, not as criticism)\n\nWouldn\u0027t we get the same effect from data types with carefully controlled field visibility, without the extra layer of abstraction and boilerplate?\n\nWhat I mean is, if there was a module with concrete types (mostly structs, I suppose) that represent the AST, and a pass from rnix CST -\u003e our AST, and the parts of that AST have only private fields and use the same methods as this trait, then we\u0027d get the same isolation but without having the extra trait \u0026 *Impl type layers.\n\nOr is there some longer term plan here about multiple types implementing the syntax traits?",
+      "range": {
+        "startLine": 8,
+        "startChar": 65,
+        "endLine": 9,
+        "endChar": 50
+      },
+      "revId": "9e51c56603312b1b1f79be35f79f53e5680735d7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
