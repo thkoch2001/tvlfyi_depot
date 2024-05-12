@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1662b4ef_899a9046",
+        "filename": "tvix/castore/src/proto/grpc_directoryservice_wrapper.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-12T13:14:57Z",
+      "side": 0,
+      "message": "We also did not properly close the channel here if `e` was an error.",
+      "revId": "baac6e7084cbb9cd5a41ed656fb267041333897a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
