@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b2e371e_ff7c4772",
+        "filename": "tvix/eval/src/compiler/syn/cst.rs",
+        "patchSetId": 29
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-12T21:35:15Z",
+      "side": 1,
+      "message": "@tazjin note new comment explaining some things.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 35,
+        "endChar": 4
+      },
+      "revId": "820377bebd1d9e03477606b04b45d91c7451de26",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
