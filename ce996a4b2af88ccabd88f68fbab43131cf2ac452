@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "377e3e5e_3e9dafe4",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2024-05-13T16:05:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fca46e9a_14397655",
+      "revId": "ce996a4b2af88ccabd88f68fbab43131cf2ac452",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b22e840c_33c8b140",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-05-13T16:00:55Z",
       "side": 1,
       "message": "maybe \"pattern\", not \"word\"?",
+      "revId": "ce996a4b2af88ccabd88f68fbab43131cf2ac452",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4b531942_b3644726",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2024-05-13T16:05:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b22e840c_33c8b140",
       "revId": "ce996a4b2af88ccabd88f68fbab43131cf2ac452",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
