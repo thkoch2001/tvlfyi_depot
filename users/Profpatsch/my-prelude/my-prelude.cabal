@@ -59,6 +59,7 @@ library
     exposed-modules:
       MyPrelude
       Aeson
+      Arg
       AtLeast
       Test
       Postgres.Decoder
