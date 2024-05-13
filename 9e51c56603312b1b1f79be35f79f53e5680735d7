@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "accaa8b4_d0f6a1ac",
+        "filename": "tvix/default.nix",
+        "patchSetId": 31
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-13T00:09:29Z",
+      "side": 1,
+      "message": "Sorry; I do hate clippy with a deep passion; I feel like fighting with it is a poor use of human beings\u0027 time.  Whatever lints can\u0027t be moved into rustfmt (i.e. be performed automatically) should be dropped.  But now is not the time for that debate.\n\nSeparately, I keep having problems with my clippy not doing the same things that depot\u0027s clippy does.  IMHO we should explicitly list and opt-in to clippy lints, not just use whatever is the default for the particular rustc version that whitby happens to be running.",
+      "parentUuid": "344545b3_8abc786b",
+      "range": {
+        "startLine": 233,
+        "startChar": 0,
+        "endLine": 233,
+        "endChar": 2
+      },
+      "revId": "9e51c56603312b1b1f79be35f79f53e5680735d7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "495c94e2_8119fcb1",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-05-12T22:23:31Z",
       "side": 1,
       "message": "(asking to understand design choices, not as criticism)\n\nWouldn\u0027t we get the same effect from data types with carefully controlled field visibility, without the extra layer of abstraction and boilerplate?\n\nWhat I mean is, if there was a module with concrete types (mostly structs, I suppose) that represent the AST, and a pass from rnix CST -\u003e our AST, and the parts of that AST have only private fields and use the same methods as this trait, then we\u0027d get the same isolation but without having the extra trait \u0026 *Impl type layers.\n\nOr is there some longer term plan here about multiple types implementing the syntax traits?",
+      "range": {
+        "startLine": 8,
+        "startChar": 65,
+        "endLine": 9,
+        "endChar": 50
+      },
+      "revId": "9e51c56603312b1b1f79be35f79f53e5680735d7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5065a418_3cafb580",
+        "filename": "tvix/eval/src/compiler/syn/mod.rs",
+        "patchSetId": 31
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-13T00:09:29Z",
+      "side": 1,
+      "message": "Yes.  As you move through the desugaring passes, you get to make more and more assumptions about the AST.  By using traits, we can get the Rust compiler to verify those assumptions *statically* (at the time when tvix-eval is compiled) so we won\u0027t need to have `panic!()`s in the code for situations where those assumptions might be violated.\n\nFor example:\n\n1. Let\u0027s say we add a pass that eliminates all `inherit` statements.  Its return type would be `Syntax\u003cInherit \u003d !\u003e` (where `!` is Rust\u0027s \"impossible type\").  This \"makes the impossible unrepresentable\".  Then the \"emit the bytecodes\" part of the compiler doesn\u0027t need to understand `inherit`, and its argument type will be `Syntax\u003cInherit \u003d !\u003e`.\n\n2. Another example is rewriting `rec { ... }` into `let ... in { inherit ...; }`.  (I suppose `Syntax::AttrSet` should have a subtrait `Syntax::RecAttrSet`).\n\nThis also lets the compiler statically verify that the desugaring passes are being run in the correct order.  For example, if we mistakenly run the \"eliminate inherit\" pass *first*, and then run the \"eliminate recattrs\" after it, the \"eliminate recattrs\" pass will *reintroduce* `Inherit` nodes.  When we try to pass the result of \"eliminate recattrs\" to the \"emit the bytecodes\" pass, Rust will report a type error (`Syntax::Inherit !\u003d !`).\n\nThis is the overriding theme of the types exposed by `Syntax`: they are the types which should change (generally making fewer and fewer ASTs possible) as you go through more and more desugaring passes.",
+      "parentUuid": "495c94e2_8119fcb1",
       "range": {
         "startLine": 8,
         "startChar": 65,
