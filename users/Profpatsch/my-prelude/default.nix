@@ -7,6 +7,7 @@ pkgs.haskellPackages.mkDerivation {
   src = depot.users.Profpatsch.exactSource ./. [
     ./my-prelude.cabal
     ./src/Aeson.hs
+    ./src/Arg.hs
     ./src/AtLeast.hs
     ./src/MyPrelude.hs
     ./src/Test.hs
