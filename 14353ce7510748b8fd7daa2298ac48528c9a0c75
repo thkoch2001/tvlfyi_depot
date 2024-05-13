@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a527c590_6187abcd",
+        "filename": "tvix/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-13T20:04:39Z",
+      "side": 0,
+      "message": "Could we please switch to *opt-in* for clippy lints?\n\nSince we\u0027re already starting to do it here.\n\nBlindly accepting whatever lints the clippylord feels like adding to each new release seems a bit silly.",
+      "range": {
+        "startLine": 229,
+        "startChar": 78,
+        "endLine": 229,
+        "endChar": 120
+      },
+      "revId": "14353ce7510748b8fd7daa2298ac48528c9a0c75",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
