@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fca46e9a_14397655",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-13T16:00:55Z",
+      "side": 1,
+      "message": "Either the logic or the function name is wrong.\n\nThis says it should skip if the search string is returned.",
+      "revId": "ce996a4b2af88ccabd88f68fbab43131cf2ac452",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b22e840c_33c8b140",
+        "filename": "fun/clbot/clbot.go",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-13T16:00:55Z",
+      "side": 1,
+      "message": "maybe \"pattern\", not \"word\"?",
+      "revId": "ce996a4b2af88ccabd88f68fbab43131cf2ac452",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
