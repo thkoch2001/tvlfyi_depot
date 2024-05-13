@@ -45,7 +45,7 @@ pkgs.mkShell {
       h.unix
       h.tagsoup
       h.attoparsec
-      h.iCalendar
+      # h.iCalendar
       h.case-insensitive
       h.hscolour
       h.nicify-lib
