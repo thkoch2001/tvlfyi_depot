@@ -10,6 +10,7 @@ import Control.Monad.Reader
 import Data.Aeson qualified as Json
 import Data.Aeson.BetterErrors qualified as Json
 import Data.Aeson.KeyMap qualified as KeyMap
+import Data.Error.Tree (prettyErrorTree)
 import Data.HashMap.Strict qualified as HashMap
 import Data.List qualified as List
 import Data.Map.Strict qualified as Map
@@ -105,9 +106,6 @@ htmlUi = do
               ( do
                   label @"torrentId" <$> Multipart.field "torrent-id" ((Field.utf8 >>> Field.signedDecimal >>> Field.bounded @Int "int"))
               )
-      let parseQueryArgs span parser =
-            Parse.runParse "Unable to find the right request query arguments" (lmap Wai.queryString parser) req
-              & assertM span id
 
       let parseQueryArgsNewSpan spanName parser =
             Parse.runParse "Unable to find the right request query arguments" (lmap Wai.queryString parser) req
@@ -196,27 +194,29 @@ htmlUi = do
                         Just _torrent -> [hsx|Running|]
                 ),
                 ( "snips/jsonld/render",
-                  respond.html $ \span -> do
-                    qry <-
-                      parseQueryArgs
-                        span
-                        ( label @"target"
-                            <$> ( (singleQueryArgument "target" Field.utf8 >>> textToURI)
-                                    & Parse.andParse uriToHttpClientRequest
-                                )
-                        )
-                    jsonld <- httpGetJsonLd (qry.target)
-                    pure $ renderJsonld jsonld
+                  do
+                    let HandlerResponses {htmlWithQueryArgs} = respond
+                    htmlWithQueryArgs
+                      ( label @"target"
+                          <$> ( (singleQueryArgument "target" Field.utf8 >>> textToURI)
+                                  & Parse.andParse uriToHttpClientRequest
+                              )
+                      )
+                      ( \qry _span -> do
+                          jsonld <- httpGetJsonLd (qry.target)
+                          pure $ renderJsonld jsonld
+                      )
                 ),
                 ( "artist",
-                  respond.html $ \span -> do
-                    qry <-
-                      parseQueryArgs
-                        span
-                        ( label @"dbId"
-                            <$> (singleQueryArgument "db_id" Field.utf8)
-                        )
-                    artistPage qry
+                  do
+                    let HandlerResponses {htmlWithQueryArgs} = respond
+
+                    htmlWithQueryArgs
+                      ( label @"dbId"
+                          <$> (singleQueryArgument "db_id" Field.utf8)
+                      )
+                      $ \qry _span -> do
+                        artistPage qry
                 ),
                 ( "autorefresh",
                   respond.plain $ do
@@ -316,7 +316,9 @@ type Handlers m = HandlerResponses m -> Map Text (m ResponseReceived)
 
 data HandlerResponses m = HandlerResponses
   { -- | render html
-    html :: ((Otel.Span -> m Html) -> m ResponseReceived),
+    html :: (Otel.Span -> m Html) -> m ResponseReceived,
+    -- | render html after parsing some query arguments
+    htmlWithQueryArgs :: forall a. (Parse Query a -> (a -> Otel.Span -> m Html) -> m ResponseReceived),
     -- | render a plain wai response
     plain :: (m Wai.Response -> m ResponseReceived)
   }
@@ -330,23 +332,44 @@ runHandlers ::
   m ResponseReceived
 runHandlers defaultHandler handlers req respond = withRunInIO $ \runInIO -> do
   let path = req & Wai.pathInfo & Text.intercalate "/"
+  let html act =
+        Otel.inSpan'
+          [fmt|Route /{path}|]
+          ( Otel.defaultSpanArguments
+              { Otel.attributes =
+                  HashMap.fromList
+                    [ ("server.path", Otel.toAttribute @Text path)
+                    ]
+              }
+          )
+          ( \span -> do
+              res <- act span <&> (\h -> T2 (label @"html" h) (label @"extraHeaders" []))
+              liftIO $ respond . Wai.responseLBS Http.ok200 ([("Content-Type", "text/html")] <> res.extraHeaders) . Html.renderHtml $ res.html
+          )
+
   let handlerResponses =
         ( HandlerResponses
             { plain = (\m -> liftIO $ runInIO m >>= respond),
-              html = \act ->
-                Otel.inSpan'
-                  [fmt|Route /{path}|]
-                  ( Otel.defaultSpanArguments
-                      { Otel.attributes =
-                          HashMap.fromList
-                            [ ("server.path", Otel.toAttribute @Text path)
-                            ]
-                      }
-                  )
-                  ( \span -> do
-                      res <- act span <&> (\html -> T2 (label @"html" html) (label @"extraHeaders" []))
-                      liftIO $ respond . Wai.responseLBS Http.ok200 ([("Content-Type", "text/html")] <> res.extraHeaders) . Html.renderHtml $ res.html
-                  )
+              html,
+              htmlWithQueryArgs = \parser act ->
+                case req & Parse.runParse "Unable to find the right request query arguments" (lmap Wai.queryString parser) of
+                  Right a -> html (act a)
+                  Left err ->
+                    html
+                      ( \span -> do
+                          recordException
+                            span
+                            ( T2
+                                (label @"type_" "Query Parse Exception")
+                                (label @"message" (prettyErrorTree err))
+                            )
+
+                          pure
+                            [hsx|
+                              <h1>Error:</h1>
+                              <pre>{err & prettyErrorTree}</pre>
+                            |]
+                      )
             }
         )
   let handler =

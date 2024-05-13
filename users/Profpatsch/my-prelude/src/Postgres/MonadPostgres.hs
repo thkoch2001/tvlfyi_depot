@@ -500,7 +500,6 @@ runPgFormat pool sqlStatement = do
         Pool.putResource localPool new
     )
     ( \(pgFmt, _localPool) -> do
-        putStderrLn "Running with warm pgformatter"
         ByteString.hPut pgFmt.stdinHdl sqlStatement
         -- close stdin to make pg_formatter format (it exits …)
         -- issue: https://github.com/darold/pgFormatter/issues/333
