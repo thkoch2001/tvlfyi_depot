@@ -366,7 +366,7 @@ handlePGException ::
   ( ToRow params,
     MonadUnliftIO m,
     MonadLogger m,
-    HasField "pgFormat" tools Tool
+    HasField "pgFormat" tools PgFormatPool
   ) =>
   tools ->
   Text ->
@@ -417,7 +417,7 @@ withPGTransaction connPool f =
 -- | `pg_formatter` is a perl script that does not support any kind of streaming.
 -- Thus we initialize a pool with a bunch of these scripts running, waiting for input. This way we can have somewhat fast SQL formatting.
 --
--- Call `initPgFormatPool` to initialize, then use `withPgFormat` to format some sql.
+-- Call `initPgFormatPool` to initialize, then use `runPgFormat` to format some sql.
 data PgFormatPool = PgFormatPool
   { pool :: Pool PgFormatProcess,
     pgFormat :: Tool
@@ -426,6 +426,7 @@ data PgFormatPool = PgFormatPool
 data PgFormatProcess = PgFormatProcess
   { stdinHdl :: Handle,
     stdoutHdl :: Handle,
+    stderrHdl :: Handle,
     procHdl :: ProcessHandle
   }
 
@@ -446,7 +447,7 @@ initPgFormatPool tools = do
           -- unused resource time
           100
           -- number of resources
-          3
+          10
       )
 
   -- fill the pool with resources
@@ -461,8 +462,8 @@ destroyPgFormatPool :: PgFormatPool -> IO ()
 destroyPgFormatPool pool = Pool.destroyAllResources pool.pool
 
 -- | Format the given SQL with pg_formatter. Will use the pool of already running formatters to speed up execution.
-withPgFormat :: PgFormatPool -> ByteString -> IO (ExitCode, ByteString)
-withPgFormat pool sqlStatement = do
+runPgFormat :: PgFormatPool -> ByteString -> IO (T3 "exitCode" ExitCode "formatted" ByteString "stderr" ByteString)
+runPgFormat pool sqlStatement = do
   bracket
     (Pool.takeResource pool.pool)
     ( \(a, localPool) -> do
@@ -473,13 +474,19 @@ withPgFormat pool sqlStatement = do
         Pool.putResource localPool new
     )
     ( \(pgFmt, _localPool) -> do
+        putStderrLn "Running with warm pgformatter"
         ByteString.hPut pgFmt.stdinHdl sqlStatement
         -- close stdin to make pg_formatter format (it exits …)
         -- issue: https://github.com/darold/pgFormatter/issues/333
         hClose pgFmt.stdinHdl
         formatted <- ByteString.hGetContents pgFmt.stdoutHdl
+        errs <- ByteString.hGetContents pgFmt.stderrHdl
         exitCode <- Process.waitForProcess pgFmt.procHdl
-        pure (exitCode, formatted)
+        pure $
+          T3
+            (label @"exitCode" exitCode)
+            (label @"formatted" formatted)
+            (label @"stderr" errs)
     )
 
 runPGTransactionImpl ::
@@ -495,7 +502,7 @@ runPGTransactionImpl zoom (Transaction transaction) = do
       unliftIO $ runReaderT transaction conn
 
 executeImpl ::
-  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool, Otel.MonadTracer m) =>
+  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools PgFormatPool, Otel.MonadTracer m) =>
   m tools ->
   m DebugLogDatabaseQueries ->
   Query ->
@@ -513,7 +520,7 @@ executeImpl zoomTools zoomDebugLogDatabaseQueries qry params =
       >>= toNumberOfRowsAffected "executeImpl"
 
 executeImpl_ ::
-  (MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool, Otel.MonadTracer m) =>
+  (MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools PgFormatPool, Otel.MonadTracer m) =>
   m tools ->
   m DebugLogDatabaseQueries ->
   Query ->
@@ -530,7 +537,7 @@ executeImpl_ zoomTools zoomDebugLogDatabaseQueries qry =
       >>= toNumberOfRowsAffected "executeImpl_"
 
 executeManyImpl ::
-  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool, Otel.MonadTracer m) =>
+  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools PgFormatPool, Otel.MonadTracer m) =>
   m tools ->
   m DebugLogDatabaseQueries ->
   Query ->
@@ -557,7 +564,7 @@ toNumberOfRowsAffected functionName i64 =
     <&> label @"numberOfRowsAffected"
 
 executeManyReturningWithImpl ::
-  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools Tool, Otel.MonadTracer m) =>
+  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools PgFormatPool, Otel.MonadTracer m) =>
   m tools ->
   m DebugLogDatabaseQueries ->
   Query ->
@@ -578,7 +585,7 @@ foldRowsWithAccImpl ::
   ( ToRow params,
     MonadUnliftIO m,
     MonadLogger m,
-    HasField "pgFormat" tools Tool,
+    HasField "pgFormat" tools PgFormatPool,
     Otel.MonadTracer m
   ) =>
   m tools ->
@@ -612,7 +619,7 @@ foldRowsWithAccImpl zoomTools zoomDebugLogDatabaseQueries qry params (Decoder ro
       )
 
 pgFormatQueryNoParams' ::
-  (MonadIO m, MonadLogger m, HasField "pgFormat" tools Tool) =>
+  (MonadIO m, MonadLogger m, HasField "pgFormat" tools PgFormatPool) =>
   tools ->
   Query ->
   Transaction m Text
@@ -648,7 +655,7 @@ queryWithImpl ::
   ( ToRow params,
     MonadUnliftIO m,
     MonadLogger m,
-    HasField "pgFormat" tools Tool,
+    HasField "pgFormat" tools PgFormatPool,
     Otel.MonadTracer m
   ) =>
   m tools ->
@@ -670,7 +677,7 @@ queryWithImpl zoomTools zoomDebugLogDatabaseQueries qry params (Decoder fromRow)
 queryWithImpl_ ::
   ( MonadUnliftIO m,
     MonadLogger m,
-    HasField "pgFormat" tools Tool
+    HasField "pgFormat" tools PgFormatPool
   ) =>
   m tools ->
   Query ->
@@ -696,7 +703,7 @@ pgFormatQuery' ::
   ( MonadIO m,
     ToRow params,
     MonadLogger m,
-    HasField "pgFormat" tools Tool
+    HasField "pgFormat" tools PgFormatPool
   ) =>
   tools ->
   Query ->
@@ -710,7 +717,7 @@ pgFormatQueryMany' ::
   ( MonadIO m,
     ToRow params,
     MonadLogger m,
-    HasField "pgFormat" tools Tool
+    HasField "pgFormat" tools PgFormatPool
   ) =>
   tools ->
   Query ->
@@ -727,21 +734,32 @@ postgresToolsParser = label @"pgFormat" <$> readTool "pg_format"
 pgFormatQueryByteString ::
   ( MonadIO m,
     MonadLogger m,
-    HasField "pgFormat" tools Tool
+    HasField "pgFormat" tools PgFormatPool
   ) =>
   tools ->
   ByteString ->
   m Text
 pgFormatQueryByteString tools queryBytes = do
-  do
-    (exitCode, stdout, stderr) <-
-      Process.readProcessWithExitCode
-        tools.pgFormat.toolPath
-        [ "--no-rcfile",
-          "-"
-        ]
-        (queryBytes & bytesToTextUtf8Lenient & textToString)
-    handlePgFormatExitCode exitCode stdout stderr queryBytes
+  res <-
+    liftIO $
+      runPgFormat
+        tools.pgFormat
+        (queryBytes)
+  case res.exitCode of
+    ExitSuccess -> pure (res.formatted & bytesToTextUtf8Lenient)
+    ExitFailure status -> do
+      logWarn [fmt|pg_format failed with status {status} while formatting the query, using original query string. Is there a syntax error?|]
+      logDebug
+        ( prettyErrorTree
+            ( nestedMultiError
+                "pg_format output"
+                ( nestedError "stdout" (singleError (res.formatted & bytesToTextUtf8Lenient & newError))
+                    :| [(nestedError "stderr" (singleError (res.stderr & bytesToTextUtf8Lenient & newError)))]
+                )
+            )
+        )
+      logDebug [fmt|pg_format stdout: stderr|]
+      pure (queryBytes & bytesToTextUtf8Lenient)
 
 pgFormatStartCommandWaitForInput ::
   ( MonadIO m,
@@ -752,7 +770,7 @@ pgFormatStartCommandWaitForInput ::
   m PgFormatProcess
 pgFormatStartCommandWaitForInput tools = do
   do
-    (Just stdinHdl, Just stdoutHdl, Nothing, procHdl) <-
+    (Just stdinHdl, Just stdoutHdl, Just stderrHdl, procHdl) <-
       Process.createProcess
         ( ( Process.proc
               tools.pgFormat.toolPath
@@ -762,29 +780,11 @@ pgFormatStartCommandWaitForInput tools = do
           )
             { Process.std_in = Process.CreatePipe,
               Process.std_out = Process.CreatePipe,
-              Process.std_err = Process.Inherit
+              Process.std_err = Process.CreatePipe
             }
         )
 
     pure PgFormatProcess {..}
-
-handlePgFormatExitCode :: (MonadLogger m) => ExitCode -> String -> String -> ByteString -> m Text
-handlePgFormatExitCode exitCode stdout stderr queryBytes =
-  case exitCode of
-    ExitSuccess -> pure (stdout & stringToText)
-    ExitFailure status -> do
-      logWarn [fmt|pg_format failed with status {status} while formatting the query, using original query string. Is there a syntax error?|]
-      logDebug
-        ( prettyErrorTree
-            ( nestedMultiError
-                "pg_format output"
-                ( nestedError "stdout" (singleError (stdout & stringToText & newError))
-                    :| [(nestedError "stderr" (singleError (stderr & stringToText & newError)))]
-                )
-            )
-        )
-      logDebug [fmt|pg_format stdout: stderr|]
-      pure (queryBytes & bytesToTextUtf8Lenient)
 
 data DebugLogDatabaseQueries
   = -- | Do not log the database queries
@@ -805,7 +805,7 @@ traceQueryIfEnabled ::
   ( ToRow params,
     MonadUnliftIO m,
     MonadLogger m,
-    HasField "pgFormat" tools Tool,
+    HasField "pgFormat" tools PgFormatPool,
     Otel.MonadTracer m
   ) =>
   tools ->
