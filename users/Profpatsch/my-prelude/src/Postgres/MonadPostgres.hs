@@ -26,6 +26,7 @@ import Data.List qualified as List
 import Data.Pool (Pool)
 import Data.Pool qualified as Pool
 import Data.Text qualified as Text
+import Data.Time (getCurrentTime)
 import Data.Typeable (Typeable)
 import Database.PostgreSQL.Simple (Connection, FormatError, FromRow, Query, QueryError, ResultError, SqlError, ToRow)
 import Database.PostgreSQL.Simple qualified as PG
@@ -37,6 +38,7 @@ import Database.PostgreSQL.Simple.Types (Query (..))
 import GHC.IO.Handle (Handle)
 import GHC.Records (getField)
 import Label
+import OpenTelemetry.Trace.Core (NewEvent (newEventName))
 import OpenTelemetry.Trace.Core qualified as Otel hiding (inSpan, inSpan')
 import OpenTelemetry.Trace.Monad qualified as Otel
 import PossehlAnalyticsPrelude
@@ -816,12 +818,16 @@ traceQueryIfEnabled ::
   Transaction m ()
 traceQueryIfEnabled tools span logDatabaseQueries qry params = do
   -- In case we have query logging enabled, we want to do that
-  let formattedQuery =
-        Otel.inSpan "Postgres Query Formatting" Otel.defaultSpanArguments $
-          case params of
+  let formattedQuery = do
+        withEvent
+          span
+          "Query Format start"
+          "Query Format end"
+          $ case params of
             HasNoParams -> pgFormatQueryNoParams' tools qry
             HasSingleParam p -> pgFormatQuery' tools qry p
             HasMultiParams ps -> pgFormatQueryMany' tools qry ps
+
   let doLog errs =
         Otel.addAttributes
           span
@@ -858,6 +864,37 @@ traceQueryIfEnabled tools span logDatabaseQueries qry params = do
       -- and just ignore anything that errors (if it errors because of a problem with the query, it would have been caught by the query itself.
       ex <- doExplain
       doLog (T2 (label @"query" q) (label @"explain" (Just ex)))
+
+-- | Add a start and end event to the span, and figure out how long the difference was.
+--
+-- This is more lightweight than starting an extra span for timing things.
+withEvent :: (MonadIO f) => Otel.Span -> Text -> Text -> f b -> f b
+withEvent span start end act = do
+  let mkMs ts = (ts & Otel.timestampNanoseconds & toInteger) `div` 1000_000
+  s <- Otel.getTimestamp
+  Otel.addEvent
+    span
+    ( Otel.NewEvent
+        { newEventName = start,
+          newEventAttributes = mempty,
+          newEventTimestamp = Just s
+        }
+    )
+  res <- act
+  e <- Otel.getTimestamp
+  let tookMs =
+        (mkMs e - mkMs s)
+          -- should be small enough
+          & fromInteger @Int
+  Otel.addEvent
+    span
+    ( Otel.NewEvent
+        { newEventName = end,
+          newEventAttributes = HashMap.fromList [("took ms", Otel.toAttribute tookMs)],
+          newEventTimestamp = Just e
+        }
+    )
+  pure res
 
 instance (ToField t1) => ToRow (Label l1 t1) where
   toRow t2 = toRow $ PG.Only $ getField @l1 t2
