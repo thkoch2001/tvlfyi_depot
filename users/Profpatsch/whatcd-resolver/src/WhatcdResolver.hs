@@ -639,7 +639,8 @@ httpTorrent span req =
 
 runAppWith :: AppT IO a -> IO (Either TmpPg.StartError a)
 runAppWith appT = withTracer $ \tracer -> withDb $ \db -> do
-  pgFormat <- readTools (label @"toolsEnvVar" "WHATCD_RESOLVER_TOOLS") (readTool "pg_format")
+  tool <- readTools (label @"toolsEnvVar" "WHATCD_RESOLVER_TOOLS") (readTool "pg_format")
+  pgFormat <- initPgFormatPool (label @"pgFormat" tool)
   let config = label @"logDatabaseQueries" LogDatabaseQueries
   pgConnPool <-
     Pool.newPool $

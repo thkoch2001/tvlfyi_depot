@@ -19,14 +19,13 @@ import OpenTelemetry.Trace.Monad qualified as Otel
 import PossehlAnalyticsPrelude
 import Postgres.MonadPostgres
 import System.IO qualified as IO
-import Tool (Tool)
 import UnliftIO
 import Prelude hiding (span)
 
 data Context = Context
   { config :: Label "logDatabaseQueries" DebugLogDatabaseQueries,
     tracer :: Otel.Tracer,
-    pgFormat :: Tool,
+    pgFormat :: PgFormatPool,
     pgConnPool :: Pool Postgres.Connection,
     transmissionSessionId :: MVar ByteString
   }
