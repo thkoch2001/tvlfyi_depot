@@ -41,7 +41,8 @@ var (
 	notifyRepo     = flag.String("notify_repo", "depot", "Repo name to notify about")
 	notifyBranches = stringSetFlag{}
 
-	neverPing = flag.String("never_ping", "marcus", "Comma-separated terms that should never ping users")
+	neverPing   = flag.String("never_ping", "marcus", "Comma-separated terms that should never ping users")
+	onlyDisplay = flag.String("only_display", "", "Comma-separated substrings of the gerrit CL Change Subject that should be shown (everything else is dropped)")
 )
 
 func init() {
@@ -193,6 +194,15 @@ func nopingAll(username, message string) string {
 	return strings.ReplaceAll(message, username, noping(username))
 }
 
+func changeShouldBeSkipped(changeSubject string) bool {
+	for _, word := range strings.Split(*onlyDisplay, ",") {
+		if strings.Contains(changeSubject, word) {
+			return true
+		}
+	}
+	return false
+}
+
 func patchSetURL(c gerritevents.Change, p gerritevents.PatchSet) string {
 	return fmt.Sprintf("https://cl.tvl.fyi/%d", c.Number)
 }
@@ -248,13 +258,13 @@ func main() {
 			var parsedMsg string
 			switch e := e.(type) {
 			case *gerritevents.PatchSetCreated:
-				if e.Change.Project != *notifyRepo || !notifyBranches[e.Change.Branch] || e.PatchSet.Number != 1 {
+				if e.Change.Project != *notifyRepo || !notifyBranches[e.Change.Branch] || e.PatchSet.Number != 1 || changeShouldBeSkipped(e.Change.Subject) {
 					continue
 				}
 				user := username(e.PatchSet.Uploader)
 				parsedMsg = nopingAll(user, fmt.Sprintf("CL/%d proposed by %s - %s - %s", e.Change.Number, user, e.Change.Subject, patchSetURL(e.Change, e.PatchSet)))
 			case *gerritevents.ChangeMerged:
-				if e.Change.Project != *notifyRepo || !notifyBranches[e.Change.Branch] {
+				if e.Change.Project != *notifyRepo || !notifyBranches[e.Change.Branch] || changeShouldBeSkipped(e.Change.Subject) {
 					continue
 				}
 				owner := username(e.Change.Owner)
