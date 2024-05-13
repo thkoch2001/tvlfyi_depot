@@ -7,6 +7,7 @@ let
 
   inherit (lib)
     listToAttrs
+    mapAttrsToList
     mkEnableOption
     mkIf
     mkOption
@@ -25,13 +26,13 @@ let
     ${pkgs.systemd}/bin/systemd-escape '${name}' >> $out
   ''));
 
-  mkUnit = flags: channel: {
+  mkUnit = channel: channelFlags: {
     name = "clbot-${systemdEscape channel}";
     value = {
       description = "${description} to ${channel}";
       wantedBy = [ "multi-user.target" ];
 
-      script = "${depot.fun.clbot}/bin/clbot ${mkFlags (cfg.flags // {
+      script = "${depot.fun.clbot}/bin/clbot ${mkFlags (cfg.flags // channelFlags // {
         irc_channel = channel;
       })} -alsologtostderr";
 
@@ -53,8 +54,8 @@ in
     };
 
     channels = mkOption {
-      type = with types; listOf str;
-      description = "Channels in which to post (generates one unit per channel)";
+      type = with types; attrsOf (attrsOf str);
+      description = "Channels in which to post (generates one unit per channel); nested attrs are used as extra flags to the service, which override the attrs in `flags`";
     };
 
     secretsFile = mkOption {
@@ -77,6 +78,6 @@ in
       };
     };
 
-    systemd.services = listToAttrs (map (mkUnit cfg.flags) cfg.channels);
+    systemd.services = listToAttrs (mapAttrsToList mkUnit cfg.channels);
   };
 }
