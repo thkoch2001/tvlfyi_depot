@@ -14,6 +14,10 @@ let
   # Load the crate2nix crate tree.
   crates = pkgs.callPackage ./Cargo.nix {
     defaultCrateOverrides = pkgs.defaultCrateOverrides // {
+      nar-bridge = prev: {
+        nativeBuildInputs = protobufDep prev;
+      };
+
       opentelemetry-proto = prev: {
         nativeBuildInputs = protobufDep prev;
       };
