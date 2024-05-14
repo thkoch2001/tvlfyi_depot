@@ -89,6 +89,7 @@ let
           (lib.nameValuePair "${crateName}-${crates.internal.crates.${crateName}.version}" crates.internal.crates.${crateName}.src.outputHash)
         ) [
         "bigtable_rs"
+        "tokio-listener"
         "wu-manber"
       ]);
   };
