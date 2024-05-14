@@ -22,6 +22,30 @@
       },
       "revId": "30a252849752c3e869f723a6e3395ae4c566afb1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dfc4840e_a800b4fb",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1002,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-05-14T13:31:08Z",
+      "side": 1,
+      "message": "I agree. Maybe it was done for the benefit of comparisons with nixpkgs @tvl@lahfa.xyz?",
+      "parentUuid": "32f3a917_b750fc77",
+      "range": {
+        "startLine": 1001,
+        "startChar": 0,
+        "endLine": 1002,
+        "endChar": 2
+      },
+      "revId": "30a252849752c3e869f723a6e3395ae4c566afb1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
