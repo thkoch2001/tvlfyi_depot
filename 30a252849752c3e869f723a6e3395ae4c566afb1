@@ -46,6 +46,30 @@
       },
       "revId": "30a252849752c3e869f723a6e3395ae4c566afb1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc9f4d89_027c1a45",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1002,
+      "author": {
+        "id": 1000066
+      },
+      "writtenOn": "2024-05-14T21:01:57Z",
+      "side": 1,
+      "message": "I think @sternenseemann@systemli.org you meant to mention me, not Ryan.\n\nThe reasoning for doing this is in the commit message of 8d4aa2c15c88d6e2912882ebf480d89c172d4e1f.  If we make unimplemented builtins an uncatchable then we can eval even less of nixpkgs than we currently can.  The real fix is to actually implement `__curPos`.\n\nBTW I thought we were renaming these? https://cl.tvl.fyi/c/depot/+/11000/comment/66e5b119_2dc2f989/",
+      "parentUuid": "dfc4840e_a800b4fb",
+      "range": {
+        "startLine": 1001,
+        "startChar": 0,
+        "endLine": 1002,
+        "endChar": 2
+      },
+      "revId": "30a252849752c3e869f723a6e3395ae4c566afb1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
