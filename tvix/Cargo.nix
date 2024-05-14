@@ -12049,9 +12049,14 @@ rec {
       };
       "tokio-listener" = rec {
         crateName = "tokio-listener";
-        version = "0.3.2";
+        version = "0.4.0";
         edition = "2021";
-        sha256 = "00vkr1cywd2agn8jbkzwwf7y4ps3cfjm8l9ab697px2cgc97wdln";
+        workspace_member = null;
+        src = pkgs.fetchgit {
+          url = "https://github.com/vi/tokio-listener";
+          rev = "063a9a5d102c92b1133b91f2e62a9bfa40dbfb28";
+          sha256 = "0hl5xnzddc2k492hl0hh7z5c3hwphxchhglx7r0rbkp2a7v3a1gn";
+        };
         dependencies = [
           {
             name = "axum";
@@ -12124,7 +12129,9 @@ rec {
           "default" = [ "user_facing_default" "tokio-util" ];
           "hyper014" = [ "dep:hyper014" ];
           "inetd" = [ "dep:futures-util" ];
+          "multi-listener" = [ "dep:futures-util" ];
           "nix" = [ "dep:nix" ];
+          "sd_listen" = [ "socket2" ];
           "serde" = [ "dep:serde" "serde_with" ];
           "serde_with" = [ "dep:serde_with" ];
           "socket2" = [ "dep:socket2" ];
