@@ -496,15 +496,21 @@ getBestTorrentsTable = do
         fresh
           & foldMap
             ( \b -> do
-                let artistLink :: Text = [fmt|/artist?db_id={b.groupId}|]
+                let artists =
+                      b.artists
+                        <&> ( \a ->
+                                T2
+                                  (label @"url" [fmt|/artist?db_id={a.artistId}|])
+                                  (label @"content" $ Html.toHtml @Text a.artistName)
+                            )
+                        & mkLinkList
+
                 [hsx|
                   <tr>
                   <td>{localTorrent b}</td>
                   <td>{Html.toHtml @Int b.groupId}</td>
                   <td>
-                    <a href={artistLink}>
-                      {Html.toHtml @Text b.torrentGroupJson.artist}
-                    </a>
+                    {artists}
                   </td>
                   <td>{Html.toHtml @Text b.torrentGroupJson.groupName}</td>
                   <td>{Html.toHtml @Int b.seedingWeight}</td>
@@ -531,6 +537,15 @@ getBestTorrentsTable = do
           </tbody>
         </table>
       |]
+
+mkLinkList :: [T2 "url" Text "content" Html] -> Html
+mkLinkList xs =
+  xs
+    <&> ( \x -> do
+            [hsx|<a href={x.url}>{x.content}</a>|]
+        )
+    & List.intersperse ", "
+    & mconcat
 
 getTransmissionTorrentsTable ::
   (MonadTransmission m, MonadThrow m, MonadLogger m, MonadOtel m) => m Html
