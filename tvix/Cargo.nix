@@ -1519,13 +1519,27 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "std" ];
       };
-      "base64" = rec {
+      "base64 0.21.7" = rec {
         crateName = "base64";
         version = "0.21.7";
         edition = "2018";
         sha256 = "0rw52yvsk75kar9wgqfwgb414kvil1gn7mqkrhn9zf1537mpsacx";
         authors = [
           "Alice Maz <alice@alicemaz.com>"
+          "Marshall Pierce <marshall@mpierce.org>"
+        ];
+        features = {
+          "default" = [ "std" ];
+          "std" = [ "alloc" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "default" "std" ];
+      };
+      "base64 0.22.1" = rec {
+        crateName = "base64";
+        version = "0.22.1";
+        edition = "2018";
+        sha256 = "1imqzgh7bxcikp5vx3shqvw9j09g9ly0xr0jma0q66i52r7jbcvj";
+        authors = [
           "Marshall Pierce <marshall@mpierce.org>"
         ];
         features = {
@@ -4397,7 +4411,7 @@ rec {
           }
           {
             name = "base64";
-            packageId = "base64";
+            packageId = "base64 0.21.7";
           }
           {
             name = "chrono";
@@ -4415,7 +4429,7 @@ rec {
           }
           {
             name = "hyper-rustls";
-            packageId = "hyper-rustls";
+            packageId = "hyper-rustls 0.24.2";
             usesDefaultFeatures = false;
             features = [ "tokio-runtime" "http1" "http2" ];
           }
@@ -5291,6 +5305,11 @@ rec {
             packageId = "tokio";
             features = [ "sync" ];
           }
+          {
+            name = "want";
+            packageId = "want";
+            optional = true;
+          }
         ];
         devDependencies = [
           {
@@ -5319,9 +5338,9 @@ rec {
           "server" = [ "dep:httpdate" "dep:pin-project-lite" "dep:smallvec" ];
           "tracing" = [ "dep:tracing" ];
         };
-        resolvedDefaultFeatures = [ "default" "http1" "http2" "server" ];
+        resolvedDefaultFeatures = [ "client" "default" "http1" "http2" "server" ];
       };
-      "hyper-rustls" = rec {
+      "hyper-rustls 0.24.2" = rec {
         crateName = "hyper-rustls";
         version = "0.24.2";
         edition = "2021";
@@ -5396,6 +5415,98 @@ rec {
         };
         resolvedDefaultFeatures = [ "http1" "http2" "rustls-native-certs" "tokio-runtime" ];
       };
+      "hyper-rustls 0.27.2" = rec {
+        crateName = "hyper-rustls";
+        version = "0.27.2";
+        edition = "2021";
+        sha256 = "0ma1wyfnqnkz7zyr7wpply3xfvlijd0rqqhb6ajs28c9jhnbxr2y";
+        dependencies = [
+          {
+            name = "futures-util";
+            packageId = "futures-util";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "http";
+            packageId = "http 1.1.0";
+          }
+          {
+            name = "hyper";
+            packageId = "hyper 1.3.1";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "hyper-util";
+            packageId = "hyper-util";
+            usesDefaultFeatures = false;
+            features = [ "client-legacy" "tokio" ];
+          }
+          {
+            name = "rustls";
+            packageId = "rustls 0.23.7";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "rustls-native-certs";
+            packageId = "rustls-native-certs 0.7.0";
+            optional = true;
+          }
+          {
+            name = "rustls-pki-types";
+            packageId = "rustls-pki-types";
+            rename = "pki-types";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+          }
+          {
+            name = "tokio-rustls";
+            packageId = "tokio-rustls 0.26.0";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "tower-service";
+            packageId = "tower-service";
+          }
+        ];
+        devDependencies = [
+          {
+            name = "hyper-util";
+            packageId = "hyper-util";
+            usesDefaultFeatures = false;
+            features = [ "server-auto" ];
+          }
+          {
+            name = "rustls";
+            packageId = "rustls 0.23.7";
+            usesDefaultFeatures = false;
+            features = [ "tls12" ];
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "io-std" "macros" "net" "rt-multi-thread" ];
+          }
+        ];
+        features = {
+          "aws-lc-rs" = [ "rustls/aws_lc_rs" ];
+          "default" = [ "native-tokio" "http1" "tls12" "logging" "aws-lc-rs" ];
+          "fips" = [ "aws-lc-rs" "rustls/fips" ];
+          "http1" = [ "hyper-util/http1" ];
+          "http2" = [ "hyper-util/http2" ];
+          "log" = [ "dep:log" ];
+          "logging" = [ "log" "tokio-rustls/logging" "rustls/logging" ];
+          "native-tokio" = [ "rustls-native-certs" ];
+          "ring" = [ "rustls/ring" ];
+          "rustls-native-certs" = [ "dep:rustls-native-certs" ];
+          "rustls-platform-verifier" = [ "dep:rustls-platform-verifier" ];
+          "tls12" = [ "tokio-rustls/tls12" "rustls/tls12" ];
+          "webpki-roots" = [ "dep:webpki-roots" ];
+          "webpki-tokio" = [ "webpki-roots" ];
+        };
+        resolvedDefaultFeatures = [ "http1" "native-tokio" "ring" "rustls-native-certs" "tls12" ];
+      };
       "hyper-timeout" = rec {
         crateName = "hyper-timeout";
         version = "0.4.1";
@@ -5451,6 +5562,11 @@ rec {
             packageId = "bytes";
           }
           {
+            name = "futures-channel";
+            packageId = "futures-channel";
+            optional = true;
+          }
+          {
             name = "futures-util";
             packageId = "futures-util";
             usesDefaultFeatures = false;
@@ -5483,6 +5599,24 @@ rec {
             optional = true;
             features = [ "net" "rt" "time" ];
           }
+          {
+            name = "tower";
+            packageId = "tower";
+            optional = true;
+            features = [ "make" "util" ];
+          }
+          {
+            name = "tower-service";
+            packageId = "tower-service";
+            optional = true;
+          }
+          {
+            name = "tracing";
+            packageId = "tracing";
+            optional = true;
+            usesDefaultFeatures = false;
+            features = [ "std" ];
+          }
         ];
         devDependencies = [
           {
@@ -5511,7 +5645,7 @@ rec {
           "service" = [ "dep:tower" "dep:tower-service" ];
           "tokio" = [ "dep:tokio" "dep:socket2" ];
         };
-        resolvedDefaultFeatures = [ "default" "http1" "http2" "server" "server-auto" "tokio" ];
+        resolvedDefaultFeatures = [ "client" "client-legacy" "default" "http1" "http2" "server" "server-auto" "tokio" ];
       };
       "iana-time-zone" = rec {
         crateName = "iana-time-zone";
@@ -7419,7 +7553,7 @@ rec {
           }
           {
             name = "base64";
-            packageId = "base64";
+            packageId = "base64 0.21.7";
             optional = true;
             usesDefaultFeatures = false;
             features = [ "std" ];
@@ -7481,7 +7615,7 @@ rec {
           }
           {
             name = "reqwest";
-            packageId = "reqwest";
+            packageId = "reqwest 0.11.23";
             optional = true;
             usesDefaultFeatures = false;
             features = [ "rustls-tls-native-roots" ];
@@ -9135,6 +9269,173 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "overlapped-lists" "serde" "serialize" ];
       };
+      "quinn" = rec {
+        crateName = "quinn";
+        version = "0.11.2";
+        edition = "2021";
+        sha256 = "1bdkir6irdxld7xq2zd58scmm44w3vx1zswq6x0mfy6fpbmfxkp4";
+        dependencies = [
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+          }
+          {
+            name = "quinn-proto";
+            packageId = "quinn-proto";
+            rename = "proto";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "quinn-udp";
+            packageId = "quinn-udp";
+            rename = "udp";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "rustc-hash";
+            packageId = "rustc-hash";
+          }
+          {
+            name = "rustls";
+            packageId = "rustls 0.23.7";
+            optional = true;
+            usesDefaultFeatures = false;
+            features = [ "ring" "std" ];
+          }
+          {
+            name = "thiserror";
+            packageId = "thiserror";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "sync" ];
+          }
+          {
+            name = "tracing";
+            packageId = "tracing";
+          }
+        ];
+        devDependencies = [
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "rt" "rt-multi-thread" "time" "macros" "sync" ];
+          }
+        ];
+        features = {
+          "async-io" = [ "dep:async-io" ];
+          "async-std" = [ "dep:async-std" ];
+          "default" = [ "log" "platform-verifier" "ring" "runtime-tokio" "rustls" ];
+          "futures-io" = [ "dep:futures-io" ];
+          "log" = [ "tracing/log" "proto/log" "udp/log" ];
+          "platform-verifier" = [ "proto/platform-verifier" ];
+          "ring" = [ "proto/ring" ];
+          "runtime-async-std" = [ "async-io" "async-std" ];
+          "runtime-smol" = [ "async-io" "smol" ];
+          "runtime-tokio" = [ "tokio/time" "tokio/rt" "tokio/net" ];
+          "rustls" = [ "dep:rustls" "proto/rustls" "proto/ring" ];
+          "smol" = [ "dep:smol" ];
+        };
+        resolvedDefaultFeatures = [ "ring" "runtime-tokio" "rustls" ];
+      };
+      "quinn-proto" = rec {
+        crateName = "quinn-proto";
+        version = "0.11.3";
+        edition = "2021";
+        sha256 = "1zhfcj6fffdgkqdhxzlr18hqmpwqshwbx9280h8bi78h7b01gxfx";
+        dependencies = [
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "rand";
+            packageId = "rand";
+          }
+          {
+            name = "ring";
+            packageId = "ring";
+            optional = true;
+          }
+          {
+            name = "rustc-hash";
+            packageId = "rustc-hash";
+          }
+          {
+            name = "rustls";
+            packageId = "rustls 0.23.7";
+            optional = true;
+            usesDefaultFeatures = false;
+            features = [ "ring" "std" ];
+          }
+          {
+            name = "slab";
+            packageId = "slab";
+          }
+          {
+            name = "thiserror";
+            packageId = "thiserror";
+          }
+          {
+            name = "tinyvec";
+            packageId = "tinyvec";
+            features = [ "alloc" ];
+          }
+          {
+            name = "tracing";
+            packageId = "tracing";
+          }
+        ];
+        features = {
+          "arbitrary" = [ "dep:arbitrary" ];
+          "default" = [ "rustls" "log" ];
+          "log" = [ "tracing/log" ];
+          "platform-verifier" = [ "dep:rustls-platform-verifier" ];
+          "ring" = [ "dep:ring" ];
+          "rustls" = [ "dep:rustls" "ring" ];
+        };
+        resolvedDefaultFeatures = [ "ring" "rustls" ];
+      };
+      "quinn-udp" = rec {
+        crateName = "quinn-udp";
+        version = "0.5.2";
+        edition = "2021";
+        sha256 = "0ilcrwrah36nqxh329p31ghj3rxm4sw5w4iy2kxwf3w68nf655lh";
+        dependencies = [
+          {
+            name = "libc";
+            packageId = "libc";
+          }
+          {
+            name = "once_cell";
+            packageId = "once_cell";
+            target = { target, features }: (target."windows" or false);
+          }
+          {
+            name = "socket2";
+            packageId = "socket2";
+          }
+          {
+            name = "tracing";
+            packageId = "tracing";
+          }
+          {
+            name = "windows-sys";
+            packageId = "windows-sys 0.52.0";
+            target = { target, features }: (target."windows" or false);
+            features = [ "Win32_Foundation" "Win32_System_IO" "Win32_Networking_WinSock" ];
+          }
+        ];
+        features = {
+          "default" = [ "log" ];
+          "log" = [ "tracing/log" ];
+        };
+      };
       "quote" = rec {
         crateName = "quote";
         version = "1.0.35";
@@ -9636,7 +9937,7 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" ];
       };
-      "reqwest" = rec {
+      "reqwest 0.11.23" = rec {
         crateName = "reqwest";
         version = "0.11.23";
         edition = "2018";
@@ -9647,7 +9948,7 @@ rec {
         dependencies = [
           {
             name = "base64";
-            packageId = "base64";
+            packageId = "base64 0.21.7";
           }
           {
             name = "bytes";
@@ -9691,7 +9992,7 @@ rec {
           }
           {
             name = "hyper-rustls";
-            packageId = "hyper-rustls";
+            packageId = "hyper-rustls 0.24.2";
             optional = true;
             usesDefaultFeatures = false;
             target = { target, features }: (!("wasm32" == target."arch" or null));
@@ -9814,7 +10115,7 @@ rec {
           }
           {
             name = "wasm-streams";
-            packageId = "wasm-streams";
+            packageId = "wasm-streams 0.3.0";
             optional = true;
             target = { target, features }: ("wasm32" == target."arch" or null);
           }
@@ -9826,7 +10127,7 @@ rec {
           }
           {
             name = "winreg";
-            packageId = "winreg";
+            packageId = "winreg 0.50.0";
             target = { target, features }: (target."windows" or false);
           }
         ];
@@ -9904,6 +10205,300 @@ rec {
           "webpki-roots" = [ "dep:webpki-roots" ];
         };
         resolvedDefaultFeatures = [ "__rustls" "__tls" "hyper-rustls" "json" "rustls" "rustls-native-certs" "rustls-pemfile" "rustls-tls-native-roots" "serde_json" "stream" "tokio-rustls" "tokio-util" "wasm-streams" ];
+      };
+      "reqwest 0.12.5" = rec {
+        crateName = "reqwest";
+        version = "0.12.5";
+        edition = "2021";
+        sha256 = "0dva5mx1cli19adc9igc81ix4si7yiri24ayxdw8652pgnid5mn7";
+        authors = [
+          "Sean McArthur <sean@seanmonstar.com>"
+        ];
+        dependencies = [
+          {
+            name = "base64";
+            packageId = "base64 0.22.1";
+          }
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "futures-core";
+            packageId = "futures-core";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "futures-util";
+            packageId = "futures-util";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "http";
+            packageId = "http 1.1.0";
+          }
+          {
+            name = "http-body";
+            packageId = "http-body 1.0.0";
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+          }
+          {
+            name = "http-body-util";
+            packageId = "http-body-util";
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+          }
+          {
+            name = "hyper";
+            packageId = "hyper 1.3.1";
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+            features = [ "http1" "client" ];
+          }
+          {
+            name = "hyper-rustls";
+            packageId = "hyper-rustls 0.27.2";
+            optional = true;
+            usesDefaultFeatures = false;
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+            features = [ "http1" "tls12" ];
+          }
+          {
+            name = "hyper-util";
+            packageId = "hyper-util";
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+            features = [ "http1" "client" "client-legacy" "tokio" ];
+          }
+          {
+            name = "ipnet";
+            packageId = "ipnet";
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+          }
+          {
+            name = "js-sys";
+            packageId = "js-sys";
+            target = { target, features }: ("wasm32" == target."arch" or null);
+          }
+          {
+            name = "log";
+            packageId = "log";
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+          }
+          {
+            name = "mime";
+            packageId = "mime";
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+          }
+          {
+            name = "once_cell";
+            packageId = "once_cell";
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+          }
+          {
+            name = "percent-encoding";
+            packageId = "percent-encoding";
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+          }
+          {
+            name = "quinn";
+            packageId = "quinn";
+            optional = true;
+            usesDefaultFeatures = false;
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+            features = [ "rustls" "runtime-tokio" ];
+          }
+          {
+            name = "rustls";
+            packageId = "rustls 0.23.7";
+            optional = true;
+            usesDefaultFeatures = false;
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+            features = [ "std" "tls12" ];
+          }
+          {
+            name = "rustls-native-certs";
+            packageId = "rustls-native-certs 0.7.0";
+            optional = true;
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+          }
+          {
+            name = "rustls-pemfile";
+            packageId = "rustls-pemfile 2.1.0";
+            optional = true;
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+          }
+          {
+            name = "rustls-pki-types";
+            packageId = "rustls-pki-types";
+            optional = true;
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+            features = [ "alloc" ];
+          }
+          {
+            name = "serde";
+            packageId = "serde";
+          }
+          {
+            name = "serde_json";
+            packageId = "serde_json";
+            optional = true;
+          }
+          {
+            name = "serde_json";
+            packageId = "serde_json";
+            target = { target, features }: ("wasm32" == target."arch" or null);
+          }
+          {
+            name = "serde_urlencoded";
+            packageId = "serde_urlencoded";
+          }
+          {
+            name = "sync_wrapper";
+            packageId = "sync_wrapper 1.0.1";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            usesDefaultFeatures = false;
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+            features = [ "net" "time" ];
+          }
+          {
+            name = "tokio-rustls";
+            packageId = "tokio-rustls 0.26.0";
+            optional = true;
+            usesDefaultFeatures = false;
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+            features = [ "tls12" ];
+          }
+          {
+            name = "tokio-util";
+            packageId = "tokio-util";
+            optional = true;
+            usesDefaultFeatures = false;
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+            features = [ "codec" "io" ];
+          }
+          {
+            name = "tower-service";
+            packageId = "tower-service";
+          }
+          {
+            name = "url";
+            packageId = "url";
+          }
+          {
+            name = "wasm-bindgen";
+            packageId = "wasm-bindgen";
+            target = { target, features }: ("wasm32" == target."arch" or null);
+          }
+          {
+            name = "wasm-bindgen-futures";
+            packageId = "wasm-bindgen-futures";
+            target = { target, features }: ("wasm32" == target."arch" or null);
+          }
+          {
+            name = "wasm-streams";
+            packageId = "wasm-streams 0.4.0";
+            optional = true;
+            target = { target, features }: ("wasm32" == target."arch" or null);
+          }
+          {
+            name = "web-sys";
+            packageId = "web-sys";
+            target = { target, features }: ("wasm32" == target."arch" or null);
+            features = [ "AbortController" "AbortSignal" "Headers" "Request" "RequestInit" "RequestMode" "Response" "Window" "FormData" "Blob" "BlobPropertyBag" "ServiceWorkerGlobalScope" "RequestCredentials" "File" "ReadableStream" ];
+          }
+          {
+            name = "winreg";
+            packageId = "winreg 0.52.0";
+            target = { target, features }: (target."windows" or false);
+          }
+        ];
+        devDependencies = [
+          {
+            name = "futures-util";
+            packageId = "futures-util";
+            usesDefaultFeatures = false;
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+            features = [ "std" "alloc" ];
+          }
+          {
+            name = "hyper";
+            packageId = "hyper 1.3.1";
+            usesDefaultFeatures = false;
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+            features = [ "http1" "http2" "client" "server" ];
+          }
+          {
+            name = "hyper-util";
+            packageId = "hyper-util";
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+            features = [ "http1" "http2" "client" "client-legacy" "server-auto" "tokio" ];
+          }
+          {
+            name = "rustls";
+            packageId = "rustls 0.23.7";
+            usesDefaultFeatures = false;
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+            features = [ "ring" ];
+          }
+          {
+            name = "serde";
+            packageId = "serde";
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+            features = [ "derive" ];
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            usesDefaultFeatures = false;
+            target = { target, features }: (!("wasm32" == target."arch" or null));
+            features = [ "macros" "rt-multi-thread" ];
+          }
+          {
+            name = "wasm-bindgen";
+            packageId = "wasm-bindgen";
+            target = { target, features }: ("wasm32" == target."arch" or null);
+            features = [ "serde-serialize" ];
+          }
+        ];
+        features = {
+          "__rustls" = [ "dep:hyper-rustls" "dep:tokio-rustls" "dep:rustls" "__tls" "dep:rustls-pemfile" "dep:rustls-pki-types" ];
+          "__rustls-ring" = [ "hyper-rustls?/ring" "tokio-rustls?/ring" "rustls?/ring" "quinn?/ring" ];
+          "__tls" = [ "dep:rustls-pemfile" "tokio/io-util" ];
+          "blocking" = [ "dep:futures-channel" "futures-channel?/sink" "futures-util/io" "futures-util/sink" "tokio/sync" ];
+          "brotli" = [ "dep:async-compression" "async-compression?/brotli" "dep:tokio-util" ];
+          "charset" = [ "dep:encoding_rs" ];
+          "cookies" = [ "dep:cookie_crate" "dep:cookie_store" ];
+          "default" = [ "default-tls" "charset" "http2" "macos-system-configuration" ];
+          "default-tls" = [ "dep:hyper-tls" "dep:native-tls-crate" "__tls" "dep:tokio-native-tls" ];
+          "deflate" = [ "dep:async-compression" "async-compression?/zlib" "dep:tokio-util" ];
+          "gzip" = [ "dep:async-compression" "async-compression?/gzip" "dep:tokio-util" ];
+          "h2" = [ "dep:h2" ];
+          "hickory-dns" = [ "dep:hickory-resolver" ];
+          "http2" = [ "h2" "hyper/http2" "hyper-util/http2" "hyper-rustls?/http2" ];
+          "http3" = [ "rustls-tls-manual-roots" "dep:h3" "dep:h3-quinn" "dep:quinn" "dep:slab" "dep:futures-channel" ];
+          "json" = [ "dep:serde_json" ];
+          "macos-system-configuration" = [ "dep:system-configuration" ];
+          "multipart" = [ "dep:mime_guess" ];
+          "native-tls" = [ "default-tls" ];
+          "native-tls-alpn" = [ "native-tls" "native-tls-crate?/alpn" "hyper-tls?/alpn" ];
+          "native-tls-vendored" = [ "native-tls" "native-tls-crate?/vendored" ];
+          "rustls-tls" = [ "rustls-tls-webpki-roots" ];
+          "rustls-tls-manual-roots" = [ "__rustls" "__rustls-ring" ];
+          "rustls-tls-manual-roots-no-provider" = [ "__rustls" ];
+          "rustls-tls-native-roots" = [ "dep:rustls-native-certs" "hyper-rustls?/native-tokio" "__rustls" "__rustls-ring" ];
+          "rustls-tls-no-provider" = [ "rustls-tls-manual-roots-no-provider" ];
+          "rustls-tls-webpki-roots" = [ "dep:webpki-roots" "hyper-rustls?/webpki-tokio" "__rustls" "__rustls-ring" ];
+          "socks" = [ "dep:tokio-socks" ];
+          "stream" = [ "tokio/fs" "dep:tokio-util" "dep:wasm-streams" ];
+          "zstd" = [ "dep:async-compression" "async-compression?/zstd" "dep:tokio-util" ];
+        };
+        resolvedDefaultFeatures = [ "__rustls" "__rustls-ring" "__tls" "rustls-tls-native-roots" "stream" ];
       };
       "ring" = rec {
         crateName = "ring";
@@ -10392,6 +10987,61 @@ rec {
         };
         resolvedDefaultFeatures = [ "log" "logging" "ring" "tls12" ];
       };
+      "rustls 0.23.7" = rec {
+        crateName = "rustls";
+        version = "0.23.7";
+        edition = "2021";
+        sha256 = "0yv7bh16rwhn6fnlb3wnixb2y4in9gf3z3ysa8k3zbgh3nbdpfzb";
+        dependencies = [
+          {
+            name = "once_cell";
+            packageId = "once_cell";
+            usesDefaultFeatures = false;
+            features = [ "alloc" "race" ];
+          }
+          {
+            name = "ring";
+            packageId = "ring";
+            optional = true;
+          }
+          {
+            name = "rustls-pki-types";
+            packageId = "rustls-pki-types";
+            rename = "pki-types";
+            features = [ "alloc" ];
+          }
+          {
+            name = "rustls-webpki";
+            packageId = "rustls-webpki 0.102.2";
+            rename = "webpki";
+            usesDefaultFeatures = false;
+            features = [ "alloc" ];
+          }
+          {
+            name = "subtle";
+            packageId = "subtle";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "zeroize";
+            packageId = "zeroize";
+          }
+        ];
+        features = {
+          "aws-lc-rs" = [ "aws_lc_rs" ];
+          "aws_lc_rs" = [ "dep:aws-lc-rs" "webpki/aws_lc_rs" ];
+          "default" = [ "aws_lc_rs" "logging" "std" "tls12" ];
+          "fips" = [ "aws_lc_rs" "aws-lc-rs?/fips" ];
+          "hashbrown" = [ "dep:hashbrown" ];
+          "log" = [ "dep:log" ];
+          "logging" = [ "log" ];
+          "read_buf" = [ "rustversion" "std" ];
+          "ring" = [ "dep:ring" "webpki/ring" ];
+          "rustversion" = [ "dep:rustversion" ];
+          "std" = [ "webpki/std" "pki-types/std" "once_cell/std" ];
+        };
+        resolvedDefaultFeatures = [ "ring" "std" "tls12" ];
+      };
       "rustls-native-certs 0.6.3" = rec {
         crateName = "rustls-native-certs";
         version = "0.6.3";
@@ -10461,7 +11111,7 @@ rec {
         dependencies = [
           {
             name = "base64";
-            packageId = "base64";
+            packageId = "base64 0.21.7";
           }
         ];
 
@@ -10474,7 +11124,7 @@ rec {
         dependencies = [
           {
             name = "base64";
-            packageId = "base64";
+            packageId = "base64 0.21.7";
             usesDefaultFeatures = false;
             features = [ "alloc" ];
           }
@@ -11113,7 +11763,7 @@ rec {
         dependencies = [
           {
             name = "base64";
-            packageId = "base64";
+            packageId = "base64 0.21.7";
             optional = true;
             usesDefaultFeatures = false;
           }
@@ -12727,6 +13377,46 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "logging" "ring" "tls12" ];
       };
+      "tokio-rustls 0.26.0" = rec {
+        crateName = "tokio-rustls";
+        version = "0.26.0";
+        edition = "2021";
+        sha256 = "1m00czrmk8x7pdjnz10a3da3i1d0sdf9j9vfp5dnk5ss1q6w8yqc";
+        dependencies = [
+          {
+            name = "rustls";
+            packageId = "rustls 0.23.7";
+            usesDefaultFeatures = false;
+            features = [ "std" ];
+          }
+          {
+            name = "rustls-pki-types";
+            packageId = "rustls-pki-types";
+            rename = "pki-types";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+          }
+        ];
+        devDependencies = [
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "full" ];
+          }
+        ];
+        features = {
+          "aws-lc-rs" = [ "aws_lc_rs" ];
+          "aws_lc_rs" = [ "rustls/aws_lc_rs" ];
+          "default" = [ "logging" "tls12" "aws_lc_rs" ];
+          "fips" = [ "rustls/fips" ];
+          "logging" = [ "rustls/logging" ];
+          "ring" = [ "rustls/ring" ];
+          "tls12" = [ "rustls/tls12" ];
+        };
+        resolvedDefaultFeatures = [ "ring" "tls12" ];
+      };
       "tokio-stream" = rec {
         crateName = "tokio-stream";
         version = "0.1.14";
@@ -13070,7 +13760,7 @@ rec {
           }
           {
             name = "base64";
-            packageId = "base64";
+            packageId = "base64 0.21.7";
           }
           {
             name = "bytes";
@@ -14766,7 +15456,7 @@ rec {
           }
           {
             name = "reqwest";
-            packageId = "reqwest";
+            packageId = "reqwest 0.12.5";
             usesDefaultFeatures = false;
             features = [ "rustls-tls-native-roots" ];
           }
@@ -14922,6 +15612,11 @@ rec {
         edition = "2021";
         crateBin = [
           {
+            name = "tvix-cache-daemon";
+            path = "src/bin/tvix-cache-daemon.rs";
+            requiredFeatures = [ ];
+          }
+          {
             name = "tvix-store";
             path = "src/bin/tvix-store.rs";
             requiredFeatures = [ ];
@@ -15009,7 +15704,7 @@ rec {
           }
           {
             name = "reqwest";
-            packageId = "reqwest";
+            packageId = "reqwest 0.12.5";
             usesDefaultFeatures = false;
             features = [ "rustls-tls-native-roots" "stream" ];
           }
@@ -16107,7 +16802,7 @@ rec {
         ];
 
       };
-      "wasm-streams" = rec {
+      "wasm-streams 0.3.0" = rec {
         crateName = "wasm-streams";
         version = "0.3.0";
         edition = "2021";
@@ -16138,6 +16833,48 @@ rec {
             name = "web-sys";
             packageId = "web-sys";
             features = [ "AbortSignal" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "web-sys";
+            packageId = "web-sys";
+            features = [ "console" "AbortSignal" "Response" "ReadableStream" "Window" ];
+          }
+        ];
+
+      };
+      "wasm-streams 0.4.0" = rec {
+        crateName = "wasm-streams";
+        version = "0.4.0";
+        edition = "2021";
+        sha256 = "0ad17c59xb8fffsnbrqbyqz93hb66nzxhizpii31icb31g4w8pdn";
+        type = [ "cdylib" "rlib" ];
+        authors = [
+          "Mattias Buelens <mattias@buelens.com>"
+        ];
+        dependencies = [
+          {
+            name = "futures-util";
+            packageId = "futures-util";
+            features = [ "io" "sink" ];
+          }
+          {
+            name = "js-sys";
+            packageId = "js-sys";
+          }
+          {
+            name = "wasm-bindgen";
+            packageId = "wasm-bindgen";
+          }
+          {
+            name = "wasm-bindgen-futures";
+            packageId = "wasm-bindgen-futures";
+          }
+          {
+            name = "web-sys";
+            packageId = "web-sys";
+            features = [ "AbortSignal" "QueuingStrategy" "ReadableStream" "ReadableStreamType" "ReadableWritablePair" "ReadableStreamByobReader" "ReadableStreamReaderMode" "ReadableStreamReadResult" "ReadableStreamByobRequest" "ReadableStreamDefaultReader" "ReadableByteStreamController" "ReadableStreamGetReaderOptions" "ReadableStreamDefaultController" "StreamPipeOptions" "TransformStream" "TransformStreamDefaultController" "Transformer" "UnderlyingSink" "UnderlyingSource" "WritableStream" "WritableStreamDefaultController" "WritableStreamDefaultWriter" ];
           }
         ];
         devDependencies = [
@@ -16616,7 +17353,7 @@ rec {
           "XrViewerPose" = [ "XrPose" ];
           "XrWebGlLayer" = [ "EventTarget" "XrLayer" ];
         };
-        resolvedDefaultFeatures = [ "AbortController" "AbortSignal" "Blob" "BlobPropertyBag" "CanvasRenderingContext2d" "Document" "DomRect" "DomRectReadOnly" "Element" "Event" "EventTarget" "File" "FormData" "Headers" "HtmlCanvasElement" "HtmlElement" "MessageEvent" "Node" "ReadableStream" "Request" "RequestCredentials" "RequestInit" "RequestMode" "Response" "ServiceWorkerGlobalScope" "Window" "Worker" "WorkerGlobalScope" ];
+        resolvedDefaultFeatures = [ "AbortController" "AbortSignal" "Blob" "BlobPropertyBag" "CanvasRenderingContext2d" "Document" "DomRect" "DomRectReadOnly" "Element" "Event" "EventTarget" "File" "FormData" "Headers" "HtmlCanvasElement" "HtmlElement" "MessageEvent" "Node" "QueuingStrategy" "ReadableByteStreamController" "ReadableStream" "ReadableStreamByobReader" "ReadableStreamByobRequest" "ReadableStreamDefaultController" "ReadableStreamDefaultReader" "ReadableStreamGetReaderOptions" "ReadableStreamReadResult" "ReadableStreamReaderMode" "ReadableStreamType" "ReadableWritablePair" "Request" "RequestCredentials" "RequestInit" "RequestMode" "Response" "ServiceWorkerGlobalScope" "StreamPipeOptions" "TransformStream" "TransformStreamDefaultController" "Transformer" "UnderlyingSink" "UnderlyingSource" "Window" "Worker" "WorkerGlobalScope" "WritableStream" "WritableStreamDefaultController" "WritableStreamDefaultWriter" ];
       };
       "web-time" = rec {
         crateName = "web-time";
@@ -18334,11 +19071,36 @@ rec {
         ];
 
       };
-      "winreg" = rec {
+      "winreg 0.50.0" = rec {
         crateName = "winreg";
         version = "0.50.0";
         edition = "2018";
         sha256 = "1cddmp929k882mdh6i9f2as848f13qqna6czwsqzkh1pqnr5fkjj";
+        authors = [
+          "Igor Shaula <gentoo90@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "cfg-if";
+            packageId = "cfg-if";
+          }
+          {
+            name = "windows-sys";
+            packageId = "windows-sys 0.48.0";
+            features = [ "Win32_Foundation" "Win32_System_Time" "Win32_System_Registry" "Win32_Security" "Win32_Storage_FileSystem" "Win32_System_Diagnostics_Debug" ];
+          }
+        ];
+        features = {
+          "chrono" = [ "dep:chrono" ];
+          "serde" = [ "dep:serde" ];
+          "serialization-serde" = [ "transactions" "serde" ];
+        };
+      };
+      "winreg 0.52.0" = rec {
+        crateName = "winreg";
+        version = "0.52.0";
+        edition = "2018";
+        sha256 = "19gh9vp7mp1ab84kc3ag48nm9y7xgjhh3xa4vxss1gylk1rsaxx2";
         authors = [
           "Igor Shaula <gentoo90@gmail.com>"
         ];
