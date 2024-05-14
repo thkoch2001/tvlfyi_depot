@@ -229,4 +229,9 @@
     email = "tvl@alice-carroll.pet";
     password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$mt/0RzKw4RHxm7ybpMHP5Q$P/SDBMv5si9D98NFO/eZgh2+InlByqYxqAvQWhl+p0c";
   }
+  {
+    username = "yuka";
+    email = "tvl@yuka.dev";
+    password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$aEyiAIuynQMwfY7xE+pMxg$QdghylHO2JZMR/YyYf4UAnhhb/gBdAkoDeANEwdixxU";
+  }
 ]
