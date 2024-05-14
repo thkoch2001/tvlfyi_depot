@@ -33,6 +33,16 @@ rec {
   # You can override the features with
   # workspaceMembers."${crateName}".build.override { features = [ "default" "feature1" ... ]; }.
   workspaceMembers = {
+    "nar-bridge" = rec {
+      packageId = "nar-bridge";
+      build = internal.buildRustCrateWithFeatures {
+        packageId = "nar-bridge";
+      };
+
+      # Debug support which might change between releases.
+      # File a bug if you depend on any for non-debug work!
+      debug = internal.debugCrate { inherit packageId; };
+    };
     "nix-compat" = rec {
       packageId = "nix-compat";
       build = internal.buildRustCrateWithFeatures {
@@ -1004,7 +1014,7 @@ rec {
         ];
 
       };
-      "axum" = rec {
+      "axum 0.6.20" = rec {
         crateName = "axum";
         version = "0.6.20";
         edition = "2021";
@@ -1016,7 +1026,7 @@ rec {
           }
           {
             name = "axum-core";
-            packageId = "axum-core";
+            packageId = "axum-core 0.3.4";
           }
           {
             name = "bitflags";
@@ -1034,15 +1044,15 @@ rec {
           }
           {
             name = "http";
-            packageId = "http";
+            packageId = "http 0.2.11";
           }
           {
             name = "http-body";
-            packageId = "http-body";
+            packageId = "http-body 0.4.6";
           }
           {
             name = "hyper";
-            packageId = "hyper";
+            packageId = "hyper 0.14.28";
             features = [ "stream" ];
           }
           {
@@ -1075,7 +1085,7 @@ rec {
           }
           {
             name = "sync_wrapper";
-            packageId = "sync_wrapper";
+            packageId = "sync_wrapper 0.1.2";
           }
           {
             name = "tower";
@@ -1132,7 +1142,184 @@ rec {
           "ws" = [ "tokio" "dep:tokio-tungstenite" "dep:sha1" "dep:base64" ];
         };
       };
-      "axum-core" = rec {
+      "axum 0.7.5" = rec {
+        crateName = "axum";
+        version = "0.7.5";
+        edition = "2021";
+        sha256 = "1kyb7pzgn60crl9wyq7dhciv40sxdr1mbqx2r4s7g9j253qrlv1s";
+        dependencies = [
+          {
+            name = "async-trait";
+            packageId = "async-trait";
+          }
+          {
+            name = "axum-core";
+            packageId = "axum-core 0.4.3";
+          }
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "futures-util";
+            packageId = "futures-util";
+            usesDefaultFeatures = false;
+            features = [ "alloc" ];
+          }
+          {
+            name = "http";
+            packageId = "http 1.1.0";
+          }
+          {
+            name = "http-body";
+            packageId = "http-body 1.0.0";
+          }
+          {
+            name = "http-body-util";
+            packageId = "http-body-util";
+          }
+          {
+            name = "hyper";
+            packageId = "hyper 1.3.1";
+            optional = true;
+          }
+          {
+            name = "hyper-util";
+            packageId = "hyper-util";
+            optional = true;
+            features = [ "tokio" "server" ];
+          }
+          {
+            name = "itoa";
+            packageId = "itoa";
+          }
+          {
+            name = "matchit";
+            packageId = "matchit";
+          }
+          {
+            name = "memchr";
+            packageId = "memchr";
+          }
+          {
+            name = "mime";
+            packageId = "mime";
+          }
+          {
+            name = "percent-encoding";
+            packageId = "percent-encoding";
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+          }
+          {
+            name = "serde";
+            packageId = "serde";
+          }
+          {
+            name = "serde_json";
+            packageId = "serde_json";
+            optional = true;
+            features = [ "raw_value" ];
+          }
+          {
+            name = "serde_path_to_error";
+            packageId = "serde_path_to_error";
+            optional = true;
+          }
+          {
+            name = "serde_urlencoded";
+            packageId = "serde_urlencoded";
+            optional = true;
+          }
+          {
+            name = "sync_wrapper";
+            packageId = "sync_wrapper 1.0.1";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            rename = "tokio";
+            optional = true;
+            features = [ "time" ];
+          }
+          {
+            name = "tower";
+            packageId = "tower";
+            usesDefaultFeatures = false;
+            features = [ "util" ];
+          }
+          {
+            name = "tower-layer";
+            packageId = "tower-layer";
+          }
+          {
+            name = "tower-service";
+            packageId = "tower-service";
+          }
+          {
+            name = "tracing";
+            packageId = "tracing";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+        ];
+        buildDependencies = [
+          {
+            name = "rustversion";
+            packageId = "rustversion";
+          }
+        ];
+        devDependencies = [
+          {
+            name = "rustversion";
+            packageId = "rustversion";
+          }
+          {
+            name = "serde";
+            packageId = "serde";
+            features = [ "derive" ];
+          }
+          {
+            name = "serde_json";
+            packageId = "serde_json";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            rename = "tokio";
+            features = [ "macros" "rt" "rt-multi-thread" "net" "test-util" ];
+          }
+          {
+            name = "tower";
+            packageId = "tower";
+            rename = "tower";
+            features = [ "util" "timeout" "limit" "load-shed" "steer" "filter" ];
+          }
+          {
+            name = "tracing";
+            packageId = "tracing";
+          }
+        ];
+        features = {
+          "__private_docs" = [ "tower/full" "dep:tower-http" ];
+          "default" = [ "form" "http1" "json" "matched-path" "original-uri" "query" "tokio" "tower-log" "tracing" ];
+          "form" = [ "dep:serde_urlencoded" ];
+          "http1" = [ "dep:hyper" "hyper?/http1" "hyper-util?/http1" ];
+          "http2" = [ "dep:hyper" "hyper?/http2" "hyper-util?/http2" ];
+          "json" = [ "dep:serde_json" "dep:serde_path_to_error" ];
+          "macros" = [ "dep:axum-macros" ];
+          "multipart" = [ "dep:multer" ];
+          "query" = [ "dep:serde_urlencoded" ];
+          "tokio" = [ "dep:hyper-util" "dep:tokio" "tokio/net" "tokio/rt" "tower/make" "tokio/macros" ];
+          "tower-log" = [ "tower/log" ];
+          "tracing" = [ "dep:tracing" "axum-core/tracing" ];
+          "ws" = [ "dep:hyper" "tokio" "dep:tokio-tungstenite" "dep:sha1" "dep:base64" ];
+        };
+        resolvedDefaultFeatures = [ "default" "form" "http1" "http2" "json" "matched-path" "original-uri" "query" "tokio" "tower-log" "tracing" ];
+      };
+      "axum-core 0.3.4" = rec {
         crateName = "axum-core";
         version = "0.3.4";
         edition = "2021";
@@ -1154,11 +1341,11 @@ rec {
           }
           {
             name = "http";
-            packageId = "http";
+            packageId = "http 0.2.11";
           }
           {
             name = "http-body";
-            packageId = "http-body";
+            packageId = "http-body 0.4.6";
           }
           {
             name = "mime";
@@ -1191,6 +1378,85 @@ rec {
           "__private_docs" = [ "dep:tower-http" ];
           "tracing" = [ "dep:tracing" ];
         };
+      };
+      "axum-core 0.4.3" = rec {
+        crateName = "axum-core";
+        version = "0.4.3";
+        edition = "2021";
+        sha256 = "1qx28wg4j6qdcdrisqwyaavlzc0zvbsrcwa99zf9456lfbyn6p51";
+        dependencies = [
+          {
+            name = "async-trait";
+            packageId = "async-trait";
+          }
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "futures-util";
+            packageId = "futures-util";
+            usesDefaultFeatures = false;
+            features = [ "alloc" ];
+          }
+          {
+            name = "http";
+            packageId = "http 1.1.0";
+          }
+          {
+            name = "http-body";
+            packageId = "http-body 1.0.0";
+          }
+          {
+            name = "http-body-util";
+            packageId = "http-body-util";
+          }
+          {
+            name = "mime";
+            packageId = "mime";
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+          }
+          {
+            name = "sync_wrapper";
+            packageId = "sync_wrapper 0.1.2";
+          }
+          {
+            name = "tower-layer";
+            packageId = "tower-layer";
+          }
+          {
+            name = "tower-service";
+            packageId = "tower-service";
+          }
+          {
+            name = "tracing";
+            packageId = "tracing";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+        ];
+        buildDependencies = [
+          {
+            name = "rustversion";
+            packageId = "rustversion";
+          }
+        ];
+        devDependencies = [
+          {
+            name = "futures-util";
+            packageId = "futures-util";
+            usesDefaultFeatures = false;
+            features = [ "alloc" ];
+          }
+        ];
+        features = {
+          "__private_docs" = [ "dep:tower-http" ];
+          "tracing" = [ "dep:tracing" ];
+        };
+        resolvedDefaultFeatures = [ "tracing" ];
       };
       "backtrace" = rec {
         crateName = "backtrace";
@@ -1301,7 +1567,7 @@ rec {
           }
           {
             name = "http";
-            packageId = "http";
+            packageId = "http 0.2.11";
           }
           {
             name = "log";
@@ -4144,7 +4410,7 @@ rec {
           }
           {
             name = "hyper";
-            packageId = "hyper";
+            packageId = "hyper 0.14.28";
             features = [ "client" "runtime" "http2" ];
           }
           {
@@ -4378,7 +4644,7 @@ rec {
         ];
 
       };
-      "h2" = rec {
+      "h2 0.3.26" = rec {
         crateName = "h2";
         version = "0.3.26";
         edition = "2018";
@@ -4413,7 +4679,79 @@ rec {
           }
           {
             name = "http";
-            packageId = "http";
+            packageId = "http 0.2.11";
+          }
+          {
+            name = "indexmap";
+            packageId = "indexmap 2.1.0";
+            features = [ "std" ];
+          }
+          {
+            name = "slab";
+            packageId = "slab";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "io-util" ];
+          }
+          {
+            name = "tokio-util";
+            packageId = "tokio-util";
+            features = [ "codec" "io" ];
+          }
+          {
+            name = "tracing";
+            packageId = "tracing";
+            usesDefaultFeatures = false;
+            features = [ "std" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "rt-multi-thread" "macros" "sync" "net" ];
+          }
+        ];
+        features = { };
+      };
+      "h2 0.4.4" = rec {
+        crateName = "h2";
+        version = "0.4.4";
+        edition = "2021";
+        sha256 = "0sc0ymhiqp4hbz39d405cjbga77wnz2pprbgyc498xs58hlwfvl1";
+        authors = [
+          "Carl Lerche <me@carllerche.com>"
+          "Sean McArthur <sean@seanmonstar.com>"
+        ];
+        dependencies = [
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "fnv";
+            packageId = "fnv";
+          }
+          {
+            name = "futures-core";
+            packageId = "futures-core";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "futures-sink";
+            packageId = "futures-sink";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "futures-util";
+            packageId = "futures-util";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "http";
+            packageId = "http 1.1.0";
           }
           {
             name = "indexmap";
@@ -4601,7 +4939,7 @@ rec {
         ];
 
       };
-      "http" = rec {
+      "http 0.2.11" = rec {
         crateName = "http";
         version = "0.2.11";
         edition = "2018";
@@ -4627,7 +4965,36 @@ rec {
         ];
 
       };
-      "http-body" = rec {
+      "http 1.1.0" = rec {
+        crateName = "http";
+        version = "1.1.0";
+        edition = "2018";
+        sha256 = "0n426lmcxas6h75c2cp25m933pswlrfjz10v91vc62vib2sdvf91";
+        authors = [
+          "Alex Crichton <alex@alexcrichton.com>"
+          "Carl Lerche <me@carllerche.com>"
+          "Sean McArthur <sean@seanmonstar.com>"
+        ];
+        dependencies = [
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "fnv";
+            packageId = "fnv";
+          }
+          {
+            name = "itoa";
+            packageId = "itoa";
+          }
+        ];
+        features = {
+          "default" = [ "std" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
+      };
+      "http-body 0.4.6" = rec {
         crateName = "http-body";
         version = "0.4.6";
         edition = "2018";
@@ -4644,7 +5011,63 @@ rec {
           }
           {
             name = "http";
-            packageId = "http";
+            packageId = "http 0.2.11";
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+          }
+        ];
+
+      };
+      "http-body 1.0.0" = rec {
+        crateName = "http-body";
+        version = "1.0.0";
+        edition = "2018";
+        sha256 = "0hyn8n3iadrbwq8y0p1rl1275s4nm49bllw5wji29g4aa3dqbb0w";
+        authors = [
+          "Carl Lerche <me@carllerche.com>"
+          "Lucio Franco <luciofranco14@gmail.com>"
+          "Sean McArthur <sean@seanmonstar.com>"
+        ];
+        dependencies = [
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "http";
+            packageId = "http 1.1.0";
+          }
+        ];
+
+      };
+      "http-body-util" = rec {
+        crateName = "http-body-util";
+        version = "0.1.1";
+        edition = "2018";
+        sha256 = "07agldas2qgcfc05ckiarlmf9vzragbda823nqhrqrc6mjrghx84";
+        authors = [
+          "Carl Lerche <me@carllerche.com>"
+          "Lucio Franco <luciofranco14@gmail.com>"
+          "Sean McArthur <sean@seanmonstar.com>"
+        ];
+        dependencies = [
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "futures-core";
+            packageId = "futures-core";
+          }
+          {
+            name = "http";
+            packageId = "http 1.1.0";
+          }
+          {
+            name = "http-body";
+            packageId = "http-body 1.0.0";
           }
           {
             name = "pin-project-lite";
@@ -4693,7 +5116,7 @@ rec {
         ];
 
       };
-      "hyper" = rec {
+      "hyper 0.14.28" = rec {
         crateName = "hyper";
         version = "0.14.28";
         edition = "2018";
@@ -4722,16 +5145,16 @@ rec {
           }
           {
             name = "h2";
-            packageId = "h2";
+            packageId = "h2 0.3.26";
             optional = true;
           }
           {
             name = "http";
-            packageId = "http";
+            packageId = "http 0.2.11";
           }
           {
             name = "http-body";
-            packageId = "http-body";
+            packageId = "http-body 0.4.6";
           }
           {
             name = "httparse";
@@ -4800,6 +5223,104 @@ rec {
         };
         resolvedDefaultFeatures = [ "client" "default" "full" "h2" "http1" "http2" "runtime" "server" "socket2" "stream" "tcp" ];
       };
+      "hyper 1.3.1" = rec {
+        crateName = "hyper";
+        version = "1.3.1";
+        edition = "2021";
+        sha256 = "0va9pjqshsr8zc07m9h4j2821hsmd9lw9j416yisjqh8gp8msmzy";
+        authors = [
+          "Sean McArthur <sean@seanmonstar.com>"
+        ];
+        dependencies = [
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "futures-channel";
+            packageId = "futures-channel";
+            optional = true;
+          }
+          {
+            name = "futures-util";
+            packageId = "futures-util";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "h2";
+            packageId = "h2 0.4.4";
+            optional = true;
+          }
+          {
+            name = "http";
+            packageId = "http 1.1.0";
+          }
+          {
+            name = "http-body";
+            packageId = "http-body 1.0.0";
+          }
+          {
+            name = "httparse";
+            packageId = "httparse";
+            optional = true;
+          }
+          {
+            name = "httpdate";
+            packageId = "httpdate";
+            optional = true;
+          }
+          {
+            name = "itoa";
+            packageId = "itoa";
+            optional = true;
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+            optional = true;
+          }
+          {
+            name = "smallvec";
+            packageId = "smallvec";
+            optional = true;
+            features = [ "const_generics" "const_new" ];
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "sync" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "futures-channel";
+            packageId = "futures-channel";
+            features = [ "sink" ];
+          }
+          {
+            name = "futures-util";
+            packageId = "futures-util";
+            usesDefaultFeatures = false;
+            features = [ "alloc" "sink" ];
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "fs" "macros" "net" "io-std" "io-util" "rt" "rt-multi-thread" "sync" "time" "test-util" ];
+          }
+        ];
+        features = {
+          "client" = [ "dep:want" "dep:pin-project-lite" "dep:smallvec" ];
+          "ffi" = [ "dep:libc" "dep:http-body-util" "futures-util?/alloc" ];
+          "full" = [ "client" "http1" "http2" "server" ];
+          "http1" = [ "dep:futures-channel" "dep:futures-util" "dep:httparse" "dep:itoa" ];
+          "http2" = [ "dep:futures-channel" "dep:futures-util" "dep:h2" ];
+          "server" = [ "dep:httpdate" "dep:pin-project-lite" "dep:smallvec" ];
+          "tracing" = [ "dep:tracing" ];
+        };
+        resolvedDefaultFeatures = [ "default" "http1" "http2" "server" ];
+      };
       "hyper-rustls" = rec {
         crateName = "hyper-rustls";
         version = "0.24.2";
@@ -4813,11 +5334,11 @@ rec {
           }
           {
             name = "http";
-            packageId = "http";
+            packageId = "http 0.2.11";
           }
           {
             name = "hyper";
-            packageId = "hyper";
+            packageId = "hyper 0.14.28";
             usesDefaultFeatures = false;
             features = [ "client" ];
           }
@@ -4844,7 +5365,7 @@ rec {
         devDependencies = [
           {
             name = "hyper";
-            packageId = "hyper";
+            packageId = "hyper 0.14.28";
             features = [ "full" ];
           }
           {
@@ -4886,7 +5407,7 @@ rec {
         dependencies = [
           {
             name = "hyper";
-            packageId = "hyper";
+            packageId = "hyper 0.14.28";
             features = [ "client" ];
           }
           {
@@ -4905,7 +5426,7 @@ rec {
         devDependencies = [
           {
             name = "hyper";
-            packageId = "hyper";
+            packageId = "hyper 0.14.28";
             features = [ "client" "http1" "tcp" ];
           }
           {
@@ -4915,6 +5436,82 @@ rec {
           }
         ];
 
+      };
+      "hyper-util" = rec {
+        crateName = "hyper-util";
+        version = "0.1.3";
+        edition = "2021";
+        sha256 = "1akngan7j0n2n0wd25c6952mvqbkj9gp1lcwzyxjc0d37l8yyf6a";
+        authors = [
+          "Sean McArthur <sean@seanmonstar.com>"
+        ];
+        dependencies = [
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "futures-util";
+            packageId = "futures-util";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "http";
+            packageId = "http 1.1.0";
+          }
+          {
+            name = "http-body";
+            packageId = "http-body 1.0.0";
+          }
+          {
+            name = "hyper";
+            packageId = "hyper 1.3.1";
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+          }
+          {
+            name = "socket2";
+            packageId = "socket2";
+            optional = true;
+            features = [ "all" ];
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            optional = true;
+            features = [ "net" "rt" "time" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "hyper";
+            packageId = "hyper 1.3.1";
+            features = [ "full" ];
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "macros" "test-util" ];
+          }
+        ];
+        features = {
+          "client" = [ "hyper/client" "dep:tracing" "dep:futures-channel" "dep:tower" "dep:tower-service" ];
+          "client-legacy" = [ "client" ];
+          "full" = [ "client" "client-legacy" "server" "server-auto" "service" "http1" "http2" "tokio" ];
+          "http1" = [ "hyper/http1" ];
+          "http2" = [ "hyper/http2" ];
+          "server" = [ "hyper/server" ];
+          "server-auto" = [ "server" "http1" "http2" ];
+          "service" = [ "dep:tower" "dep:tower-service" ];
+          "tokio" = [ "dep:tokio" "dep:socket2" ];
+        };
+        resolvedDefaultFeatures = [ "default" "http1" "http2" "server" "server-auto" "tokio" ];
       };
       "iana-time-zone" = rec {
         crateName = "iana-time-zone";
@@ -6186,6 +6783,126 @@ rec {
           "serde_impl" = [ "serde" ];
         };
       };
+      "nar-bridge" = rec {
+        crateName = "nar-bridge";
+        version = "0.1.0";
+        edition = "2021";
+        crateBin = [
+          {
+            name = "nar-bridge";
+            path = "src/bin/nar-bridge.rs";
+            requiredFeatures = [ ];
+          }
+        ];
+        # We can't filter paths with references in Nix 2.4
+        # See https://github.com/NixOS/nix/issues/5410
+        src =
+          if ((lib.versionOlder builtins.nixVersion "2.4pre20211007") || (lib.versionOlder "2.5" builtins.nixVersion))
+          then lib.cleanSourceWith { filter = sourceFilter; src = ./nar-bridge; }
+          else ./nar-bridge;
+        dependencies = [
+          {
+            name = "axum";
+            packageId = "axum 0.7.5";
+            features = [ "http2" ];
+          }
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "clap";
+            packageId = "clap";
+            features = [ "derive" "env" ];
+          }
+          {
+            name = "data-encoding";
+            packageId = "data-encoding";
+          }
+          {
+            name = "itertools";
+            packageId = "itertools 0.12.0";
+          }
+          {
+            name = "nix-compat";
+            packageId = "nix-compat";
+            features = [ "async" ];
+          }
+          {
+            name = "prost";
+            packageId = "prost";
+          }
+          {
+            name = "thiserror";
+            packageId = "thiserror";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+          }
+          {
+            name = "tokio-listener";
+            packageId = "tokio-listener";
+            features = [ "axum07" "clap" "multi-listener" "sd_listen" ];
+          }
+          {
+            name = "tokio-util";
+            packageId = "tokio-util";
+            features = [ "io" "io-util" "compat" ];
+          }
+          {
+            name = "tonic";
+            packageId = "tonic";
+            features = [ "tls" "tls-roots" ];
+          }
+          {
+            name = "tracing";
+            packageId = "tracing";
+          }
+          {
+            name = "tracing-subscriber";
+            packageId = "tracing-subscriber";
+          }
+          {
+            name = "tvix-castore";
+            packageId = "tvix-castore";
+          }
+          {
+            name = "tvix-store";
+            packageId = "tvix-store";
+          }
+          {
+            name = "tvix-tracing";
+            packageId = "tvix-tracing";
+            features = [ "tonic" ];
+          }
+          {
+            name = "url";
+            packageId = "url";
+          }
+        ];
+        buildDependencies = [
+          {
+            name = "prost-build";
+            packageId = "prost-build";
+          }
+          {
+            name = "tonic-build";
+            packageId = "tonic-build";
+          }
+        ];
+        devDependencies = [
+          {
+            name = "rstest";
+            packageId = "rstest";
+          }
+        ];
+        features = {
+          "default" = [ "otlp" ];
+          "otlp" = [ "tvix-tracing/otlp" ];
+        };
+        resolvedDefaultFeatures = [ "default" "otlp" ];
+      };
       "nibble_vec" = rec {
         crateName = "nibble_vec";
         version = "0.1.0";
@@ -6727,7 +7444,7 @@ rec {
           }
           {
             name = "hyper";
-            packageId = "hyper";
+            packageId = "hyper 0.14.28";
             optional = true;
             usesDefaultFeatures = false;
           }
@@ -6821,7 +7538,7 @@ rec {
         devDependencies = [
           {
             name = "hyper";
-            packageId = "hyper";
+            packageId = "hyper 0.14.28";
             features = [ "server" ];
           }
           {
@@ -6951,7 +7668,7 @@ rec {
           }
           {
             name = "http";
-            packageId = "http";
+            packageId = "http 0.2.11";
             usesDefaultFeatures = false;
           }
           {
@@ -6984,7 +7701,7 @@ rec {
           }
           {
             name = "http";
-            packageId = "http";
+            packageId = "http 0.2.11";
             optional = true;
             usesDefaultFeatures = false;
           }
@@ -8953,21 +9670,21 @@ rec {
           }
           {
             name = "h2";
-            packageId = "h2";
+            packageId = "h2 0.3.26";
             target = { target, features }: (!("wasm32" == target."arch" or null));
           }
           {
             name = "http";
-            packageId = "http";
+            packageId = "http 0.2.11";
           }
           {
             name = "http-body";
-            packageId = "http-body";
+            packageId = "http-body 0.4.6";
             target = { target, features }: (!("wasm32" == target."arch" or null));
           }
           {
             name = "hyper";
-            packageId = "hyper";
+            packageId = "hyper 0.14.28";
             usesDefaultFeatures = false;
             target = { target, features }: (!("wasm32" == target."arch" or null));
             features = [ "tcp" "http1" "http2" "client" "runtime" ];
@@ -9116,7 +9833,7 @@ rec {
         devDependencies = [
           {
             name = "hyper";
-            packageId = "hyper";
+            packageId = "hyper 0.14.28";
             usesDefaultFeatures = false;
             target = { target, features }: (!("wasm32" == target."arch" or null));
             features = [ "tcp" "stream" "http1" "http2" "client" "server" "runtime" ];
@@ -10273,7 +10990,27 @@ rec {
           "preserve_order" = [ "indexmap" "std" ];
           "std" = [ "serde/std" ];
         };
-        resolvedDefaultFeatures = [ "alloc" "default" "std" ];
+        resolvedDefaultFeatures = [ "alloc" "default" "raw_value" "std" ];
+      };
+      "serde_path_to_error" = rec {
+        crateName = "serde_path_to_error";
+        version = "0.1.16";
+        edition = "2021";
+        sha256 = "19hlz2359l37ifirskpcds7sxg0gzpqvfilibs7whdys0128i6dg";
+        authors = [
+          "David Tolnay <dtolnay@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "itoa";
+            packageId = "itoa";
+          }
+          {
+            name = "serde";
+            packageId = "serde";
+          }
+        ];
+
       };
       "serde_qs" = rec {
         crateName = "serde_qs";
@@ -10736,6 +11473,7 @@ rec {
           "drain_keep_rest" = [ "drain_filter" ];
           "serde" = [ "dep:serde" ];
         };
+        resolvedDefaultFeatures = [ "const_generics" "const_new" ];
       };
       "smol_str" = rec {
         crateName = "smol_str";
@@ -11098,11 +11836,24 @@ rec {
         };
         resolvedDefaultFeatures = [ "clone-impls" "default" "derive" "extra-traits" "full" "parsing" "printing" "proc-macro" "quote" "visit" "visit-mut" ];
       };
-      "sync_wrapper" = rec {
+      "sync_wrapper 0.1.2" = rec {
         crateName = "sync_wrapper";
         version = "0.1.2";
         edition = "2018";
         sha256 = "0q01lyj0gr9a93n10nxsn8lwbzq97jqd6b768x17c8f7v7gccir0";
+        authors = [
+          "Actyx AG <developer@actyx.io>"
+        ];
+        features = {
+          "futures" = [ "futures-core" ];
+          "futures-core" = [ "dep:futures-core" ];
+        };
+      };
+      "sync_wrapper 1.0.1" = rec {
+        crateName = "sync_wrapper";
+        version = "1.0.1";
+        edition = "2018";
+        sha256 = "150k6lwvr4nl237ngsz8fj5j78k712m4bggrfyjsidllraz5l1m7";
         authors = [
           "Actyx AG <developer@actyx.io>"
         ];
@@ -11728,6 +12479,12 @@ rec {
         sha256 = "1cm6r5dmpq96s8gw9dgsinq5g8s466j48dg7dckwc4gc28g6cd21";
         dependencies = [
           {
+            name = "axum";
+            packageId = "axum 0.7.5";
+            rename = "axum07";
+            optional = true;
+          }
+          {
             name = "clap";
             packageId = "clap";
             optional = true;
@@ -11746,6 +12503,19 @@ rec {
             name = "futures-util";
             packageId = "futures-util";
             optional = true;
+          }
+          {
+            name = "hyper";
+            packageId = "hyper 1.3.1";
+            rename = "hyper1";
+            optional = true;
+            features = [ "server" ];
+          }
+          {
+            name = "hyper-util";
+            packageId = "hyper-util";
+            optional = true;
+            features = [ "server" "server-auto" ];
           }
           {
             name = "nix";
@@ -11780,6 +12550,17 @@ rec {
             name = "tonic";
             packageId = "tonic";
             rename = "tonic";
+            optional = true;
+          }
+          {
+            name = "tower";
+            packageId = "tower";
+            optional = true;
+            features = [ "util" ];
+          }
+          {
+            name = "tower-service";
+            packageId = "tower-service";
             optional = true;
           }
           {
@@ -11818,7 +12599,7 @@ rec {
           "unix_path_tools" = [ "nix" ];
           "user_facing_default" = [ "inetd" "unix" "unix_path_tools" "sd_listen" "socket_options" ];
         };
-        resolvedDefaultFeatures = [ "clap" "default" "inetd" "multi-listener" "nix" "sd_listen" "socket2" "socket_options" "tokio-util" "tonic011" "unix" "unix_path_tools" "user_facing_default" ];
+        resolvedDefaultFeatures = [ "axum07" "clap" "default" "inetd" "multi-listener" "nix" "sd_listen" "socket2" "socket_options" "tokio-util" "tonic011" "unix" "unix_path_tools" "user_facing_default" ];
       };
       "tokio-macros" = rec {
         crateName = "tokio-macros";
@@ -12283,7 +13064,7 @@ rec {
           }
           {
             name = "axum";
-            packageId = "axum";
+            packageId = "axum 0.6.20";
             optional = true;
             usesDefaultFeatures = false;
           }
@@ -12297,20 +13078,20 @@ rec {
           }
           {
             name = "h2";
-            packageId = "h2";
+            packageId = "h2 0.3.26";
             optional = true;
           }
           {
             name = "http";
-            packageId = "http";
+            packageId = "http 0.2.11";
           }
           {
             name = "http-body";
-            packageId = "http-body";
+            packageId = "http-body 0.4.6";
           }
           {
             name = "hyper";
-            packageId = "hyper";
+            packageId = "hyper 0.14.28";
             optional = true;
             features = [ "full" ];
           }
@@ -12649,11 +13430,11 @@ rec {
           }
           {
             name = "http";
-            packageId = "http";
+            packageId = "http 0.2.11";
           }
           {
             name = "http-body";
-            packageId = "http-body";
+            packageId = "http-body 0.4.6";
           }
           {
             name = "http-range-header";
@@ -14382,7 +15163,7 @@ rec {
         dependencies = [
           {
             name = "http";
-            packageId = "http";
+            packageId = "http 0.2.11";
             optional = true;
           }
           {
