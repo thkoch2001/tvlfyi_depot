@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32f3a917_b750fc77",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1002,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-05-14T12:48:27Z",
+      "side": 1,
+      "message": "I feel like \"unimplemented feature\" probably should not be a catchable error, but a real error instead (i.e. this is a problem, but probably not the correct fix).\n\nI\u0027m not sure why it was decided to make that a catchable error.",
+      "range": {
+        "startLine": 1001,
+        "startChar": 0,
+        "endLine": 1002,
+        "endChar": 2
+      },
+      "revId": "30a252849752c3e869f723a6e3395ae4c566afb1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
