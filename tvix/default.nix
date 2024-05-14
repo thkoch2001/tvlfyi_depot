@@ -14,6 +14,11 @@ let
   # Load the crate2nix crate tree.
   crates = pkgs.callPackage ./Cargo.nix {
     defaultCrateOverrides = pkgs.defaultCrateOverrides // {
+      nar-bridge = prev: {
+        nativeBuildInputs = protobufDep prev;
+        src = depot.tvix.utils.filterRustCrateSrc { root = prev.src.origSrc; };
+      };
+
       opentelemetry-proto = prev: {
         nativeBuildInputs = protobufDep prev;
       };
