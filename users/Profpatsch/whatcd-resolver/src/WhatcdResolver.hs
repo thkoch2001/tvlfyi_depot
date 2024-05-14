@@ -338,7 +338,8 @@ runHandlers defaultHandler handlers req respond = withRunInIO $ \runInIO -> do
           ( Otel.defaultSpanArguments
               { Otel.attributes =
                   HashMap.fromList
-                    [ ("server.path", Otel.toAttribute @Text path)
+                    [ ("_.server.path", Otel.toAttribute @Text path),
+                      ("_.server.query_args", Otel.toAttribute @Text (req.rawQueryString & bytesToTextUtf8Lenient))
                     ]
               }
           )
