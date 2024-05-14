@@ -360,8 +360,9 @@ data TorrentData transmissionInfo = TorrentData
   { groupId :: Int,
     torrentId :: Int,
     seedingWeight :: Int,
+    artists :: [T2 "artistId" Int "artistName" Text],
     torrentJson :: Json.Value,
-    torrentGroupJson :: T3 "artist" Text "groupName" Text "groupYear" Int,
+    torrentGroupJson :: T2 "groupName" Text "groupYear" Int,
     torrentStatus :: TorrentStatus transmissionInfo
   }
 
@@ -409,13 +410,18 @@ getBestTorrents opts = do
         groupId <- Dec.fromField @Int
         torrentId <- Dec.fromField @Int
         seedingWeight <- Dec.fromField @Int
-        torrentJson <- Dec.json Json.asValue
+        (torrentJson, artists) <- Dec.json $ do
+          val <- Json.asValue
+          artists <- Json.keyOrDefault "artists" [] $ Json.eachInArray $ do
+            id_ <- Json.keyLabel @"artistId" "id" (Json.asIntegral @_ @Int)
+            name <- Json.keyLabel @"artistName" "name" Json.asText
+            pure $ T2 id_ name
+          pure (val, artists)
         torrentGroupJson <-
           ( Dec.json $ do
-              artist <- Json.keyLabel @"artist" "artist" Json.asText
               groupName <- Json.keyLabel @"groupName" "groupName" Json.asText
               groupYear <- Json.keyLabel @"groupYear" "groupYear" (Json.asIntegral @_ @Int)
-              pure $ T3 artist groupName groupYear
+              pure $ T2 groupName groupYear
             )
         hasTorrentFile <- Dec.fromField @Bool
         transmissionTorrentHash <-
