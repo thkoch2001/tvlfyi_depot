@@ -1,0 +1,227 @@
+use std::collections::HashSet;
+use std::sync::Arc;
+
+use data_encoding::HEXLOWER;
+use futures::stream::BoxStream;
+use futures::SinkExt;
+use futures::TryFutureExt;
+use futures::TryStreamExt;
+use object_store::{path::Path, ObjectStore};
+use prost::Message;
+use tokio_util::codec::LengthDelimitedCodec;
+use tonic::async_trait;
+use tracing::{debug, instrument, warn, Level};
+use url::Url;
+
+use super::{ClosureValidator, DirectoryPutter, DirectoryService};
+use crate::{proto, B3Digest, Error};
+
+#[derive(Clone)]
+pub struct ObjectStoreDirectoryService {
+    object_store: Arc<dyn ObjectStore>,
+    base_path: Path,
+}
+
+impl ObjectStoreDirectoryService {
+    /// Constructs a new [ObjectStoreBlobService] from a [Url] supported by
+    /// [object_store].
+    /// Any path suffix becomes the base path of the object store.
+    /// additional options, the same as in [object_store::parse_url_opts] can
+    /// be passed.
+    pub fn parse_url_opts<I, K, V>(url: &Url, options: I) -> Result<Self, object_store::Error>
+    where
+        I: IntoIterator<Item = (K, V)>,
+        K: AsRef<str>,
+        V: Into<String>,
+    {
+        let (object_store, path) = object_store::parse_url_opts(url, options)?;
+
+        Ok(Self {
+            object_store: Arc::new(object_store),
+            base_path: path,
+        })
+    }
+
+    /// Like [Self::parse_url_opts], except without the options.
+    pub fn parse_url(url: &Url) -> Result<Self, object_store::Error> {
+        Self::parse_url_opts(url, Vec::<(String, String)>::new())
+    }
+}
+
+#[async_trait]
+impl DirectoryService for ObjectStoreDirectoryService {
+    #[instrument(skip(self, _digest), fields(directory.digest = %_digest))]
+    async fn get(&self, _digest: &B3Digest) -> Result<Option<proto::Directory>, Error> {
+        return Err(Error::InvalidRequest(
+            "only get_recursive is supported by the ObjectStoreDirectoryService".into(),
+        ));
+    }
+
+    #[instrument(skip(self, _directory), fields(directory.digest = %_directory.digest()))]
+    async fn put(&self, _directory: proto::Directory) -> Result<B3Digest, Error> {
+        return Err(Error::InvalidRequest(
+            "only put_multiple_start is supported by the ObjectStoreDirectoryService".into(),
+        ));
+    }
+
+    #[instrument(skip_all, fields(directory.digest = %root_directory_digest))]
+    fn get_recursive(
+        &self,
+        root_directory_digest: &B3Digest,
+    ) -> BoxStream<'static, Result<proto::Directory, Error>> {
+        let root_directory_digest = root_directory_digest.clone();
+
+        // The Directory digests we're still expecting to get sent.
+        let mut expected_directory_digests: HashSet<B3Digest> =
+            HashSet::from([root_directory_digest.clone()]);
+
+        let base_path = self.base_path.clone();
+        let object_store = self.object_store.clone();
+        Box::pin(
+            (async move {
+                let dir_path = derive_blob_path(&base_path, &root_directory_digest);
+                let request = object_store.get(&dir_path);
+
+                let stream = request.await.map_err(std::io::Error::from)?.into_stream();
+
+                // get a reader of the response body.
+                let r = tokio_util::io::StreamReader::new(stream);
+                let decompressed_stream = async_compression::tokio::bufread::ZstdDecoder::new(r);
+
+                let directories_stream = LengthDelimitedCodec::builder()
+                    .length_field_type::<u32>()
+                    .new_read(decompressed_stream);
+
+                Ok::<_, Error>(
+                    directories_stream
+                        .map_err(Error::from)
+                        .and_then(move |buf| {
+                            let mut hasher = blake3::Hasher::new();
+
+                            let digest: B3Digest = hasher.update(&buf).finalize().as_bytes().into();
+
+                            let was_expected = expected_directory_digests.remove(&digest);
+                            async move {
+                                if !was_expected {
+                                    return Err(crate::Error::StorageError(format!(
+                                        "received unexpected directory {}",
+                                        digest
+                                    )));
+                                }
+
+                                let directory = proto::Directory::decode(&*buf).map_err(|e| {
+                                    warn!("unable to parse directory {}: {}", digest, e);
+                                    Error::StorageError(e.to_string())
+                                })?;
+
+                                Ok::<_, Error>(directory)
+                            }
+                        }),
+                )
+            })
+            .try_flatten_stream(),
+        )
+    }
+
+    #[instrument(skip_all)]
+    fn put_multiple_start(&self) -> Box<(dyn DirectoryPutter + 'static)>
+    where
+        Self: Clone,
+    {
+        Box::new(ObjectStoreDirectoryPutter::new(
+            self.object_store.clone(),
+            self.base_path.clone(),
+        ))
+    }
+}
+
+struct ObjectStoreDirectoryPutter {
+    object_store: Arc<dyn ObjectStore>,
+    base_path: Path,
+
+    directory_validator: Option<ClosureValidator>,
+}
+
+impl ObjectStoreDirectoryPutter {
+    fn new(object_store: Arc<dyn ObjectStore>, base_path: Path) -> Self {
+        Self {
+            object_store,
+            base_path,
+            directory_validator: Some(Default::default()),
+        }
+    }
+}
+
+#[instrument(level=Level::TRACE, skip_all,fields(base_path=%base_path,blob.digest=%digest),ret(Display))]
+fn derive_blob_path(base_path: &Path, digest: &B3Digest) -> Path {
+    base_path
+        .child("dirs")
+        .child(HEXLOWER.encode(&digest.as_slice()[..2]))
+        .child(HEXLOWER.encode(digest.as_slice()))
+}
+
+#[async_trait]
+impl DirectoryPutter for ObjectStoreDirectoryPutter {
+    #[instrument(level = "trace", skip_all, fields(directory.digest=%directory.digest()), err)]
+    async fn put(&mut self, directory: proto::Directory) -> Result<(), Error> {
+        match self.directory_validator {
+            None => return Err(Error::StorageError("already closed".to_string())),
+            Some(ref mut validator) => {
+                validator.add(directory)?;
+            }
+        }
+
+        Ok(())
+    }
+
+    #[instrument(level = "trace", skip_all, ret, err)]
+    async fn close(&mut self) -> Result<B3Digest, Error> {
+        match self.directory_validator.take() {
+            None => Err(Error::InvalidRequest("already closed".to_string())),
+            Some(validator) => {
+                // retrieve the validated directories.
+                let directories = validator.finalize()?;
+
+                // Get the root digest, which is at the end (cf. insertion order)
+                let root_digest = directories
+                    .last()
+                    .ok_or_else(|| Error::InvalidRequest("got no directories".to_string()))?
+                    .digest();
+
+                let dir_path = derive_blob_path(&self.base_path, &root_digest);
+
+                match self.object_store.head(&dir_path).await {
+                    // directory tree already exists, nothing to do
+                    Ok(_) => {
+                        debug!("directory tree already exists");
+                    }
+
+                    // directory tree does not yet exist, compress and upload.
+                    Err(object_store::Error::NotFound { .. }) => {
+                        debug!("uploading directory tree");
+
+                        let object_store_writer = object_store::buffered::BufWriter::new(
+                            self.object_store.clone(),
+                            dir_path,
+                        );
+                        let compressed_writer =
+                            async_compression::tokio::write::ZstdEncoder::new(object_store_writer);
+                        let mut directories_sink = LengthDelimitedCodec::builder()
+                            .length_field_type::<u32>()
+                            .new_write(compressed_writer);
+
+                        for directory in directories {
+                            directories_sink
+                                .send(directory.encode_to_vec().into())
+                                .await?;
+                        }
+                    }
+                    // other error
+                    Err(err) => Err(std::io::Error::from(err))?,
+                }
+
+                Ok(root_digest)
+            }
+        }
+    }
+}
