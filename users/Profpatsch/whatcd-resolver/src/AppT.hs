@@ -27,7 +27,7 @@ data Context = Context
     tracer :: Otel.Tracer,
     pgFormat :: PgFormatPool,
     pgConnPool :: Pool Postgres.Connection,
-    transmissionSessionId :: MVar ByteString
+    transmissionSessionId :: IORef (Maybe ByteString)
   }
 
 newtype AppT m a = AppT {unAppT :: ReaderT Context m a}
