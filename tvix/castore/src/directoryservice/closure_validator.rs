@@ -4,7 +4,7 @@ use bstr::ByteSlice;
 
 use petgraph::{
     graph::{DiGraph, NodeIndex},
-    visit::Bfs,
+    visit::{Bfs, Dfs, Walker},
 };
 use tracing::instrument;
 
@@ -120,7 +120,6 @@ impl ClosureValidator {
     /// (deduplicated) and validated list of directories, in from-leaves-to-root
     /// order.
     /// In case no elements have been inserted, returns an empty list.
-    #[instrument(level = "trace", skip_all, err)]
     pub(crate) fn finalize(self) -> Result<Vec<Directory>, Error> {
         // If no nodes were inserted, an empty list is returned.
         let last_directory_ix = if let Some(x) = self.last_directory_ix {
@@ -129,15 +128,40 @@ impl ClosureValidator {
             return Ok(vec![]);
         };
 
-        // do a BFS traversal of the graph, starting with the root node to get
-        // (the count of) all nodes reachable from there.
-        let mut traversal = Bfs::new(&self.graph, last_directory_ix);
+        let iter = Bfs::new(&self.graph, last_directory_ix)
+            .iter(&self.graph)
+            .collect::<Vec<_>>()
+            .into_iter();
 
+        self.finalize_with_order(iter)
+    }
+
+    pub(crate) fn finalize_root_to_leaves(self) -> Result<Vec<Directory>, Error> {
+        // If no nodes were inserted, an empty list is returned.
+        let last_directory_ix = if let Some(x) = self.last_directory_ix {
+            x
+        } else {
+            return Ok(vec![]);
+        };
+
+        let iter = Dfs::new(&self.graph, last_directory_ix)
+            .iter(&self.graph)
+            .collect::<Vec<_>>()
+            .into_iter();
+
+        self.finalize_with_order(iter)
+    }
+
+    #[instrument(level = "trace", skip_all, err)]
+    fn finalize_with_order(
+        self,
+        mut traversal: impl Iterator<Item = NodeIndex>,
+    ) -> Result<Vec<Directory>, Error> {
         let mut visited_directory_count = 0;
         #[cfg(debug_assertions)]
         let mut visited_directory_ixs = HashSet::new();
         #[cfg_attr(not(debug_assertions), allow(unused))]
-        while let Some(directory_ix) = traversal.next(&self.graph) {
+        while let Some(directory_ix) = traversal.next() {
             #[cfg(debug_assertions)]
             visited_directory_ixs.insert(directory_ix);
 
