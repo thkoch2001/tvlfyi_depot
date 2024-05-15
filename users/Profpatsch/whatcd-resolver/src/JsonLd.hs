@@ -3,7 +3,6 @@
 module JsonLd where
 
 import AppT
-import Control.Monad.Reader
 import Data.Aeson qualified as Json
 import Data.Aeson.BetterErrors qualified as Json
 import Data.ByteString.Builder qualified as Builder
