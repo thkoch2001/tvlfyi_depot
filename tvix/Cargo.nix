@@ -13634,6 +13634,11 @@ rec {
           else ./castore;
         dependencies = [
           {
+            name = "async-compression";
+            packageId = "async-compression";
+            features = [ "tokio" "zstd" ];
+          }
+          {
             name = "async-stream";
             packageId = "async-stream";
           }
@@ -13749,7 +13754,7 @@ rec {
           {
             name = "tokio-util";
             packageId = "tokio-util";
-            features = [ "io" "io-util" ];
+            features = [ "io" "io-util" "codec" ];
           }
           {
             name = "tonic";
