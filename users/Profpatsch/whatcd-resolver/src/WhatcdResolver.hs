@@ -610,34 +610,46 @@ migrate = inSpan "Database Migration" $ do
       UNIQUE(torrent_id)
     );
 
+    CREATE INDEX IF NOT EXISTS redacted_torrents_json_torrent_group_fk ON redacted.torrents_json (torrent_group);
+
+
     ALTER TABLE redacted.torrents_json
     ADD COLUMN IF NOT EXISTS torrent_file bytea NULL;
     ALTER TABLE redacted.torrents_json
     ADD COLUMN IF NOT EXISTS transmission_torrent_hash text NULL;
 
-    -- inflect out values of the full json
 
+    -- the seeding weight is used to find the best torrent in a group.
+    CREATE OR REPLACE FUNCTION calc_seeding_weight(full_json_result jsonb) RETURNS int AS $$
+    BEGIN
+      RETURN
+        ((full_json_result->'seeders')::integer*3
+        + (full_json_result->'snatches')::integer
+        )
+        -- prefer remasters by multiplying them with 3
+        * (CASE
+            WHEN full_json_result->>'remasterTitle' ILIKE '%remaster%'
+            THEN 3
+            ELSE 1
+          END);
+    END;
+    $$ LANGUAGE plpgsql IMMUTABLE;
+
+    -- inflect out values of the full json
     CREATE OR REPLACE VIEW redacted.torrents AS
     SELECT
       t.id,
       t.torrent_id,
       t.torrent_group,
       -- the seeding weight is used to find the best torrent in a group.
-      ( ((full_json_result->'seeders')::integer*3
-        + (full_json_result->'snatches')::integer
-        )
-      -- prefer remasters by multiplying them with 3
-      * (CASE
-          WHEN full_json_result->>'remasterTitle' ILIKE '%remaster%'
-          THEN 3
-          ELSE 1
-         END)
-      )
-      AS seeding_weight,
+      calc_seeding_weight(t.full_json_result) AS seeding_weight,
       t.full_json_result,
       t.torrent_file,
       t.transmission_torrent_hash
     FROM redacted.torrents_json t;
+
+    -- make sure we store the results
+    CREATE INDEX IF NOT EXISTS redacted_torrents_json_seeding_weight ON redacted.torrents_json (calc_seeding_weight(full_json_result));
 
     CREATE INDEX IF NOT EXISTS torrents_json_seeding ON redacted.torrents_json(((full_json_result->'seeding')::integer));
     CREATE INDEX IF NOT EXISTS torrents_json_snatches ON redacted.torrents_json(((full_json_result->'snatches')::integer));
