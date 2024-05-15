@@ -213,7 +213,7 @@ htmlUi = do
 
                     htmlWithQueryArgs
                       ( label @"dbId"
-                          <$> (singleQueryArgument "db_id" Field.utf8)
+                          <$> (singleQueryArgument "db_id" (Field.utf8 >>> Field.decimalNatural))
                       )
                       $ \qry _span -> do
                         artistPage qry
@@ -256,7 +256,7 @@ htmlUi = do
       --       "https://musicbrainz.org/work/92000fd4-d304-406d-aeb4-6bdbeed318ec"
       --     )
       --     <&> renderJsonld
-      bestTorrentsTable <- getBestTorrentsTable
+      bestTorrentsTable <- getBestTorrentsTable Nothing
       -- transmissionTorrentsTable <- lift @Transaction getTransmissionTorrentsTable
       pure $
         Html.docTypeHtml
@@ -305,11 +305,23 @@ htmlUi = do
       </body>
     |]
 
-artistPage :: (HasField "dbId" dat Text, Applicative m) => dat -> m Html
-artistPage dat = do
+artistPage ::
+  ( HasField "dbId" dat Natural,
+    MonadPostgres m,
+    MonadOtel m,
+    MonadLogger m,
+    MonadThrow m,
+    MonadTransmission m
+  ) =>
+  dat ->
+  m Html
+artistPage dat = runTransaction $ do
+  torrents <- getBestTorrentsTable (Just $ label @"artistId" dat.dbId)
   pure
     [hsx|
     Artist ID: {dat.dbId}
+
+    {torrents}
   |]
 
 type Handlers m = HandlerResponses m -> Map Text (m ResponseReceived)
@@ -451,7 +463,11 @@ snipsRedactedSearch dat = do
       ]
   runTransaction $ do
     t
-    getBestTorrentsTable
+    getBestTorrentsTable (Nothing :: Maybe (Label "artistId" Natural))
+
+data ArtistFilter = ArtistFilter
+  { onlyArtist :: Maybe (Label "artistId" Text)
+  }
 
 getBestTorrentsTable ::
   ( MonadTransmission m,
@@ -460,9 +476,10 @@ getBestTorrentsTable ::
     MonadPostgres m,
     MonadOtel m
   ) =>
+  Maybe (Label "artistId" Natural) ->
   Transaction m Html
-getBestTorrentsTable = do
-  bestStale :: [TorrentData ()] <- getBestTorrents (label @"onlyDownloaded" False)
+getBestTorrentsTable artistFilter = do
+  bestStale :: [TorrentData ()] <- getBestTorrents GetBestTorrentsFilter {onlyArtist = artistFilter, onlyDownloaded = False}
   actual <-
     getAndUpdateTransmissionTorrentsStatus
       ( bestStale
