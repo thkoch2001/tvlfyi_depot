@@ -23,6 +23,7 @@ import Json.Enc qualified as Enc
 import MyPrelude
 import Network.HTTP.Client
 import Network.HTTP.Simple
+import Network.HTTP.Types.Status (Status (..))
 import Optional
 import Prelude hiding (span)
 
@@ -53,15 +54,23 @@ doRequestJson ::
   m (Response ByteString)
 doRequestJson opts val = inSpan' "HTTP Request (JSON)" $ \span -> do
   addAttribute span "request.xh" (requestToXhCommandLine opts val)
-  defaultRequest {secure = not (opts & optsUsePlainHttp)}
-    & setRequestHost (opts & optsHost)
-    & setRequestPort (opts & optsPort)
-    -- TODO: is this automatically escaped by the library?
-    & setRequestPath (opts & optsPath)
-    & setRequestHeaders (opts & optsHeaders)
-    & setRequestMethod opts.method
-    & setRequestBodyLBS (Enc.encToBytesUtf8Lazy val)
-    & httpBS
+  resp <-
+    defaultRequest {secure = not (opts & optsUsePlainHttp)}
+      & setRequestHost (opts & optsHost)
+      & setRequestPort (opts & optsPort)
+      -- TODO: is this automatically escaped by the library?
+      & setRequestPath (opts & optsPath)
+      & setRequestHeaders (opts & optsHeaders)
+      & setRequestMethod opts.method
+      & setRequestBodyLBS (Enc.encToBytesUtf8Lazy val)
+      & httpBS
+  let code = resp & getResponseStatus & (.statusCode)
+  let msg = resp & getResponseStatus & (.statusMessage) & bytesToTextUtf8Lenient
+  addAttribute
+    span
+    "request.response.status"
+    ([fmt|{code} {msg}|] :: Text)
+  pure resp
 
 optsHost :: RequestOptions -> ByteString
 optsHost opts =
