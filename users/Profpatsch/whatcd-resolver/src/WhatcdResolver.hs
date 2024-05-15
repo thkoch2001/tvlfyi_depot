@@ -688,7 +688,7 @@ runAppWith appT = withTracer $ \tracer -> withDb $ \db -> do
         {- resource destruction -} Postgres.close
         {- unusedResourceOpenTime -} 10
         {- max resources across all stripes -} 20
-  transmissionSessionId <- newEmptyMVar
+  transmissionSessionId <- newIORef Nothing
   let newAppT = do
         logInfo [fmt|Running with config: {showPretty config}|]
         logInfo [fmt|Connected to database at {db & TmpPg.toDataDirectory} on socket {db & TmpPg.toConnectionString}|]

@@ -25,6 +25,7 @@ import Json.Enc qualified as Enc
 import Label
 import MyPrelude
 import Network.HTTP.Types
+import OpenTelemetry.Attributes (ToAttribute (toAttribute))
 import OpenTelemetry.Trace qualified as Otel hiding (getTracer, inSpan, inSpan')
 import Optional
 import Postgres.MonadPostgres
@@ -226,7 +227,7 @@ doTransmissionRequest ::
   (TransmissionRequest, Json.Parse Error output) ->
   m (TransmissionResponse output)
 doTransmissionRequest span dat (req, parser) = do
-  sessionId <- getTransmissionId
+  sessionId <- getCurrentTransmissionSessionId
   let textArg t = (Enc.text t, Otel.toAttribute @Text t)
   let encArg enc = (enc, Otel.toAttribute @Text $ enc & Enc.encToTextPretty)
   let intArg i = (Enc.int i, Otel.toAttribute @Int i)
@@ -257,7 +258,7 @@ doTransmissionRequest span dat (req, parser) = do
       (body <&> second fst & Enc.object)
   -- Implement the CSRF protection thingy
   case resp & Http.getResponseStatus & (.statusCode) of
-    409 -> do
+    409 -> inSpan' "New Transmission Session ID" $ \span' -> do
       tid <-
         resp
           & Http.getResponseHeader "X-Transmission-Session-Id"
@@ -266,9 +267,21 @@ doTransmissionRequest span dat (req, parser) = do
           & unwrapIOError
           & liftIO
           <&> NonEmpty.head
-      setTransmissionId tid
+
+      addAttributes span' $
+        HashMap.fromList
+          [ ("transmission.new_session_id", tid & bytesToTextUtf8Lenient & toAttribute),
+            ("transmission.old_session_id", sessionId <&> bytesToTextUtf8Lenient & fromMaybe "<none yet>" & toAttribute)
+          ]
+
+      updateTransmissionSessionId tid
+
       doTransmissionRequest span dat (req, parser)
-    200 ->
+    200 -> do
+      addAttributes span $
+        HashMap.fromList
+          [ ("transmission.valid_session_id", sessionId <&> bytesToTextUtf8Lenient & fromMaybe "<none yet>" & toAttribute)
+          ]
       resp
         & Http.getResponseBody
         & Json.parseStrict
@@ -296,11 +309,11 @@ doTransmissionRequest span dat (req, parser) = do
     _ -> liftIO $ unwrapIOError $ Left [fmt|Non-200 response: {showPretty resp}|]
 
 class MonadTransmission m where
-  getTransmissionId :: m (Maybe ByteString)
-  setTransmissionId :: ByteString -> m ()
+  getCurrentTransmissionSessionId :: m (Maybe ByteString)
+  updateTransmissionSessionId :: ByteString -> m ()
 
 instance (MonadIO m) => MonadTransmission (AppT m) where
-  getTransmissionId = AppT (asks (.transmissionSessionId)) >>= tryTakeMVar
-  setTransmissionId t = do
+  getCurrentTransmissionSessionId = AppT (asks (.transmissionSessionId)) >>= readIORef
+  updateTransmissionSessionId t = do
     var <- AppT $ asks (.transmissionSessionId)
-    putMVar var t
+    writeIORef var (Just t)
