@@ -16,6 +16,24 @@
       "message": "can you wire it into the testcases?",
       "revId": "2f743b6ea8f0e70504cef9b027c466337c2b28c2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a30cd45b_5e5656b8",
+        "filename": "tvix/castore/src/directoryservice/from_addr.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-05-15T14:15:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f4a7770_dab75171",
+      "revId": "2f743b6ea8f0e70504cef9b027c466337c2b28c2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
