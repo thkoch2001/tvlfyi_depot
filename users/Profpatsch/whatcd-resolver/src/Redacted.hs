@@ -362,8 +362,13 @@ data TorrentData transmissionInfo = TorrentData
     seedingWeight :: Int,
     artists :: [T2 "artistId" Int "artistName" Text],
     torrentJson :: Json.Value,
-    torrentGroupJson :: T2 "groupName" Text "groupYear" Int,
+    torrentGroupJson :: TorrentGroupJson,
     torrentStatus :: TorrentStatus transmissionInfo
+  }
+
+data TorrentGroupJson = TorrentGroupJson
+  { groupName :: Text,
+    groupYear :: Int
   }
 
 data TorrentStatus transmissionInfo
@@ -382,30 +387,58 @@ getTorrentById dat = do
     (Dec.json Json.asValue)
     >>= ensureSingleRow
 
+data GetBestTorrentsFilter = GetBestTorrentsFilter
+  { onlyDownloaded :: Bool,
+    onlyArtist :: Maybe (Label "artistId" Natural)
+  }
+
 -- | Find the best torrent for each torrent group (based on the seeding_weight)
-getBestTorrents :: (MonadPostgres m, HasField "onlyDownloaded" opts Bool) => opts -> Transaction m [TorrentData ()]
+getBestTorrents ::
+  (MonadPostgres m) =>
+  GetBestTorrentsFilter ->
+  Transaction m [TorrentData ()]
 getBestTorrents opts = do
   queryWith
     [sql|
-      SELECT * FROM (
-        SELECT DISTINCT ON (group_id)
+      SELECT
+        group_id,
+        torrent_id,
+        seeding_weight,
+        torrent_json,
+        torrent_group_json,
+        has_torrent_file,
+        transmission_torrent_hash
+      FROM (
+        SELECT DISTINCT ON (tg.group_id)
           tg.group_id,
           t.torrent_id,
           seeding_weight,
           t.full_json_result AS torrent_json,
           tg.full_json_result AS torrent_group_json,
           t.torrent_file IS NOT NULL as has_torrent_file,
-          t.transmission_torrent_hash
+          t.transmission_torrent_hash,
+          (jsonb_path_query_array(t.full_json_result, '$.artists[*].id')) as torrent_artists
         FROM redacted.torrents t
         JOIN redacted.torrent_groups tg ON tg.id = t.torrent_group
-        ORDER BY group_id, seeding_weight DESC
+        ORDER BY tg.group_id, seeding_weight DESC
       ) as _
       WHERE
         -- onlyDownloaded
         ((NOT ?::bool) OR has_torrent_file)
+        -- filter by artist id
+        AND
+        (?::bool OR (to_jsonb(?::int) <@ torrent_artists))
       ORDER BY seeding_weight DESC
     |]
-    (Only opts.onlyDownloaded :: Only Bool)
+    ( do
+        let (onlyArtistB, onlyArtistId) = case opts.onlyArtist of
+              Nothing -> (True, 0)
+              Just a -> (False, a.artistId)
+        ( opts.onlyDownloaded :: Bool,
+          onlyArtistB :: Bool,
+          onlyArtistId & fromIntegral @Natural @Int
+          )
+    )
     ( do
         groupId <- Dec.fromField @Int
         torrentId <- Dec.fromField @Int
@@ -419,9 +452,9 @@ getBestTorrents opts = do
           pure (val, artists)
         torrentGroupJson <-
           ( Dec.json $ do
-              groupName <- Json.keyLabel @"groupName" "groupName" Json.asText
-              groupYear <- Json.keyLabel @"groupYear" "groupYear" (Json.asIntegral @_ @Int)
-              pure $ T2 groupName groupYear
+              groupName <- Json.key "groupName" Json.asText
+              groupYear <- Json.key "groupYear" (Json.asIntegral @_ @Int)
+              pure $ TorrentGroupJson {..}
             )
         hasTorrentFile <- Dec.fromField @Bool
         transmissionTorrentHash <-
