@@ -16,6 +16,24 @@
       "message": "needs a docstring (probably on the callsite(s) too.",
       "revId": "c6a2a761c31fae3a0d58446590189d1c55a74992",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a12c1c51_f2828c4e",
+        "filename": "tvix/castore/src/directoryservice/closure_validator.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-05-15T21:32:43Z",
+      "side": 1,
+      "message": "Added docstring and comments in a few places; made the code nicer",
+      "parentUuid": "1d60c156_59449c11",
+      "revId": "c6a2a761c31fae3a0d58446590189d1c55a74992",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
