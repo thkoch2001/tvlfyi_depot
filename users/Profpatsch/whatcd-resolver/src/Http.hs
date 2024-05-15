@@ -16,16 +16,13 @@ where
 import AppT
 import Data.CaseInsensitive (CI (original))
 import Data.Char qualified as Char
-import Data.Int (Int64)
 import Data.List qualified as List
 import Data.Text qualified as Text
-import Data.Text.Lazy qualified as Lazy.Text
 import Data.Text.Punycode qualified as Punycode
 import Json.Enc qualified as Enc
 import MyPrelude
 import Network.HTTP.Client
 import Network.HTTP.Simple
-import OpenTelemetry.Attributes qualified as Otel
 import Optional
 import Prelude hiding (span)
 
@@ -55,10 +52,6 @@ doRequestJson ::
   Enc.Enc ->
   m (Response ByteString)
 doRequestJson opts val = inSpan' "HTTP Request (JSON)" $ \span -> do
-  let x = requestToXhCommandLine opts val
-  let attrs = [100, 200 .. fromIntegral @Int @Int64 (x & Text.length)]
-  for_ attrs $ \n -> do
-    addAttribute span [fmt|request.xh.{n}|] (Lazy.Text.repeat 'x' & Lazy.Text.take n & toStrict & Otel.TextAttribute)
   addAttribute span "request.xh" (requestToXhCommandLine opts val)
   defaultRequest {secure = not (opts & optsUsePlainHttp)}
     & setRequestHost (opts & optsHost)
