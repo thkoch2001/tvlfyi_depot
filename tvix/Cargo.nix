@@ -7821,9 +7821,9 @@ rec {
       };
       "petgraph" = rec {
         crateName = "petgraph";
-        version = "0.6.4";
+        version = "0.6.5";
         edition = "2018";
-        sha256 = "1ac6wfq5f5pzcv0nvzzfgjbwg2kwslpnzsw5wcmxlscfcb9azlz1";
+        sha256 = "1ns7mbxidnn2pqahbbjccxkrqkrll2i5rbxx43ns6rh6fn3cridl";
         authors = [
           "bluss"
           "mitchmindtree"
@@ -7840,9 +7840,10 @@ rec {
           }
         ];
         features = {
-          "all" = [ "unstable" "quickcheck" "matrix_graph" "stable_graph" "graphmap" ];
+          "all" = [ "unstable" "quickcheck" "matrix_graph" "stable_graph" "graphmap" "rayon" ];
           "default" = [ "graphmap" "stable_graph" "matrix_graph" ];
           "quickcheck" = [ "dep:quickcheck" ];
+          "rayon" = [ "dep:rayon" "indexmap/rayon" ];
           "serde" = [ "dep:serde" ];
           "serde-1" = [ "serde" "serde_derive" ];
           "serde_derive" = [ "dep:serde_derive" ];
@@ -13634,6 +13635,11 @@ rec {
           else ./castore;
         dependencies = [
           {
+            name = "async-compression";
+            packageId = "async-compression";
+            features = [ "tokio" "zstd" ];
+          }
+          {
             name = "async-stream";
             packageId = "async-stream";
           }
@@ -13749,7 +13755,7 @@ rec {
           {
             name = "tokio-util";
             packageId = "tokio-util";
-            features = [ "io" "io-util" ];
+            features = [ "io" "io-util" "codec" ];
           }
           {
             name = "tonic";

@@ -4,7 +4,8 @@ use bstr::ByteSlice;
 
 use petgraph::{
     graph::{DiGraph, NodeIndex},
-    visit::Bfs,
+    visit::{Bfs, IntoNodeIdentifiers, Reversed, Topo, Walker},
+    Incoming,
 };
 use tracing::instrument;
 
@@ -122,11 +123,54 @@ impl ClosureValidator {
     /// In case no elements have been inserted, returns an empty list.
     #[instrument(level = "trace", skip_all, err)]
     pub(crate) fn finalize(self) -> Result<Vec<Directory>, Error> {
+        let graph = match self.finalize_raw()? {
+            None => return Ok(vec![]),
+            Some(v) => v,
+        };
+        // Dissolve the graph, returning the nodes as a Vec.
+        // As the graph was populated in a valid DFS PostOrder, we can return
+        // nodes in that same order.
+        let (nodes, _edges) = graph.into_nodes_edges();
+        Ok(nodes.into_iter().map(|x| x.weight).collect())
+    }
+
+    /// Ensure that all inserted Directories are connected, then return a
+    /// (deduplicated) and validated list of directories, in from-leaves-to-root
+    /// order.
+    /// In case no elements have been inserted, returns an empty list.
+    #[instrument(level = "trace", skip_all, err)]
+    pub(crate) fn finalize_root_to_leaves(self) -> Result<Vec<Directory>, Error> {
+        let mut graph = match self.finalize_raw()? {
+            None => return Ok(vec![]),
+            Some(v) => v,
+        };
+
+        // do a BFS traversal of the graph, starting with the root node to get
+        // (the count of) all nodes reachable from there.
+        let traversal = Bfs::new(
+            &graph,
+            graph
+                .node_identifiers()
+                .filter(|&a| graph.neighbors_directed(a, Incoming).next().is_none())
+                .next()
+                .unwrap(),
+        );
+
+        Ok(traversal
+            .iter(&graph)
+            .collect::<Vec<_>>()
+            .into_iter()
+            .map(|i| graph.remove_node(i).unwrap())
+            .collect())
+    }
+
+    #[instrument(level = "trace", skip_all, err)]
+    fn finalize_raw(self) -> Result<Option<DiGraph<Directory, ()>>, Error> {
         // If no nodes were inserted, an empty list is returned.
         let last_directory_ix = if let Some(x) = self.last_directory_ix {
             x
         } else {
-            return Ok(vec![]);
+            return Ok(None);
         };
 
         // do a BFS traversal of the graph, starting with the root node to get
@@ -172,11 +216,7 @@ impl ClosureValidator {
             }
         }
 
-        // Dissolve the graph, returning the nodes as a Vec.
-        // As the graph was populated in a valid DFS PostOrder, we can return
-        // nodes in that same order.
-        let (nodes, _edges) = self.graph.into_nodes_edges();
-        Ok(nodes.into_iter().map(|x| x.weight).collect())
+        Ok(Some(self.graph))
     }
 }
 
