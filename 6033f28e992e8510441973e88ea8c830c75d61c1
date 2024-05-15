@@ -1,0 +1,208 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7bf7b94c_bfae0090",
+        "filename": "tvix/castore/src/directoryservice/closure_validator.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-15T22:24:46Z",
+      "side": 1,
+      "message": "`.ok_or_else(||vec![])?;`",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41f0678f_93e8d41e",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-15T22:24:46Z",
+      "side": 1,
+      "message": "Can you add a longer comment here, describing the data format and behavior (only indexing into roots)",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e4bb084_075c7cc8",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-15T22:24:46Z",
+      "side": 1,
+      "message": "add a small comment that this returns the root node by returning the first element from get_recursive.",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61e29503_5c3da458",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-15T22:24:46Z",
+      "side": 1,
+      "message": "I\u0027d probably call this handle or directory_putter.",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd285d3b_7ffd41ff",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-15T22:24:46Z",
+      "side": 1,
+      "message": "🐔",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be042f2b_872893aa",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-15T22:24:46Z",
+      "side": 1,
+      "message": "to_owned()",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea8a3112_66bd0bb7",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-15T22:24:46Z",
+      "side": 1,
+      "message": "s/get sent/receive/\n\ns/still//",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ae9d8b1_54ed9814",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-15T22:24:46Z",
+      "side": 1,
+      "message": "this can be calculated outside the async move, then you don\u0027t need to clone base_path and only move dir_path.",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f4a92fe7_69bd4d68",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-15T22:24:46Z",
+      "side": 1,
+      "message": "use a map_err(|e| ...)? instead.",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "55ade73f_d9bd1d09",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-15T22:24:46Z",
+      "side": 1,
+      "message": "that\u0027s probably a trace at most.",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dc017e65_8b77cb4d",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-15T22:24:46Z",
+      "side": 1,
+      "message": "trace!",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "464dcd66_7d63d65b",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-15T22:24:46Z",
+      "side": 1,
+      "message": "stray debug println",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
