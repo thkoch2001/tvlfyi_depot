@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d60c156_59449c11",
+        "filename": "tvix/castore/src/directoryservice/closure_validator.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-15T14:50:04Z",
+      "side": 1,
+      "message": "needs a docstring (probably on the callsite(s) too.",
+      "revId": "c6a2a761c31fae3a0d58446590189d1c55a74992",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
