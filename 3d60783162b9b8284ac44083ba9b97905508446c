@@ -117,6 +117,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c996c401_5e8a13e7",
+        "filename": "tvix/docs/src/nix-daemon/operations.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-05-16T20:24:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "52eab44d_06c4693a",
+      "revId": "3d60783162b9b8284ac44083ba9b97905508446c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ac8b91ae_d78adfb7",
