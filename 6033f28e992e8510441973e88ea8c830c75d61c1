@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "10830eb2_453e56c8",
+        "filename": "tvix/castore/src/directoryservice/closure_validator.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-05-16T07:17:50Z",
+      "side": 1,
+      "message": "does not work, since we are prematurely returning from the function",
+      "parentUuid": "7bf7b94c_bfae0090",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "41f0678f_93e8d41e",
         "filename": "tvix/castore/src/directoryservice/object_store.rs",
         "patchSetId": 12
@@ -69,6 +87,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3562fad5_71bfd004",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-05-16T07:17:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "61e29503_5c3da458",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fd285d3b_7ffd41ff",
@@ -82,6 +118,24 @@
       "writtenOn": "2024-05-15T22:24:46Z",
       "side": 1,
       "message": "🐔",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "36a88c8c_02fa938d",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-05-16T07:17:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd285d3b_7ffd41ff",
       "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -103,6 +157,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c1d38009_9f4b20c8",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-05-16T07:17:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be042f2b_872893aa",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ea8a3112_66bd0bb7",
@@ -120,6 +192,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50b91c01_c253fdf3",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-05-16T07:17:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea8a3112_66bd0bb7",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7ae9d8b1_54ed9814",
@@ -133,6 +223,24 @@
       "writtenOn": "2024-05-15T22:24:46Z",
       "side": 1,
       "message": "this can be calculated outside the async move, then you don\u0027t need to clone base_path and only move dir_path.",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98b84143_2296a987",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-05-16T07:17:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7ae9d8b1_54ed9814",
       "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -156,6 +264,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c1e92d88_f1c689e0",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-05-16T07:17:50Z",
+      "side": 1,
+      "message": "I don\u0027t think this makes sense when changing the type (Err -\u003e Ok) for a specific kind of Err, at least I wouldn\u0027t know how to make this shorter or more readable using map_err",
+      "parentUuid": "f4a92fe7_69bd4d68",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "55ade73f_d9bd1d09",
         "filename": "tvix/castore/src/directoryservice/object_store.rs",
         "patchSetId": 12
@@ -167,6 +293,24 @@
       "writtenOn": "2024-05-15T22:24:46Z",
       "side": 1,
       "message": "that\u0027s probably a trace at most.",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "463f6baa_d498c74c",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-05-16T07:17:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "55ade73f_d9bd1d09",
       "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -188,6 +332,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf7f81ec_06d1afdc",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-05-16T07:17:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dc017e65_8b77cb4d",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "464dcd66_7d63d65b",
@@ -201,6 +363,24 @@
       "writtenOn": "2024-05-15T22:24:46Z",
       "side": 1,
       "message": "stray debug println",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3af3f80e_e047e268",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-05-16T07:17:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "464dcd66_7d63d65b",
       "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
