@@ -3,6 +3,7 @@
 module Redacted where
 
 import AppT
+import Arg
 import Control.Monad.Logger.CallStack
 import Control.Monad.Reader
 import Data.Aeson qualified as Json
@@ -67,12 +68,8 @@ redactedGetTorrentFile dat = inSpan' "Redacted Get Torrent File" $ \span -> do
       )
   httpTorrent span req
 
--- fix
---   ( \io -> do
---       logInfo "delay"
---       liftIO $ threadDelay 10_000_000
---       io
---   )
+mkRedactedTorrentLink :: Arg "torrentId" Int -> Text
+mkRedactedTorrentLink torrentId = [fmt|https://redacted.ch/torrents.php?id={torrentId.unArg}|]
 
 exampleSearch :: (MonadThrow m, MonadLogger m, MonadPostgres m, MonadOtel m) => m (Transaction m ())
 exampleSearch = do
