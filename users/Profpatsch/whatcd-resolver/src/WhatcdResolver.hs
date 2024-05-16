@@ -652,6 +652,9 @@ migrate = inSpan "Database Migration" $ do
     END;
     $$ LANGUAGE plpgsql IMMUTABLE;
 
+    ALTER TABLE redacted.torrents_json
+    ADD COLUMN IF NOT EXISTS seeding_weight int GENERATED ALWAYS AS (calc_seeding_weight(full_json_result)) STORED;
+
     -- inflect out values of the full json
     CREATE OR REPLACE VIEW redacted.torrents AS
     SELECT
@@ -659,14 +662,12 @@ migrate = inSpan "Database Migration" $ do
       t.torrent_id,
       t.torrent_group,
       -- the seeding weight is used to find the best torrent in a group.
-      calc_seeding_weight(t.full_json_result) AS seeding_weight,
+      t.seeding_weight,
       t.full_json_result,
       t.torrent_file,
       t.transmission_torrent_hash
     FROM redacted.torrents_json t;
 
-    -- make sure we store the results
-    CREATE INDEX IF NOT EXISTS redacted_torrents_json_seeding_weight ON redacted.torrents_json (calc_seeding_weight(full_json_result));
 
     CREATE INDEX IF NOT EXISTS torrents_json_seeding ON redacted.torrents_json(((full_json_result->'seeding')::integer));
     CREATE INDEX IF NOT EXISTS torrents_json_snatches ON redacted.torrents_json(((full_json_result->'snatches')::integer));
