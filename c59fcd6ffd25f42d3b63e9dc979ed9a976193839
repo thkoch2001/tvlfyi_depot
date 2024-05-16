@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22d0aaf8_b18b2b85",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-16T21:43:03Z",
+      "side": 1,
+      "message": "fix(castore/directory/objectstore): ... (and get pass the commit message column length limit)",
+      "revId": "c59fcd6ffd25f42d3b63e9dc979ed9a976193839",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fb4ae6bd_d7dba9db",
+        "filename": "tvix/castore/src/directoryservice/closure_validator.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-16T21:43:03Z",
+      "side": 1,
+      "message": "what\u0027s this \"count of\" again?",
+      "revId": "c59fcd6ffd25f42d3b63e9dc979ed9a976193839",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1dd97c32_9fb31587",
+        "filename": "tvix/castore/src/directoryservice/closure_validator.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-16T21:43:03Z",
+      "side": 1,
+      "message": "same",
+      "revId": "c59fcd6ffd25f42d3b63e9dc979ed9a976193839",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
