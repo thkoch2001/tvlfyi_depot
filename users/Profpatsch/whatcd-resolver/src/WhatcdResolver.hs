@@ -3,6 +3,7 @@
 module WhatcdResolver where
 
 import AppT
+import Arg
 import Control.Category qualified as Cat
 import Control.Monad.Catch.Pure (runCatch)
 import Control.Monad.Logger.CallStack
@@ -539,7 +540,11 @@ getBestTorrentsTable artistFilter = do
                   <td>
                     {artists}
                   </td>
-                  <td>{Html.toHtml @Text b.torrentGroupJson.groupName}</td>
+                  <td>
+                    <a href={mkRedactedTorrentLink (Arg b.torrentId)}>
+                      {Html.toHtml @Text b.torrentGroupJson.groupName}
+                    </a>
+                  </td>
                   <td>{Html.toHtml @Int b.seedingWeight}</td>
                   <td><details hx-trigger="toggle once" hx-post="snips/redacted/torrentDataJson" hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentId)]}></details></td>
                   </tr>
