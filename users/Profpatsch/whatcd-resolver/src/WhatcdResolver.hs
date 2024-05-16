@@ -24,6 +24,7 @@ import FieldParser (FieldParser, FieldParser' (..))
 import FieldParser qualified as Field
 import Html qualified
 import IHP.HSX.QQ (hsx)
+import IHP.HSX.ToHtml (ToHtml)
 import Json qualified
 import Json.Enc (Enc)
 import Json.Enc qualified as Enc
@@ -259,9 +260,41 @@ htmlUi = do
       bestTorrentsTable <- getBestTorrentsTable Nothing
       -- transmissionTorrentsTable <- lift @Transaction getTransmissionTorrentsTable
       pure $
-        Html.docTypeHtml
+        htmlPageChrome
           [hsx|
+            <form
+              hx-post="/snips/redacted/search"
+              hx-target="#redacted-search-results">
+              <label for="redacted-search">Redacted Search</label>
+              <input
+                id="redacted-search"
+                type="text"
+                name="redacted-search" />
+              <button type="submit" hx-disabled-elt="this">Search</button>
+              <div class="htmx-indicator">Search running!</div>
+            </form>
+            <div id="redacted-search-results">
+              {bestTorrentsTable}
+            </div>
+            <!-- refresh the page if the uniqueRunId is different -->
+            <input
+                hidden
+                type="text"
+                id="autorefresh"
+                name="hasItBeenRestarted"
+                value={uniqueRunId}
+                hx-get="/autorefresh"
+                hx-trigger="every 5s"
+                hx-swap="none"
+            />
+        |]
+
+htmlPageChrome :: (ToHtml a) => a -> Html
+htmlPageChrome body =
+  Html.docTypeHtml $
+    [hsx|
       <head>
+        <!-- TODO: set nice page title for each page -->
         <title>whatcd-resolver</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -277,31 +310,7 @@ htmlUi = do
         </style>
       </head>
       <body>
-        <form
-          hx-post="/snips/redacted/search"
-          hx-target="#redacted-search-results">
-          <label for="redacted-search">Redacted Search</label>
-          <input
-            id="redacted-search"
-            type="text"
-            name="redacted-search" />
-          <button type="submit" hx-disabled-elt="this">Search</button>
-          <div class="htmx-indicator">Search running!</div>
-        </form>
-        <div id="redacted-search-results">
-          {bestTorrentsTable}
-        </div>
-        <!-- refresh the page if the uniqueRunId is different -->
-        <input
-             hidden
-             type="text"
-             id="autorefresh"
-             name="hasItBeenRestarted"
-             value={uniqueRunId}
-             hx-get="/autorefresh"
-             hx-trigger="every 5s"
-             hx-swap="none"
-        />
+        {body}
       </body>
     |]
 
@@ -317,12 +326,13 @@ artistPage ::
   m Html
 artistPage dat = runTransaction $ do
   torrents <- getBestTorrentsTable (Just $ label @"artistId" dat.dbId)
-  pure
-    [hsx|
-    Artist ID: {dat.dbId}
+  pure $
+    htmlPageChrome
+      [hsx|
+        Artist ID: {dat.dbId}
 
-    {torrents}
-  |]
+        {torrents}
+      |]
 
 type Handlers m = HandlerResponses m -> Map Text (m ResponseReceived)
 
