@@ -156,6 +156,30 @@
       },
       "revId": "3d60783162b9b8284ac44083ba9b97905508446c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e1ebce6b_5598d862",
+        "filename": "tvix/docs/src/nix-daemon/serialization.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-05-16T21:45:01Z",
+      "side": 1,
+      "message": "Are you sure about this issue? After reading around the web for std::string and std::string_view which cppnix uses it seems that these are NOT null terminated.\nFrom what I can se it is the cppnix test that is flawed since it creates the test strings from cstring literals (which are null terminated).\nSee: https://stackoverflow.com/questions/164168/how-do-you-construct-a-stdstring-with-an-embedded-null",
+      "parentUuid": "ac8b91ae_d78adfb7",
+      "range": {
+        "startLine": 101,
+        "startChar": 0,
+        "endLine": 101,
+        "endChar": 2
+      },
+      "revId": "3d60783162b9b8284ac44083ba9b97905508446c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
