@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0648521_3a0d9a5f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-05-16T21:59:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22d0aaf8_b18b2b85",
+      "revId": "c59fcd6ffd25f42d3b63e9dc979ed9a976193839",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb4ae6bd_d7dba9db",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "faadbe68_fed65ced",
+        "filename": "tvix/castore/src/directoryservice/closure_validator.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-05-16T21:59:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fb4ae6bd_d7dba9db",
+      "revId": "c59fcd6ffd25f42d3b63e9dc979ed9a976193839",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1dd97c32_9fb31587",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-05-16T21:43:03Z",
       "side": 1,
       "message": "same",
+      "revId": "c59fcd6ffd25f42d3b63e9dc979ed9a976193839",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a98b36fe_d0e3e735",
+        "filename": "tvix/castore/src/directoryservice/closure_validator.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-05-16T21:59:14Z",
+      "side": 1,
+      "message": "here it\u0027s actually supposed to be that way (counting the number of nodes is how we validate the closure)",
+      "parentUuid": "1dd97c32_9fb31587",
       "revId": "c59fcd6ffd25f42d3b63e9dc979ed9a976193839",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
