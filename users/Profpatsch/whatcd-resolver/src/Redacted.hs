@@ -400,34 +400,30 @@ getBestTorrents ::
 getBestTorrents opts = do
   queryWith
     [sql|
+      WITH filtered_torrents AS (
+        SELECT DISTINCT ON (torrent_group)
+          id
+        FROM
+          redacted.torrents
+        WHERE
+          -- onlyDownloaded
+          ((NOT ?::bool) OR torrent_file IS NOT NULL)
+          -- filter by artist id
+          AND
+          (?::bool OR (to_jsonb(?::int) <@ (jsonb_path_query_array(full_json_result, '$.artists[*].id'))))
+        ORDER BY torrent_group, seeding_weight DESC
+      )
       SELECT
-        group_id,
-        torrent_id,
-        seeding_weight,
-        torrent_json,
-        torrent_group_json,
-        has_torrent_file,
-        transmission_torrent_hash
-      FROM (
-        SELECT DISTINCT ON (tg.group_id)
-          tg.group_id,
-          t.torrent_id,
-          seeding_weight,
-          t.full_json_result AS torrent_json,
-          tg.full_json_result AS torrent_group_json,
-          t.torrent_file IS NOT NULL as has_torrent_file,
-          t.transmission_torrent_hash,
-          (jsonb_path_query_array(t.full_json_result, '$.artists[*].id')) as torrent_artists
-        FROM redacted.torrents t
-        JOIN redacted.torrent_groups tg ON tg.id = t.torrent_group
-        ORDER BY tg.group_id, seeding_weight DESC
-      ) as _
-      WHERE
-        -- onlyDownloaded
-        ((NOT ?::bool) OR has_torrent_file)
-        -- filter by artist id
-        AND
-        (?::bool OR (to_jsonb(?::int) <@ torrent_artists))
+        tg.group_id,
+        t.torrent_id,
+        t.seeding_weight,
+        t.full_json_result AS torrent_json,
+        tg.full_json_result AS torrent_group_json,
+        t.torrent_file IS NOT NULL AS has_torrent_file,
+        t.transmission_torrent_hash
+      FROM filtered_torrents f
+      JOIN redacted.torrents t ON t.id = f.id
+      JOIN redacted.torrent_groups tg ON tg.id = t.torrent_group
       ORDER BY seeding_weight DESC
     |]
     ( do
