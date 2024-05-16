@@ -75,6 +75,14 @@ fn check_edge(dir: &DirectoryNode, child: &Directory) -> Result<(), Error> {
 }
 
 impl<O: OrderValidator> ClosureValidator<O> {
+    pub(crate) fn with_order(order_validator: O) -> Self {
+        Self {
+            graph: Default::default(),
+            digest_to_node_ix: Default::default(),
+            order_validator,
+        }
+    }
+
     /// Parse a new Directory from its protobuf format and add it into the closure
     #[instrument(level = "trace", skip_all, err)]
     pub fn add_bytes(&mut self, bytes: bytes::Bytes) -> Result<(), Error> {
