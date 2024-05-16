@@ -20,6 +20,63 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4c1beaf5_8e5a0c8a",
+        "filename": "tvix/docs/src/nix-daemon/logging.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-16T17:25:33Z",
+      "side": 1,
+      "message": "This is a bit confusing, what do you mean with \"last of the fake stderr\"?\n\nMaybe just \"Marks the end of the logs, normal processing can resume\"?",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 33
+      },
+      "revId": "3d60783162b9b8284ac44083ba9b97905508446c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1aa2c12e_021f4734",
+        "filename": "tvix/docs/src/nix-daemon/logging.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-16T17:25:33Z",
+      "side": 1,
+      "message": "These sections describe the meaning of the individual operations, but not their wire format - though we can probably deal with that as a followup CL.",
+      "revId": "3d60783162b9b8284ac44083ba9b97905508446c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52eab44d_06c4693a",
+        "filename": "tvix/docs/src/nix-daemon/operations.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 666,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-16T17:25:33Z",
+      "side": 1,
+      "message": "stray whitespace",
+      "revId": "3d60783162b9b8284ac44083ba9b97905508446c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ac8b91ae_d78adfb7",
         "filename": "tvix/docs/src/nix-daemon/serialization.md",
         "patchSetId": 3
