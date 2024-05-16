@@ -34,6 +34,8 @@
 - ignore: { name: Use tuple-section }
 - ignore: { name: Use forM_ }
 - ignore: { name: Functor law }
+- ignore: { name: Use maybe }
+
 # fst and snd are usually a code smell and should be explicit matches, _naming the ignored side.
 - ignore: { name: Use fst }
 - ignore: { name: Use snd }
