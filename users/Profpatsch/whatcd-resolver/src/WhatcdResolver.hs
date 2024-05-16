@@ -213,8 +213,8 @@ htmlUi = do
                     let HandlerResponses {htmlWithQueryArgs} = respond
 
                     htmlWithQueryArgs
-                      ( label @"dbId"
-                          <$> (singleQueryArgument "db_id" (Field.utf8 >>> Field.decimalNatural))
+                      ( label @"redactedId"
+                          <$> (singleQueryArgument "redacted_id" (Field.utf8 >>> Field.decimalNatural))
                       )
                       $ \qry _span -> do
                         artistPage qry
@@ -315,7 +315,7 @@ htmlPageChrome body =
     |]
 
 artistPage ::
-  ( HasField "dbId" dat Natural,
+  ( HasField "redactedId" dat Natural,
     MonadPostgres m,
     MonadOtel m,
     MonadLogger m,
@@ -325,11 +325,11 @@ artistPage ::
   dat ->
   m Html
 artistPage dat = runTransaction $ do
-  torrents <- getBestTorrentsTable (Just $ label @"artistId" dat.dbId)
+  torrents <- getBestTorrentsTable (Just $ getLabel @"redactedId" dat)
   pure $
     htmlPageChrome
       [hsx|
-        Artist ID: {dat.dbId}
+        Artist ID: {dat.redactedId}
 
         {torrents}
       |]
@@ -473,7 +473,7 @@ snipsRedactedSearch dat = do
       ]
   runTransaction $ do
     t
-    getBestTorrentsTable (Nothing :: Maybe (Label "artistId" Natural))
+    getBestTorrentsTable (Nothing :: Maybe (Label "redactedId" Natural))
 
 data ArtistFilter = ArtistFilter
   { onlyArtist :: Maybe (Label "artistId" Text)
@@ -486,7 +486,7 @@ getBestTorrentsTable ::
     MonadPostgres m,
     MonadOtel m
   ) =>
-  Maybe (Label "artistId" Natural) ->
+  Maybe (Label "redactedId" Natural) ->
   Transaction m Html
 getBestTorrentsTable artistFilter = do
   bestStale :: [TorrentData ()] <- getBestTorrents GetBestTorrentsFilter {onlyArtist = artistFilter, onlyDownloaded = False}
@@ -527,7 +527,7 @@ getBestTorrentsTable artistFilter = do
                       b.artists
                         <&> ( \a ->
                                 T2
-                                  (label @"url" [fmt|/artist?db_id={a.artistId}|])
+                                  (label @"url" [fmt|/artist?redacted_id={a.artistId}|])
                                   (label @"content" $ Html.toHtml @Text a.artistName)
                             )
                         & mkLinkList
