@@ -389,7 +389,7 @@ getTorrentById dat = do
 
 data GetBestTorrentsFilter = GetBestTorrentsFilter
   { onlyDownloaded :: Bool,
-    onlyArtist :: Maybe (Label "artistId" Natural)
+    onlyArtist :: Maybe (Label "redactedId" Natural)
   }
 
 -- | Find the best torrent for each torrent group (based on the seeding_weight)
@@ -429,7 +429,7 @@ getBestTorrents opts = do
     ( do
         let (onlyArtistB, onlyArtistId) = case opts.onlyArtist of
               Nothing -> (True, 0)
-              Just a -> (False, a.artistId)
+              Just a -> (False, a.redactedId)
         ( opts.onlyDownloaded :: Bool,
           onlyArtistB :: Bool,
           onlyArtistId & fromIntegral @Natural @Int
