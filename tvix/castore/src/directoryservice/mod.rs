@@ -3,6 +3,7 @@ use futures::stream::BoxStream;
 use tonic::async_trait;
 
 mod closure_validator;
+mod combinators;
 mod from_addr;
 mod grpc;
 mod memory;
@@ -16,6 +17,7 @@ mod traverse;
 mod utils;
 
 pub use self::closure_validator::ClosureValidator;
+pub use self::combinators::Cache;
 pub use self::from_addr::from_addr;
 pub use self::grpc::GRPCDirectoryService;
 pub use self::memory::MemoryDirectoryService;
