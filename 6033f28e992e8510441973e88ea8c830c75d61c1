@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "acdec207_8385405a",
+        "filename": "tvix/castore/src/directoryservice/closure_validator.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-16T16:26:26Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "10830eb2_453e56c8",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "41f0678f_93e8d41e",
@@ -312,6 +330,24 @@
       "side": 1,
       "message": "I don\u0027t think this makes sense when changing the type (Err -\u003e Ok) for a specific kind of Err, at least I wouldn\u0027t know how to make this shorter or more readable using map_err",
       "parentUuid": "f4a92fe7_69bd4d68",
+      "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "539a037e_314c6f8e",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-16T16:26:26Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c1e92d88_f1c689e0",
       "revId": "6033f28e992e8510441973e88ea8c830c75d61c1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
