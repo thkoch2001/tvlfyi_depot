@@ -43,6 +43,30 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "d70da833_85b7958f",
+        "filename": "tvix/docs/src/nix-daemon/logging.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-05-16T20:23:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c1beaf5_8e5a0c8a",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 33
+      },
+      "revId": "3d60783162b9b8284ac44083ba9b97905508446c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "1aa2c12e_021f4734",
         "filename": "tvix/docs/src/nix-daemon/logging.md",
         "patchSetId": 3
@@ -54,6 +78,24 @@
       "writtenOn": "2024-05-16T17:25:33Z",
       "side": 1,
       "message": "These sections describe the meaning of the individual operations, but not their wire format - though we can probably deal with that as a followup CL.",
+      "revId": "3d60783162b9b8284ac44083ba9b97905508446c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18321d0d_d86a3bb3",
+        "filename": "tvix/docs/src/nix-daemon/logging.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-05-16T20:23:55Z",
+      "side": 1,
+      "message": "Done.",
+      "parentUuid": "1aa2c12e_021f4734",
       "revId": "3d60783162b9b8284ac44083ba9b97905508446c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
