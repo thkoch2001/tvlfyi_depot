@@ -151,12 +151,12 @@ runApp = withTracer $ \tracer -> do
                                 )
                               ]
                         if
-                            -- If the last cache update is newer or equal to the requested version, we can tell the browser it’s fine
-                            | Just modifiedSince <- req'.ifModifiedSince,
-                              modifiedSince >= new.lastModified ->
-                                pure $ Wai.responseLBS Http.status304 cacheToHeaders ""
-                            | otherwise ->
-                                pure $ h cacheToHeaders (new.result & toLazyBytes)
+                          -- If the last cache update is newer or equal to the requested version, we can tell the browser it’s fine
+                          | Just modifiedSince <- req'.ifModifiedSince,
+                            modifiedSince >= new.lastModified ->
+                              pure $ Wai.responseLBS Http.status304 cacheToHeaders ""
+                          | otherwise ->
+                              pure $ h cacheToHeaders (new.result & toLazyBytes)
                     )
               }
           ]
@@ -198,7 +198,7 @@ runApp = withTracer $ \tracer -> do
         (Parse.maybe $ Parse.fieldParser parseHeaderTime)
         & rmap (fmap mkSecondTime)
 
-parseRequest :: (MonadThrow f, MonadIO f) => Otel.Span -> Parse from a -> from -> f a
+parseRequest :: (MonadThrow f) => Otel.Span -> Parse from a -> from -> f a
 parseRequest span parser req =
   Parse.runParse "Unable to parse the HTTP request" parser req
     & assertM span id
@@ -220,9 +220,9 @@ heatmap = do
       t
         & firstSection (match (Soup.TagOpen ("") [("class", "heatmap")]))
         >>= firstSection (match (Soup.TagOpen "table" []))
-        <&> getTable
-        <&> (<> htmlToTags [hsx|<figcaption>source: <a href={mapallSpaceOla} target="_blank">mapall.space</a></figcaption>|])
-        <&> wrapTagStream (T2 (label @"el" "figure") (label @"attrs" []))
+          <&> getTable
+          <&> (<> htmlToTags [hsx|<figcaption>source: <a href={mapallSpaceOla} target="_blank">mapall.space</a></figcaption>|])
+          <&> wrapTagStream (T2 (label @"el" "figure") (label @"attrs" []))
 
     -- get the table from opening tag to closing tag (allowing nested tables)
     getTable = go 0
@@ -310,8 +310,8 @@ runHandlers runApplication handlers = do
 inSpan :: (MonadUnliftIO m, Otel.MonadTracer m) => Text -> m a -> m a
 inSpan name = Otel.inSpan name Otel.defaultSpanArguments
 
-inSpan' :: (MonadUnliftIO m, Otel.MonadTracer m) => Text -> (Otel.Span -> m a) -> m a
--- inSpan' name =  Otel.inSpan' name Otel.defaultSpanArguments
+inSpan' :: Text -> (Otel.Span -> m a) -> m a
+-- inSpan' name = Otel.inSpan' name Otel.defaultSpanArguments
 inSpan' _name act = act (error "todo telemetry disabled")
 
 zipT2 ::
@@ -379,17 +379,17 @@ httpJson opts span parser req = do
                   <&> Wai.parseContentType
                   <&> (\(ct, _mimeAttributes) -> ct)
           if
-              | statusCode == 200,
-                Just ct <- contentType,
-                ct == opts'.contentType ->
-                  Right $ (resp & Http.responseBody)
-              | statusCode == 200,
-                Just otherType <- contentType ->
-                  Left [fmt|Server returned a non-json body, with content-type "{otherType}"|]
-              | statusCode == 200,
-                Nothing <- contentType ->
-                  Left [fmt|Server returned a body with unspecified content type|]
-              | code <- statusCode -> Left [fmt|Server returned an non-200 error code, code {code}: {resp & showPretty}|]
+            | statusCode == 200,
+              Just ct <- contentType,
+              ct == opts'.contentType ->
+                Right $ (resp & Http.responseBody)
+            | statusCode == 200,
+              Just otherType <- contentType ->
+                Left [fmt|Server returned a non-json body, with content-type "{otherType}"|]
+            | statusCode == 200,
+              Nothing <- contentType ->
+                Left [fmt|Server returned a body with unspecified content type|]
+            | code <- statusCode -> Left [fmt|Server returned an non-200 error code, code {code}: {resp & showPretty}|]
       )
     >>= assertM
       span
@@ -398,7 +398,7 @@ httpJson opts span parser req = do
             & first (Json.parseErrorTree "could not parse redacted response")
       )
 
-assertM :: (MonadThrow f, MonadIO f) => Otel.Span -> (t -> Either ErrorTree a) -> t -> f a
+assertM :: (MonadThrow f) => Otel.Span -> (t -> Either ErrorTree a) -> t -> f a
 assertM span f v = case f v of
   Right a -> pure a
   Left err -> appThrowTree span err
@@ -419,7 +419,7 @@ data Cache a = Cache
     lastModified :: !SecondTime,
     result :: !a
   }
-  deriving (Show)
+  deriving stock (Show)
 
 newCache :: Text -> a -> IO (TVar (Cache a))
 newCache name result = do
@@ -528,8 +528,8 @@ recordException span dat = liftIO $ do
         ..
       }
 
-appThrowTree :: (MonadThrow m, MonadIO m) => Otel.Span -> ErrorTree -> m a
-appThrowTree span exc = do
+appThrowTree :: (MonadThrow m) => Otel.Span -> ErrorTree -> m a
+appThrowTree _span exc = do
   let msg = prettyErrorTree exc
   -- recordException
   --   span
@@ -539,7 +539,7 @@ appThrowTree span exc = do
   --   )
   throwM $ AppException msg
 
-orAppThrowTree :: (MonadThrow m, MonadIO m) => Otel.Span -> Either ErrorTree a -> m a
+orAppThrowTree :: (MonadThrow m) => Otel.Span -> Either ErrorTree a -> m a
 orAppThrowTree span = \case
   Left err -> appThrowTree span err
   Right a -> pure a
