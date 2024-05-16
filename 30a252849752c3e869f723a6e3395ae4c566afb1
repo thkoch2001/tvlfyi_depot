@@ -70,6 +70,30 @@
       },
       "revId": "30a252849752c3e869f723a6e3395ae4c566afb1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4f206742_529a00a2",
+        "filename": "tvix/eval/src/value/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1002,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-16T22:23:32Z",
+      "side": 1,
+      "message": "We can implement the same stopgap solution as for `unsafeGetAttrPos`, emit some bogus values for now. Did that in https://cl.tvl.fyi/c/depot/+/11685, PTAL.",
+      "parentUuid": "fc9f4d89_027c1a45",
+      "range": {
+        "startLine": 1001,
+        "startChar": 0,
+        "endLine": 1002,
+        "endChar": 2
+      },
+      "revId": "30a252849752c3e869f723a6e3395ae4c566afb1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
