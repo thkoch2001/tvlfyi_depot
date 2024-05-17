@@ -234,4 +234,9 @@
     email = "tvl@yuka.dev";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$aEyiAIuynQMwfY7xE+pMxg$QdghylHO2JZMR/YyYf4UAnhhb/gBdAkoDeANEwdixxU";
   }
+  {
+    username = "benjaminedwardwebb";
+    email = "benjaminedwardwebb@gmail.com";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$kdFNmxgIGsF8TkB/GoPy1A$GUXd3M35Jqxqlfra4gPCcFW3ehE0RVrlHOzaoD7Pu7s";
+  }
 ]
