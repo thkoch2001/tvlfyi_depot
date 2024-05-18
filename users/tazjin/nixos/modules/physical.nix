@@ -45,6 +45,9 @@ in
         gdb
         git
         gnupg
+        go
+        gopls
+        gotools
         gtk3 # for gtk-launch
         htop
         hyperfine
