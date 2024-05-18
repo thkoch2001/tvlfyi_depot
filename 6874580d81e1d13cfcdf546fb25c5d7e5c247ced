@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4670cf12_aba180e3",
+        "filename": "tvix/castore/src/import/blobs.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-05-18T20:16:43Z",
+      "side": 1,
+      "message": "This could almost a `BlobService` wrapper that implements `BlobService`. I think the main thing missing would be a join/close method.",
+      "revId": "6874580d81e1d13cfcdf546fb25c5d7e5c247ced",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
