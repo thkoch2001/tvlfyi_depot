@@ -1,8 +1,8 @@
-use super::PathInfoService;
-use crate::proto;
+use super::{Error, PathInfoService};
 use crate::proto::PathInfo;
 use async_stream::try_stream;
 use bigtable_rs::{bigtable, google::bigtable::v2 as bigtable_v2};
+use bstr::BStr;
 use bytes::Bytes;
 use data_encoding::HEXLOWER;
 use futures::stream::BoxStream;
@@ -12,7 +12,6 @@ use serde::{Deserialize, Serialize};
 use serde_with::{serde_as, DurationSeconds};
 use tonic::async_trait;
 use tracing::{instrument, trace};
-use tvix_castore::Error;
 
 /// There should not be more than 10 MiB in a single cell.
 /// https://cloud.google.com/bigtable/docs/schema-design#cells
@@ -241,13 +240,14 @@ impl PathInfoService for BigtablePathInfoService {
         let mut response = client
             .read_rows(request)
             .await
-            .map_err(|e| Error::StorageError(format!("unable to read rows: {}", e)))?;
+            .map_err(|e| Error::Retrieve(Box::new(e), "unable to read rows"))?;
 
         if response.len() != 1 {
             if response.len() > 1 {
                 // This shouldn't happen, we limit number of rows to 1
-                return Err(Error::StorageError(
-                    "got more than one row from bigtable".into(),
+                return Err(Error::Retrieve(
+                    Box::new(BigtableError::MoreThanOneRow(path_info_key.into())),
+                    "",
                 ));
             }
             // else, this is simply a "not found".
@@ -257,39 +257,51 @@ impl PathInfoService for BigtablePathInfoService {
         let (row_key, mut cells) = response.pop().unwrap();
         if row_key != path_info_key.as_bytes() {
             // This shouldn't happen, we requested this row key.
-            return Err(Error::StorageError(
-                "got wrong row key from bigtable".into(),
+            return Err(Error::Retrieve(
+                Box::new(BigtableError::UnexpectedRowKey(row_key, path_info_key)),
+                "",
             ));
         }
 
         let cell = cells
             .pop()
-            .ok_or_else(|| Error::StorageError("found no cells".into()))?;
+            .ok_or_else(|| Error::Retrieve(Box::new(BigtableError::NoCells(row_key)), ""))?;
 
         // Ensure there's only one cell (so no more left after the pop())
         // This shouldn't happen, We filter out other cells in our query.
         if !cells.is_empty() {
-            return Err(Error::StorageError(
-                "more than one cell returned from bigtable".into(),
+            return Err(Error::Retrieve(
+                Box::new(BigtableError::MoreThanOneCell(row_key)),
+                "",
             ));
         }
 
         // We also require the qualifier to be correct in the filter above,
         // so this shouldn't happen.
         if path_info_key.as_bytes() != cell.qualifier {
-            return Err(Error::StorageError("unexpected cell qualifier".into()));
+            return Err(Error::Retrieve(
+                Box::new(BigtableError::UnexpectedCellQualifier(
+                    cell.qualifier,
+                    path_info_key.into(),
+                )),
+                "",
+            ));
         }
 
         // Try to parse the value into a PathInfo message
-        let path_info = proto::PathInfo::decode(Bytes::from(cell.value))
-            .map_err(|e| Error::StorageError(format!("unable to decode pathinfo proto: {}", e)))?;
+        let path_info = PathInfo::decode(Bytes::from(cell.value))
+            .map_err(|e| Error::Retrieve(Box::new(e), "failed to decode pathinfo proto"))?;
 
-        let store_path = path_info
-            .validate()
-            .map_err(|e| Error::StorageError(format!("invalid PathInfo: {}", e)))?;
+        let store_path = path_info.validate()?;
 
         if store_path.digest() != &digest {
-            return Err(Error::StorageError("PathInfo has unexpected digest".into()));
+            return Err(Error::Retrieve(
+                Box::new(BigtableError::PathInfoUnexpectedDigest(
+                    digest.to_vec(),
+                    *store_path.digest(),
+                )),
+                "",
+            ));
         }
 
         Ok(Some(path_info))
@@ -297,17 +309,16 @@ impl PathInfoService for BigtablePathInfoService {
 
     #[instrument(level = "trace", skip_all, fields(path_info.root_node = ?path_info.node))]
     async fn put(&self, path_info: PathInfo) -> Result<PathInfo, Error> {
-        let store_path = path_info
-            .validate()
-            .map_err(|e| Error::InvalidRequest(format!("pathinfo failed validation: {}", e)))?;
+        let store_path = path_info.validate()?;
 
         let mut client = self.client.clone();
         let path_info_key = derive_pathinfo_key(store_path.digest());
 
         let data = path_info.encode_to_vec();
         if data.len() as u64 > CELL_SIZE_LIMIT {
-            return Err(Error::StorageError(
-                "PathInfo exceeds cell limit on Bigtable".into(),
+            return Err(Error::Insert(
+                Box::new(BigtableError::PathInfoTooBig(data.len())),
+                "",
             ));
         }
 
@@ -339,7 +350,7 @@ impl PathInfoService for BigtablePathInfoService {
                 ],
             })
             .await
-            .map_err(|e| Error::StorageError(format!("unable to mutate rows: {}", e)))?;
+            .map_err(|e| Error::Insert(Box::new(e), "unable to mutate rows"))?;
 
         if resp.predicate_matched {
             trace!("already existed")
@@ -367,39 +378,43 @@ impl PathInfoService for BigtablePathInfoService {
             let response = client
                 .read_rows(request)
                 .await
-                .map_err(|e| Error::StorageError(format!("unable to read rows: {}", e)))?;
+                .map_err(|e| Error::Retrieve(Box::new(e), "unable to read rows"))?;
 
             for (row_key, mut cells) in response {
                 let cell = cells
                     .pop()
-                    .ok_or_else(|| Error::StorageError("found no cells".into()))?;
+                    .ok_or_else(|| Error::Retrieve(Box::new(BigtableError::NoCells(row_key)), ""))?;
 
                 // The cell must have the same qualifier as the row key
                 if row_key != cell.qualifier {
-                    Err(Error::StorageError("unexpected cell qualifier".into()))?;
+                    Err(Error::Retrieve(
+                        Box::new(BigtableError::UnexpectedCellQualifier(row_key, cell.qualifier)), ""
+                    ))?;
                 }
 
                 // Ensure there's only one cell (so no more left after the pop())
                 // This shouldn't happen, We filter out other cells in our query.
                 if !cells.is_empty() {
-
-                    Err(Error::StorageError(
-                        "more than one cell returned from bigtable".into(),
-                    ))?
+                    Err(Error::Retrieve(
+                        Box::new(BigtableError::MoreThanOneCell(row_key)),
+                        "",
+                    ))?;
                 }
 
                 // Try to parse the value into a PathInfo message.
-                let path_info = proto::PathInfo::decode(Bytes::from(cell.value))
-                    .map_err(|e| Error::StorageError(format!("unable to decode pathinfo proto: {}", e)))?;
+                let path_info = PathInfo::decode(Bytes::from(cell.value))
+                    .map_err(|e| Error::Retrieve(Box::new(e), "failed to decode pathinfo proto"))?;
 
                 // Validate the containing PathInfo, ensure its StorePath digest
                 // matches row key.
                 let store_path = path_info
-                    .validate()
-                    .map_err(|e| Error::StorageError(format!("invalid PathInfo: {}", e)))?;
+                    .validate()?;
 
                 if store_path.digest().as_slice() != row_key.as_slice() {
-                    Err(Error::StorageError("PathInfo has unexpected digest".into()))?
+                    Err(Error::Retrieve(
+                        Box::new(BigtableError::PathInfoUnexpectedDigest(row_key, *store_path.digest())),
+                        "",
+                    ))?;
                 }
 
 
@@ -409,4 +424,28 @@ impl PathInfoService for BigtablePathInfoService {
 
         Box::pin(stream)
     }
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum BigtableError {
+    #[error("more than one row found for pathinfo key {}", BStr::new(.0.as_slice()))]
+    MoreThanOneRow(Vec<u8>),
+
+    #[error("unexpected row key {} returned for pathinfo key {1}", BStr::new(.0.as_slice()))]
+    UnexpectedRowKey(Vec<u8>, String),
+
+    #[error("found no cells for row key {}", BStr::new(.0.as_slice()))]
+    NoCells(Vec<u8>),
+
+    #[error("more than one cell found for row key {}", BStr::new(.0.as_slice()))]
+    MoreThanOneCell(Vec<u8>),
+
+    #[error("unexpected cell qualifier {} for row key {}", BStr::new(.0.as_slice()), BStr::new(.1.as_slice()))]
+    UnexpectedCellQualifier(Vec<u8>, Vec<u8>),
+
+    #[error("unexpected digest, row key {}, proto {}", nixbase32::encode(.0), nixbase32::encode(.1))]
+    PathInfoUnexpectedDigest(Vec<u8>, [u8; 20]),
+
+    #[error("PathInfo size ({0}) exceeds cell limit")]
+    PathInfoTooBig(usize),
 }

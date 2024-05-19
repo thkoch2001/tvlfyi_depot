@@ -1,11 +1,10 @@
+use super::Error;
+use super::PathInfoService;
 use crate::proto::PathInfo;
 use futures::stream::BoxStream;
 use nix_compat::nixbase32;
 use tonic::async_trait;
 use tracing::{debug, instrument};
-use tvix_castore::Error;
-
-use super::PathInfoService;
 
 /// Asks near first, if not found, asks far.
 /// If found in there, returns it, and *inserts* it into
@@ -51,12 +50,16 @@ where
     }
 
     async fn put(&self, _path_info: PathInfo) -> Result<PathInfo, Error> {
-        Err(Error::StorageError("unimplemented".to_string()))
+        Err(Error::Insert(
+            Box::new(std::io::Error::other("unimplemented")),
+            "",
+        ))
     }
 
     fn list(&self) -> BoxStream<'static, Result<PathInfo, Error>> {
-        Box::pin(tokio_stream::once(Err(Error::StorageError(
-            "unimplemented".to_string(),
+        Box::pin(tokio_stream::once(Err(Error::Insert(
+            Box::new(std::io::Error::other("unimplemented")),
+            "",
         ))))
     }
 }

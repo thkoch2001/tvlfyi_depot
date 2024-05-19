@@ -3,9 +3,9 @@ use futures::StreamExt;
 use tonic::async_trait;
 use tvix_castore::fs::{RootNodes, TvixStoreFs};
 use tvix_castore::proto as castorepb;
-use tvix_castore::Error;
 use tvix_castore::{blobservice::BlobService, directoryservice::DirectoryService};
 
+use super::Error;
 use super::PathInfoService;
 
 /// Helper to construct a [TvixStoreFs] from a [BlobService], [DirectoryService]

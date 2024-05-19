@@ -13,11 +13,9 @@ mod fs;
 #[cfg(test)]
 mod tests;
 
+use crate::proto::PathInfo;
 use futures::stream::BoxStream;
 use tonic::async_trait;
-use tvix_castore::Error;
-
-use crate::proto::PathInfo;
 
 pub use self::combinators::Cache as CachePathInfoService;
 pub use self::from_addr::from_addr;
@@ -72,4 +70,17 @@ where
     fn list(&self) -> BoxStream<'static, Result<PathInfo, Error>> {
         self.as_ref().list()
     }
+}
+
+#[derive(Debug, thiserror::Error)]
+pub enum Error {
+    #[error("failed to retrieve pathinfo: {0}: {1}")]
+    Retrieve(#[source] Box<dyn std::error::Error + Send>, &'static str),
+
+    #[error("failed to insert PathInfo: {0}: {1}")]
+    Insert(#[source] Box<dyn std::error::Error + Send>, &'static str),
+
+    /// Error during validation of PathInfo message.
+    #[error("failed to validate PathInfo: {0}")]
+    Validate(#[from] crate::proto::ValidatePathInfoError),
 }
