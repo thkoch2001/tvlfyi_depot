@@ -8,8 +8,8 @@ use tokio::sync::RwLock;
 use tonic::async_trait;
 use tracing::instrument;
 
+use crate::pathinfoservice::Error;
 use crate::proto::PathInfo;
-use tvix_castore::Error;
 
 use super::PathInfoService;
 
@@ -35,9 +35,7 @@ impl PathInfoService for LruPathInfoService {
     #[instrument(level = "trace", skip_all, fields(path_info.root_node = ?path_info.node))]
     async fn put(&self, path_info: PathInfo) -> Result<PathInfo, Error> {
         // call validate
-        let store_path = path_info
-            .validate()
-            .map_err(|e| Error::InvalidRequest(format!("invalid PathInfo: {}", e)))?;
+        let store_path = path_info.validate()?;
 
         self.lru
             .write()

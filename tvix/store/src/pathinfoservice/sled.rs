@@ -45,10 +45,7 @@ impl PathInfoService for SledPathInfoService {
             move || db.get(digest.as_slice())
         })
         .await?
-        .map_err(|e| {
-            warn!("failed to retrieve PathInfo: {}", e);
-            Error::StorageError(format!("failed to retrieve PathInfo: {}", e))
-        })?;
+        .map_err(Error::Retrieve)?;
         match resp {
             None => Ok(None),
             Some(data) => {
@@ -64,9 +61,7 @@ impl PathInfoService for SledPathInfoService {
     #[instrument(level = "trace", skip_all, fields(path_info.root_node = ?path_info.node))]
     async fn put(&self, path_info: PathInfo) -> Result<PathInfo, Error> {
         // Call validate on the received PathInfo message.
-        let store_path = path_info
-            .validate()
-            .map_err(|e| Error::InvalidRequest(format!("failed to validate PathInfo: {}", e)))?;
+        let store_path = path_info.validate().map_err(Error::Validate)?;
 
         // In case the PathInfo is valid, we were able to parse a StorePath.
         // Store it in the database, keyed by its digest.
@@ -78,12 +73,7 @@ impl PathInfoService for SledPathInfoService {
             move || db.insert(k, data)
         })
         .await?
-        .map_err(|e| {
-            warn!("failed to insert PathInfo: {}", e);
-            Error::StorageError(format! {
-                "failed to insert PathInfo: {}", e
-            })
-        })?;
+        .map_err(Error::Insert)?;
 
         Ok(path_info)
     }
