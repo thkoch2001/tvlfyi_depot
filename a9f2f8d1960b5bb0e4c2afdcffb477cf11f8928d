@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "183c1d5b_6010e3d0",
+        "filename": "tvix/eval/src/tests/nix_tests/eval-okay-toxml-empty.exp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-20T15:32:15Z",
+      "side": 1,
+      "message": "… and suffix this file with `.xml`",
+      "revId": "a9f2f8d1960b5bb0e4c2afdcffb477cf11f8928d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50fd30bd_8bb23093",
+        "filename": "tvix/eval/src/tests/nix_tests/eval-okay-toxml-empty.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-20T15:32:15Z",
+      "side": 1,
+      "message": "Just { }",
+      "revId": "a9f2f8d1960b5bb0e4c2afdcffb477cf11f8928d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

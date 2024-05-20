@@ -52,6 +52,24 @@
       "parentUuid": "193860f0_78f99217",
       "revId": "d4ea12ba64220480e6731cf0963e5e05dfd0bd65",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ffd05ad_e425e551",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-20T15:32:15Z",
+      "side": 1,
+      "message": "You don\u0027t need to toXML directly, if there\u0027s a `.xml` file we can directly compare the XML representations - see the other two comments.",
+      "parentUuid": "16e5f1fd_75f2eb8f",
+      "revId": "d4ea12ba64220480e6731cf0963e5e05dfd0bd65",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
