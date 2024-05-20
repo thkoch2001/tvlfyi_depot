@@ -16,6 +16,24 @@
       "message": "This could almost a `BlobService` wrapper that implements `BlobService`. I think the main thing missing would be a join/close method.",
       "revId": "6874580d81e1d13cfcdf546fb25c5d7e5c247ced",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fbc0fec7_112334fb",
+        "filename": "tvix/castore/src/import/blobs.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-20T15:06:55Z",
+      "side": 1,
+      "message": "Let\u0027s keep this separate for now.",
+      "parentUuid": "4670cf12_aba180e3",
+      "revId": "6874580d81e1d13cfcdf546fb25c5d7e5c247ced",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
