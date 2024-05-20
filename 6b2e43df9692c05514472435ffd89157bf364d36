@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c9f3cb8a_5616cdab",
+        "filename": "tvix/store/src/pathinfoservice/tests/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-20T14:56:37Z",
+      "side": 1,
+      "message": "probably re-export to make this uniform.",
+      "revId": "6b2e43df9692c05514472435ffd89157bf364d36",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
