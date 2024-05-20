@@ -105,13 +105,15 @@ async fn filtered_ingest(
 #[builtins(state = "Rc<TvixStoreIO>")]
 mod import_builtins {
     use std::rc::Rc;
+    use std::str::FromStr;
 
     use super::*;
 
     use nix_compat::nixhash::{CAHash, NixHash};
+    use nix_compat::store_path::{self, StorePath};
     use tvix_eval::generators::Gen;
     use tvix_eval::{generators::GenCo, ErrorKind, Value};
-    use tvix_eval::{NixContextElement, NixString};
+    use tvix_eval::{NixContext, NixContextElement, NixString};
 
     use tvix_castore::B3Digest;
 
@@ -279,6 +281,24 @@ mod import_builtins {
             NixString::new_context_from(NixContextElement::Plain(outpath.clone()).into(), outpath)
                 .into(),
         )
+    }
+
+    #[builtin("storePath")]
+    async fn builtin_store_path(
+        state: Rc<TvixStoreIO>,
+        co: GenCo,
+        path: Value,
+    ) -> Result<Value, ErrorKind> {
+        let p = path.to_path()?;
+        if !state.path_exists(&p)? {
+            return Err(ImportError::PathNotFound(*p).into());
+        }
+
+        let s = p.to_str().ok_or(ErrorKind::Utf8)?;
+        Ok(Value::String(NixString::new_context_from(
+            [NixContextElement::Plain(s.into())].into(),
+            s,
+        )))
     }
 }
 
