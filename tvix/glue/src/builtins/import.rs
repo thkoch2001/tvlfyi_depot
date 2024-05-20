@@ -104,6 +104,8 @@ async fn filtered_ingest(
 
 #[builtins(state = "Rc<TvixStoreIO>")]
 mod import_builtins {
+    use std::ffi::OsStr;
+    use std::os::unix::ffi::OsStrExt;
     use std::rc::Rc;
 
     use super::*;
@@ -279,6 +281,33 @@ mod import_builtins {
             NixString::new_context_from(NixContextElement::Plain(outpath.clone()).into(), outpath)
                 .into(),
         )
+    }
+
+    #[builtin("storePath")]
+    async fn builtin_store_path(
+        state: Rc<TvixStoreIO>,
+        co: GenCo,
+        path: Value,
+    ) -> Result<Value, ErrorKind> {
+        let p = match &path {
+            Value::String(s) => Path::new(OsStr::from_bytes(s.as_bytes())),
+            Value::Path(p) => p.as_path(),
+            _ => {
+                return Err(ErrorKind::TypeError {
+                    expected: "string or path",
+                    actual: path.type_of(),
+                })
+            }
+        };
+        if !state.path_exists(&p)? {
+            return Err(ImportError::PathNotFound(p.to_owned()).into());
+        }
+
+        let s = p.to_str().ok_or(ErrorKind::Utf8)?;
+        Ok(Value::String(NixString::new_context_from(
+            [NixContextElement::Plain(s.into())].into(),
+            s,
+        )))
     }
 }
 
