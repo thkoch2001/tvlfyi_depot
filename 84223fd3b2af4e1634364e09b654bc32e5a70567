@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f24a92fe_5551a9b9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-20T08:12:44Z",
+      "side": 1,
+      "message": "Missing dot at the end.\n\nAlso, not correct yet:\n\n1) This may only work for store paths:\n\n```\nnix-repl\u003e builtins.storePath /dev/null  \nerror:\n       … while calling the \u0027storePath\u0027 builtin\n\n         at «string»:1:1:\n\n            1| builtins.storePath /dev/null\n             | ^\n\n       error: path \u0027/dev/null\u0027 is not in the Nix store\n\n       at «none»:0: (source not available)\n```\n\nvs\n\n```\ntvix-repl\u003e builtins.storePath /dev/null\n\u003d\u003e \"/dev/null\" :: string\ntvix-repl\u003e builtins.getContext (builtins.storePath /dev/null)\n\u003d\u003e { \"/dev/null\" \u003d { path \u003d true; }; } :: set\n```\n\n\n---\n\n2) Nix takes a string or Path as argument, while tvix errors out if you give it a string:\n```\nnix-repl\u003e builtins.storePath \"/nix/store/pa10z4ngm0g83kx9mssrqzz30s84vq7k-hello-2.12.1.tar.gz\"\n\"/nix/store/pa10z4ngm0g83kx9mssrqzz30s84vq7k-hello-2.12.1.tar.gz\"\n```\n\nvs.\n\n```\ntvix-repl\u003e builtins.storePath \"/nix/store/pa10z4ngm0g83kx9mssrqzz30s84vq7k-hello-2.12.1.tar.gz\"\nnote: while evaluating this Nix code\n --\u003e [code]:1:1\n  |\n1 | builtins.storePath \"/nix/store/pa10z4ngm0g83kx9mssrqzz30s84vq7k-hello-2.12.1.tar.gz\"\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nerror[E006]: expected value of type \u0027path\u0027, but found a \u0027string\u0027\n --\u003e [code]:1:1\n  |\n1 | builtins.storePath \"/nix/store/pa10z4ngm0g83kx9mssrqzz30s84vq7k-hello-2.12.1.tar.gz\"\n  | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n```",
+      "revId": "84223fd3b2af4e1634364e09b654bc32e5a70567",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14237945_9986ea0a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-20T08:12:44Z",
+      "side": 1,
+      "message": "We can coerce a file of known contents into the store, discard the context, and then run some tests on that string. Or literally write out the path after it has been coerced - the calculation is the same across all architectures. \n\nThis should allow writing some test cases, and until we have a better fixture / classification system we can use `/dev/null` like `glue/src/tests/tvix_tests/eval-okay-fetchurl.nix` does.",
+      "revId": "84223fd3b2af4e1634364e09b654bc32e5a70567",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf150e19_bc25b42d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-20T08:12:44Z",
+      "side": 1,
+      "message": "\"g\"",
+      "revId": "84223fd3b2af4e1634364e09b654bc32e5a70567",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
