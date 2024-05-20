@@ -16,6 +16,24 @@
       "message": "Nice! Can you add a test case for the example from https://b.tvl.fyi/issues/399 into `eval/src/tests/tvix_tests/` ?\n\nWe probably only need a `eval-okay-xml-2.nix` containing an empty attrset, and a `eval-okay-xml-2.exp.xml` with the output from the bug.",
       "revId": "d4ea12ba64220480e6731cf0963e5e05dfd0bd65",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "193860f0_78f99217",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-20T14:14:32Z",
+      "side": 1,
+      "message": "unresolved",
+      "parentUuid": "ae634396_cd964c27",
+      "revId": "d4ea12ba64220480e6731cf0963e5e05dfd0bd65",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
