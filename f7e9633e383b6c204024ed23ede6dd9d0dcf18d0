@@ -16,6 +16,24 @@
       "message": "commit message should match reality, otherwise fine!",
       "revId": "f7e9633e383b6c204024ed23ede6dd9d0dcf18d0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd30eae5_bd947618",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-20T06:52:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c190719_321926d3",
+      "revId": "f7e9633e383b6c204024ed23ede6dd9d0dcf18d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
