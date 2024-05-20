@@ -3,14 +3,15 @@
 //! things in nixpkgs rely on.
 
 use bstr::ByteSlice;
-use std::borrow::Cow;
+use std::borrow::{Borrow, Cow};
+use std::collections::VecDeque;
 use std::{io::Write, rc::Rc};
 
 use crate::{ErrorKind, Value};
 
 /// Recursively serialise a value to XML. The value *must* have been
 /// deep-forced before being passed to this function.
-pub fn value_to_xml<W: Write>(mut writer: W, value: &Value) -> Result<(), ErrorKind> {
+pub fn value_to_xml<W: Write>(mut writer: W, value: Rc<Value>) -> Result<(), ErrorKind> {
     // Write a literal document declaration, using C++-Nix-style
     // single quotes.
     writeln!(writer, "<?xml version='1.0' encoding='utf-8'?>")?;
@@ -18,118 +19,186 @@ pub fn value_to_xml<W: Write>(mut writer: W, value: &Value) -> Result<(), ErrorK
     let mut emitter = XmlEmitter::new(writer);
 
     emitter.write_open_tag("expr", &[])?;
-    value_variant_to_xml(&mut emitter, value)?;
+    match value_variant_to_xml::<W>(value) {
+        ToEmit::One(emit) => (emit.0)(&mut emitter)?,
+
+        ToEmit::More(more) => {
+            let mut vals: Vec<Rc<Value>> = Vec::new();
+            let mut fmt_queue: VecDeque<EmitValue<W>> = VecDeque::from(more);
+            loop {
+                match fmt_queue.pop_front() {
+                    None => break,
+                    Some(EmitValue::Emit(emit)) => (emit.0)(&mut emitter)?,
+                    Some(EmitValue::FormatValue(value)) => {
+                        vals.push(value.clone());
+                        match value_variant_to_xml(value) {
+                            ToEmit::One(emit) => (emit.0)(&mut emitter)?,
+                            ToEmit::More(more) => {
+                                for el in more.into_iter().rev() {
+                                    fmt_queue.push_front(el);
+                                }
+                            }
+                        };
+                    }
+                }
+            }
+        }
+    }
+
     emitter.write_closing_tag("expr")?;
 
     Ok(())
 }
 
-fn write_typed_value<W: Write, V: ToString>(
-    w: &mut XmlEmitter<W>,
-    name_unescaped: &str,
-    value: V,
-) -> Result<(), ErrorKind> {
-    w.write_self_closing_tag(name_unescaped, &[("value", &value.to_string())])?;
-    Ok(())
+fn write_typed_value<'a, W: Write>(name_unescaped: &'a str, value: String) -> Emit<'a, W> {
+    Emit(Box::new(move |w| {
+        w.write_self_closing_tag(name_unescaped, &[("value", &value)])?;
+        Ok(())
+    }))
 }
 
-fn value_variant_to_xml<W: Write>(w: &mut XmlEmitter<W>, value: &Value) -> Result<(), ErrorKind> {
-    match value {
-        Value::Thunk(t) => return value_variant_to_xml(w, &t.value()),
+enum EmitValue<'a, W> {
+    FormatValue(Rc<Value>),
+    Emit(Emit<'a, W>),
+}
 
-        Value::Null => {
+struct Emit<'a, W>(Box<dyn FnOnce(&mut XmlEmitter<W>) -> Result<(), ErrorKind> + 'a>);
+
+enum ToEmit<'a, W> {
+    One(Emit<'a, W>),
+    More(Vec<EmitValue<'a, W>>),
+}
+
+fn value_variant_to_xml<'a, W: Write>(value: Rc<Value>) -> ToEmit<'a, W> {
+    match value.borrow() {
+        Value::Thunk(t) => ToEmit::More(vec![EmitValue::FormatValue(Rc::new(
+            t.clone().unwrap_or_clone(),
+        ))]),
+
+        Value::Null => ToEmit::One(Emit(Box::new(|w: &mut XmlEmitter<W>| {
             w.write_open_tag("null", &[])?;
             w.write_closing_tag("null")?;
+            Ok(())
+        }))),
+
+        Value::Bool(b) => ToEmit::One(write_typed_value("bool", b.to_string())),
+        Value::Integer(i) => ToEmit::One(write_typed_value("int", i.to_string())),
+        Value::Float(f) => ToEmit::One(write_typed_value("float", f.to_string())),
+        Value::String(s) => ToEmit::One(write_typed_value("string", s.as_bstr().to_string())),
+        Value::Path(p) => {
+            let s = p.to_string_lossy().into_owned();
+            ToEmit::One(Emit(Box::new(|w| (write_typed_value("path", s).0)(w))))
         }
 
-        Value::Bool(b) => return write_typed_value(w, "bool", b),
-        Value::Integer(i) => return write_typed_value(w, "int", i),
-        Value::Float(f) => return write_typed_value(w, "float", f),
-        Value::String(s) => return write_typed_value(w, "string", s.to_str()?),
-        Value::Path(p) => return write_typed_value(w, "path", p.to_string_lossy()),
-
         Value::List(list) => {
-            w.write_open_tag("list", &[])?;
-
-            for elem in list.into_iter() {
-                value_variant_to_xml(w, elem)?;
-            }
-
-            w.write_closing_tag("list")?;
+            let mut v = Vec::new();
+            v.push(EmitValue::Emit(Emit(Box::new(|w| {
+                w.write_open_tag("list", &[])?;
+                Ok(())
+            }))));
+            v.extend(
+                list.into_iter()
+                    .map(|v| EmitValue::FormatValue(Rc::new(v.clone())))
+                    .collect::<Vec<_>>(),
+            );
+            v.push(EmitValue::Emit(Emit(Box::new(|w| {
+                w.write_closing_tag("list")?;
+                Ok(())
+            }))));
+            ToEmit::More(v)
         }
 
         Value::Attrs(attrs) => {
-            w.write_open_tag("attrs", &[])?;
+            let mut v = Vec::new();
+            v.push(EmitValue::Emit(Emit(Box::new(|w| {
+                w.write_open_tag("attrs", &[])?;
+                Ok(())
+            }))));
 
-            for elem in attrs.iter() {
-                w.write_open_tag("attr", &[("name", &elem.0.to_str_lossy())])?;
-                value_variant_to_xml(w, elem.1)?;
-                w.write_closing_tag("attr")?;
-            }
+            v.extend(attrs.iter().flat_map(|elem| {
+                let name = elem.0.to_str_lossy().into_owned();
+                let val = elem.1.clone();
+                vec![
+                    EmitValue::Emit(Emit(Box::new(move |w| {
+                        w.write_open_tag("attr", &[("name", &name)])?;
+                        Ok(())
+                    }))),
+                    EmitValue::FormatValue(Rc::new(val)),
+                    EmitValue::Emit(Emit(Box::new(move |w| {
+                        w.write_closing_tag("attr")?;
+                        Ok(())
+                    }))),
+                ]
+            }));
 
-            w.write_closing_tag("attrs")?;
-        }
+            v.push(EmitValue::Emit(Emit(Box::new(|w| {
+                w.write_closing_tag("attrs")?;
+                Ok(())
+            }))));
 
-        Value::Closure(c) => {
-            w.write_open_tag("function", &[])?;
+            ToEmit::More(v)
+        },
+        Value::Closure(c) =>{
+            let formals = c.lambda.formals.clone();
+            ToEmit::One(Emit(Box::new(move |w| {
+                w.write_open_tag("function", &[])?;
 
-            match &c.lambda.formals {
-                Some(formals) => {
-                    let mut attrs: Vec<(&str, &str)> = Vec::with_capacity(2);
-                    if formals.ellipsis {
-                        attrs.push(("ellipsis", "1"));
+                match formals {
+                    Some(formals) => {
+                        let mut attrs: Vec<(&str, &str)> = Vec::with_capacity(2);
+                        if formals.ellipsis {
+                            attrs.push(("ellipsis", "1"));
+                        }
+                        if let Some(ref name) = &formals.name {
+                            attrs.push(("name", name.as_str()));
+                        }
+
+                        w.write_open_tag("attrspat", &attrs)?;
+                        for arg in formals.arguments.iter() {
+                            w.write_self_closing_tag("attr", &[("name", &arg.0.to_str_lossy().into_owned())])?;
+                        }
+
+                        w.write_closing_tag("attrspat")?;
                     }
-                    if let Some(ref name) = &formals.name {
-                        attrs.push(("name", name.as_str()));
+                    None => {
+                        // TODO(tazjin): tvix does not currently persist function
+                        // argument names anywhere (whereas we do for formals, as
+                        // that is required for other runtime behaviour). Because of
+                        // this the implementation here is fake, always returning
+                        // the same argument name.
+                        //
+                        // If we don't want to persist the data, we can re-parse the
+                        // AST from the spans of the lambda's bytecode and figure it
+                        // out that way, but it needs some investigating.
+                        w.write_self_closing_tag("varpat", &[("name", /* fake: */ "x")])?;
                     }
-
-                    w.write_open_tag("attrspat", &attrs)?;
-                    for arg in formals.arguments.iter() {
-                        w.write_self_closing_tag("attr", &[("name", &arg.0.to_str_lossy())])?;
-                    }
-
-                    w.write_closing_tag("attrspat")?;
                 }
-                None => {
-                    // TODO(tazjin): tvix does not currently persist function
-                    // argument names anywhere (whereas we do for formals, as
-                    // that is required for other runtime behaviour). Because of
-                    // this the implementation here is fake, always returning
-                    // the same argument name.
-                    //
-                    // If we don't want to persist the data, we can re-parse the
-                    // AST from the spans of the lambda's bytecode and figure it
-                    // out that way, but it needs some investigating.
-                    w.write_self_closing_tag("varpat", &[("name", /* fake: */ "x")])?;
-                }
-            }
 
-            w.write_closing_tag("function")?;
-        }
-
-        Value::Builtin(_) => {
+                w.write_closing_tag("function")?;
+                Ok(())
+            })))},
+        Value::Builtin(_) => ToEmit::One(Emit(Box::new(|w| {
             w.write_open_tag("unevaluated", &[])?;
             w.write_closing_tag("unevaluated")?;
-        }
+            Ok(())
+        }))),
 
         Value::AttrNotFound
         | Value::Blueprint(_)
         | Value::DeferredUpvalue(_)
         | Value::UnresolvedPath(_)
         | Value::Json(..)
-        | Value::FinaliseRequest(_) => {
-            return Err(ErrorKind::TvixBug {
+        | Value::FinaliseRequest(_) => ToEmit::One(Emit(Box::new(move |_| {
+            Err(ErrorKind::TvixBug {
                 msg: "internal value variant encountered in builtins.toXML",
-                metadata: Some(Rc::new(value.clone())),
+                metadata: Some(value.clone()),
             })
-        }
+        }))),
 
         Value::Catchable(_) => {
             panic!("tvix bug: value_to_xml() called on a value which had not been deep-forced")
         }
-    };
-
-    Ok(())
+    }
 }
 
 /// A simple-stupid XML emitter, which implements only the subset needed for byte-by-byte compat with C++ nix’ `builtins.toXML`.

@@ -12,6 +12,7 @@ use std::cmp::{self, Ordering};
 use std::collections::VecDeque;
 use std::collections::{BTreeMap, HashSet};
 use std::path::PathBuf;
+use std::rc::Rc;
 
 use crate::arithmetic_op;
 use crate::value::PointerEquality;
@@ -1504,7 +1505,7 @@ mod pure_builtins {
         }
 
         let mut buf: Vec<u8> = vec![];
-        to_xml::value_to_xml(&mut buf, &value)?;
+        to_xml::value_to_xml(&mut buf, Rc::new(value))?;
         Ok(String::from_utf8(buf)?.into())
     }
 

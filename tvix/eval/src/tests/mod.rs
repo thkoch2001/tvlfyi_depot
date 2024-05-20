@@ -3,6 +3,7 @@ use builtin_macros::builtins;
 use pretty_assertions::assert_eq;
 use rstest::rstest;
 use std::path::PathBuf;
+use std::rc::Rc;
 
 /// Module for one-off tests which do not follow the rest of the
 /// test layout.
@@ -111,7 +112,7 @@ fn eval_test(code_path: PathBuf, expect_success: bool) {
         let exp_xml_str = std::fs::read_to_string(exp_xml_path).expect("unable to read .xml file");
 
         let mut xml_actual_buf = Vec::new();
-        crate::builtins::value_to_xml(&mut xml_actual_buf, &value).expect("value_to_xml failed");
+        crate::builtins::value_to_xml(&mut xml_actual_buf, Rc::new(value)).expect("value_to_xml failed");
 
         assert_eq!(
             String::from_utf8(xml_actual_buf).expect("to_xml produced invalid utf-8"),
