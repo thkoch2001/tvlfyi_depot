@@ -50,6 +50,23 @@
       "message": "\"g\"",
       "revId": "84223fd3b2af4e1634364e09b654bc32e5a70567",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6030d5e_396a4f44",
+        "filename": "tvix/glue/src/builtins/errors.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-20T08:17:02Z",
+      "side": 1,
+      "message": "```suggestion\n    #[error(\"path \u0027{0}\u0027 does not exist and cannot be created\")]\n```\n\n`{0}` does use Display on the struct element, see https://docs.rs/thiserror/latest/thiserror/#details.",
+      "revId": "84223fd3b2af4e1634364e09b654bc32e5a70567",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
