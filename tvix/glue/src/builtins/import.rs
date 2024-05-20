@@ -280,6 +280,24 @@ mod import_builtins {
                 .into(),
         )
     }
+
+    #[builtin("storePath")]
+    async fn builtin_store_path(
+        state: Rc<TvixStoreIO>,
+        co: GenCo,
+        path: Value,
+    ) -> Result<Value, ErrorKind> {
+        let p = path.to_path()?;
+        if !state.path_exists(&p)? {
+            return Err(ImportError::PathNotFound(*p).into());
+        }
+
+        let s = p.to_str().ok_or(ErrorKind::Utf8)?;
+        Ok(Value::String(NixString::new_context_from(
+            [NixContextElement::Plain(s.into())].into(),
+            s,
+        )))
+    }
 }
 
 pub use import_builtins::builtins as import_builtins;
