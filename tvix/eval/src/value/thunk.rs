@@ -350,7 +350,7 @@ impl Thunk {
     /// the Rc has more than one strong reference.  It is an error
     /// to call this on a thunk that has not been forced, or is not
     /// otherwise known to be fully evaluated.
-    fn unwrap_or_clone(self) -> Value {
+    pub fn unwrap_or_clone(self) -> Value {
         match Rc::try_unwrap(self.0) {
             Ok(refcell) => refcell.into_inner().expect(),
             Err(rc) => Ref::map(rc.borrow(), |thunkrepr| thunkrepr.expect_ref()).clone(),
