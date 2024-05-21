@@ -16,6 +16,24 @@
       "message": "what does this comment mean?",
       "revId": "6a38247e96c979b5891a24b3b8eb74b3781843f7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64754cda_59717ba1",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-toxml.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-21T17:29:20Z",
+      "side": 1,
+      "message": "Ah, the comment is just copied from `tvix/eval/src/tests/nix_tests/eval-okay-toxml.nix`, so it can be removed here. Or replaced with an explaination we actually test some escaping cases.",
+      "parentUuid": "eb3e9b5d_4b71173d",
+      "revId": "6a38247e96c979b5891a24b3b8eb74b3781843f7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
