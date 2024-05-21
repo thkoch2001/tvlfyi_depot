@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ade52a82_550788c3",
+        "filename": "tvix/eval/src/tests/nix_tests/eval-okay-toxml-empty.exp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2024-05-21T10:19:53Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "183c1d5b_6010e3d0",
+      "revId": "a9f2f8d1960b5bb0e4c2afdcffb477cf11f8928d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50fd30bd_8bb23093",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-05-20T15:32:15Z",
       "side": 1,
       "message": "Just { }",
+      "revId": "a9f2f8d1960b5bb0e4c2afdcffb477cf11f8928d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0858b56f_ba873b07",
+        "filename": "tvix/eval/src/tests/nix_tests/eval-okay-toxml-empty.nix",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000013
+      },
+      "writtenOn": "2024-05-21T10:19:53Z",
+      "side": 1,
+      "message": "\u003e Just { }\n\nI feel like it’s a bit confusing that the toXML is added implicitly, but I’ll concur.",
+      "parentUuid": "50fd30bd_8bb23093",
       "revId": "a9f2f8d1960b5bb0e4c2afdcffb477cf11f8928d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
