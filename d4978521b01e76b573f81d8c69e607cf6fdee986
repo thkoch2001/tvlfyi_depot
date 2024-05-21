@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5104d33_d994cde7",
+        "filename": "tvix/eval/src/tests/nix_tests/eval-okay-toxml.exp",
+        "patchSetId": 4
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-21T13:09:10Z",
+      "side": 0,
+      "message": "This is `nix_tests`, which is coming from the nix test suite. please add your own additional test to tvix_tests.",
+      "revId": "d4978521b01e76b573f81d8c69e607cf6fdee986",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
