@@ -34,6 +34,24 @@
       "parentUuid": "eb3e9b5d_4b71173d",
       "revId": "6a38247e96c979b5891a24b3b8eb74b3781843f7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "239dfb2e_7e4f96e8",
+        "filename": "tvix/eval/src/tests/tvix_tests/eval-okay-toxml.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-22T10:26:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "64754cda_59717ba1",
+      "revId": "6a38247e96c979b5891a24b3b8eb74b3781843f7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
