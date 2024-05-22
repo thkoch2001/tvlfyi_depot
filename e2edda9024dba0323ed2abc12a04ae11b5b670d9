@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18ff9e1c_94219522",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-22T10:26:37Z",
+      "side": 1,
+      "message": "Nah, this is not an improvement, neither readability nor performance.",
+      "revId": "e2edda9024dba0323ed2abc12a04ae11b5b670d9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
