@@ -197,7 +197,9 @@ impl DirectoryPutter for ObjectStoreDirectoryPutter {
         match self.directory_validator {
             None => return Err(Error::StorageError("already closed".to_string())),
             Some(ref mut validator) => {
-                validator.add(directory)?;
+                validator
+                    .add(directory)
+                    .map_err(|e| Error::StorageError(e.to_string()))?;
             }
         }
 
@@ -214,7 +216,10 @@ impl DirectoryPutter for ObjectStoreDirectoryPutter {
         // retrieve the validated directories.
         // It is important that they are in topological order (root first),
         // since that's how we want to retrieve them from the object store in the end.
-        let directories = validator.finalize_root_to_leaves()?;
+        validator
+            .validate()
+            .map_err(|e| Error::StorageError(e.to_string()))?;
+        let directories = validator.drain_root_to_leaves().collect::<Vec<_>>();
 
         // Get the root digest
         let root_digest = directories
