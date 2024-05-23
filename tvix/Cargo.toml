@@ -27,7 +27,7 @@ members = [
   "glue",
   "nar-bridge",
   "nix-compat",
-  "serde",
+  "serde", "shell",
   "store",
   "tracing",
 ]

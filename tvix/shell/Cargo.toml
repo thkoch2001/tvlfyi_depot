@@ -1,0 +1,20 @@
+[package]
+name = "tvix-shell"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+tvix-castore = { path = "../castore", features = ["fs", "fuse"] }
+tvix-store = { path = "../store", default-features = false, features = ["fuse"]}
+tvix-eval = { path = "../eval" }
+tvix-glue = { path = "../glue" }
+clap = { version = "4.0", features = ["derive", "env"] }
+tracing = "0.1.37"
+tracing-subscriber = { version = "0.3.18", features = ["env-filter"] }
+tokio = { version = "1.32.0", features = ["macros", "rt-multi-thread"] }
+nix = { version = "0.28", features = [ "sched", "signal", "user", "mount" ] }
+tempfile = "3.8.1"
+
+
+[lints]
+workspace = true
