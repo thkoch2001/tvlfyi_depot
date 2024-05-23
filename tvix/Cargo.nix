@@ -13062,6 +13062,10 @@ rec {
             packageId = "futures";
           }
           {
+            name = "itertools";
+            packageId = "itertools 0.12.0";
+          }
+          {
             name = "lazy_static";
             packageId = "lazy_static";
           }
