@@ -1,19 +1,28 @@
-use std::collections::{HashMap, HashSet};
+use std::collections::HashMap;
 
 use bstr::ByteSlice;
+use prost::Message;
 
 use petgraph::{
     graph::{DiGraph, NodeIndex},
-    visit::{Bfs, Walker},
+    visit::{Bfs, DfsPostOrder, EdgeRef, Walker},
+    Direction,
 };
 use tracing::instrument;
 
+use super::order_validator::{LeavesToRootValidator, OrderValidator};
 use crate::{
-    proto::{self, Directory},
-    B3Digest, Error,
+    proto::{self, Directory, DirectoryNode},
+    B3Digest,
 };
 
-type DirectoryGraph = DiGraph<Directory, ()>;
+#[derive(thiserror::Error, Debug)]
+pub enum Error {
+    #[error("{0}")]
+    ValidationError(String),
+    #[error("{0}")]
+    OrderError(#[from] super::order_validator::Error),
+}
 
 /// This can be used to validate a Directory closure (DAG of connected
 /// Directories), and their insertion order.
@@ -36,188 +45,220 @@ type DirectoryGraph = DiGraph<Directory, ()>;
 /// During finalize, a check for graph connectivity is performed too, to ensure
 /// there's no disconnected components, and only one root.
 #[derive(Default)]
-pub struct ClosureValidator {
-    // A directed graph, using Directory as node weight, without edge weights.
+pub struct ClosureValidator<O = LeavesToRootValidator> {
+    // A directed graph, using Directory as node weight.
     // Edges point from parents to children.
-    graph: DirectoryGraph,
+    //
+    // Nodes with None weigths might exist when a digest has been referred to but the directory
+    // with this digest has not yet been sent.
+    //
+    // The option in the edge weight tracks the pending validation state of the respective edge, for example if
+    // the child has not been added yet.
+    graph: DiGraph<Option<Directory>, Option<DirectoryNode>>,
 
     // A lookup table from directory digest to node index.
     digest_to_node_ix: HashMap<B3Digest, NodeIndex>,
 
-    /// Keeps track of the last-inserted directory graph node index.
-    /// On a correct insert, this will be the root node, from which the DFS post
-    /// order traversal will start from.
-    last_directory_ix: Option<NodeIndex>,
+    order_validator: O,
+}
+fn check_edge(dir: &DirectoryNode, child: &Directory) -> Result<(), Error> {
+    // Ensure the size specified in the child node matches our records.
+    if dir.size != child.size() {
+        return Err(Error::ValidationError(format!(
+            "'{}' has wrong size, specified {}, recorded {}",
+            dir.name.as_bstr(),
+            dir.size,
+            child.size(),
+        )));
+    }
+    Ok(())
 }
 
-impl ClosureValidator {
-    /// Insert a new Directory into the closure.
-    /// Perform individual Directory validation, validation of insertion order
-    /// and size fields.
+impl<O: OrderValidator> ClosureValidator<O> {
+    /// Parse a new Directory from its protobuf format and add it into the closure
+    #[instrument(level = "trace", skip_all, err)]
+    pub fn add_bytes(&mut self, bytes: bytes::Bytes) -> Result<(), Error> {
+        let mut hasher = blake3::Hasher::new();
+        let digest: B3Digest = hasher.update(&bytes).finalize().as_bytes().into();
+
+        // Only decode the bytes if the order validator allows it
+        if !self.order_validator.digest_allowed(&digest) {
+            return Err(Error::ValidationError(format!(
+                "unexpected digest: {:?}",
+                &digest
+            )));
+        }
+
+        let directory = proto::Directory::decode(bytes)
+            .map_err(|e| Error::ValidationError(format!("failed to decode Directory: {}", e)))?;
+
+        self.add_order_unchecked(directory)
+    }
+
+    /// Insert a new Directory into the closure
+    /// If possible, use add_bytes to leave the parsing up to the ClosureValidator
     #[instrument(level = "trace", skip_all, fields(directory.digest=%directory.digest(), directory.size=%directory.size()), err)]
     pub fn add(&mut self, directory: proto::Directory) -> Result<(), Error> {
         let digest = directory.digest();
+        if !self.order_validator.digest_allowed(&digest) {
+            return Err(Error::ValidationError(format!(
+                "unexpected digest: {:?}",
+                &digest
+            )));
+        }
+        self.add_order_unchecked(directory)
+    }
 
-        // If we already saw this node previously, it's already validated and in the graph.
-        if self.digest_to_node_ix.contains_key(&digest) {
+    /// Internal function to add directory which has already been confirmed to be in-order
+    fn add_order_unchecked(&mut self, directory: proto::Directory) -> Result<(), Error> {
+        // Do some basic validation
+        directory
+            .validate()
+            .map_err(|e| Error::ValidationError(e.to_string()))?;
+
+        let digest = directory.digest();
+
+        for subdir in &directory.directories {
+            let subdir_digest: B3Digest = subdir
+                .digest
+                .clone()
+                .try_into()
+                .map_err(|e| Error::ValidationError(format!("invalid digest: {}", e)))?;
+            if subdir_digest == digest {
+                return Err(Error::ValidationError(
+                    "self-referential directories are not allowed".into(),
+                ));
+            }
+        }
+
+        // Tell the order validator about the new node
+        self.order_validator.add_directory(&directory)?;
+
+        // Teach the graph about the existence of a node with this digest
+        let ix = *self
+            .digest_to_node_ix
+            .entry(digest)
+            .or_insert_with(|| self.graph.add_node(None));
+
+        if self.graph[ix].is_some() {
+            // The node is already in the graph, there is nothing to do here.
             return Ok(());
         }
 
-        // Do some general validation
-        directory
-            .validate()
-            .map_err(|e| Error::InvalidRequest(e.to_string()))?;
+        // set up edges to all child directories
+        for subdir in &directory.directories {
+            let subdir_digest: B3Digest = subdir.digest.clone().try_into().unwrap();
 
-        // Ensure the directory only refers to directories which we already accepted.
-        // We lookup their node indices and add them to a HashSet.
-        let mut child_ixs = HashSet::new();
-        for dir in &directory.directories {
-            let child_digest = B3Digest::try_from(dir.digest.to_owned()).unwrap(); // validated
+            let child_ix = *self
+                .digest_to_node_ix
+                .entry(subdir_digest)
+                .or_insert_with(|| self.graph.add_node(None));
 
-            // Ensure the digest has already been seen
-            let child_ix = *self.digest_to_node_ix.get(&child_digest).ok_or_else(|| {
-                Error::InvalidRequest(format!(
-                    "'{}' refers to unseen child dir: {}",
-                    dir.name.as_bstr(),
-                    &child_digest
-                ))
-            })?;
+            let pending_edge_check = match &self.graph[child_ix] {
+                Some(child) => {
+                    // child is already available, validate the edge now
+                    check_edge(subdir, child)?;
+                    None
+                }
+                None => Some(subdir.clone()), // pending validation
+            };
+            self.graph.add_edge(ix, child_ix, pending_edge_check);
+        }
 
-            // Ensure the size specified in the child node matches the directory size itself.
-            let recorded_child_size = self
+        // validate the edges from parents to this node
+        // this is complicated because there is no edges_directed_mut :'c
+        for edge_id in self
+            .graph
+            .edges_directed(ix, Direction::Incoming)
+            .map(|edge_ref| edge_ref.id())
+            .collect::<Vec<_>>()
+            .into_iter()
+        {
+            let edge_weight = self
                 .graph
-                .node_weight(child_ix)
-                .expect("node not found")
-                .size();
+                .edge_weight_mut(edge_id)
+                .expect("edge not found")
+                .take()
+                .expect("edge is already validated");
+            check_edge(&edge_weight, &directory)?;
+        }
 
-            // Ensure the size specified in the child node matches our records.
-            if dir.size != recorded_child_size {
-                return Err(Error::InvalidRequest(format!(
-                    "'{}' has wrong size, specified {}, recorded {}",
-                    dir.name.as_bstr(),
-                    dir.size,
-                    recorded_child_size
-                )));
+        // finally, store the directory information in the node weight
+        self.graph[ix] = Some(directory);
+
+        /*
+            for dir in &node.directories {
+                let child_ix = self.digest_to_node_ix[&dir.digest.clone().try_into().unwrap()];
             }
-
-            child_ixs.insert(child_ix);
-        }
-
-        // Insert node into the graph, and add edges to all children.
-        let node_ix = self.graph.add_node(directory);
-        for child_ix in child_ixs {
-            self.graph.add_edge(node_ix, child_ix, ());
-        }
-
-        // Record the mapping from digest to node_ix in our lookup table.
-        self.digest_to_node_ix.insert(digest, node_ix);
-
-        // Update last_directory_ix.
-        self.last_directory_ix = Some(node_ix);
+        */
 
         Ok(())
     }
 
-    /// Ensure that all inserted Directories are connected, then return a
-    /// (deduplicated) and validated list of directories, in from-leaves-to-root
-    /// order.
-    /// In case no elements have been inserted, returns an empty list.
     #[instrument(level = "trace", skip_all, err)]
-    pub(crate) fn finalize(self) -> Result<Vec<Directory>, Error> {
-        let (graph, _) = match self.finalize_raw()? {
-            None => return Ok(vec![]),
+    pub(crate) fn validate(&self) -> Result<(), Error> {
+        // If there disconnected nodes, the order validator will complain
+        let _root = match self.order_validator.root()? {
             Some(v) => v,
-        };
-        // Dissolve the graph, returning the nodes as a Vec.
-        // As the graph was populated in a valid DFS PostOrder, we can return
-        // nodes in that same order.
-        let (nodes, _edges) = graph.into_nodes_edges();
-        Ok(nodes.into_iter().map(|x| x.weight).collect())
-    }
-
-    /// Ensure that all inserted Directories are connected, then return a
-    /// (deduplicated) and validated list of directories, in from-root-to-leaves
-    /// order.
-    /// In case no elements have been inserted, returns an empty list.
-    #[instrument(level = "trace", skip_all, err)]
-    pub(crate) fn finalize_root_to_leaves(self) -> Result<Vec<Directory>, Error> {
-        let (graph, root) = match self.finalize_raw()? {
-            None => return Ok(vec![]),
-            Some(v) => v,
+            None => return Ok(()), // Graph is empty, nothing to validate
         };
 
-        // do a BFS traversal of the graph, starting with the root node to get
-        // all nodes reachable from there.
-        let traversal = Bfs::new(&graph, root);
-
-        let order = traversal.iter(&graph).collect::<Vec<_>>();
-
-        let (nodes, _edges) = graph.into_nodes_edges();
-
-        // Convert to option, so that we can take individual nodes out without messing up the
-        // indices
-        let mut nodes = nodes.into_iter().map(Some).collect::<Vec<_>>();
-
-        Ok(order
-            .iter()
-            .map(|i| nodes[i.index()].take().unwrap().weight)
-            .collect())
-    }
-
-    /// Internal implementation of closure validation
-    #[instrument(level = "trace", skip_all, err)]
-    fn finalize_raw(self) -> Result<Option<(DirectoryGraph, NodeIndex)>, Error> {
-        // If no nodes were inserted, an empty list is returned.
-        let last_directory_ix = if let Some(x) = self.last_directory_ix {
-            x
-        } else {
-            return Ok(None);
-        };
-
-        // do a BFS traversal of the graph, starting with the root node to get
-        // (the count of) all nodes reachable from there.
-        let mut traversal = Bfs::new(&self.graph, last_directory_ix);
-
-        let mut visited_directory_count = 0;
-        #[cfg(debug_assertions)]
-        let mut visited_directory_ixs = HashSet::new();
-        #[cfg_attr(not(debug_assertions), allow(unused))]
-        while let Some(directory_ix) = traversal.next(&self.graph) {
-            #[cfg(debug_assertions)]
-            visited_directory_ixs.insert(directory_ix);
-
-            visited_directory_count += 1;
+        // test that the graph is complete
+        if self.graph.raw_nodes().iter().any(|n| n.weight.is_none()) {
+            return Err(Error::ValidationError("graph is incomplete".into()));
         }
 
-        // If the number of nodes collected equals the total number of nodes in
-        // the graph, we know all nodes are connected.
-        if visited_directory_count != self.graph.node_count() {
-            // more or less exhaustive error reporting.
-            #[cfg(debug_assertions)]
-            {
-                let all_directory_ixs: HashSet<_> = self.graph.node_indices().collect();
+        Ok(())
+    }
 
-                let unvisited_directories: HashSet<_> = all_directory_ixs
-                    .difference(&visited_directory_ixs)
-                    .map(|ix| self.graph.node_weight(*ix).expect("node not found"))
-                    .collect();
+    /// Return the list of directories in from-root-to-leaves order.
+    /// In case no elements have been inserted, returns an empty list.
+    ///
+    /// panics if the specified root is not in the graph
+    #[instrument(level = "trace", skip_all)]
+    pub(crate) fn drain_root_to_leaves(self) -> impl Iterator<Item = Directory> {
+        let root = match self.order_validator.root().unwrap() {
+            None => return itertools::Either::Left(std::iter::empty()),
+            Some(v) => v,
+        };
 
-                return Err(Error::InvalidRequest(format!(
-                    "found {} disconnected directories: {:?}",
-                    self.graph.node_count() - visited_directory_ixs.len(),
-                    unvisited_directories
-                )));
-            }
-            #[cfg(not(debug_assertions))]
-            {
-                return Err(Error::InvalidRequest(format!(
-                    "found {} disconnected directories",
-                    self.graph.node_count() - visited_directory_count
-                )));
-            }
-        }
+        // do a BFS traversal of the graph, starting with the root node
+        let traversal = Bfs::new(&self.graph, self.digest_to_node_ix[&root]);
 
-        Ok(Some((self.graph, last_directory_ix)))
+        let order = traversal.iter(&self.graph).collect::<Vec<_>>();
+
+        let (mut nodes, _edges) = self.graph.into_nodes_edges();
+
+        itertools::Either::Right(
+            order
+                .into_iter()
+                .filter_map(move |i| nodes[i.index()].weight.take()),
+        )
+    }
+
+    /// Return the list of directories in from-leaves-to-root order.
+    /// In case no elements have been inserted, returns an empty list.
+    ///
+    /// panics when the specified root is not in the graph
+    #[instrument(level = "trace", skip_all)]
+    pub(crate) fn drain_leaves_to_root(self) -> impl Iterator<Item = Directory> {
+        let root = match self.order_validator.root().unwrap() {
+            None => return itertools::Either::Left(std::iter::empty()),
+            Some(v) => v,
+        };
+
+        // do a DFS Post-Order traversal of the graph, starting with the root node
+        let traversal = DfsPostOrder::new(&self.graph, self.digest_to_node_ix[&root]);
+
+        let order = traversal.iter(&self.graph).collect::<Vec<_>>();
+
+        let (mut nodes, _edges) = self.graph.into_nodes_edges();
+
+        itertools::Either::Right(
+            order
+                .into_iter()
+                .filter_map(move |i| nodes[i.index()].weight.take()),
+        )
     }
 }
 
@@ -249,7 +290,7 @@ mod tests {
         };
     }
 
-    use super::ClosureValidator;
+    use super::{ClosureValidator, LeavesToRootValidator};
 
     #[rstest]
     /// Uploading an empty directory should succeed.
@@ -275,7 +316,7 @@ mod tests {
         #[case] exp_fail_upload_last: bool,
         #[case] exp_finalize: Option<Vec<&Directory>>, // Some(_) if finalize successful, None if not.
     ) {
-        let mut dcv = ClosureValidator::default();
+        let mut dcv = ClosureValidator::<LeavesToRootValidator>::default();
         let len_directories_to_upload = directories_to_upload.len();
 
         for (i, d) in directories_to_upload.iter().enumerate() {
@@ -292,7 +333,9 @@ mod tests {
         }
 
         // everything was uploaded successfully. Test finalize().
-        let resp = dcv.finalize();
+        let resp = dcv
+            .validate()
+            .map(|_| dcv.drain_leaves_to_root().collect::<Vec<_>>());
 
         match exp_finalize {
             Some(directories) => {

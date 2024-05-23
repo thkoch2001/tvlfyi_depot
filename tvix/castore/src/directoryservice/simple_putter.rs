@@ -33,7 +33,9 @@ impl<DS: DirectoryService + 'static> DirectoryPutter for SimplePutter<DS> {
         match self.directory_validator {
             None => return Err(Error::StorageError("already closed".to_string())),
             Some(ref mut validator) => {
-                validator.add(directory)?;
+                validator
+                    .add(directory)
+                    .map_err(|e| Error::StorageError(e.to_string()))?;
             }
         }
 
@@ -46,7 +48,10 @@ impl<DS: DirectoryService + 'static> DirectoryPutter for SimplePutter<DS> {
             None => Err(Error::InvalidRequest("already closed".to_string())),
             Some(validator) => {
                 // retrieve the validated directories.
-                let directories = validator.finalize()?;
+                validator
+                    .validate()
+                    .map_err(|e| Error::StorageError(e.to_string()))?;
+                let directories = validator.drain_leaves_to_root().collect::<Vec<_>>();
 
                 // Get the root digest, which is at the end (cf. insertion order)
                 let root_digest = directories
