@@ -32,6 +32,14 @@ pub struct RootToLeavesValidator {
     expected_digests: HashSet<B3Digest>,
 }
 
+impl RootToLeavesValidator {
+    pub(crate) fn new_with_root_digest(root_digest: B3Digest) -> Self {
+        let mut this = Self::default();
+        this.expected_digests.insert(root_digest);
+        this
+    }
+}
+
 impl OrderValidator for RootToLeavesValidator {
     fn digest_allowed(&mut self, digest: &B3Digest) -> bool {
         self.expected_digests.is_empty() // we don't know the root node; allow any
