@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8c79b64_b8dfbeff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000018
+      },
+      "writtenOn": "2024-05-23T12:47:08Z",
+      "side": 1,
+      "message": "The test case with the derivation is still a stack overflow for me, but I suppose that\u0027s a separate issue.",
+      "revId": "0e30a2dd686662af4eb0a74e3d3b57c968cf43fa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
