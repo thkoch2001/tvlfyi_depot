@@ -145,7 +145,9 @@ impl DirectoryPutter for SledDirectoryPutter {
         match self.directory_validator {
             None => return Err(Error::StorageError("already closed".to_string())),
             Some(ref mut validator) => {
-                validator.add(directory)?;
+                validator
+                    .add(directory)
+                    .map_err(|e| Error::StorageError(e.to_string()))?;
             }
         }
 
@@ -162,7 +164,10 @@ impl DirectoryPutter for SledDirectoryPutter {
                     let tree = self.tree.clone();
                     move || {
                         // retrieve the validated directories.
-                        let directories = validator.finalize()?;
+                        validator
+                            .validate()
+                            .map_err(|e| Error::StorageError(e.to_string()))?;
+                        let directories = validator.drain_leaves_to_root().collect::<Vec<_>>();
 
                         // Get the root digest, which is at the end (cf. insertion order)
                         let root_digest = directories
