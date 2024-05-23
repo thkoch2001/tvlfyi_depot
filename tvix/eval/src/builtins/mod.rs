@@ -1504,8 +1504,9 @@ mod pure_builtins {
         }
 
         let mut buf: Vec<u8> = vec![];
-        to_xml::value_to_xml(&mut buf, &value)?;
-        Ok(buf.into())
+        let context = to_xml::value_to_xml(&mut buf, &value)?;
+
+        Ok((buf, Some(Box::new(context))).into())
     }
 
     #[builtin("placeholder")]
