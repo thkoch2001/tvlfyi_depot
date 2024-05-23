@@ -16,6 +16,24 @@
       "message": "This doesn\u0027t seem right — `builtins.hasContext (builtins.toXML {})` is true, which it shouldn\u0027t.",
       "revId": "0da7f6138f08849053f429a644549fed07e21f10",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "faa0c4f6_5c26fcce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-23T10:27:21Z",
+      "side": 1,
+      "message": "Ah right, we have this distinction between an empty NixContext, and None. I fixed this now for toXML, and added a FIXME to clean this up in a followup.",
+      "parentUuid": "93b430c5_c3a9e43e",
+      "revId": "0da7f6138f08849053f429a644549fed07e21f10",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
