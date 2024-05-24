@@ -21,17 +21,6 @@ depot.nix.readTree.drvTargets {
     withAWS = false;
   });
 
-  # To match telega in emacs-overlay or wherever
-  tdlib = super.tdlib.overrideAttrs (_: {
-    version = "1.8.24";
-    src = self.fetchFromGitHub {
-      owner = "tdlib";
-      repo = "td";
-      rev = "d79bd4b69403868897496da39b773ab25c69f6af";
-      sha256 = "0bc5akzw12qwj45rzqkrhw65qlrn9q8pzmvc5aiqv4bvhkb1ghl0";
-    };
-  });
-
   home-manager = super.home-manager.overrideAttrs (_: {
     src = depot.third_party.sources.home-manager;
     version = "git-"
@@ -69,6 +58,17 @@ depot.nix.readTree.drvTargets {
           sha256 = "1mmlrd2zpcwiv8gh10y7lrpflnbmsycdascrxjr3bfcwa8yx7901";
         };
       };
+
+      # Override telega sources until MELPA updates in nixpkgs resume.
+      telega = esuper.telega.overrideAttrs (_: {
+        version = "0.8.291"; # unstable
+        src = self.fetchFromGitHub {
+          owner = "zevlg";
+          repo = "telega.el";
+          rev = "58b4963b292ceb723d665df100b519eb5a99c676";
+          sha256 = "1q3ydbm0jhrsyvvdn0mpmxvskq0l53jkh40a5hlx7i3qkinbhbry";
+        };
+      });
     })
   );
 

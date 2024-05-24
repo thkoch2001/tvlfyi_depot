@@ -10,7 +10,7 @@ pkgs.makeOverridable
 
     # If switching telega versions, use this variable because it will
     # keep the version check, binary path and so on in sync.
-    currentTelega = epkgs: epkgs.melpaPackages.telega;
+    currentTelega = epkgs: epkgs.telega;
 
     # $PATH for binaries that need to be available to Emacs
     emacsBinPath = lib.makeBinPath [
