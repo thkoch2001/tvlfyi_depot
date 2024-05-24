@@ -55,7 +55,7 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   fetchConfigured = true;
 
   fetchAttrs = {
-    sha256 = "sha256:119mqli75c9fy05ddrlh2brjxb354yvv1ijjkk1y1yqcaqppwwb8";
+    sha256 = "sha256-lsb9T2vIcEMlN21YnY6v9vv+W/lynvkXGYc+ZM0oJFI=";
     preBuild = ''
       rm .bazelversion
     '';
@@ -105,6 +105,9 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
         mkdir -p $bazelOut/_bits/$(dirname $d)
         cp -R "$d" "$bazelOut/_bits/$(dirname $d)/node_modules"
       done
+
+      # Remove non-deterministic local package from cache
+      rm -r "$bazelOut"/external/yarn_cache/v6/npm-polymer-bridges-1.0.0-*
 
       (cd $bazelOut/ && tar czf $out --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner external/ _bits/)
 
