@@ -44,7 +44,6 @@ pkgs.rustPlatform.buildRustPackage rec {
     export PATH=${lib.makeBinPath deps}:$PATH
     mkdir home
     export HOME=$PWD/.home
-    env
     trunk build --release -d $out
   '';
 

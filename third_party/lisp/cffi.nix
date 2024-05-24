@@ -2,7 +2,7 @@
 { depot, pkgs, ... }:
 
 with depot.nix;
-let src = with pkgs; srcOnly lispPackages.cffi;
+let src = with pkgs; srcOnly sbclPackages.cffi;
 in buildLisp.library {
   name = "cffi";
   deps = with depot.third_party.lisp; [

@@ -3,7 +3,7 @@
 { depot, pkgs, ... }:
 
 let
-  src = with pkgs; srcOnly lispPackages.bordeaux-threads;
+  src = with pkgs; srcOnly lispBordeauxThreads088;
   getSrc = f: "${src}/src/${f}";
 in
 depot.nix.buildLisp.library {
