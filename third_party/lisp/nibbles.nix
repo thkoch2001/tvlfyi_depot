@@ -2,7 +2,7 @@
 
 let
   inherit (depot.nix.buildLisp) bundled;
-  src = with pkgs; srcOnly lispPackages.nibbles;
+  src = with pkgs; srcOnly sbclPackages.nibbles;
 in
 depot.nix.buildLisp.library {
   name = "nibbles";
