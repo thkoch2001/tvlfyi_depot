@@ -2,7 +2,7 @@
 { depot, pkgs, ... }:
 
 let
-  src = with pkgs; srcOnly lispPackages.hunchentoot;
+  src = with pkgs; srcOnly sbclPackages.hunchentoot;
 
   url-rewrite = depot.nix.buildLisp.library {
     name = "url-rewrite";
