@@ -2,7 +2,7 @@
 
 let
   inherit (depot.nix) buildLisp;
-  src = with pkgs; srcOnly lispPackages.str;
+  src = with pkgs; srcOnly sbclPackages.str;
 in
 buildLisp.library {
   name = "str";

@@ -1,6 +1,6 @@
 { depot, pkgs, ... }:
 
-let src = with pkgs; srcOnly lispPackages.prove;
+let src = with pkgs; srcOnly sbclPackages.prove;
 in depot.nix.buildLisp.library {
   name = "prove";
 
