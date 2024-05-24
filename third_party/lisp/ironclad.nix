@@ -3,7 +3,7 @@
 let
   inherit (pkgs) runCommand;
   inherit (depot.nix.buildLisp) bundled;
-  src = with pkgs; srcOnly lispPackages.ironclad;
+  src = with pkgs; srcOnly sbclPackages.ironclad;
   getSrc = f: "${src}/src/${f}";
 
 in

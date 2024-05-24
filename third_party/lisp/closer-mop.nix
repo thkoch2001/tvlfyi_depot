@@ -3,7 +3,7 @@
 # Lisp implementations
 { depot, pkgs, ... }:
 
-let src = with pkgs; srcOnly lispPackages.closer-mop;
+let src = with pkgs; srcOnly sbclPackages.closer-mop;
 in depot.nix.buildLisp.library {
   name = "closer-mop";
 
