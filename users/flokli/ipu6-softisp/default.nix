@@ -42,14 +42,14 @@ depot.nix.readTree.drvTargets rec {
   });
 
   # Make sure the firmware requested by the driver is present in our firmware.
-  # We do have a .xz suffix here, but that's fine, since request_firmware does
-  # check ${name}.xz too in case CONFIG_FW_LOADER_COMPRESS is set.
+  # We do have a .zst suffix here, but that's fine, since request_firmware does
+  # check ${name}.zst too in case CONFIG_FW_LOADER_COMPRESS is set.
   # The path needs to be kept in sync with the ones used in the kernel patch.
   checkFirmware = pkgs.runCommand "check-firmware" { } ''
-    stat ${testSystem}/firmware/intel/ipu/ipu6se_fw.bin.xz
-    stat ${testSystem}/firmware/intel/ipu/ipu6ep_fw.bin.xz
-    stat ${testSystem}/firmware/intel/ipu/ipu6_fw.bin.xz
-    stat ${testSystem}/firmware/intel/ipu/ipu6epmtl_fw.bin.xz
+    stat ${testSystem}/firmware/intel/ipu/ipu6se_fw.bin.zst
+    stat ${testSystem}/firmware/intel/ipu/ipu6ep_fw.bin.zst
+    stat ${testSystem}/firmware/intel/ipu/ipu6_fw.bin.zst
+    stat ${testSystem}/firmware/intel/ipu/ipu6epmtl_fw.bin.zst
 
     # all good, succeed build
     touch $out
