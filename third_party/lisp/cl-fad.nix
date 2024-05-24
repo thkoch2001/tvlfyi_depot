@@ -3,7 +3,7 @@
 
 with depot.nix;
 
-let src = with pkgs; srcOnly lispPackages.cl-fad;
+let src = with pkgs; srcOnly sbclPackages.cl-fad;
 in buildLisp.library {
   name = "cl-fad";
 

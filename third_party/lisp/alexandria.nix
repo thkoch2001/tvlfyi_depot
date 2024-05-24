@@ -2,7 +2,7 @@
 # pretty much everything depends on.
 { depot, pkgs, ... }:
 
-let src = with pkgs; srcOnly lispPackages.alexandria;
+let src = with pkgs; srcOnly sbclPackages.alexandria;
 in depot.nix.buildLisp.library {
   name = "alexandria";
 
