@@ -55,7 +55,7 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
   fetchConfigured = true;
 
   fetchAttrs = {
-    sha256 = "sha256:119mqli75c9fy05ddrlh2brjxb354yvv1ijjkk1y1yqcaqppwwb8";
+    sha256 = "sha256-lsb9T2vIcEMlN21YnY6v9vv+W/lynvkXGYc+ZM0oJFI=";
     preBuild = ''
       rm .bazelversion
     '';
@@ -105,6 +105,15 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
         mkdir -p $bazelOut/_bits/$(dirname $d)
         cp -R "$d" "$bazelOut/_bits/$(dirname $d)/node_modules"
       done
+
+      # The yarn cache is produced in this fixed-output derivation, so that in
+      # the build derivation all packages are available without network access.
+      # `polymer-bridges` is a local package, and yarn copies it to the cache
+      # along with a random UUID, making it non-deterministic. The easiest fix
+      # is just to delete this particular package from the cache, since as a
+      # local package, it will be available without network access in the build
+      # derivation even without the cache.
+      rm -r "$bazelOut"/external/yarn_cache/v6/npm-polymer-bridges-1.0.0-*
 
       (cd $bazelOut/ && tar czf $out --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner external/ _bits/)
 
