@@ -2,7 +2,7 @@
 # an in-memory database)
 { depot, pkgs, ... }:
 
-let src = with pkgs; srcOnly lispPackages.cl-prevalence;
+let src = with pkgs; srcOnly sbclPackages.cl-prevalence;
 in depot.nix.buildLisp.library {
   name = "cl-prevalence";
 
