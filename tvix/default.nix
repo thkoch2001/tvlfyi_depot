@@ -12,6 +12,25 @@ let
     SystemConfiguration
   ]);
 
+  # Filters the given source, only keeping files related to the build, preventing unnecessary rebuilds.
+  # Includes src in the root, all other .rs files, as well as Cargo.toml.
+  # Additional files to be included can be specified in extraFileset.
+  filterRustCrateSrc =
+    { root # The original src
+    , extraFileset ? null # Additional filesets to include (e.g. fileFilter for proto files)
+    }:
+    lib.fileset.toSource {
+      inherit root;
+      fileset = (lib.fileset.intersection
+        (lib.fileset.fromSource root) # We build our final fileset from the original src
+        (lib.fileset.unions ([
+          (root + "/src")
+          (lib.fileset.fileFilter (f: f.hasExt "rs") root)
+          # We assume that every Rust crate will at a minimum have .rs files and a Cargo.toml
+          (lib.fileset.fileFilter (f: f.name == "Cargo.toml") root)
+        ] ++ lib.optional (extraFileset != null) extraFileset)));
+    };
+
   # Load the crate2nix crate tree.
   crates = import ./Cargo.nix {
     inherit pkgs;
@@ -52,27 +71,72 @@ let
       };
 
       tvix-build = prev: {
+        src = filterRustCrateSrc rec {
+          root = prev.src.origSrc;
+          extraFileset = (lib.fileset.fileFilter (f: f.hasExt "proto") root);
+        };
         PROTO_ROOT = depot.tvix.build.protos.protos;
         nativeBuildInputs = protobufDep prev;
         buildInputs = darwinDeps;
       };
 
       tvix-castore = prev: {
+        src = filterRustCrateSrc rec {
+          root = prev.src.origSrc;
+          extraFileset = (lib.fileset.fileFilter (f: f.hasExt "proto") root);
+        };
         PROTO_ROOT = depot.tvix.castore.protos.protos;
         nativeBuildInputs = protobufDep prev;
       };
 
       tvix-cli = prev: {
+        src = filterRustCrateSrc { root = prev.src.origSrc; };
         buildInputs = prev.buildInputs or [ ] ++ darwinDeps;
       };
 
       tvix-store = prev: {
+        src = filterRustCrateSrc rec {
+          root = prev.src.origSrc;
+          extraFileset = (lib.fileset.fileFilter (f: f.hasExt "proto") root);
+        };
         PROTO_ROOT = depot.tvix.store.protos.protos;
         nativeBuildInputs = protobufDep prev;
         # fuse-backend-rs uses DiskArbitration framework to handle mount/unmount on Darwin
         buildInputs = prev.buildInputs or [ ]
           ++ darwinDeps
           ++ lib.optional pkgs.stdenv.isDarwin pkgs.buildPackages.darwin.apple_sdk.frameworks.DiskArbitration;
+      };
+
+      tvix-eval-builtin-macros = prev: {
+        src = filterRustCrateSrc { root = prev.src.origSrc; };
+      };
+
+      tvix-eval = prev: {
+        src = filterRustCrateSrc rec {
+          root = prev.src.origSrc;
+          extraFileset = lib.fileset.unions [
+            (root + "/proptest-regressions")
+          ];
+        };
+      };
+
+      tvix-glue = prev: {
+        src = filterRustCrateSrc {
+          root = prev.src.origSrc;
+        };
+      };
+
+      tvix-serde = prev: {
+        src = filterRustCrateSrc { root = prev.src.origSrc; };
+      };
+
+      nix-compat = prev: {
+        src = filterRustCrateSrc rec {
+          root = prev.src.origSrc;
+          extraFileset = lib.fileset.unions [
+            (root + "/testdata")
+          ];
+        };
       };
     };
   };
