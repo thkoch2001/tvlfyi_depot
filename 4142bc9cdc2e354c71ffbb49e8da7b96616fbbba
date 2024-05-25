@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "64ebf194_aa5780d2",
+        "filename": "tvix/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-25T20:27:19Z",
+      "side": 1,
+      "message": "Can you add a docstring, explaining what the function does?",
+      "revId": "4142bc9cdc2e354c71ffbb49e8da7b96616fbbba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c6abb285_cc5eadf3",
+        "filename": "tvix/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-25T20:27:19Z",
+      "side": 1,
+      "message": "maybe just `filterRust[Crate]Src`? This is a local variable, we can be a bit opinionated with names.",
+      "revId": "4142bc9cdc2e354c71ffbb49e8da7b96616fbbba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08137fb2_4fa774e1",
+        "filename": "tvix/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-25T20:27:19Z",
+      "side": 1,
+      "message": "```suggestion\n    { src # The original src\n```\n\nThis is independent of crate2nix, and calling it src here makes it a bit less verbose on the callsite.",
+      "revId": "4142bc9cdc2e354c71ffbb49e8da7b96616fbbba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ef7a5c9_719f3cba",
+        "filename": "tvix/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-25T20:27:19Z",
+      "side": 1,
+      "message": "include",
+      "range": {
+        "startLine": 18,
+        "startChar": 53,
+        "endLine": 18,
+        "endChar": 56
+      },
+      "revId": "4142bc9cdc2e354c71ffbb49e8da7b96616fbbba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "873879a2_09ba868c",
+        "filename": "tvix/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-25T20:27:19Z",
+      "side": 1,
+      "message": "I\u0027d feel more comfortable if we\u0027d specify the directories including these test fixtures, rather than including specific filetypes.",
+      "revId": "4142bc9cdc2e354c71ffbb49e8da7b96616fbbba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
