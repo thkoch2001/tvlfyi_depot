@@ -1,4 +1,4 @@
-{ depot, pkgs, ... }:
+{ depot, pkgs, lib, ... }:
 
 let
   mkImportCheck = p: expectedPath: {
@@ -27,26 +27,26 @@ in
   testPreRun = ''
     export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
   '';
-
-  # enable some optional features.
-  features = [ "default" "cloud" ]
-    # virtiofs feature currently fails to build on Darwin.
-    ++ pkgs.lib.optional pkgs.stdenv.isLinux "virtiofs";
-}).overrideAttrs (_: {
+}).overrideAttrs {
   meta.ci.targets = [ "integration-tests" ];
   meta.ci.extraSteps = {
     import-docs = (mkImportCheck "tvix/store/docs" ./docs);
   };
-  passthru.integration-tests = depot.tvix.crates.workspaceMembers.tvix-store.build.override {
-    runTests = true;
-    testPreRun = ''
-      export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
-      export PATH="$PATH:${pkgs.lib.makeBinPath [pkgs.cbtemulator pkgs.google-cloud-bigtable-tool]}"
-    '';
-
-    # enable some optional features.
-    features = [ "default" "cloud" "integration" ]
-      # virtiofs feature currently fails to build on Darwin.
-      ++ pkgs.lib.optional pkgs.stdenv.isLinux "virtiofs";
+  passthru.integration-tests = pkgs.symlinkJoin {
+    name = "tvix-store-integration-tests";
+    postBuild = "rm -rf $out/*"; # We want to clean up $out
+    paths = (map
+      (featuresPowerset: depot.tvix.crates.workspaceMembers.tvix-store.build.override ({
+        runTests = true;
+        testPreRun = ''
+          export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
+          export PATH="$PATH:${lib.makeBinPath [ pkgs.cbtemulator pkgs.google-cloud-bigtable-tool ]}"
+        '';
+        features = [ "integration" ] ++ featuresPowerset;
+      }))
+      (depot.tvix.utils.powerset ([ "cloud" "fuse" "otlp" "tonic-reflection" ]
+        # virtiofs feature currently fails to build on Darwin
+        ++ lib.optional pkgs.stdenv.isLinux "virtiofs")
+      ));
   };
-})
+}
