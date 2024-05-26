@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fad4f7ca_dc73b2ab",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-26T17:12:03Z",
+      "side": 1,
+      "message": "needs a commit message, and link to the bug it fixes.",
+      "revId": "e42426d2ef7eb13da5d4e041803d8e3a97f4d273",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
