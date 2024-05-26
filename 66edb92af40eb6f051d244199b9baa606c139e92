@@ -16,6 +16,24 @@
       "message": "I\u0027d probably link to https://docs.teleirc.com/en/latest/ instead. That website seems horribly outdated, still mentions the nodejs version, even though it\u0027s been rewritten to golang in the meantime.",
       "revId": "66edb92af40eb6f051d244199b9baa606c139e92",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b4f5798_14bfbdad",
+        "filename": "third_party/teleirc/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-05-26T19:30:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4811bf2d_67169c0b",
+      "revId": "66edb92af40eb6f051d244199b9baa606c139e92",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
