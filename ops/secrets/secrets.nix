@@ -9,6 +9,9 @@ let
 
     # zamalek
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDBRXeb8EuecLHP0bW4zuebXp4KRnXgJTZfeVWXQ1n1R"
+
+    # khamovnik
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID1ptE5HvGSXxSXo+aHBTKa5PBlAM1HqmpzWz0yAhHLj"
   ];
 
   aspen = [
@@ -47,6 +50,7 @@ in
   "owothia.age" = whitbyDefault;
   "panettone.age" = whitbyDefault;
   "smtprelay.age" = whitbyDefault;
+  "teleirc.age" = whitbyDefault;
   "tf-buildkite.age" = terraform;
   "tf-glesys.age" = terraform;
   "tf-keycloak.age" = terraform;
