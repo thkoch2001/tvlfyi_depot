@@ -16,6 +16,24 @@
       "message": "This (and the one in store) is the only place where this should be called integration-tests, because we add the `integration` feature to an additional build, which pulls in some tests requiring simulators.\n\nPlease call the other places differently (feature-permutations?), and keep the integration one a separate passthrough. That feature doesn\u0027t need to be part of the permutations.",
       "revId": "cf190ff30c5230d329b5e64553c7a87c9567d8fb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8eb332d_6a1b364c",
+        "filename": "tvix/castore/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-05-26T19:18:15Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "94f3c35d_1d2a4cf0",
+      "revId": "cf190ff30c5230d329b5e64553c7a87c9567d8fb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
