@@ -25,6 +25,7 @@ in
     (mod "restic.nix")
     (mod "smtprelay.nix")
     (mod "sourcegraph.nix")
+    (mod "teleirc.nix")
     (mod "tvl-buildkite.nix")
     (mod "tvl-slapd/default.nix")
     (mod "tvl-users.nix")
@@ -232,6 +233,7 @@ in
       owothia.file = secretFile "owothia";
       panettone.file = secretFile "panettone";
       smtprelay.file = secretFile "smtprelay";
+      teleirc.file = secretFile "teleirc";
 
       buildkite-agent-token = {
         file = secretFile "buildkite-agent-token";
@@ -409,6 +411,9 @@ in
         };
       };
     };
+
+    # Run the Telegram<>IRC bridge for Volga Sprint.
+    teleirc.enable = true;
 
     # Run atward, the search engine redirection thing.
     atward.enable = true;
