@@ -293,4 +293,6 @@ in
     "shell"
     "rust-docs"
   ];
+
+  utils = import ./utils.nix { inherit lib depot; };
 }
