@@ -1,4 +1,4 @@
-{ depot, pkgs, ... }:
+{ depot, pkgs, lib, ... }:
 
 let
   mkImportCheck = p: expectedPath: {
@@ -22,31 +22,35 @@ let
   };
 in
 
-(depot.tvix.crates.workspaceMembers.tvix-store.build.override {
+(depot.tvix.crates.workspaceMembers.tvix-store.build.override (old: {
   runTests = true;
   testPreRun = ''
     export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
   '';
-
-  # enable some optional features.
-  features = [ "default" "cloud" ]
-    # virtiofs feature currently fails to build on Darwin.
-    ++ pkgs.lib.optional pkgs.stdenv.isLinux "virtiofs";
-}).overrideAttrs (_: {
-  meta.ci.targets = [ "integration-tests" ];
-  meta.ci.extraSteps = {
-    import-docs = (mkImportCheck "tvix/store/docs" ./docs);
+  features = old.features
+    # virtiofs feature currently fails to build on Darwin
+    ++ lib.optional pkgs.stdenv.isLinux "virtiofs";
+})).overrideAttrs (old: rec {
+  meta.ci = {
+    targets = [ "integration-tests" ] ++ lib.filter (x: lib.hasPrefix "with-features" x || x == "no-features") (lib.attrNames passthru);
+    extraSteps.import-docs = (mkImportCheck "tvix/store/docs" ./docs);
   };
-  passthru.integration-tests = depot.tvix.crates.workspaceMembers.tvix-store.build.override {
-    runTests = true;
-    testPreRun = ''
+  passthru = (depot.tvix.utils.mkFeaturePowerset {
+    inherit (old) crateName;
+    features = ([ "cloud" "fuse" "otlp" "tonic-reflection" ]
+      # virtiofs feature currently fails to build on Darwin
+      ++ lib.optional pkgs.stdenv.isLinux "virtiofs");
+    override.testPreRun = ''
       export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt
-      export PATH="$PATH:${pkgs.lib.makeBinPath [pkgs.cbtemulator pkgs.google-cloud-bigtable-tool]}"
     '';
-
-    # enable some optional features.
-    features = [ "default" "cloud" "integration" ]
-      # virtiofs feature currently fails to build on Darwin.
-      ++ pkgs.lib.optional pkgs.stdenv.isLinux "virtiofs";
+  }) // {
+    integration-tests = depot.tvix.crates.workspaceMembers.${old.crateName}.build.override (old: {
+      runTests = true;
+      testPreRun = ''
+        export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt;
+        export PATH="$PATH:${pkgs.lib.makeBinPath [ pkgs.cbtemulator pkgs.google-cloud-bigtable-tool ]}"
+      '';
+      features = old.features ++ [ "integration" ];
+    });
   };
 })
