@@ -16,6 +16,24 @@
       "message": "needs a commit message, and link to the bug it fixes.",
       "revId": "e42426d2ef7eb13da5d4e041803d8e3a97f4d273",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a508326b_e3641565",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-26T17:22:55Z",
+      "side": 1,
+      "message": "please also add a small note to the docs explaining the crate2nix process that whenever a new feature is introduced these lists might need updating.",
+      "parentUuid": "fad4f7ca_dc73b2ab",
+      "revId": "e42426d2ef7eb13da5d4e041803d8e3a97f4d273",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
