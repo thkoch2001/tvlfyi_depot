@@ -327,8 +327,8 @@ Get the hell out of here, snipe!
 
 (map!
  (:map flycheck-mode-map
-  :m  "]e" #'flycheck-next-error
-  :m  "[e" #'flycheck-previous-error))
+  :m  "]q" #'flycheck-next-error
+  :m  "[q" #'flycheck-previous-error))
 #+end_src
 
 ** Smerge
@@ -723,6 +723,16 @@ fireplace-esque eval binding
    :n "g RET" #'org-capture-finalize
    :n "g \\"  #'org-captue-refile)))
 #+end_src
+
+** eglot
+#+begin_src emacs-lisp
+(defun disable-eglot-inlay-mode-hints ()
+  (eglot-inlay-hints-mode -1))
+(add-hook 'eglot-managed-mode-hook #'disable-eglot-inlay-mode-hints)
+#+end_src
+
+#+RESULTS:
+| disable-eglot-inlay-mode-hints | evil-normalize-keymaps | doom-modeline-override-eglot | doom-modeline-update-eglot | flycheck-eglot-mode | +lsp-optimization-mode |
 
 ** magit
 #+begin_src elisp :tangle yes
