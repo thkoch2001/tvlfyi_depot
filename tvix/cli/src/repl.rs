@@ -18,6 +18,7 @@ fn state_dir() -> Option<PathBuf> {
 pub enum ReplCommand<'a> {
     Expr(&'a str),
     Explain(&'a str),
+    Quit,
 }
 
 impl<'a> ReplCommand<'a> {
