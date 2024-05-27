@@ -5,10 +5,10 @@ pkgs.buildGoModule rec {
   version = "2.3.0-4";
 
   src = pkgs.fetchFromGitHub {
-    owner = "RITlug";
+    owner = "tvlfyi";
     repo = "teleirc";
-    rev = "v2.3.0-4-g9ad5f9a";
-    sha256 = "08h9ady2vz6nfcii2ac41b2lfqzjfiwv8apbcx4fybaymwy5vn7g";
+    rev = "356ed1450840822172e7dff57965cc5371f63454";
+    sha256 = "0s6rlixks7lar9js4q1drg742cy2p4n8l4pmlzjmskl5d04c15gq";
   };
 
   vendorHash = "sha256:06f2wyxbphj73wknpp6dsn7rb4yhvdl6x0gj729cns7r4bsviscs";
