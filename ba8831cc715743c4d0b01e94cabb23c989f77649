@@ -16,6 +16,24 @@
       "message": "Is the other stuff in `/external/yarn_cache/v*` stable, or needed for the build to succeed?",
       "revId": "ba8831cc715743c4d0b01e94cabb23c989f77649",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d188d39c_a1a1baa1",
+        "filename": "third_party/gerrit/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000108
+      },
+      "writtenOn": "2024-05-27T08:00:26Z",
+      "side": 1,
+      "message": "AFAIU yes, the architecture consists of a fixed output deps derivation with network access that creates the yarn cache, and a second derivation that can build without network access since everything yarn would download is cached.\n\nnpm-polymer-bridges happens to be a local file dependency, and is in fact available in the second derivation, which is why this hack of deleting it from the cache seems to work.",
+      "parentUuid": "6d9eccb9_9da9cf19",
+      "revId": "ba8831cc715743c4d0b01e94cabb23c989f77649",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
