@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "46b33400_439dfb6a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-05-27T17:48:16Z",
+      "side": 1,
+      "message": "er, sorry.",
+      "parentUuid": "b38e527e_2a5eb06d",
+      "revId": "84223fd3b2af4e1634364e09b654bc32e5a70567",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "14237945_9986ea0a",
         "filename": "/COMMIT_MSG",
         "patchSetId": 2
@@ -70,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "78df0420_8975e8b4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-05-27T17:48:16Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "cf150e19_bc25b42d",
+      "revId": "84223fd3b2af4e1634364e09b654bc32e5a70567",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d6030d5e_396a4f44",
@@ -83,6 +119,24 @@
       "writtenOn": "2024-05-20T08:17:02Z",
       "side": 1,
       "message": "```suggestion\n    #[error(\"path \u0027{0}\u0027 does not exist and cannot be created\")]\n```\n\n`{0}` does use Display on the struct element, see https://docs.rs/thiserror/latest/thiserror/#details.",
+      "revId": "84223fd3b2af4e1634364e09b654bc32e5a70567",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7117e4a_4e4e8c37",
+        "filename": "tvix/glue/src/builtins/errors.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-05-27T17:48:16Z",
+      "side": 1,
+      "message": "sigh.\n\nthis doesn\u0027t compile. `PathBuf` doesn\u0027t implement the `Display` trait (since it\u0027s not necesarily a UTF8-compatible string), you have to call [`display`](https://doc.rust-lang.org/std/path/struct.PathBuf.html#method.display) on it to get a Display impl.\n\nPlease be a little more thoughtful with review comments.",
+      "parentUuid": "d6030d5e_396a4f44",
       "revId": "84223fd3b2af4e1634364e09b654bc32e5a70567",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
