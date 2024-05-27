@@ -52,6 +52,24 @@
       "parentUuid": "d188d39c_a1a1baa1",
       "revId": "ba8831cc715743c4d0b01e94cabb23c989f77649",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd2ec58e_1abe00db",
+        "filename": "third_party/gerrit/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000108
+      },
+      "writtenOn": "2024-05-27T16:25:25Z",
+      "side": 1,
+      "message": "Updated.",
+      "parentUuid": "65e69223_bdbe3b36",
+      "revId": "ba8831cc715743c4d0b01e94cabb23c989f77649",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
