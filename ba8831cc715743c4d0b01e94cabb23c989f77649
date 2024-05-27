@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d9eccb9_9da9cf19",
+        "filename": "third_party/gerrit/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-27T07:41:02Z",
+      "side": 1,
+      "message": "Is the other stuff in `/external/yarn_cache/v*` stable, or needed for the build to succeed?",
+      "revId": "ba8831cc715743c4d0b01e94cabb23c989f77649",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
