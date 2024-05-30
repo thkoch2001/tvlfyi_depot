@@ -13248,6 +13248,7 @@ rec {
         features = {
           "arbitrary" = [ "proptest" "test-strategy" "imbl/proptest" ];
           "default" = [ "impure" "arbitrary" "nix_tests" ];
+          "nix_tests" = [ "impure" ];
           "proptest" = [ "dep:proptest" ];
           "test-strategy" = [ "dep:test-strategy" ];
         };
