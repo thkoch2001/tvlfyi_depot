@@ -120,7 +120,6 @@ fn eval_test(code_path: PathBuf, expect_success: bool) {
 
 // identity-* tests contain Nix code snippets which should evaluate to
 // themselves exactly (i.e. literals).
-#[cfg(feature = "impure")]
 #[rstest]
 fn identity(#[files("src/tests/tvix_tests/identity-*.nix")] code_path: PathBuf) {
     use crate::EvalIO;
@@ -151,14 +150,12 @@ fn identity(#[files("src/tests/tvix_tests/identity-*.nix")] code_path: PathBuf) 
 //
 // These evaluations are always supposed to succeed, i.e. all snippets
 // are guaranteed to be valid Nix code.
-#[cfg(feature = "impure")]
 #[rstest]
 fn eval_okay(#[files("src/tests/tvix_tests/eval-okay-*.nix")] code_path: PathBuf) {
     eval_test(code_path, true)
 }
 
 // eval-okay-* tests from the original Nix test suite.
-#[cfg(feature = "impure")]
 #[rstest]
 fn nix_eval_okay(#[files("src/tests/nix_tests/eval-okay-*.nix")] code_path: PathBuf) {
     eval_test(code_path, true)
@@ -173,7 +170,6 @@ fn nix_eval_okay(#[files("src/tests/nix_tests/eval-okay-*.nix")] code_path: Path
 // notyetpassing; this makes the test suite much more useful for
 // regression testing, since there should always be zero non-ignored
 // failing tests.
-#[cfg(feature = "impure")]
 #[rstest]
 fn nix_eval_okay_currently_failing(
     #[files("src/tests/nix_tests/notyetpassing/eval-okay-*.nix")] code_path: PathBuf,
@@ -181,7 +177,6 @@ fn nix_eval_okay_currently_failing(
     eval_test(code_path, false)
 }
 
-#[cfg(feature = "impure")]
 #[rstest]
 fn eval_okay_currently_failing(
     #[files("src/tests/tvix_tests/notyetpassing/eval-okay-*.nix")] code_path: PathBuf,
@@ -192,14 +187,12 @@ fn eval_okay_currently_failing(
 // eval-fail-* tests contain a snippet of Nix code, which is
 // expected to fail evaluation.  The exact type of failure
 // (assertion, parse error, etc) is not currently checked.
-#[cfg(feature = "impure")]
 #[rstest]
 fn eval_fail(#[files("src/tests/tvix_tests/eval-fail-*.nix")] code_path: PathBuf) {
     eval_test(code_path, false)
 }
 
 // eval-fail-* tests from the original Nix test suite.
-#[cfg(feature = "impure")]
 #[rstest]
 fn nix_eval_fail(#[files("src/tests/nix_tests/eval-fail-*.nix")] code_path: PathBuf) {
     eval_test(code_path, false)
