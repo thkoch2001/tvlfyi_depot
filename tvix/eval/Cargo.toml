@@ -47,7 +47,7 @@ default = ["impure", "arbitrary", "nix_tests"]
 
 # Enables running the Nix language test suite from the original C++
 # Nix implementation (at version 2.3) against Tvix.
-nix_tests = []
+nix_tests = ["impure"]
 
 # Enables operations in the VM which depend on the ability to perform I/O
 impure = []
