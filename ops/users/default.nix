@@ -244,4 +244,9 @@
     email = "benjaminedwardwebb@gmail.com";
     password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$kdFNmxgIGsF8TkB/GoPy1A$GUXd3M35Jqxqlfra4gPCcFW3ehE0RVrlHOzaoD7Pu7s";
   }
+  {
+    username = "fmzakari";
+    email = "farid.m.zakaria@gmail.com";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$NzSX6x2+mApMvhNrvVIWaQ$/GUwbj+6GUyJL8XSgxTThc3TmVTM4WLQ+6KMC4NwovE";
+  }
 ]
