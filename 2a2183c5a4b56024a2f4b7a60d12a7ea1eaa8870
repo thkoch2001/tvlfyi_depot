@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72ff013e_1c1c8f02",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-05-30T18:02:48Z",
+      "side": 1,
+      "message": "nak, this cements us further into the annoyance https://cl.tvl.fyi/c/depot/+/11723/4//COMMIT_MSG described.",
+      "revId": "2a2183c5a4b56024a2f4b7a60d12a7ea1eaa8870",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
