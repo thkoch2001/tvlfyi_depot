@@ -68,7 +68,7 @@ redactedGetTorrentFile dat = inSpan' "Redacted Get Torrent File" $ \span -> do
       )
   httpTorrent span req
 
-mkRedactedTorrentLink :: Arg "torrentId" Int -> Text
+mkRedactedTorrentLink :: Arg "torrentGroupId" Int -> Text
 mkRedactedTorrentLink torrentId = [fmt|https://redacted.ch/torrents.php?id={torrentId.unArg}|]
 
 exampleSearch :: (MonadThrow m, MonadLogger m, MonadPostgres m, MonadOtel m) => m (Transaction m ())

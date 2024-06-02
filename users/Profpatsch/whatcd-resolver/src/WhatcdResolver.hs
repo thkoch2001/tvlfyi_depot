@@ -541,7 +541,7 @@ getBestTorrentsTable artistFilter = do
                     {artists}
                   </td>
                   <td>
-                    <a href={mkRedactedTorrentLink (Arg b.torrentId)}>
+                    <a href={mkRedactedTorrentLink (Arg b.groupId)}>
                       {Html.toHtml @Text b.torrentGroupJson.groupName}
                     </a>
                   </td>
