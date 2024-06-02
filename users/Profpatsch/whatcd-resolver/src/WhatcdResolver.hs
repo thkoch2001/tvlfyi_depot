@@ -545,6 +545,7 @@ getBestTorrentsTable artistFilter = do
                       {Html.toHtml @Text b.torrentGroupJson.groupName}
                     </a>
                   </td>
+                  <td>{Html.toHtml @Int b.torrentGroupJson.groupYear}</td>
                   <td>{Html.toHtml @Int b.seedingWeight}</td>
                   <td><details hx-trigger="toggle once" hx-post="snips/redacted/torrentDataJson" hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentId)]}></details></td>
                   </tr>
@@ -559,6 +560,7 @@ getBestTorrentsTable artistFilter = do
               <th>Group ID</th>
               <th>Artist</th>
               <th>Name</th>
+              <th>Year</th>
               <th>Weight</th>
               <th>Torrent</th>
               <th>Torrent Group</th>
