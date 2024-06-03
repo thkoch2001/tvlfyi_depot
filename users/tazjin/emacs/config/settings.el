@@ -19,6 +19,9 @@
       ediff-split-window-function 'split-window-horizontally
       initial-major-mode 'emacs-lisp-mode)
 
+(setq-default tab-width 4)
+(setq-default fill-column 80)
+
 (add-to-list 'safe-local-variable-values '(lexical-binding . t))
 (add-to-list 'safe-local-variable-values '(whitespace-line-column . 80))
 
