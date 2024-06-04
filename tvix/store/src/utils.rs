@@ -21,7 +21,7 @@ pub async fn construct_services(
 ) -> std::io::Result<(
     Arc<dyn BlobService>,
     Arc<dyn DirectoryService>,
-    Box<dyn PathInfoService>,
+    Arc<dyn PathInfoService>,
     Box<dyn NarCalculationService>,
 )> {
     let blob_service: Arc<dyn BlobService> = blobservice::from_addr(blob_service_addr.as_ref())

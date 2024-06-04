@@ -1,6 +1,9 @@
+use std::sync::Arc;
+
 use url::Url;
 
 use crate::{proto::blob_service_client::BlobServiceClient, Error};
+use crate::blobservice::CombinedBlobService;
 
 use super::{BlobService, GRPCBlobService, MemoryBlobService, ObjectStoreBlobService};
 
@@ -12,17 +15,17 @@ use super::{BlobService, GRPCBlobService, MemoryBlobService, ObjectStoreBlobServ
 /// - `objectstore+*://` ([ObjectStoreBlobService])
 ///
 /// See their `from_url` methods for more details about their syntax.
-pub async fn from_addr(uri: &str) -> Result<Box<dyn BlobService>, crate::Error> {
+pub async fn from_addr(uri: &str) -> Result<Arc<dyn BlobService>, crate::Error> {
     let url = Url::parse(uri)
         .map_err(|e| crate::Error::StorageError(format!("unable to parse url: {}", e)))?;
 
-    let blob_service: Box<dyn BlobService> = match url.scheme() {
+    let mut blob_service: Arc<dyn BlobService> = match url.scheme() {
         "memory" => {
             // memory doesn't support host or path in the URL.
             if url.has_host() || !url.path().is_empty() {
                 return Err(Error::StorageError("invalid url".to_string()));
             }
-            Box::<MemoryBlobService>::default()
+            Arc::<MemoryBlobService>::default()
         }
         scheme if scheme.starts_with("grpc+") => {
             // schemes starting with grpc+ go to the GRPCPathInfoService.
@@ -31,7 +34,7 @@ pub async fn from_addr(uri: &str) -> Result<Box<dyn BlobService>, crate::Error> 
             // - In the case of non-unix sockets, there must be a host, but no path.
             // Constructing the channel is handled by tvix_castore::channel::from_url.
             let client = BlobServiceClient::new(crate::tonic::channel_from_url(&url).await?);
-            Box::new(GRPCBlobService::from_client(client))
+            Arc::new(GRPCBlobService::from_client(client))
         }
         scheme if scheme.starts_with("objectstore+") => {
             // We need to convert the URL to string, strip the prefix there, and then
@@ -40,7 +43,7 @@ pub async fn from_addr(uri: &str) -> Result<Box<dyn BlobService>, crate::Error> 
                 let s = url.to_string();
                 Url::parse(s.strip_prefix("objectstore+").unwrap()).unwrap()
             };
-            Box::new(
+            Arc::new(
                 ObjectStoreBlobService::parse_url(&trimmed_url)
                     .map_err(|e| Error::StorageError(e.to_string()))?,
             )
@@ -52,6 +55,11 @@ pub async fn from_addr(uri: &str) -> Result<Box<dyn BlobService>, crate::Error> 
             )))
         }
     };
+    let query = url.query_pairs().map(|(a, b)| (a.to_string(), b.to_string())).collect::<std::collections::HashMap<String, String>>();
+    if let Some(cache_setting) = query.get("cache") {
+        let cache = Box::pin(from_addr(cache_setting)).await?;
+        blob_service = Arc::new(CombinedBlobService::new(cache, blob_service));
+    }
 
     Ok(blob_service)
 }

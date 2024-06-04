@@ -1,6 +1,8 @@
 use url::Url;
 
+use std::sync::Arc;
 use crate::{proto::directory_service_client::DirectoryServiceClient, Error};
+use crate::directoryservice::Cache;
 
 use super::{
     DirectoryService, GRPCDirectoryService, MemoryDirectoryService, ObjectStoreDirectoryService,
@@ -21,18 +23,18 @@ use super::{
 ///   Connects to a local tvix-store gRPC service via Unix socket.
 /// - `grpc+http://host:port`, `grpc+https://host:port`
 ///    Connects to a (remote) tvix-store gRPC service.
-pub async fn from_addr(uri: &str) -> Result<Box<dyn DirectoryService>, crate::Error> {
+pub async fn from_addr(uri: &str) -> Result<Arc<dyn DirectoryService>, crate::Error> {
     #[allow(unused_mut)]
     let mut url = Url::parse(uri)
         .map_err(|e| crate::Error::StorageError(format!("unable to parse url: {}", e)))?;
 
-    let directory_service: Box<dyn DirectoryService> = match url.scheme() {
+    let mut directory_service: Arc<dyn DirectoryService> = match url.scheme() {
         "memory" => {
             // memory doesn't support host or path in the URL.
             if url.has_host() || !url.path().is_empty() {
                 return Err(Error::StorageError("invalid url".to_string()));
             }
-            Box::<MemoryDirectoryService>::default()
+            Arc::<MemoryDirectoryService>::default()
         }
         "sled" => {
             // sled doesn't support host, and a path can be provided (otherwise
@@ -49,7 +51,7 @@ pub async fn from_addr(uri: &str) -> Result<Box<dyn DirectoryService>, crate::Er
 
             // TODO: expose compression and other parameters as URL parameters?
 
-            Box::new(if url.path().is_empty() {
+            Arc::new(if url.path().is_empty() {
                 SledDirectoryService::new_temporary()
                     .map_err(|e| Error::StorageError(e.to_string()))?
             } else {
@@ -64,7 +66,7 @@ pub async fn from_addr(uri: &str) -> Result<Box<dyn DirectoryService>, crate::Er
             // - In the case of non-unix sockets, there must be a host, but no path.
             // Constructing the channel is handled by tvix_castore::channel::from_url.
             let client = DirectoryServiceClient::new(crate::tonic::channel_from_url(&url).await?);
-            Box::new(GRPCDirectoryService::from_client(client))
+            Arc::new(GRPCDirectoryService::from_client(client))
         }
         scheme if scheme.starts_with("objectstore+") => {
             // We need to convert the URL to string, strip the prefix there, and then
@@ -73,7 +75,8 @@ pub async fn from_addr(uri: &str) -> Result<Box<dyn DirectoryService>, crate::Er
                 let s = url.to_string();
                 Url::parse(s.strip_prefix("objectstore+").unwrap()).unwrap()
             };
-            Box::new(
+            println!("{:?}", trimmed_url);
+            Arc::new(
                 ObjectStoreDirectoryService::parse_url(&trimmed_url)
                     .map_err(|e| Error::StorageError(e.to_string()))?,
             )
@@ -96,7 +99,7 @@ pub async fn from_addr(uri: &str) -> Result<Box<dyn DirectoryService>, crate::Er
             let params: BigtableParameters = serde_qs::from_str(url.query().unwrap_or_default())
                 .map_err(|e| Error::InvalidRequest(format!("failed to parse parameters: {}", e)))?;
 
-            Box::new(
+            Arc::new(
                 BigtableDirectoryService::connect(params)
                     .await
                     .map_err(|e| Error::StorageError(e.to_string()))?,
@@ -109,6 +112,11 @@ pub async fn from_addr(uri: &str) -> Result<Box<dyn DirectoryService>, crate::Er
             )))
         }
     };
+    let query = url.query_pairs().map(|(a, b)| (a.to_string(), b.to_string())).collect::<std::collections::HashMap<String, String>>();
+    if let Some(cache_setting) = query.get("cache") {
+        let cache = Box::pin(from_addr(cache_setting)).await?;
+        directory_service = Arc::new(Cache::new(cache, directory_service));
+    }
     Ok(directory_service)
 }
 

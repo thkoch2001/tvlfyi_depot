@@ -4,6 +4,7 @@ use super::{
     GRPCPathInfoService, MemoryPathInfoService, NixHTTPPathInfoService, PathInfoService,
     SledPathInfoService,
 };
+use crate::pathinfoservice::combinators::Cache;
 
 use nix_compat::narinfo;
 use std::sync::Arc;
@@ -36,18 +37,18 @@ pub async fn from_addr(
     uri: &str,
     blob_service: Arc<dyn BlobService>,
     directory_service: Arc<dyn DirectoryService>,
-) -> Result<Box<dyn PathInfoService>, Error> {
+) -> Result<Arc<dyn PathInfoService>, Error> {
     #[allow(unused_mut)]
     let mut url =
         Url::parse(uri).map_err(|e| Error::StorageError(format!("unable to parse url: {}", e)))?;
 
-    let path_info_service: Box<dyn PathInfoService> = match url.scheme() {
+    let mut path_info_service: Arc<dyn PathInfoService> = match url.scheme() {
         "memory" => {
             // memory doesn't support host or path in the URL.
             if url.has_host() || !url.path().is_empty() {
                 return Err(Error::StorageError("invalid url".to_string()));
             }
-            Box::<MemoryPathInfoService>::default()
+            Arc::<MemoryPathInfoService>::default()
         }
         "sled" => {
             // sled doesn't support host, and a path can be provided (otherwise
@@ -64,7 +65,7 @@ pub async fn from_addr(
 
             // TODO: expose other parameters as URL parameters?
 
-            Box::new(if url.path().is_empty() {
+            Arc::new(if url.path().is_empty() {
                 SledPathInfoService::new_temporary()
                     .map_err(|e| Error::StorageError(e.to_string()))?
             } else {
@@ -79,7 +80,7 @@ pub async fn from_addr(
             let new_url = Url::parse(url.to_string().strip_prefix("nix+").unwrap()).unwrap();
 
             let mut nix_http_path_info_service =
-                NixHTTPPathInfoService::new(new_url, blob_service, directory_service);
+                NixHTTPPathInfoService::new(new_url, blob_service.clone(), directory_service.clone());
 
             let pairs = &url.query_pairs();
             for (k, v) in pairs.into_iter() {
@@ -97,7 +98,7 @@ pub async fn from_addr(
                 }
             }
 
-            Box::new(nix_http_path_info_service)
+            Arc::new(nix_http_path_info_service)
         }
         scheme if scheme.starts_with("grpc+") => {
             // schemes starting with grpc+ go to the GRPCPathInfoService.
@@ -107,7 +108,7 @@ pub async fn from_addr(
             // Constructing the channel is handled by tvix_castore::channel::from_url.
             let client =
                 PathInfoServiceClient::new(tvix_castore::tonic::channel_from_url(&url).await?);
-            Box::new(GRPCPathInfoService::from_client(client))
+            Arc::new(GRPCPathInfoService::from_client(client))
         }
         #[cfg(feature = "cloud")]
         "bigtable" => {
@@ -127,7 +128,7 @@ pub async fn from_addr(
             let params: BigtableParameters = serde_qs::from_str(url.query().unwrap_or_default())
                 .map_err(|e| Error::InvalidRequest(format!("failed to parse parameters: {}", e)))?;
 
-            Box::new(
+            Arc::new(
                 BigtablePathInfoService::connect(params)
                     .await
                     .map_err(|e| Error::StorageError(e.to_string()))?,
@@ -138,6 +139,11 @@ pub async fn from_addr(
             url.scheme()
         )))?,
     };
+    let query = url.query_pairs().map(|(a, b)| (a.to_string(), b.to_string())).collect::<std::collections::HashMap<String, String>>();
+    if let Some(cache_setting) = query.get("cache") {
+        let cache = Box::pin(from_addr(cache_setting, blob_service, directory_service)).await?;
+        path_info_service = Arc::new(Cache::new(cache, path_info_service));
+    }
 
     Ok(path_info_service)
 }

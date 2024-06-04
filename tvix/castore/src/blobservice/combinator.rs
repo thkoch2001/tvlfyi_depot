@@ -4,7 +4,6 @@ use tonic::async_trait;
 use tracing::{instrument, warn};
 
 use crate::B3Digest;
-
 use super::{naive_seeker::NaiveSeeker, BlobReader, BlobService, BlobWriter};
 
 /// Combinator for a BlobService, using a "local" and "remote" blobservice.
@@ -17,6 +16,12 @@ use super::{naive_seeker::NaiveSeeker, BlobReader, BlobService, BlobWriter};
 pub struct CombinedBlobService<BL, BR> {
     local: BL,
     remote: BR,
+}
+
+impl<BL, BR> CombinedBlobService<BL, BR> {
+    pub fn new(local: BL, remote: BR) -> Self {
+        Self { local, remote }
+    }
 }
 
 impl<BL, BR> Clone for CombinedBlobService<BL, BR>

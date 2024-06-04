@@ -211,6 +211,7 @@ async fn run_child2(args: Args) -> ! {
     .unwrap();
     trace!("spawn");
     let err = std::process::Command::new("bash")
+        .args(["--norc", "--noprofile"])
         .spawn()
         .unwrap()
         .wait()
