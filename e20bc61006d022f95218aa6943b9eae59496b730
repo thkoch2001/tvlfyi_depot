@@ -51,6 +51,24 @@
       "parentUuid": "9a0ec6e5_ac451cc9",
       "revId": "e20bc61006d022f95218aa6943b9eae59496b730",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09454a93_ab5a0f49",
+        "filename": "tvix/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-05T18:28:25Z",
+      "side": 1,
+      "message": "The cargo.nix output shouldn\u0027t depend on the previous output, so let\u0027s remove that.",
+      "parentUuid": "ef85462d_60a75611",
+      "revId": "e20bc61006d022f95218aa6943b9eae59496b730",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
