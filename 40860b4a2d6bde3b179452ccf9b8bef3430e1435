@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2073ffa6_9af41fca",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-05T17:03:53Z",
+      "side": 1,
+      "message": "Is this is because we forgot to run crate2nix somewhere again? if so, let\u0027s tackle plumbing that to CI in a followup.",
+      "revId": "40860b4a2d6bde3b179452ccf9b8bef3430e1435",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
