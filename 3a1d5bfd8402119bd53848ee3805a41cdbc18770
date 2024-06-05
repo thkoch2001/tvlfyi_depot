@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2570eb09_c2cec58f",
+        "filename": "tvix/docs/src/TODO.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000110
+      },
+      "writtenOn": "2024-06-05T08:48:23Z",
+      "side": 1,
+      "message": "I think its a good idea to drop log level and only use RUST_LOG. I also noticed this while testing tvix a couple of months ago that there are multiple ways to configure output to stderr. There is also `--no-warnings`. Maybe we can merge all these options into RUST_LOG because currently its confusing if you change the log level to error and you still end up gettings warnings",
+      "range": {
+        "startLine": 148,
+        "startChar": 0,
+        "endLine": 150,
+        "endChar": 40
+      },
+      "revId": "3a1d5bfd8402119bd53848ee3805a41cdbc18770",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
