@@ -16,6 +16,24 @@
       "message": "I would add here that the store composition format is not the same as the user-facing substituters config.\nThe user-facing config should include sensible default wrappers for caching, retries, fallbacks, etc. and then render to a \u0027composable store config\u0027.",
       "revId": "c6ab56c3bae6eaa85cca8ebee243f0b8625fd6ff",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "081557b6_cd90f177",
+        "filename": "tvix/docs/src/TODO.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-05T08:44:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bd86923_618abc55",
+      "revId": "c6ab56c3bae6eaa85cca8ebee243f0b8625fd6ff",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
