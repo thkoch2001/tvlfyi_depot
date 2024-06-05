@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcecc5ce_13a8ab24",
+        "filename": "tvix/eval/build.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-05T17:07:15Z",
+      "side": 1,
+      "message": "Can you add a line \"Pick up new test case files\" above the issue link? (in all 3 files). that makes it a bit more obvious without having to first follow that link.",
+      "revId": "9983ca326775dff836c35db5a696000d33776255",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
