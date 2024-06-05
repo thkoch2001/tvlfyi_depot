@@ -22,6 +22,30 @@
       },
       "revId": "3a1d5bfd8402119bd53848ee3805a41cdbc18770",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e604ae1_663990de",
+        "filename": "tvix/docs/src/TODO.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-05T08:51:03Z",
+      "side": 1,
+      "message": "Note `--no-warnings` is Nix language evaluator warnings, which is a slightly different thing. I\u0027d probably keep it separate.\n\nOk, then let\u0027s drop `--log-level` CLI parameters. But I guess we can keep this TODO list here flexible.",
+      "parentUuid": "2570eb09_c2cec58f",
+      "range": {
+        "startLine": 148,
+        "startChar": 0,
+        "endLine": 150,
+        "endChar": 40
+      },
+      "revId": "3a1d5bfd8402119bd53848ee3805a41cdbc18770",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
