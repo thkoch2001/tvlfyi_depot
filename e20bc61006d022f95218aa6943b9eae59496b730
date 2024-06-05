@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "47991b1b_6f0c906e",
+        "filename": "tvix/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-06-05T18:40:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5b348fb8_6047bb47",
+      "revId": "e20bc61006d022f95218aa6943b9eae59496b730",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a0ec6e5_ac451cc9",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "The cargo.nix output shouldn\u0027t depend on the previous output, so let\u0027s remove that.",
       "parentUuid": "ef85462d_60a75611",
+      "revId": "e20bc61006d022f95218aa6943b9eae59496b730",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c25be2e_8f189dc9",
+        "filename": "tvix/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-06-05T18:40:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09454a93_ab5a0f49",
       "revId": "e20bc61006d022f95218aa6943b9eae59496b730",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
