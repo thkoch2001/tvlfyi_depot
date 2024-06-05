@@ -185,13 +185,19 @@ in
     pkgs.stdenv.mkDerivation {
       inherit src;
 
-      # Important: we include the hash of the Cargo.lock file and
-      # Cargo.nix file in the derivation name.  This forces the FOD
-      # to be rebuilt/reverified whenever either of them changes.
-      name = "tvix-crate2nix-check-" +
-        (builtins.substring 0 8 (builtins.hashFile "sha256" ./Cargo.lock)) +
-        "-" +
-        (builtins.substring 0 8 (builtins.hashFile "sha256" ./Cargo.nix));
+      # Important: we include the hash of all Cargo related files in the derivation name.
+      # This forces the FOD to be rebuilt/reverified whenever either of them changes.
+      name = "tvix-crate2nix-check-" + (builtins.substring 0 8
+        (builtins.hashString "sha256" (lib.concatMapStrings (x: builtins.hashFile "sha256" x)
+          (lib.fileset.toList
+            (lib.fileset.fileFilter
+              (f:
+                f.name == "Cargo.toml"
+                  || f.name == "Cargo.lock"
+                  || f.name == "Cargo.nix")
+              ./.)
+          )))
+      );
 
       nativeBuildInputs = with pkgs; [ git cacert cargo ];
       buildPhase = ''
