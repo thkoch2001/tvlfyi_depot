@@ -33,6 +33,24 @@
       "message": "why cargo.nix?",
       "revId": "e20bc61006d022f95218aa6943b9eae59496b730",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef85462d_60a75611",
+        "filename": "tvix/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 197,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-06-05T18:09:35Z",
+      "side": 1,
+      "message": "I actually don\u0027t know 😄, it\u0027s just what was previously there.",
+      "parentUuid": "9a0ec6e5_ac451cc9",
+      "revId": "e20bc61006d022f95218aa6943b9eae59496b730",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
