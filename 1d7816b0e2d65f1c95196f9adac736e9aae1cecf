@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ff31bc4_33b2a8d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-06T10:35:13Z",
+      "side": 1,
+      "message": "Rebased this to the latest changes. It might be a unlucky example, as it\u0027s unfree and we\u0027d need to add it.",
+      "revId": "1d7816b0e2d65f1c95196f9adac736e9aae1cecf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
