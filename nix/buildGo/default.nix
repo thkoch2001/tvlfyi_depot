@@ -86,12 +86,40 @@ let
 
   # High-level build functions
 
+  embedfinder = {}:
+    runCommand "embedfinder" { } ''
+      ${importcfgCmd { name = "embedfinder"; deps = []; }}
+      ${go}/bin/go tool compile -o embedfinder.a -importcfg=importcfg -trimpath=$PWD -trimpath=${go} -p main ${./embed/embedfinder.go} ${./embed/embedcfg.go} ${./embed/filter.go} ${./embed/read.go}
+      mkdir -p $out/bin
+      ${go}/bin/go tool link -o $out/bin/embedfinder -importcfg=importcfg -buildid nix embedfinder.a
+    '';
+
+  embedfinderCmd = { srcs, embed_cfg ? null }:
+    let
+      out_cmd =
+        if (embed_cfg == null)
+        then ''
+          export EMBED_CFG=$(${embedfinder {}}/bin/embedfinder ${spaceOut srcs})
+
+          export EMBED_FLAG=""
+          if test -n "$EMBED_CFG"
+          then
+            export EMBED_FLAG="-embedcfg=$EMBED_CFG"
+          fi
+        '' else ''
+          echo '${builtins.toJSON embed_cfg}' > embedcfg
+          export EMBED_FLAG="-embedcfg=embedcfg"
+        '';
+    in
+    out_cmd;
+
   # Build a Go program out of the specified files and dependencies.
-  program = { name, srcs, deps ? [ ], x_defs ? { } }:
+  program = { name, srcs, deps ? [ ], x_defs ? { }, embed_cfg ? null }:
     let uniqueDeps = allDeps (map (d: d.gopkg) deps);
     in runCommand name { } ''
       ${importcfgCmd { inherit name; deps = uniqueDeps; }}
-      ${go}/bin/go tool compile -o ${name}.a -importcfg=importcfg -trimpath=$PWD -trimpath=${go} -p main ${includeSources uniqueDeps} ${spaceOut srcs}
+      ${embedfinderCmd { inherit srcs embed_cfg; }}
+      ${go}/bin/go tool compile -o ${name}.a -importcfg=importcfg $EMBED_FLAG -trimpath=$PWD -trimpath=${go} -p main ${includeSources uniqueDeps} ${spaceOut srcs}
       mkdir -p $out/bin
       export GOROOT_FINAL=go
       ${go}/bin/go tool link -o $out/bin/${name} -importcfg=importcfg -buildid nix ${xFlags x_defs} ${includeLibs uniqueDeps} ${name}.a
@@ -101,7 +129,7 @@ let
   #
   # This outputs both the sources and compiled binary, as both are
   # needed when downstream packages depend on it.
-  package = { name, srcs, deps ? [ ], path ? name, sfiles ? [ ] }:
+  package = { name, srcs, deps ? [ ], path ? name, sfiles ? [ ], embed_cfg ? null }:
     let
       uniqueDeps = allDeps (map (d: d.gopkg) deps);
 
@@ -124,7 +152,8 @@ let
         ${srcList path (map (s: "${s}") srcs)}
         ${asmBuild}
         ${importcfgCmd { inherit name; deps = uniqueDeps; }}
-        ${go}/bin/go tool compile -pack ${asmLink} -o $out/${path}.a -importcfg=importcfg -trimpath=$PWD -trimpath=${go} -p ${path} ${includeSources uniqueDeps} ${spaceOut srcs}
+        ${embedfinderCmd { inherit srcs embed_cfg; }}
+        ${go}/bin/go tool compile -pack ${asmLink} -o $out/${path}.a -importcfg=importcfg $EMBED_FLAG -trimpath=$PWD -trimpath=${go} -p ${path} ${includeSources uniqueDeps} ${spaceOut srcs}
         ${asmPack}
       '').overrideAttrs (_: {
         passthru = {

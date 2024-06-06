@@ -10,6 +10,8 @@ import (
 	"flag"
 	"fmt"
 	"go/build"
+	"io/fs"
+	"io/ioutil"
 	"log"
 	"os"
 	"path"
@@ -45,7 +47,7 @@ type foreignDep struct {
 
 // findGoDirs returns a filepath.WalkFunc that identifies all
 // directories that contain Go source code in a certain tree.
-func findGoDirs(at string) ([]string, error) {
+func findGoDirs(at string) ([]string, map[string]bool, error) {
 	dirSet := make(map[string]bool)
 
 	err := filepath.Walk(at, func(path string, info os.FileInfo, err error) error {
@@ -69,23 +71,41 @@ func findGoDirs(at string) ([]string, error) {
 	})
 
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
+	dirMap := make(map[string]bool)
 	goDirs := []string{}
 	for goDir := range dirSet {
 		goDirs = append(goDirs, goDir)
+		dirMap[strings.TrimPrefix(goDir, at)] = true
 	}
 
-	return goDirs, nil
+	return goDirs, dirMap, nil
 }
 
 // analysePackage loads and analyses the imports of a single Go
 // package, returning the data that is required by the Nix code to
 // generate a derivation for this package.
-func analysePackage(root, source, importpath string, stdlib map[string]bool) (pkg, error) {
+func analysePackage(root, source, importpath string, stdlib map[string]bool, dirMap map[string]bool) (pkg, error) {
 	ctx := build.Default
 	ctx.CgoEnabled = false
+	ctx.UseAllFiles = false
+	ctx.ReadDir = func(dir string) ([]fs.FileInfo, error) {
+		d, err := ioutil.ReadDir(dir)
+		if err != nil {
+			return nil, err
+		}
+
+		noTests := make([]fs.FileInfo, 0)
+		for _, entry := range d {
+			if !strings.HasSuffix(entry.Name(), "_test.go") {
+				noTests = append(noTests, entry)
+			}
+		}
+
+		return noTests, nil
+	}
 
 	p, err := ctx.ImportDir(source, build.IgnoreVendor)
 	if err != nil {
@@ -102,7 +122,7 @@ func analysePackage(root, source, importpath string, stdlib map[string]bool) (pk
 
 		if i == importpath {
 			local = append(local, []string{})
-		} else if strings.HasPrefix(i, importpath+"/") {
+		} else if strings.HasPrefix(i, importpath+"/") && dirMap[strings.TrimPrefix(i, importpath)] {
 			local = append(local, strings.Split(strings.TrimPrefix(i, importpath+"/"), "/"))
 		} else {
 			// The import positions is a map keyed on the import name.
@@ -166,19 +186,23 @@ func main() {
 		log.Fatalf("-source flag must be specified")
 	}
 
+	if strings.Contains(*source, "editiondefaults") {
+		panic(*source)
+	}
+
 	stdlibPkgs, err := loadStdlibPkgs(stdlibList)
 	if err != nil {
 		log.Fatalf("failed to load standard library index from %q: %s\n", stdlibList, err)
 	}
 
-	goDirs, err := findGoDirs(*source)
+	goDirs, dirMap, err := findGoDirs(*source)
 	if err != nil {
 		log.Fatalf("failed to walk source directory '%s': %s", *source, err)
 	}
 
 	all := []pkg{}
 	for _, d := range goDirs {
-		analysed, err := analysePackage(*source, d, *path, stdlibPkgs)
+		analysed, err := analysePackage(*source, d, *path, stdlibPkgs, dirMap)
 
 		// If the Go source analysis returned "no buildable Go files",
 		// that directory should be skipped.
