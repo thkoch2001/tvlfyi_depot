@@ -22,6 +22,30 @@
       },
       "revId": "8e18c8d1c940e497d6dfa4ca8b2cf520fa0b8f34",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "33555d6f_58045dc3",
+        "filename": "tvix/glue/Cargo.toml",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-06T09:59:45Z",
+      "side": 1,
+      "message": "https://cl.tvl.fyi/c/depot/+/11756",
+      "parentUuid": "b15acf5e_e1454739",
+      "range": {
+        "startLine": 29,
+        "startChar": 0,
+        "endLine": 29,
+        "endChar": 2
+      },
+      "revId": "8e18c8d1c940e497d6dfa4ca8b2cf520fa0b8f34",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ],
   "submitRequirementResults": []
