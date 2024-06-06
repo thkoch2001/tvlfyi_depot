@@ -128,6 +128,10 @@ let
         src = filterRustCrateSrc { root = prev.src.origSrc; };
       };
 
+      tvix-tracing = prev: {
+        src = filterRustCrateSrc { root = prev.src.origSrc; };
+      };
+
       nix-compat = prev: {
         src = filterRustCrateSrc rec {
           root = prev.src.origSrc;

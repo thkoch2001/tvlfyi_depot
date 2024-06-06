@@ -123,6 +123,16 @@ rec {
       # File a bug if you depend on any for non-debug work!
       debug = internal.debugCrate { inherit packageId; };
     };
+    "tvix-tracing" = rec {
+      packageId = "tvix-tracing";
+      build = internal.buildRustCrateWithFeatures {
+        packageId = "tvix-tracing";
+      };
+
+      # Debug support which might change between releases.
+      # File a bug if you depend on any for non-debug work!
+      debug = internal.debugCrate { inherit packageId; };
+    };
   };
 
   # A derivation that joins the outputs of all workspace members together.
@@ -12950,16 +12960,12 @@ rec {
             optional = true;
           }
           {
-            name = "tracing";
-            packageId = "tracing";
-          }
-          {
-            name = "tracing-subscriber";
-            packageId = "tracing-subscriber";
-          }
-          {
             name = "tvix-castore";
             packageId = "tvix-castore";
+          }
+          {
+            name = "tvix-tracing";
+            packageId = "tvix-tracing";
           }
           {
             name = "url";
@@ -13296,15 +13302,6 @@ rec {
             packageId = "tokio";
           }
           {
-            name = "tracing";
-            packageId = "tracing";
-            features = [ "max_level_trace" "release_max_level_info" ];
-          }
-          {
-            name = "tracing-subscriber";
-            packageId = "tracing-subscriber";
-          }
-          {
             name = "tvix-build";
             packageId = "tvix-build";
           }
@@ -13324,6 +13321,10 @@ rec {
             name = "tvix-store";
             packageId = "tvix-store";
             usesDefaultFeatures = false;
+          }
+          {
+            name = "tvix-tracing";
+            packageId = "tvix-tracing";
           }
           {
             name = "wu-manber";
@@ -13795,10 +13796,6 @@ rec {
             packageId = "futures";
           }
           {
-            name = "indicatif";
-            packageId = "indicatif";
-          }
-          {
             name = "lazy_static";
             packageId = "lazy_static";
           }
@@ -13810,22 +13807,6 @@ rec {
             name = "nix-compat";
             packageId = "nix-compat";
             features = [ "async" ];
-          }
-          {
-            name = "opentelemetry";
-            packageId = "opentelemetry";
-            optional = true;
-          }
-          {
-            name = "opentelemetry-otlp";
-            packageId = "opentelemetry-otlp";
-            optional = true;
-          }
-          {
-            name = "opentelemetry_sdk";
-            packageId = "opentelemetry_sdk";
-            optional = true;
-            features = [ "rt-tokio" ];
           }
           {
             name = "parking_lot";
@@ -13909,25 +13890,12 @@ rec {
             packageId = "tower";
           }
           {
-            name = "tracing";
-            packageId = "tracing";
-          }
-          {
-            name = "tracing-indicatif";
-            packageId = "tracing-indicatif";
-          }
-          {
-            name = "tracing-opentelemetry";
-            packageId = "tracing-opentelemetry";
-          }
-          {
-            name = "tracing-subscriber";
-            packageId = "tracing-subscriber";
-            features = [ "env-filter" ];
-          }
-          {
             name = "tvix-castore";
             packageId = "tvix-castore";
+          }
+          {
+            name = "tvix-tracing";
+            packageId = "tvix-tracing";
           }
           {
             name = "url";
@@ -13974,11 +13942,71 @@ rec {
           "cloud" = [ "dep:bigtable_rs" "tvix-castore/cloud" ];
           "default" = [ "cloud" "fuse" "otlp" "tonic-reflection" ];
           "fuse" = [ "tvix-castore/fuse" ];
-          "otlp" = [ "dep:opentelemetry" "dep:opentelemetry-otlp" "dep:opentelemetry_sdk" ];
+          "otlp" = [ "tvix-tracing/otlp" ];
           "tonic-reflection" = [ "dep:tonic-reflection" "tvix-castore/tonic-reflection" ];
           "virtiofs" = [ "tvix-castore/virtiofs" ];
         };
         resolvedDefaultFeatures = [ "cloud" "default" "fuse" "integration" "otlp" "tonic-reflection" "virtiofs" ];
+      };
+      "tvix-tracing" = rec {
+        crateName = "tvix-tracing";
+        version = "0.1.0";
+        edition = "2021";
+        # We can't filter paths with references in Nix 2.4
+        # See https://github.com/NixOS/nix/issues/5410
+        src =
+          if ((lib.versionOlder builtins.nixVersion "2.4pre20211007") || (lib.versionOlder "2.5" builtins.nixVersion))
+          then lib.cleanSourceWith { filter = sourceFilter; src = ./tracing; }
+          else ./tracing;
+        dependencies = [
+          {
+            name = "indicatif";
+            packageId = "indicatif";
+          }
+          {
+            name = "lazy_static";
+            packageId = "lazy_static";
+          }
+          {
+            name = "opentelemetry";
+            packageId = "opentelemetry";
+            optional = true;
+          }
+          {
+            name = "opentelemetry-otlp";
+            packageId = "opentelemetry-otlp";
+            optional = true;
+          }
+          {
+            name = "opentelemetry_sdk";
+            packageId = "opentelemetry_sdk";
+            optional = true;
+            features = [ "rt-tokio" ];
+          }
+          {
+            name = "tracing";
+            packageId = "tracing";
+            features = [ "max_level_trace" "release_max_level_info" ];
+          }
+          {
+            name = "tracing-indicatif";
+            packageId = "tracing-indicatif";
+          }
+          {
+            name = "tracing-opentelemetry";
+            packageId = "tracing-opentelemetry";
+            optional = true;
+          }
+          {
+            name = "tracing-subscriber";
+            packageId = "tracing-subscriber";
+            features = [ "env-filter" ];
+          }
+        ];
+        features = {
+          "otlp" = [ "dep:tracing-opentelemetry" "dep:opentelemetry" "dep:opentelemetry-otlp" "dep:opentelemetry_sdk" ];
+        };
+        resolvedDefaultFeatures = [ "default" "otlp" ];
       };
       "typenum" = rec {
         crateName = "typenum";

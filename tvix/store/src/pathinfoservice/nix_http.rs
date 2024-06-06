@@ -10,10 +10,11 @@ use std::io::{self, Write};
 use tokio::io::{AsyncRead, BufReader};
 use tokio_util::io::InspectReader;
 use tonic::async_trait;
-use tracing::{debug, instrument, warn};
+
 use tvix_castore::{
     blobservice::BlobService, directoryservice::DirectoryService, proto as castorepb, Error,
 };
+use tvix_tracing::tracing::{self, debug, instrument, warn};
 
 use crate::proto::PathInfo;
 

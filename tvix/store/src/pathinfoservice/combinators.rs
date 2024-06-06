@@ -2,8 +2,9 @@ use crate::proto::PathInfo;
 use futures::stream::BoxStream;
 use nix_compat::nixbase32;
 use tonic::async_trait;
-use tracing::{debug, instrument};
+
 use tvix_castore::Error;
+use tvix_tracing::tracing::{self, debug, instrument};
 
 use super::PathInfoService;
 

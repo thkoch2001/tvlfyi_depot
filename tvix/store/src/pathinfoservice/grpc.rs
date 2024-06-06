@@ -7,8 +7,9 @@ use async_stream::try_stream;
 use futures::stream::BoxStream;
 use nix_compat::nixbase32;
 use tonic::{async_trait, transport::Channel, Code};
-use tracing::instrument;
+
 use tvix_castore::{proto as castorepb, Error};
+use tvix_tracing::tracing::{self, instrument};
 
 /// Connects to a (remote) tvix-store PathInfoService over gRPC.
 #[derive(Clone)]

@@ -11,8 +11,9 @@ use prost::Message;
 use serde::{Deserialize, Serialize};
 use serde_with::{serde_as, DurationSeconds};
 use tonic::async_trait;
-use tracing::{instrument, trace};
+
 use tvix_castore::Error;
+use tvix_tracing::tracing::{self, instrument, trace};
 
 /// There should not be more than 10 MiB in a single cell.
 /// https://cloud.google.com/bigtable/docs/schema-design#cells
