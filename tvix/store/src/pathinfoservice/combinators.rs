@@ -3,6 +3,7 @@ use futures::stream::BoxStream;
 use nix_compat::nixbase32;
 use tonic::async_trait;
 use tracing::{debug, instrument};
+
 use tvix_castore::Error;
 
 use super::PathInfoService;

@@ -5,6 +5,7 @@ use futures::{stream::BoxStream, TryStreamExt};
 use std::ops::Deref;
 use tonic::{async_trait, Request, Response, Result, Status};
 use tracing::{instrument, warn};
+
 use tvix_castore::proto as castorepb;
 
 pub struct GRPCPathInfoServiceWrapper<PS, NS> {
