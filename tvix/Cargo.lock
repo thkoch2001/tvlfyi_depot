@@ -4126,9 +4126,8 @@ dependencies = [
  "tonic",
  "tonic-build",
  "tonic-reflection",
- "tracing",
- "tracing-subscriber",
  "tvix-castore",
+ "tvix-tracing",
  "url",
 ]
 
@@ -4203,13 +4202,12 @@ dependencies = [
  "thiserror",
  "tikv-jemallocator",
  "tokio",
- "tracing",
- "tracing-subscriber",
  "tvix-build",
  "tvix-castore",
  "tvix-eval",
  "tvix-glue",
  "tvix-store",
+ "tvix-tracing",
  "wu-manber",
 ]
 
@@ -4326,13 +4324,9 @@ dependencies = [
  "count-write",
  "data-encoding",
  "futures",
- "indicatif",
  "lazy_static",
  "lru",
  "nix-compat",
- "opentelemetry",
- "opentelemetry-otlp",
- "opentelemetry_sdk",
  "parking_lot 0.12.2",
  "pin-project-lite",
  "prost",
@@ -4357,13 +4351,25 @@ dependencies = [
  "tonic-build",
  "tonic-reflection",
  "tower",
+ "tvix-castore",
+ "tvix-tracing",
+ "url",
+ "walkdir",
+]
+
+[[package]]
+name = "tvix-tracing"
+version = "0.1.0"
+dependencies = [
+ "indicatif",
+ "lazy_static",
+ "opentelemetry",
+ "opentelemetry-otlp",
+ "opentelemetry_sdk",
  "tracing",
  "tracing-indicatif",
  "tracing-opentelemetry",
  "tracing-subscriber",
- "tvix-castore",
- "url",
- "walkdir",
 ]
 
 [[package]]

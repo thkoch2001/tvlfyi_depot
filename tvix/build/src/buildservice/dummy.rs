@@ -1,5 +1,5 @@
 use tonic::async_trait;
-use tracing::instrument;
+use tvix_tracing::tracing::{self, instrument};
 
 use super::BuildService;
 use crate::proto::{Build, BuildRequest};

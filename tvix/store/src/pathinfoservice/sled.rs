@@ -6,9 +6,9 @@ use nix_compat::nixbase32;
 use prost::Message;
 use std::path::Path;
 use tonic::async_trait;
-use tracing::instrument;
-use tracing::warn;
+
 use tvix_castore::Error;
+use tvix_tracing::tracing::{self, instrument, warn};
 
 /// SledPathInfoService stores PathInfo in a [sled](https://github.com/spacejam/sled).
 ///
