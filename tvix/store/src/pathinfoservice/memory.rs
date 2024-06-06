@@ -6,8 +6,9 @@ use nix_compat::nixbase32;
 use std::{collections::HashMap, sync::Arc};
 use tokio::sync::RwLock;
 use tonic::async_trait;
-use tracing::instrument;
+
 use tvix_castore::Error;
+use tvix_tracing::tracing::{self, instrument};
 
 #[derive(Default)]
 pub struct MemoryPathInfoService {

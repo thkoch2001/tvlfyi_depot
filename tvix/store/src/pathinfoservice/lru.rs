@@ -6,10 +6,10 @@ use std::num::NonZeroUsize;
 use std::sync::Arc;
 use tokio::sync::RwLock;
 use tonic::async_trait;
-use tracing::instrument;
 
 use crate::proto::PathInfo;
 use tvix_castore::Error;
+use tvix_tracing::tracing::{self, instrument};
 
 use super::PathInfoService;
 
