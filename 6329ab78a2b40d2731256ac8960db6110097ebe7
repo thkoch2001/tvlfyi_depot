@@ -34,6 +34,24 @@
       "parentUuid": "f60820b2_1e52890a",
       "revId": "6329ab78a2b40d2731256ac8960db6110097ebe7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa4d9c82_b6e9bc28",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-06T10:21:23Z",
+      "side": 1,
+      "message": "Fair point. Rebased this to latest canon.",
+      "parentUuid": "fcf82e6d_09500d15",
+      "revId": "6329ab78a2b40d2731256ac8960db6110097ebe7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
