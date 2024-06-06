@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "54de872d_89c59a70",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-06T09:25:49Z",
+      "side": 1,
+      "message": "Can you add a description explaining:\n\n - the motivation behind this change (why, what does it unlock)\n - a high-level overview how this is accomplished\n\nIt\u0027d really help with review, as well as someone later looking at the git log to understand what\u0027s going on here.\n\nMaybe make it a bit more clear what we\u0027re introducing here (leaves_to_root).",
+      "revId": "b67ae0b8a79807b250b9b800114204cd7534f588",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d46faab6_6165678c",
+        "filename": "tvix/castore/src/directoryservice/closure_validator.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-06T09:25:49Z",
+      "side": 1,
+      "message": "```suggestion\n    /// Adds a directory which has already been confirmed to be in-order to the graph.\n```",
+      "revId": "b67ae0b8a79807b250b9b800114204cd7534f588",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a064d293_f3664a53",
+        "filename": "tvix/castore/src/directoryservice/closure_validator.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-06T09:25:49Z",
+      "side": 1,
+      "message": "Leftover comment",
+      "revId": "b67ae0b8a79807b250b9b800114204cd7534f588",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a1b6a71_04cb074d",
+        "filename": "tvix/castore/src/directoryservice/closure_validator.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-06T09:25:49Z",
+      "side": 1,
+      "message": "can we easily write this without itertools? That\u0027s the only place it\u0027s used.",
+      "revId": "b67ae0b8a79807b250b9b800114204cd7534f588",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
