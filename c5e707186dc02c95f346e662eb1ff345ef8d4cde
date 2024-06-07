@@ -35,6 +35,23 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7075ca3a_a4a2991e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-06-07T17:24:45Z",
+      "side": 1,
+      "message": "This change is missing the nix src filtering and the features powerset bits:\n\nYou can apply this diff\n```\ndiff --git a/tvix/default.nix b/tvix/default.nix\nindex edcae8dd0..e1b8781ba 100644\n--- a/tvix/default.nix\n+++ b/tvix/default.nix\n@@ -128,6 +128,10 @@ let\n         src \u003d filterRustCrateSrc { root \u003d prev.src.origSrc; };\n       };\n \n+      tvix-tracing \u003d prev: {\n+        src \u003d filterRustCrateSrc { root \u003d prev.src.origSrc; };\n+      };\n+\n       nix-compat \u003d prev: {\n         src \u003d filterRustCrateSrc rec {\n           root \u003d prev.src.origSrc;\ndiff --git a/tvix/tracing/default.nix b/tvix/tracing/default.nix\nnew file mode 100644\nindex 000000000..a4fe3a5d9\n--- /dev/null\n+++ b/tvix/tracing/default.nix\n@@ -0,0 +1,11 @@\n+{ depot, lib, ... }:\n+\n+(depot.tvix.crates.workspaceMembers.tvix-tracing.build.override {\n+  runTests \u003d true;\n+}).overrideAttrs (old: rec {\n+  meta.ci.targets \u003d lib.filter (x: lib.hasPrefix \"with-features\" x || x \u003d\u003d \"no-features\") (lib.attrNames passthru);\n+  passthru \u003d depot.tvix.utils.mkFeaturePowerset {\n+    inherit (old) crateName;\n+    features \u003d [ \"otlp\" ];\n+  };\n+})\n``",
+      "revId": "c5e707186dc02c95f346e662eb1ff345ef8d4cde",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f59d56c_350886ff",
