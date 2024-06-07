@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d751b13_0720d8c4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-07T10:11:40Z",
+      "side": 1,
+      "message": "s/Boilercode/boilerplate? 😄",
+      "revId": "c5e707186dc02c95f346e662eb1ff345ef8d4cde",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9142ba99_540b3bfe",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-07T10:11:40Z",
+      "side": 1,
+      "message": "I\u0027m not 100% sold on using the (re)exported `tracing` crate in all library code. It might be a bit confusing why we use the re-export, importing `tracing::…` is quite common in other code.\n\nI can be convinced to one thing or the other, but if we use the re-export we should definitely document a bit more why we\u0027re doing it that way.",
+      "revId": "c5e707186dc02c95f346e662eb1ff345ef8d4cde",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f59d56c_350886ff",
+        "filename": "tvix/tracing/Cargo.toml",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-07T10:11:40Z",
+      "side": 1,
+      "message": "```suggestion\ntracing \u003d { version \u003d \"0.1.40\", features \u003d [\"max_level_trace\", \"release_max_level_info\"] }\n```\n\n… at least that\u0027s what was set in tvix/cli/Cargo.toml before.",
+      "revId": "c5e707186dc02c95f346e662eb1ff345ef8d4cde",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22351ec7_1ca5cfbd",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-07T10:11:40Z",
+      "side": 1,
+      "message": "```suggestion\n// using a macro_rule here because of the complex return type\n```",
+      "revId": "c5e707186dc02c95f346e662eb1ff345ef8d4cde",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "30750897_e3a09b8a",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-07T10:11:40Z",
+      "side": 1,
+      "message": "At some point, we might want to use some builder pattern here, and then have the otlp config just another conditional configure function on that *Builder struct.\n\nThough it\u0027s probably fine as it is right now, and can be done in a followup CL, once/if we extend the complexity in here.",
+      "revId": "c5e707186dc02c95f346e662eb1ff345ef8d4cde",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
