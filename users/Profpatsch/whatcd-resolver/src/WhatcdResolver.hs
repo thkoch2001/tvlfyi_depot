@@ -214,7 +214,7 @@ htmlUi = do
                     let HandlerResponses {htmlWithQueryArgs} = respond
 
                     htmlWithQueryArgs
-                      ( label @"redactedId"
+                      ( label @"artistRedactedId"
                           <$> (singleQueryArgument "redacted_id" (Field.utf8 >>> Field.decimalNatural))
                       )
                       $ \qry _span -> do
@@ -316,7 +316,7 @@ htmlPageChrome body =
     |]
 
 artistPage ::
-  ( HasField "redactedId" dat Natural,
+  ( HasField "artistRedactedId" dat Natural,
     MonadPostgres m,
     MonadOtel m,
     MonadLogger m,
@@ -326,11 +326,11 @@ artistPage ::
   dat ->
   m Html
 artistPage dat = runTransaction $ do
-  torrents <- getBestTorrentsTable (Just $ getLabel @"redactedId" dat)
+  torrents <- getBestTorrentsTable (Just $ getLabel @"artistRedactedId" dat)
   pure $
     htmlPageChrome
       [hsx|
-        Artist ID: {dat.redactedId}
+        Artist ID: {dat.artistRedactedId}
 
         {torrents}
       |]
@@ -474,7 +474,7 @@ snipsRedactedSearch dat = do
       ]
   runTransaction $ do
     t
-    getBestTorrentsTable (Nothing :: Maybe (Label "redactedId" Natural))
+    getBestTorrentsTable (Nothing :: Maybe (Label "artistRedactedId" Natural))
 
 data ArtistFilter = ArtistFilter
   { onlyArtist :: Maybe (Label "artistId" Text)
@@ -487,9 +487,22 @@ getBestTorrentsTable ::
     MonadPostgres m,
     MonadOtel m
   ) =>
-  Maybe (Label "redactedId" Natural) ->
+  Maybe (Label "artistRedactedId" Natural) ->
   Transaction m Html
-getBestTorrentsTable artistFilter = do
+getBestTorrentsTable dat = do
+  fresh <- getBestTorrentsData dat
+  pure $ mkBestTorrentsTable fresh
+
+getBestTorrentsData ::
+  ( MonadTransmission m,
+    MonadThrow m,
+    MonadLogger m,
+    MonadPostgres m,
+    MonadOtel m
+  ) =>
+  Maybe (Label "artistRedactedId" Natural) ->
+  Transaction m [TorrentData (Label "percentDone" Percentage)]
+getBestTorrentsData artistFilter = do
   bestStale :: [TorrentData ()] <- getBestTorrents GetBestTorrentsFilter {onlyArtist = artistFilter, onlyDownloaded = False}
   actual <-
     getAndUpdateTransmissionTorrentsStatus
@@ -502,20 +515,23 @@ getBestTorrentsTable artistFilter = do
           <&> (\t -> (getLabel @"torrentHash" t, t.transmissionInfo))
           & Map.fromList
       )
-  let fresh =
-        bestStale
-          --  we have to update the status of every torrent that’s not in tranmission anymore
-          -- TODO I feel like it’s easier (& more correct?) to just do the database request again …
-          <&> ( \td -> case td.torrentStatus of
-                  InTransmission info ->
-                    case actual & Map.lookup (getLabel @"torrentHash" info) of
-                      -- TODO this is also pretty dumb, cause it assumes that we have the torrent file if it was in transmission before,
-                      -- which is an internal factum that is established in getBestTorrents (and might change later)
-                      Nothing -> td {torrentStatus = NotInTransmissionYet}
-                      Just transmissionInfo -> td {torrentStatus = InTransmission (T2 (getLabel @"torrentHash" info) (label @"transmissionInfo" transmissionInfo))}
-                  NotInTransmissionYet -> td {torrentStatus = NotInTransmissionYet}
-                  NoTorrentFileYet -> td {torrentStatus = NoTorrentFileYet}
-              )
+  pure $
+    bestStale
+      --  we have to update the status of every torrent that’s not in tranmission anymore
+      -- TODO I feel like it’s easier (& more correct?) to just do the database request again …
+      <&> ( \td -> case td.torrentStatus of
+              InTransmission info ->
+                case actual & Map.lookup (getLabel @"torrentHash" info) of
+                  -- TODO this is also pretty dumb, cause it assumes that we have the torrent file if it was in transmission before,
+                  -- which is an internal factum that is established in getBestTorrents (and might change later)
+                  Nothing -> td {torrentStatus = NotInTransmissionYet}
+                  Just transmissionInfo -> td {torrentStatus = InTransmission (T2 (getLabel @"torrentHash" info) (label @"transmissionInfo" transmissionInfo))}
+              NotInTransmissionYet -> td {torrentStatus = NotInTransmissionYet}
+              NoTorrentFileYet -> td {torrentStatus = NoTorrentFileYet}
+          )
+
+mkBestTorrentsTable :: [TorrentData (Label "percentDone" Percentage)] -> Html
+mkBestTorrentsTable fresh = do
   let localTorrent b = case b.torrentStatus of
         NoTorrentFileYet -> [hsx|<button hx-post="snips/redacted/getTorrentFile" hx-swap="outerHTML" hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentId)]}>Upload Torrent</button>|]
         InTransmission info -> [hsx|{info.transmissionInfo.percentDone.unPercentage}% done|]
@@ -551,8 +567,7 @@ getBestTorrentsTable artistFilter = do
                   </tr>
                 |]
             )
-  pure $
-    [hsx|
+  [hsx|
         <table class="table">
           <thead>
             <tr>
