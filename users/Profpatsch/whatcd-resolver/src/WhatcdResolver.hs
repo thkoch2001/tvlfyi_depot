@@ -262,6 +262,7 @@ htmlUi = do
       -- transmissionTorrentsTable <- lift @Transaction getTransmissionTorrentsTable
       pure $
         htmlPageChrome
+          "whatcd-resolver"
           [hsx|
             <form
               hx-post="/snips/redacted/search"
@@ -290,13 +291,13 @@ htmlUi = do
             />
         |]
 
-htmlPageChrome :: (ToHtml a) => a -> Html
-htmlPageChrome body =
+htmlPageChrome :: (ToHtml a) => Text -> a -> Html
+htmlPageChrome title body =
   Html.docTypeHtml $
     [hsx|
       <head>
         <!-- TODO: set nice page title for each page -->
-        <title>whatcd-resolver</title>
+        <title>{title}</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
@@ -326,9 +327,15 @@ artistPage ::
   dat ->
   m Html
 artistPage dat = runTransaction $ do
-  torrents <- getBestTorrentsTable (Just $ getLabel @"artistRedactedId" dat)
+  fresh <- getBestTorrentsData (Just $ getLabel @"artistRedactedId" dat)
+  let artistName = fresh & findMaybe (\t -> t.artists & findMaybe (\a -> if a.artistId == (dat.artistRedactedId & fromIntegral @Natural @Int) then Just a.artistName else Nothing))
+  let torrents = mkBestTorrentsTable fresh
   pure $
     htmlPageChrome
+      ( case artistName of
+          Nothing -> "whatcd-resolver"
+          Just a -> [fmt|{a} - Artist Page - whatcd-resolver|]
+      )
       [hsx|
         Artist ID: {dat.artistRedactedId}
 
