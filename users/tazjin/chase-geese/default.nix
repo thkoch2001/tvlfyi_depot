@@ -9,5 +9,5 @@ pkgs.writeShellScriptBin "chase-geese" ''
 
   echo "Mounting the cloud ..."
   mkdir -p ~/cloud
-  ${depot.third_party.geesefs}/bin/geesefs tazjins-files ~/cloud
+  ${pkgs.geesefs}/bin/geesefs tazjins-files ~/cloud
 ''
