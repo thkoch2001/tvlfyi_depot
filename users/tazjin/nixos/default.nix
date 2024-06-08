@@ -2,6 +2,7 @@
 
 let systemFor = sys: (depot.ops.nixos.nixosFor sys).system;
 in depot.nix.readTree.drvTargets {
+  arbatSystem = systemFor depot.users.tazjin.nixos.arbat;
   camdenSystem = systemFor depot.users.tazjin.nixos.camden;
   frogSystem = systemFor depot.users.tazjin.nixos.frog;
   tverskoySystem = systemFor depot.users.tazjin.nixos.tverskoy;
