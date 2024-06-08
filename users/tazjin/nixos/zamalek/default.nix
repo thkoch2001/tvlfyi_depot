@@ -61,10 +61,6 @@ in
     hostId = "ee399356";
     networkmanager.enable = true;
 
-    extraHosts = ''
-      10.101.240.1 wifi.silja.fi
-    '';
-
     nameservers = [
       "8.8.8.8"
       "8.8.4.4"
@@ -82,7 +78,6 @@ in
   services.xserver.libinput.touchpad.tapping = false;
   services.avahi.enable = true;
   services.tailscale.enable = true;
-  powerManagement.powertop.enable = true;
 
   system.stateVersion = "21.11";
 }
