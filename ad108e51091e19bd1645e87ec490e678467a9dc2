@@ -34,6 +34,24 @@
       "parentUuid": "b1a5cfbe_2f13206f",
       "revId": "ad108e51091e19bd1645e87ec490e678467a9dc2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c04f1c7_20c5ae87",
+        "filename": "third_party/sources/sources.json",
+        "patchSetId": 16
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-08T14:47:32Z",
+      "side": 0,
+      "message": "I opened cl/11762, we can deal with it there.",
+      "parentUuid": "f4e2fa0a_a14ac5a1",
+      "revId": "ad108e51091e19bd1645e87ec490e678467a9dc2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
