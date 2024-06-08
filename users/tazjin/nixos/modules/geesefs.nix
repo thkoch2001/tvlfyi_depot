@@ -28,7 +28,7 @@
 
       mkdir -p $STATE_DIRECTORY/tazjins-files $STATE_DIRECTORY/cache
 
-      ${depot.third_party.geesefs}/bin/geesefs \
+      ${pkgs.geesefs}/bin/geesefs \
         -f -o allow_other \
         --cache $STATE_DIRECTORY/cache \
         --shared-config $CREDENTIALS_DIRECTORY/geesefs-tazjins-files \
