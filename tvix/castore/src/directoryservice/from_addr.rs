@@ -1,8 +1,8 @@
 use url::Url;
 
-use std::sync::Arc;
-use crate::{proto::directory_service_client::DirectoryServiceClient, Error};
 use crate::directoryservice::Cache;
+use crate::{proto::directory_service_client::DirectoryServiceClient, Error};
+use std::sync::Arc;
 
 use super::{
     DirectoryService, GRPCDirectoryService, MemoryDirectoryService, ObjectStoreDirectoryService,
@@ -112,7 +112,10 @@ pub async fn from_addr(uri: &str) -> Result<Arc<dyn DirectoryService>, crate::Er
             )))
         }
     };
-    let query = url.query_pairs().map(|(a, b)| (a.to_string(), b.to_string())).collect::<std::collections::HashMap<String, String>>();
+    let query = url
+        .query_pairs()
+        .map(|(a, b)| (a.to_string(), b.to_string()))
+        .collect::<std::collections::HashMap<String, String>>();
     if let Some(cache_setting) = query.get("cache") {
         let cache = Box::pin(from_addr(cache_setting)).await?;
         directory_service = Arc::new(Cache::new(cache, directory_service));

@@ -1,10 +1,11 @@
 use futures::{StreamExt, TryStreamExt};
+use tokio::io::AsyncWriteExt;
 use tokio_util::io::{ReaderStream, StreamReader};
 use tonic::async_trait;
 use tracing::{instrument, warn};
 
-use crate::B3Digest;
 use super::{naive_seeker::NaiveSeeker, BlobReader, BlobService, BlobWriter};
+use crate::B3Digest;
 
 /// Combinator for a BlobService, using a "local" and "remote" blobservice.
 /// Requests are tried in (and returned from) the local store first, only if
@@ -68,7 +69,43 @@ where
                     // blobservice doesn't support chunks, read the blob from
                     // the remote blobservice directly.
                     if remote_chunks.is_empty() {
-                        return self.remote.as_ref().open_read(digest).await;
+                        return match self.remote.as_ref().open_read(digest).await? {
+                            None => Ok(None),
+                            Some(chunk) => {
+                                let local_writer = self.local.as_ref().open_write().await;
+
+                                // convert the stream of readers to a stream of streams of byte chunks
+                                let bytes_stream = ReaderStream::new(chunk);
+                                let written = futures::stream::try_unfold(
+                                    (local_writer, bytes_stream),
+                                    |(mut local_writer, mut bytes_stream)| async move {
+                                        println!("saving to local");
+                                        if let Some(buf) = bytes_stream.next().await.transpose()? {
+                                            local_writer.write_all(&buf).await?;
+                                            Ok::<_, std::io::Error>(Some((
+                                                buf,
+                                                (local_writer, bytes_stream),
+                                            )))
+                                        } else {
+                                            local_writer.close().await?;
+                                            Ok(None)
+                                        }
+                                    },
+                                );
+
+                                // convert into AsyncRead
+                                let blob_reader = StreamReader::new(written);
+
+                                Ok(Some(Box::new(NaiveSeeker::new(Box::pin(blob_reader)))))
+
+                                /*let mut buf = vec![];
+                                v.read_to_end(&mut buf).await?;
+                                let mut local_writer = self.local.as_ref().open_write().await;
+                                local_writer.write_all(&buf).await?;
+                                local_writer.close().await?;
+                                Ok(Some(Box::new(std::io::Cursor::new(buf))))*/
+                            }
+                        };
                     }
                     // otherwise, a chunked reader, which will always try the
                     // local backend first.
@@ -84,6 +121,7 @@ where
                             )
                         })
                         .collect();
+                                        println!("chunked for {}: {:?}", digest, chunks);
 
                     Ok(Some(make_chunked_reader(self.clone(), chunks)))
                 }

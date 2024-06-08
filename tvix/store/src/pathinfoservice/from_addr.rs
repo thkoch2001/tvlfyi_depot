@@ -79,8 +79,11 @@ pub async fn from_addr(
             // setting something http(s) that previously wasn't.
             let new_url = Url::parse(url.to_string().strip_prefix("nix+").unwrap()).unwrap();
 
-            let mut nix_http_path_info_service =
-                NixHTTPPathInfoService::new(new_url, blob_service.clone(), directory_service.clone());
+            let mut nix_http_path_info_service = NixHTTPPathInfoService::new(
+                new_url,
+                blob_service.clone(),
+                directory_service.clone(),
+            );
 
             let pairs = &url.query_pairs();
             for (k, v) in pairs.into_iter() {
@@ -139,7 +142,10 @@ pub async fn from_addr(
             url.scheme()
         )))?,
     };
-    let query = url.query_pairs().map(|(a, b)| (a.to_string(), b.to_string())).collect::<std::collections::HashMap<String, String>>();
+    let query = url
+        .query_pairs()
+        .map(|(a, b)| (a.to_string(), b.to_string()))
+        .collect::<std::collections::HashMap<String, String>>();
     if let Some(cache_setting) = query.get("cache") {
         let cache = Box::pin(from_addr(cache_setting, blob_service, directory_service)).await?;
         path_info_service = Arc::new(Cache::new(cache, path_info_service));

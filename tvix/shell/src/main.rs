@@ -210,12 +210,14 @@ async fn run_child2(args: Args) -> ! {
     )
     .unwrap();
     trace!("spawn");
-    let err = std::process::Command::new("bash")
-        .args(["--norc", "--noprofile"])
-        .spawn()
-        .unwrap()
-        .wait()
-        .unwrap();
+    let err = std::process::Command::new(
+        "/nix/store/n2p10bjfnsc43hcbd9dv1qph65p2aph8-bash-interactive-5.2p26/bin/bash",
+    )
+    .args(["--norc", "--noprofile"])
+    .spawn()
+    .unwrap()
+    .wait()
+    .unwrap();
     info!("exited");
 
     umount("/nix/store").unwrap();

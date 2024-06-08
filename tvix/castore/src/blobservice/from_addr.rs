@@ -2,8 +2,8 @@ use std::sync::Arc;
 
 use url::Url;
 
-use crate::{proto::blob_service_client::BlobServiceClient, Error};
 use crate::blobservice::CombinedBlobService;
+use crate::{proto::blob_service_client::BlobServiceClient, Error};
 
 use super::{BlobService, GRPCBlobService, MemoryBlobService, ObjectStoreBlobService};
 
@@ -55,7 +55,10 @@ pub async fn from_addr(uri: &str) -> Result<Arc<dyn BlobService>, crate::Error> 
             )))
         }
     };
-    let query = url.query_pairs().map(|(a, b)| (a.to_string(), b.to_string())).collect::<std::collections::HashMap<String, String>>();
+    let query = url
+        .query_pairs()
+        .map(|(a, b)| (a.to_string(), b.to_string()))
+        .collect::<std::collections::HashMap<String, String>>();
     if let Some(cache_setting) = query.get("cache") {
         let cache = Box::pin(from_addr(cache_setting)).await?;
         blob_service = Arc::new(CombinedBlobService::new(cache, blob_service));
