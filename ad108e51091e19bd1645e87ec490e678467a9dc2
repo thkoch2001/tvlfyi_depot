@@ -16,6 +16,24 @@
       "message": "You can drop geesefs from the overlay, that\u0027s now in nixpkgs (and more recent)",
       "revId": "ad108e51091e19bd1645e87ec490e678467a9dc2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4e2fa0a_a14ac5a1",
+        "filename": "third_party/sources/sources.json",
+        "patchSetId": 16
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-06-08T14:08:55Z",
+      "side": 0,
+      "message": "hasn\u0027t made it to nixos-unstable yet",
+      "parentUuid": "b1a5cfbe_2f13206f",
+      "revId": "ad108e51091e19bd1645e87ec490e678467a9dc2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
