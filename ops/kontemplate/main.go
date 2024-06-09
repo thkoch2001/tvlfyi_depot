@@ -21,9 +21,9 @@ import (
 	"os/exec"
 	"strings"
 
+	"github.com/alecthomas/kingpin/v2"
 	"github.com/tazjin/kontemplate/context"
 	"github.com/tazjin/kontemplate/templater"
-	"gopkg.in/alecthomas/kingpin.v2"
 )
 
 const version string = "1.8.0"
