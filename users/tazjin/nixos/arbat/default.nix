@@ -60,6 +60,12 @@ in
   };
 
   # TODO(tazjin): decide on this
+  services.libinput = {
+    enable = true;
+    # libinput thinks the touchpad is a mouse
+    mouse.naturalScrolling = false;
+    mouse.disableWhileTyping = true;
+  };
   # services.xserver.libinput.touchpad.clickMethod = "clickfinger";
   # services.xserver.libinput.touchpad.tapping = false;
 

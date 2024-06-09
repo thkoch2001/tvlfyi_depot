@@ -30,6 +30,7 @@
         name = "exwm";
         start = "${config.tazjin.emacs}/bin/tazjins-emacs --internal-border=0 --border-width=0";
       };
+      desktopManager.xfce.enable = true;
     };
   };
 
