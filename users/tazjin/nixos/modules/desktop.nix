@@ -12,13 +12,12 @@
 
     redshift.enable = true;
     blueman.enable = true;
+    libinput.enable = true;
 
     xserver = {
       enable = true;
       xkb.layout = "us";
       xkb.options = "caps:super";
-
-      libinput.enable = true;
 
       displayManager = {
         # Give EXWM permission to control the session.
