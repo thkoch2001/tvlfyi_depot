@@ -14,6 +14,7 @@
 
   nix.settings.trusted-users = [ "tazjin" ];
 
+  home-manager.backupFileExtension = "backup";
   home-manager.useGlobalPkgs = true;
   home-manager.users.tazjin = with depot.users.tazjin;
     home."${config.networking.hostName}" or home.shared;
