@@ -16,7 +16,6 @@ in
     (usermod "chromium.nix")
     (usermod "desktop.nix")
     (usermod "fonts.nix")
-    # (usermod "hidpi.nix") # TODO(tazjin): not sure yet
     (usermod "home-config.nix")
     (usermod "laptop.nix")
     (usermod "persistence.nix")
@@ -26,12 +25,13 @@ in
 
   tvl.cache.enable = true;
 
-  # TODO(tazjin): hardware settings; boot settings
-
   boot = {
     loader.systemd-boot.enable = true;
     supportedFilesystems = [ "zfs" ];
     zfs.devNodes = "/dev/";
+    # TODO: double-check this list
+    initrd.availableKernelModules = [ "ahci" "uhci_hcd" "ehci_pci" "xhci_pci" "usb_storage" "sd_mod" "rtsx_usb_sdmmc" ];
+    kernelModules = [ "kvm-intel" ]; # interesting
   };
 
   networking = {
@@ -47,16 +47,22 @@ in
     "/nix" = zdevice "zpool/persistent/nix";
     "/depot" = zdevice "zpool/persistent/depot";
 
-    # "/boot" = {
-    #   device = "/dev/disk/by-uuid/2487-3908";
-    #   fsType = "vfat";
-    # };
+    "/boot" = {
+      device = "/dev/disk/by-uuid/B3B5-92F7";
+      fsType = "vfat";
+    };
+  };
+
+  hardware = {
+    enableRedistributableFirmware = true;
+    opengl.enable = true;
+    bluetooth.enable = true;
   };
 
   # TODO(tazjin): decide on this
   # services.xserver.libinput.touchpad.clickMethod = "clickfinger";
   # services.xserver.libinput.touchpad.tapping = false;
 
-
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   system.stateVersion = "24.11";
 }
