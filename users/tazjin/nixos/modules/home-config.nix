@@ -15,5 +15,6 @@
   nix.settings.trusted-users = [ "tazjin" ];
 
   home-manager.useGlobalPkgs = true;
-  home-manager.users.tazjin = depot.users.tazjin.home."${config.networking.hostName}";
+  home-manager.users.tazjin = with depot.users.tazjin;
+    home."${config.networking.hostName}" or home.shared;
 }
