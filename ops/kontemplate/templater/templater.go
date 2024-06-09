@@ -20,7 +20,7 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/Masterminds/sprig"
+	"github.com/Masterminds/sprig/v3"
 	"github.com/tazjin/kontemplate/context"
 	"github.com/tazjin/kontemplate/util"
 )

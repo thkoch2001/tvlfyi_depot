@@ -12,12 +12,11 @@
 
 { lib, pkgs, ... }:
 
-pkgs.buildGoPackage rec {
+pkgs.buildGoModule rec {
   name = "kontemplate-${version}";
   version = "canon";
   src = ./.;
-  goPackagePath = "github.com/tazjin/kontemplate";
-  goDeps = ./deps.nix;
+  
   buildInputs = [ pkgs.parallel ];
 
   # Enable checks and configure check-phase to include vet:
@@ -27,6 +26,8 @@ pkgs.buildGoPackage rec {
       buildGoDir vet "$pkg"
     done
   '';
+
+  vendorHash = "sha256-xPGVM2dq5fAVOiuodOXhDm3v3k+ncNLhlk6aCtF5S9E=";
 
   meta = with lib; {
     description = "A resource templating helper for Kubernetes";
