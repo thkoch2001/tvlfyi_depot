@@ -12,6 +12,9 @@ let
 
     # khamovnik
     "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAID1ptE5HvGSXxSXo+aHBTKa5PBlAM1HqmpzWz0yAhHLj"
+
+    # arbat
+    "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJ1Eai0p7eF7XML5wokqF4GlVZM+YXEORfs/GPGwEky7"
   ];
 
   aspen = [
