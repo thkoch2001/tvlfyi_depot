@@ -10,4 +10,6 @@ in depot.nix.readTree.drvTargets {
   koptevoRaw = depot.ops.nixos.nixosFor depot.users.tazjin.nixos.koptevo;
   koptevoSystem = systemFor depot.users.tazjin.nixos.koptevo;
   khamovnikSystem = systemFor depot.users.tazjin.nixos.khamovnik;
+
+  installerIso = (depot.ops.nixos.nixosFor depot.users.tazjin.nixos.installer).config.system.build.isoImage;
 }
