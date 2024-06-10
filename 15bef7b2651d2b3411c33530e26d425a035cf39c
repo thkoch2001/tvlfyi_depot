@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dd3b91a_aaeb6752",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-10T16:21:54Z",
+      "side": 1,
+      "message": "It doesn\u0027t have the pub use anymore.",
+      "revId": "15bef7b2651d2b3411c33530e26d425a035cf39c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
