@@ -25,8 +25,17 @@ deploy is necessary.
 
 ```terraform
 module "deploy_somehost" {
+  # Clone just this directory through josh. Add a `ref=` parameter to pin to a specific commit.
   source              = "git::https://code.tvl.fyi/depot.git:/ops/terraform/deploy-nixos.git"
+
+  # The attribute.path pointing to the expression to instantiate.
   attrpath            = "ops.nixos.somehost"
+
+  # The path to the Nix file to invoke. Optional.
+  # If omitted, will shell out to git to determine the repo root, and Nix will
+  # use `default.nix` in there.
+  entrypoint          = "${path.module}/../../somewhere.nix"
+
   target_host         = "somehost.tvl.su"
   target_user         = "someone"
   target_user_ssh_key = tls_private_key.somehost.private_key_pem
@@ -36,9 +45,6 @@ module "deploy_somehost" {
 ## Future work
 
 Several things can be improved about this module, for example:
-
-* The repository root (relative to which the attribute path is evaluated) could
-  be made configurable.
 
 * The remote system closure could be discovered to restore remote system state
   after manual deploys on the target (i.e. "stomping" of changes).
