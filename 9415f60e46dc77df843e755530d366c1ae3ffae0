@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28009d64_9668ad93",
+        "filename": "tvix/docs/src/TODO.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-06-10T12:11:36Z",
+      "side": 1,
+      "message": "To their constructor, or to the open_{read,write}() functions? I\u0027m not sure how both of those work together with gRPC, but otherwise I\u0027d prefer passing it to the utility functions which have fetch chunks instead of the constructor, allowing multiple chunk services to be used with one blob service without reconstructing.",
+      "revId": "9415f60e46dc77df843e755530d366c1ae3ffae0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70682393_f5f0051a",
+        "filename": "tvix/docs/src/TODO.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-06-10T12:11:36Z",
+      "side": 1,
+      "message": "```suggestion\n   could be a global thing with access to the whole store composition layer, which\n```",
+      "revId": "9415f60e46dc77df843e755530d366c1ae3ffae0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f94105f9_53713392",
+        "filename": "tvix/docs/src/TODO.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-06-10T12:11:36Z",
+      "side": 1,
+      "message": "I guess if the ChunkService was passed into the constructor of some BlobServices, it could also be left out in others (those which implement ChunkService themselves and do not work with other ChunkServices)",
+      "revId": "9415f60e46dc77df843e755530d366c1ae3ffae0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
