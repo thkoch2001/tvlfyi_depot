@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "17e33b4c_3a12ca41",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000110
+      },
+      "writtenOn": "2024-06-10T11:59:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d751b13_0720d8c4",
+      "revId": "c5e707186dc02c95f346e662eb1ff345ef8d4cde",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9142ba99_540b3bfe",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-06-07T10:11:40Z",
       "side": 1,
       "message": "I\u0027m not 100% sold on using the (re)exported `tracing` crate in all library code. It might be a bit confusing why we use the re-export, importing `tracing::…` is quite common in other code.\n\nI can be convinced to one thing or the other, but if we use the re-export we should definitely document a bit more why we\u0027re doing it that way.",
+      "revId": "c5e707186dc02c95f346e662eb1ff345ef8d4cde",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8267b7f5_8cfc0fd6",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000110
+      },
+      "writtenOn": "2024-06-10T11:59:53Z",
+      "side": 1,
+      "message": "Yeah, i am also no longer convinced that is a great idea for this project. First i thought it might makes sense to just expose `tracing` as well as `tracing-indicatif` so you don\u0027t have to define all 3 in each Cargo.toml but I it only makes sense to use this for  this for projects that actually need `tvix-tracing` (right now) which are only the crates that result in an executable. The glue crate e.g. doesn\u0027t need `tvix-tracing` so its easier to just use `tracing` directly. But now we have two different ways to use `tracing` which might just only be confusing.\nAnother thing is that `tracing::instrument` uses `tracing::instrument::Instrumented`, which then means we also have to include `tvix_tracing::tracing:self` also kinda annoying.\nI would just revert that export, if that works for you",
+      "parentUuid": "9142ba99_540b3bfe",
       "revId": "c5e707186dc02c95f346e662eb1ff345ef8d4cde",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -87,6 +123,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5f83bc4_892807c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000110
+      },
+      "writtenOn": "2024-06-10T11:59:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "904479a9_8e96ab08",
+      "revId": "c5e707186dc02c95f346e662eb1ff345ef8d4cde",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f59d56c_350886ff",
@@ -104,6 +158,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dba29845_39237621",
+        "filename": "tvix/tracing/Cargo.toml",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000110
+      },
+      "writtenOn": "2024-06-10T11:59:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f59d56c_350886ff",
+      "revId": "c5e707186dc02c95f346e662eb1ff345ef8d4cde",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "22351ec7_1ca5cfbd",
@@ -117,6 +189,24 @@
       "writtenOn": "2024-06-07T10:11:40Z",
       "side": 1,
       "message": "```suggestion\n// using a macro_rule here because of the complex return type\n```",
+      "revId": "c5e707186dc02c95f346e662eb1ff345ef8d4cde",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8715f372_e20d8a2e",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000110
+      },
+      "writtenOn": "2024-06-10T11:59:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "22351ec7_1ca5cfbd",
       "revId": "c5e707186dc02c95f346e662eb1ff345ef8d4cde",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
