@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffb6bacb_c7a2cec2",
+        "filename": "tvix/docs/src/TODO.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-10T16:15:17Z",
+      "side": 1,
+      "message": "I meant to say \"we could have `BlobService` also require implementing `ChunkService`, and in cases where only store metadata, require a ChunkService to be passed in *via* the constructor.\n\nBut you\u0027re right, if we have some external BlobReader, instantiated with any BlobReader/ChunkReader and providing access to that data, these two things can be independent from each other.",
+      "parentUuid": "28009d64_9668ad93",
+      "revId": "9415f60e46dc77df843e755530d366c1ae3ffae0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "70682393_f5f0051a",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "85cd3b48_ce35a99c",
+        "filename": "tvix/docs/src/TODO.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-10T16:15:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70682393_f5f0051a",
+      "revId": "9415f60e46dc77df843e755530d366c1ae3ffae0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f94105f9_53713392",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-06-10T12:11:36Z",
       "side": 1,
       "message": "I guess if the ChunkService was passed into the constructor of some BlobServices, it could also be left out in others (those which implement ChunkService themselves and do not work with other ChunkServices)",
+      "revId": "9415f60e46dc77df843e755530d366c1ae3ffae0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a101455d_ac5f14fe",
+        "filename": "tvix/docs/src/TODO.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-10T16:15:17Z",
+      "side": 1,
+      "message": "Yes. But as written in https://cl.tvl.fyi/c/depot/+/11755/comment/28009d64_9668ad93/, maybe it\u0027s ok to just try having these entirely separate for now. This is just a TODO list writing down an idea, not a binding architecture contract, so we can still decide differently if it doesn\u0027t work out :-)",
+      "parentUuid": "f94105f9_53713392",
       "revId": "9415f60e46dc77df843e755530d366c1ae3ffae0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
