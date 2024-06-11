@@ -67,6 +67,24 @@
       "message": "can we easily write this without itertools? That\u0027s the only place it\u0027s used.",
       "revId": "b67ae0b8a79807b250b9b800114204cd7534f588",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dd28455_721f6afe",
+        "filename": "tvix/castore/src/directoryservice/closure_validator.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-06-11T13:08:17Z",
+      "side": 1,
+      "message": "We can write our own enum which wraps the two possible iterators, but that\u0027s quite a bit of extra code.\nWe can also Box the result, but that has a runtime impact.",
+      "parentUuid": "3a1b6a71_04cb074d",
+      "revId": "b67ae0b8a79807b250b9b800114204cd7534f588",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
