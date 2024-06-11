@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "84bca3dc_baeecd39",
+        "filename": "tvix/castore/src/directoryservice/combinators.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-06-11T12:23:06Z",
+      "side": 1,
+      "message": "The Box returned at the top level of this function always contains a TryFlattenStream[1], so this is at another level. Boxing here would mean it\u0027s boxed twice at a runtime penalty.\n\n[1] https://docs.rs/futures/latest/futures/future/struct.TryFlattenStream.html",
+      "parentUuid": "c2b1767a_d76b0f5e",
+      "revId": "bb2529225d72e0c85c4d2d2a7ee79aa1db2b6773",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e85f3b99_52a7fa1a",
         "filename": "tvix/castore/src/directoryservice/combinators.rs",
         "patchSetId": 1
