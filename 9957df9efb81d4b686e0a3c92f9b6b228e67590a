@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "972bdfe2_e0e07f45",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-11T15:34:46Z",
+      "side": 1,
+      "message": "I think this is better, though I\u0027d prefer to only merge this once we also flush shortly before exit (at least in the correct termination and error cases) - otherwise there\u0027s even more short-lived processes which won\u0027t get to flush any trace messages at all.\n\nWe should also look into what is producing that many messages currently, IIRC there might be something in our gRPC stack (which could be tuned down a bit, potentially)",
+      "revId": "9957df9efb81d4b686e0a3c92f9b6b228e67590a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
