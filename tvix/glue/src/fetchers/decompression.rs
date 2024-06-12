@@ -52,9 +52,20 @@ where
         buf: &mut ReadBuf<'_>,
     ) -> Poll<io::Result<()>> {
         let this = self.project();
+
+        // if there's still something in the pre-existing buffer, use that.
         if !this.buffer.is_empty() {
-            // TODO: check if the buffer fits first
-            buf.put_slice(this.buffer);
+            if buf.remaining() < this.buffer.len() {
+                // we can only write up to buf.remaining() bytes, so if there's
+                // less space available than that, use as much as we can and
+                // update the buffer with the rest.
+                let rest_buf = this.buffer.split_off(buf.remaining());
+                buf.put_slice(this.buffer);
+                *this.buffer = rest_buf;
+            } else {
+                buf.put_slice(this.buffer);
+            }
+
             this.buffer.clear();
         }
         this.inner.poll_read(cx, buf)
