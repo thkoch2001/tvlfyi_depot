@@ -85,6 +85,24 @@
       "parentUuid": "3a1b6a71_04cb074d",
       "revId": "b67ae0b8a79807b250b9b800114204cd7534f588",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba6596d4_6d264841",
+        "filename": "tvix/castore/src/directoryservice/closure_validator.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-12T11:39:09Z",
+      "side": 1,
+      "message": "Maybe let\u0027s add a comment alongside the import explaining what we use it for, and move it into this function?",
+      "parentUuid": "4dd28455_721f6afe",
+      "revId": "b67ae0b8a79807b250b9b800114204cd7534f588",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
