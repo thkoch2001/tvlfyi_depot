@@ -249,4 +249,9 @@
     email = "farid.m.zakaria@gmail.com";
     password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$NzSX6x2+mApMvhNrvVIWaQ$/GUwbj+6GUyJL8XSgxTThc3TmVTM4WLQ+6KMC4NwovE";
   }
+  {
+    username = "toastal";
+    email = "toastal@posteo.net";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$txwVjPn9kKPUgsZnPtpyaA$pE0ISDGScCE4JCKcmbnzC+GZZ4PP6MqKJKmR/sxo6TY";
+  }
 ]
