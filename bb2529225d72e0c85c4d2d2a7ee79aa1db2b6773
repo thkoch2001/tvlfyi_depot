@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "30e560a4_95fa4774",
+        "filename": "tvix/castore/src/directoryservice/combinators.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-06-12T15:39:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "06e6e1df_858f3b24",
+      "revId": "bb2529225d72e0c85c4d2d2a7ee79aa1db2b6773",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "32f0da26_66f25d89",
@@ -100,6 +118,24 @@
       "writtenOn": "2024-05-24T16:14:02Z",
       "side": 1,
       "message": "can we have more speaking names for these, and a comment explaining what we do here?\n\ncopy1 is the closure validator we use to validate the directories we receive from copy1, copy2 is a vec where we append copies to in insertion order, and what we return to the client later.",
+      "revId": "bb2529225d72e0c85c4d2d2a7ee79aa1db2b6773",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d09d6ba_26d9a6d2",
+        "filename": "tvix/castore/src/directoryservice/combinators.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-06-12T15:39:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e85f3b99_52a7fa1a",
       "revId": "bb2529225d72e0c85c4d2d2a7ee79aa1db2b6773",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
