@@ -105,6 +105,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19762c2c_21e202c8",
+        "filename": "tvix/castore/src/directoryservice/combinators.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-12T20:15:45Z",
+      "side": 1,
+      "message": "Ok",
+      "parentUuid": "84bca3dc_baeecd39",
+      "revId": "bb2529225d72e0c85c4d2d2a7ee79aa1db2b6773",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e85f3b99_52a7fa1a",
