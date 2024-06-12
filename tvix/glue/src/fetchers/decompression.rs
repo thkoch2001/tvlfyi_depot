@@ -215,4 +215,25 @@ mod tests {
         entries[0].read_to_string(&mut data).await.unwrap();
         assert_eq!(data, "");
     }
+
+    /// Ensure the reader properly returns data even if we partially read from it,
+    /// While it's still draining data from the first few bytes it read.
+    #[rstest]
+    #[case::gzip(include_bytes!("../tests/blob.tar.gz"))]
+    #[case::bzip2(include_bytes!("../tests/blob.tar.bz2"))]
+    #[case::xz(include_bytes!("../tests/blob.tar.xz"))]
+    #[tokio::test]
+    async fn partial_reads(#[case] data: &[u8]) {
+        let mut reader = DecompressedReader::new(BufReader::new(data));
+        let mut buf1 = [0; 3];
+        let mut buf2 = Vec::new();
+
+        reader.read_exact(&mut buf1).await.unwrap();
+        reader.read_to_end(&mut buf2).await.unwrap();
+
+        let mut buf = buf1.to_vec();
+        buf.extend_from_slice(&buf2);
+
+        assert_eq!(&buf, include_bytes!("../tests/blob.tar"));
+    }
 }
