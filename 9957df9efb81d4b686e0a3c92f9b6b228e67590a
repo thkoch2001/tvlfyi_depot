@@ -16,6 +16,24 @@
       "message": "I think this is better, though I\u0027d prefer to only merge this once we also flush shortly before exit (at least in the correct termination and error cases) - otherwise there\u0027s even more short-lived processes which won\u0027t get to flush any trace messages at all.\n\nWe should also look into what is producing that many messages currently, IIRC there might be something in our gRPC stack (which could be tuned down a bit, potentially)",
       "revId": "9957df9efb81d4b686e0a3c92f9b6b228e67590a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8e5ccc27_4a3403ec",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000110
+      },
+      "writtenOn": "2024-06-12T15:13:52Z",
+      "side": 1,
+      "message": "yeah so i did some debugging and if i set `RUST_LOG\u003dinfo` we currently end up with 1350 Traces, if i import 20k paths.\nMost of these traces are only 2-4 spans.\nThere are two huge traces that are interesting:\n1 Trace with 52k spans\n- `tvix.store: poll` which contains a bunch of `h2::` traces with level `debug`\n1 Trace with 54k spans\n- `tvix.store: upload_blob` which are all spans generated from within `tvix_castore`\n\nWe currently only apply the EnvFilter to the `tracing_subscriber::fmt::Layer`, not to the whole `tracing_subscriber::registry()`, if i change this, we end with 1 trace: `tvix.store: upload_blob`. Was this done by design? That we currently only filter the `fmt::Layer` and not also the `otlp` one",
+      "parentUuid": "972bdfe2_e0e07f45",
+      "revId": "9957df9efb81d4b686e0a3c92f9b6b228e67590a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
