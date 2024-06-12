@@ -1,4 +1,28 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "438f221d_98e48ba0",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-06-12T23:43:58Z",
+      "side": 1,
+      "message": "Either capitalize the first letter here like in Fetching or do the opposite for Fetching, your call, we need a consistent convention for logs/errors/progress capitalization.",
+      "range": {
+        "startLine": 186,
+        "startChar": 56,
+        "endLine": 186,
+        "endChar": 63
+      },
+      "revId": "f5ae72138db7520f81dbdcb0235b89e687581c89",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ],
   "submitRequirementResults": []
 }
