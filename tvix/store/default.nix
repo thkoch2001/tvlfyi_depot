@@ -33,7 +33,7 @@ in
 })).overrideAttrs (old: rec {
   meta.ci = {
     targets = [ "integration-tests" ] ++ lib.filter (x: lib.hasPrefix "with-features" x || x == "no-features") (lib.attrNames passthru);
-    extraSteps.import-docs = (mkImportCheck "tvix/store/docs" ./docs);
+    extraSteps.import-docs = (mkImportCheck "tvix/docs/src/store" ../docs/src/store);
   };
   passthru = (depot.tvix.utils.mkFeaturePowerset {
     inherit (old) crateName;
