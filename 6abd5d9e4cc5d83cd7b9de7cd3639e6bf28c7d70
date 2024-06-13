@@ -1,0 +1,174 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40b9fb3d_4d31ebd2",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T14:40:55Z",
+      "side": 1,
+      "message": "docstring",
+      "revId": "6abd5d9e4cc5d83cd7b9de7cd3639e6bf28c7d70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f1c40205_6dffc2be",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T14:40:55Z",
+      "side": 1,
+      "message": "docstring",
+      "revId": "6abd5d9e4cc5d83cd7b9de7cd3639e6bf28c7d70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdea91e5_8dac646b",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T14:40:55Z",
+      "side": 1,
+      "message": "Is this still an issue with the wrapped main?",
+      "revId": "6abd5d9e4cc5d83cd7b9de7cd3639e6bf28c7d70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cff0aa88_05f90cb9",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 93,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T14:40:55Z",
+      "side": 1,
+      "message": "docstring",
+      "revId": "6abd5d9e4cc5d83cd7b9de7cd3639e6bf28c7d70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "968f4252_4a1fe90c",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T14:40:55Z",
+      "side": 1,
+      "message": "docstring",
+      "revId": "6abd5d9e4cc5d83cd7b9de7cd3639e6bf28c7d70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e27e149b_260704e6",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T14:40:55Z",
+      "side": 1,
+      "message": "docstring",
+      "revId": "6abd5d9e4cc5d83cd7b9de7cd3639e6bf28c7d70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0c9aeb4_fe97a61f",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T14:40:55Z",
+      "side": 1,
+      "message": "maybe create this a bit further down, closer to where it\u0027s used.",
+      "revId": "6abd5d9e4cc5d83cd7b9de7cd3639e6bf28c7d70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f7b57b9_7e69996c",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T14:40:55Z",
+      "side": 1,
+      "message": "```suggestion\n                    .expect(\"Failed to install batch exporter using Tokio\");\n```\n\ndrive-by fix suggestion ;-)",
+      "revId": "6abd5d9e4cc5d83cd7b9de7cd3639e6bf28c7d70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecad2eb4_46437580",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T14:40:55Z",
+      "side": 1,
+      "message": "This needs an explaining block (spawning the task listening on the Rx side of the handle for flushes.",
+      "revId": "6abd5d9e4cc5d83cd7b9de7cd3639e6bf28c7d70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83f169f6_4e16b7a2",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T14:40:55Z",
+      "side": 1,
+      "message": "why the clone here? do we still use the old one somewhere?",
+      "revId": "6abd5d9e4cc5d83cd7b9de7cd3639e6bf28c7d70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
