@@ -9,8 +9,10 @@ pkgs.stdenv.mkDerivation {
   src = lib.cleanSource ./.;
 
   nativeBuildInputs = [
+    pkgs.d2
     pkgs.mdbook
     pkgs.mdbook-admonish
+    pkgs.mdbook-d2
     pkgs.mdbook-plantuml
     pkgs.plantuml
   ];
