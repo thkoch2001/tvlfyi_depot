@@ -22,6 +22,30 @@
       },
       "revId": "f5ae72138db7520f81dbdcb0235b89e687581c89",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f7e05b7e_f6d34edf",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T06:41:25Z",
+      "side": 1,
+      "message": "https://cl.tvl.fyi/c/depot/+/11796",
+      "parentUuid": "438f221d_98e48ba0",
+      "range": {
+        "startLine": 186,
+        "startChar": 56,
+        "endLine": 186,
+        "endChar": 63
+      },
+      "revId": "f5ae72138db7520f81dbdcb0235b89e687581c89",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ],
   "submitRequirementResults": []
