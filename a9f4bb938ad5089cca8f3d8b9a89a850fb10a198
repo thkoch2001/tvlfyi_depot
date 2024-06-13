@@ -48,6 +48,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2f6c91d_ae09486d",
+        "filename": "tvix/build/build.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T12:27:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fcbd4787_9c1fbbeb",
+      "range": {
+        "startLine": 42,
+        "startChar": 2,
+        "endLine": 63,
+        "endChar": 5
+      },
+      "revId": "a9f4bb938ad5089cca8f3d8b9a89a850fb10a198",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f0654dcc_a2e79e4a",
@@ -83,6 +107,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "16e51c5e_764eae6d",
+        "filename": "tvix/build/src/buildservice/from_addr.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T12:27:04Z",
+      "side": 1,
+      "message": "We can do the rename to runc once we have more than one OCI implementation.",
+      "parentUuid": "e9ec0d64_08ac8051",
+      "revId": "a9f4bb938ad5089cca8f3d8b9a89a850fb10a198",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87c59998_b386682a",
@@ -96,6 +138,24 @@
       "writtenOn": "2024-05-20T01:27:34Z",
       "side": 1,
       "message": "open a bug?",
+      "revId": "a9f4bb938ad5089cca8f3d8b9a89a850fb10a198",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ffd2e4f8_986319dd",
+        "filename": "tvix/build/src/buildservice/oci.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T12:27:04Z",
+      "side": 1,
+      "message": "This is still actively being developed. I\u0027d personally be fine to grep for TODO and FUTUREWORK in that piece of code for now.",
+      "parentUuid": "87c59998_b386682a",
       "revId": "a9f4bb938ad5089cca8f3d8b9a89a850fb10a198",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -123,6 +183,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8868bd48_8e28673e",
+        "filename": "tvix/build/src/buildservice/oci.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T12:27:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4f4baf7a_41e8eda8",
+      "range": {
+        "startLine": 84,
+        "startChar": 59,
+        "endLine": 84,
+        "endChar": 60
+      },
+      "revId": "a9f4bb938ad5089cca8f3d8b9a89a850fb10a198",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ecd1db5b_80f83578",
@@ -136,6 +220,24 @@
       "writtenOn": "2024-05-20T01:27:34Z",
       "side": 1,
       "message": "nit: mind adding a blank line above this one?",
+      "revId": "a9f4bb938ad5089cca8f3d8b9a89a850fb10a198",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80e108a6_63da150f",
+        "filename": "tvix/build/src/buildservice/oci.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T12:27:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ecd1db5b_80f83578",
       "revId": "a9f4bb938ad5089cca8f3d8b9a89a850fb10a198",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -163,6 +265,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b4424dc_711687e1",
+        "filename": "tvix/build/src/buildservice/oci.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T12:27:04Z",
+      "side": 1,
+      "message": "Leftovers from debugging. In fact, we want to stream the build results as we\u0027re going somewhere, define the protocol to get them from a remote host, ….\n\nI\u0027m now setting piped, and collect it all at the end, until we make it streaming.",
+      "parentUuid": "e74e03e1_88dfb4e3",
+      "range": {
+        "startLine": 233,
+        "startChar": 0,
+        "endLine": 234,
+        "endChar": 34
+      },
+      "revId": "a9f4bb938ad5089cca8f3d8b9a89a850fb10a198",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b94cd8c9_c43cfd6b",
@@ -176,6 +302,30 @@
       "writtenOn": "2024-05-20T01:27:34Z",
       "side": 1,
       "message": "this seems like it\u0027d be much more readable as a `find_map`",
+      "range": {
+        "startLine": 57,
+        "startChar": 0,
+        "endLine": 61,
+        "endChar": 43
+      },
+      "revId": "a9f4bb938ad5089cca8f3d8b9a89a850fb10a198",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02620a76_2a58382c",
+        "filename": "tvix/build/src/oci/bundle.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T12:27:04Z",
+      "side": 1,
+      "message": "Done, thanks for the suggestion!",
+      "parentUuid": "b94cd8c9_c43cfd6b",
       "range": {
         "startLine": 57,
         "startChar": 0,
