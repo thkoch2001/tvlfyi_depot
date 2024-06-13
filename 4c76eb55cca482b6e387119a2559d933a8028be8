@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "33f74f4f_13b4a2c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T19:55:07Z",
+      "side": 1,
+      "message": "It\u0027s a bit odd this doesn\u0027t expose the bug that cl/11812 should fix?",
+      "revId": "4c76eb55cca482b6e387119a2559d933a8028be8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
