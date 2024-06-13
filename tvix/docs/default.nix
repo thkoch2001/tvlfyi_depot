@@ -10,6 +10,7 @@ pkgs.stdenv.mkDerivation {
 
   nativeBuildInputs = [
     pkgs.mdbook
+    pkgs.mdbook-admonish
     pkgs.mdbook-plantuml
     pkgs.plantuml
   ];
