@@ -16,6 +16,24 @@
       "message": "It\u0027s a bit odd this doesn\u0027t expose the bug that cl/11812 should fix?",
       "revId": "4c76eb55cca482b6e387119a2559d933a8028be8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9cddf955_a8f723e2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T21:06:10Z",
+      "side": 1,
+      "message": "chatted with @me@griff.name about this - this is because `DecompressedReaderInner` wraps the  `WithPreexistingBuffer` always with a `BufReader` that can hold much more bytes.\n\nWe should get rid of that (possible double) buffer, and also implement `AsyncBufRead` if the underlying reader supports it.",
+      "parentUuid": "33f74f4f_13b4a2c0",
+      "revId": "4c76eb55cca482b6e387119a2559d933a8028be8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
