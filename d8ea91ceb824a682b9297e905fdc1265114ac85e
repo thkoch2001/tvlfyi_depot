@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e4fb098_b3b3feb7",
+        "filename": "tvix/build/src/buildservice/from_addr.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T20:27:39Z",
+      "side": 1,
+      "message": "… a parameter, probably. Check the examples in tvix-[ca]store for examples using `serde_js`.",
+      "revId": "d8ea91ceb824a682b9297e905fdc1265114ac85e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "52472432_6cf9e19b",
+        "filename": "tvix/build/src/buildservice/oci.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T20:27:39Z",
+      "side": 1,
+      "message": "TODO",
+      "revId": "d8ea91ceb824a682b9297e905fdc1265114ac85e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d42bc9c6_03d8da89",
+        "filename": "tvix/build/src/oci/bundle.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T20:27:39Z",
+      "side": 1,
+      "message": "drop",
+      "revId": "d8ea91ceb824a682b9297e905fdc1265114ac85e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7cf756f_fc46a5b2",
+        "filename": "tvix/build/src/oci/mod.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T20:27:39Z",
+      "side": 1,
+      "message": "broken docstring",
+      "revId": "d8ea91ceb824a682b9297e905fdc1265114ac85e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
