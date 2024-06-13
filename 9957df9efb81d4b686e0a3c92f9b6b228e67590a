@@ -34,6 +34,24 @@
       "parentUuid": "972bdfe2_e0e07f45",
       "revId": "9957df9efb81d4b686e0a3c92f9b6b228e67590a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32c802f1_5b23e39d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-13T12:00:42Z",
+      "side": 1,
+      "message": "I don\u0027t have a good answer to that, filtering might make sense. Though `RUST_LOG` also implies logs.\n\nIs there any other common convention out there, should `RUST_LOG` apply to both logs and traces?",
+      "parentUuid": "8e5ccc27_4a3403ec",
+      "revId": "9957df9efb81d4b686e0a3c92f9b6b228e67590a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
