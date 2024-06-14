@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c8a08b29_cac4fee5",
+        "filename": "tvix/castore/src/directoryservice/combinators.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-06-14T15:33:19Z",
+      "side": 1,
+      "message": "This introduces more heap allocations and cloning, but sure... Done!",
+      "parentUuid": "32f0da26_66f25d89",
+      "revId": "bb2529225d72e0c85c4d2d2a7ee79aa1db2b6773",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c2b1767a_d76b0f5e",
         "filename": "tvix/castore/src/directoryservice/combinators.rs",
         "patchSetId": 1
