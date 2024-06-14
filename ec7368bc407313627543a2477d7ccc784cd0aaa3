@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "743a4468_45b75ee1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-14T20:23:27Z",
+      "side": 1,
+      "message": "I got confused multiple times, switching back and forth between the commit message and then the implementation.\n\nI\u0027m still figuring things out, writing down some notes:\n\nThe OrderValidator trait is implemented by two structs, in LeavesToRootValidator and in RootToLeavesValidator.\n\nThere\u0027s additionally a ClosureValidator, which internally uses one of these `OrderValidator` (and is generic over them), but there\u0027s no instance other than the default generic type parameter, and no tests of it either ;-)\n\n---\n\nThe `OrderValidator` trait is a bit surprising. It itself also doesn\u0027t have a docstring explaining what it \"abstracts over\", which could help to understand the methods.\n\n---\n\nNaively, I\u0027d expect some order validator to only have a single method: `accept(\u0026mut self, \u0026Directory) -\u003e bool, denoting whether it was accepted or not.\n\nReading through it a bit more, I understand you want to avoid parsing the protobuf message if it wouldn\u0027t be acceptable anyways.\n\nMaybe there can be a `would_accept_digest(\u0026self, \u0026B3Digest) -\u003e bool` for that, but I don\u0027t think the protobuf parsing should be part of the validator itself.\n\nNeither should `root` be part of the trait IMHO, that\u0027s a closure concept and probably better determined by the user of the order validator.",
+      "revId": "ec7368bc407313627543a2477d7ccc784cd0aaa3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "796a13e0_ef96f1b4",
+        "filename": "tvix/castore/src/directoryservice/closure_validator.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-14T20:23:27Z",
+      "side": 1,
+      "message": "If this is in Leaves to Root order only, why is this generic over O?",
+      "revId": "ec7368bc407313627543a2477d7ccc784cd0aaa3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3bfbfcb4_45d6f652",
+        "filename": "tvix/castore/src/directoryservice/order_validator.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-14T20:23:27Z",
+      "side": 1,
+      "message": "This shouldn\u0027t mutate any state, it should only be a check (see comment in the commit message). The `add_*` one should do the mutation.",
+      "revId": "ec7368bc407313627543a2477d7ccc784cd0aaa3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "937cb982_35bd22d4",
+        "filename": "tvix/castore/src/directoryservice/order_validator.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-14T20:23:27Z",
+      "side": 1,
+      "message": "See toplevel comment, this is a closure concept",
+      "revId": "ec7368bc407313627543a2477d7ccc784cd0aaa3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "09313d1a_1d97d759",
+        "filename": "tvix/castore/src/directoryservice/order_validator.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-14T20:23:27Z",
+      "side": 1,
+      "message": "Needs a doccomment, explaining that this is typically used for.",
+      "revId": "ec7368bc407313627543a2477d7ccc784cd0aaa3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "41600b74_5cef1b12",
+        "filename": "tvix/castore/src/directoryservice/order_validator.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-14T20:23:27Z",
+      "side": 1,
+      "message": "Needs a doccomment, explaining that this is typically used for.",
+      "revId": "ec7368bc407313627543a2477d7ccc784cd0aaa3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05dbb20a_6855863b",
+        "filename": "tvix/castore/src/directoryservice/order_validator.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-14T20:23:27Z",
+      "side": 1,
+      "message": "This is the only occurence of `InvalidOrder`, and if we only return booleans in our trait on whether we did accept or not, we don\u0027t need any error types at all.",
+      "revId": "ec7368bc407313627543a2477d7ccc784cd0aaa3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

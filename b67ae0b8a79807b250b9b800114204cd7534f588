@@ -108,6 +108,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eb1126f0_f2bb7a11",
+        "filename": "tvix/castore/src/directoryservice/closure_validator.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 189,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-14T20:23:27Z",
+      "side": 1,
+      "message": "No, still there (the multiline `for dir in \u0026node.directories`)",
+      "parentUuid": "6236ae59_487ff5f5",
+      "revId": "b67ae0b8a79807b250b9b800114204cd7534f588",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3a1b6a71_04cb074d",
         "filename": "tvix/castore/src/directoryservice/closure_validator.rs",
         "patchSetId": 4
