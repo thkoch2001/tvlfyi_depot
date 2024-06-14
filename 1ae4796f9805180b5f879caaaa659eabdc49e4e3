@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37846ab7_819ace9d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-06-14T22:55:59Z",
+      "side": 1,
+      "message": "Basically done? Just waiting for PR reviews and merges on these two:\nhttps://github.com/NixOS/nixpkgs/pull/319153\nhttps://github.com/nix-community/crate2nix/pull/352",
+      "revId": "1ae4796f9805180b5f879caaaa659eabdc49e4e3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
