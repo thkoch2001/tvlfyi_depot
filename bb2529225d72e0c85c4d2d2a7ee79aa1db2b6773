@@ -88,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8d7f642_af3f44b5",
+        "filename": "tvix/castore/src/directoryservice/combinators.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-06-14T15:34:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8a08b29_cac4fee5",
+      "revId": "bb2529225d72e0c85c4d2d2a7ee79aa1db2b6773",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c2b1767a_d76b0f5e",
