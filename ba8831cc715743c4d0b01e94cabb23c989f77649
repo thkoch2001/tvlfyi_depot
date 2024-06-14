@@ -70,6 +70,24 @@
       "parentUuid": "65e69223_bdbe3b36",
       "revId": "ba8831cc715743c4d0b01e94cabb23c989f77649",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b44aa499_9fe49946",
+        "filename": "third_party/gerrit/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-14T07:31:40Z",
+      "side": 1,
+      "message": "There\u0027s now some java crash. I\u0027ve been retriggering CI twice and it still fails.\n\nNot sure how this succeeded previously. It might be this silently regressed through some nixpkgs bump and we didn\u0027t spot it because of the nixpkgs bump?\n\n@lukegb@tvl.fyi mentioned to have that seen a bunch of times.",
+      "parentUuid": "dd2ec58e_1abe00db",
+      "revId": "ba8831cc715743c4d0b01e94cabb23c989f77649",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
