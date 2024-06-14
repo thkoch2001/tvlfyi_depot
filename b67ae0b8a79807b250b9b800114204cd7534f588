@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dac2905c_a755f143",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-06-14T15:48:01Z",
+      "side": 1,
+      "message": "Added a more extensive commit message",
+      "parentUuid": "54de872d_89c59a70",
+      "revId": "b67ae0b8a79807b250b9b800114204cd7534f588",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d46faab6_6165678c",
