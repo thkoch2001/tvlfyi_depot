@@ -52,6 +52,24 @@
       "parentUuid": "8e5ccc27_4a3403ec",
       "revId": "9957df9efb81d4b686e0a3c92f9b6b228e67590a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5a3913e_b87e40d0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-14T07:40:23Z",
+      "side": 1,
+      "message": "I think I\u0027m ok to have `RUST_LOG` also apply to traces for now. The `#[instrument]` macro creates spans of level `INFO` by default, so we shouldn\u0027t loose most structure by doing so.",
+      "parentUuid": "32c802f1_5b23e39d",
+      "revId": "9957df9efb81d4b686e0a3c92f9b6b228e67590a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
