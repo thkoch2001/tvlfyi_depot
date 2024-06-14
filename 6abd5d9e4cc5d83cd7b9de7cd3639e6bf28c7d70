@@ -349,6 +349,24 @@
       "parentUuid": "83f169f6_4e16b7a2",
       "revId": "6abd5d9e4cc5d83cd7b9de7cd3639e6bf28c7d70",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aad922ce_882bc14f",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-14T09:08:53Z",
+      "side": 1,
+      "message": "Ah yes. In that case, I\u0027d suggest to just pass a `{…}` to the spawn_blocking, in which you have the `let tracer_provider \u003d tracer_provider.clone()`, and then return the `move || { … }`.\n\nIt\u0027d make it more clear where it\u0027s used, and we have similar examples for this when we need to hand out a handle to a `blob_service` for example. Maybe add a comment that the original `tracer_provider` needs to be kept around to process the next item/message in the channel.",
+      "parentUuid": "2b359839_a5d06848",
+      "revId": "6abd5d9e4cc5d83cd7b9de7cd3639e6bf28c7d70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
