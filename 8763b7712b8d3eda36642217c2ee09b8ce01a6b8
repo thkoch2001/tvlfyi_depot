@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18714184_dfe7b619",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-14T09:09:33Z",
+      "side": 1,
+      "message": "One nit left (in the unresolved comment), otherwise this should be good to go!",
+      "revId": "8763b7712b8d3eda36642217c2ee09b8ce01a6b8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
