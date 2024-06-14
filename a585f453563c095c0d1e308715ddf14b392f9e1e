@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78a69230_122fa563",
+        "filename": "third_party/gerrit/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-14T07:32:53Z",
+      "side": 1,
+      "message": "https://cl.tvl.fyi/c/depot/+/8920 also removes `$bazelOut/external/yarn_cache/v6/.tmp/*`. Does it make sense to add that here, too?",
+      "revId": "a585f453563c095c0d1e308715ddf14b392f9e1e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
