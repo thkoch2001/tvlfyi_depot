@@ -385,6 +385,24 @@
       "parentUuid": "2b359839_a5d06848",
       "revId": "6abd5d9e4cc5d83cd7b9de7cd3639e6bf28c7d70",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f85faf3b_8134a994",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000110
+      },
+      "writtenOn": "2024-06-14T09:25:08Z",
+      "side": 1,
+      "message": "Oh thats actually really nice. thanks :D",
+      "parentUuid": "aad922ce_882bc14f",
+      "revId": "6abd5d9e4cc5d83cd7b9de7cd3639e6bf28c7d70",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
