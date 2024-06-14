@@ -18,6 +18,23 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1e48890_503d7014",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-14T07:06:32Z",
+      "side": 1,
+      "message": "@lukegb@tvl.fyi let\u0027s shelve this (and the parent), for the same reasons as mentioned in https://cl.tvl.fyi/c/depot/+/8985.",
+      "revId": "d75a1f12806ecf4ec4c9978f45d2984390fa71e5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f6c423c5_2e8cd02f",
