@@ -158,6 +158,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca296ed8_b5115152",
+        "filename": "tvix/castore/src/directoryservice/order_validator.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-06-15T22:41:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09313d1a_1d97d759",
+      "revId": "ec7368bc407313627543a2477d7ccc784cd0aaa3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "41600b74_5cef1b12",
@@ -171,6 +189,24 @@
       "writtenOn": "2024-06-14T20:23:27Z",
       "side": 1,
       "message": "Needs a doccomment, explaining that this is typically used for.",
+      "revId": "ec7368bc407313627543a2477d7ccc784cd0aaa3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3bca5188_52591972",
+        "filename": "tvix/castore/src/directoryservice/order_validator.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-06-15T22:41:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "41600b74_5cef1b12",
       "revId": "ec7368bc407313627543a2477d7ccc784cd0aaa3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
