@@ -103,6 +103,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22c5eca5_3384e4d7",
+        "filename": "tvix/castore/src/directoryservice/directory_graph.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-15T19:27:51Z",
+      "side": 1,
+      "message": "Ah yes, in cl/11709 it does.",
+      "parentUuid": "87890128_42f90dac",
+      "revId": "5aad9967182d2b9652e6c2999058dfe1550a24cf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14e0de70_d87fad31",
