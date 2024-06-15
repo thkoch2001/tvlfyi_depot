@@ -31,115 +31,150 @@ let
         ] ++ lib.optional (extraFileset != null) extraFileset)));
     };
 
-  # Load the crate2nix crate tree.
-  crates = import ./Cargo.nix {
-    inherit pkgs;
-    nixpkgs = pkgs.path;
+  defaultCrateOverridesForPkgs = pkgs: pkgs.defaultCrateOverrides // {
+    zstd-sys = prev: {
+      nativeBuildInputs = prev.nativeBuildInputs or [ ];
+      buildInputs = prev.buildInputs or [ ] ++ iconvDarwinDep;
+    };
 
-    # Hack to fix Darwin build
-    # See https://github.com/NixOS/nixpkgs/issues/218712
-    buildRustCrateForPkgs = pkgs:
-      if pkgs.stdenv.isDarwin then
-        let
-          buildRustCrate = pkgs.buildRustCrate;
-          buildRustCrate_ = args: buildRustCrate args // { dontStrip = true; };
-          override = o: args: buildRustCrate.override o (args // { dontStrip = true; });
-        in
-        pkgs.makeOverridable override { }
-      else pkgs.buildRustCrate;
+    opentelemetry-proto = prev: {
+      nativeBuildInputs = protobufDep prev;
+    };
 
-    defaultCrateOverrides = pkgs.defaultCrateOverrides // {
-      zstd-sys = prev: {
-        nativeBuildInputs = prev.nativeBuildInputs or [ ];
-        buildInputs = prev.buildInputs or [ ] ++ iconvDarwinDep;
+    prost-build = prev: {
+      nativeBuildInputs = protobufDep prev;
+    };
+
+    prost-wkt-types = prev: {
+      nativeBuildInputs = protobufDep prev;
+    };
+
+    tonic-reflection = prev: {
+      nativeBuildInputs = protobufDep prev;
+    };
+
+    tvix-build = prev: {
+      src = filterRustCrateSrc rec {
+        root = prev.src.origSrc;
+        extraFileset = (lib.fileset.fileFilter (f: f.hasExt "proto") root);
       };
+      PROTO_ROOT = depot.tvix.build.protos.protos;
+      nativeBuildInputs = protobufDep prev;
+      buildInputs = darwinDeps;
+    };
 
-      opentelemetry-proto = prev: {
-        nativeBuildInputs = protobufDep prev;
+    tvix-castore = prev: {
+      src = filterRustCrateSrc rec {
+        root = prev.src.origSrc;
+        extraFileset = (lib.fileset.fileFilter (f: f.hasExt "proto") root);
       };
+      PROTO_ROOT = depot.tvix.castore.protos.protos;
+      nativeBuildInputs = protobufDep prev;
+    };
 
-      prost-build = prev: {
-        nativeBuildInputs = protobufDep prev;
+    tvix-cli = prev: {
+      src = filterRustCrateSrc { root = prev.src.origSrc; };
+      buildInputs = prev.buildInputs or [ ] ++ darwinDeps;
+    };
+
+    tvix-store = prev: {
+      src = filterRustCrateSrc rec {
+        root = prev.src.origSrc;
+        extraFileset = (lib.fileset.fileFilter (f: f.hasExt "proto") root);
       };
+      PROTO_ROOT = depot.tvix.store.protos.protos;
+      nativeBuildInputs = protobufDep prev;
+      # fuse-backend-rs uses DiskArbitration framework to handle mount/unmount on Darwin
+      buildInputs = prev.buildInputs or [ ]
+        ++ darwinDeps
+        ++ lib.optional pkgs.stdenv.isDarwin pkgs.buildPackages.darwin.apple_sdk.frameworks.DiskArbitration;
+    };
 
-      prost-wkt-types = prev: {
-        nativeBuildInputs = protobufDep prev;
+    tvix-eval-builtin-macros = prev: {
+      src = filterRustCrateSrc { root = prev.src.origSrc; };
+    };
+
+    tvix-eval = prev: {
+      src = filterRustCrateSrc rec {
+        root = prev.src.origSrc;
+        extraFileset = (root + "/proptest-regressions");
       };
+    };
 
-      tonic-reflection = prev: {
-        nativeBuildInputs = protobufDep prev;
+    tvix-glue = prev: {
+      src = filterRustCrateSrc {
+        root = prev.src.origSrc;
       };
+    };
 
-      tvix-build = prev: {
-        src = filterRustCrateSrc rec {
-          root = prev.src.origSrc;
-          extraFileset = (lib.fileset.fileFilter (f: f.hasExt "proto") root);
-        };
-        PROTO_ROOT = depot.tvix.build.protos.protos;
-        nativeBuildInputs = protobufDep prev;
-        buildInputs = darwinDeps;
-      };
+    tvix-serde = prev: {
+      src = filterRustCrateSrc { root = prev.src.origSrc; };
+    };
 
-      tvix-castore = prev: {
-        src = filterRustCrateSrc rec {
-          root = prev.src.origSrc;
-          extraFileset = (lib.fileset.fileFilter (f: f.hasExt "proto") root);
-        };
-        PROTO_ROOT = depot.tvix.castore.protos.protos;
-        nativeBuildInputs = protobufDep prev;
-      };
+    tvix-tracing = prev: {
+      src = filterRustCrateSrc { root = prev.src.origSrc; };
+    };
 
-      tvix-cli = prev: {
-        src = filterRustCrateSrc { root = prev.src.origSrc; };
-        buildInputs = prev.buildInputs or [ ] ++ darwinDeps;
-      };
+    tvixbolt = prev: {
+      src = filterRustCrateSrc { root = prev.src.origSrc; };
+      installPhase = ''
+        ${pkgs.pkgsBuildBuild.wasm-bindgen-cli}/bin/wasm-bindgen \
+          --target web \
+          --out-dir $out \
+          --out-name ${prev.crateName} \
+          --no-typescript \
+          target/lib/${prev.crateName}-*.wasm
+          cp src/{*.html,*.css} $out/
+      '';
+    };
 
-      tvix-store = prev: {
-        src = filterRustCrateSrc rec {
-          root = prev.src.origSrc;
-          extraFileset = (lib.fileset.fileFilter (f: f.hasExt "proto") root);
-        };
-        PROTO_ROOT = depot.tvix.store.protos.protos;
-        nativeBuildInputs = protobufDep prev;
-        # fuse-backend-rs uses DiskArbitration framework to handle mount/unmount on Darwin
-        buildInputs = prev.buildInputs or [ ]
-          ++ darwinDeps
-          ++ lib.optional pkgs.stdenv.isDarwin pkgs.buildPackages.darwin.apple_sdk.frameworks.DiskArbitration;
-      };
-
-      tvix-eval-builtin-macros = prev: {
-        src = filterRustCrateSrc { root = prev.src.origSrc; };
-      };
-
-      tvix-eval = prev: {
-        src = filterRustCrateSrc rec {
-          root = prev.src.origSrc;
-          extraFileset = (root + "/proptest-regressions");
-        };
-      };
-
-      tvix-glue = prev: {
-        src = filterRustCrateSrc {
-          root = prev.src.origSrc;
-        };
-      };
-
-      tvix-serde = prev: {
-        src = filterRustCrateSrc { root = prev.src.origSrc; };
-      };
-
-      tvix-tracing = prev: {
-        src = filterRustCrateSrc { root = prev.src.origSrc; };
-      };
-
-      nix-compat = prev: {
-        src = filterRustCrateSrc rec {
-          root = prev.src.origSrc;
-          extraFileset = (root + "/testdata");
-        };
+    nix-compat = prev: {
+      src = filterRustCrateSrc rec {
+        root = prev.src.origSrc;
+        extraFileset = (root + "/testdata");
       };
     };
   };
+
+  # Load the crate2nix crate tree.
+  crates = lib.recursiveUpdate
+    (pkgs.callPackage ./Cargo.nix { defaultCrateOverrides = defaultCrateOverridesForPkgs pkgs; })
+    {
+      workspaceMembers =
+        let
+          pkgsWasm32 = import
+            (pkgs.applyPatches {
+              name = "nixpkgs-patched";
+              src = pkgs.path;
+              patches = [
+                (pkgs.fetchpatch {
+                  url = "https://github.com/NixOS/nixpkgs/commit/de9a49c390e6793af604c9a05f8c7015aff32903.patch";
+                  hash = "sha256-r/K3z/cVuwtuTdmqnAZ63gaSiH4BW2SFR4YA/oYgJao=";
+                })
+                (pkgs.fetchpatch {
+                  url = "https://github.com/NixOS/nixpkgs/commit/272c12120c9c7034832bf11d7ec36c5bd8212f6a.patch";
+                  hash = "sha256-gjYriGKd5uQWyr8UB61lYPJ91ry8uo6LsVF9ez7J/dI=";
+                })
+                (pkgs.fetchpatch {
+                  url = "https://github.com/NixOS/nixpkgs/commit/6a9c408e89888c69b3c1a4993048b8ff0e117b53.patch";
+                  hash = "sha256-kQwMIapMFJI29jxv7+d/+vFJUQCjrjzeRtk2NQjA1VA=";
+                })
+              ];
+            })
+            {
+              crossSystem = {
+                config = "wasm32-unknown-none-unknown";
+                rust.rustcTarget = "wasm32-unknown-unknown";
+                useLLVM = true;
+              };
+            };
+        in
+        {
+          inherit ((pkgsWasm32.callPackage ./Cargo.nix {
+            defaultCrateOverrides = defaultCrateOverridesForPkgs pkgsWasm32;
+          }).workspaceMembers) tvixbolt;
+        };
+    };
 
   # Cargo dependencies to be used with nixpkgs rustPlatform functions.
   cargoDeps = pkgs.rustPlatform.importCargoLock {
