@@ -99,6 +99,8 @@ depot.nix.readTree.drvTargets {
 
   crate2nix = super.crate2nix.overrideAttrs (old: {
     patches = old.patches or [ ] ++ [
+      # https://github.com/nix-community/crate2nix/pull/352/
+      ./patches/crate2nix-drop-rust-lib.patch
       # https://github.com/nix-community/crate2nix/pull/301
       ./patches/crate2nix-tests-debug.patch
     ];
