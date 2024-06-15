@@ -29,6 +29,7 @@ members = [
   "serde",
   "store",
   "tracing",
+  "tvixbolt",
 ]
 
 [workspace.lints.clippy]
