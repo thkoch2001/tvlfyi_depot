@@ -98,6 +98,12 @@ depot.nix.readTree.drvTargets {
   });
 
   crate2nix = super.crate2nix.overrideAttrs (old: {
+    src = self.fetchFromGitHub {
+      owner = "Kranzes";
+      repo = "crate2nix";
+      rev = "ea9f0af8ba6fc8044ddf237c29eae4384841b9e1";
+      hash = "sha256-2k5UZfiyr2YN1rm25rfwgp8vA306eAEIqECbtzcItmg=";
+    };
     patches = old.patches or [ ] ++ [
       # https://github.com/nix-community/crate2nix/pull/301
       ./patches/crate2nix-tests-debug.patch
