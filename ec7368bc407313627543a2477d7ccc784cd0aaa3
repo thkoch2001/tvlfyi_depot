@@ -53,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "09ca18d6_8142cad8",
+        "filename": "tvix/castore/src/directoryservice/closure_validator.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-15T20:21:38Z",
+      "side": 1,
+      "message": "This is generic over O, and https://cl.tvl.fyi/c/depot/+/11708/comment/07b4db4b_d019f1aa/ is the comment for updating the docstring in the file where it\u0027s living now in.",
+      "parentUuid": "796a13e0_ef96f1b4",
+      "revId": "ec7368bc407313627543a2477d7ccc784cd0aaa3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3bfbfcb4_45d6f652",
