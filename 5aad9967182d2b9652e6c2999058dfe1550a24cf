@@ -140,6 +140,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2781e735_7faf1589",
+        "filename": "tvix/castore/src/directoryservice/directory_graph.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-06-15T22:09:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "434861f6_97526c96",
+      "revId": "5aad9967182d2b9652e6c2999058dfe1550a24cf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87890128_42f90dac",
@@ -293,6 +311,24 @@
       "writtenOn": "2024-06-15T19:24:55Z",
       "side": 1,
       "message": "Please add some tests for these two at the end of this file.",
+      "revId": "5aad9967182d2b9652e6c2999058dfe1550a24cf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a94e62e_92f59604",
+        "filename": "tvix/castore/src/directoryservice/order_validator.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-06-15T22:09:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2adc16e7_a4488ba5",
       "revId": "5aad9967182d2b9652e6c2999058dfe1550a24cf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
