@@ -5,10 +5,10 @@ TVL Code Reviews
 **Table of Contents**
 
 - [TVL Code Reviews](#tvl-code-reviews)
+    - [Registration](#registration)
     - [Gerrit setup](#gerrit-setup)
     - [Gerrit workflows](#gerrit-workflows)
     - [Review process & approvals](#review-process--approvals)
-    - [Registration](#registration)
     - [Submitting changes via email](#submitting-changes-via-email)
     - [Gerrit for Github users](#gerrit-for-github-users)
 
@@ -21,6 +21,24 @@ contribution guidelines](./CONTRIBUTING.md).
 
 All changes are tracked at [cl.tvl.fyi](https://cl.tvl.fyi) using Gerrit. See
 [Registration](#registration) for information on how to register an account.
+
+## Registration
+
+The preferred method of contributions & review is done via Gerrit.
+
+TVL’s Gerrit supports single sign-on (SSO) using a GitHub, StackOverflow or
+GitLab.com account. Alternatively, if you would like to have a TVL-specific
+account on the Gerrit instance, follow these instructions:
+
+1. Be a member of `#tvl` on [hackint][].
+2. Clone the depot locally (via `git clone "https://cl.tvl.fyi/depot"`).
+3. Create a user entry in our LDAP server in [ops/users][ops-users].
+
+   The entry can be generated using [//web/pwcrypt](https://signup.tvl.fyi/).
+4. Create a commit adding yourself (see e.g.
+   [CL/2671](https://cl.tvl.fyi/c/depot/+/2671))
+5. Submit the patch via email (see
+   [Submitting changes via email](#submitting-changes-via-email))
 
 ## Gerrit setup
 
@@ -111,23 +129,8 @@ formalised checks before submitting:
 If all these conditions are fulfilled, the **change author submits their change
 themselves**.
 
-## Registration
-
-You may log into Gerrit using a GitHub, StackOverflow or GitLab.com account.
-
-If you would like to have a TVL-specific account on the Gerrit
-instance, follow these instructions:
-
-1. Be a member of `#tvl` on [hackint][].
-2. Clone the depot locally (via `git clone "https://cl.tvl.fyi/depot"`).
-3. Create a user entry in our LDAP server in [ops/users][ops-users].
-
-   The entry can be generated using [//web/pwcrypt](https://signup.tvl.fyi/).
-4. Create a commit adding yourself (see e.g.
-   [CL/2671](https://cl.tvl.fyi/c/depot/+/2671))
-5. Submit the commit via email (see below).
-
 ## Submitting changes via email
+
 Please keep in mind this process is more complicated and requires more work from
 both sides:
 
