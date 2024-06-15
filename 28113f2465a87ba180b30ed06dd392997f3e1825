@@ -16,6 +16,24 @@
       "message": "Preference here is on the LDAP account actually, because at least for GitHub, keycloak sometimes just stacktraces.\n\nWe should reword this a bit, that SSO sometimes causes issues, and the LDAP account can be used as a fallback.",
       "revId": "28113f2465a87ba180b30ed06dd392997f3e1825",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c50120e7_e5a08fda",
+        "filename": "docs/REVIEWS.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-15T17:40:04Z",
+      "side": 1,
+      "message": "I like this version better, thanks!",
+      "parentUuid": "f05b1d59_90a02ca8",
+      "revId": "28113f2465a87ba180b30ed06dd392997f3e1825",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
