@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "166f3784_4ca8d4e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-06-15T13:36:37Z",
+      "side": 1,
+      "message": "Why? I already think there\u0027s too much stuff in //tvix that isn\u0027t *part of* tvix, but just uses it.",
+      "revId": "614649f44b767b0747c2c004111795c9624d0279",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
