@@ -14,7 +14,7 @@
     };
 
     services.nginx.virtualHosts."bolt.tvix.dev" = {
-      root = depot.web.tvixbolt;
+      root = depot.tvix.tvixbolt;
       enableACME = true;
       forceSSL = true;
     };

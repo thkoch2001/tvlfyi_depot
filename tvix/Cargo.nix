@@ -133,6 +133,16 @@ rec {
       # File a bug if you depend on any for non-debug work!
       debug = internal.debugCrate { inherit packageId; };
     };
+    "tvixbolt" = rec {
+      packageId = "tvixbolt";
+      build = internal.buildRustCrateWithFeatures {
+        packageId = "tvixbolt";
+      };
+
+      # Debug support which might change between releases.
+      # File a bug if you depend on any for non-debug work!
+      debug = internal.debugCrate { inherit packageId; };
+    };
   };
 
   # A derivation that joins the outputs of all workspace members together.
@@ -1579,6 +1589,16 @@ rec {
         ];
 
       };
+      "boolinator" = rec {
+        crateName = "boolinator";
+        version = "2.4.0";
+        edition = "2015";
+        sha256 = "1nccxzb1dfkjfrgzqaw1a90p26zlvv6nah5ckcpj6bn9a4zqga6g";
+        authors = [
+          "Daniel Keep <daniel.keep@gmail.com>"
+        ];
+
+      };
       "bstr" = rec {
         crateName = "bstr";
         version = "1.9.0";
@@ -2177,6 +2197,26 @@ rec {
         };
         resolvedDefaultFeatures = [ "ansi-parsing" "unicode-width" ];
       };
+      "console_error_panic_hook" = rec {
+        crateName = "console_error_panic_hook";
+        version = "0.1.7";
+        edition = "2015";
+        sha256 = "1g5v8s0ndycc10mdn6igy914k645pgpcl8vjpz6nvxkhyirynsm0";
+        authors = [
+          "Nick Fitzgerald <fitzgen@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "cfg-if";
+            packageId = "cfg-if";
+          }
+          {
+            name = "wasm-bindgen";
+            packageId = "wasm-bindgen";
+          }
+        ];
+
+      };
       "const-oid" = rec {
         crateName = "const-oid";
         version = "0.9.6";
@@ -2286,7 +2326,7 @@ rec {
           {
             name = "libc";
             packageId = "libc";
-            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "aarch64-linux-android");
+            target = { target, features }: (stdenv.hostPlatform.rust.rustcTarget == "aarch64-linux-android");
           }
           {
             name = "libc";
@@ -4377,6 +4417,326 @@ rec {
           "The Rust Project Developers"
         ];
 
+      };
+      "gloo" = rec {
+        crateName = "gloo";
+        version = "0.4.2";
+        edition = "2018";
+        sha256 = "1kb8ynbd43r3xnhcrkj8kcscqc86q7a2s56dlnbkwpp5xrjpk513";
+        authors = [
+          "Rust and WebAssembly Working Group"
+        ];
+        dependencies = [
+          {
+            name = "gloo-console";
+            packageId = "gloo-console";
+          }
+          {
+            name = "gloo-dialogs";
+            packageId = "gloo-dialogs";
+          }
+          {
+            name = "gloo-events";
+            packageId = "gloo-events";
+          }
+          {
+            name = "gloo-file";
+            packageId = "gloo-file";
+          }
+          {
+            name = "gloo-render";
+            packageId = "gloo-render";
+          }
+          {
+            name = "gloo-storage";
+            packageId = "gloo-storage";
+          }
+          {
+            name = "gloo-timers";
+            packageId = "gloo-timers";
+          }
+          {
+            name = "gloo-utils";
+            packageId = "gloo-utils";
+          }
+        ];
+        features = {
+          "futures" = [ "gloo-timers/futures" "gloo-file/futures" ];
+        };
+        resolvedDefaultFeatures = [ "default" "futures" ];
+      };
+      "gloo-console" = rec {
+        crateName = "gloo-console";
+        version = "0.2.3";
+        edition = "2018";
+        sha256 = "0gqd35vn0i5y6hzfrsb2i032p1j832c08sar6dr19gny0lycxdw2";
+        authors = [
+          "Rust and WebAssembly Working Group"
+        ];
+        dependencies = [
+          {
+            name = "gloo-utils";
+            packageId = "gloo-utils";
+            features = [ "serde" ];
+          }
+          {
+            name = "js-sys";
+            packageId = "js-sys";
+          }
+          {
+            name = "serde";
+            packageId = "serde";
+            features = [ "derive" ];
+          }
+          {
+            name = "wasm-bindgen";
+            packageId = "wasm-bindgen";
+          }
+          {
+            name = "web-sys";
+            packageId = "web-sys";
+            features = [ "console" "Document" ];
+          }
+        ];
+
+      };
+      "gloo-dialogs" = rec {
+        crateName = "gloo-dialogs";
+        version = "0.1.1";
+        edition = "2018";
+        sha256 = "1rh2j0l8rbj8pbypxqy99qi2x3hq52sclijs8h47zlkjmij261k7";
+        authors = [
+          "Rust and WebAssembly Working Group"
+        ];
+        dependencies = [
+          {
+            name = "wasm-bindgen";
+            packageId = "wasm-bindgen";
+          }
+          {
+            name = "web-sys";
+            packageId = "web-sys";
+            features = [ "Window" ];
+          }
+        ];
+
+      };
+      "gloo-events" = rec {
+        crateName = "gloo-events";
+        version = "0.1.2";
+        edition = "2018";
+        sha256 = "1z4j14r2lim77s0jm1dpk306jyycmx2kirid33j0b0gdmgw0gcb8";
+        authors = [
+          "Rust and WebAssembly Working Group"
+        ];
+        dependencies = [
+          {
+            name = "wasm-bindgen";
+            packageId = "wasm-bindgen";
+          }
+          {
+            name = "web-sys";
+            packageId = "web-sys";
+            features = [ "Event" "EventTarget" "AddEventListenerOptions" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "web-sys";
+            packageId = "web-sys";
+            features = [ "HtmlElement" "Window" "Document" "Element" "MouseEvent" "ProgressEvent" ];
+          }
+        ];
+
+      };
+      "gloo-file" = rec {
+        crateName = "gloo-file";
+        version = "0.2.3";
+        edition = "2018";
+        sha256 = "1mxnd7l8gglv5yqhah6ny329hc0c98vn7h5xg0yv8f0aax75dmd8";
+        authors = [
+          "Rust and WebAssembly Working Group"
+        ];
+        dependencies = [
+          {
+            name = "futures-channel";
+            packageId = "futures-channel";
+            optional = true;
+          }
+          {
+            name = "gloo-events";
+            packageId = "gloo-events";
+          }
+          {
+            name = "js-sys";
+            packageId = "js-sys";
+          }
+          {
+            name = "wasm-bindgen";
+            packageId = "wasm-bindgen";
+          }
+          {
+            name = "web-sys";
+            packageId = "web-sys";
+            features = [ "Blob" "File" "FileList" "FileReader" "HtmlInputElement" "BlobPropertyBag" "FilePropertyBag" "DomException" "Url" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "web-sys";
+            packageId = "web-sys";
+            features = [ "Window" "Response" ];
+          }
+        ];
+        features = {
+          "futures" = [ "futures-channel" ];
+          "futures-channel" = [ "dep:futures-channel" ];
+          "mime" = [ "dep:mime" ];
+        };
+        resolvedDefaultFeatures = [ "default" "futures" "futures-channel" ];
+      };
+      "gloo-render" = rec {
+        crateName = "gloo-render";
+        version = "0.1.1";
+        edition = "2018";
+        sha256 = "0r3pxj22l489ldakj6521a0f0n1r9v8xrai3k12d9kv7xxm31n9g";
+        authors = [
+          "Rust and WebAssembly Working Group"
+        ];
+        dependencies = [
+          {
+            name = "wasm-bindgen";
+            packageId = "wasm-bindgen";
+          }
+          {
+            name = "web-sys";
+            packageId = "web-sys";
+            features = [ "Window" ];
+          }
+        ];
+
+      };
+      "gloo-storage" = rec {
+        crateName = "gloo-storage";
+        version = "0.2.2";
+        edition = "2018";
+        sha256 = "1074j754a6c21sbmqws5qwaha0a13fikv17ps476zzfvyl5vcsjx";
+        authors = [
+          "Rust and WebAssembly Working Group"
+        ];
+        dependencies = [
+          {
+            name = "gloo-utils";
+            packageId = "gloo-utils";
+          }
+          {
+            name = "js-sys";
+            packageId = "js-sys";
+          }
+          {
+            name = "serde";
+            packageId = "serde";
+          }
+          {
+            name = "serde_json";
+            packageId = "serde_json";
+          }
+          {
+            name = "thiserror";
+            packageId = "thiserror";
+          }
+          {
+            name = "wasm-bindgen";
+            packageId = "wasm-bindgen";
+          }
+          {
+            name = "web-sys";
+            packageId = "web-sys";
+            features = [ "Storage" "Window" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "serde";
+            packageId = "serde";
+            features = [ "derive" ];
+          }
+        ];
+
+      };
+      "gloo-timers" = rec {
+        crateName = "gloo-timers";
+        version = "0.2.6";
+        edition = "2018";
+        sha256 = "0p2yqcxw0q9kclhwpgshq1r4ijns07nmmagll3lvrgl7pdk5m6cv";
+        authors = [
+          "Rust and WebAssembly Working Group"
+        ];
+        dependencies = [
+          {
+            name = "futures-channel";
+            packageId = "futures-channel";
+            optional = true;
+          }
+          {
+            name = "futures-core";
+            packageId = "futures-core";
+            optional = true;
+          }
+          {
+            name = "js-sys";
+            packageId = "js-sys";
+          }
+          {
+            name = "wasm-bindgen";
+            packageId = "wasm-bindgen";
+          }
+        ];
+        features = {
+          "futures" = [ "futures-core" "futures-channel" ];
+          "futures-channel" = [ "dep:futures-channel" ];
+          "futures-core" = [ "dep:futures-core" ];
+        };
+        resolvedDefaultFeatures = [ "default" "futures" "futures-channel" "futures-core" ];
+      };
+      "gloo-utils" = rec {
+        crateName = "gloo-utils";
+        version = "0.1.7";
+        edition = "2018";
+        sha256 = "13m59g36spynspvhx0xsaahbkdshn1v03gcjf87s7cvc443wnzq3";
+        authors = [
+          "Rust and WebAssembly Working Group"
+        ];
+        dependencies = [
+          {
+            name = "js-sys";
+            packageId = "js-sys";
+          }
+          {
+            name = "serde";
+            packageId = "serde";
+            optional = true;
+          }
+          {
+            name = "serde_json";
+            packageId = "serde_json";
+            optional = true;
+          }
+          {
+            name = "wasm-bindgen";
+            packageId = "wasm-bindgen";
+          }
+          {
+            name = "web-sys";
+            packageId = "web-sys";
+            features = [ "Document" "History" "HtmlElement" "Location" "Window" "HtmlHeadElement" "Element" ];
+          }
+        ];
+        features = {
+          "default" = [ "serde" ];
+          "serde" = [ "dep:serde" "dep:serde_json" ];
+        };
+        resolvedDefaultFeatures = [ "default" "serde" ];
       };
       "h2" = rec {
         crateName = "h2";
@@ -7849,6 +8209,74 @@ rec {
           "verbatim" = [ "syn/parsing" ];
         };
       };
+      "proc-macro-error" = rec {
+        crateName = "proc-macro-error";
+        version = "1.0.4";
+        edition = "2018";
+        sha256 = "1373bhxaf0pagd8zkyd03kkx6bchzf6g0dkwrwzsnal9z47lj9fs";
+        authors = [
+          "CreepySkeleton <creepy-skeleton@yandex.ru>"
+        ];
+        dependencies = [
+          {
+            name = "proc-macro-error-attr";
+            packageId = "proc-macro-error-attr";
+          }
+          {
+            name = "proc-macro2";
+            packageId = "proc-macro2";
+          }
+          {
+            name = "quote";
+            packageId = "quote";
+          }
+          {
+            name = "syn";
+            packageId = "syn 1.0.109";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+        ];
+        buildDependencies = [
+          {
+            name = "version_check";
+            packageId = "version_check";
+          }
+        ];
+        features = {
+          "default" = [ "syn-error" ];
+          "syn" = [ "dep:syn" ];
+          "syn-error" = [ "syn" ];
+        };
+        resolvedDefaultFeatures = [ "default" "syn" "syn-error" ];
+      };
+      "proc-macro-error-attr" = rec {
+        crateName = "proc-macro-error-attr";
+        version = "1.0.4";
+        edition = "2018";
+        sha256 = "0sgq6m5jfmasmwwy8x4mjygx5l7kp8s4j60bv25ckv2j1qc41gm1";
+        procMacro = true;
+        authors = [
+          "CreepySkeleton <creepy-skeleton@yandex.ru>"
+        ];
+        dependencies = [
+          {
+            name = "proc-macro2";
+            packageId = "proc-macro2";
+          }
+          {
+            name = "quote";
+            packageId = "quote";
+          }
+        ];
+        buildDependencies = [
+          {
+            name = "version_check";
+            packageId = "version_check";
+          }
+        ];
+
+      };
       "proc-macro2" = rec {
         crateName = "proc-macro2";
         version = "1.0.76";
@@ -9224,6 +9652,17 @@ rec {
         ];
 
       };
+      "route-recognizer" = rec {
+        crateName = "route-recognizer";
+        version = "0.3.1";
+        edition = "2018";
+        sha256 = "0ikp3blbina00jdbifxw1c9whg6mljli24lq5pv82iar53xr9axg";
+        authors = [
+          "wycats"
+          "rustasync"
+        ];
+
+      };
       "rowan" = rec {
         crateName = "rowan";
         version = "0.15.15";
@@ -10005,6 +10444,16 @@ rec {
         ];
 
       };
+      "scoped-tls-hkt" = rec {
+        crateName = "scoped-tls-hkt";
+        version = "0.1.4";
+        edition = "2018";
+        sha256 = "1p6x35cffxr6y293ip4m8pnf60bbgyvg06q7rb3gdn8h6ifpdp1x";
+        authors = [
+          "Diggory Blake <diggsey@googlemail.com>"
+        ];
+
+      };
       "scopeguard" = rec {
         crateName = "scopeguard";
         version = "1.2.0";
@@ -10161,6 +10610,41 @@ rec {
           "serde_derive" = [ "dep:serde_derive" ];
         };
         resolvedDefaultFeatures = [ "alloc" "default" "derive" "rc" "serde_derive" "std" ];
+      };
+      "serde-wasm-bindgen" = rec {
+        crateName = "serde-wasm-bindgen";
+        version = "0.3.1";
+        edition = "2018";
+        sha256 = "1xzh1a3rhapirlca4rbvh6bycphxg5yjmdwjsqij3hl6wpl6b0v1";
+        authors = [
+          "Ingvar Stepanyan <me@rreverser.com>"
+        ];
+        dependencies = [
+          {
+            name = "fnv";
+            packageId = "fnv";
+          }
+          {
+            name = "js-sys";
+            packageId = "js-sys";
+          }
+          {
+            name = "serde";
+            packageId = "serde";
+          }
+          {
+            name = "wasm-bindgen";
+            packageId = "wasm-bindgen";
+          }
+        ];
+        devDependencies = [
+          {
+            name = "serde";
+            packageId = "serde";
+            features = [ "derive" ];
+          }
+        ];
+        features = { };
       };
       "serde_derive" = rec {
         crateName = "serde_derive";
@@ -14286,6 +14770,60 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "otlp" "tracy" ];
       };
+      "tvixbolt" = rec {
+        crateName = "tvixbolt";
+        version = "0.1.0";
+        edition = "2021";
+        # We can't filter paths with references in Nix 2.4
+        # See https://github.com/NixOS/nix/issues/5410
+        src =
+          if ((lib.versionOlder builtins.nixVersion "2.4pre20211007") || (lib.versionOlder "2.5" builtins.nixVersion))
+          then lib.cleanSourceWith { filter = sourceFilter; src = ./tvixbolt; }
+          else ./tvixbolt;
+        type = [ "cdylib" ];
+        dependencies = [
+          {
+            name = "codemap";
+            packageId = "codemap";
+          }
+          {
+            name = "rnix";
+            packageId = "rnix";
+          }
+          {
+            name = "serde";
+            packageId = "serde";
+            features = [ "derive" ];
+          }
+          {
+            name = "serde_urlencoded";
+            packageId = "serde_urlencoded";
+          }
+          {
+            name = "tvix-eval";
+            packageId = "tvix-eval";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "wasm-bindgen";
+            packageId = "wasm-bindgen";
+          }
+          {
+            name = "web-sys";
+            packageId = "web-sys";
+            features = [ "HtmlDetailsElement" ];
+          }
+          {
+            name = "yew";
+            packageId = "yew";
+          }
+          {
+            name = "yew-router";
+            packageId = "yew-router";
+          }
+        ];
+
+      };
       "typenum" = rec {
         crateName = "typenum";
         version = "1.17.0";
@@ -14972,9 +15510,9 @@ rec {
       };
       "wasm-bindgen" = rec {
         crateName = "wasm-bindgen";
-        version = "0.2.90";
+        version = "0.2.92";
         edition = "2018";
-        sha256 = "01jlal3mynqwvqx4acrdnr9bvsdczaz2sy8lmmzmqh81lab348mi";
+        sha256 = "1a4mcw13nsk3fr8fxjzf9kk1wj88xkfsmnm0pjraw01ryqfm7qjb";
         authors = [
           "The wasm-bindgen Developers"
         ];
@@ -15003,9 +15541,9 @@ rec {
       };
       "wasm-bindgen-backend" = rec {
         crateName = "wasm-bindgen-backend";
-        version = "0.2.90";
+        version = "0.2.92";
         edition = "2018";
-        sha256 = "1kcxml9762zjdrn0h0n0qxfg1n7z1f577jcc5yimi3a0cddr7p7w";
+        sha256 = "1nj7wxbi49f0rw9d44rjzms26xlw6r76b2mrggx8jfbdjrxphkb1";
         authors = [
           "The wasm-bindgen Developers"
         ];
@@ -15080,9 +15618,9 @@ rec {
       };
       "wasm-bindgen-macro" = rec {
         crateName = "wasm-bindgen-macro";
-        version = "0.2.90";
+        version = "0.2.92";
         edition = "2018";
-        sha256 = "16d980bql7y5krfqlmcr8mk1q4mrm0rmb0a99j92im5jc62j6k1y";
+        sha256 = "09npa1srjjabd6nfph5yc03jb26sycjlxhy0c2a1pdrpx4yq5y51";
         procMacro = true;
         authors = [
           "The wasm-bindgen Developers"
@@ -15105,9 +15643,9 @@ rec {
       };
       "wasm-bindgen-macro-support" = rec {
         crateName = "wasm-bindgen-macro-support";
-        version = "0.2.90";
+        version = "0.2.92";
         edition = "2018";
-        sha256 = "19r5bsyjw0fvim7dsj8pbwrq8v0ggh845lhfasgavhbdh2vapqds";
+        sha256 = "1dqv2xs8zcyw4kjgzj84bknp2h76phmsb3n7j6hn396h4ssifkz9";
         authors = [
           "The wasm-bindgen Developers"
         ];
@@ -15142,10 +15680,10 @@ rec {
       };
       "wasm-bindgen-shared" = rec {
         crateName = "wasm-bindgen-shared";
-        version = "0.2.90";
+        version = "0.2.92";
         edition = "2018";
         links = "wasm_bindgen";
-        sha256 = "0av0m0shdg1jxhf66ymjbq03m0qb7ypm297glndm7mri3hxl34ad";
+        sha256 = "15kyavsrna2cvy30kg03va257fraf9x00ny554vxngvpyaa0q6dg";
         authors = [
           "The wasm-bindgen Developers"
         ];
@@ -15660,7 +16198,7 @@ rec {
           "XrViewerPose" = [ "XrPose" ];
           "XrWebGlLayer" = [ "EventTarget" "XrLayer" ];
         };
-        resolvedDefaultFeatures = [ "AbortController" "AbortSignal" "Blob" "BlobPropertyBag" "CanvasRenderingContext2d" "Document" "DomRect" "DomRectReadOnly" "Element" "Event" "EventTarget" "File" "FormData" "Headers" "HtmlCanvasElement" "HtmlElement" "MessageEvent" "Node" "ReadableStream" "Request" "RequestCredentials" "RequestInit" "RequestMode" "Response" "ServiceWorkerGlobalScope" "Window" "Worker" "WorkerGlobalScope" ];
+        resolvedDefaultFeatures = [ "AbortController" "AbortSignal" "AddEventListenerOptions" "AnimationEvent" "Attr" "Blob" "BlobPropertyBag" "CanvasRenderingContext2d" "CharacterData" "Document" "DomException" "DomRect" "DomRectReadOnly" "DragEvent" "Element" "ErrorEvent" "Event" "EventInit" "EventTarget" "File" "FileList" "FilePropertyBag" "FileReader" "FocusEvent" "FormData" "Headers" "History" "HtmlBaseElement" "HtmlCanvasElement" "HtmlDetailsElement" "HtmlElement" "HtmlHeadElement" "HtmlInputElement" "HtmlTextAreaElement" "InputEvent" "InputEventInit" "KeyboardEvent" "Location" "MessageEvent" "MouseEvent" "NamedNodeMap" "Node" "PointerEvent" "ProgressEvent" "ReadableStream" "Request" "RequestCredentials" "RequestInit" "RequestMode" "Response" "ServiceWorkerGlobalScope" "Storage" "Text" "TouchEvent" "TransitionEvent" "UiEvent" "Url" "UrlSearchParams" "WheelEvent" "Window" "Worker" "WorkerGlobalScope" "console" ];
       };
       "web-time" = rec {
         crateName = "web-time";
@@ -15770,12 +16308,12 @@ rec {
           {
             name = "winapi-i686-pc-windows-gnu";
             packageId = "winapi-i686-pc-windows-gnu";
-            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "i686-pc-windows-gnu");
+            target = { target, features }: (stdenv.hostPlatform.rust.rustcTarget == "i686-pc-windows-gnu");
           }
           {
             name = "winapi-x86_64-pc-windows-gnu";
             packageId = "winapi-x86_64-pc-windows-gnu";
-            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "x86_64-pc-windows-gnu");
+            target = { target, features }: (stdenv.hostPlatform.rust.rustcTarget == "x86_64-pc-windows-gnu");
           }
         ];
         features = {
@@ -17141,7 +17679,7 @@ rec {
           {
             name = "windows_aarch64_gnullvm";
             packageId = "windows_aarch64_gnullvm 0.48.5";
-            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "aarch64-pc-windows-gnullvm");
+            target = { target, features }: (stdenv.hostPlatform.rust.rustcTarget == "aarch64-pc-windows-gnullvm");
           }
           {
             name = "windows_aarch64_msvc";
@@ -17166,7 +17704,7 @@ rec {
           {
             name = "windows_x86_64_gnullvm";
             packageId = "windows_x86_64_gnullvm 0.48.5";
-            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "x86_64-pc-windows-gnullvm");
+            target = { target, features }: (stdenv.hostPlatform.rust.rustcTarget == "x86_64-pc-windows-gnullvm");
           }
           {
             name = "windows_x86_64_msvc";
@@ -17188,7 +17726,7 @@ rec {
           {
             name = "windows_aarch64_gnullvm";
             packageId = "windows_aarch64_gnullvm 0.52.5";
-            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "aarch64-pc-windows-gnullvm");
+            target = { target, features }: (stdenv.hostPlatform.rust.rustcTarget == "aarch64-pc-windows-gnullvm");
           }
           {
             name = "windows_aarch64_msvc";
@@ -17203,7 +17741,7 @@ rec {
           {
             name = "windows_i686_gnullvm";
             packageId = "windows_i686_gnullvm";
-            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "i686-pc-windows-gnullvm");
+            target = { target, features }: (stdenv.hostPlatform.rust.rustcTarget == "i686-pc-windows-gnullvm");
           }
           {
             name = "windows_i686_msvc";
@@ -17218,7 +17756,7 @@ rec {
           {
             name = "windows_x86_64_gnullvm";
             packageId = "windows_x86_64_gnullvm 0.52.5";
-            target = { target, features }: (pkgs.rust.lib.toRustTarget stdenv.hostPlatform == "x86_64-pc-windows-gnullvm");
+            target = { target, features }: (stdenv.hostPlatform.rust.rustcTarget == "x86_64-pc-windows-gnullvm");
           }
           {
             name = "windows_x86_64_msvc";
@@ -17490,6 +18028,204 @@ rec {
         ];
 
       };
+      "yew" = rec {
+        crateName = "yew";
+        version = "0.19.3";
+        edition = "2018";
+        sha256 = "1kcqk4pm0vy08gshgpq7wamir0gsprc5gkrqff27sgvxwm9wn71a";
+        authors = [
+          "Denis Kolodin <deniskolodin@gmail.com>"
+          "Justin Starry <justin@yew.rs>"
+        ];
+        dependencies = [
+          {
+            name = "console_error_panic_hook";
+            packageId = "console_error_panic_hook";
+          }
+          {
+            name = "gloo";
+            packageId = "gloo";
+          }
+          {
+            name = "gloo-utils";
+            packageId = "gloo-utils";
+          }
+          {
+            name = "indexmap";
+            packageId = "indexmap 1.9.3";
+            features = [ "std" ];
+          }
+          {
+            name = "js-sys";
+            packageId = "js-sys";
+          }
+          {
+            name = "scoped-tls-hkt";
+            packageId = "scoped-tls-hkt";
+          }
+          {
+            name = "slab";
+            packageId = "slab";
+          }
+          {
+            name = "wasm-bindgen";
+            packageId = "wasm-bindgen";
+          }
+          {
+            name = "wasm-bindgen-futures";
+            packageId = "wasm-bindgen-futures";
+          }
+          {
+            name = "web-sys";
+            packageId = "web-sys";
+            features = [ "AnimationEvent" "Document" "DragEvent" "Element" "ErrorEvent" "Event" "EventInit" "EventTarget" "FocusEvent" "HtmlElement" "HtmlInputElement" "HtmlTextAreaElement" "InputEvent" "InputEventInit" "KeyboardEvent" "Location" "MouseEvent" "Node" "PointerEvent" "ProgressEvent" "Text" "TouchEvent" "TransitionEvent" "UiEvent" "WheelEvent" "Window" ];
+          }
+          {
+            name = "yew-macro";
+            packageId = "yew-macro";
+          }
+        ];
+        features = { };
+      };
+      "yew-macro" = rec {
+        crateName = "yew-macro";
+        version = "0.19.3";
+        edition = "2018";
+        sha256 = "1fxp0givrfcjg2k51mg1a023z2b1qxlii091ds6pcvam5c47kasz";
+        procMacro = true;
+        authors = [
+          "Justin Starry <justin@yew.rs>"
+        ];
+        dependencies = [
+          {
+            name = "boolinator";
+            packageId = "boolinator";
+          }
+          {
+            name = "lazy_static";
+            packageId = "lazy_static";
+          }
+          {
+            name = "proc-macro-error";
+            packageId = "proc-macro-error";
+          }
+          {
+            name = "proc-macro2";
+            packageId = "proc-macro2";
+          }
+          {
+            name = "quote";
+            packageId = "quote";
+          }
+          {
+            name = "syn";
+            packageId = "syn 1.0.109";
+            features = [ "full" "extra-traits" ];
+          }
+        ];
+        features = { };
+      };
+      "yew-router" = rec {
+        crateName = "yew-router";
+        version = "0.16.0";
+        edition = "2018";
+        sha256 = "1wlra0fl17lld52n7mzdy5b7fkm9hr2a2gswdmcryc5aygv08n0m";
+        authors = [
+          "Hamza <muhammadhamza1311@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "gloo";
+            packageId = "gloo";
+            features = [ "futures" ];
+          }
+          {
+            name = "gloo-utils";
+            packageId = "gloo-utils";
+          }
+          {
+            name = "js-sys";
+            packageId = "js-sys";
+          }
+          {
+            name = "route-recognizer";
+            packageId = "route-recognizer";
+          }
+          {
+            name = "serde";
+            packageId = "serde";
+          }
+          {
+            name = "serde-wasm-bindgen";
+            packageId = "serde-wasm-bindgen";
+          }
+          {
+            name = "serde_urlencoded";
+            packageId = "serde_urlencoded";
+          }
+          {
+            name = "thiserror";
+            packageId = "thiserror";
+          }
+          {
+            name = "wasm-bindgen";
+            packageId = "wasm-bindgen";
+          }
+          {
+            name = "web-sys";
+            packageId = "web-sys";
+            features = [ "Attr" "Document" "History" "HtmlBaseElement" "Event" "NamedNodeMap" "Url" "UrlSearchParams" "Window" ];
+          }
+          {
+            name = "yew";
+            packageId = "yew";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "yew-router-macro";
+            packageId = "yew-router-macro";
+          }
+        ];
+        devDependencies = [
+          {
+            name = "serde";
+            packageId = "serde";
+            features = [ "derive" ];
+          }
+          {
+            name = "web-sys";
+            packageId = "web-sys";
+            features = [ "HtmlHeadElement" ];
+          }
+        ];
+        features = { };
+      };
+      "yew-router-macro" = rec {
+        crateName = "yew-router-macro";
+        version = "0.16.0";
+        edition = "2018";
+        sha256 = "16p1lwwf8kb44zaypp2y1g4l5l86i3q6p4c0zi7svsjj7ccrs11r";
+        procMacro = true;
+        authors = [
+          "Hamza <muhammadhamza1311@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "proc-macro2";
+            packageId = "proc-macro2";
+          }
+          {
+            name = "quote";
+            packageId = "quote";
+          }
+          {
+            name = "syn";
+            packageId = "syn 1.0.109";
+            features = [ "full" "extra-traits" ];
+          }
+        ];
+
+      };
       "zerocopy" = rec {
         crateName = "zerocopy";
         version = "0.7.34";
@@ -17674,14 +18410,11 @@ rec {
       fuchsia = true;
       test = false;
 
-      /* We are choosing an arbitrary rust version to grab `lib` from,
-      which is unfortunate, but `lib` has been version-agnostic the
-      whole time so this is good enough for now.
-      */
-      os = pkgs.rust.lib.toTargetOs platform;
-      arch = pkgs.rust.lib.toTargetArch platform;
-      family = pkgs.rust.lib.toTargetFamily platform;
-      vendor = pkgs.rust.lib.toTargetVendor platform;
+      inherit (platform.rust.platform)
+        arch
+        os
+        vendor;
+      family = platform.rust.platform.target-family;
       env = "gnu";
       endian =
         if platform.parsed.cpu.significantByte.name == "littleEndian"
@@ -17925,7 +18658,7 @@ rec {
             let
               self = {
                 crates = lib.mapAttrs (packageId: value: buildByPackageIdForPkgsImpl self pkgs packageId) crateConfigs;
-                target = makeTarget pkgs.stdenv.hostPlatform;
+                target = makeTarget stdenv.hostPlatform;
                 build = mkBuiltByPackageIdByPkgs pkgs.buildPackages;
               };
             in

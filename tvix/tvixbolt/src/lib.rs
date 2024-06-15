@@ -7,6 +7,7 @@ use std::fmt::Write;
 
 use serde::{Deserialize, Serialize};
 use tvix_eval::observer::{DisassemblingObserver, TracingObserver};
+use wasm_bindgen::prelude::wasm_bindgen;
 use web_sys::HtmlDetailsElement;
 use web_sys::HtmlTextAreaElement;
 use yew::prelude::*;
@@ -310,6 +311,7 @@ fn eval(model: &Model) -> Output {
     out
 }
 
-fn main() {
+#[wasm_bindgen]
+pub fn main() {
     yew::start_app::<Model>();
 }
