@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "57a67c22_1d6a693c",
+        "filename": "tvix/castore/src/directoryservice/directory_graph.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-15T20:18:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dbcb2688_8a87c6b8",
+      "revId": "5aad9967182d2b9652e6c2999058dfe1550a24cf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3356d346_20b8e814",
@@ -48,6 +66,24 @@
       "writtenOn": "2024-06-15T19:24:55Z",
       "side": 1,
       "message": "```suggestion\n///  - validation of insertion order\n```",
+      "revId": "5aad9967182d2b9652e6c2999058dfe1550a24cf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14d25708_fc613f4b",
+        "filename": "tvix/castore/src/directoryservice/directory_graph.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-15T20:18:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3356d346_20b8e814",
       "revId": "5aad9967182d2b9652e6c2999058dfe1550a24cf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -138,6 +174,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "15ff2ba2_176a6a4a",
+        "filename": "tvix/castore/src/directoryservice/directory_graph.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-15T20:18:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14e0de70_d87fad31",
+      "revId": "5aad9967182d2b9652e6c2999058dfe1550a24cf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "efeb5f4d_081e0864",
@@ -155,6 +209,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "45eb39a5_4304324a",
+        "filename": "tvix/castore/src/directoryservice/directory_graph.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-15T20:18:41Z",
+      "side": 1,
+      "message": "Itertools isn\u0027t used anymore.",
+      "parentUuid": "efeb5f4d_081e0864",
+      "revId": "5aad9967182d2b9652e6c2999058dfe1550a24cf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2ed14db0_8b6fcdc3",
@@ -168,6 +240,24 @@
       "writtenOn": "2024-06-15T19:24:55Z",
       "side": 1,
       "message": "same",
+      "revId": "5aad9967182d2b9652e6c2999058dfe1550a24cf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "371636c1_17cd1c69",
+        "filename": "tvix/castore/src/directoryservice/directory_graph.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 248,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-15T20:18:41Z",
+      "side": 1,
+      "message": "Itertools isn\u0027t used anymore.",
+      "parentUuid": "2ed14db0_8b6fcdc3",
       "revId": "5aad9967182d2b9652e6c2999058dfe1550a24cf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
