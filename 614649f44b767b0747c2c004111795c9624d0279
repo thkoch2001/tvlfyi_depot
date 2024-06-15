@@ -16,6 +16,24 @@
       "message": "Why? I already think there\u0027s too much stuff in //tvix that isn\u0027t *part of* tvix, but just uses it.",
       "revId": "614649f44b767b0747c2c004111795c9624d0279",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "61c9eb63_b367a706",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-15T15:29:17Z",
+      "side": 1,
+      "message": "This is mostly a PoC to demonstrate crate2nix now working for webassembly, which I\u0027m pretty hyped about, thanks @personal@ilanjoselevich.com 🎉.\n\nTvixbolt is a good demo candidate. It doesn\u0027t have to be part of the workspace technically, but the crate2nix UX is quite bad when referring to \"out-of-workspace, but in-repo and please gitignore-fltered\" crates.\nIf you want to keep using the old building approach for it, and keep it outside the workspace, that also fine.\n\nHowever, there\u0027s gonna be other web frontends for tvix-store/tvix-build which I\u0027d like to see being shipped/served with/from tvix-store or tvix-build directly, and these would need to live inside //tvix.\n\nThis is likely gonna stay drafted at least until the nixpkgs fixes landed. The commit message has been updated to provide some context.",
+      "parentUuid": "166f3784_4ca8d4e7",
+      "revId": "614649f44b767b0747c2c004111795c9624d0279",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
