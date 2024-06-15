@@ -4214,6 +4214,7 @@ dependencies = [
  "fuse-backend-rs",
  "futures",
  "hex-literal",
+ "itertools 0.12.0",
  "lazy_static",
  "libc",
  "object_store",
