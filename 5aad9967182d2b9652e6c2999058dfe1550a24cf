@@ -124,6 +124,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "434861f6_97526c96",
+        "filename": "tvix/castore/src/directoryservice/directory_graph.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-15T21:51:33Z",
+      "side": 1,
+      "message": "(due to it being a field in the instrumentation, and that having an `err`",
+      "parentUuid": "660bf51f_c2ed4d7c",
+      "revId": "5aad9967182d2b9652e6c2999058dfe1550a24cf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "87890128_42f90dac",
         "filename": "tvix/castore/src/directoryservice/directory_graph.rs",
         "patchSetId": 12
