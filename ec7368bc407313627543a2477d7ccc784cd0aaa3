@@ -190,6 +190,24 @@
       "message": "This is the only occurence of `InvalidOrder`, and if we only return booleans in our trait on whether we did accept or not, we don\u0027t need any error types at all.",
       "revId": "ec7368bc407313627543a2477d7ccc784cd0aaa3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d4774065_70bca333",
+        "filename": "tvix/castore/src/directoryservice/order_validator.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 85,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-06-15T20:22:28Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05dbb20a_6855863b",
+      "revId": "ec7368bc407313627543a2477d7ccc784cd0aaa3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
