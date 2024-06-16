@@ -3206,9 +3206,10 @@ rec {
       };
       "erased-serde" = rec {
         crateName = "erased-serde";
-        version = "0.4.4";
+        version = "0.4.5";
         edition = "2021";
-        sha256 = "1lx0si6iljzmfpblhn4b0ip3kw2yv4vjyca0riqz3ix311q80wrb";
+        sha256 = "13dirfj9972nvk05b20w3xyn3xp1j6qyfp9avhksnkxbcnfkiqi4";
+        libName = "erased_serde";
         authors = [
           "David Tolnay <dtolnay@gmail.com>"
         ];
@@ -3218,13 +3219,17 @@ rec {
             packageId = "serde";
             usesDefaultFeatures = false;
           }
+          {
+            name = "typeid";
+            packageId = "typeid";
+          }
         ];
         features = {
           "alloc" = [ "serde/alloc" ];
           "default" = [ "std" ];
           "std" = [ "alloc" "serde/std" ];
         };
-        resolvedDefaultFeatures = [ "alloc" ];
+        resolvedDefaultFeatures = [ "alloc" "default" "std" ];
       };
       "errno" = rec {
         crateName = "errno";
@@ -10296,6 +10301,32 @@ rec {
         };
         resolvedDefaultFeatures = [ "serde" ];
       };
+      "serde_tagged" = rec {
+        crateName = "serde_tagged";
+        version = "0.3.0";
+        edition = "2015";
+        sha256 = "1scr98aw9d9hf9bf0gr5fcmhkwsz0fpy2wr2zi5r4cnfya6j9kbn";
+        authors = [
+          "qzed <qzed@users.noreply.github.com>"
+        ];
+        dependencies = [
+          {
+            name = "erased-serde";
+            packageId = "erased-serde";
+            optional = true;
+          }
+          {
+            name = "serde";
+            packageId = "serde";
+          }
+        ];
+        features = {
+          "default" = [ "erased" ];
+          "erased" = [ "erased-serde" ];
+          "erased-serde" = [ "dep:erased-serde" ];
+        };
+        resolvedDefaultFeatures = [ "default" "erased" "erased-serde" ];
+      };
       "serde_urlencoded" = rec {
         crateName = "serde_urlencoded";
         version = "0.7.1";
@@ -13216,6 +13247,10 @@ rec {
           else ./castore;
         dependencies = [
           {
+            name = "anyhow";
+            packageId = "anyhow";
+          }
+          {
             name = "async-compression";
             packageId = "async-compression";
             features = [ "tokio" "zstd" ];
@@ -13253,6 +13288,10 @@ rec {
           {
             name = "digest";
             packageId = "digest";
+          }
+          {
+            name = "erased-serde";
+            packageId = "erased-serde";
           }
           {
             name = "fastcdc";
@@ -13306,6 +13345,10 @@ rec {
           {
             name = "serde_qs";
             packageId = "serde_qs";
+          }
+          {
+            name = "serde_tagged";
+            packageId = "serde_tagged";
           }
           {
             name = "serde_with";
@@ -14258,6 +14301,16 @@ rec {
           "tracy" = [ "dep:tracing-tracy" ];
         };
         resolvedDefaultFeatures = [ "default" "otlp" "tracy" ];
+      };
+      "typeid" = rec {
+        crateName = "typeid";
+        version = "1.0.0";
+        edition = "2021";
+        sha256 = "1ky97g0dwzdhmbcwzy098biqh26vhlc98l5x6zy44yhyk7687785";
+        authors = [
+          "David Tolnay <dtolnay@gmail.com>"
+        ];
+
       };
       "typenum" = rec {
         crateName = "typenum";
