@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use std::sync::Arc;
 
 use data_encoding::HEXLOWER;
@@ -19,6 +20,14 @@ use super::{
     DirectoryGraph, DirectoryPutter, DirectoryService, LeavesToRootValidator, RootToLeavesValidator,
 };
 use crate::{proto, B3Digest, Error};
+
+#[derive(serde::Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ObjectStoreDirectoryServiceConfig {
+    object_store_url: String,
+    #[serde(default)]
+    object_store_options: HashMap<String, String>,
+}
 
 /// Stores directory closures in an object store.
 /// Notably, this makes use of the option to disallow accessing child directories except when
@@ -46,7 +55,7 @@ fn derive_dirs_path(base_path: &Path, digest: &B3Digest) -> Path {
 const MAX_FRAME_LENGTH: usize = 1 * 1024 * 1024 * 1000; // 1 MiB
                                                         //
 impl ObjectStoreDirectoryService {
-    /// Constructs a new [ObjectStoreBlobService] from a [Url] supported by
+    /// Constructs a new [ObjectStoreDirectoryService] from a [Url] supported by
     /// [object_store].
     /// Any path suffix becomes the base path of the object store.
     /// additional options, the same as in [object_store::parse_url_opts] can
@@ -68,6 +77,19 @@ impl ObjectStoreDirectoryService {
     /// Like [Self::parse_url_opts], except without the options.
     pub fn parse_url(url: &Url) -> Result<Self, object_store::Error> {
         Self::parse_url_opts(url, Vec::<(String, String)>::new())
+    }
+
+    pub fn from_config(
+        config: ObjectStoreDirectoryServiceConfig,
+    ) -> Result<ObjectStoreDirectoryService, Box<dyn std::error::Error>> {
+        let (object_store, path) = object_store::parse_url_opts(
+            &config.object_store_url.parse()?,
+            config.object_store_options,
+        )?;
+        Ok(Self {
+            object_store: Arc::new(object_store),
+            base_path: path,
+        })
     }
 }
 

@@ -1,4 +1,5 @@
 use std::{
+    collections::HashMap,
     io::{self, Cursor},
     pin::pin,
     sync::Arc,
@@ -23,6 +24,20 @@ use crate::{
 };
 
 use super::{BlobReader, BlobService, BlobWriter, ChunkedReader};
+
+fn default_avg_chunk_size() -> u32 {
+    256 * 1024
+}
+
+#[derive(serde::Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ObjectStoreBlobServiceConfig {
+    object_store_url: String,
+    #[serde(default = "default_avg_chunk_size")]
+    avg_chunk_size: u32,
+    #[serde(default)]
+    object_store_options: HashMap<String, String>,
+}
 
 #[derive(Clone)]
 pub struct ObjectStoreBlobService {
@@ -94,6 +109,20 @@ impl ObjectStoreBlobService {
     /// Like [Self::parse_url_opts], except without the options.
     pub fn parse_url(url: &Url) -> Result<Self, object_store::Error> {
         Self::parse_url_opts(url, Vec::<(String, String)>::new())
+    }
+
+    pub fn from_config(
+        config: ObjectStoreBlobServiceConfig,
+    ) -> Result<ObjectStoreBlobService, Box<dyn std::error::Error>> {
+        let (object_store, path) = object_store::parse_url_opts(
+            &config.object_store_url.parse()?,
+            config.object_store_options,
+        )?;
+        Ok(Self {
+            object_store: Arc::new(object_store),
+            base_path: path,
+            avg_chunk_size: config.avg_chunk_size,
+        })
     }
 }
 
