@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+use std::future::Future;
 use std::sync::Arc;
 
 use data_encoding::HEXLOWER;
@@ -16,9 +18,39 @@ use tracing::{instrument, trace, warn, Level};
 use url::Url;
 
 use super::{
-    DirectoryGraph, DirectoryPutter, DirectoryService, LeavesToRootValidator, RootToLeavesValidator,
+    DirectoryGraph, DirectoryPutter, DirectoryService, DirectoryServiceBuilder,
+    LeavesToRootValidator, RootToLeavesValidator,
 };
 use crate::{proto, B3Digest, Error};
+
+#[derive(serde::Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ObjectStoreDirectoryServiceConfig {
+    object_store_url: String,
+    #[serde(default)]
+    object_store_options: HashMap<String, String>,
+}
+
+#[async_trait]
+impl DirectoryServiceBuilder for ObjectStoreDirectoryServiceConfig {
+    async fn build(
+        &self,
+        _instance_name: &str,
+        _resolve: &dyn Fn(
+            String,
+        )
+            -> Box<dyn Future<Output = anyhow::Result<Arc<dyn DirectoryService>>>>,
+    ) -> anyhow::Result<Arc<dyn DirectoryService>> {
+        let (object_store, path) = object_store::parse_url_opts(
+            &self.object_store_url.parse()?,
+            &self.object_store_options,
+        )?;
+        Ok(Arc::new(ObjectStoreDirectoryService {
+            object_store: Arc::new(object_store),
+            base_path: path,
+        }))
+    }
+}
 
 /// Stores directory closures in an object store.
 /// Notably, this makes use of the option to disallow accessing child directories except when
@@ -46,7 +78,7 @@ fn derive_dirs_path(base_path: &Path, digest: &B3Digest) -> Path {
 const MAX_FRAME_LENGTH: usize = 1 * 1024 * 1024 * 1000; // 1 MiB
                                                         //
 impl ObjectStoreDirectoryService {
-    /// Constructs a new [ObjectStoreBlobService] from a [Url] supported by
+    /// Constructs a new [ObjectStoreDirectoryService] from a [Url] supported by
     /// [object_store].
     /// Any path suffix becomes the base path of the object store.
     /// additional options, the same as in [object_store::parse_url_opts] can
