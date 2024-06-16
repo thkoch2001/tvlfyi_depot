@@ -113,6 +113,16 @@ rec {
       # File a bug if you depend on any for non-debug work!
       debug = internal.debugCrate { inherit packageId; };
     };
+    "tvix-shell" = rec {
+      packageId = "tvix-shell";
+      build = internal.buildRustCrateWithFeatures {
+        packageId = "tvix-shell";
+      };
+
+      # Debug support which might change between releases.
+      # File a bug if you depend on any for non-debug work!
+      debug = internal.debugCrate { inherit packageId; };
+    };
     "tvix-store" = rec {
       packageId = "tvix-store";
       build = internal.buildRustCrateWithFeatures {
@@ -1786,6 +1796,16 @@ rec {
           "rustc-dep-of-std" = [ "core" "compiler_builtins" ];
         };
       };
+      "cfg_aliases" = rec {
+        crateName = "cfg_aliases";
+        version = "0.1.1";
+        edition = "2018";
+        sha256 = "17p821nc6jm830vzl2lmwz60g3a30hcm33nk6l257i1rjdqw85px";
+        authors = [
+          "Zicklag <zicklag@katharostech.com>"
+        ];
+
+      };
       "chrono" = rec {
         crateName = "chrono";
         version = "0.4.34";
@@ -3206,9 +3226,10 @@ rec {
       };
       "erased-serde" = rec {
         crateName = "erased-serde";
-        version = "0.4.4";
+        version = "0.4.5";
         edition = "2021";
-        sha256 = "1lx0si6iljzmfpblhn4b0ip3kw2yv4vjyca0riqz3ix311q80wrb";
+        sha256 = "13dirfj9972nvk05b20w3xyn3xp1j6qyfp9avhksnkxbcnfkiqi4";
+        libName = "erased_serde";
         authors = [
           "David Tolnay <dtolnay@gmail.com>"
         ];
@@ -3218,13 +3239,17 @@ rec {
             packageId = "serde";
             usesDefaultFeatures = false;
           }
+          {
+            name = "typeid";
+            packageId = "typeid";
+          }
         ];
         features = {
           "alloc" = [ "serde/alloc" ];
           "default" = [ "std" ];
           "std" = [ "alloc" "serde/std" ];
         };
-        resolvedDefaultFeatures = [ "alloc" ];
+        resolvedDefaultFeatures = [ "alloc" "default" "std" ];
       };
       "errno" = rec {
         crateName = "errno";
@@ -5654,9 +5679,9 @@ rec {
       };
       "libc" = rec {
         crateName = "libc";
-        version = "0.2.152";
+        version = "0.2.155";
         edition = "2015";
-        sha256 = "1rsnma7hnw22w7jh9yqg43slddvfbnfzrvm3s7s4kinbj1jvzqqk";
+        sha256 = "0z44c53z54znna8n322k5iwg80arxxpdzjj5260pxxzc9a58icwp";
         authors = [
           "The Rust Project Developers"
         ];
@@ -6371,6 +6396,53 @@ rec {
           "zerocopy" = [ "fs" "uio" ];
         };
         resolvedDefaultFeatures = [ "default" "fs" ];
+      };
+      "nix 0.28.0" = rec {
+        crateName = "nix";
+        version = "0.28.0";
+        edition = "2021";
+        sha256 = "1r0rylax4ycx3iqakwjvaa178jrrwiiwghcw95ndzy72zk25c8db";
+        authors = [
+          "The nix-rust Project Developers"
+        ];
+        dependencies = [
+          {
+            name = "bitflags";
+            packageId = "bitflags 2.4.2";
+          }
+          {
+            name = "cfg-if";
+            packageId = "cfg-if";
+          }
+          {
+            name = "libc";
+            packageId = "libc";
+            features = [ "extra_traits" ];
+          }
+        ];
+        buildDependencies = [
+          {
+            name = "cfg_aliases";
+            packageId = "cfg_aliases";
+          }
+        ];
+        features = {
+          "aio" = [ "pin-utils" ];
+          "dir" = [ "fs" ];
+          "memoffset" = [ "dep:memoffset" ];
+          "mount" = [ "uio" ];
+          "mqueue" = [ "fs" ];
+          "net" = [ "socket" ];
+          "pin-utils" = [ "dep:pin-utils" ];
+          "ptrace" = [ "process" ];
+          "sched" = [ "process" ];
+          "signal" = [ "process" ];
+          "socket" = [ "memoffset" ];
+          "ucontext" = [ "signal" ];
+          "user" = [ "feature" ];
+          "zerocopy" = [ "fs" "uio" ];
+        };
+        resolvedDefaultFeatures = [ "default" "feature" "mount" "process" "sched" "signal" "uio" "user" ];
       };
       "nix-compat" = rec {
         crateName = "nix-compat";
@@ -10296,6 +10368,32 @@ rec {
         };
         resolvedDefaultFeatures = [ "serde" ];
       };
+      "serde_tagged" = rec {
+        crateName = "serde_tagged";
+        version = "0.3.0";
+        edition = "2015";
+        sha256 = "1scr98aw9d9hf9bf0gr5fcmhkwsz0fpy2wr2zi5r4cnfya6j9kbn";
+        authors = [
+          "qzed <qzed@users.noreply.github.com>"
+        ];
+        dependencies = [
+          {
+            name = "erased-serde";
+            packageId = "erased-serde";
+            optional = true;
+          }
+          {
+            name = "serde";
+            packageId = "serde";
+          }
+        ];
+        features = {
+          "default" = [ "erased" ];
+          "erased" = [ "erased-serde" ];
+          "erased-serde" = [ "dep:erased-serde" ];
+        };
+        resolvedDefaultFeatures = [ "default" "erased" "erased-serde" ];
+      };
       "serde_urlencoded" = rec {
         crateName = "serde_urlencoded";
         version = "0.7.1";
@@ -13255,6 +13353,10 @@ rec {
             packageId = "digest";
           }
           {
+            name = "erased-serde";
+            packageId = "erased-serde";
+          }
+          {
             name = "fastcdc";
             packageId = "fastcdc";
             features = [ "tokio" ];
@@ -13306,6 +13408,10 @@ rec {
           {
             name = "serde_qs";
             packageId = "serde_qs";
+          }
+          {
+            name = "serde_tagged";
+            packageId = "serde_tagged";
           }
           {
             name = "serde_with";
@@ -13955,6 +14061,74 @@ rec {
         ];
 
       };
+      "tvix-shell" = rec {
+        crateName = "tvix-shell";
+        version = "0.1.0";
+        edition = "2021";
+        crateBin = [
+          {
+            name = "tvix-shell";
+            path = "src/main.rs";
+            requiredFeatures = [ ];
+          }
+        ];
+        # We can't filter paths with references in Nix 2.4
+        # See https://github.com/NixOS/nix/issues/5410
+        src =
+          if ((lib.versionOlder builtins.nixVersion "2.4pre20211007") || (lib.versionOlder "2.5" builtins.nixVersion))
+          then lib.cleanSourceWith { filter = sourceFilter; src = ./shell; }
+          else ./shell;
+        dependencies = [
+          {
+            name = "clap";
+            packageId = "clap";
+            features = [ "derive" "env" ];
+          }
+          {
+            name = "nix";
+            packageId = "nix 0.28.0";
+            features = [ "sched" "signal" "user" "mount" ];
+          }
+          {
+            name = "tempfile";
+            packageId = "tempfile";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "macros" "rt-multi-thread" ];
+          }
+          {
+            name = "tracing";
+            packageId = "tracing";
+          }
+          {
+            name = "tracing-subscriber";
+            packageId = "tracing-subscriber";
+            features = [ "env-filter" ];
+          }
+          {
+            name = "tvix-castore";
+            packageId = "tvix-castore";
+            features = [ "fs" "fuse" ];
+          }
+          {
+            name = "tvix-eval";
+            packageId = "tvix-eval";
+          }
+          {
+            name = "tvix-glue";
+            packageId = "tvix-glue";
+          }
+          {
+            name = "tvix-store";
+            packageId = "tvix-store";
+            usesDefaultFeatures = false;
+            features = [ "fuse" ];
+          }
+        ];
+
+      };
       "tvix-store" = rec {
         crateName = "tvix-store";
         version = "0.1.0";
@@ -14258,6 +14432,16 @@ rec {
           "tracy" = [ "dep:tracing-tracy" ];
         };
         resolvedDefaultFeatures = [ "default" "otlp" "tracy" ];
+      };
+      "typeid" = rec {
+        crateName = "typeid";
+        version = "1.0.0";
+        edition = "2021";
+        sha256 = "1ky97g0dwzdhmbcwzy098biqh26vhlc98l5x6zy44yhyk7687785";
+        authors = [
+          "David Tolnay <dtolnay@gmail.com>"
+        ];
+
       };
       "typenum" = rec {
         crateName = "typenum";
