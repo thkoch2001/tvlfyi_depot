@@ -1,5 +1,8 @@
+use std::sync::Arc;
+
 use crate::{proto, B3Digest, Error};
 use futures::stream::BoxStream;
+use std::future::Future;
 use tonic::async_trait;
 
 mod combinators;
@@ -20,8 +23,8 @@ pub use self::combinators::Cache;
 pub use self::directory_graph::DirectoryGraph;
 pub use self::from_addr::from_addr;
 pub use self::grpc::GRPCDirectoryService;
-pub use self::memory::MemoryDirectoryService;
-pub use self::object_store::ObjectStoreDirectoryService;
+pub use self::memory::{MemoryDirectoryService, MemoryDirectoryServiceConfig};
+pub use self::object_store::{ObjectStoreDirectoryService, ObjectStoreDirectoryServiceConfig};
 pub use self::order_validator::{LeavesToRootValidator, OrderValidator, RootToLeavesValidator};
 pub use self::simple_putter::SimplePutter;
 pub use self::sled::SledDirectoryService;
@@ -125,4 +128,16 @@ pub trait DirectoryPutter: Send {
     /// If there's been any invalid Directory message uploaded, and error *must*
     /// be returned.
     async fn close(&mut self) -> Result<B3Digest, Error>;
+}
+
+#[async_trait]
+pub trait DirectoryServiceBuilder {
+    async fn build(
+        &self,
+        instance_name: &str,
+        resolve: &dyn Fn(
+            String,
+        )
+            -> Box<dyn Future<Output = anyhow::Result<Arc<dyn DirectoryService>>>>,
+    ) -> anyhow::Result<Arc<dyn DirectoryService>>;
 }

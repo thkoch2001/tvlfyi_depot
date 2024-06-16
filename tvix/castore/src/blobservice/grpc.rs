@@ -1,8 +1,9 @@
-use super::{BlobReader, BlobService, BlobWriter, ChunkedReader};
+use super::{BlobReader, BlobService, BlobServiceBuilder, BlobWriter, ChunkedReader};
 use crate::{
     proto::{self, stat_blob_response::ChunkMeta},
     B3Digest,
 };
+use futures::future::BoxFuture;
 use futures::sink::SinkExt;
 use std::{
     io::{self, Cursor},
@@ -19,6 +20,27 @@ use tokio_util::{
 };
 use tonic::{async_trait, transport::Channel, Code, Status};
 use tracing::instrument;
+
+#[derive(serde::Deserialize, Debug)]
+#[serde(deny_unknown_fields)]
+pub struct GRPCBlobServiceConfig {
+    url: String,
+}
+
+#[async_trait]
+impl BlobServiceBuilder for GRPCBlobServiceConfig {
+    async fn build(
+        &self,
+        _instance_name: &str,
+        _resolve: &(dyn Fn(String) -> BoxFuture<'static, anyhow::Result<Arc<dyn BlobService>>>
+              + Sync),
+    ) -> anyhow::Result<Arc<dyn BlobService>> {
+        let client = proto::blob_service_client::BlobServiceClient::new(
+            crate::tonic::channel_from_url(&self.url.parse()?).await?,
+        );
+        Ok(Arc::new(GRPCBlobService::from_client(client)))
+    }
+}
 
 /// Connects to a (remote) tvix-store BlobService over gRPC.
 #[derive(Clone)]
