@@ -1,3 +1,6 @@
+use std::sync::Arc;
+
+use futures::future::BoxFuture;
 use futures::stream::BoxStream;
 use futures::StreamExt;
 use futures::TryFutureExt;
@@ -6,10 +9,45 @@ use tonic::async_trait;
 use tracing::{instrument, trace};
 
 use super::{DirectoryGraph, DirectoryService, RootToLeavesValidator, SimplePutter};
+use crate::composition::ServiceBuilder;
 use crate::directoryservice::DirectoryPutter;
 use crate::proto;
 use crate::B3Digest;
 use crate::Error;
+
+#[derive(serde::Deserialize, Debug)]
+#[serde(deny_unknown_fields)]
+pub struct CacheConfig {
+    near: String,
+    far: String,
+}
+
+#[async_trait]
+impl ServiceBuilder for CacheConfig {
+    type Output = Arc<dyn DirectoryService + 'static>;
+    async fn build<'a>(
+        &'a self,
+        _instance_name: &str,
+        resolve: &(dyn Fn(
+            String,
+        ) -> BoxFuture<
+            'a,
+            Result<
+                Arc<dyn DirectoryService + 'static>,
+                Box<dyn std::error::Error + Send + Sync + 'static>,
+            >,
+        > + Sync),
+    ) -> Result<
+        Arc<dyn DirectoryService + 'static>,
+        Box<dyn std::error::Error + Send + Sync + 'static>,
+    > {
+        let (near, far) = futures::join!(resolve(self.near.clone()), resolve(self.far.clone()));
+        Ok(Arc::new(Cache {
+            near: near?,
+            far: far?,
+        }))
+    }
+}
 
 /// Asks near first, if not found, asks far.
 /// If found in there, returns it, and *inserts* it into

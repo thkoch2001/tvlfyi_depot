@@ -1,4 +1,5 @@
 use std::{
+    collections::HashMap,
     io::{self, Cursor},
     pin::pin,
     sync::Arc,
@@ -7,6 +8,7 @@ use std::{
 
 use data_encoding::HEXLOWER;
 use fastcdc::v2020::AsyncStreamCDC;
+use futures::future::BoxFuture;
 use futures::Future;
 use object_store::{path::Path, ObjectStore};
 use pin_project_lite::pin_project;
@@ -18,11 +20,51 @@ use tracing::{debug, instrument, trace, Level};
 use url::Url;
 
 use crate::{
+    composition::ServiceBuilder,
     proto::{stat_blob_response::ChunkMeta, StatBlobResponse},
     B3Digest, B3HashingReader,
 };
 
 use super::{BlobReader, BlobService, BlobWriter, ChunkedReader};
+
+fn default_avg_chunk_size() -> u32 {
+    256 * 1024
+}
+
+#[derive(serde::Deserialize)]
+#[serde(deny_unknown_fields)]
+pub struct ObjectStoreBlobServiceConfig {
+    object_store_url: String,
+    #[serde(default = "default_avg_chunk_size")]
+    avg_chunk_size: u32,
+    #[serde(default)]
+    object_store_options: HashMap<String, String>,
+}
+
+#[async_trait]
+impl ServiceBuilder for ObjectStoreBlobServiceConfig {
+    type Output = Arc<dyn BlobService>;
+    async fn build<'a>(
+        &'a self,
+        _instance_name: &str,
+        _resolve: &(dyn Fn(
+            String,
+        ) -> BoxFuture<
+            'a,
+            Result<Arc<dyn BlobService>, Box<dyn std::error::Error + Send + Sync + 'static>>,
+        > + Sync),
+    ) -> Result<Arc<dyn BlobService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
+        let (object_store, path) = object_store::parse_url_opts(
+            &self.object_store_url.parse()?,
+            &self.object_store_options,
+        )?;
+        Ok(Arc::new(ObjectStoreBlobService {
+            object_store: Arc::new(object_store),
+            base_path: path,
+            avg_chunk_size: self.avg_chunk_size,
+        }))
+    }
+}
 
 #[derive(Clone)]
 pub struct ObjectStoreBlobService {
