@@ -1,3 +1,4 @@
+use futures::future::BoxFuture;
 use parking_lot::RwLock;
 use std::io::{self, Cursor, Write};
 use std::task::Poll;
@@ -6,6 +7,7 @@ use tonic::async_trait;
 use tracing::instrument;
 
 use super::{BlobReader, BlobService, BlobWriter};
+use crate::composition::ServiceBuilder;
 use crate::B3Digest;
 
 #[derive(Clone, Default)]
@@ -34,6 +36,27 @@ impl BlobService for MemoryBlobService {
     #[instrument(skip_all)]
     async fn open_write(&self) -> Box<dyn BlobWriter> {
         Box::new(MemoryBlobWriter::new(self.db.clone()))
+    }
+}
+
+#[derive(serde::Deserialize, Debug)]
+#[serde(deny_unknown_fields)]
+pub struct MemoryBlobServiceConfig {}
+
+#[async_trait]
+impl ServiceBuilder for MemoryBlobServiceConfig {
+    type Output = Arc<dyn BlobService>;
+    async fn build<'a>(
+        &'a self,
+        _instance_name: &str,
+        _resolve: &(dyn Fn(
+            String,
+        ) -> BoxFuture<
+            'a,
+            Result<Arc<dyn BlobService>, Box<dyn std::error::Error + Send + Sync + 'static>>,
+        > + Sync),
+    ) -> Result<Arc<dyn BlobService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
+        Ok(Arc::new(MemoryBlobService::default()))
     }
 }
 
