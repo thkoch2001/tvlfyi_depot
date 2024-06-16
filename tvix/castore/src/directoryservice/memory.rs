@@ -1,4 +1,5 @@
 use crate::{proto, B3Digest, Error};
+use futures::future::BoxFuture;
 use futures::stream::BoxStream;
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -7,7 +8,27 @@ use tonic::async_trait;
 use tracing::{instrument, warn};
 
 use super::utils::traverse_directory;
-use super::{DirectoryPutter, DirectoryService, SimplePutter};
+use super::{DirectoryPutter, DirectoryService, DirectoryServiceBuilder, SimplePutter};
+
+#[derive(serde::Deserialize, Debug)]
+#[serde(deny_unknown_fields)]
+pub struct MemoryDirectoryServiceConfig {}
+
+#[async_trait]
+impl DirectoryServiceBuilder for MemoryDirectoryServiceConfig {
+    async fn build(
+        &self,
+        _instance_name: &str,
+        _resolve: &(dyn Fn(
+            String,
+        ) -> BoxFuture<
+            'static,
+            Result<Arc<dyn DirectoryService>, Box<dyn std::error::Error + Send + Sync + 'static>>,
+        > + Sync),
+    ) -> Result<Arc<dyn DirectoryService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
+        Ok(Arc::new(MemoryDirectoryService::default()))
+    }
+}
 
 #[derive(Clone, Default)]
 pub struct MemoryDirectoryService {
