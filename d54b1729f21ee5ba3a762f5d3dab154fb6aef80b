@@ -16,6 +16,24 @@
       "message": "comment back in?",
       "revId": "d54b1729f21ee5ba3a762f5d3dab154fb6aef80b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa9870ac_b5c446f3",
+        "filename": "tvix/castore/src/directoryservice/combinators.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-06-16T08:25:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ba45d2a4_0ebb4f3e",
+      "revId": "d54b1729f21ee5ba3a762f5d3dab154fb6aef80b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
