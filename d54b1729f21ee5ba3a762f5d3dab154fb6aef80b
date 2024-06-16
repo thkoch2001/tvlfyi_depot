@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba45d2a4_0ebb4f3e",
+        "filename": "tvix/castore/src/directoryservice/combinators.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-16T06:03:30Z",
+      "side": 1,
+      "message": "comment back in?",
+      "revId": "d54b1729f21ee5ba3a762f5d3dab154fb6aef80b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
