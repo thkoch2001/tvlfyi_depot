@@ -1,3 +1,4 @@
+use futures::future::BoxFuture;
 use parking_lot::RwLock;
 use std::io::{self, Cursor, Write};
 use std::task::Poll;
@@ -5,12 +6,28 @@ use std::{collections::HashMap, sync::Arc};
 use tonic::async_trait;
 use tracing::instrument;
 
-use super::{BlobReader, BlobService, BlobWriter};
+use super::{BlobReader, BlobService, BlobServiceBuilder, BlobWriter};
 use crate::B3Digest;
 
 #[derive(Clone, Default)]
 pub struct MemoryBlobService {
     db: Arc<RwLock<HashMap<B3Digest, Vec<u8>>>>,
+}
+
+#[derive(serde::Deserialize, Debug)]
+#[serde(deny_unknown_fields)]
+pub struct MemoryBlobServiceConfig {}
+
+#[async_trait]
+impl BlobServiceBuilder for MemoryBlobServiceConfig {
+    async fn build(
+        &self,
+        _instance_name: &str,
+        _resolve: &(dyn Fn(String) -> BoxFuture<'static, anyhow::Result<Arc<dyn BlobService>>>
+              + Sync),
+    ) -> anyhow::Result<Arc<dyn BlobService>> {
+        Ok(Arc::new(MemoryBlobService::default()))
+    }
 }
 
 #[async_trait]

@@ -1,3 +1,6 @@
+use std::sync::Arc;
+
+use futures::future::BoxFuture;
 use futures::{StreamExt, TryStreamExt};
 use tokio_util::io::{ReaderStream, StreamReader};
 use tonic::async_trait;
@@ -5,7 +8,31 @@ use tracing::{instrument, warn};
 
 use crate::B3Digest;
 
-use super::{naive_seeker::NaiveSeeker, BlobReader, BlobService, BlobWriter};
+use super::{naive_seeker::NaiveSeeker, BlobReader, BlobService, BlobServiceBuilder, BlobWriter};
+
+#[derive(serde::Deserialize, Debug, Clone)]
+#[serde(deny_unknown_fields)]
+pub struct CombinedBlobServiceConfig {
+    local: String,
+    remote: String,
+}
+
+#[async_trait]
+impl BlobServiceBuilder for CombinedBlobServiceConfig {
+    async fn build(
+        &self,
+        _instance_name: &str,
+        resolve: &(dyn for<'a, 'b> Fn(String) -> BoxFuture<'static, anyhow::Result<Arc<dyn BlobService>>>
+              + Sync),
+    ) -> anyhow::Result<Arc<dyn BlobService>> {
+        let (local, remote) = //(resolve(self.local.clone()).await, resolve(self.remote.clone()).await);
+            futures::join!(resolve(self.local.clone()), resolve(self.remote.clone()));
+        Ok(Arc::new(CombinedBlobService {
+            local: local?,
+            remote: remote?,
+        }))
+    }
+}
 
 /// Combinator for a BlobService, using a "local" and "remote" blobservice.
 /// Requests are tried in (and returned from) the local store first, only if
