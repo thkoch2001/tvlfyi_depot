@@ -1,0 +1,61 @@
+use crate::blobservice::BlobServiceBuilder;
+use crate::directoryservice::DirectoryServiceBuilder;
+use erased_serde::deserialize;
+use lazy_static::lazy_static;
+use serde::de::DeserializeOwned;
+use serde::de::DeserializeSeed;
+use serde_tagged::de::BoxFnSeed;
+use std::collections::BTreeMap;
+
+pub struct Registry<T: ?Sized>(BTreeMap<&'static str, BoxFnSeed<Box<T>>>);
+
+impl<T: ?Sized> Registry<T> {
+    #[allow(private_bounds)]
+    pub fn register<C: DeserializeOwned + IntoDynBox<T>>(&mut self, type_name: &'static str) {
+        self.0.insert(
+            type_name,
+            BoxFnSeed::new(|x| deserialize::<C>(x).map(IntoDynBox::into)),
+        );
+    }
+}
+
+impl<'de, T> DeserializeSeed<'de> for &Registry<T> {
+    type Value = Box<T>;
+    fn deserialize<D>(self, de: D) -> std::result::Result<Box<T>, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        serde_tagged::de::internal::deserialize(de, "type", &self.0)
+    }
+}
+
+trait IntoDynBox<T: ?Sized> {
+    fn into(self) -> Box<T>;
+}
+
+impl<T: BlobServiceBuilder + 'static> IntoDynBox<dyn BlobServiceBuilder> for T {
+    fn into(self) -> Box<dyn BlobServiceBuilder> {
+        Box::new(self)
+    }
+}
+
+impl<T: DirectoryServiceBuilder + 'static> IntoDynBox<dyn DirectoryServiceBuilder> for T {
+    fn into(self) -> Box<dyn DirectoryServiceBuilder> {
+        Box::new(self)
+    }
+}
+
+lazy_static! {
+    static ref BLOB_REG: Registry<dyn BlobServiceBuilder> = {
+        let mut reg = Registry(Default::default());
+        reg.register::<super::blobservice::ObjectStoreBlobServiceConfig>("objectstore");
+        reg.register::<super::blobservice::MemoryBlobServiceConfig>("memory");
+        reg
+    };
+    static ref DIRECTORY_REG: Registry<dyn DirectoryServiceBuilder> = {
+        let mut reg = Registry(Default::default());
+        reg.register::<super::directoryservice::ObjectStoreDirectoryServiceConfig>("objectstore");
+        reg.register::<super::directoryservice::MemoryDirectoryServiceConfig>("memory");
+        reg
+    };
+}

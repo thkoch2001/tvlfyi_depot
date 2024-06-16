@@ -1,4 +1,5 @@
 use std::io;
+use std::sync::Arc;
 use tonic::async_trait;
 
 use crate::proto::stat_blob_response::ChunkMeta;
@@ -19,8 +20,8 @@ pub use self::chunked_reader::ChunkedReader;
 pub use self::combinator::CombinedBlobService;
 pub use self::from_addr::from_addr;
 pub use self::grpc::GRPCBlobService;
-pub use self::memory::MemoryBlobService;
-pub use self::object_store::ObjectStoreBlobService;
+pub use self::memory::{MemoryBlobService, MemoryBlobServiceConfig};
+pub use self::object_store::{ObjectStoreBlobService, ObjectStoreBlobServiceConfig};
 
 /// The base trait all BlobService services need to implement.
 /// It provides functions to check whether a given blob exists,
@@ -101,3 +102,11 @@ impl BlobReader for io::Cursor<&'static [u8; 0]> {}
 impl BlobReader for io::Cursor<Vec<u8>> {}
 impl BlobReader for io::Cursor<bytes::Bytes> {}
 impl BlobReader for tokio::fs::File {}
+
+pub trait BlobServiceBuilder {
+    fn build(
+        &self,
+        instance_name: &str,
+        resolve: &dyn Fn(&str) -> anyhow::Result<Arc<dyn BlobService>>,
+    ) -> anyhow::Result<Arc<dyn BlobService>>;
+}
