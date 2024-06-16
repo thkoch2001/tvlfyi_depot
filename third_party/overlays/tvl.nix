@@ -120,4 +120,14 @@ depot.nix.readTree.drvTargets {
   tpm2-pkcs11 = super.tpm2-pkcs11.overrideAttrs (old: {
     patches = (old.patches or [ ]) ++ [ ./patches/tpm2-pkcs11-190-dbupgrade.patch ];
   });
+
+  # macFUSE bump containing fix for https://github.com/osxfuse/osxfuse/issues/974
+  # https://github.com/NixOS/nixpkgs/pull/320197
+  fuse = if super.stdenv.isDarwin then super.fuse.overrideAttrs(old: rec {
+    version = "4.8.0";
+    src = super.fetchurl {
+      url = "https://github.com/osxfuse/osxfuse/releases/download/macfuse-${version}/macfuse-${version}.dmg";
+      hash = "sha256-ucTzO2qdN4QkowMVvC3+4pjEVjbwMsB0xFk+bvQxwtQ=";
+    };
+  }) else super.fuse;
 }
