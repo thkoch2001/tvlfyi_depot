@@ -1,7 +1,10 @@
+use std::sync::Arc;
+
+use crate::composition::{Registry, ServiceBuilder};
 use crate::{proto, B3Digest, Error};
+
 use futures::stream::BoxStream;
 use tonic::async_trait;
-
 mod combinators;
 mod directory_graph;
 mod from_addr;
@@ -16,12 +19,12 @@ pub mod tests;
 mod traverse;
 mod utils;
 
-pub use self::combinators::Cache;
+pub use self::combinators::{Cache, CacheConfig};
 pub use self::directory_graph::DirectoryGraph;
 pub use self::from_addr::from_addr;
 pub use self::grpc::GRPCDirectoryService;
-pub use self::memory::MemoryDirectoryService;
-pub use self::object_store::ObjectStoreDirectoryService;
+pub use self::memory::{MemoryDirectoryService, MemoryDirectoryServiceConfig};
+pub use self::object_store::{ObjectStoreDirectoryService, ObjectStoreDirectoryServiceConfig};
 pub use self::order_validator::{LeavesToRootValidator, OrderValidator, RootToLeavesValidator};
 pub use self::simple_putter::SimplePutter;
 pub use self::sled::SledDirectoryService;
@@ -125,4 +128,10 @@ pub trait DirectoryPutter: Send {
     /// If there's been any invalid Directory message uploaded, and error *must*
     /// be returned.
     async fn close(&mut self) -> Result<B3Digest, Error>;
+}
+
+pub fn add_default_services(reg: &mut Registry) {
+    reg.register::<Box<dyn ServiceBuilder<Output = Arc<dyn DirectoryService>>>, super::directoryservice::ObjectStoreDirectoryServiceConfig>("objectstore");
+    reg.register::<Box<dyn ServiceBuilder<Output = Arc<dyn DirectoryService>>>, super::directoryservice::MemoryDirectoryServiceConfig>("memory");
+    reg.register::<Box<dyn ServiceBuilder<Output = Arc<dyn DirectoryService>>>, super::directoryservice::CacheConfig>("cache");
 }
