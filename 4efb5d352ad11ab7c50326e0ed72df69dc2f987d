@@ -16,6 +16,24 @@
       "message": "```suggestion\n   That\u0027s a lot of roundtrips, adding up to a lot of useless waiting.\n```",
       "revId": "4efb5d352ad11ab7c50326e0ed72df69dc2f987d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "44ab592b_6be22c8a",
+        "filename": "tvix/docs/src/TODO.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-17T07:18:09Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "8ad7408a_c1b26bb2",
+      "revId": "4efb5d352ad11ab7c50326e0ed72df69dc2f987d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
