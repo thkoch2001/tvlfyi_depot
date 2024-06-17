@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9432dbb4_7c03902b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-06-17T15:36:33Z",
+      "side": 1,
+      "message": "The PR is not what matters, what matters is the commit. Which is available in the .patch file.",
+      "parentUuid": "0407e663_17f4cb41",
+      "revId": "f3dcf7e25dda6ec1f4b42b3d72dbd9f63601612f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f5277f20_77eb7da9",
         "filename": "third_party/overlays/tvl.nix",
         "patchSetId": 2
