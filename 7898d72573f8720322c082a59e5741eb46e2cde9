@@ -1,4 +1,158 @@
 {
-  "comments": [],
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1852a81d_d59c704c",
+        "filename": "tvix/shell/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-17T07:04:55Z",
+      "side": 1,
+      "message": "See https://cl.tvl.fyi/c/depot/+/11824 - this shouldn\u0027t be necessary anymore.\n\nIt also might make sense to move the available parallelism as a default into Fuse daemon, and only override it where the user explicitly sets a number of threads.",
+      "revId": "7898d72573f8720322c082a59e5741eb46e2cde9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d73331f1_338f97e1",
+        "filename": "tvix/shell/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-17T07:04:55Z",
+      "side": 1,
+      "message": "I\u0027d be more in favor of dropping the option TBH (see docs/sec/TODO.md)",
+      "revId": "7898d72573f8720322c082a59e5741eb46e2cde9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "044778c1_379056f2",
+        "filename": "tvix/shell/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-17T07:04:55Z",
+      "side": 1,
+      "message": "num_threads?",
+      "revId": "7898d72573f8720322c082a59e5741eb46e2cde9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cea3e969_1ba2cf56",
+        "filename": "tvix/shell/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-17T07:04:55Z",
+      "side": 1,
+      "message": "you can use tvix_tracing for that now.",
+      "revId": "7898d72573f8720322c082a59e5741eb46e2cde9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5500147_bc416b3e",
+        "filename": "tvix/shell/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-17T07:04:55Z",
+      "side": 1,
+      "message": "make this a `event \u003d ?what` structured field?",
+      "revId": "7898d72573f8720322c082a59e5741eb46e2cde9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01a5fdd2_d4582665",
+        "filename": "tvix/shell/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-17T07:04:55Z",
+      "side": 1,
+      "message": "have this use `error!`, so it has all the necessary fields and context. Also, e can probably be a `err` field.",
+      "revId": "7898d72573f8720322c082a59e5741eb46e2cde9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d727bb99_340d4e8b",
+        "filename": "tvix/shell/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-17T07:04:55Z",
+      "side": 1,
+      "message": "structured field",
+      "revId": "7898d72573f8720322c082a59e5741eb46e2cde9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b8abdba_7414f314",
+        "filename": "tvix/shell/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-17T07:04:55Z",
+      "side": 1,
+      "message": "Isnt there some sort of allocation, out of a global pool defined in /etc that needs to happen, and just waiting to this file in `/proc` is not sufficient?\n\nI recall stumbling over this while writing the OCI builder, and pushed it to later.",
+      "revId": "7898d72573f8720322c082a59e5741eb46e2cde9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f75ed04e_5b0f0f19",
+        "filename": "tvix/shell/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-17T07:04:55Z",
+      "side": 1,
+      "message": "you could probably add the instrument macro to this function, and then use Span::current() to record these as fields to the span. At least mount_path.",
+      "revId": "7898d72573f8720322c082a59e5741eb46e2cde9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ],
   "submitRequirementResults": []
 }
