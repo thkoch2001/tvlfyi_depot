@@ -36,18 +36,6 @@ let
     inherit pkgs;
     nixpkgs = pkgs.path;
 
-    # Hack to fix Darwin build
-    # See https://github.com/NixOS/nixpkgs/issues/218712
-    buildRustCrateForPkgs = pkgs:
-      if pkgs.stdenv.isDarwin then
-        let
-          buildRustCrate = pkgs.buildRustCrate;
-          buildRustCrate_ = args: buildRustCrate args // { dontStrip = true; };
-          override = o: args: buildRustCrate.override o (args // { dontStrip = true; });
-        in
-        pkgs.makeOverridable override { }
-      else pkgs.buildRustCrate;
-
     defaultCrateOverrides = pkgs.defaultCrateOverrides // {
       zstd-sys = prev: {
         nativeBuildInputs = prev.nativeBuildInputs or [ ];
