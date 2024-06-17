@@ -32,10 +32,7 @@ let
     };
 
   # Load the crate2nix crate tree.
-  crates = import ./Cargo.nix {
-    inherit pkgs;
-    nixpkgs = pkgs.path;
-
+  crates = pkgs.callPackage ./Cargo.nix {
     defaultCrateOverrides = pkgs.defaultCrateOverrides // {
       zstd-sys = prev: {
         nativeBuildInputs = prev.nativeBuildInputs or [ ];
