@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f097364d_c83bad40",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-17T07:27:28Z",
+      "side": 1,
+      "message": "This needs a file-level docstring explaining the API and how do use it, maybe even a doctest of an example usage. I\u0027m happy to help draft this together, but I feel like only per-function docstrings are gonna make the overall idea too hard to grasp.",
+      "revId": "ef54fb743954253562ad74e6d5a1c5fcafae2892",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "faf12a22_2b06643d",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-17T07:27:28Z",
+      "side": 1,
+      "message": "can we still call register from the outside to add our own implementation to the registry?",
+      "revId": "ef54fb743954253562ad74e6d5a1c5fcafae2892",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3b18071e_695f434f",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-17T07:27:28Z",
+      "side": 1,
+      "message": "Unsure about the naming here, it gets quite long.\n\nMaybe we just call this ServiceConfig, and only add the long name in the public export?\n\nMore like a note, we have a bit of the same mess with the services themselves.",
+      "revId": "ef54fb743954253562ad74e6d5a1c5fcafae2892",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
