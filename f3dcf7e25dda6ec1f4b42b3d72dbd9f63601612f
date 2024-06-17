@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8b7b69d4_3e6a8437",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-06-17T17:18:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9432dbb4_7c03902b",
+      "revId": "f3dcf7e25dda6ec1f4b42b3d72dbd9f63601612f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5277f20_77eb7da9",
@@ -49,6 +67,24 @@
       "writtenOn": "2024-06-17T15:29:17Z",
       "side": 1,
       "message": "and here.",
+      "revId": "f3dcf7e25dda6ec1f4b42b3d72dbd9f63601612f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d1ba0b8a_6d901203",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-06-17T17:18:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5277f20_77eb7da9",
       "revId": "f3dcf7e25dda6ec1f4b42b3d72dbd9f63601612f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
