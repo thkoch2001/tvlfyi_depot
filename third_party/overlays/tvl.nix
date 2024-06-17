@@ -101,6 +101,8 @@ depot.nix.readTree.drvTargets {
     patches = old.patches or [ ] ++ [
       # https://github.com/nix-community/crate2nix/pull/301
       ./patches/crate2nix-tests-debug.patch
+      # TODO(Kranzes): drop on next release
+      ./patches/crate2nix-drop-darwin-explicit-dontstrip.patch
     ];
   });
 
