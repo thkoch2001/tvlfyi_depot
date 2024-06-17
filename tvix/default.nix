@@ -4,7 +4,6 @@
 let
   # crate override for crates that need protobuf
   protobufDep = prev: (prev.nativeBuildInputs or [ ]) ++ [ pkgs.buildPackages.protobuf ];
-  iconvDarwinDep = lib.optional pkgs.stdenv.isDarwin pkgs.libiconv;
 
   # On Darwin, some crates producing binaries need to be able to link against security.
   darwinDeps = lib.optionals pkgs.stdenv.isDarwin (with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
@@ -36,7 +35,6 @@ let
     defaultCrateOverrides = pkgs.defaultCrateOverrides // {
       zstd-sys = prev: {
         nativeBuildInputs = prev.nativeBuildInputs or [ ];
-        buildInputs = prev.buildInputs or [ ] ++ iconvDarwinDep;
       };
 
       opentelemetry-proto = prev: {
@@ -246,7 +244,7 @@ in
 
     buildInputs = [
       pkgs.fuse
-    ] ++ iconvDarwinDep;
+    ] ++ lib.optional pkgs.stdenv.isDarwin pkgs.libiconv;
 
     buildPhase = ''
       cargo doc --document-private-items
