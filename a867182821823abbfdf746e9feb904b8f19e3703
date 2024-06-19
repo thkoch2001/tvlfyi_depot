@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2c572357_4368093b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-19T10:34:09Z",
+      "side": 1,
+      "message": "Using std::io::{Stdout,StdErr} directly will clobber...",
+      "revId": "a867182821823abbfdf746e9feb904b8f19e3703",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7905e534_f8c4decd",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-19T10:34:09Z",
+      "side": 1,
+      "message": "```suggestion\n    /// Returns a writer for [std::io::Stdout] that ensures its output will not be clobbered by\n```",
+      "revId": "a867182821823abbfdf746e9feb904b8f19e3703",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1de911d7_4f3738e0",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-19T10:34:09Z",
+      "side": 1,
+      "message": "that last line is redundant and can be dropped",
+      "revId": "a867182821823abbfdf746e9feb904b8f19e3703",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76ed20bf_123d67f3",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-19T10:34:09Z",
+      "side": 1,
+      "message": "same comments for here.",
+      "revId": "a867182821823abbfdf746e9feb904b8f19e3703",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
