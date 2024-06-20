@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9f39ae82_f3f544c8",
+        "filename": "tvix/docs/src/eval/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-20T13:16:16Z",
+      "side": 1,
+      "message": "So it’s for the writer, not the reader, but the reader needs to see it?",
+      "parentUuid": "4e2191de_d744f587",
+      "revId": "0c035437babd3d4374592b10de6750f4b9bba69f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e7c86864_f35a8e1d",
         "filename": "tvix/docs/src/store/api.md",
         "patchSetId": 1
