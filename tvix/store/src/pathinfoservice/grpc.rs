@@ -11,19 +11,24 @@ use tracing::{instrument, Span};
 use tracing_indicatif::span_ext::IndicatifSpanExt;
 use tvix_castore::{proto as castorepb, Error};
 
+type InterceptedService = tonic::service::interceptor::InterceptedService<
+    Channel,
+    fn(tonic::Request<()>) -> Result<tonic::Request<()>, tonic::Status>,
+>;
+
 /// Connects to a (remote) tvix-store PathInfoService over gRPC.
 #[derive(Clone)]
 pub struct GRPCPathInfoService {
     /// The internal reference to a gRPC client.
     /// Cloning it is cheap, and it internally handles concurrent requests.
-    grpc_client: proto::path_info_service_client::PathInfoServiceClient<Channel>,
+    grpc_client: proto::path_info_service_client::PathInfoServiceClient<InterceptedService>,
 }
 
 impl GRPCPathInfoService {
     /// construct a [GRPCPathInfoService] from a [proto::path_info_service_client::PathInfoServiceClient].
     /// panics if called outside the context of a tokio runtime.
     pub fn from_client(
-        grpc_client: proto::path_info_service_client::PathInfoServiceClient<Channel>,
+        grpc_client: proto::path_info_service_client::PathInfoServiceClient<InterceptedService>,
     ) -> Self {
         Self { grpc_client }
     }
