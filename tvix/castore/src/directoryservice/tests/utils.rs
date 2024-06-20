@@ -32,7 +32,7 @@ pub async fn make_grpc_directory_service_client() -> Box<dyn DirectoryService> {
     // Create a client, connecting to the right side. The URI is unused.
     let mut maybe_right = Some(right);
     Box::new(GRPCDirectoryService::from_client(
-        DirectoryServiceClient::new(
+        DirectoryServiceClient::with_interceptor(
             Endpoint::try_from("http://[::]:50051")
                 .unwrap()
                 .connect_with_connector(tower::service_fn(move |_: Uri| {
@@ -41,6 +41,7 @@ pub async fn make_grpc_directory_service_client() -> Box<dyn DirectoryService> {
                 }))
                 .await
                 .unwrap(),
+            tvix_tracing::propagate::tonic::send_trace,
         ),
     ))
 }

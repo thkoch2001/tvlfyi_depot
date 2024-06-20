@@ -14,19 +14,24 @@ use tonic::Code;
 use tonic::{transport::Channel, Status};
 use tracing::{instrument, warn};
 
+type InterceptedService = tonic::service::interceptor::InterceptedService<
+    Channel,
+    fn(tonic::Request<()>) -> Result<tonic::Request<()>, tonic::Status>,
+>;
+
 /// Connects to a (remote) tvix-store DirectoryService over gRPC.
 #[derive(Clone)]
 pub struct GRPCDirectoryService {
     /// The internal reference to a gRPC client.
     /// Cloning it is cheap, and it internally handles concurrent requests.
-    grpc_client: proto::directory_service_client::DirectoryServiceClient<Channel>,
+    grpc_client: proto::directory_service_client::DirectoryServiceClient<InterceptedService>,
 }
 
 impl GRPCDirectoryService {
     /// construct a [GRPCDirectoryService] from a [proto::directory_service_client::DirectoryServiceClient].
     /// panics if called outside the context of a tokio runtime.
     pub fn from_client(
-        grpc_client: proto::directory_service_client::DirectoryServiceClient<Channel>,
+        grpc_client: proto::directory_service_client::DirectoryServiceClient<InterceptedService>,
     ) -> Self {
         Self { grpc_client }
     }
@@ -328,12 +333,12 @@ mod tests {
                 socket_path.display()
             ))
             .expect("must parse");
-            let client = DirectoryServiceClient::new(
+            GRPCDirectoryService::from_client(DirectoryServiceClient::with_interceptor(
                 crate::tonic::channel_from_url(&url)
                     .await
                     .expect("must succeed"),
-            );
-            GRPCDirectoryService::from_client(client)
+                tvix_tracing::propagate::tonic::send_trace,
+            ))
         };
 
         assert!(grpc_client
