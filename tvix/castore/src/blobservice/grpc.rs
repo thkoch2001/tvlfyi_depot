@@ -18,21 +18,26 @@ use tokio_util::{
     sync::PollSender,
 };
 use tonic::{async_trait, transport::Channel, Code, Status};
-use tracing::instrument;
+use tracing::{instrument, Instrument, Span};
+
+type InterceptedService = tonic::service::interceptor::InterceptedService<
+    Channel,
+    fn(tonic::Request<()>) -> Result<tonic::Request<()>, tonic::Status>,
+>;
 
 /// Connects to a (remote) tvix-store BlobService over gRPC.
 #[derive(Clone)]
 pub struct GRPCBlobService {
     /// The internal reference to a gRPC client.
     /// Cloning it is cheap, and it internally handles concurrent requests.
-    grpc_client: proto::blob_service_client::BlobServiceClient<Channel>,
+    grpc_client: proto::blob_service_client::BlobServiceClient<InterceptedService>,
 }
 
 impl GRPCBlobService {
     /// construct a [GRPCBlobService] from a [proto::blob_service_client::BlobServiceClient].
     /// panics if called outside the context of a tokio runtime.
     pub fn from_client(
-        grpc_client: proto::blob_service_client::BlobServiceClient<Channel>,
+        grpc_client: proto::blob_service_client::BlobServiceClient<InterceptedService>,
     ) -> Self {
         Self { grpc_client }
     }
@@ -133,6 +138,8 @@ impl BlobService for GRPCBlobService {
         let task = tokio::spawn({
             let mut grpc_client = self.grpc_client.clone();
             async move { Ok::<_, Status>(grpc_client.put(blobchunk_stream).await?.into_inner()) }
+                // instrument the task with the current span, this is not done by default
+                .in_current_span()
         });
 
         // The tx part of the channel is converted to a sink of byte chunks.
@@ -330,13 +337,12 @@ mod tests {
                 socket_path.display()
             ))
             .expect("must parse");
-            let client = BlobServiceClient::new(
+            GRPCBlobService::from_client(BlobServiceClient::with_interceptor(
                 crate::tonic::channel_from_url(&url)
                     .await
                     .expect("must succeed"),
-            );
-
-            GRPCBlobService::from_client(client)
+                tvix_tracing::propagate::tonic::send_trace,
+            ))
         };
 
         let has = grpc_client
