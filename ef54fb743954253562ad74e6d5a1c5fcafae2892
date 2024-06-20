@@ -53,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "aace62f8_3123df81",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-20T18:41:46Z",
+      "side": 1,
+      "message": "I played around with this a bit, it seems I\u0027m not able to invoke `reg.register()` from \"regular code\" at runtime.\n\nI was however able to instantiate my own different registry using my own `lazy_static` block of course. Which I think should be fine, if we build another binary knowing about other stores, it should be fine to require knowing about these at lazy_static time.\n\nIf this is intentional / as expected, maybe we don\u0027t need a to control mutability, but just an `Arc`? And maybe move the \"register the common services\" into a function each taking a specific `\u0026mut Registry\u003cdyn …\u003e`, like this:\n\n```rust\nlazy_static! {\n    pub static ref BLOB_REG: Mutex\u003cRegistry\u003cdyn BlobService\u003e\u003e \u003d {\n        let mut reg \u003d Registry(Default::default());\n        add_default_blobservices(\u0026mut reg);\n        Mutex::new(reg)\n    };\n    pub static ref DIRECTORY_REG: Mutex\u003cRegistry\u003cdyn DirectoryService\u003e\u003e \u003d {\n        let mut reg \u003d Registry(Default::default());\n        add_default_directoryservices(\u0026mut reg);\n        Mutex::new(reg)\n    };\n}\n\nimpl\u003c\u0027de\u003e serde::Deserialize\u003c\u0027de\u003e for Box\u003cdyn BlobService\u003e {\n    fn deserialize\u003cD\u003e(de: D) -\u003e std::result::Result\u003cSelf, D::Error\u003e\n    where\n        D: serde::Deserializer\u003c\u0027de\u003e,\n    {\n        serde_tagged::de::internal::deserialize(de, \"type\", \u0026BLOB_REG.lock().unwrap().0)\n    }\n}\n\nimpl\u003c\u0027de\u003e serde::Deserialize\u003c\u0027de\u003e for Box\u003cdyn DirectoryService\u003e {\n    fn deserialize\u003cD\u003e(de: D) -\u003e std::result::Result\u003cSelf, D::Error\u003e\n    where\n        D: serde::Deserializer\u003c\u0027de\u003e,\n    {\n        serde_tagged::de::internal::deserialize(de, \"type\", \u0026DIRECTORY_REG.lock().unwrap().0)\n    }\n}\n```\n\nThat would make registry instantiation that also picks the \"default ones\" easier.",
+      "parentUuid": "c8e58ed8_2725d391",
+      "revId": "ef54fb743954253562ad74e6d5a1c5fcafae2892",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "3b18071e_695f434f",
