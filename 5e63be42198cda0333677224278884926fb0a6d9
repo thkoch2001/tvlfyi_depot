@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ba3138a_e2c50c00",
+        "filename": "tvix/castore/src/blobservice/grpc.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000110
+      },
+      "writtenOn": "2024-06-20T10:11:44Z",
+      "side": 1,
+      "message": "i\u0027ve found a couple of other tokio::spawn which should probably be instrumented. In `castore/src/fs/mod.rs` and `castore/src/directoryservice/grpc.rs`, basically every `tokio::spawn` in a function that is also `instrumented`.\n\nShould i do this in this cl or should i open a new one?",
+      "revId": "5e63be42198cda0333677224278884926fb0a6d9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
