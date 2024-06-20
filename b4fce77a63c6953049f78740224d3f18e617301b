@@ -16,6 +16,24 @@
       "message": "Can you also use `.in_current_span()`? Seems shorter and mentioned in https://github.com/tokio-rs/tokio/discussions/6008.",
       "revId": "b4fce77a63c6953049f78740224d3f18e617301b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9dbdf1d_4c2288f9",
+        "filename": "tvix/castore/src/blobservice/grpc.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000110
+      },
+      "writtenOn": "2024-06-20T14:50:42Z",
+      "side": 1,
+      "message": "works as well. dont know why but tested the second one first",
+      "parentUuid": "c9e15ca4_19602853",
+      "revId": "b4fce77a63c6953049f78740224d3f18e617301b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
