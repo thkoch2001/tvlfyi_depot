@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "36dd0745_966e883e",
+        "filename": "tvix/docs/src/eval/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-20T13:17:46Z",
+      "side": 1,
+      "message": "It\u0027s not calling the reader for action, but it\u0027s still important to be aware there\u0027s some uncertainty here. let\u0027s just restore these two ones to their old state, I\u0027m happy with the rest.",
+      "parentUuid": "9f39ae82_f3f544c8",
+      "revId": "0c035437babd3d4374592b10de6750f4b9bba69f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e7c86864_f35a8e1d",
         "filename": "tvix/docs/src/store/api.md",
         "patchSetId": 1
