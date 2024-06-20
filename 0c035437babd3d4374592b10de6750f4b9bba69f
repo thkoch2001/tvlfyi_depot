@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e8d6f45_186ae08e",
+        "filename": "tvix/docs/src/eval/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-20T07:19:48Z",
+      "side": 1,
+      "message": "I think this one should be kept. it\u0027s a Todo for the writer, not a call-out to the reader.",
+      "revId": "0c035437babd3d4374592b10de6750f4b9bba69f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7c86864_f35a8e1d",
+        "filename": "tvix/docs/src/store/api.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-20T07:19:48Z",
+      "side": 1,
+      "message": "same for there I think",
+      "revId": "0c035437babd3d4374592b10de6750f4b9bba69f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
