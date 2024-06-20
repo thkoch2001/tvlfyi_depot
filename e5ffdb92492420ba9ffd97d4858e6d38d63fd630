@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ba6ba29_bcae576d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000110
+      },
+      "writtenOn": "2024-06-20T15:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ead4e546_82d27d1f",
+      "revId": "e5ffdb92492420ba9ffd97d4858e6d38d63fd630",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72868d8e_810a073c",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-06-20T15:07:21Z",
       "side": 1,
       "message": "Remove \"the\"",
+      "revId": "e5ffdb92492420ba9ffd97d4858e6d38d63fd630",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c28ca35_bcfc0fc0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000110
+      },
+      "writtenOn": "2024-06-20T15:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72868d8e_810a073c",
       "revId": "e5ffdb92492420ba9ffd97d4858e6d38d63fd630",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f743e82c_9830628b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000110
+      },
+      "writtenOn": "2024-06-20T15:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c9afb80_517f3ff5",
+      "revId": "e5ffdb92492420ba9ffd97d4858e6d38d63fd630",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e52d6707_4f6e93b5",
@@ -69,6 +123,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "18b1c629_9a6099cc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000110
+      },
+      "writtenOn": "2024-06-20T15:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e52d6707_4f6e93b5",
+      "revId": "e5ffdb92492420ba9ffd97d4858e6d38d63fd630",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d5ea78d5_19e69ffb",
@@ -82,6 +154,24 @@
       "writtenOn": "2024-06-20T15:07:21Z",
       "side": 1,
       "message": "I think we do want to make this configurable in the future. If we can\u0027t make it generic over the exact type of client easily, I\u0027d prefer doing dynamic dispatch rather than requiring it to always be intercepted. Though we can also deal with it in a followup, your call.",
+      "revId": "e5ffdb92492420ba9ffd97d4858e6d38d63fd630",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e458661d_20053250",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000110
+      },
+      "writtenOn": "2024-06-20T15:54:27Z",
+      "side": 1,
+      "message": "yeah i also didn\u0027t like this very much, i figured out why the Generic type implementation wasnt compiling this morning, solved that and retested",
+      "parentUuid": "d5ea78d5_19e69ffb",
       "revId": "e5ffdb92492420ba9ffd97d4858e6d38d63fd630",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }

@@ -16,6 +16,24 @@
       "message": "Can we generalize this on being intercepted or not?\n\nThe current approach forces every blobservice to be setup with the interceptor, including the tests, which is a bit inconvenient.\nAllowing it to be used with both an intercepted, or not intercepted `BlobServiceClient` would be nice.",
       "revId": "dea2e16199dda547cffa04f27dd30ef0000e37bb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "192b52d5_e3091a4e",
+        "filename": "tvix/castore/src/blobservice/grpc.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1000110
+      },
+      "writtenOn": "2024-06-20T15:54:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c24f9fc_dc9b2f13",
+      "revId": "dea2e16199dda547cffa04f27dd30ef0000e37bb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
