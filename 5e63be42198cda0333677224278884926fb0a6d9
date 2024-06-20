@@ -34,6 +34,24 @@
       "parentUuid": "4ba3138a_e2c50c00",
       "revId": "5e63be42198cda0333677224278884926fb0a6d9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "932f11cb_e5a312bf",
+        "filename": "tvix/castore/src/blobservice/grpc.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1000110
+      },
+      "writtenOn": "2024-06-20T14:24:49Z",
+      "side": 1,
+      "message": "done https://cl.tvl.fyi/c/depot/+/11864",
+      "parentUuid": "0f0fbe97_0b286e10",
+      "revId": "5e63be42198cda0333677224278884926fb0a6d9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
