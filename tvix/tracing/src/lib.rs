@@ -1,5 +1,6 @@
 use indicatif::ProgressStyle;
 use lazy_static::lazy_static;
+use opentelemetry_sdk::propagation::TraceContextPropagator;
 use tokio::sync::{mpsc, oneshot};
 use tracing::Level;
 use tracing_indicatif::{filter::IndicatifFilter, IndicatifLayer};
@@ -15,6 +16,9 @@ use opentelemetry_sdk::{
 };
 #[cfg(feature = "tracy")]
 use tracing_tracy::TracyLayer;
+
+#[cfg(feature = "tonic")] // TODO or http
+pub mod propagate;
 
 lazy_static! {
     pub static ref PB_PROGRESS_STYLE: ProgressStyle = ProgressStyle::with_template(
@@ -176,6 +180,9 @@ impl TracingBuilder {
         #[cfg(feature = "otlp")]
         {
             if let Some(service_name) = self.service_name {
+                // register a text map propagator for trace propagation
+                opentelemetry::global::set_text_map_propagator(TraceContextPropagator::new());
+
                 let (tracer, tx) = gen_otlp_tracer(service_name.to_string());
                 // Create a tracing layer with the configured tracer
                 let layer = tracing_opentelemetry::layer().with_tracer(tracer);
