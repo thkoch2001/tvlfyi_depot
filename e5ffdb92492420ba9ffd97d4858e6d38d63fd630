@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ead4e546_82d27d1f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-20T15:07:21Z",
+      "side": 1,
+      "message": "\" w \"",
+      "revId": "e5ffdb92492420ba9ffd97d4858e6d38d63fd630",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72868d8e_810a073c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-20T15:07:21Z",
+      "side": 1,
+      "message": "Remove \"the\"",
+      "revId": "e5ffdb92492420ba9ffd97d4858e6d38d63fd630",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c9afb80_517f3ff5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-20T15:07:21Z",
+      "side": 1,
+      "message": "same",
+      "revId": "e5ffdb92492420ba9ffd97d4858e6d38d63fd630",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e52d6707_4f6e93b5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-20T15:07:21Z",
+      "side": 1,
+      "message": "s/to/too/",
+      "revId": "e5ffdb92492420ba9ffd97d4858e6d38d63fd630",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5ea78d5_19e69ffb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-20T15:07:21Z",
+      "side": 1,
+      "message": "I think we do want to make this configurable in the future. If we can\u0027t make it generic over the exact type of client easily, I\u0027d prefer doing dynamic dispatch rather than requiring it to always be intercepted. Though we can also deal with it in a followup, your call.",
+      "revId": "e5ffdb92492420ba9ffd97d4858e6d38d63fd630",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
