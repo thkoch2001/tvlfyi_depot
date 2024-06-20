@@ -72,6 +72,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "86c87f2b_7447e7b9",
+        "filename": "tvix/docs/src/eval/build-references.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-20T14:48:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "36dd0745_966e883e",
+      "revId": "0c035437babd3d4374592b10de6750f4b9bba69f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e7c86864_f35a8e1d",
@@ -103,6 +121,24 @@
       "side": 1,
       "message": "The latest change now makes it entirely invisible to the reader. Please restore the old version for these two.",
       "parentUuid": "e7c86864_f35a8e1d",
+      "revId": "0c035437babd3d4374592b10de6750f4b9bba69f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea5be8b2_a7992c38",
+        "filename": "tvix/docs/src/store/api.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 209,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-20T14:48:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e58ffbd7_0e6ab0a1",
       "revId": "0c035437babd3d4374592b10de6750f4b9bba69f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
