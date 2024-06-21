@@ -71,6 +71,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff305613_267a7ce7",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-21T15:02:25Z",
+      "side": 1,
+      "message": "I realized there\u0027s still Mutex in the code sample, ignore these :-)",
+      "parentUuid": "aace62f8_3123df81",
+      "revId": "ef54fb743954253562ad74e6d5a1c5fcafae2892",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "3b18071e_695f434f",
