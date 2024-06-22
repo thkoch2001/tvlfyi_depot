@@ -1,2 +1,6 @@
 include_rules
-: lock.json |> !nim_cfg |> | ./<lock>
+
+: sbom.json |> !sbom-to-nix |> | ./<lock>
+run ./Tuprules.jq sbom.json
+
+: foreach {bin} |> !assert_built |>

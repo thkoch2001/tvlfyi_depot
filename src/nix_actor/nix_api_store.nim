@@ -10,7 +10,7 @@ proc init_plugins*(context: NixContext): nix_err {.nix_api_store.}
 
 proc store_open*(a1: NixContext; uri: cstring; params: ptr cstringArray): Store {.nix_api_store.}
 
-proc store_unref*(store: Store) {.nix_api_store.}
+proc store_free*(store: Store) {.nix_api_store.}
 
 proc store_get_uri*(context: NixContext; store: Store; dest: cstring; n: cuint): nix_err {.nix_api_store.}
 

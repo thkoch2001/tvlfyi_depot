@@ -1,7 +1,8 @@
-include ../eris-nim/depends.tup
-NIM_FLAGS += --path:$(TUP_CWD)/../eris-nim/src
+PROJECT_DIR = $(TUP_CWD)
+NIM = $(DIRENV) $(NIM)
 
 include ../syndicate-nim/depends.tup
 NIM_FLAGS += --path:$(TUP_CWD)/../syndicate-nim/src
 
 NIM_GROUPS += $(TUP_CWD)/<lock>
+NIM_GROUPS += $(TUP_CWD)/<protocol>

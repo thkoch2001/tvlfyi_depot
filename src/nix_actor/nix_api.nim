@@ -1,9 +1,9 @@
 # SPDX-FileCopyrightText: ☭ Emery Hemingway
 # SPDX-License-Identifier: Unlicense
 
-import ./nix_api_types, ./nix_api_util, ./nix_api_value, ./nix_api_store, ./nix_api_expr
+import ./nix_api_types, ./nix_api_value, ./nix_api_store, ./nix_api_expr
 
-export NixContext, Store, State, Value, ValueType,
+export NixContext, Store, EvalState, Value, ValueType,
   gc_decref, isNil
 
 {.passC: staticExec("pkg-config --cflags nix-expr-c").}
@@ -25,21 +25,21 @@ proc openStore*(): Store =
   var ctx: NixContext
   result = store_open(ctx, nil, nil)
 
-proc close*(store: Store) = store_unref(store)
+proc close*(store: Store) = store_free(store)
 
-proc newState*(store: Store; searchPath: varargs[string]): State =
+proc newState*(store: Store; lookupPath: openarray[string]): EvalState =
   var ctx: NixContext
-  var path = allocCStringArray(searchPath)
+  var path = allocCStringArray(lookupPath)
   defer: deallocCStringArray(path)
   result = state_create(ctx, path, store)
 
-proc close*(state: State) = state_free(state)
+proc close*(state: EvalState) = state_free(state)
 
-proc newValue*(state: State): Value =
+proc newValue*(state: EvalState): Value =
   var ctx: NixContext
   alloc_value(ctx, state)
 
-proc evalFromString*(state: State; expr, path: string): Value =
+proc evalFromString*(state: EvalState; expr, path: string): Value =
   var ctx: NixContext
   result = alloc_value(ctx, state)
   discard expr_eval_from_string(ctx, state, expr, path, result)
@@ -48,11 +48,10 @@ proc close*(value: Value) =
   var ctx: NixContext
   discard gc_decref(ctx, cast[pointer](value))
 
-proc force*(state: State; value: Value) =
+proc force*(state: EvalState; value: Value) =
   var ctx: NixContext
   discard value_force(ctx, state, value)
 
-proc get_attr_byidx*(ctx: NixContext; value: Value; state: State; i: cuint): (cstring, Value) =
+proc get_attr_byidx*(ctx: NixContext; value: Value; state: EvalState; i: cuint): (cstring, Value) =
   var ctx: NixContext
   result[1] = get_attr_byidx(ctx, value, state, i, addr result[0])
-

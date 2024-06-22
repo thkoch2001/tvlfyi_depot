@@ -1,64 +1,44 @@
 version 1 .
 
-StringSeq = [string ...] .
-StringSet = #{string} .
+# Gatekeeper step to access nix-actor.
+ResolveStep = <nix-actor @detail ResolveDetail> .
+ResolveDetail = {
+  # PATH to search for Nix utilities.
+  command-path: [string ...]
+
+  # Command line options.
+  options: AttrSet
+
+  # List of strings corresponding to entries in NIX_PATH.
+  # For example:
+  #  [ "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
+  #    "nixos-config=/etc/nixos/configuration.nix"
+  #    "/nix/var/nix/profiles/per-user/root/channels"
+  #  ]
+  lookupPath: [string ...]
+} .
+
+# Common error type.
+Error = <error @message string>.
+
+# Asserted to nix-actor.
+# @expr is evaluated and asserted to @result
+# with log lines messaged to @log.
+Eval = <eval @expr string @log #:string @result EvalResult> .
+EvalResult = Error / EvalSuccess .
+EvalSuccess = [@expr string @result any] .
+
+# Asserted to nix-actor.
+# @expr is instantiated to a store-derivation which is asserted to @result.
+Instantiate = <instantiate @expr string @log #:string @result InstantiateResult> .
+InstantiateResult = Error / Derivation .
+Derivation = <drv @expr string @storePath string> .
+
+# Asserted to nix-actor.
+# The list of store-paths from realising @drv
+# are asserted to @outputs as a list of strings.
+Realise = <realise @drv string @log #:string @outputs #:Result> .
+RealiseResult = Error / Outputs .
+Outputs = <outputs @drv string @storePaths [string ...]> .
+
 AttrSet = {symbol: any ...:...} .
-
-Build = <nix-build @input string @output any> .
-
-Realise = <realise @drv string @outputs StringSeq> .
-
-Instantiate = <instantiate @expr string @options AttrSet @result any> .
-
-Eval = <eval @expr string @path string @result any> .
-
-Narinfo = <narinfo @path string @info AttrSet> .
-
-Field = int / string .
-Fields = [Field ...] .
-
-ActionStart = <start @id int @level int @type int @text string @fields Fields @parent int> .
-ActionStop = <stop @id int> .
-ActionResult = <result @id int @type int @fields Fields> .
-
-; TODO: why not make target a singleton?
-Missing = <missing @targets StringSeq @willBuild StringSet @willSubstitute StringSet @unknown StringSet @downloadSize int @narSize int> .
-
-; Path info for the worker protocol version 35.
-LegacyPathAttrs = {
-  deriver: string
-  narHash: string
-  references: StringSeq ; prefer a set
-  registrationTime: int
-  narSize: int
-  ultimate: bool
-  sigs: StringSet
-  ca: string
-} .
-
-AddToStoreClientAttrs = {
-  name: string
-  eris: bytes
-  ca-method: symbol
-  references: StringSeq ; prefer a set
-} .
-
-; Intersection of the attributes needed to add a path to a store
-; and the attributes returned by the daemon after adding the path.
-AddToStoreAttrs = {
-  name: string
-  eris: bytes
-  ca-method: symbol
-  references: StringSeq ; prefer a set
-
-  deriver: string
-  narHash: string
-  registrationTime: int
-  narSize: int
-  ultimate: bool
-  sigs: StringSet
-  ca: string
-} .
-
-; Any collection of attributes describing a store path.
-PathInfo = <path @path string @attrs AttrSet> .

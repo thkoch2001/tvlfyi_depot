@@ -1,2 +1,2 @@
 include_rules
-: ../../protocol.prs |> !preserves_schema_nim |> protocol.nim | ../<protocol>
+: $(PROJECT_DIR)/protocol.prs |> !preserves-schema-nim |> protocol.nim | $(PROJECT_DIR)/<protocol>

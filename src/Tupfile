@@ -1,3 +1,0 @@
-include_rules
-: foreach *.nim | $(SYNDICATE_PROTOCOL) ./<protocol> |> !nim_bin |> {bin}
-: foreach {bin} |> !assert_built |>
