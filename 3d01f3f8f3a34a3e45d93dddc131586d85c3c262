@@ -52,6 +52,24 @@
       "parentUuid": "dcebd539_24e6a16b",
       "revId": "3d01f3f8f3a34a3e45d93dddc131586d85c3c262",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eb7fb869_f3d8c36c",
+        "filename": "tvix/docs/mdbook-extra.css",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-23T18:48:22Z",
+      "side": 1,
+      "message": "https://github.com/highlightjs/highlight.js/pull/3066\n\nIt would look like they are conservative about making these types of decisions \u0026 expect users to buy in themselves?",
+      "parentUuid": "3e05804b_6be8c718",
+      "revId": "3d01f3f8f3a34a3e45d93dddc131586d85c3c262",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
