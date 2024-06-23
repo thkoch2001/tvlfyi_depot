@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8c232e15_2f2827df",
+        "filename": "tvix/docs/mdbook-extra.css",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-23T09:52:06Z",
+      "side": 1,
+      "message": "Is there an upstream discussion? do highlight.js folks not set this on their own?\n\nWould be great to have some comment explaining the rationale, maybe linking to an upstream issue, so we can periodically re-evaluate if this is still necessary.",
+      "revId": "3d01f3f8f3a34a3e45d93dddc131586d85c3c262",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
