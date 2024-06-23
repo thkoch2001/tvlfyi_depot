@@ -16,6 +16,24 @@
       "message": "Is there an upstream discussion? do highlight.js folks not set this on their own?\n\nWould be great to have some comment explaining the rationale, maybe linking to an upstream issue, so we can periodically re-evaluate if this is still necessary.",
       "revId": "3d01f3f8f3a34a3e45d93dddc131586d85c3c262",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcebd539_24e6a16b",
+        "filename": "tvix/docs/mdbook-extra.css",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-23T15:00:14Z",
+      "side": 1,
+      "message": "I have had these discussions on many a platform (even last week), but I don’t think folks are putting 2 \u0026 2 together. They complain when you put `$` because now they can’t select \u0026 copy it, but then the syntax highlighting behaves strangely if you put the correct `console` or `sh-session` or `shell-session` syntax highlighting in most cases (they are not `bash` scripts) as no prompt means it is the console output, not input. When they put `bash` highlighting they get the correct highlight sometimes, but output doesn’t work nor does it indicate to the user that this is being run in your terminal emulator. If you want to have the prompt indicator + the correct syntax highlighting + the prompt being easier to select so you can copy/paste without accidentally having a `$` or `#`, then this is what you have to do. The docs I had begun writing was using `$` for “Getting Started” to make it more clear \u0026 there is a 95% chance folks want to select these lines for their terminal rather than copy the full prompts themselves.\n\nIf you think the behavior is better to have the `$` selectable then this can be dropped (which is why this is definitely in a separate CL).\n\nUpstream mdBook also knows it needs to straight-up remove highlight.js as expensive \u0026 wasteful, but that process has taken years to move for whatever reason since they aren’t taking the quick route of just executing highlight.js at build time instead trying to replace it with a whole Rust parsing lib. That lib will eventually probably need similar love. As such, this seems like a short workaround until that happens.",
+      "parentUuid": "8c232e15_2f2827df",
+      "revId": "3d01f3f8f3a34a3e45d93dddc131586d85c3c262",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
