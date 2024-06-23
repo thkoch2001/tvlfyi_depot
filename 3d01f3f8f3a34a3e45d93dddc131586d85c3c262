@@ -34,6 +34,24 @@
       "parentUuid": "8c232e15_2f2827df",
       "revId": "3d01f3f8f3a34a3e45d93dddc131586d85c3c262",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e05804b_6be8c718",
+        "filename": "tvix/docs/mdbook-extra.css",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-23T15:43:06Z",
+      "side": 1,
+      "message": "\u003e [..]\n\nDo we have any sh-session / shell-session in the docs right now?\nIn these, the `$` / `#` are not part of the script, but metadata, so IMHO they should not be selectable, and there should be an upstream issue about that, in the upstream issue tracker.\n\n\n\u003e If you think the behavior is better to have the $ selectable then this can be dropped (which is why this is definitely in a separate CL).\n\nThis currently is the only CL I\u0027m seeing in this chain, no?\n\n\u003e Upstream mdBook also knows it needs to straight-up remove highlight.js as expensive \u0026 wasteful, [...]\n\nSeems unrelated to this CL. And I\u0027d still encourage opening an issue, so people are aware of it and can watch its progress over time.",
+      "parentUuid": "dcebd539_24e6a16b",
+      "revId": "3d01f3f8f3a34a3e45d93dddc131586d85c3c262",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
