@@ -183,5 +183,15 @@ in
   programs.mosh.enable = true;
   zramSwap.enable = true;
 
+  # temp access for ahnberg to debug network stuff
+  users.users.ahnberg = {
+    isNormalUser = true;
+    createHome = true;
+    uid = 1001;
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDlUDKa9a9nvthSVr9tfiTTTAPFcMQLyPZ5DndBG49oT ahnberg@AhnNod"
+    ];
+  };
+
   system.stateVersion = "23.05";
 }
