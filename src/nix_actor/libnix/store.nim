@@ -1,8 +1,8 @@
 # SPDX-FileCopyrightText: ☭ Emery Hemingway
 # SPDX-License-Identifier: Unlicense
 
-{.passC: staticExec("pkg-config --cflags nix-store").}
-{.passL: staticExec("pkg-config --libs nix-store").}
+{.passC: staticExec"$PKG_CONFIG --cflags nix-store".}
+{.passL: staticExec"$PKG_CONFIG --libs nix-store".}
 
 {.passC: "'-DSYSTEM=\"x86_64-linux\"'".}
 

@@ -3,8 +3,8 @@
 
 import ./stdpuspus, ./store
 
-{.passC: staticExec("pkg-config --cflags nix-expr").}
-{.passL: staticExec("pkg-config --libs nix-expr").}
+{.passC: staticExec"$PKG_CONFIG --cflags nix-expr".}
+{.passL: staticExec"$PKG_CONFIG --libs nix-expr".}
 
 proc parentDir(path: string): string =
   var i = path.high

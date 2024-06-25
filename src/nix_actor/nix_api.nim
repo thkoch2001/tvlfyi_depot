@@ -6,8 +6,8 @@ import ./nix_api_types, ./nix_api_value, ./nix_api_store, ./nix_api_expr
 export NixContext, Store, EvalState, Value, ValueType,
   gc_decref, isNil
 
-{.passC: staticExec("pkg-config --cflags nix-expr-c").}
-{.passL: staticExec("pkg-config --libs nix-expr-c").}
+{.passC: staticExec"$PKG_CONFIG --cflags nix-expr-c".}
+{.passL: staticExec"$PKG_CONFIG --libs nix-expr-c".}
 
 # Always pass NixContext as a nil pointer.
 
