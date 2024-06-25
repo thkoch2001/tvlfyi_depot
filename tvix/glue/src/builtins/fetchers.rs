@@ -60,7 +60,17 @@ async fn extract_fetch_args(
         Err(cek) => return Ok(Err(cek)),
     };
 
-    // TODO: disallow other attrset keys, to match Nix' behaviour.
+    // Disallow other attrset keys, to match Nix' behaviour.
+    // We complain about the first unexpected key we find in the list.
+    let mut invalid_attr_keys = attrs
+        .keys()
+        .filter(|k| k.as_bstr() != "url" && k.as_bstr() != "name" && k.as_bstr() != "sha256");
+
+    if let Some(first_invalid_k) = invalid_attr_keys.next() {
+        return Err(ErrorKind::UnexpectedArgumentBuiltin(
+            first_invalid_k.clone(),
+        ));
+    }
 
     // parse the sha256 string into a digest.
     let sha256 = match sha256_str {
