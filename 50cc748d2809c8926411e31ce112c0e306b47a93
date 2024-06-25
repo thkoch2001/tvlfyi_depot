@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0b012c9_0b2985a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-25T11:50:10Z",
+      "side": 1,
+      "message": "This is my attempt to split up, reword where I think helps, \u0026 duplicate the parts of the Getting Started + Contributing docs that help a new user.\n\nGenerally I think it looks alright as `cat`’d \u0026 in the mdBooks a GUI browser, but I am not happy with mdBook’s output for terminal browser such as w3m.",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
