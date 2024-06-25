@@ -1,0 +1,51 @@
+#!/usr/bin/env -S syndicate-server --control --config
+
+let ?nixLog = dataspace
+$nixLog ?? ?line [
+  $log ! <log "nix-results-log" { line: $line }>
+]
+
+let ?results = dataspace
+$results ? ?any [
+  $log ! <log "nix-results" { line: $any }>
+]
+
+? <nix-actor ?cap> $cap [
+
+  <eval "builtins.trace \"This is only a test.\" builtins.nixVersion" $nixLog $results>
+
+  <instantiate "let pkgs = import <nixpkgs> {}; in pkgs.cowsay" $nixLog $results>
+
+  # Realise all observed store derivations.
+  $results ? <drv ?expr ?drv> [
+    $cap <realise $drv $nixLog $results>
+  ]
+
+]
+
+let ?resolver = <* $config [<rewrite <accepted ?cap> <nix-actor $cap>>]>
+? <service-object <daemon nix-actor> ?cap> [
+  $cap <resolve <nix-actor {
+      command-path: [ "/run/current-system/sw/bin" ]
+      lookupPath: [
+        "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos",
+        "nixos-config=/etc/nixos/configuration.nix",
+        "/nix/var/nix/profiles/per-user/root/channels",
+      ]
+      options: { }
+    }> $resolver>
+]
+
+<require-service <daemon nix-actor>>
+
+<require-service <config-watcher "/home/emery/src/config/built/nix-actor.pr" $.>>
+? <built nix-actor ?path ?sum> [
+  <daemon nix-actor {
+    argv: [ $path ]
+    clearEnv: #t
+    env: {
+      BUILD_SUM: $sum
+    }
+    protocol: application/syndicate
+  }>
+]
