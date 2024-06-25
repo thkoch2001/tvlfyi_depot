@@ -16,6 +16,125 @@
       "message": "This is my attempt to split up, reword where I think helps, \u0026 duplicate the parts of the Getting Started + Contributing docs that help a new user.\n\nGenerally I think it looks alright as `cat`’d \u0026 in the mdBooks a GUI browser, but I am not happy with mdBook’s output for terminal browser such as w3m.",
       "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2546edb0_6fd3a1ab",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-25T14:17:40Z",
+      "side": 1,
+      "message": "Please use the hashes in front of the heading, to be consistent with the rest of the docs.",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "db5affd3_40d75589",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-25T14:17:40Z",
+      "side": 1,
+      "message": "I already wasn\u0027t a big fan of the concept of \"my\" in the TVL docs, let\u0027s reword this go be more passive: \"Usually there is a strong...\"",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2156016c_22e12068",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-25T14:17:40Z",
+      "side": 1,
+      "message": "I think this is the angular style guide (but please check that). we should probably link to it, these are just examples.",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "179a567d_e1604acc",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-25T14:17:40Z",
+      "side": 1,
+      "message": "We should not pick whitby here, but an example from tvix.",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d7d643f_fa4f8c6c",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-25T14:17:40Z",
+      "side": 1,
+      "message": "I think more of this should be moved to the getting started page.\n\nWe can just mention most tests can be run locally with nix/mg, and link to the other page for details.",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2996850b_c884a0fb",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-25T14:17:40Z",
+      "side": 1,
+      "message": "We should mention we also use direnv (which needs to be hooked into your shell), and that you can then use the `mg` commands. (but in the Getting started page)",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0cd851d_a5f3a437",
+        "filename": "tvix/docs/src/contributing/gerrit.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-25T14:17:40Z",
+      "side": 1,
+      "message": "we can maybe have a ^1 footnote here explaining there\u0027s known issues with GitHub sso for some accounts.",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
