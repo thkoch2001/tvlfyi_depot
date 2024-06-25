@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "96d3714a_33249563",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-25T18:21:03Z",
+      "side": 1,
+      "message": "It isn’t consistent tho. A lot of the docs have a `\u003d\u003d\u003d…` as a heading. Personally \u0026 subjective, I think this makes text view (ala `cat`) nicer/clearer to understand the thematic breaks, but I don’t feel strong enough to really fight for it.",
+      "parentUuid": "2546edb0_6fd3a1ab",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "db5affd3_40d75589",
         "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
         "patchSetId": 1
@@ -48,6 +66,24 @@
       "writtenOn": "2024-06-25T14:17:40Z",
       "side": 1,
       "message": "I already wasn\u0027t a big fan of the concept of \"my\" in the TVL docs, let\u0027s reword this go be more passive: \"Usually there is a strong...\"",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ab554b4_e71ef4f4",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-25T18:21:03Z",
+      "side": 1,
+      "message": "I would definitely agree, but when in doubt, I wanted to stick with the word that was there.",
+      "parentUuid": "db5affd3_40d75589",
       "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -71,6 +107,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5cc4437f_0455948e",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-25T18:21:03Z",
+      "side": 1,
+      "message": "That would be a very good idea. I will have a look.",
+      "parentUuid": "2156016c_22e12068",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "179a567d_e1604acc",
         "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
         "patchSetId": 1
@@ -88,6 +142,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2621e5ca_f74c90a9",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-25T18:21:03Z",
+      "side": 1,
+      "message": "I would certainly agree \u0026 I was hoping you would point it out to offer me a suggestion 😅",
+      "parentUuid": "179a567d_e1604acc",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3d7d643f_fa4f8c6c",
         "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
         "patchSetId": 1
@@ -99,6 +171,24 @@
       "writtenOn": "2024-06-25T14:17:40Z",
       "side": 1,
       "message": "I think more of this should be moved to the getting started page.\n\nWe can just mention most tests can be run locally with nix/mg, and link to the other page for details.",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b27a2b3a_26b61771",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-25T18:21:03Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "3d7d643f_fa4f8c6c",
       "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -122,6 +212,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ebb58e98_6e5e036d",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-25T18:21:03Z",
+      "side": 1,
+      "message": "I thought about this \u0026 I originally had `direnv` added but it wasn’t clear if it was ‘suggested’ vs. ‘supported’ so I left it out. Where do the `mg` commands come from by the way?\n\nAdditionally as an aside, it seems `use nix`/`use flake` are not in the `.envrc` which don’t hook into *my* shell which means I get sent to bash which is uncomfortable \u0026 not the experience I am used to with Nix projects. 😢",
+      "parentUuid": "2996850b_c884a0fb",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e0cd851d_a5f3a437",
         "filename": "tvix/docs/src/contributing/gerrit.md",
         "patchSetId": 1
@@ -133,6 +241,24 @@
       "writtenOn": "2024-06-25T14:17:40Z",
       "side": 1,
       "message": "we can maybe have a ^1 footnote here explaining there\u0027s known issues with GitHub sso for some accounts.",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "548fc17b_4e312e41",
+        "filename": "tvix/docs/src/contributing/gerrit.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-25T18:21:03Z",
+      "side": 1,
+      "message": "Good idea if you have some specific text. I know we had the discussion, however, I don’t really understand the technical issue well enough beyond “keycloak issue” which was the note a had taken.",
+      "parentUuid": "e0cd851d_a5f3a437",
       "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
