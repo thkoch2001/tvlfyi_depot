@@ -106,6 +106,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e7f6587_456d1b57",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-26T10:21:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1934fcd2_80fc4ded",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "db5affd3_40d75589",
@@ -265,6 +283,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d50ec2b_06e85676",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-26T10:21:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9233af7_55216038",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3d7d643f_fa4f8c6c",
@@ -355,6 +391,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fef82736_45e8a188",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-26T10:21:05Z",
+      "side": 1,
+      "message": "I would agree that that discussion is out of scope here, but I still don’t know what `mg` *is*--only that it exists as a result of `direnv` execution. I tried web searching it 3 times at this point \u0026 still don’t know what it is. Is it home-grown? What does it do?",
+      "parentUuid": "6adc1d6b_963e2590",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b358db3c_44170673",
         "filename": "tvix/docs/src/contributing/gerrit.md",
         "patchSetId": 1
@@ -437,6 +491,24 @@
       "side": 1,
       "message": "What about the following proposal?\n\n---\n\n\nNote our IdP (Keycloak) sometimes has [problems doing SSO with GitHub](https://b.tvl.fyi/issues/201), so you might get an \"unexpected error\" while trying to sign in with GitHub. It\u0027s not your fault.\n\nIf you\u0027re hit by this, or generally wish to have a backup authentication strategy (recommended), you can create a TVL-specific LDAP account by following these instructions:\n\n[…]\n\nDo not use the \"New user? Register\" flow at the bottom of the login page, it creates an ephemeral user that might stop working without prior notice.",
       "parentUuid": "548fc17b_4e312e41",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24875efe_e129c265",
+        "filename": "tvix/docs/src/contributing/gerrit.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-26T10:21:05Z",
+      "side": 1,
+      "message": "I would vote for keeping it a footnote \u0026 just recommend folks create TVL accounts in addition to SSO (if not exclusively) \u0026 move on. Would we also want to list all potential issues with GitLab or StackOverflow in the future too? If the answer is “no, that would create a lot of noise or is too specific” then I would say no special treatment is deserved. I want to live in a world where we don’t talk about MS GitHub as a ‘default’ \u0026 seen instead as just one service you need to ‘deal with’ when you have to rather than specifically highlighting flaws with their integration--especially since the other 2 SSO don’t have known issues(?).",
+      "parentUuid": "8b8987fe_27dc8a6e",
       "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
