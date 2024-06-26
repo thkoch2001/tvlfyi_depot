@@ -90,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1934fcd2_80fc4ded",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-26T08:23:17Z",
+      "side": 1,
+      "message": "7 out of the 27 markdown files use a `\u003d\u003d` for  the toplevel heading, and only for the first-level heading, not subheadings, where the other style (various amounts of `#` in front of the heading) is used.\n\nI made a pass in cl/11881 updating these references.\n\nI find the very wide separators quite distracting, and adding as many dashes below as the heading itself is long is also a bit of busywork.\n\nIf we\u0027re talking about ensuring there\u0027s nice formatting inside the terminal, tools like `mdcat` could be used.",
+      "parentUuid": "96d3714a_33249563",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "db5affd3_40d75589",
         "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
         "patchSetId": 1
@@ -231,6 +249,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f9233af7_55216038",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-26T08:23:17Z",
+      "side": 1,
+      "message": "For example, when changing the struct fields in `tvix/glue/src/builtins/fetchers.rs` it is enough to write `refactor(tvix/glue): …`.\n\n(That\u0027s cl/11875 for example)",
+      "parentUuid": "2621e5ca_f74c90a9",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3d7d643f_fa4f8c6c",
         "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
         "patchSetId": 1
@@ -301,6 +337,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6adc1d6b_963e2590",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-26T08:23:17Z",
+      "side": 1,
+      "message": "`mg` is brought in by `direnv`, we don\u0027t have `use nix` there, but a slightly more lazy approach, delaying some of the time to when it\u0027s actually executed.\n\nIt\u0027s not really important to go too deep into detail here, but adding a [Hook direnv into your shell](https://direnv.net/docs/hook.html) as part of the instructions, and mentioning you should `direnv allow` when entering is probably okay.\n\nIf the `.envrc` doesn\u0027t work with your shell, that\u0027s a bug (which we should fix, but outside of this CL - please open an issue at b.tvl.fyi, mentioning your shell and behaviour).",
+      "parentUuid": "ebb58e98_6e5e036d",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b358db3c_44170673",
         "filename": "tvix/docs/src/contributing/gerrit.md",
         "patchSetId": 1
@@ -365,6 +419,24 @@
       "side": 1,
       "message": "Good idea if you have some specific text. I know we had the discussion, however, I don’t really understand the technical issue well enough beyond “keycloak issue” which was the note a had taken.",
       "parentUuid": "e0cd851d_a5f3a437",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b8987fe_27dc8a6e",
+        "filename": "tvix/docs/src/contributing/gerrit.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-26T08:23:17Z",
+      "side": 1,
+      "message": "What about the following proposal?\n\n---\n\n\nNote our IdP (Keycloak) sometimes has [problems doing SSO with GitHub](https://b.tvl.fyi/issues/201), so you might get an \"unexpected error\" while trying to sign in with GitHub. It\u0027s not your fault.\n\nIf you\u0027re hit by this, or generally wish to have a backup authentication strategy (recommended), you can create a TVL-specific LDAP account by following these instructions:\n\n[…]\n\nDo not use the \"New user? Register\" flow at the bottom of the login page, it creates an ephemeral user that might stop working without prior notice.",
+      "parentUuid": "548fc17b_4e312e41",
       "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
