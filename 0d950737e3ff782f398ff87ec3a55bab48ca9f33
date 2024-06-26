@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa94a14e_b5237614",
+        "filename": "tvix/glue/src/tests/tvix_tests/eval-okay-tofile.exp",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-26T08:00:13Z",
+      "side": 1,
+      "message": "I manually ran `nix-instantiate --eval --strict path/to/file` to verify this output matches the Nixcpp output, though it\u0027d be nice if `verify-lang-tests/default.nix` would be extended to support this. (cc @personal@ilanjoselevich.com)",
+      "revId": "0d950737e3ff782f398ff87ec3a55bab48ca9f33",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
