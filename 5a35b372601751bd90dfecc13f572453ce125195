@@ -16,6 +16,24 @@
       "message": "s/UnexpectedArguemntBuiltin/UnexpectedArgumentBuiltin",
       "revId": "5a35b372601751bd90dfecc13f572453ce125195",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d218cfd_670e068a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-26T14:27:01Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99607f93_aecfd7b8",
+      "revId": "5a35b372601751bd90dfecc13f572453ce125195",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
