@@ -3,6 +3,7 @@ mod errors;
 mod hashing_reader;
 
 pub mod blobservice;
+pub mod chunkstore;
 pub mod directoryservice;
 pub mod fixtures;
 
