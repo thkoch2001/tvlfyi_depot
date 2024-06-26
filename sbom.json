@@ -7,7 +7,7 @@
       "bom-ref": "pkg:nim/nix_actor",
       "name": "nix_actor",
       "description": "Syndicated Nix Actor",
-      "version": "20240625",
+      "version": "20240626",
       "authors": [
         {
           "name": "Emery Hemingway"
@@ -129,10 +129,10 @@
       "type": "library",
       "bom-ref": "pkg:nim/preserves",
       "name": "preserves",
-      "version": "20240623",
+      "version": "trunk",
       "externalReferences": [
         {
-          "url": "https://git.syndicate-lang.org/ehmry/preserves-nim/archive/19f5641ec0459d60f0ae992aa72151c45a73ef2f.tar.gz",
+          "url": "https://git.syndicate-lang.org/ehmry/preserves-nim/archive/2e48681eb43c28737d08b793c3ad48f18379dc5f.tar.gz",
           "type": "source-distribution"
         },
         {
@@ -147,23 +147,23 @@
         },
         {
           "name": "nix:fod:path",
-          "value": "/nix/store/l2xg6y34x7h9sxbx8fk61j9m4ramqaac-source"
+          "value": "/nix/store/v9140vbdxz9va8l8qsqyra0dcfgfw9dc-source"
         },
         {
           "name": "nix:fod:rev",
-          "value": "19f5641ec0459d60f0ae992aa72151c45a73ef2f"
+          "value": "2e48681eb43c28737d08b793c3ad48f18379dc5f"
         },
         {
           "name": "nix:fod:sha256",
-          "value": "08q86d7s96wy8190z2973bb0cjp5k6xdakna1669672m1davqxnl"
+          "value": "0mgwdi9qcpsjpylds3nn7j88qal724hxhkamv949h3g01zyy038b"
         },
         {
           "name": "nix:fod:url",
-          "value": "https://git.syndicate-lang.org/ehmry/preserves-nim/archive/19f5641ec0459d60f0ae992aa72151c45a73ef2f.tar.gz"
+          "value": "https://git.syndicate-lang.org/ehmry/preserves-nim/archive/2e48681eb43c28737d08b793c3ad48f18379dc5f.tar.gz"
         },
         {
           "name": "nix:fod:ref",
-          "value": "20240623"
+          "value": "trunk"
         },
         {
           "name": "nix:fod:srcDir",

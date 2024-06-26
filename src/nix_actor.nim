@@ -169,7 +169,7 @@ proc eval(store: Store; state: EvalState; expr: string): EvalResult =
       close(nixVal)
 
 proc serve(turn: Turn; detail: ResolveDetail; store: Store; state: EvalState; ds: Cap) =
-  during(turn, ds, Eval.grabWithin) do (expr: string, log: Cap, resp: Cap):
+  during(turn, ds, Eval.grabWithin) do (expr: string, resp: Cap):
     discard publish(turn, resp, eval(store, state, expr))
 
   during(turn, ds, Instantiate.grabWithin) do (expr: string, log: Value, resp: Cap):

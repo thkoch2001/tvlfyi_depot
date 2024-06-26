@@ -24,7 +24,7 @@ Error = <error @message string>.
 # Asserted to nix-actor.
 # @expr is evaluated and asserted to @result
 # with log lines messaged to @log.
-Eval = <eval @expr string @log #:string @result EvalResult> .
+Eval = <eval @expr string @result #:EvalResult> .
 EvalResult = Error / EvalSuccess .
 EvalSuccess = [@expr string @result any] .
 

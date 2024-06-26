@@ -8,8 +8,7 @@ type
 
   Eval* {.preservesRecord: "eval".} = object
     `expr`*: string
-    `log`* {.preservesEmbedded.}: Value
-    `result`*: EvalResult
+    `result`* {.preservesEmbedded.}: Value
 
   AttrSet* = Table[Symbol, Value]
   Realise* {.preservesRecord: "realise".} = object
