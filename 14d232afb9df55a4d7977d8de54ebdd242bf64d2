@@ -16,6 +16,24 @@
       "message": "Could probably use `any` instead of `filter`",
       "revId": "14d232afb9df55a4d7977d8de54ebdd242bf64d2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a680f754_27f09c0b",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-26T04:50:27Z",
+      "side": 1,
+      "message": "You mean `find` (because we still want to show one key).",
+      "parentUuid": "9e24e037_8501e0b2",
+      "revId": "14d232afb9df55a4d7977d8de54ebdd242bf64d2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
