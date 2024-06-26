@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2cadc11_36f57302",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-26T07:56:30Z",
+      "side": 1,
+      "message": "Good catches. I am good at spotting typos… unless they are my own. :P",
+      "parentUuid": "74a48ae7_f1b24bc2",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2546edb0_6fd3a1ab",
@@ -105,6 +123,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "038bc3dd_6fe0904d",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-26T07:56:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ab554b4_e71ef4f4",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2156016c_22e12068",
@@ -136,6 +172,24 @@
       "side": 1,
       "message": "That would be a very good idea. I will have a look.",
       "parentUuid": "2156016c_22e12068",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "51db652d_02af2f3e",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-26T07:56:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5cc4437f_0455948e",
       "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
