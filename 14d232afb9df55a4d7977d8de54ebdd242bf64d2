@@ -34,6 +34,24 @@
       "parentUuid": "9e24e037_8501e0b2",
       "revId": "14d232afb9df55a4d7977d8de54ebdd242bf64d2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ca74ae2c_36496a55",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-26T07:05:17Z",
+      "side": 1,
+      "message": "Done. Also converted the list of allowed keys to a constant, and used `contains` rather than 3 individual boolean checks.",
+      "parentUuid": "a680f754_27f09c0b",
+      "revId": "14d232afb9df55a4d7977d8de54ebdd242bf64d2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
