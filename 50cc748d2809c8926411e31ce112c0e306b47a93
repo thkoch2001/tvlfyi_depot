@@ -409,6 +409,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ec9af09a_7bed3970",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-26T14:03:26Z",
+      "side": 1,
+      "message": "It\u0027s a wrapper around nix for nix-based monorepos that gives a bazel-like target syntax.\n\nIt\u0027s code lives in `tools/magrathea/mg.scm`, but it\u0027s fairly underdocumented..",
+      "parentUuid": "fef82736_45e8a188",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b358db3c_44170673",
         "filename": "tvix/docs/src/contributing/gerrit.md",
         "patchSetId": 1
@@ -509,6 +527,24 @@
       "side": 1,
       "message": "I would vote for keeping it a footnote \u0026 just recommend folks create TVL accounts in addition to SSO (if not exclusively) \u0026 move on. Would we also want to list all potential issues with GitLab or StackOverflow in the future too? If the answer is “no, that would create a lot of noise or is too specific” then I would say no special treatment is deserved. I want to live in a world where we don’t talk about MS GitHub as a ‘default’ \u0026 seen instead as just one service you need to ‘deal with’ when you have to rather than specifically highlighting flaws with their integration--especially since the other 2 SSO don’t have known issues(?).",
       "parentUuid": "8b8987fe_27dc8a6e",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d873ea9_72299ece",
+        "filename": "tvix/docs/src/contributing/gerrit.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-26T14:03:26Z",
+      "side": 1,
+      "message": "People stumbling into GitHub SSO being broken unfortunately happens too often to hide it away too much, so I\u0027d prefer to keep this a bit more prominent. We don\u0027t encourage logging in with github.",
+      "parentUuid": "24875efe_e129c265",
       "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
