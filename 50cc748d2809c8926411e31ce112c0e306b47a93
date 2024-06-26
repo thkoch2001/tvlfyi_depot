@@ -262,6 +262,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "50d3493b_b7593796",
+        "filename": "tvix/docs/src/contributing/gerrit.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-26T07:38:55Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b358db3c_44170673",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e0cd851d_a5f3a437",
@@ -310,6 +328,24 @@
       "writtenOn": "2024-06-26T05:11:19Z",
       "side": 1,
       "message": "```suggestion\nThe workflow on Gerrit is quite different than the pull request (PR) model that\n```",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "56715d08_7ca5765e",
+        "filename": "tvix/docs/src/contributing/gerrit.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-26T07:38:55Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "08cbab15_8d3fc9f2",
       "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
