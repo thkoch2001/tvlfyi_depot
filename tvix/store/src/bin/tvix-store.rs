@@ -72,6 +72,13 @@ enum Commands {
         #[arg(
             long,
             env,
+            default_value = "objectstore+file:///var/lib/tvix-store/chunks.object_store"
+        )]
+        chunk_store_addr: String,
+
+        #[arg(
+            long,
+            env,
             default_value = "objectstore+file:///var/lib/tvix-store/blobs.object_store"
         )]
         blob_service_addr: String,
@@ -92,6 +99,9 @@ enum Commands {
         paths: Vec<PathBuf>,
 
         #[arg(long, env, default_value = "grpc+http://[::1]:8000")]
+        chunk_store_addr: String,
+
+        #[arg(long, env, default_value = "grpc+http://[::1]:8000")]
         blob_service_addr: String,
 
         #[arg(long, env, default_value = "grpc+http://[::1]:8000")]
@@ -103,6 +113,9 @@ enum Commands {
 
     /// Copies a list of store paths on the system into tvix-store.
     Copy {
+        #[arg(long, env, default_value = "grpc+http://[::1]:8000")]
+        chunk_store_addr: String,
+
         #[arg(long, env, default_value = "grpc+http://[::1]:8000")]
         blob_service_addr: String,
 
@@ -129,6 +142,9 @@ enum Commands {
     Mount {
         #[clap(value_name = "PATH")]
         dest: PathBuf,
+
+        #[arg(long, env, default_value = "grpc+http://[::1]:8000")]
+        chunk_store_addr: String,
 
         #[arg(long, env, default_value = "grpc+http://[::1]:8000")]
         blob_service_addr: String,
@@ -167,6 +183,9 @@ enum Commands {
         socket: PathBuf,
 
         #[arg(long, env, default_value = "grpc+http://[::1]:8000")]
+        chunk_store_addr: String,
+
+        #[arg(long, env, default_value = "grpc+http://[::1]:8000")]
         blob_service_addr: String,
 
         #[arg(long, env, default_value = "grpc+http://[::1]:8000")]
@@ -199,18 +218,25 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
     match cli.command {
         Commands::Daemon {
             listen_address,
+            chunk_store_addr,
             blob_service_addr,
             directory_service_addr,
             path_info_service_addr,
         } => {
             // initialize stores
-            let (blob_service, directory_service, path_info_service, nar_calculation_service) =
-                tvix_store::utils::construct_services(
-                    blob_service_addr,
-                    directory_service_addr,
-                    path_info_service_addr,
-                )
-                .await?;
+            let (
+                _chunk_store,
+                blob_service,
+                directory_service,
+                path_info_service,
+                nar_calculation_service,
+            ) = tvix_store::utils::construct_services(
+                chunk_store_addr,
+                blob_service_addr,
+                directory_service_addr,
+                path_info_service_addr,
+            )
+            .await?;
 
             let listen_address = listen_address
                 .unwrap_or_else(|| "[::]:8000".to_string())
@@ -264,18 +290,25 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         }
         Commands::Import {
             paths,
+            chunk_store_addr,
             blob_service_addr,
             directory_service_addr,
             path_info_service_addr,
         } => {
             // FUTUREWORK: allow flat for single files?
-            let (blob_service, directory_service, path_info_service, nar_calculation_service) =
-                tvix_store::utils::construct_services(
-                    blob_service_addr,
-                    directory_service_addr,
-                    path_info_service_addr,
-                )
-                .await?;
+            let (
+                chunk_store,
+                blob_service,
+                directory_service,
+                path_info_service,
+                nar_calculation_service,
+            ) = tvix_store::utils::construct_services(
+                chunk_store_addr,
+                blob_service_addr,
+                directory_service_addr,
+                path_info_service_addr,
+            )
+            .await?;
 
             // Arc PathInfoService and NarCalculationService, as we clone it .
             let path_info_service: Arc<dyn PathInfoService> = path_info_service.into();
@@ -286,6 +319,7 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
                 .into_iter()
                 .map(|path| {
                     tokio::task::spawn({
+                        let chunk_store = chunk_store.clone();
                         let blob_service = blob_service.clone();
                         let directory_service = directory_service.clone();
                         let path_info_service = path_info_service.clone();
@@ -296,6 +330,7 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
                                 let resp = tvix_store::import::import_path_as_nar_ca(
                                     &path,
                                     name,
+                                    chunk_store,
                                     blob_service,
                                     directory_service,
                                     path_info_service,
@@ -315,18 +350,25 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             try_join_all(tasks).await?;
         }
         Commands::Copy {
+            chunk_store_addr,
             blob_service_addr,
             directory_service_addr,
             path_info_service_addr,
             reference_graph_path,
         } => {
-            let (blob_service, directory_service, path_info_service, _nar_calculation_service) =
-                tvix_store::utils::construct_services(
-                    blob_service_addr,
-                    directory_service_addr,
-                    path_info_service_addr,
-                )
-                .await?;
+            let (
+                chunk_store,
+                blob_service,
+                directory_service,
+                path_info_service,
+                _nar_calculation_service,
+            ) = tvix_store::utils::construct_services(
+                chunk_store_addr,
+                blob_service_addr,
+                directory_service_addr,
+                path_info_service_addr,
+            )
+            .await?;
 
             // Parse the file at reference_graph_path.
             let reference_graph_json = tokio::fs::read(&reference_graph_path).await?;
@@ -382,12 +424,14 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             let uploads: Vec<_> = futures::stream::iter(elems)
                 .map(|elem| {
                     // Map to a future returning the root node, alongside with the closure info.
+                    let chunk_store = chunk_store.clone();
                     let blob_service = blob_service.clone();
                     let directory_service = directory_service.clone();
                     async move {
                         // Ingest the given path.
 
                         ingest_path(
+                            chunk_store,
                             blob_service,
                             directory_service,
                             PathBuf::from(elem.path.to_absolute_path()),
@@ -430,6 +474,7 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         #[cfg(feature = "fuse")]
         Commands::Mount {
             dest,
+            chunk_store_addr,
             blob_service_addr,
             directory_service_addr,
             path_info_service_addr,
@@ -438,16 +483,23 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
             allow_other,
             show_xattr,
         } => {
-            let (blob_service, directory_service, path_info_service, _nar_calculation_service) =
-                tvix_store::utils::construct_services(
-                    blob_service_addr,
-                    directory_service_addr,
-                    path_info_service_addr,
-                )
-                .await?;
+            let (
+                chunk_store,
+                blob_service,
+                directory_service,
+                path_info_service,
+                _nar_calculation_service,
+            ) = tvix_store::utils::construct_services(
+                chunk_store_addr,
+                blob_service_addr,
+                directory_service_addr,
+                path_info_service_addr,
+            )
+            .await?;
 
             let fuse_daemon = tokio::task::spawn_blocking(move || {
                 let fs = make_fs(
+                    chunk_store,
                     blob_service,
                     directory_service,
                     Arc::from(path_info_service),
@@ -480,22 +532,30 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error>> {
         #[cfg(feature = "virtiofs")]
         Commands::VirtioFs {
             socket,
+            chunk_store_addr,
             blob_service_addr,
             directory_service_addr,
             path_info_service_addr,
             list_root,
             show_xattr,
         } => {
-            let (blob_service, directory_service, path_info_service, _nar_calculation_service) =
-                tvix_store::utils::construct_services(
-                    blob_service_addr,
-                    directory_service_addr,
-                    path_info_service_addr,
-                )
-                .await?;
+            let (
+                chunk_store,
+                blob_service,
+                directory_service,
+                path_info_service,
+                _nar_calculation_service,
+            ) = tvix_store::utils::construct_services(
+                chunk_store_addr,
+                blob_service_addr,
+                directory_service_addr,
+                path_info_service_addr,
+            )
+            .await?;
 
             tokio::task::spawn_blocking(move || {
                 let fs = make_fs(
+                    chunk_store,
                     blob_service,
                     directory_service,
                     Arc::from(path_info_service),

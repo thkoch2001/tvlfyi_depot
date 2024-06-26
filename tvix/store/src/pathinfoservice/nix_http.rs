@@ -11,7 +11,8 @@ use tokio::io::{self, AsyncRead};
 use tonic::async_trait;
 use tracing::{debug, instrument, warn};
 use tvix_castore::{
-    blobservice::BlobService, directoryservice::DirectoryService, proto as castorepb, Error,
+    blobservice::BlobService, chunkstore::ChunkStore, directoryservice::DirectoryService,
+    proto as castorepb, Error,
 };
 
 /// NixHTTPPathInfoService acts as a bridge in between the Nix HTTP Binary cache
@@ -29,10 +30,11 @@ use tvix_castore::{
 /// [DirectoryService], so able to fetch referred Directories and Blobs.
 /// [PathInfoService::put] is not implemented and returns an error if called.
 /// TODO: what about reading from nix-cache-info?
-pub struct NixHTTPPathInfoService<BS, DS> {
+pub struct NixHTTPPathInfoService<CS, BS, DS> {
     base_url: url::Url,
     http_client: reqwest::Client,
 
+    chunk_store: CS,
     blob_service: BS,
     directory_service: DS,
 
@@ -41,11 +43,17 @@ pub struct NixHTTPPathInfoService<BS, DS> {
     public_keys: Option<Vec<narinfo::PubKey>>,
 }
 
-impl<BS, DS> NixHTTPPathInfoService<BS, DS> {
-    pub fn new(base_url: url::Url, blob_service: BS, directory_service: DS) -> Self {
+impl<CS, BS, DS> NixHTTPPathInfoService<CS, BS, DS> {
+    pub fn new(
+        base_url: url::Url,
+        chunk_store: CS,
+        blob_service: BS,
+        directory_service: DS,
+    ) -> Self {
         Self {
             base_url,
             http_client: reqwest::Client::new(),
+            chunk_store,
             blob_service,
             directory_service,
 
@@ -60,8 +68,9 @@ impl<BS, DS> NixHTTPPathInfoService<BS, DS> {
 }
 
 #[async_trait]
-impl<BS, DS> PathInfoService for NixHTTPPathInfoService<BS, DS>
+impl<CS, BS, DS> PathInfoService for NixHTTPPathInfoService<CS, BS, DS>
 where
+    CS: AsRef<dyn ChunkStore> + Send + Sync + Clone + 'static,
     BS: AsRef<dyn BlobService> + Send + Sync + Clone + 'static,
     DS: AsRef<dyn DirectoryService> + Send + Sync + Clone + 'static,
 {
@@ -191,6 +200,7 @@ where
         };
 
         let (root_node, nar_hash, nar_size) = ingest_nar_and_hash(
+            self.chunk_store.clone(),
             self.blob_service.clone(),
             self.directory_service.clone(),
             &mut r,

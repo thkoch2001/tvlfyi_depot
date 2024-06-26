@@ -14,7 +14,9 @@ use tracing_indicatif::span_ext::IndicatifSpanExt;
 use walkdir::DirEntry;
 use walkdir::WalkDir;
 
+use crate::blob::BlobWriter;
 use crate::blobservice::BlobService;
+use crate::chunkstore::ChunkStore;
 use crate::directoryservice::DirectoryService;
 use crate::proto::node::Node;
 use crate::B3Digest;
@@ -30,15 +32,17 @@ use super::IngestionError;
 ///
 /// This function will walk the filesystem using `walkdir` and will consume
 /// `O(#number of entries)` space.
-#[instrument(skip(blob_service, directory_service), fields(path, indicatif.pb_show=1), err)]
-pub async fn ingest_path<BS, DS, P>(
+#[instrument(skip_all, fields(path, indicatif.pb_show=1), err)]
+pub async fn ingest_path<CS, BS, DS, P>(
+    chunk_store: CS,
     blob_service: BS,
     directory_service: DS,
     path: P,
 ) -> Result<Node, IngestionError<Error>>
 where
     P: AsRef<std::path::Path> + std::fmt::Debug,
-    BS: BlobService + Clone,
+    CS: ChunkStore + Clone + 'static,
+    BS: BlobService + Clone + 'static,
     DS: DirectoryService,
 {
     let span = Span::current();
@@ -51,7 +55,7 @@ where
         .contents_first(true)
         .into_iter();
 
-    let entries = dir_entries_to_ingestion_stream(blob_service, iter, path.as_ref());
+    let entries = dir_entries_to_ingestion_stream(chunk_store, blob_service, iter, path.as_ref());
     ingest_entries(
         directory_service,
         entries.inspect({
@@ -72,13 +76,15 @@ where
 /// The produced stream is buffered, so uploads can happen concurrently.
 ///
 /// The root is the [Path] in the filesystem that is being ingested into the castore.
-pub fn dir_entries_to_ingestion_stream<'a, BS, I>(
+pub fn dir_entries_to_ingestion_stream<'a, CS, BS, I>(
+    chunk_store: CS,
     blob_service: BS,
     iter: I,
     root: &'a std::path::Path,
 ) -> BoxStream<'a, Result<IngestionEntry, Error>>
 where
-    BS: BlobService + Clone + 'a,
+    CS: ChunkStore + Clone + 'static,
+    BS: BlobService + Clone + 'static,
     I: Iterator<Item = Result<DirEntry, walkdir::Error>> + Send + 'a,
 {
     let prefix = root.parent().unwrap_or_else(|| std::path::Path::new(""));
@@ -86,11 +92,18 @@ where
     Box::pin(
         futures::stream::iter(iter)
             .map(move |x| {
+                let chunk_store = chunk_store.clone();
                 let blob_service = blob_service.clone();
                 async move {
                     match x {
                         Ok(dir_entry) => {
-                            dir_entry_to_ingestion_entry(blob_service, &dir_entry, prefix).await
+                            dir_entry_to_ingestion_entry(
+                                chunk_store,
+                                blob_service,
+                                &dir_entry,
+                                prefix,
+                            )
+                            .await
                         }
                         Err(e) => Err(Error::Stat(
                             prefix.to_path_buf(),
@@ -108,13 +121,15 @@ where
 ///
 /// The prefix path is stripped from the path of each entry. This is usually the parent path
 /// of the path being ingested so that the last element of the stream only has one component.
-pub async fn dir_entry_to_ingestion_entry<BS>(
+pub async fn dir_entry_to_ingestion_entry<CS, BS>(
+    chunk_store: CS,
     blob_service: BS,
     entry: &DirEntry,
     prefix: &std::path::Path,
 ) -> Result<IngestionEntry, Error>
 where
-    BS: BlobService,
+    CS: ChunkStore + Clone + 'static,
+    BS: BlobService + Clone + 'static,
 {
     let file_type = entry.file_type();
 
@@ -141,7 +156,7 @@ where
             .metadata()
             .map_err(|e| Error::Stat(entry.path().to_path_buf(), e.into()))?;
 
-        let digest = upload_blob(blob_service, entry.path().to_path_buf()).await?;
+        let digest = upload_blob(chunk_store, blob_service, entry.path().to_path_buf()).await?;
 
         Ok(IngestionEntry::Regular {
             path,
@@ -157,13 +172,15 @@ where
 }
 
 /// Uploads the file at the provided [Path] the the [BlobService].
-#[instrument(skip(blob_service), fields(path, indicatif.pb_show=1), err)]
-async fn upload_blob<BS>(
+#[instrument(skip_all, fields(path, indicatif.pb_show=1), err)]
+async fn upload_blob<CS, BS>(
+    chunk_store: CS,
     blob_service: BS,
     path: impl AsRef<std::path::Path>,
 ) -> Result<B3Digest, Error>
 where
-    BS: BlobService,
+    CS: ChunkStore + Clone + 'static,
+    BS: BlobService + Clone + 'static,
 {
     let span = Span::current();
     span.pb_set_style(&tvix_tracing::PB_TRANSFER_STYLE);
@@ -184,7 +201,7 @@ where
         span.pb_inc(d.len() as u64);
     });
 
-    let mut writer = blob_service.open_write().await;
+    let mut writer = BlobWriter::new(blob_service, chunk_store);
     tokio::io::copy(&mut BufReader::new(reader), &mut writer)
         .await
         .map_err(|e| Error::BlobRead(path.as_ref().to_path_buf(), e))?;

@@ -4,6 +4,7 @@ use std::sync::Arc;
 pub use tvix_castore::fixtures::*;
 use tvix_castore::{
     blobservice::{BlobService, MemoryBlobService},
+    chunkstore::{ChunkStore, MemoryChunkStore},
     directoryservice::{DirectoryService, MemoryDirectoryService},
     proto as castorepb,
 };
@@ -129,6 +130,11 @@ lazy_static! {
         }),
       ..PATH_INFO_WITHOUT_NARINFO.clone()
     };
+}
+
+#[fixture]
+pub(crate) fn chunk_store() -> Arc<dyn ChunkStore> {
+    Arc::from(MemoryChunkStore::default())
 }
 
 #[fixture]

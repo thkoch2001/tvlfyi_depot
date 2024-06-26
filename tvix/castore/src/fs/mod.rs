@@ -15,9 +15,9 @@ use self::{
     inode_tracker::InodeTracker,
     inodes::{DirectoryInodeData, InodeData},
 };
-use crate::proto as castorepb;
+use crate::{blob::BlobReader, chunkstore::ChunkStore, proto as castorepb};
 use crate::{
-    blobservice::{BlobReader, BlobService},
+    blobservice::BlobService,
     directoryservice::DirectoryService,
     proto::{node::Node, NamedNode},
     B3Digest,
@@ -77,7 +77,8 @@ use tracing::{debug, error, instrument, warn, Instrument as _, Span};
 /// allocation", aka reserve Directory.size inodes for each directory node we
 /// explore.
 /// Tests for this live in the tvix-store crate.
-pub struct TvixStoreFs<BS, DS, RN> {
+pub struct TvixStoreFs<CS, BS, DS, RN> {
+    chunk_store: CS,
     blob_service: BS,
     directory_service: DS,
     root_nodes_provider: RN,
@@ -114,20 +115,22 @@ pub struct TvixStoreFs<BS, DS, RN> {
 
     /// This holds all open file handles
     #[allow(clippy::type_complexity)]
-    file_handles: RwLock<HashMap<u64, (Span, Arc<Mutex<Box<dyn BlobReader>>>)>>,
+    file_handles: RwLock<HashMap<u64, (Span, Arc<Mutex<BlobReader<CS>>>)>>,
 
     next_file_handle: AtomicU64,
 
     tokio_handle: tokio::runtime::Handle,
 }
 
-impl<BS, DS, RN> TvixStoreFs<BS, DS, RN>
+impl<CS, BS, DS, RN> TvixStoreFs<CS, BS, DS, RN>
 where
-    BS: AsRef<dyn BlobService> + Clone + Send,
-    DS: AsRef<dyn DirectoryService> + Clone + Send + 'static,
+    CS: ChunkStore + Clone + 'static,
+    BS: BlobService + Clone + 'static,
+    DS: DirectoryService + Clone + 'static,
     RN: RootNodes + Clone + 'static,
 {
     pub fn new(
+        chunk_store: CS,
         blob_service: BS,
         directory_service: DS,
         root_nodes_provider: RN,
@@ -135,6 +138,7 @@ where
         show_xattr: bool,
     ) -> Self {
         Self {
+            chunk_store,
             blob_service,
             directory_service,
             root_nodes_provider,
@@ -184,7 +188,7 @@ where
                     .block_on({
                         let directory_service = self.directory_service.clone();
                         let parent_digest = parent_digest.to_owned();
-                        async move { directory_service.as_ref().get(&parent_digest).await }
+                        async move { directory_service.get(&parent_digest).await }
                     })?
                     .ok_or_else(|| {
                         warn!(directory.digest=%parent_digest, "directory not found");
@@ -303,10 +307,11 @@ const ROOT_NODES_BUFFER_SIZE: usize = 16;
 const XATTR_NAME_DIRECTORY_DIGEST: &[u8] = b"user.tvix.castore.directory.digest";
 const XATTR_NAME_BLOB_DIGEST: &[u8] = b"user.tvix.castore.blob.digest";
 
-impl<BS, DS, RN> FileSystem for TvixStoreFs<BS, DS, RN>
+impl<CS, BS, DS, RN> FileSystem for TvixStoreFs<CS, BS, DS, RN>
 where
-    BS: AsRef<dyn BlobService> + Clone + Send + 'static,
-    DS: AsRef<dyn DirectoryService> + Send + Clone + 'static,
+    CS: ChunkStore + Clone + 'static,
+    BS: BlobService + Clone + 'static,
+    DS: DirectoryService + Clone + 'static,
     RN: RootNodes + Clone + 'static,
 {
     type Handle = u64;
@@ -657,9 +662,10 @@ where
                 Span::current().record("blob.digest", blob_digest.to_string());
 
                 match self.tokio_handle.block_on({
+                    let chunk_store = self.chunk_store.clone();
                     let blob_service = self.blob_service.clone();
                     let blob_digest = blob_digest.clone();
-                    async move { blob_service.as_ref().open_read(&blob_digest).await }
+                    async move { BlobReader::new(&blob_digest, chunk_store, blob_service).await }
                 }) {
                     Ok(None) => {
                         warn!("blob not found");
@@ -763,7 +769,7 @@ where
             let mut buf: Vec<u8> = Vec::with_capacity(size as usize);
 
             // copy things from the internal buffer into buf to fill it till up until size
-            tokio::io::copy(&mut blob_reader.as_mut().take(size as u64), &mut buf).await?;
+            tokio::io::copy(&mut (&mut *blob_reader).take(size as u64), &mut buf).await?;
 
             Ok::<_, std::io::Error>(buf)
         })?;

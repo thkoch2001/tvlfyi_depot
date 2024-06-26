@@ -5,6 +5,7 @@ use std::{
 };
 use tokio::io::{self, AsyncWrite};
 
+use tvix_castore::chunkstore::{self, ChunkStore};
 use tvix_castore::{
     blobservice::{self, BlobService},
     directoryservice::{self, DirectoryService},
@@ -16,15 +17,20 @@ use crate::pathinfoservice::{self, PathInfoService};
 
 /// Construct the store handles from their addrs.
 pub async fn construct_services(
+    chunk_store_addr: impl AsRef<str>,
     blob_service_addr: impl AsRef<str>,
     directory_service_addr: impl AsRef<str>,
     path_info_service_addr: impl AsRef<str>,
 ) -> std::io::Result<(
+    Arc<dyn ChunkStore>,
     Arc<dyn BlobService>,
     Arc<dyn DirectoryService>,
     Box<dyn PathInfoService>,
     Box<dyn NarCalculationService>,
 )> {
+    let chunk_store: Arc<dyn ChunkStore> = chunkstore::from_addr(chunk_store_addr.as_ref())
+        .await?
+        .into();
     let blob_service: Arc<dyn BlobService> = blobservice::from_addr(blob_service_addr.as_ref())
         .await?
         .into();
@@ -35,6 +41,7 @@ pub async fn construct_services(
 
     let path_info_service = pathinfoservice::from_addr(
         path_info_service_addr.as_ref(),
+        chunk_store.clone(),
         blob_service.clone(),
         directory_service.clone(),
     )
@@ -61,6 +68,7 @@ pub async fn construct_services(
             ))
         } else {
             Box::new(SimpleRenderer::new(
+                chunk_store.clone(),
                 blob_service.clone(),
                 directory_service.clone(),
             )) as Box<dyn NarCalculationService>
@@ -68,6 +76,7 @@ pub async fn construct_services(
     };
 
     Ok((
+        chunk_store,
         blob_service,
         directory_service,
         path_info_service,

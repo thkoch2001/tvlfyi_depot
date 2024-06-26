@@ -11,6 +11,7 @@ use tokio_tar::Archive;
 use tracing::{instrument, warn, Level};
 
 use crate::blobservice::BlobService;
+use crate::chunkstore::ChunkStore;
 use crate::directoryservice::DirectoryService;
 use crate::import::{ingest_entries, IngestionEntry, IngestionError};
 use crate::proto::node::Node;
@@ -58,12 +59,14 @@ pub enum Error {
 /// Ingests elements from the given tar [`Archive`] into a the passed [`BlobService`] and
 /// [`DirectoryService`].
 #[instrument(skip_all, ret(level = Level::TRACE), err)]
-pub async fn ingest_archive<BS, DS, R>(
+pub async fn ingest_archive<CS, BS, DS, R>(
+    chunk_store: CS,
     blob_service: BS,
     directory_service: DS,
     mut archive: Archive<R>,
 ) -> Result<Node, IngestionError<Error>>
 where
+    CS: ChunkStore + Clone + 'static,
     BS: BlobService + Clone + 'static,
     DS: DirectoryService,
     R: AsyncRead + Unpin,
@@ -75,7 +78,7 @@ where
     // In the first phase, collect up all the regular files and symlinks.
     let mut nodes = IngestionEntryGraph::new();
 
-    let mut blob_uploader = ConcurrentBlobUploader::new(blob_service);
+    let mut blob_uploader = ConcurrentBlobUploader::new(chunk_store, blob_service);
 
     let mut entries_iter = archive.entries().map_err(Error::Entries)?;
     while let Some(mut entry) = entries_iter.try_next().await.map_err(Error::NextEntry)? {

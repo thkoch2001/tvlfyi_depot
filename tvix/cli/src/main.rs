@@ -95,11 +95,13 @@ fn init_io_handle(tokio_runtime: &tokio::runtime::Runtime, args: &Args) -> Rc<Tv
     let (blob_service, directory_service, path_info_service, nar_calculation_service) =
         tokio_runtime
             .block_on({
+                let chunk_service_addr = args.chunk_service_addr.clone();
                 let blob_service_addr = args.blob_service_addr.clone();
                 let directory_service_addr = args.directory_service_addr.clone();
                 let path_info_service_addr = args.path_info_service_addr.clone();
                 async move {
                     tvix_store::utils::construct_services(
+                        chunk_service_addr,
                         blob_service_addr,
                         directory_service_addr,
                         path_info_service_addr,
@@ -107,7 +109,9 @@ fn init_io_handle(tokio_runtime: &tokio::runtime::Runtime, args: &Args) -> Rc<Tv
                     .await
                 }
             })
-            .expect("unable to setup {blob|directory|pathinfo}service before interpreter setup");
+            .expect(
+                "unable to setup {chunk|blob|directory|pathinfo}service before interpreter setup",
+            );
 
     let build_service = tokio_runtime
         .block_on({
@@ -125,6 +129,7 @@ fn init_io_handle(tokio_runtime: &tokio::runtime::Runtime, args: &Args) -> Rc<Tv
         .expect("unable to setup buildservice before interpreter setup");
 
     Rc::new(TvixStoreIO::new(
+        chunk_store.clone(),
         blob_service.clone(),
         directory_service.clone(),
         path_info_service.into(),

@@ -15,6 +15,7 @@ use tokio_util::io::SyncIoBridge;
 use tracing::{error, instrument, warn, Level, Span};
 use tracing_indicatif::span_ext::IndicatifSpanExt;
 use tvix_build::buildservice::BuildService;
+use tvix_castore::chunkstore::ChunkStore;
 use tvix_castore::proto::node::Node;
 use tvix_eval::{EvalIO, FileType, StdIO};
 use tvix_store::nar::NarCalculationService;
@@ -48,6 +49,7 @@ use crate::tvix_build::derivation_to_build_request;
 /// directory service or path info service.
 pub struct TvixStoreIO {
     // This is public so helper functions can interact with the stores directly.
+    pub(crate) chunk_store: Arc<dyn ChunkStore>,
     pub(crate) blob_service: Arc<dyn BlobService>,
     pub(crate) directory_service: Arc<dyn DirectoryService>,
     pub(crate) path_info_service: Arc<dyn PathInfoService>,
@@ -72,6 +74,7 @@ pub struct TvixStoreIO {
 
 impl TvixStoreIO {
     pub fn new(
+        chunk_store: Arc<dyn ChunkStore>,
         blob_service: Arc<dyn BlobService>,
         directory_service: Arc<dyn DirectoryService>,
         path_info_service: Arc<dyn PathInfoService>,
@@ -80,6 +83,7 @@ impl TvixStoreIO {
         tokio_handle: tokio::runtime::Handle,
     ) -> Self {
         Self {
+            chunk_store: chunk_store.clone(),
             blob_service: blob_service.clone(),
             directory_service: directory_service.clone(),
             path_info_service: path_info_service.clone(),
@@ -640,12 +644,20 @@ mod tests {
     // `derivation` builtin.
     fn eval(str: &str) -> EvaluationResult {
         let tokio_runtime = tokio::runtime::Runtime::new().unwrap();
-        let (blob_service, directory_service, path_info_service, nar_calculation_service) =
-            tokio_runtime
-                .block_on(async { construct_services("memory://", "memory://", "memory://").await })
-                .unwrap();
+        let (
+            chunk_store,
+            blob_service,
+            directory_service,
+            path_info_service,
+            nar_calculation_service,
+        ) = tokio_runtime
+            .block_on(async {
+                construct_services("memory://", "memory://", "memory://", "memory://").await
+            })
+            .unwrap();
 
         let io = Rc::new(TvixStoreIO::new(
+            chunk_store,
             blob_service,
             directory_service,
             path_info_service.into(),

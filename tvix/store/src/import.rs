@@ -1,8 +1,8 @@
 use std::path::Path;
 use tracing::{debug, instrument};
 use tvix_castore::{
-    blobservice::BlobService, directoryservice::DirectoryService, import::fs::ingest_path,
-    proto::node::Node, B3Digest,
+    blobservice::BlobService, chunkstore::ChunkStore, directoryservice::DirectoryService,
+    import::fs::ingest_path, proto::node::Node, B3Digest,
 };
 
 use nix_compat::{
@@ -106,9 +106,10 @@ pub fn derive_nar_ca_path_info(
 /// resulting root node in the passed PathInfoService, using the "NAR sha256
 /// digest" and the passed name for output path calculation.
 #[instrument(skip_all, fields(store_name=name, path=?path), err)]
-pub async fn import_path_as_nar_ca<BS, DS, PS, NS, P>(
+pub async fn import_path_as_nar_ca<CS, BS, DS, PS, NS, P>(
     path: P,
     name: &str,
+    chunk_store: CS,
     blob_service: BS,
     directory_service: DS,
     path_info_service: PS,
@@ -116,12 +117,13 @@ pub async fn import_path_as_nar_ca<BS, DS, PS, NS, P>(
 ) -> Result<StorePath, std::io::Error>
 where
     P: AsRef<Path> + std::fmt::Debug,
-    BS: BlobService + Clone,
+    CS: ChunkStore + Clone + 'static,
+    BS: BlobService + Clone + 'static,
     DS: DirectoryService,
     PS: AsRef<dyn PathInfoService>,
     NS: NarCalculationService,
 {
-    let root_node = ingest_path(blob_service, directory_service, path.as_ref())
+    let root_node = ingest_path(chunk_store, blob_service, directory_service, path.as_ref())
         .await
         .map_err(|e| std::io::Error::new(std::io::ErrorKind::Other, e))?;
 

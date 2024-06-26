@@ -10,7 +10,9 @@ use tokio::{
 };
 use tokio_util::io::InspectReader;
 
-use crate::{blobservice::BlobService, B3Digest, Path, PathBuf};
+use crate::{
+    blob::BlobWriter, blobservice::BlobService, chunkstore::ChunkStore, B3Digest, Path, PathBuf,
+};
 
 /// Files smaller than this threshold, in bytes, are uploaded to the [BlobService] in the
 /// background.
@@ -51,20 +53,23 @@ pub enum Error {
 ///
 /// Once all blobs have been uploaded, make sure to call [ConcurrentBlobUploader::join] to wait
 /// for all background jobs to complete and check for any errors.
-pub struct ConcurrentBlobUploader<BS> {
+pub struct ConcurrentBlobUploader<CS, BS> {
+    chunk_store: CS,
     blob_service: BS,
     upload_tasks: JoinSet<Result<(), Error>>,
     upload_semaphore: Arc<Semaphore>,
 }
 
-impl<BS> ConcurrentBlobUploader<BS>
+impl<CS, BS> ConcurrentBlobUploader<CS, BS>
 where
+    CS: ChunkStore + Clone + 'static,
     BS: BlobService + Clone + 'static,
 {
     /// Creates a new concurrent blob uploader which uploads blobs to the provided
     /// blob service.
-    pub fn new(blob_service: BS) -> Self {
+    pub fn new(chunk_store: CS, blob_service: BS) -> Self {
         Self {
+            chunk_store,
             blob_service,
             upload_tasks: JoinSet::new(),
             upload_semaphore: Arc::new(Semaphore::new(MAX_BUFFER_SIZE)),
@@ -113,12 +118,14 @@ where
             }
 
             self.upload_tasks.spawn({
+                let chunk_store = self.chunk_store.clone();
                 let blob_service = self.blob_service.clone();
                 let expected_digest = digest.clone();
                 let path = path.to_owned();
                 let r = Cursor::new(buffer);
                 async move {
-                    let digest = upload_blob(&blob_service, &path, expected_size, r).await?;
+                    let digest =
+                        upload_blob(chunk_store, blob_service, &path, expected_size, r).await?;
 
                     assert_eq!(digest, expected_digest, "Tvix bug: blob digest mismatch");
 
@@ -132,7 +139,14 @@ where
             return Ok(digest);
         }
 
-        upload_blob(&self.blob_service, path, expected_size, r).await
+        upload_blob(
+            self.chunk_store.clone(),
+            self.blob_service.clone(),
+            path,
+            expected_size,
+            r,
+        )
+        .await
     }
 
     /// Waits for all background upload jobs to complete, returning any upload errors.
@@ -144,17 +158,19 @@ where
     }
 }
 
-async fn upload_blob<BS, R>(
-    blob_service: &BS,
+async fn upload_blob<CS, BS, R>(
+    chunk_store: CS,
+    blob_service: BS,
     path: &Path,
     expected_size: u64,
     mut r: R,
 ) -> Result<B3Digest, Error>
 where
-    BS: BlobService,
+    CS: ChunkStore + Clone + 'static,
+    BS: BlobService + Clone + 'static,
     R: AsyncRead + Unpin,
 {
-    let mut writer = blob_service.open_write().await;
+    let mut writer = BlobWriter::new(blob_service, chunk_store);
 
     let size = tokio::io::copy(&mut r, &mut writer)
         .await

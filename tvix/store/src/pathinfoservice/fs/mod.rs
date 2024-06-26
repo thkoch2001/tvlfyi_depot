@@ -1,6 +1,7 @@
 use futures::stream::BoxStream;
 use futures::StreamExt;
 use tonic::async_trait;
+use tvix_castore::chunkstore::ChunkStore;
 use tvix_castore::fs::{RootNodes, TvixStoreFs};
 use tvix_castore::proto as castorepb;
 use tvix_castore::Error;
@@ -12,19 +13,22 @@ use super::PathInfoService;
 /// and [PathInfoService].
 /// This avoids users to have to interact with the wrapper struct directly, as
 /// it leaks into the type signature of TvixStoreFS.
-pub fn make_fs<BS, DS, PS>(
+pub fn make_fs<CS, BS, DS, PS>(
+    chunk_store: CS,
     blob_service: BS,
     directory_service: DS,
     path_info_service: PS,
     list_root: bool,
     show_xattr: bool,
-) -> TvixStoreFs<BS, DS, RootNodesWrapper<PS>>
+) -> TvixStoreFs<CS, BS, DS, RootNodesWrapper<PS>>
 where
-    BS: AsRef<dyn BlobService> + Send + Clone + 'static,
-    DS: AsRef<dyn DirectoryService> + Send + Clone + 'static,
+    CS: AsRef<dyn ChunkStore> + Send + Sync + Clone + 'static,
+    BS: AsRef<dyn BlobService> + Send + Sync + Clone + 'static,
+    DS: AsRef<dyn DirectoryService> + Send + Sync + Clone + 'static,
     PS: AsRef<dyn PathInfoService> + Send + Sync + Clone + 'static,
 {
     TvixStoreFs::new(
+        chunk_store,
         blob_service,
         directory_service,
         RootNodesWrapper(path_info_service),

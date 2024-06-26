@@ -1,16 +1,15 @@
 use parking_lot::RwLock;
-use std::io::{self, Cursor, Write};
-use std::task::Poll;
+use std::io::{self};
 use std::{collections::HashMap, sync::Arc};
 use tonic::async_trait;
 use tracing::instrument;
 
-use super::{BlobReader, BlobService, BlobWriter};
+use super::{BlobService, ChunkMeta};
 use crate::B3Digest;
 
 #[derive(Clone, Default)]
 pub struct MemoryBlobService {
-    db: Arc<RwLock<HashMap<B3Digest, Vec<u8>>>>,
+    db: Arc<RwLock<HashMap<B3Digest, Vec<ChunkMeta>>>>,
 }
 
 #[async_trait]
@@ -21,19 +20,15 @@ impl BlobService for MemoryBlobService {
         Ok(db.contains_key(digest))
     }
 
-    #[instrument(skip_all, err, fields(blob.digest=%digest))]
-    async fn open_read(&self, digest: &B3Digest) -> io::Result<Option<Box<dyn BlobReader>>> {
-        let db = self.db.read();
-
-        match db.get(digest).map(|x| Cursor::new(x.clone())) {
-            Some(result) => Ok(Some(Box::new(result))),
-            None => Ok(None),
-        }
+    #[instrument(skip_all, ret, err, fields(blob.digest=%digest))]
+    async fn put(&self, digest: B3Digest, chunks: &[ChunkMeta]) -> io::Result<()> {
+        self.db.write().insert(digest, chunks.to_vec());
+        Ok(())
     }
 
-    #[instrument(skip_all)]
-    async fn open_write(&self) -> Box<dyn BlobWriter> {
-        Box::new(MemoryBlobWriter::new(self.db.clone()))
+    #[instrument(skip_all, ret, err, fields(blob.digest=%digest))]
+    async fn chunks(&self, digest: &B3Digest) -> io::Result<Option<Vec<ChunkMeta>>> {
+        Ok(self.db.read().get(digest).cloned())
     }
 }
 
@@ -45,83 +40,4 @@ pub struct MemoryBlobWriter {
 
     /// The digest that has been returned, if we successfully closed.
     digest: Option<B3Digest>,
-}
-
-impl MemoryBlobWriter {
-    fn new(db: Arc<RwLock<HashMap<B3Digest, Vec<u8>>>>) -> Self {
-        Self {
-            db,
-            writers: Some((Vec::new(), blake3::Hasher::new())),
-            digest: None,
-        }
-    }
-}
-impl tokio::io::AsyncWrite for MemoryBlobWriter {
-    fn poll_write(
-        mut self: std::pin::Pin<&mut Self>,
-        _cx: &mut std::task::Context<'_>,
-        b: &[u8],
-    ) -> std::task::Poll<Result<usize, io::Error>> {
-        Poll::Ready(match &mut self.writers {
-            None => Err(io::Error::new(
-                io::ErrorKind::NotConnected,
-                "already closed",
-            )),
-            Some((ref mut buf, ref mut hasher)) => {
-                let bytes_written = buf.write(b)?;
-                hasher.write(&b[..bytes_written])
-            }
-        })
-    }
-
-    fn poll_flush(
-        self: std::pin::Pin<&mut Self>,
-        _cx: &mut std::task::Context<'_>,
-    ) -> std::task::Poll<Result<(), io::Error>> {
-        Poll::Ready(match self.writers {
-            None => Err(io::Error::new(
-                io::ErrorKind::NotConnected,
-                "already closed",
-            )),
-            Some(_) => Ok(()),
-        })
-    }
-
-    fn poll_shutdown(
-        self: std::pin::Pin<&mut Self>,
-        _cx: &mut std::task::Context<'_>,
-    ) -> std::task::Poll<Result<(), io::Error>> {
-        // shutdown is "instantaneous", we only write to memory.
-        Poll::Ready(Ok(()))
-    }
-}
-
-#[async_trait]
-impl BlobWriter for MemoryBlobWriter {
-    async fn close(&mut self) -> io::Result<B3Digest> {
-        if self.writers.is_none() {
-            match &self.digest {
-                Some(digest) => Ok(digest.clone()),
-                None => Err(io::Error::new(io::ErrorKind::BrokenPipe, "already closed")),
-            }
-        } else {
-            let (buf, hasher) = self.writers.take().unwrap();
-
-            let digest: B3Digest = hasher.finalize().as_bytes().into();
-
-            // Only insert if the blob doesn't already exist.
-            let mut db = self.db.upgradable_read();
-            if !db.contains_key(&digest) {
-                // open the database for writing.
-                db.with_upgraded(|db| {
-                    // and put buf in there. This will move buf out.
-                    db.insert(digest.clone(), buf);
-                });
-            }
-
-            self.digest = Some(digest.clone());
-
-            Ok(digest)
-        }
-    }
 }

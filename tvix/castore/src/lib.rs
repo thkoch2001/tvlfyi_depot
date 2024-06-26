@@ -2,7 +2,9 @@ mod digests;
 mod errors;
 mod hashing_reader;
 
+pub mod blob;
 pub mod blobservice;
+pub mod chunkstore;
 pub mod directoryservice;
 pub mod fixtures;
 

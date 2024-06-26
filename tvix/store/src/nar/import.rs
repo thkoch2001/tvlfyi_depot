@@ -7,6 +7,7 @@ use tokio::{
 };
 use tvix_castore::{
     blobservice::BlobService,
+    chunkstore::ChunkStore,
     directoryservice::DirectoryService,
     import::{
         blobs::{self, ConcurrentBlobUploader},
@@ -20,13 +21,15 @@ use tvix_castore::{
 /// interacting with a [BlobService] and [DirectoryService].
 /// Returns the castore root node, as well as the sha256 and size of the NAR
 /// contents ingested.
-pub async fn ingest_nar_and_hash<R, BS, DS>(
+pub async fn ingest_nar_and_hash<R, CS, BS, DS>(
+    chunk_store: CS,
     blob_service: BS,
     directory_service: DS,
     r: &mut R,
 ) -> Result<(Node, [u8; 32], u64), IngestionError<Error>>
 where
     R: AsyncRead + Unpin + Send,
+    CS: ChunkStore + Clone + 'static,
     BS: BlobService + Clone + 'static,
     DS: DirectoryService,
 {
@@ -45,7 +48,7 @@ where
     // reader to be buffered too.
     let mut r = tokio::io::BufReader::new(r);
 
-    let root_node = ingest_nar(blob_service, directory_service, &mut r).await?;
+    let root_node = ingest_nar(chunk_store, blob_service, directory_service, &mut r).await?;
 
     Ok((root_node, nar_hash.finalize().into(), nar_size))
 }
@@ -53,13 +56,15 @@ where
 /// Ingests the contents from a [AsyncRead] providing NAR into the tvix store,
 /// interacting with a [BlobService] and [DirectoryService].
 /// It returns the castore root node or an error.
-pub async fn ingest_nar<R, BS, DS>(
+pub async fn ingest_nar<R, CS, BS, DS>(
+    chunk_store: CS,
     blob_service: BS,
     directory_service: DS,
     r: &mut R,
 ) -> Result<Node, IngestionError<Error>>
 where
     R: AsyncBufRead + Unpin + Send,
+    CS: ChunkStore + Clone + 'static,
     BS: BlobService + Clone + 'static,
     DS: DirectoryService,
 {
@@ -71,7 +76,7 @@ where
     let rx = tokio_stream::wrappers::ReceiverStream::new(rx);
 
     let produce = async move {
-        let mut blob_uploader = ConcurrentBlobUploader::new(blob_service);
+        let mut blob_uploader = ConcurrentBlobUploader::new(chunk_store, blob_service);
 
         let res = produce_nar_inner(
             &mut blob_uploader,
@@ -103,13 +108,14 @@ where
     Ok(node.rename("".into()))
 }
 
-async fn produce_nar_inner<BS>(
-    blob_uploader: &mut ConcurrentBlobUploader<BS>,
+async fn produce_nar_inner<CS, BS>(
+    blob_uploader: &mut ConcurrentBlobUploader<CS, BS>,
     node: nar_reader::Node<'_, '_>,
     path: PathBuf,
     tx: mpsc::Sender<Result<IngestionEntry, Error>>,
 ) -> Result<IngestionEntry, Error>
 where
+    CS: ChunkStore + Clone + 'static,
     BS: BlobService + Clone + 'static,
 {
     Ok(match node {
@@ -172,6 +178,7 @@ mod test {
     use rstest::*;
     use tokio_stream::StreamExt;
     use tvix_castore::blobservice::BlobService;
+    use tvix_castore::chunkstore::ChunkStore;
     use tvix_castore::directoryservice::DirectoryService;
     use tvix_castore::fixtures::{
         DIRECTORY_COMPLICATED, DIRECTORY_WITH_KEEP, EMPTY_BLOB_DIGEST, HELLOWORLD_BLOB_CONTENTS,
@@ -180,17 +187,19 @@ mod test {
     use tvix_castore::proto as castorepb;
 
     use crate::tests::fixtures::{
-        blob_service, directory_service, NAR_CONTENTS_COMPLICATED, NAR_CONTENTS_HELLOWORLD,
-        NAR_CONTENTS_SYMLINK,
+        blob_service, chunk_store, directory_service, NAR_CONTENTS_COMPLICATED,
+        NAR_CONTENTS_HELLOWORLD, NAR_CONTENTS_SYMLINK,
     };
 
     #[rstest]
     #[tokio::test]
     async fn single_symlink(
+        chunk_store: Arc<dyn ChunkStore>,
         blob_service: Arc<dyn BlobService>,
         directory_service: Arc<dyn DirectoryService>,
     ) {
         let root_node = ingest_nar(
+            chunk_store.clone(),
             blob_service,
             directory_service,
             &mut Cursor::new(&NAR_CONTENTS_SYMLINK.clone()),
@@ -210,10 +219,12 @@ mod test {
     #[rstest]
     #[tokio::test]
     async fn single_file(
+        chunk_store: Arc<dyn ChunkStore>,
         blob_service: Arc<dyn BlobService>,
         directory_service: Arc<dyn DirectoryService>,
     ) {
         let root_node = ingest_nar(
+            chunk_store.clone(),
             blob_service.clone(),
             directory_service,
             &mut Cursor::new(&NAR_CONTENTS_HELLOWORLD.clone()),
@@ -238,10 +249,12 @@ mod test {
     #[rstest]
     #[tokio::test]
     async fn complicated(
+        chunk_store: Arc<dyn ChunkStore>,
         blob_service: Arc<dyn BlobService>,
         directory_service: Arc<dyn DirectoryService>,
     ) {
         let root_node = ingest_nar(
+            chunk_store.clone(),
             blob_service.clone(),
             directory_service.clone(),
             &mut Cursor::new(&NAR_CONTENTS_COMPLICATED.clone()),

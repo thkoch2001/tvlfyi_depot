@@ -1,24 +1,8 @@
-use super::{BlobReader, BlobService, BlobWriter, ChunkedReader};
-use crate::{
-    proto::{self, stat_blob_response::ChunkMeta},
-    B3Digest,
-};
-use futures::sink::SinkExt;
-use std::{
-    io::{self, Cursor},
-    pin::pin,
-    sync::Arc,
-    task::Poll,
-};
-use tokio::io::AsyncWriteExt;
-use tokio::task::JoinHandle;
-use tokio_stream::{wrappers::ReceiverStream, StreamExt};
-use tokio_util::{
-    io::{CopyToBytes, SinkWriter},
-    sync::PollSender,
-};
-use tonic::{async_trait, Code, Status};
-use tracing::{instrument, Instrument as _};
+use super::{BlobService, ChunkMeta};
+use crate::{proto, B3Digest};
+use std::io;
+use tonic::{async_trait, Code};
+use tracing::instrument;
 
 /// Connects to a (remote) tvix-store BlobService over gRPC.
 #[derive(Clone)]
@@ -61,101 +45,19 @@ where
         }
     }
 
-    #[instrument(skip(self, digest), fields(blob.digest=%digest), err)]
-    async fn open_read(&self, digest: &B3Digest) -> io::Result<Option<Box<dyn BlobReader>>> {
-        // First try to get a list of chunks. In case there's only one chunk returned,
-        // buffer its data into a Vec, otherwise use a ChunkedReader.
-        // We previously used NaiveSeeker here, but userland likes to seek backwards too often,
-        // and without store composition this will get very noisy.
-        // FUTUREWORK: use CombinedBlobService and store composition.
-        match self.chunks(digest).await {
-            Ok(None) => Ok(None),
-            Ok(Some(chunks)) => {
-                if chunks.is_empty() || chunks.len() == 1 {
-                    // No more granular chunking info, treat this as an individual chunk.
-                    // Get a stream of [proto::BlobChunk], or return an error if the blob
-                    // doesn't exist.
-                    return match self
-                        .grpc_client
-                        .clone()
-                        .read(proto::ReadBlobRequest {
-                            digest: digest.clone().into(),
-                        })
-                        .await
-                    {
-                        Ok(stream) => {
-                            let data_stream = stream.into_inner().map(|e| {
-                                e.map(|c| c.data)
-                                    .map_err(|s| std::io::Error::new(io::ErrorKind::InvalidData, s))
-                            });
-
-                            // Use StreamReader::new to convert to an AsyncRead.
-                            let mut data_reader = tokio_util::io::StreamReader::new(data_stream);
-
-                            let mut buf = Vec::new();
-                            // TODO: only do this up to a certain limit.
-                            tokio::io::copy(&mut data_reader, &mut buf).await?;
-
-                            Ok(Some(Box::new(Cursor::new(buf))))
-                        }
-                        Err(e) if e.code() == Code::NotFound => Ok(None),
-                        Err(e) => Err(io::Error::new(io::ErrorKind::Other, e)),
-                    };
-                }
-
-                // The chunked case. Let ChunkedReader do individual reads.
-                // TODO: we should store the chunking data in some local cache,
-                // so `ChunkedReader` doesn't call `self.chunks` *again* for every chunk.
-                // Think about how store composition will fix this.
-                let chunked_reader = ChunkedReader::from_chunks(
-                    chunks.into_iter().map(|chunk| {
-                        (
-                            chunk.digest.try_into().expect("invalid b3 digest"),
-                            chunk.size,
-                        )
-                    }),
-                    Arc::new(self.clone()) as Arc<dyn BlobService>,
-                );
-                Ok(Some(Box::new(chunked_reader)))
-            }
-            Err(e) => Err(e)?,
-        }
-    }
-
-    /// Returns a BlobWriter, that'll internally wrap each write in a
-    /// [proto::BlobChunk], which is send to the gRPC server.
-    #[instrument(skip_all)]
-    async fn open_write(&self) -> Box<dyn BlobWriter> {
-        // set up an mpsc channel passing around Bytes.
-        let (tx, rx) = tokio::sync::mpsc::channel::<bytes::Bytes>(10);
-
-        // bytes arriving on the RX side are wrapped inside a
-        // [proto::BlobChunk], and a [ReceiverStream] is constructed.
-        let blobchunk_stream = ReceiverStream::new(rx).map(|x| proto::BlobChunk { data: x });
-
-        // spawn the gRPC put request, which will read from blobchunk_stream.
-        let task = tokio::spawn({
-            let mut grpc_client = self.grpc_client.clone();
-            async move { Ok::<_, Status>(grpc_client.put(blobchunk_stream).await?.into_inner()) }
-                // instrument the task with the current span, this is not done by default
-                .in_current_span()
-        });
-
-        // The tx part of the channel is converted to a sink of byte chunks.
-        let sink = PollSender::new(tx)
-            .sink_map_err(|e| std::io::Error::new(std::io::ErrorKind::BrokenPipe, e));
-
-        // … which is turned into an [tokio::io::AsyncWrite].
-        let writer = SinkWriter::new(CopyToBytes::new(sink));
-
-        Box::new(GRPCBlobWriter {
-            task_and_writer: Some((task, writer)),
-            digest: None,
-        })
+    async fn put(&self, digest: B3Digest, chunks: &[ChunkMeta]) -> io::Result<()> {
+        // Not really clear what to do here, we sort of have to either:
+        // - Expose more chunking details over gRPC so the BlobWriter will work
+        // - Add another layer on top of chunk/blob, either:
+        //    - Remote blob/chunk store which uses gRPC and doesn't expose chunk details
+        //    - In-process blob/chunk store backed by the blob & chunk service
+        // Sort of in favor of the latter: it lets us simplify a lot of the chunk and blob
+        // handling internally, but also keeps the gRPC interface clean.
+        todo!("ugh not sure what we are supposed to do here...")
     }
 
     #[instrument(skip(self, digest), fields(blob.digest=%digest), err)]
-    async fn chunks(&self, digest: &B3Digest) -> io::Result<Option<Vec<ChunkMeta>>> {
+    async fn chunks(&self, digest: &B3Digest) -> io::Result<Option<Vec<super::ChunkMeta>>> {
         let resp = self
             .grpc_client
             .clone()
@@ -175,101 +77,16 @@ where
                 resp.validate()
                     .map_err(|e| std::io::Error::new(io::ErrorKind::InvalidData, e))?;
 
-                Ok(Some(resp.chunks))
+                let chunks = resp
+                    .chunks
+                    .into_iter()
+                    .map(|chunk| chunk.try_into())
+                    .collect::<Result<_, _>>()
+                    .map_err(|e| io::Error::new(io::ErrorKind::InvalidData, e))?;
+
+                Ok(Some(chunks))
             }
         }
-    }
-}
-
-pub struct GRPCBlobWriter<W: tokio::io::AsyncWrite> {
-    /// The task containing the put request, and the inner writer, if we're still writing.
-    task_and_writer: Option<(JoinHandle<Result<proto::PutBlobResponse, Status>>, W)>,
-
-    /// The digest that has been returned, if we successfully closed.
-    digest: Option<B3Digest>,
-}
-
-#[async_trait]
-impl<W: tokio::io::AsyncWrite + Send + Sync + Unpin + 'static> BlobWriter for GRPCBlobWriter<W> {
-    async fn close(&mut self) -> io::Result<B3Digest> {
-        if self.task_and_writer.is_none() {
-            // if we're already closed, return the b3 digest, which must exist.
-            // If it doesn't, we already closed and failed once, and didn't handle the error.
-            match &self.digest {
-                Some(digest) => Ok(digest.clone()),
-                None => Err(io::Error::new(io::ErrorKind::BrokenPipe, "already closed")),
-            }
-        } else {
-            let (task, mut writer) = self.task_and_writer.take().unwrap();
-
-            // invoke shutdown, so the inner writer closes its internal tx side of
-            // the channel.
-            writer.shutdown().await?;
-
-            // block on the RPC call to return.
-            // This ensures all chunks are sent out, and have been received by the
-            // backend.
-
-            match task.await? {
-                Ok(resp) => {
-                    // return the digest from the response, and store it in self.digest for subsequent closes.
-                    let digest_len = resp.digest.len();
-                    let digest: B3Digest = resp.digest.try_into().map_err(|_| {
-                        io::Error::new(
-                            io::ErrorKind::Other,
-                            format!("invalid root digest length {} in response", digest_len),
-                        )
-                    })?;
-                    self.digest = Some(digest.clone());
-                    Ok(digest)
-                }
-                Err(e) => Err(io::Error::new(io::ErrorKind::Other, e.to_string())),
-            }
-        }
-    }
-}
-
-impl<W: tokio::io::AsyncWrite + Unpin> tokio::io::AsyncWrite for GRPCBlobWriter<W> {
-    fn poll_write(
-        mut self: std::pin::Pin<&mut Self>,
-        cx: &mut std::task::Context<'_>,
-        buf: &[u8],
-    ) -> std::task::Poll<Result<usize, io::Error>> {
-        match &mut self.task_and_writer {
-            None => Poll::Ready(Err(io::Error::new(
-                io::ErrorKind::NotConnected,
-                "already closed",
-            ))),
-            Some((_, ref mut writer)) => {
-                let pinned_writer = pin!(writer);
-                pinned_writer.poll_write(cx, buf)
-            }
-        }
-    }
-
-    fn poll_flush(
-        mut self: std::pin::Pin<&mut Self>,
-        cx: &mut std::task::Context<'_>,
-    ) -> std::task::Poll<Result<(), io::Error>> {
-        match &mut self.task_and_writer {
-            None => Poll::Ready(Err(io::Error::new(
-                io::ErrorKind::NotConnected,
-                "already closed",
-            ))),
-            Some((_, ref mut writer)) => {
-                let pinned_writer = pin!(writer);
-                pinned_writer.poll_flush(cx)
-            }
-        }
-    }
-
-    fn poll_shutdown(
-        self: std::pin::Pin<&mut Self>,
-        _cx: &mut std::task::Context<'_>,
-    ) -> std::task::Poll<Result<(), io::Error>> {
-        // TODO(raitobezarius): this might not be a graceful shutdown of the
-        // channel inside the gRPC connection.
-        Poll::Ready(Ok(()))
     }
 }
 

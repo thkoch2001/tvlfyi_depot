@@ -7,7 +7,9 @@ use super::{
 
 use nix_compat::narinfo;
 use std::sync::Arc;
-use tvix_castore::{blobservice::BlobService, directoryservice::DirectoryService, Error};
+use tvix_castore::{
+    blobservice::BlobService, chunkstore::ChunkStore, directoryservice::DirectoryService, Error,
+};
 use url::Url;
 
 /// Constructs a new instance of a [PathInfoService] from an URI.
@@ -34,6 +36,7 @@ use url::Url;
 /// these also need to be passed in.
 pub async fn from_addr(
     uri: &str,
+    chunk_store: Arc<dyn ChunkStore>,
     blob_service: Arc<dyn BlobService>,
     directory_service: Arc<dyn DirectoryService>,
 ) -> Result<Box<dyn PathInfoService>, Error> {
@@ -79,7 +82,7 @@ pub async fn from_addr(
             let new_url = Url::parse(url.to_string().strip_prefix("nix+").unwrap()).unwrap();
 
             let mut nix_http_path_info_service =
-                NixHTTPPathInfoService::new(new_url, blob_service, directory_service);
+                NixHTTPPathInfoService::new(new_url, chunk_store, blob_service, directory_service);
 
             let pairs = &url.query_pairs();
             for (k, v) in pairs.into_iter() {
@@ -154,6 +157,7 @@ mod tests {
     use tempfile::TempDir;
     use tvix_castore::{
         blobservice::{BlobService, MemoryBlobService},
+        chunkstore::ChunkStore,
         directoryservice::{DirectoryService, MemoryDirectoryService},
     };
 
@@ -224,11 +228,14 @@ mod tests {
     )]
     #[tokio::test]
     async fn test_from_addr_tokio(#[case] uri_str: &str, #[case] exp_succeed: bool) {
+        use tvix_castore::chunkstore::MemoryChunkStore;
+
+        let chunk_store: Arc<dyn ChunkStore> = Arc::from(MemoryChunkStore::default());
         let blob_service: Arc<dyn BlobService> = Arc::from(MemoryBlobService::default());
         let directory_service: Arc<dyn DirectoryService> =
             Arc::from(MemoryDirectoryService::default());
 
-        let resp = from_addr(uri_str, blob_service, directory_service).await;
+        let resp = from_addr(uri_str, chunk_store, blob_service, directory_service).await;
 
         if exp_succeed {
             resp.expect("should succeed");

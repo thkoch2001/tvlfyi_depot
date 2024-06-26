@@ -9,19 +9,23 @@ use tonic::async_trait;
 use tracing::{instrument, Span};
 use tracing_indicatif::span_ext::IndicatifSpanExt;
 use tvix_castore::{
+    blob::BlobReader,
     blobservice::BlobService,
+    chunkstore::ChunkStore,
     directoryservice::DirectoryService,
     proto::{self as castorepb, NamedNode},
 };
 
-pub struct SimpleRenderer<BS, DS> {
+pub struct SimpleRenderer<CS, BS, DS> {
+    chunk_store: CS,
     blob_service: BS,
     directory_service: DS,
 }
 
-impl<BS, DS> SimpleRenderer<BS, DS> {
-    pub fn new(blob_service: BS, directory_service: DS) -> Self {
+impl<CS, BS, DS> SimpleRenderer<CS, BS, DS> {
+    pub fn new(chunk_store: CS, blob_service: BS, directory_service: DS) -> Self {
         Self {
+            chunk_store,
             blob_service,
             directory_service,
         }
@@ -29,9 +33,10 @@ impl<BS, DS> SimpleRenderer<BS, DS> {
 }
 
 #[async_trait]
-impl<BS, DS> NarCalculationService for SimpleRenderer<BS, DS>
+impl<CS, BS, DS> NarCalculationService for SimpleRenderer<CS, BS, DS>
 where
-    BS: BlobService + Clone,
+    CS: ChunkStore + Clone + 'static,
+    BS: BlobService + Clone + 'static,
     DS: DirectoryService + Clone,
 {
     async fn calculate_nar(
@@ -40,6 +45,7 @@ where
     ) -> Result<(u64, [u8; 32]), tvix_castore::Error> {
         calculate_size_and_sha256(
             root_node,
+            self.chunk_store.clone(),
             self.blob_service.clone(),
             self.directory_service.clone(),
         )
@@ -51,14 +57,16 @@ where
 /// Invoke [write_nar], and return the size and sha256 digest of the produced
 /// NAR output.
 #[instrument(skip_all, fields(indicatif.pb_show=1))]
-pub async fn calculate_size_and_sha256<BS, DS>(
+pub async fn calculate_size_and_sha256<CS, BS, DS>(
     root_node: &castorepb::node::Node,
+    chunk_store: CS,
     blob_service: BS,
     directory_service: DS,
 ) -> Result<(u64, [u8; 32]), RenderError>
 where
-    BS: BlobService + Send,
-    DS: DirectoryService + Send,
+    CS: ChunkStore + Clone + 'static,
+    BS: BlobService + Clone + 'static,
+    DS: DirectoryService,
 {
     let mut h = Sha256::new();
     let mut cw = CountWrite::from(&mut h);
@@ -72,6 +80,7 @@ where
         // actually do any I/O, so it's fine to wrap.
         AsyncIoBridge(&mut cw),
         root_node,
+        chunk_store,
         blob_service,
         directory_service,
     )
@@ -84,16 +93,18 @@ where
 /// and uses the passed blob_service and directory_service to perform the
 /// necessary lookups as it traverses the structure.
 /// The contents in NAR serialization are writen to the passed [AsyncWrite].
-pub async fn write_nar<W, BS, DS>(
+pub async fn write_nar<W, CS, BS, DS>(
     mut w: W,
     proto_root_node: &castorepb::node::Node,
+    chunk_store: CS,
     blob_service: BS,
     directory_service: DS,
 ) -> Result<(), RenderError>
 where
     W: AsyncWrite + Unpin + Send,
-    BS: BlobService + Send,
-    DS: DirectoryService + Send,
+    CS: ChunkStore + Clone + 'static,
+    BS: BlobService + Clone + 'static,
+    DS: DirectoryService,
 {
     // Initialize NAR writer
     let nar_root_node = nar_writer::open(&mut w)
@@ -103,6 +114,7 @@ where
     walk_node(
         nar_root_node,
         proto_root_node,
+        chunk_store,
         blob_service,
         directory_service,
     )
@@ -113,14 +125,16 @@ where
 
 /// Process an intermediate node in the structure.
 /// This consumes the node.
-async fn walk_node<BS, DS>(
+async fn walk_node<CS, BS, DS>(
     nar_node: nar_writer::Node<'_, '_>,
     proto_node: &castorepb::node::Node,
+    chunk_store: CS,
     blob_service: BS,
     directory_service: DS,
-) -> Result<(BS, DS), RenderError>
+) -> Result<(CS, BS, DS), RenderError>
 where
-    BS: BlobService + Send,
+    CS: ChunkStore + Clone + 'static,
+    BS: BlobService + Clone + 'static,
     DS: DirectoryService + Send,
 {
     match proto_node {
@@ -139,17 +153,17 @@ where
                 ))
             })?;
 
-            let mut blob_reader = match blob_service
-                .open_read(&digest)
-                .await
-                .map_err(RenderError::StoreError)?
-            {
-                Some(blob_reader) => Ok(BufReader::new(blob_reader)),
-                None => Err(RenderError::NARWriterError(io::Error::new(
-                    io::ErrorKind::NotFound,
-                    format!("blob with digest {} not found", &digest),
-                ))),
-            }?;
+            let mut blob_reader =
+                match BlobReader::new(&digest, chunk_store.clone(), blob_service.clone())
+                    .await
+                    .map_err(RenderError::StoreError)?
+                {
+                    Some(blob_reader) => Ok(BufReader::new(blob_reader)),
+                    None => Err(RenderError::NARWriterError(io::Error::new(
+                        io::ErrorKind::NotFound,
+                        format!("blob with digest {} not found", &digest),
+                    ))),
+                }?;
 
             nar_node
                 .file(
@@ -193,6 +207,7 @@ where
 
                     // We put blob_service, directory_service back here whenever we come up from
                     // the recursion.
+                    let mut chunk_store = chunk_store;
                     let mut blob_service = blob_service;
                     let mut directory_service = directory_service;
 
@@ -204,9 +219,10 @@ where
                             .await
                             .map_err(RenderError::NARWriterError)?;
 
-                        (blob_service, directory_service) = Box::pin(walk_node(
+                        (chunk_store, blob_service, directory_service) = Box::pin(walk_node(
                             child_node,
                             &proto_node,
+                            chunk_store,
                             blob_service,
                             directory_service,
                         ))
@@ -219,11 +235,11 @@ where
                         .await
                         .map_err(RenderError::NARWriterError)?;
 
-                    return Ok((blob_service, directory_service));
+                    return Ok((chunk_store, blob_service, directory_service));
                 }
             }
         }
     }
 
-    Ok((blob_service, directory_service))
+    Ok((chunk_store, blob_service, directory_service))
 }

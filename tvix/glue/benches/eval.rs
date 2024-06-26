@@ -25,13 +25,16 @@ fn interpret(code: &str) {
     // TODO: this is a bit annoying.
     // It'd be nice if we could set this up once and then run evaluate() with a
     // piece of code. b/262
-    let (blob_service, directory_service, path_info_service, nar_calculation_service) =
+    let (chunk_store, blob_service, directory_service, path_info_service, nar_calculation_service) =
         TOKIO_RUNTIME
-            .block_on(async { construct_services("memory://", "memory://", "memory://").await })
+            .block_on(async {
+                construct_services("memory://", "memory://", "memory://", "memory://").await
+            })
             .unwrap();
 
     // We assemble a complete store in memory.
     let tvix_store_io = Rc::new(TvixStoreIO::new(
+        chunk_store,
         blob_service,
         directory_service,
         path_info_service.into(),

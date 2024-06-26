@@ -68,11 +68,20 @@ mod tests {
     fn eval(str: &str) -> EvaluationResult {
         // We assemble a complete store in memory.
         let runtime = tokio::runtime::Runtime::new().expect("Failed to build a Tokio runtime");
-        let (blob_service, directory_service, path_info_service, nar_calculation_service) = runtime
-            .block_on(async { construct_services("memory://", "memory://", "memory://").await })
+        let (
+            chunk_store,
+            blob_service,
+            directory_service,
+            path_info_service,
+            nar_calculation_service,
+        ) = runtime
+            .block_on(async {
+                construct_services("memory://", "memory://", "memory://", "memory://").await
+            })
             .expect("Failed to construct store services in memory");
 
         let io = Rc::new(TvixStoreIO::new(
+            chunk_store,
             blob_service,
             directory_service,
             path_info_service.into(),
