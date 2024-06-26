@@ -12,7 +12,9 @@ $results ? ?any [
 
 ? <nix-actor ?cap> $cap [
 
-  <eval "builtins.trace \"This is only a test.\" builtins.nixVersion" $nixLog $results>
+  <eval "builtins.trace \"This is only a test.\" builtins.nixVersion" $results>
+
+  <eval-file "/home/emery/src/nix_actor/test.nix" { a: 1, b: #f, c: [ #t ] } $results>
 
   <instantiate "let pkgs = import <nixpkgs> {}; in pkgs.cowsay" $nixLog $results>
 

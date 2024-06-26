@@ -168,9 +168,33 @@ proc eval(store: Store; state: EvalState; expr: string): EvalResult =
     finally:
       close(nixVal)
 
+proc evalFile(store: Store; state: EvalState; path: string; args: Value): EvalFileResult =
+    var
+      js = args.jsonText
+    stderr.writeLine "converted ", $args, " to ", js
+    var
+      expr = """import $1 (builtins.fromJSON ''$2'')""" % [ path, js ]
+        # TODO: convert to NixValue instead of using JSON conversion.
+      nixVal: NixValue
+    try:
+      nixVal = state.evalFromString(expr, "")
+      state.force(nixVal)
+      result = EvalFileResult(orKind: EvalFileResultKind.success)
+      result.success.path = path
+      result.success.args = args
+      result.success.result = nixVal.toPreserves(state).mapEmbeds(unthunk)
+    except CatchableError as err:
+      reset result
+      result.error.message = err.msg
+    finally:
+      close(nixVal)
+
 proc serve(turn: Turn; detail: ResolveDetail; store: Store; state: EvalState; ds: Cap) =
   during(turn, ds, Eval.grabWithin) do (expr: string, resp: Cap):
     discard publish(turn, resp, eval(store, state, expr))
+
+  during(turn, ds, EvalFile.grabWithin) do (path: string, args: Value, resp: Cap):
+    discard publish(turn, resp, evalFile(store, state, path, args))
 
   during(turn, ds, Instantiate.grabWithin) do (expr: string, log: Value, resp: Cap):
     discard publish(turn, resp, instantiate(turn.facet, detail, expr, log.unembed(Cap)))

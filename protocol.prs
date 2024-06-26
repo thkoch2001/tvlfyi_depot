@@ -25,8 +25,11 @@ Error = <error @message string>.
 # @expr is evaluated and asserted to @result
 # with log lines messaged to @log.
 Eval = <eval @expr string @result #:EvalResult> .
+EvalFile = <eval-file @path string @args any @result #:EvalFileResult> .
 EvalResult = Error / EvalSuccess .
 EvalSuccess = [@expr string @result any] .
+EvalFileResult = Error / @success EvalFileSuccess .
+EvalFileSuccess = [@path string @args any @result any] .
 
 # Asserted to nix-actor.
 # @expr is instantiated to a store-derivation which is asserted to @result.
