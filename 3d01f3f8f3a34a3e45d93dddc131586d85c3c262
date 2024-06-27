@@ -70,6 +70,24 @@
       "parentUuid": "3e05804b_6be8c718",
       "revId": "3d01f3f8f3a34a3e45d93dddc131586d85c3c262",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "178e5a57_276da76a",
+        "filename": "tvix/docs/mdbook-extra.css",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-27T05:42:48Z",
+      "side": 1,
+      "message": "Ok, let\u0027s get this in as it is.\n\nIt didn\u0027t make too much sense without cl/11869 also on my plate :-)\n\nPlease submit these two together.",
+      "parentUuid": "eb7fb869_f3d8c36c",
+      "revId": "3d01f3f8f3a34a3e45d93dddc131586d85c3c262",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
