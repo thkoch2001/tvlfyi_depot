@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a47b3159_d4004106",
+        "filename": "tvix/docs/src/getting-started.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-27T06:54:42Z",
+      "side": 1,
+      "message": "Ok",
+      "parentUuid": "e1bb7eae_4f7d9cc6",
+      "revId": "2a7854d63eabd9db2c9534aedbcd8e94e8c3ff07",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7a398b0f_cbf52f77",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "I was under the impression this dealt with `lib.filesets.gitTracked` or anything of that ilk, not just flakes. But it will be dropped.",
       "parentUuid": "7a398b0f_cbf52f77",
+      "revId": "2a7854d63eabd9db2c9534aedbcd8e94e8c3ff07",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d7fe873_82edce77",
+        "filename": "tvix/docs/src/getting-started.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-27T06:54:42Z",
+      "side": 1,
+      "message": "Ok, thanks.",
+      "parentUuid": "8622fb30_093eae9c",
       "revId": "2a7854d63eabd9db2c9534aedbcd8e94e8c3ff07",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
