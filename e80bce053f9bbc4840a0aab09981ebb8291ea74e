@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f44c866b_2c65ef12",
+        "filename": "tvix/Cargo.lock",
+        "patchSetId": 2
+      },
+      "lineNbr": 1437,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-27T09:43:09Z",
+      "side": 1,
+      "message": "oO",
+      "revId": "e80bce053f9bbc4840a0aab09981ebb8291ea74e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cb7b140_e82d30ee",
+        "filename": "tvix/store/src/pathinfoservice/nix_http.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-27T09:43:09Z",
+      "side": 1,
+      "message": "Did you take a look at how to extend `object_store` to use it too?\n\nI only saw https://docs.rs/object_store/latest/object_store/struct.ClientOptions.html#method.with_default_headers, but no way to plug in a reqwest middleware - even though they\u0027re using it under the hood.\n\nMight be worth opening an issue upstream to open that.\n\nI\u0027m not convinced yet we should send W3C trace contexts there by default - after all, [everyone seems to require their own header formats](https://docs.aws.amazon.com/AmazonS3/latest/userguide/tracing_requests_using_xray.html), so we might need to make it configurable at some point, but I feel like we should at least make sure we have an option to do so with the `object_store` crate.",
+      "revId": "e80bce053f9bbc4840a0aab09981ebb8291ea74e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "877f4c9e_923bd823",
+        "filename": "tvix/tracing/src/propagate/reqwest.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-27T09:43:09Z",
+      "side": 1,
+      "message": "Can you link to the RFC, or some docs describing the header that\u0027s being used by default? \n\nI assume it\u0027s https://www.w3.org/TR/trace-context/?",
+      "revId": "e80bce053f9bbc4840a0aab09981ebb8291ea74e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
