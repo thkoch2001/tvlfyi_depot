@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "952b392f_87efbdf7",
+        "filename": "tvix/docs/src/getting-started.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-27T05:43:05Z",
+      "side": 1,
+      "message": "Add an info callout here that the tvix workspace only provides a `shell.nix`, none of the other tooling described above, and is currently unsuitable for contributing back (as you cannot really deal with some of the issues from CI from that view).\n\nIf you want to get started with Tvix, and not just look at the code, but actually hack on it, getting the full repo checked out it strongly encouraged.",
+      "revId": "2a7854d63eabd9db2c9534aedbcd8e94e8c3ff07",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a398b0f_cbf52f77",
+        "filename": "tvix/docs/src/getting-started.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-27T05:43:05Z",
+      "side": 1,
+      "message": "That\u0027s not applicable here, at least the \"nix not picking things up\", as we\u0027re not in a flake. Nix always picks things up that are in the local checkout. Please drop that callout.",
+      "revId": "2a7854d63eabd9db2c9534aedbcd8e94e8c3ff07",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
