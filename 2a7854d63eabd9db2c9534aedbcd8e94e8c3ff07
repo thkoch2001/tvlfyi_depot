@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e1bb7eae_4f7d9cc6",
+        "filename": "tvix/docs/src/getting-started.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-27T06:47:18Z",
+      "side": 1,
+      "message": "I think it might make more sense to include two paragraphs inside sections as I think it is a bit clearer what is providing what.",
+      "parentUuid": "952b392f_87efbdf7",
+      "revId": "2a7854d63eabd9db2c9534aedbcd8e94e8c3ff07",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7a398b0f_cbf52f77",
         "filename": "tvix/docs/src/getting-started.md",
         "patchSetId": 6
@@ -31,6 +49,24 @@
       "writtenOn": "2024-06-27T05:43:05Z",
       "side": 1,
       "message": "That\u0027s not applicable here, at least the \"nix not picking things up\", as we\u0027re not in a flake. Nix always picks things up that are in the local checkout. Please drop that callout.",
+      "revId": "2a7854d63eabd9db2c9534aedbcd8e94e8c3ff07",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8622fb30_093eae9c",
+        "filename": "tvix/docs/src/getting-started.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-27T06:47:18Z",
+      "side": 1,
+      "message": "I was under the impression this dealt with `lib.filesets.gitTracked` or anything of that ilk, not just flakes. But it will be dropped.",
+      "parentUuid": "7a398b0f_cbf52f77",
       "revId": "2a7854d63eabd9db2c9534aedbcd8e94e8c3ff07",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
