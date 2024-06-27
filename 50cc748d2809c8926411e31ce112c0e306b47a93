@@ -425,6 +425,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2af2b617_77a5acaa",
+        "filename": "tvix/docs/src/contributing/code-\u0026-commits.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-27T05:11:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ec9af09a_7bed3970",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b358db3c_44170673",
@@ -545,6 +563,24 @@
       "side": 1,
       "message": "People stumbling into GitHub SSO being broken unfortunately happens too often to hide it away too much, so I\u0027d prefer to keep this a bit more prominent. We don\u0027t encourage logging in with github.",
       "parentUuid": "24875efe_e129c265",
+      "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f90f39e3_a00e87e0",
+        "filename": "tvix/docs/src/contributing/gerrit.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000113
+      },
+      "writtenOn": "2024-06-27T05:11:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d873ea9_72299ece",
       "revId": "50cc748d2809c8926411e31ce112c0e306b47a93",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
