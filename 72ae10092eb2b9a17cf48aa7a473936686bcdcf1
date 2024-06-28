@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f9d80d95_2d9e4175",
+        "filename": "tvix/nix-compat/src/nixcpp/conf.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-28T10:34:29Z",
+      "side": 1,
+      "message": "Ok, that\u0027d be a bit too involved. I don\u0027t want the regular parser to do any file system IO.\n\nI added that being unsupported to the docstring, and also changed the signature of `parse` to not take `\u0026mut self`, but act as a constructor, to make it more clear this doesn\u0027t merge.\n\nI assume merging semantics, doing IO etc would be part of another constructor, or some other thing using `NixConfig`.",
+      "parentUuid": "0fd114a9_b11f3600",
+      "revId": "72ae10092eb2b9a17cf48aa7a473936686bcdcf1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7179ffe3_bf734195",
         "filename": "tvix/nix-compat/src/nixcpp/conf.rs",
         "patchSetId": 2
@@ -31,6 +49,24 @@
       "writtenOn": "2024-06-28T09:54:29Z",
       "side": 1,
       "message": "Nix doesn\u0027t just split on one space but on multiples of space, \\r and \\t as well so these are valid and parse as the same:\n```\nallowed-users\\r\u003d griff\nallowed-users\\r\u003d\\rgriff\nallowed-users\\r\u003d\\tgriff\nallowed-users\\r \\t  \u003d\\t   \\rgriff\n```",
+      "revId": "72ae10092eb2b9a17cf48aa7a473936686bcdcf1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "78c176dd_a48a91ac",
+        "filename": "tvix/nix-compat/src/nixcpp/conf.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-28T10:34:29Z",
+      "side": 1,
+      "message": "I added support and a testcase for it, thanks!",
+      "parentUuid": "7179ffe3_bf734195",
       "revId": "72ae10092eb2b9a17cf48aa7a473936686bcdcf1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
