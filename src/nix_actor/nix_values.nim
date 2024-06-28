@@ -51,13 +51,16 @@ proc toPreserves*(value: NixValue; state: EvalState): Value {.gcsafe.} =
   of NIX_TYPE_NULL:
     result = initRecord("null")
   of NIX_TYPE_ATTRS:
-    let n = getAttrsSize(ctx, value)
-    result = initDictionary(int n)
-    var i: cuint
-    while i < n:
-      let (key, val) = get_attr_byidx(ctx, value, state, i)
-      result[($key).toSymbol] = val.toPreserves(state)
-      inc(i)
+    if has_attr_byname(ctx, value, state, "outPath"):
+      result = get_attr_byname(ctx, value, state, "outPath").toPreserves(state)
+    else:
+      let n = getAttrsSize(ctx, value)
+      result = initDictionary(int n)
+      var i: cuint
+      while i < n:
+        let (key, val) = get_attr_byidx(ctx, value, state, i)
+        result[($key).toSymbol] = val.toPreserves(state)
+        inc(i)
   of NIX_TYPE_LIST:
     let n = getListSize(ctx, value)
     result = initSequence(n)
