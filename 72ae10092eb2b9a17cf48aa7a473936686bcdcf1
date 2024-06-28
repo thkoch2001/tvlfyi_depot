@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e84c0b9_f9919480",
+        "filename": "tvix/nix-compat/src/nixcpp/conf.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-06-28T10:53:18Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "f9d80d95_2d9e4175",
+      "revId": "72ae10092eb2b9a17cf48aa7a473936686bcdcf1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7179ffe3_bf734195",
