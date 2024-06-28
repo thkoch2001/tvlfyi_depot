@@ -7,7 +7,7 @@ import
   pkg/syndicate,
   pkg/syndicate/protocols/gatekeeper,
   pkg/syndicate/relays,
-  ./nix_actor/[nix_api, nix_api_util, nix_api_value],
+  ./nix_actor/[nix_api, nix_values],
   ./nix_actor/protocol
 
 proc echo(args: varargs[string, `$`]) {.used.} =
@@ -15,63 +15,6 @@ proc echo(args: varargs[string, `$`]) {.used.} =
 
 type
   Value = preserves.Value
-  NixValue = nix_api.Value
-  StringThunkRef = ref StringThunkObj
-  StringThunkObj = object of EmbeddedObj
-    data: Option[string]
-
-proc thunkString(start: cstring; n: cuint; state: pointer) {.cdecl.} =
-  let thunk = cast[ptr StringThunkObj](state)
-  assert thunk.data.isNone
-  var buf = newString(n)
-  copyMem(buf[0].addr, start, buf.len)
-  thunk.data = buf.move.some
-
-proc unthunk(v: Value): Value =
-  let thunk = v.unembed(StringThunkRef)
-  assert thunk.isSome
-  assert thunk.get.data.isSome
-  thunk.get.data.get.toPreserves
-
-proc toPreserves(value: NixValue; state: EvalState): Value {.gcsafe.} =
-  var ctx: NixContext
-  case get_type(ctx, value)
-  of NIX_TYPE_THUNK: raiseAssert "cannot preserve thunk"
-  of NIX_TYPE_INT:
-    result = getInt(ctx, value).toPreserves
-  of NIX_TYPE_FLOAT:
-    result = getFloat(ctx, value).toPreserves
-  of NIX_TYPE_BOOL:
-    result = getBool(ctx, value).toPreserves
-  of NIX_TYPE_STRING:
-    let thunk = StringThunkRef()
-    let err = getString(ctx, value, thunkString, thunk[].addr)
-    doAssert err == NIX_OK, $err
-    result = thunk.embed
-  of NIX_TYPE_PATH:
-    result = ($getPathString(ctx, value)).toPreserves
-  of NIX_TYPE_NULL:
-    result = initRecord("null")
-  of NIX_TYPE_ATTRS:
-    result = initDictionary()
-    let n = getAttrsSize(ctx, value)
-    var i: cuint
-    while i < n:
-      var (key, val) = get_attr_byidx(ctx, value, state, i)
-      inc(i)
-      result[toSymbol($key)] = val.toPreserves(state)
-      # close(val)
-  of NIX_TYPE_LIST:
-    let n = getListSize(ctx, value)
-    result = initSequence(n)
-    var i: cuint
-    while i < n:
-      var val = getListByIdx(ctx, value, state, i)
-      result[i] = val.toPreserves(state)
-      inc(i)
-      # close(val)
-  of NIX_TYPE_FUNCTION, NIX_TYPE_EXTERNAL:
-    raiseAssert "TODO: need a failure type"
 
 proc findCommand(detail: ResolveDetail; cmd: string): string =
   for dir in detail.`command-path`:
@@ -170,13 +113,10 @@ proc eval(store: Store; state: EvalState; expr: string): EvalResult =
 
 proc evalFile(store: Store; state: EvalState; path: string; args: Value): EvalFileResult =
     var
-      js = args.jsonText
-    stderr.writeLine "converted ", $args, " to ", js
-    var
-      expr = """import $1 (builtins.fromJSON ''$2'')""" % [ path, js ]
-        # TODO: convert to NixValue instead of using JSON conversion.
       nixVal: NixValue
     try:
+      var expr = """import $1 (builtins.fromJSON ''$2'')""" % [ path, args.jsonText ]
+        # TODO: convert to NixValue instead of using JSON conversion.
       nixVal = state.evalFromString(expr, "")
       state.force(nixVal)
       result = EvalFileResult(orKind: EvalFileResultKind.success)
