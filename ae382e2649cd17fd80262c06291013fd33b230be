@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e430d5c_2cbd380c",
+        "filename": "tvix/nix-compat/src/nixcpp/conf.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-06-28T09:54:29Z",
+      "side": 1,
+      "message": "You can have a comment after the value as well.\nSo this is valid: allowed-users \u003d griff # Here is comment to be ignored",
+      "revId": "ae382e2649cd17fd80262c06291013fd33b230be",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

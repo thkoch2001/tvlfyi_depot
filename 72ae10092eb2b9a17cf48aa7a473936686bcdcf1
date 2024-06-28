@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fd114a9_b11f3600",
+        "filename": "tvix/nix-compat/src/nixcpp/conf.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-06-28T09:54:29Z",
+      "side": 1,
+      "message": "Nix config also supports includes and includes that ignores missing files.\ninclude /etc/nix/my-file.conf\n!include /etc/nix/my-missing-file.conf",
+      "revId": "72ae10092eb2b9a17cf48aa7a473936686bcdcf1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7179ffe3_bf734195",
+        "filename": "tvix/nix-compat/src/nixcpp/conf.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-06-28T09:54:29Z",
+      "side": 1,
+      "message": "Nix doesn\u0027t just split on one space but on multiples of space, \\r and \\t as well so these are valid and parse as the same:\n```\nallowed-users\\r\u003d griff\nallowed-users\\r\u003d\\rgriff\nallowed-users\\r\u003d\\tgriff\nallowed-users\\r \\t  \u003d\\t   \\rgriff\n```",
+      "revId": "72ae10092eb2b9a17cf48aa7a473936686bcdcf1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
