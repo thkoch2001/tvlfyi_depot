@@ -16,6 +16,11 @@ let
       # Whether the path should be imported as a closure.
       # If false, importPathName must be specified.
     , isClosure ? false
+      # Whether to use nar-bridge to upload, rather than tvix-store copy.
+      # using nar-bridge currently is "slower", as the `pkgs.mkBinaryCache` build
+      # takes quite some time.
+    , useNarBridge ? false
+
     , importPathName ? null
 
       # The cmdline to pass to the VM.
@@ -35,6 +40,11 @@ let
         nativeBuildInputs = [
           depot.tvix.store
           depot.tvix.boot.runVM
+        ] ++ lib.optionals (isClosure && useNarBridge) [
+          depot.tvix.nar-bridge-go
+          pkgs.curl
+          pkgs.parallel
+          pkgs.xz.bin
         ];
         buildCommand = ''
           touch $out
@@ -61,10 +71,39 @@ let
           outpath=$(tvix-store import ${importPathName})
 
           echo "imported to $outpath"
-        '' + lib.optionalString (isClosure) ''
+        '' + lib.optionalString (isClosure && !useNarBridge) ''
           echo "Copying closure ${path}…"
           # This picks up the `closure` key in `$NIX_ATTRS_JSON_FILE` automatically.
           tvix-store --otlp=false copy
+        '' + lib.optionalString (isClosure && useNarBridge) ''
+          echo "Starting nar-bridge…"
+          nar-bridge-http \
+            --otlp=false \
+            --store-addr=unix://$PWD/tvix-store.sock \
+            --listen-addr=$PWD/nar-bridge.sock &
+
+          # Wait for the socket to be created.
+          while [ ! -e $PWD/nar-bridge.sock ]; do sleep 1; done
+
+          # Upload. We can't use nix copy --to http://…, as it wants access to the nix db.
+          # However, we can use mkBinaryCache to assemble .narinfo and .nar.xz to upload,
+          # and then drive a HTTP client ourselves.
+          to_upload=${pkgs.mkBinaryCache { rootPaths = [path];}}
+
+          # Upload all NAR files (with some parallelism).
+          # As mkBinaryCache produces them xz-compressed, unpack them on the fly.
+          # nar-bridge doesn't care about the path we upload *to*, but a
+          # subsequent .narinfo upload need to refer to its contents (by narhash).
+          echo -e "Uploading NARs… "
+          ls -d $to_upload/nar/*.nar.xz | parallel 'xz -d < {} | curl -s -T - --unix-socket $PWD/nar-bridge.sock http://localhost:9000/nar/$(basename {} | cut -d "." -f 1).nar'
+          echo "Done."
+
+          # Upload all NARInfo files.
+          # FUTUREWORK: This doesn't upload them in order, and currently relies
+          # on PathInfoService not doing any checking.
+          # In the future, we might want to make this behaviour configurable,
+          # and disable checking here, to keep the logic simple.
+          ls -d $to_upload/*.narinfo | parallel 'curl -s -T - --unix-socket $PWD/nar-bridge.sock http://localhost:9000/$(basename {}) < {}'
         '' + ''
           # Invoke a VM using tvix as the backing store, ensure the outpath appears in its listing.
           echo "Starting VM…"
@@ -73,7 +112,7 @@ let
           grep "${assertVMOutput}" output.txt
         '';
         requiredSystemFeatures = [ "kvm" ];
-      } // lib.optionalAttrs (isClosure) {
+      } // lib.optionalAttrs (isClosure && !useNarBridge) {
         __structuredAttrs = true;
         exportReferencesGraph.closure = [ path ];
       });
@@ -126,6 +165,15 @@ depot.nix.readTree.drvTargets
   closure-nixos = (mkBootTest {
     blobServiceAddr = "objectstore+file://$PWD/blobs";
     path = testSystem;
+    isClosure = true;
+    vmCmdline = "init=${testSystem}/init panic=-1"; # reboot immediately on panic
+    assertVMOutput = "Onwards and upwards.";
+  });
+
+  closure-nixos-nar-bridge = (mkBootTest {
+    blobServiceAddr = "objectstore+file://$PWD/blobs";
+    path = testSystem;
+    useNarBridge = true;
     isClosure = true;
     vmCmdline = "init=${testSystem}/init panic=-1"; # reboot immediately on panic
     assertVMOutput = "Onwards and upwards.";
