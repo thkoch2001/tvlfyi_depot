@@ -58,9 +58,9 @@ let
           ${preStart}
 
           # Start the tvix daemon, listening on a unix socket.
-          BLOB_SERVICE_ADDR=${blobServiceAddr} \
-            DIRECTORY_SERVICE_ADDR=${directoryServiceAddr} \
-            PATH_INFO_SERVICE_ADDR=${pathInfoServiceAddr} \
+          BLOB_SERVICE_ADDR=${lib.escapeShellArg blobServiceAddr} \
+          DIRECTORY_SERVICE_ADDR=${lib.escapeShellArg directoryServiceAddr} \
+          PATH_INFO_SERVICE_ADDR=${lib.escapeShellArg pathInfoServiceAddr} \
             tvix-store \
               --otlp=false \
               daemon -l $PWD/tvix-store.sock &
@@ -157,21 +157,21 @@ depot.nix.readTree.drvTargets
     importPathName = "docs";
   });
   docs-persistent = (mkBootTest {
-    blobServiceAddr = "objectstore+file://$PWD/blobs";
-    directoryServiceAddr = "sled://$PWD/directories.sled";
-    pathInfoServiceAddr = "sled://$PWD/pathinfo.sled";
+    blobServiceAddr = "objectstore+file:///build/blobs";
+    directoryServiceAddr = "sled:///build/directories.sled";
+    pathInfoServiceAddr = "sled:///build/pathinfo.sled";
     path = ../../docs;
     importPathName = "docs";
   });
 
   closure-tvix = (mkBootTest {
-    blobServiceAddr = "objectstore+file://$PWD/blobs";
+    blobServiceAddr = "objectstore+file:///build/blobs";
     path = depot.tvix.store;
     isClosure = true;
   });
 
   closure-nixos = (mkBootTest {
-    blobServiceAddr = "objectstore+file://$PWD/blobs";
+    blobServiceAddr = "objectstore+file:///build/blobs";
     path = testSystem;
     isClosure = true;
     vmCmdline = "init=${testSystem}/init panic=-1"; # reboot immediately on panic
@@ -179,7 +179,7 @@ depot.nix.readTree.drvTargets
   });
 
   closure-nixos-nar-bridge = (mkBootTest {
-    blobServiceAddr = "objectstore+file://$PWD/blobs";
+    blobServiceAddr = "objectstore+file:///build/blobs";
     path = testSystem;
     useNarBridge = true;
     isClosure = true;
