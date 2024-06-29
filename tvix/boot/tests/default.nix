@@ -199,6 +199,21 @@ depot.nix.readTree.drvTargets
     assertVMOutput = "Onwards and upwards.";
   });
 
+  closure-nixos-s3 = (mkBootTest {
+    blobServiceAddr = "objectstore+s3://mybucket/blobs?aws_access_key_id=myaccesskey&aws_secret_access_key=supersecret&aws_endpoint_url=http%3A%2F%2Flocalhost%3A9000&aws_allow_http";
+    directoryServiceAddr = "objectstore+s3://mybucket/directories?aws_access_key_id=myaccesskey&aws_secret_access_key=supersecret&endpoint=http%3A%2F%2Flocalhost%3A9000&aws_allow_http";
+    pathInfoServiceAddr = "memory://";
+    path = testSystem;
+    useNarBridge = true;
+    preStart = ''
+      MINIO_ACCESS_KEY=myaccesskey MINIO_SECRET_KEY=supersecret S3_BUCKET=mybucket MINIO_ADDRESS=127.0.0.1:9000 ${pkgs.minio}/bin/minio server $(mktemp -d) &
+      timeout 22 sh -c 'until ${pkgs.netcat}/bin/nc -z $0 $1; do sleep 1; done' localhost 9000
+    '';
+    isClosure = true;
+    vmCmdline = "init=${testSystem}/init panic=-1"; # reboot immediately on panic
+    assertVMOutput = "Onwards and upwards.";
+  });
+
   closure-nixos-nar-bridge = (mkBootTest {
     blobServiceAddr = "objectstore+file:///build/blobs";
     path = testSystem;
