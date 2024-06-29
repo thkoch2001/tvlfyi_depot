@@ -22,26 +22,31 @@ ResolveDetail = {
 Error = <error @message string>.
 
 # Asserted to nix-actor.
-# @expr is evaluated and asserted to @result
-# with log lines messaged to @log.
+# @expr is evaluated and asserted to @result.
 Eval = <eval @expr string @result #:EvalResult> .
+EvalResult = @err Error / @ok EvalSuccess .
+EvalSuccess = <ok @result any @expr string> .
+
+# Asserted to nix-actor.
+# @file is imported as a function, @args are applied, and the result asserted
+# to @result.
 EvalFile = <eval-file @path string @args any @result #:EvalFileResult> .
-EvalResult = Error / EvalSuccess .
-EvalSuccess = [@expr string @result any] .
-EvalFileResult = Error / @success EvalFileSuccess .
-EvalFileSuccess = [@path string @args any @result any] .
+EvalFileResult = @err Error / @ok EvalFileSuccess .
+EvalFileSuccess = <ok @result any @args any @path string> .
+
+# Represents a Nix derivation.
+# The @storePath can be realized as store object from @drvPath.
+#
+# If an attrset value resulting from evaluation has a "drvPath" attribute
+# then a drv record is returned in place of the attrset. Returning the
+# attrset is not feasible because otherwise lazy values would explode into
+# complete dependency trees.
+Derivation = <drv @drvPath string @storePath string> .
 
 # Asserted to nix-actor.
-# @expr is instantiated to a store-derivation which is asserted to @result.
-Instantiate = <instantiate @expr string @log #:string @result InstantiateResult> .
-InstantiateResult = Error / Derivation .
-Derivation = <drv @expr string @storePath string> .
-
-# Asserted to nix-actor.
-# The list of store-paths from realising @drv
-# are asserted to @outputs as a list of strings.
-Realise = <realise @drv string @log #:string @outputs #:Result> .
-RealiseResult = Error / Outputs .
-Outputs = <outputs @drv string @storePaths [string ...]> .
+# @drvPath is realised and each output is asserted to @outputs.
+Realise = <realise @drvPath string @log #:string @outputs #:RealiseResult> .
+RealiseResult = Error / RealiseSuccess .
+RealiseSuccess = <ok @storePath string @drvPath string> .
 
 AttrSet = {symbol: any ...:...} .

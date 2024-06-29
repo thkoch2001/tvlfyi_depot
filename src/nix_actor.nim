@@ -35,38 +35,7 @@ proc commandlineArgs(detail: ResolveDetail; args: varargs[string]): seq[string] 
 proc commandlineEnv(detail: ResolveDetail): StringTableRef =
   newStringTable({"NIX_PATH": detail.lookupPath.join ":"})
 
-proc instantiate(facet: Facet; detail: ResolveDetail; expr: string; log: Option[Cap]): InstantiateResult =
-  # TODO: run this process asynchronously with nim-sys.
-  var p: Process
-  try:
-    p = startProcess(
-        detail.findCommand("nix-instantiate"),
-        args = detail.commandlineArgs("--expr", expr),
-        env = detail.commandlineEnv(),
-        options = {},
-      )
-    var
-      errors = errorStream(p)
-      line = "".toPreserves
-    while true:
-      if errors.readLine(line.string):
-        if log.isSome:
-          facet.run do (turn: Turn):
-            message(turn, log.get, line)
-      elif not running(p): break
-      initDuration(milliseconds = 250).some.runOnce
-    var path = p.outputStream.readAll.strip
-    if path != "":
-      result = InstantiateResult(orKind: InstantiateResultKind.Derivation)
-      result.derivation.expr = expr
-      result.derivation.storePath = path
-  except CatchableError as err:
-    reset result
-    result.error.message = err.msg
-  finally:
-    close(p)
-
-proc realise(facet: Facet; detail: ResolveDetail; drv: string; log: Option[Cap]): RealiseResult =
+proc realise(facet: Facet; detail: ResolveDetail; drv: string; log: Option[Cap], resp: Cap) =
   # TODO: run this process asynchronously with nim-sys.
   var p: Process
   try:
@@ -87,13 +56,14 @@ proc realise(facet: Facet; detail: ResolveDetail; drv: string; log: Option[Cap])
       elif not running(p): break
       initDuration(milliseconds = 250).some.runOnce
     var storePaths = p.outputStream.readAll.strip.split
-    if storePaths != @[]:
-      result = RealiseResult(orKind: RealiseResultKind.Outputs)
-      result.outputs.drv = drv
-      result.outputs.storePaths = storePaths
+    doAssert storePaths != @[]
+    facet.run do (turn: Turn):
+      for path in storePaths:
+        discard publish(turn, resp, RealiseSuccess(
+            storePath: path, drvPath: drv))
   except CatchableError as err:
-    reset result
-    result.error.message = err.msg
+    facet.run do (turn: Turn):
+      discard publish(turn, resp, Error(message: err.msg))
   finally:
     close(p)
 
@@ -102,12 +72,12 @@ proc eval(store: Store; state: EvalState; expr: string): EvalResult =
     try:
       nixVal = state.evalFromString(expr, "")
       state.force(nixVal)
-      result = EvalResult(orKind: EvalResultKind.EvalSuccess)
-      result.evalsuccess.expr = expr
-      result.evalsuccess.result = nixVal.toPreserves(state).mapEmbeds(unthunk)
+      result = EvalResult(orKind: EvalResultKind.ok)
+      result.ok.result = nixVal.toPreserves(state).unthunkAll
+      result.ok.expr = expr
     except CatchableError as err:
       reset result
-      result.error.message = err.msg
+      result.err.message = err.msg
     finally:
       close(nixVal)
 
@@ -119,13 +89,13 @@ proc evalFile(store: Store; state: EvalState; path: string; args: Value): EvalFi
         # TODO: convert to NixValue instead of using JSON conversion.
       nixVal = state.evalFromString(expr, "")
       state.force(nixVal)
-      result = EvalFileResult(orKind: EvalFileResultKind.success)
-      result.success.path = path
-      result.success.args = args
-      result.success.result = nixVal.toPreserves(state).mapEmbeds(unthunk)
+      result = EvalFileResult(orKind: EvalFileResultKind.ok)
+      result.ok.result = nixVal.toPreserves(state).unthunkAll
+      result.ok.args = args
+      result.ok.path = path
     except CatchableError as err:
       reset result
-      result.error.message = err.msg
+      result.err.message = err.msg
     finally:
       close(nixVal)
 
@@ -136,11 +106,8 @@ proc serve(turn: Turn; detail: ResolveDetail; store: Store; state: EvalState; ds
   during(turn, ds, EvalFile.grabWithin) do (path: string, args: Value, resp: Cap):
     discard publish(turn, resp, evalFile(store, state, path, args))
 
-  during(turn, ds, Instantiate.grabWithin) do (expr: string, log: Value, resp: Cap):
-    discard publish(turn, resp, instantiate(turn.facet, detail, expr, log.unembed(Cap)))
-
   during(turn, ds, Realise.grabWithin) do (drv: string, log: Value, resp: Cap):
-    discard publish(turn, resp, realise(turn.facet, detail, drv, log.unembed(Cap)))
+    realise(turn.facet, detail, drv, log.unembed(Cap), resp)
 
 proc main() =
   initLibexpr()

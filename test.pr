@@ -1,4 +1,14 @@
-#!/usr/bin/env -S syndicate-server --control --config
+#!/usr/bin/env -S syndicate-server --config
+
+let ?nixConfig = {
+    command-path: [ "/run/current-system/sw/bin" ]
+    lookupPath: [
+      "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos",
+      "nixos-config=/etc/nixos/configuration.nix",
+      "/nix/var/nix/profiles/per-user/root/channels",
+    ]
+    options: { }
+  }
 
 let ?nixLog = dataspace
 $nixLog ?? ?line [
@@ -10,37 +20,32 @@ $results ? ?any [
   $log ! <log "nix-results" { line: $any }>
 ]
 
-? <nix-actor ?cap> $cap [
+<q <service nix $nixConfig>>
+? <a <service nix $nixConfig <accepted ?nix>>> [
 
-  <eval "builtins.trace \"This is only a test.\" builtins.nixVersion" $results>
+  $nix <eval "builtins.trace \"This is only a test.\" builtins.nixVersion" $results>
 
-  <eval-file "/home/emery/src/nix_actor/test.nix" { a: 1, b: #f, c: [ #t ] } $results>
-
-  <instantiate "let pkgs = import <nixpkgs> {}; in pkgs.cowsay" $nixLog $results>
+  $nix <eval-file "/home/emery/src/nix_actor/test.nix" { a: 1, b: #f, c: [ #t ] } $results>
 
   # Realise all observed store derivations.
-  $results ? <drv ?expr ?drv> [
-    $cap <realise $drv $nixLog $results>
+  $results ? <ok <drv ?drvPath>> [
+    $nix  <realise $drvPath $nixLog $results>
   ]
 
 ]
 
-let ?resolver = <* $config [<rewrite <accepted ?cap> <nix-actor $cap>>]>
-? <service-object <daemon nix-actor> ?cap> [
-  $cap <resolve <nix-actor {
-      command-path: [ "/run/current-system/sw/bin" ]
-      lookupPath: [
-        "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos",
-        "nixos-config=/etc/nixos/configuration.nix",
-        "/nix/var/nix/profiles/per-user/root/channels",
-      ]
-      options: { }
-    }> $resolver>
+? <q <service nix ?detail>> [
+  $log ! <log "service" { line: "nix service requested" }>
+  <require-service <daemon nix-actor>>
+  ? <service-object <daemon nix-actor> ?obj> [
+    let ?rewriter = <* $config [<rewrite ?resp <a <service nix $detail $resp>>>]>
+    $obj <resolve <nix-actor $detail> $rewriter>
+  ]
 ]
 
-<require-service <daemon nix-actor>>
-
+# The authors build system creates this file.
 <require-service <config-watcher "/home/emery/src/config/built/nix-actor.pr" $.>>
+
 ? <built nix-actor ?path ?sum> [
   <daemon nix-actor {
     argv: [ $path ]

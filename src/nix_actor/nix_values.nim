@@ -30,6 +30,9 @@ proc unthunk*(v: Value): Value =
   assert thunk.get.data.isSome
   thunk.get.data.get.toPreserves
 
+proc unthunkAll*(v: Value): Value =
+  v.mapEmbeds(unthunk)
+
 proc toPreserves*(value: NixValue; state: EvalState): Value {.gcsafe.} =
   var ctx: NixContext
   let kind = get_type(ctx, value)
@@ -51,8 +54,11 @@ proc toPreserves*(value: NixValue; state: EvalState): Value {.gcsafe.} =
   of NIX_TYPE_NULL:
     result = initRecord("null")
   of NIX_TYPE_ATTRS:
-    if has_attr_byname(ctx, value, state, "outPath"):
-      result = get_attr_byname(ctx, value, state, "outPath").toPreserves(state)
+    if has_attr_byname(ctx, value, state, "drvPath"):
+      result = initRecord("drv",
+          get_attr_byname(ctx, value, state, "drvPath").toPreserves(state),
+          get_attr_byname(ctx, value, state, "outPath").toPreserves(state),
+        )
     else:
       let n = getAttrsSize(ctx, value)
       result = initDictionary(int n)

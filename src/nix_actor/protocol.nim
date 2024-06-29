@@ -12,28 +12,32 @@ type
 
   AttrSet* = Table[Symbol, Value]
   Realise* {.preservesRecord: "realise".} = object
-    `drv`*: string
+    `drvPath`*: string
     `log`* {.preservesEmbedded.}: Value
     `outputs`* {.preservesEmbedded.}: Value
 
   Derivation* {.preservesRecord: "drv".} = object
-    `expr`*: string
+    `drvPath`*: string
     `storePath`*: string
 
   RealiseResultKind* {.pure.} = enum
-    `Error`, `Outputs`
+    `Error`, `RealiseSuccess`
   `RealiseResult`* {.preservesOr.} = object
     case orKind*: RealiseResultKind
     of RealiseResultKind.`Error`:
         `error`*: Error
 
-    of RealiseResultKind.`Outputs`:
-        `outputs`*: Outputs
+    of RealiseResultKind.`RealiseSuccess`:
+        `realisesuccess`*: RealiseSuccess
 
   
-  EvalSuccess* {.preservesTuple.} = object
-    `expr`*: string
+  EvalSuccess* {.preservesRecord: "ok".} = object
     `result`*: Value
+    `expr`*: string
+
+  RealiseSuccess* {.preservesRecord: "ok".} = object
+    `storePath`*: string
+    `drvPath`*: string
 
   EvalFile* {.preservesRecord: "eval-file".} = object
     `path`*: string
@@ -41,54 +45,34 @@ type
     `result`* {.preservesEmbedded.}: Value
 
   EvalResultKind* {.pure.} = enum
-    `Error`, `EvalSuccess`
+    `err`, `ok`
   `EvalResult`* {.preservesOr.} = object
     case orKind*: EvalResultKind
-    of EvalResultKind.`Error`:
-        `error`*: Error
+    of EvalResultKind.`err`:
+        `err`*: Error
 
-    of EvalResultKind.`EvalSuccess`:
-        `evalsuccess`*: EvalSuccess
-
-  
-  InstantiateResultKind* {.pure.} = enum
-    `Error`, `Derivation`
-  `InstantiateResult`* {.preservesOr.} = object
-    case orKind*: InstantiateResultKind
-    of InstantiateResultKind.`Error`:
-        `error`*: Error
-
-    of InstantiateResultKind.`Derivation`:
-        `derivation`*: Derivation
+    of EvalResultKind.`ok`:
+        `ok`*: EvalSuccess
 
   
   ResolveStep* {.preservesRecord: "nix-actor".} = object
     `detail`*: ResolveDetail
 
   EvalFileResultKind* {.pure.} = enum
-    `Error`, `success`
+    `err`, `ok`
   `EvalFileResult`* {.preservesOr.} = object
     case orKind*: EvalFileResultKind
-    of EvalFileResultKind.`Error`:
-        `error`*: Error
+    of EvalFileResultKind.`err`:
+        `err`*: Error
 
-    of EvalFileResultKind.`success`:
-        `success`*: EvalFileSuccess
+    of EvalFileResultKind.`ok`:
+        `ok`*: EvalFileSuccess
 
   
-  Instantiate* {.preservesRecord: "instantiate".} = object
-    `expr`*: string
-    `log`* {.preservesEmbedded.}: Value
-    `result`*: InstantiateResult
-
-  EvalFileSuccess* {.preservesTuple.} = object
-    `path`*: string
-    `args`*: Value
+  EvalFileSuccess* {.preservesRecord: "ok".} = object
     `result`*: Value
-
-  Outputs* {.preservesRecord: "outputs".} = object
-    `drv`*: string
-    `storePaths`*: seq[string]
+    `args`*: Value
+    `path`*: string
 
   ResolveDetail* {.preservesDictionary.} = object
     `command-path`*: seq[string]
@@ -97,26 +81,22 @@ type
 
 proc `$`*(x: Error | Eval | AttrSet | Realise | Derivation | RealiseResult |
     EvalSuccess |
+    RealiseSuccess |
     EvalFile |
     EvalResult |
-    InstantiateResult |
     ResolveStep |
     EvalFileResult |
-    Instantiate |
     EvalFileSuccess |
-    Outputs |
     ResolveDetail): string =
   `$`(toPreserves(x))
 
 proc encode*(x: Error | Eval | AttrSet | Realise | Derivation | RealiseResult |
     EvalSuccess |
+    RealiseSuccess |
     EvalFile |
     EvalResult |
-    InstantiateResult |
     ResolveStep |
     EvalFileResult |
-    Instantiate |
     EvalFileSuccess |
-    Outputs |
     ResolveDetail): seq[byte] =
   encode(toPreserves(x))
