@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ecff3eb9_283436d0",
+        "filename": "tvix/boot/tests/default.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-06-29T16:21:18Z",
+      "side": 1,
+      "message": "trailing space\n```suggestion\n      # takes quite some time.\n```",
+      "revId": "873d8dbd4410a2ce35bf3d8c45e9ac7d6661a64a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
