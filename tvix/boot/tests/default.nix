@@ -48,6 +48,8 @@ let
         ];
         buildCommand = ''
           touch $out
+          # Ensure we can construct http clients.
+          export SSL_CERT_FILE="${pkgs.cacert.out}/etc/ssl/certs/ca-bundle.crt"
 
           # Start the tvix daemon, listening on a unix socket.
           BLOB_SERVICE_ADDR=${blobServiceAddr} \
