@@ -178,6 +178,27 @@ depot.nix.readTree.drvTargets
     assertVMOutput = "Onwards and upwards.";
   });
 
+  closure-nixos-bigtable = (mkBootTest {
+    blobServiceAddr = "objectstore+file:///build/blobs";
+    directoryServiceAddr = "bigtable://instance-1?project_id=project-1&table_name=directories&family_name=cf1";
+    pathInfoServiceAddr = "bigtable://instance-1?project_id=project-1&table_name=pathinfos&family_name=cf1";
+    path = testSystem;
+    useNarBridge = true;
+    preStart = ''
+      ${pkgs.cbtemulator}/bin/cbtemulator -address $PWD/cbtemulator.sock &
+      timeout 22 sh -c 'until [ -e $PWD/cbtemulator.sock ]; do sleep 1; done'
+
+      export BIGTABLE_EMULATOR_HOST=unix://$PWD/cbtemulator.sock
+      ${pkgs.google-cloud-bigtable-tool}/bin/cbt -instance instance-1 -project project-1 createtable directories
+      ${pkgs.google-cloud-bigtable-tool}/bin/cbt -instance instance-1 -project project-1 createfamily directories cf1
+      ${pkgs.google-cloud-bigtable-tool}/bin/cbt -instance instance-1 -project project-1 createtable pathinfos
+      ${pkgs.google-cloud-bigtable-tool}/bin/cbt -instance instance-1 -project project-1 createfamily pathinfos cf1
+    '';
+    isClosure = true;
+    vmCmdline = "init=${testSystem}/init panic=-1"; # reboot immediately on panic
+    assertVMOutput = "Onwards and upwards.";
+  });
+
   closure-nixos-nar-bridge = (mkBootTest {
     blobServiceAddr = "objectstore+file:///build/blobs";
     path = testSystem;
