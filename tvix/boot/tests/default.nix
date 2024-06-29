@@ -23,6 +23,10 @@ let
 
     , importPathName ? null
 
+      # Commands to run before starting the tvix-daemon. Useful to provide
+      # auxillary mock services.
+    , preStart ? ""
+
       # The cmdline to pass to the VM.
       # Defaults to tvix.find, which lists all files in the store.
     , vmCmdline ? "tvix.find"
@@ -50,6 +54,8 @@ let
           touch $out
           # Ensure we can construct http clients.
           export SSL_CERT_FILE="${pkgs.cacert.out}/etc/ssl/certs/ca-bundle.crt"
+
+          ${preStart}
 
           # Start the tvix daemon, listening on a unix socket.
           BLOB_SERVICE_ADDR=${blobServiceAddr} \
