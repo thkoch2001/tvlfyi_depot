@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e90331ae_fa57320c",
+        "filename": "tvix/Cargo.lock",
+        "patchSetId": 2
+      },
+      "lineNbr": 1437,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-29T17:46:00Z",
+      "side": 1,
+      "message": "Yeah, it\u0027s conditional on the arch, and `Cargo.nix` only adds it if we compile for WASM, so this is fine.",
+      "parentUuid": "bde033f0_8c414d7f",
+      "revId": "e80bce053f9bbc4840a0aab09981ebb8291ea74e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7cb7b140_e82d30ee",
@@ -67,6 +85,58 @@
       "side": 1,
       "message": "yeah i forgot about object store, but it seems like they are only exposing the reqwest interface, and we dont really want `with_default_headers` because those are static. What we kinda need is a way to run a function prior to making a reqwest which then inserts the current span id. Currently the only way to achieve this is the external reqwest-middleware crate which wraps the client (and a couple of other things) to achieve this. There is an issue in reqwest upstream https://github.com/seanmonstar/reqwest/issues/155 that would be about that.\n\nSo yeah i think we need to open a new issue in object_store upstream and ask if we could wrap/extend this.\n\nregarding \"W3C trace contexts\", they also use the injector similar what we do in grpc: https://github.com/TrueLayer/reqwest-middleware/blob/reqwest-tracing-v0.4.7/reqwest-tracing/src/otel.rs#L64-L97",
       "parentUuid": "7cb7b140_e82d30ee",
+      "revId": "e80bce053f9bbc4840a0aab09981ebb8291ea74e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a862c01_3f8c8354",
+        "filename": "tvix/store/src/pathinfoservice/nix_http.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-29T17:46:00Z",
+      "side": 1,
+      "message": "Ok, would you mind opening an issue about this with `object_store` upstream? And/or update `TODO.md` to relect the current state?",
+      "parentUuid": "e034ec2c_684a97e9",
+      "revId": "e80bce053f9bbc4840a0aab09981ebb8291ea74e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c92b852f_bd8e630d",
+        "filename": "tvix/tracing/Cargo.toml",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-29T17:46:00Z",
+      "side": 1,
+      "message": "needs an update on the feature matrix in `tracing/default.nix`.",
+      "revId": "e80bce053f9bbc4840a0aab09981ebb8291ea74e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "84a1cb34_65433358",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-29T17:46:00Z",
+      "side": 1,
+      "message": "We can probably just drop that conditional, no?\n\n`mod.rs` will essentially just be an empty mod if you don\u0027t have any of these two features enabled.",
       "revId": "e80bce053f9bbc4840a0aab09981ebb8291ea74e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
