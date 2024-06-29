@@ -29,11 +29,8 @@ let
       assert isClosure -> importPathName == null;
       assert (!isClosure) -> importPathName != null;
 
-      pkgs.stdenv.mkDerivation {
+      pkgs.stdenv.mkDerivation ({
         name = "run-vm";
-
-        __structuredAttrs = true;
-        exportReferencesGraph.closure = [ path ];
 
         nativeBuildInputs = [
           depot.tvix.store
@@ -76,7 +73,10 @@ let
           grep "${assertVMOutput}" output.txt
         '';
         requiredSystemFeatures = [ "kvm" ];
-      };
+      } // lib.optionalAttrs (isClosure) {
+        __structuredAttrs = true;
+        exportReferencesGraph.closure = [ path ];
+      });
 
   systemFor = sys: (depot.ops.nixos.nixosFor sys).system;
 
