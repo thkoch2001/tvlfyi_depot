@@ -14257,7 +14257,7 @@ rec {
           {
             name = "tokio-listener";
             packageId = "tokio-listener";
-            features = [ "tonic011" ];
+            features = [ "clap" "multi-listener" "sd_listen" "tonic011" ];
           }
           {
             name = "tokio-stream";
