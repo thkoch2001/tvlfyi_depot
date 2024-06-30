@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14cd7569_8d307a58",
+        "filename": "tvix/glue/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-30T18:41:59Z",
+      "side": 1,
+      "message": "I think this would be more readable if the function would take the \"thing to wrap\" as an argument, and the feature flags to add additional ci extra targets.\n\nLike so:\n\n```\n(depot.tvix.utils.featurePowersetify {\n  crate \u003d depot.tvix.crates.workspaceMembers.tvix-build.build:\n  features \u003d [\"tonic-reflection\"];\n})\n```",
+      "revId": "a2ee5c02b6829909af9eab6beeab0f0fc364d001",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1594b38_3a39344d",
+        "filename": "tvix/glue/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-06-30T18:41:59Z",
+      "side": 1,
+      "message": "why do I need to set this too?",
+      "revId": "a2ee5c02b6829909af9eab6beeab0f0fc364d001",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
