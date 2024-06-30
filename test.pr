@@ -3,7 +3,7 @@
 let ?nixConfig = {
     command-path: [ "/run/current-system/sw/bin" ]
     lookupPath: [
-      "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos",
+      "nixpkgs=/home/repo/nixpkgs/channel",
       "nixos-config=/etc/nixos/configuration.nix",
       "/nix/var/nix/profiles/per-user/root/channels",
     ]
@@ -25,7 +25,7 @@ $results ? ?any [
 
   $nix <eval "builtins.trace \"This is only a test.\" builtins.nixVersion" $results>
 
-  $nix <eval-file "/home/emery/src/nix_actor/test.nix" { a: 1, b: #f, c: [ #t ] } $results>
+  $nix <eval-file "/home/emery/src/nix_actor/test.nix" { time: builtins.currentTime } $results>
 
   # Realise all observed store derivations.
   $results ? <ok <drv ?drvPath>> [
