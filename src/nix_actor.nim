@@ -45,6 +45,9 @@ proc realise(facet: Facet; detail: ResolveDetail; drv: string; log: Option[Cap],
         env = detail.commandlineEnv(),
         options = {},
       )
+    facet.onStop do (turn: Turn):
+      if p.running:
+        p.kill()
     var
       errors = errorStream(p)
       line = "".toPreserves
@@ -53,7 +56,7 @@ proc realise(facet: Facet; detail: ResolveDetail; drv: string; log: Option[Cap],
         if log.isSome:
           facet.run do (turn: Turn):
             message(turn, log.get, line)
-      elif not running(p): break
+      elif not p.running: break
       initDuration(milliseconds = 250).some.runOnce
     var storePaths = p.outputStream.readAll.strip.split
     doAssert storePaths != @[]
