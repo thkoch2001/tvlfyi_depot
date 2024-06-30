@@ -33,6 +33,24 @@
       "message": "why do I need to set this too?",
       "revId": "a2ee5c02b6829909af9eab6beeab0f0fc364d001",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b4ed388_966222d1",
+        "filename": "tvix/glue/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-06-30T18:47:39Z",
+      "side": 1,
+      "message": "You mean why we set SSL_CERT_FILE in 2 locations? That\u0027s because the derivations that we set in passthru with mkFeaturePowerset are not based on the derivation above, but are directly based on the raw workSpaceMember.tvix-glue.build derivation.",
+      "parentUuid": "b1594b38_3a39344d",
+      "revId": "a2ee5c02b6829909af9eab6beeab0f0fc364d001",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
