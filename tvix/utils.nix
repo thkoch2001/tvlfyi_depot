@@ -1,7 +1,7 @@
 { lib, depot, ... }:
 
 {
-  mkFeaturePowerset = { crateName, features, override ? { } }:
+  mkFeaturePowerset = { oldAttrs, features, override ? { }, }:
     let
       powerset = xs:
         let
@@ -10,16 +10,20 @@
         in
         lib.foldl' addElement [ [ ] ] xs;
     in
-    lib.listToAttrs (map
-      (featuresPowerset: {
-        name = if featuresPowerset != [ ] then "with-features-${lib.concatStringsSep "-" featuresPowerset}" else "no-features";
-        value = depot.tvix.crates.workspaceMembers.${crateName}.build.override (old: {
-          runTests = true;
-          features = featuresPowerset;
-        } // (if lib.isFunction override then override old else override)
-        );
-      })
-      (powerset features));
+    rec {
+      meta.ci.targets = (oldAttrs.meta.ci.targets or [ ]) ++ (lib.filter (x: lib.hasPrefix "with-features" x || x == "no-features") (lib.attrNames passthru));
+
+      passthru = lib.listToAttrs (map
+        (featuresPowerset: {
+          name = if featuresPowerset != [ ] then "with-features-${lib.concatStringsSep "-" featuresPowerset}" else "no-features";
+          value = depot.tvix.crates.workspaceMembers.${oldAttrs.crateName}.build.override (old: {
+            runTests = true;
+            features = featuresPowerset;
+          } // (if lib.isFunction override then override old else override)
+          );
+        })
+        (powerset features));
+    };
 
   # Filters the given source, only keeping files related to the build, preventing unnecessary rebuilds.
   # Includes src in the root, all other .rs files, as well as Cargo.toml.
