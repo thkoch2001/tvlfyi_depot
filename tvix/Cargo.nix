@@ -11728,6 +11728,13 @@ rec {
         sha256 = "1cm6r5dmpq96s8gw9dgsinq5g8s466j48dg7dckwc4gc28g6cd21";
         dependencies = [
           {
+            name = "clap";
+            packageId = "clap";
+            optional = true;
+            usesDefaultFeatures = false;
+            features = [ "derive" "std" ];
+          }
+          {
             name = "document-features";
             packageId = "document-features";
           }
@@ -11782,6 +11789,11 @@ rec {
         ];
         devDependencies = [
           {
+            name = "clap";
+            packageId = "clap";
+            features = [ "help" ];
+          }
+          {
             name = "tokio";
             packageId = "tokio";
             features = [ "macros" "rt" "io-util" ];
@@ -11806,7 +11818,7 @@ rec {
           "unix_path_tools" = [ "nix" ];
           "user_facing_default" = [ "inetd" "unix" "unix_path_tools" "sd_listen" "socket_options" ];
         };
-        resolvedDefaultFeatures = [ "default" "inetd" "nix" "sd_listen" "socket2" "socket_options" "tokio-util" "tonic011" "unix" "unix_path_tools" "user_facing_default" ];
+        resolvedDefaultFeatures = [ "clap" "default" "inetd" "multi-listener" "nix" "sd_listen" "socket2" "socket_options" "tokio-util" "tonic011" "unix" "unix_path_tools" "user_facing_default" ];
       };
       "tokio-macros" = rec {
         crateName = "tokio-macros";
@@ -14257,7 +14269,7 @@ rec {
           {
             name = "tokio-listener";
             packageId = "tokio-listener";
-            features = [ "tonic011" ];
+            features = [ "clap" "multi-listener" "sd_listen" "tonic011" ];
           }
           {
             name = "tokio-stream";
