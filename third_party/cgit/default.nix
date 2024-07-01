@@ -27,12 +27,25 @@ stdenv.mkDerivation rec {
   #
   # TODO(tazjin): Add an assert for this somewhere so we notice it on
   # channel bumps.
-  preBuild = ''
-    rm -rf git # remove submodule dir ...
-    cp -r --no-preserve=ownership,mode ${pkgs.srcOnly depot.third_party.git} git
-    makeFlagsArray+=(prefix="$out" CGIT_SCRIPT_PATH="$out/cgit/")
-    cat tvl-extra.css >> cgit.css
-  '';
+  preBuild =
+    let
+      # we have to give cgit a git with dottime support to build
+      git' = pkgs.git.overrideAttrs (old: {
+        src = pkgs.fetchurl {
+          url = "https://github.com/git/git/archive/refs/tags/v2.44.2.tar.gz";
+          hash = "sha256-3h0LBfAD4MXfZc0tjWQDO81UdbRo3w5C0W7j7rr9m9I=";
+        };
+        patches = (old.patches or [ ]) ++ [
+          ../git/0001-feat-third_party-git-date-add-dottime-format.patch
+        ];
+      });
+    in
+    ''
+      rm -rf git # remove submodule dir ...
+      cp -r --no-preserve=ownership,mode ${pkgs.srcOnly git'} git
+      makeFlagsArray+=(prefix="$out" CGIT_SCRIPT_PATH="$out/cgit/")
+      cat tvl-extra.css >> cgit.css
+    '';
 
   stripDebugList = [ "cgit" ];
 

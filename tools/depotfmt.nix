@@ -37,20 +37,23 @@ let
   # helper tool for formatting the depot interactively
   depotfmt = pkgs.writeShellScriptBin "depotfmt" ''
     exec ${pkgs.treefmt}/bin/treefmt ''${@} \
-      --config-file ${config} \
+      --on-unmatched=debug \
+      --config-file=${config} \
       --tree-root $(${pkgs.git}/bin/git rev-parse --show-toplevel)
   '';
 
   # wrapper script for running formatting checks in CI
   check = pkgs.writeShellScript "depotfmt-check" ''
     ${pkgs.treefmt}/bin/treefmt \
-      --clear-cache \
+      --no-cache \
+      --on-unmatched=debug \
       --fail-on-change \
-      --config-file ${config} \
-      --tree-root .
+      --config-file=${config} \
+      --tree-root=.
   '';
 in
 depotfmt.overrideAttrs (_: {
+  passthru.config = config;
   passthru.meta.ci.extraSteps.check = {
     label = "depot formatting check";
     command = check;
