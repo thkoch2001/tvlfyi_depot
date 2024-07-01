@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "24e0aa5c_5d39dd65",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-01T18:31:02Z",
+      "side": 1,
+      "message": "already replied in the other comment, but essentially the client doesn\u0027t check afterwards an already uploaded store path did indeed \"persist\" where it was uploaded to.\n\nWe might do some unnecessary copying, if Nix thinks something isn\u0027t there yet, but I\u0027d assume nar-bridge would be something deployed somewhere local to the uploading job, and tvix-castore would be spoken to a more remote location, which would also avoid uploads.\n\nThis can also partially be alleviated by keeping track of all uploaded nar hashes too.",
+      "parentUuid": "e70c0cb3_5472d1df",
+      "revId": "28cbe0495edbcf02e78abb2db58ad6c8d4d5b75f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d9c4976b_4c05c510",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-07-01T17:46:45Z",
       "side": 1,
       "message": "neat! I wonder if we\u0027ll run into any problems with base names that are too long?\n\nWill this cause any issues for uploads where the client wants to use the NAR hash instead of the custom scheme here?",
+      "revId": "28cbe0495edbcf02e78abb2db58ad6c8d4d5b75f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32f5dc47_26bc8d2a",
+        "filename": "tvix/nar-bridge/src/lib.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-01T18:31:02Z",
+      "side": 1,
+      "message": "The Basename itself is removed from the proto, so it\u0027s essentially just:\n - the Blake3 digest of a single blob\n - the Blake3 digest of the root directory (and size integer)\n - the symlink target (capped to ~reasonable lengths)\n\nUploads are a separate method and routing, so we can serve Nars from different paths than they are uploaded. in fact, we currently do that with nar-bridge-go already.\n\nWe probably still want to support head \"lookups by nar hash\", so Nix doesn\u0027t upload too much, as it thinks that nar doesn\u0027t exist yet.\n\nIt probably still makes sense to serve nar from a much different path (castore-node/$encoded), so tvix-aware http substitution clients can recognize that and are able to synthesize a PathInfo from that (and potentially substitute through the castore model).\n\nAs long as we don\u0027t have another signature mechanism, they\u0027d still need to download every blob and directory in that store path, then calculate the nar hash and size to check the current signature (so no lazy seeking), but chances are they already have large amounts of these contents and need to transfer less than always downloading the entire NAR file. And can do so in parallel from other peers too.",
+      "parentUuid": "d9c4976b_4c05c510",
       "revId": "28cbe0495edbcf02e78abb2db58ad6c8d4d5b75f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
