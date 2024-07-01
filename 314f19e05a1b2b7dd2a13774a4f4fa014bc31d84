@@ -1,0 +1,95 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "601910b5_777aea8d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-01T12:31:12Z",
+      "side": 1,
+      "message": "Please link to `http://ipa-reader.xyz/?text\u003dtv%C9%AAks\u0026voice\u003dJoey` in here so people know where this is coming from.\n\n\"Karl\" gets it better I think, it\u0027s less soft.",
+      "revId": "314f19e05a1b2b7dd2a13774a4f4fa014bc31d84",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "af9e9fd6_1d996999",
+        "filename": "tvix/docs/mdbook-extra.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-01T12:31:12Z",
+      "side": 1,
+      "message": "maybe just `e` or `elem`?",
+      "range": {
+        "startLine": 18,
+        "startChar": 58,
+        "endLine": 18,
+        "endChar": 64
+      },
+      "revId": "314f19e05a1b2b7dd2a13774a4f4fa014bc31d84",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f90c3f4_145488e6",
+        "filename": "tvix/docs/src/introduction.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-01T12:31:12Z",
+      "side": 1,
+      "message": "Not too happy with this yet. The intention is not to replace parts of/in Nix with Tvix, but to build something more modular that happens to also be able to interpret Nixlang in a way compatible to Nixcpp.",
+      "revId": "314f19e05a1b2b7dd2a13774a4f4fa014bc31d84",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70f01ff9_53725799",
+        "filename": "tvix/docs/src/introduction.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-01T12:31:12Z",
+      "side": 1,
+      "message": "No \"our\"",
+      "revId": "314f19e05a1b2b7dd2a13774a4f4fa014bc31d84",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b171424_96deb6d1",
+        "filename": "tvix/docs/src/introduction.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-01T12:31:12Z",
+      "side": 1,
+      "message": "too much marketing ;-)",
+      "revId": "314f19e05a1b2b7dd2a13774a4f4fa014bc31d84",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
