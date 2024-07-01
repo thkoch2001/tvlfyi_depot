@@ -16,6 +16,24 @@
       "message": "A bit of a nitpick but can you move it down below in the attrset where we have our other workspace members?",
       "revId": "8ba01634be3d00a289aa1dc69ae59650aeb3ec12",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cb6c491_c2c0140f",
+        "filename": "tvix/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-01T06:42:27Z",
+      "side": 1,
+      "message": "This list is alphabetically sorted (well, except nix-compat).\n\nHowever, thanks to https://github.com/NixOS/nixpkgs/pull/321544 we should be able to only list our own crates here after the next nixpkgs bump, so I\u0027d like to push this to later.",
+      "parentUuid": "b5d94f76_eec11027",
+      "revId": "8ba01634be3d00a289aa1dc69ae59650aeb3ec12",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
