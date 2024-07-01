@@ -44,13 +44,14 @@ let
   # wrapper script for running formatting checks in CI
   check = pkgs.writeShellScript "depotfmt-check" ''
     ${pkgs.treefmt}/bin/treefmt \
-      --clear-cache \
+      --no-cache \
       --fail-on-change \
       --config-file ${config} \
       --tree-root .
   '';
 in
 depotfmt.overrideAttrs (_: {
+  passthru.check = check;
   passthru.meta.ci.extraSteps.check = {
     label = "depot formatting check";
     command = check;

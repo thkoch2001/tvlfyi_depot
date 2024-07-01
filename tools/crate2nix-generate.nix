@@ -4,5 +4,11 @@
 # format the generated file with depotfmt.
 pkgs.writeShellScriptBin "crate2nix-generate" ''
   ${pkgs.crate2nix}/bin/crate2nix generate --all-features
-  ${depot.tools.depotfmt}/bin/depotfmt Cargo.nix
+
+  # Workaround for https://github.com/numtide/treefmt/issues/327
+  if [[ "$HOME" == "/homeless-shelter" ]]; then
+    ${depot.tools.depotfmt.passthru.check}/bin/depotfmt Cargo.nix
+  else
+    ${depot.tools.depotfmt}/bin/depotfmt Cargo.nix
+  fi
 ''
