@@ -1,6 +1,6 @@
 # See README.md
-{ depot ? import ../. {}, ... }:
+{ depot ? import ../. { }, ... }:
 
-depot.third_party.nixpkgs.extend(_: _: {
+depot.third_party.nixpkgs.extend (_: _: {
   tvl = depot;
 })
