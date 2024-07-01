@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e70c0cb3_5472d1df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-07-01T17:46:45Z",
+      "side": 1,
+      "message": "Nice! I\u0027m curious about the impacts the alternative nar URLs will have on the upload path. IIUC `nix copy` client will want to use regular NAR hashes when uploading.",
+      "revId": "28cbe0495edbcf02e78abb2db58ad6c8d4d5b75f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d9c4976b_4c05c510",
+        "filename": "tvix/nar-bridge/src/lib.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-07-01T17:46:45Z",
+      "side": 1,
+      "message": "neat! I wonder if we\u0027ll run into any problems with base names that are too long?\n\nWill this cause any issues for uploads where the client wants to use the NAR hash instead of the custom scheme here?",
+      "revId": "28cbe0495edbcf02e78abb2db58ad6c8d4d5b75f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "45c1762c_c18306a8",
+        "filename": "tvix/nar-bridge/src/mod.rs",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-07-01T17:46:45Z",
+      "side": 1,
+      "message": "do we need this?",
+      "revId": "28cbe0495edbcf02e78abb2db58ad6c8d4d5b75f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
