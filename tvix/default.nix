@@ -14,22 +14,12 @@ let
   # Load the crate2nix crate tree.
   crates = pkgs.callPackage ./Cargo.nix {
     defaultCrateOverrides = pkgs.defaultCrateOverrides // {
-      opentelemetry-proto = prev: {
-        nativeBuildInputs = protobufDep prev;
+      nix-compat = prev: {
+        src = depot.tvix.utils.filterRustCrateSrc rec {
+          root = prev.src.origSrc;
+          extraFileset = (root + "/testdata");
+        };
       };
-
-      prost-build = prev: {
-        nativeBuildInputs = protobufDep prev;
-      };
-
-      prost-wkt-types = prev: {
-        nativeBuildInputs = protobufDep prev;
-      };
-
-      tonic-reflection = prev: {
-        nativeBuildInputs = protobufDep prev;
-      };
-
       tvix-build = prev: {
         src = depot.tvix.utils.filterRustCrateSrc rec {
           root = prev.src.origSrc;
@@ -90,13 +80,6 @@ let
 
       tvix-tracing = prev: {
         src = depot.tvix.utils.filterRustCrateSrc { root = prev.src.origSrc; };
-      };
-
-      nix-compat = prev: {
-        src = depot.tvix.utils.filterRustCrateSrc rec {
-          root = prev.src.origSrc;
-          extraFileset = (root + "/testdata");
-        };
       };
     };
   };
