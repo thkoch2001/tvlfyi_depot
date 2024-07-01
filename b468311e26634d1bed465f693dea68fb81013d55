@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59250cc6_7b35fb13",
+        "filename": "tvix/nar-bridge/src/bin/nar-bridge.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-01T07:29:15Z",
+      "side": 1,
+      "message": "It might make sense to pick a different route here, so these requests can be clearly distinguished from other `{narhash}.nar[.compression]` requests.",
+      "revId": "b468311e26634d1bed465f693dea68fb81013d55",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d47631af_a0db0f9e",
+        "filename": "tvix/nar-bridge/src/lib.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-01T07:29:15Z",
+      "side": 1,
+      "message": "should be moved into two submodules (one for the narinfo, one for the nar bits), and tests added",
+      "revId": "b468311e26634d1bed465f693dea68fb81013d55",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
