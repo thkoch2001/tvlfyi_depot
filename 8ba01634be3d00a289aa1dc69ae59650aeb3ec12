@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b5d94f76_eec11027",
+        "filename": "tvix/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-07-01T00:48:11Z",
+      "side": 1,
+      "message": "A bit of a nitpick but can you move it down below in the attrset where we have our other workspace members?",
+      "revId": "8ba01634be3d00a289aa1dc69ae59650aeb3ec12",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
