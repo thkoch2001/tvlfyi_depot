@@ -4,6 +4,8 @@ use clap::Parser;
 use nar_bridge::get_nar;
 use nar_bridge::get_narinfo;
 use nar_bridge::AppState;
+use tower::ServiceBuilder;
+use tower_http::trace::{DefaultMakeSpan, TraceLayer};
 use tracing::info;
 
 /// Expose the Nix HTTP Binary Cache protocol for a tvix-store.
@@ -66,6 +68,17 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         .route("/nar/:root_node_enc", get(get_nar))
         .route("/:narinfo_str", get(get_narinfo))
         .route("/nix-cache-info", get(move || nix_cache_info(cli.priority)))
+        .layer(
+            ServiceBuilder::new()
+                .layer(
+                    TraceLayer::new_for_http().make_span_with(
+                        DefaultMakeSpan::new()
+                            .level(tracing::Level::INFO)
+                            .include_headers(true),
+                    ),
+                )
+                .map_request(tvix_tracing::propagate::axum::accept_trace),
+        )
         .with_state(state.clone());
 
     let listen_address = &cli.listen_args.listen_address.unwrap_or_else(|| {
