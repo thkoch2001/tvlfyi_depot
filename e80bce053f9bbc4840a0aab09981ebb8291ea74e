@@ -107,6 +107,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8cefb87_4fbb1366",
+        "filename": "tvix/store/src/pathinfoservice/nix_http.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000110
+      },
+      "writtenOn": "2024-07-02T09:42:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a862c01_3f8c8354",
+      "revId": "e80bce053f9bbc4840a0aab09981ebb8291ea74e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c92b852f_bd8e630d",
@@ -124,6 +142,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "879c81eb_c261cc96",
+        "filename": "tvix/tracing/Cargo.toml",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000110
+      },
+      "writtenOn": "2024-07-02T09:42:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c92b852f_bd8e630d",
+      "revId": "e80bce053f9bbc4840a0aab09981ebb8291ea74e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "84a1cb34_65433358",
@@ -137,6 +173,24 @@
       "writtenOn": "2024-06-29T17:46:00Z",
       "side": 1,
       "message": "We can probably just drop that conditional, no?\n\n`mod.rs` will essentially just be an empty mod if you don\u0027t have any of these two features enabled.",
+      "revId": "e80bce053f9bbc4840a0aab09981ebb8291ea74e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "db507cec_ee25936e",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000110
+      },
+      "writtenOn": "2024-07-02T09:42:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "84a1cb34_65433358",
       "revId": "e80bce053f9bbc4840a0aab09981ebb8291ea74e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f73a397a_7edf35db",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000110
+      },
+      "writtenOn": "2024-07-02T09:42:20Z",
+      "side": 1,
+      "message": "should probably submit https://cl.tvl.fyi/c/depot/+/11904 prior to submitting this because we need to do some changes here (also mostly bumps of those deps) to make reqwest 0.12 work",
+      "revId": "19d2bf0edf0b328802e0d59ebc8c11fb9b11f4d2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
