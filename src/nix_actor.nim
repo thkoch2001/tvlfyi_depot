@@ -7,7 +7,7 @@ import
   pkg/syndicate,
   pkg/syndicate/protocols/gatekeeper,
   pkg/syndicate/relays,
-  ./nix_actor/[nix_api, nix_values],
+  ./nix_actor/[nix_api, nix_api_expr, nix_values],
   ./nix_actor/protocol
 
 proc echo(args: varargs[string, `$`]) {.used.} =
@@ -71,44 +71,42 @@ proc realise(facet: Facet; detail: ResolveDetail; drv: string; log: Option[Cap],
     close(p)
 
 proc eval(store: Store; state: EvalState; expr: string): EvalResult =
-    var nixVal: NixValue
-    try:
-      nixVal = state.evalFromString(expr, "")
-      state.force(nixVal)
-      result = EvalResult(orKind: EvalResultKind.ok)
-      result.ok.result = nixVal.toPreserves(state).unthunkAll
-      result.ok.expr = expr
-    except CatchableError as err:
-      reset result
-      result.err.message = err.msg
-    finally:
-      close(nixVal)
+  defer: close(state) # Single-use state.
+  var nixVal: NixValue
+  try:
+    nixVal = state.evalFromString(expr, "")
+    state.force(nixVal)
+    result = EvalResult(orKind: EvalResultKind.ok)
+    result.ok.result = nixVal.toPreserves(state).unthunkAll
+    result.ok.expr = expr
+  except CatchableError as err:
+    reset result
+    result.err.message = err.msg
 
 proc evalFile(store: Store; state: EvalState; path: string; prArgs: Value): EvalFileResult =
-    var
-      fn, arg, res: NixValue
-    try:
-      arg = prArgs.toNix(state)
-      fn = state.evalFromString("import " & path, "")
-      res = apply(state, fn, arg)
-      state.force(res)
-      result = EvalFileResult(orKind: EvalFileResultKind.ok)
-      result.ok.result = res.toPreserves(state).unthunkAll
-      result.ok.args = prArgs
-      result.ok.path = path
-    except CatchableError as err:
-      reset result
-      result.err.message = err.msg
-    finally:
-      close(res)
-      close(arg)
-      close(fn)
+  defer: close(state) # Single-use state.
+  var
+    fn, arg, res: NixValue
+  try:
+    arg = prArgs.toNix(state)
+    fn = state.evalFromString("import " & path, "")
+    res = apply(state, fn, arg)
+    state.force(res)
+    result = EvalFileResult(orKind: EvalFileResultKind.ok)
+    result.ok.result = res.toPreserves(state).unthunkAll
+    result.ok.args = prArgs
+    result.ok.path = path
+  except CatchableError as err:
+    reset result
+    result.err.message = err.msg
 
-proc serve(turn: Turn; detail: ResolveDetail; store: Store; state: EvalState; ds: Cap) =
+proc serve(turn: Turn; detail: ResolveDetail; store: Store; ds: Cap) =
   during(turn, ds, Eval.grabWithin) do (expr: string, resp: Cap):
+    let state = newState(store, detail.lookupPath)
     discard publish(turn, resp, eval(store, state, expr))
 
   during(turn, ds, EvalFile.grabWithin) do (path: string, args: Value, resp: Cap):
+    let state = newState(store, detail.lookupPath)
     discard publish(turn, resp, evalFile(store, state, path, args))
 
   during(turn, ds, Realise.grabWithin) do (drv: string, log: Value, resp: Cap):
@@ -123,14 +121,12 @@ proc main() =
       during(turn, relay, pat) do (detail: ResolveDetail; observer: Cap):
         let
           store = openStore()
-          state = newState(store, detail.lookupPath)
           ds = turn.newDataspace()
             # TODO: attenuate this dataspace to only the assertions we observe.
         linkActor(turn, "nix-actor") do (turn: Turn):
-          serve(turn, detail, store, state, ds)
+          serve(turn, detail, store, ds)
         discard publish(turn, observer, ResolvedAccepted(responderSession: ds))
       do:
-        close(state)
         close(store)
 
 main()

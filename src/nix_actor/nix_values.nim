@@ -4,7 +4,7 @@
 import
   std/options,
   pkg/preserves,
-  ./[nix_api, nix_api_util, nix_api_value]
+  ./[nix_api, nix_api_util, nix_api_value, utils]
 
 proc echo(args: varargs[string, `$`]) {.used.} =
   stderr.writeLine(args)
@@ -34,97 +34,97 @@ proc unthunkAll*(v: Value): Value =
   v.mapEmbeds(unthunk)
 
 proc toPreserves*(value: NixValue; state: EvalState): Value {.gcsafe.} =
-  var ctx: NixContext # nil
-    # TODO: use a context for error handling
-  let kind = get_type(ctx, value)
-  case kind
-  of NIX_TYPE_THUNK: raiseAssert "cannot preserve thunk"
-  of NIX_TYPE_INT:
-    result = getInt(ctx, value).toPreserves
-  of NIX_TYPE_FLOAT:
-    result = getFloat(ctx, value).toPreserves
-  of NIX_TYPE_BOOL:
-    result = getBool(ctx, value).toPreserves
-  of NIX_TYPE_STRING:
-    let thunk = StringThunkRef()
-    let err = getString(ctx, value, thunkString, thunk[].addr)
-    doAssert err == NIX_OK, $err
-    result = thunk.embed
-  of NIX_TYPE_PATH:
-    result = ($getPathString(ctx, value)).toPreserves
-  of NIX_TYPE_NULL:
-    result = initRecord("null")
-  of NIX_TYPE_ATTRS:
-    if has_attr_byname(ctx, value, state, "drvPath"):
-      result = initRecord("drv",
-          get_attr_byname(ctx, value, state, "drvPath").toPreserves(state),
-          get_attr_byname(ctx, value, state, "outPath").toPreserves(state),
-        )
-    else:
-      let n = getAttrsSize(ctx, value)
-      result = initDictionary(int n)
+  mitNix:
+      # TODO: use a context for error handling
+    let kind = nix.get_type(value)
+    case kind
+    of NIX_TYPE_THUNK: raiseAssert "cannot preserve thunk"
+    of NIX_TYPE_INT:
+      result = nix.getInt(value).toPreserves
+    of NIX_TYPE_FLOAT:
+      result = nix.getFloat(value).toPreserves
+    of NIX_TYPE_BOOL:
+      result = nix.getBool(value).toPreserves
+    of NIX_TYPE_STRING:
+      let thunk = StringThunkRef()
+      let err = nix.getString(value, thunkString, thunk[].addr)
+      doAssert err == NIX_OK, $err
+      result = thunk.embed
+    of NIX_TYPE_PATH:
+      result = ($nix.getPathString(value)).toPreserves
+    of NIX_TYPE_NULL:
+      result = initRecord("null")
+    of NIX_TYPE_ATTRS:
+      if nix.has_attr_byname(value, state, "drvPath"):
+        result = initRecord("drv",
+            nix.get_attr_byname(value, state, "drvPath").toPreserves(state),
+            nix.get_attr_byname(value, state, "outPath").toPreserves(state),
+          )
+      else:
+        let n = nix.getAttrsSize(value)
+        result = initDictionary(int n)
+        var i: cuint
+        while i < n:
+          let (key, val) = get_attr_byidx(value, state, i)
+          result[($key).toSymbol] = val.toPreserves(state)
+          inc(i)
+    of NIX_TYPE_LIST:
+      let n = nix.getListSize(value)
+      result = initSequence(n)
       var i: cuint
       while i < n:
-        let (key, val) = get_attr_byidx(ctx, value, state, i)
-        result[($key).toSymbol] = val.toPreserves(state)
+        var val = nix.getListByIdx(value, state, i)
+        result[i] = val.toPreserves(state)
         inc(i)
-  of NIX_TYPE_LIST:
-    let n = getListSize(ctx, value)
-    result = initSequence(n)
-    var i: cuint
-    while i < n:
-      var val = getListByIdx(ctx, value, state, i)
-      result[i] = val.toPreserves(state)
-      inc(i)
-  of NIX_TYPE_FUNCTION:
-    result = "«function»".toPreserves
-  of NIX_TYPE_EXTERNAL:
-    result = "«external»".toPreserves
+    of NIX_TYPE_FUNCTION:
+      result = "«function»".toPreserves
+    of NIX_TYPE_EXTERNAL:
+      result = "«external»".toPreserves
 
-proc translate*(ctx: NixContext; state: EvalState; pr: preserves.Value): NixValue =
+proc translate*(nix: NixContext; state: EvalState; pr: preserves.Value): NixValue =
   try:
-    result = alloc_value(ctx, state)
+    result = nix.alloc_value(state)
     case pr.kind
     of pkBoolean:
-      ctx.check init_bool(ctx, result, pr.bool)
+      nix.init_bool(result, pr.bool)
     of pkFloat:
-      ctx.check init_float(ctx, result, pr.float.cdouble)
+      nix.init_float(result, pr.float.cdouble)
     of pkRegister:
-      ctx.check init_int(ctx, result, pr.register.int64)
+      nix.init_int(result, pr.register.int64)
     of pkBigInt:
-      ctx.check init_int(ctx, result, pr.register.int64)
+      nix.init_int(result, pr.register.int64)
     of pkString:
-      ctx.check init_string(ctx, result, pr.string)
+      nix.init_string(result, pr.string)
     of pkByteString:
       raise newException(ValueError, "cannot convert large Preserves integer to Nix: " & $pr)
     of pkSymbol:
-      evalFromString(ctx, state, cast[string](pr.symbol), "", result)
+      nix.evalFromString(state, cast[string](pr.symbol), "", result)
     of pkRecord:
       if pr.isRecord("null", 0):
-        ctx.check init_null(ctx, result)
+        nix.init_null(result)
       elif pr.isRecord("drv", 2):
-        let b = make_bindings_builder(ctx, state, 2)
+        let b = nix.make_bindings_builder(state, 2)
         defer: bindings_builder_free(b)
-        ctx.check bindings_builder_insert(ctx, b, "drvPath", translate(ctx, state, pr.fields[0]))
-        ctx.check bindings_builder_insert(ctx, b, "outPath", translate(ctx, state, pr.fields[1]))
-        ctx.check make_attrs(ctx, result, b)
+        nix.bindings_builder_insert(b, "drvPath", nix.translate(state, pr.fields[0]))
+        nix.bindings_builder_insert(b, "outPath", nix.translate(state, pr.fields[1]))
+        nix.make_attrs(result, b)
       else:
         raise newException(ValueError, "cannot convert Preserves record to Nix: " & $pr)
     of pkSequence, pkSet:
-      let b = make_list_builder(ctx, state, pr.len.csize_t)
+      let b = nix.make_list_builder(state, pr.len.csize_t)
       defer: list_builder_free(b)
       for i, e in pr:
-        ctx.check list_builder_insert(ctx, b, i.register.cuint, translate(ctx, state, e))
-      ctx.check make_list(ctx, b, result)
+        discard nix.list_builder_insert(b, i.register.cuint, nix.translate(state, e))
+      nix.make_list(b, result)
     of pkDictionary:
-      let b = make_bindings_builder(ctx, state, pr.dict.len.csize_t)
+      let b = nix.make_bindings_builder(state, pr.dict.len.csize_t)
       defer: bindings_builder_free(b)
       for (name, value) in pr.dict:
         if name.isSymbol:
-          ctx.check bindings_builder_insert(ctx, b, name.symbol.string, translate(ctx, state, value))
+          nix.bindings_builder_insert(b, name.symbol.string, nix.translate(state, value))
         else:
-          ctx.check bindings_builder_insert(ctx, b, $name, translate(ctx, state, value))
-      ctx.check make_attrs(ctx, result, b)
+          nix.bindings_builder_insert(b, $name, nix.translate(state, value))
+      nix.make_attrs(result, b)
     of pkEmbedded:
       raise newException(ValueError, "cannot convert Preserves embedded value to Nix")
   except CatchableError as err:
@@ -132,6 +132,5 @@ proc translate*(ctx: NixContext; state: EvalState; pr: preserves.Value): NixValu
     raise err
 
 proc toNix*(pr: preserves.Value; state: EvalState): NixValue =
-  let ctx = c_context_create()
-  defer: c_context_free(ctx)
-  result = translate(ctx, state, pr)
+  mitNix:
+    result = nix.translate(state, pr)

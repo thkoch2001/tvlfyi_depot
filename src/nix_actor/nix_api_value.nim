@@ -19,7 +19,7 @@ proc get_typename*(context: NixContext; value: Value): cstring {.nix_api_value.}
 
 proc get_bool*(context: NixContext; value: Value): bool {.nix_api_value.}
 
-proc get_string*(context: NixContext; value: Value; callback: GetStringCallback; user_data: pointer): nix_err {.nix_api_value.}
+proc get_string*(context: NixContext; value: Value; callback: GetStringCallback; user_data: pointer): nix_err {.nix_api_value, discardable.}
 
 proc get_path_string*(context: NixContext; value: Value): cstring {.nix_api_value.}
 
@@ -43,39 +43,39 @@ proc get_attr_byidx*(context: NixContext; value: Value; state: EvalState; i: cui
 
 # proc get_attr_name_byidx*(context: NixContext; value: Value; state: EvalState; i: cuint): cstring {.nix_api_value.}
 
-proc init_bool*(context: NixContext; value: Value; b: bool): nix_err {.nix_api_value.}
+proc init_bool*(context: NixContext; value: Value; b: bool): nix_err {.nix_api_value, discardable.}
 
-proc init_string*(context: NixContext; value: Value; str: cstring): nix_err {.nix_api_value.}
+proc init_string*(context: NixContext; value: Value; str: cstring): nix_err {.nix_api_value, discardable.}
 
-proc init_path_string*(context: NixContext; s: EvalState; value: Value; str: cstring): nix_err {.nix_api_value.}
+proc init_path_string*(context: NixContext; s: EvalState; value: Value; str: cstring): nix_err {.nix_api_value, discardable.}
 
-proc init_float*(context: NixContext; value: Value; d: cdouble): nix_err {.nix_api_value.}
+proc init_float*(context: NixContext; value: Value; d: cdouble): nix_err {.nix_api_value, discardable.}
 
-proc init_int*(context: NixContext; value: Value; i: int64): nix_err {.nix_api_value.}
+proc init_int*(context: NixContext; value: Value; i: int64): nix_err {.nix_api_value, discardable.}
 
-proc init_null*(context: NixContext; value: Value): nix_err {.nix_api_value.}
+proc init_null*(context: NixContext; value: Value): nix_err {.nix_api_value, discardable.}
 
-proc init_apply*(context: NixContext; value: Value; fn: Value; arg: Value): nix_err {.nix_api_value.}
+proc init_apply*(context: NixContext; value: Value; fn: Value; arg: Value): nix_err {.nix_api_value, discardable.}
 
-proc init_external*(context: NixContext; value: Value; val: ExternalValue): nix_err {.nix_api_value.}
+proc init_external*(context: NixContext; value: Value; val: ExternalValue): nix_err {.nix_api_value, discardable.}
 
-proc make_list*(context: NixContext; list_builder: ListBuilder; value: Value): nix_err {.nix_api_value.}
+proc make_list*(context: NixContext; list_builder: ListBuilder; value: Value): nix_err {.nix_api_value, discardable.}
 
 proc make_list_builder*(context: NixContext; state: EvalState; capacity: csize_t): ListBuilder {.nix_api_value.}
 
-proc list_builder_insert*(context: NixContext; list_builder: ListBuilder; index: cuint; value: Value): nix_err {.nix_api_value.}
+proc list_builder_insert*(context: NixContext; list_builder: ListBuilder; index: cuint; value: Value): nix_err {.nix_api_value, discardable.}
 
 proc list_builder_free*(list_builder: ListBuilder) {.nix_api_value.}
 
-proc make_attrs*(context: NixContext; value: Value; b: BindingsBuilder): nix_err {.nix_api_value.}
+proc make_attrs*(context: NixContext; value: Value; b: BindingsBuilder): nix_err {.nix_api_value, discardable.}
 
-# proc init_primop*(context: NixContext; value: Value; op: PrimOp): nix_err {.nix_api_value.}
+# proc init_primop*(context: NixContext; value: Value; op: PrimOp): nix_err {.nix_api_value, discardable.}
 
-proc copy_value*(context: NixContext; value: Value; source: Value): nix_err {.nix_api_value.}
+proc copy_value*(context: NixContext; value: Value; source: Value): nix_err {.nix_api_value, discardable.}
 
 proc make_bindings_builder*(context: NixContext; state: EvalState; capacity: csize_t): BindingsBuilder {.nix_api_value.}
 
-proc bindings_builder_insert*(context: NixContext; builder: BindingsBuilder; name: cstring; value: Value): nix_err {.nix_api_value.}
+proc bindings_builder_insert*(context: NixContext; builder: BindingsBuilder; name: cstring; value: Value): nix_err {.nix_api_value, discardable.}
 
 proc bindings_builder_free*(builder: BindingsBuilder) {.nix_api_value.}
 
@@ -90,4 +90,3 @@ proc realised_string_get_store_path_count*(realised_string: RealisedString): csi
 proc realised_string_get_store_path*(realised_string: RealisedString; index: csize_t): StorePath {.nix_api_value.}
 
 proc realised_string_free*(realised_string: RealisedString) {.nix_api_value.}
-
