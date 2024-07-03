@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "451bdd18_47750a4f",
+        "filename": "tvix/store/src/pathinfoservice/bigtable.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 401,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-07-03T12:34:54Z",
+      "side": 1,
+      "message": "Why not call this `path_info_key` like in `put` to keep name consistent?",
+      "revId": "d90596bf0ba97bb79d662209345a8a4a780bcbe5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
