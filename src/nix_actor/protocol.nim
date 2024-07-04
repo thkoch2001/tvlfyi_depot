@@ -78,6 +78,7 @@ type
     `command-path`*: seq[string]
     `lookupPath`*: seq[string]
     `options`*: AttrSet
+    `store-uri`*: string
 
 proc `$`*(x: Error | Eval | AttrSet | Realise | Derivation | RealiseResult |
     EvalSuccess |

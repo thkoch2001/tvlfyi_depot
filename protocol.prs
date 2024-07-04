@@ -6,9 +6,6 @@ ResolveDetail = {
   # PATH to search for Nix utilities.
   command-path: [string ...]
 
-  # Command line options.
-  options: AttrSet
-
   # List of strings corresponding to entries in NIX_PATH.
   # For example:
   #  [ "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
@@ -16,6 +13,12 @@ ResolveDetail = {
   #    "/nix/var/nix/profiles/per-user/root/channels"
   #  ]
   lookupPath: [string ...]
+
+  # Command line options.
+  options: AttrSet
+
+  # Store selector, use "auto" unless you know exactly what you need.
+  store-uri: string
 } .
 
 # Common error type.

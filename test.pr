@@ -8,6 +8,7 @@ let ?nixConfig = {
       "/nix/var/nix/profiles/per-user/root/channels",
     ]
     options: { }
+    store-uri: "auto"
   }
 
 let ?nixLog = dataspace

@@ -120,7 +120,7 @@ proc main() =
       let pat = Resolve?:{ 0: ResolveStep.grabWithin, 1: grab() }
       during(turn, relay, pat) do (detail: ResolveDetail; observer: Cap):
         let
-          store = openStore()
+          store = openStore(detail.`store-uri`)
           ds = turn.newDataspace()
             # TODO: attenuate this dataspace to only the assertions we observe.
         linkActor(turn, "nix-actor") do (turn: Turn):
