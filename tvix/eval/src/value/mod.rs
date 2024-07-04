@@ -7,6 +7,7 @@ use std::path::PathBuf;
 use std::rc::Rc;
 
 use bstr::{BString, ByteVec};
+use codemap::Span;
 use lexical_core::format::CXX_LITERAL;
 use serde::Deserialize;
 
@@ -23,7 +24,6 @@ mod thunk;
 
 use crate::errors::{CatchableErrorKind, ErrorKind};
 use crate::opcode::StackIdx;
-use crate::spans::LightSpan;
 use crate::vm::generators::{self, GenCo};
 use crate::AddContext;
 pub use attrs::NixAttrs;
@@ -224,7 +224,7 @@ impl Value {
     /// their contents, too.
     ///
     /// This is a generator function.
-    pub(super) async fn deep_force(self, co: GenCo, span: LightSpan) -> Result<Value, ErrorKind> {
+    pub(super) async fn deep_force(self, co: GenCo, span: Span) -> Result<Value, ErrorKind> {
         if let Some(v) = Self::deep_force_(self.clone(), co, span).await? {
             Ok(v)
         } else {
@@ -233,11 +233,7 @@ impl Value {
     }
 
     /// Returns Some(v) or None to indicate the returned value is myself
-    async fn deep_force_(
-        myself: Value,
-        co: GenCo,
-        span: LightSpan,
-    ) -> Result<Option<Value>, ErrorKind> {
+    async fn deep_force_(myself: Value, co: GenCo, span: Span) -> Result<Option<Value>, ErrorKind> {
         // This is a stack of values which still remain to be forced.
         let mut vals = vec![myself];
 
@@ -307,7 +303,7 @@ impl Value {
         self,
         co: GenCo,
         kind: CoercionKind,
-        span: LightSpan,
+        span: Span,
     ) -> Result<Value, ErrorKind> {
         self.coerce_to_string_(&co, kind, span).await
     }
@@ -318,7 +314,7 @@ impl Value {
         self,
         co: &GenCo,
         kind: CoercionKind,
-        span: LightSpan,
+        span: Span,
     ) -> Result<Value, ErrorKind> {
         let mut result = BString::default();
         let mut vals = vec![self];
@@ -467,7 +463,7 @@ impl Value {
         other: Value,
         co: GenCo,
         ptr_eq: PointerEquality,
-        span: LightSpan,
+        span: Span,
     ) -> Result<Value, ErrorKind> {
         self.nix_eq(other, &co, ptr_eq, span).await
     }
@@ -487,7 +483,7 @@ impl Value {
         other: Value,
         co: &GenCo,
         ptr_eq: PointerEquality,
-        span: LightSpan,
+        span: Span,
     ) -> Result<Value, ErrorKind> {
         // this is a stack of ((v1,v2),peq) triples to be compared;
         // after each triple is popped off of the stack, v1 is
@@ -745,7 +741,7 @@ impl Value {
         self,
         other: Self,
         co: GenCo,
-        span: LightSpan,
+        span: Span,
     ) -> Result<Result<Ordering, CatchableErrorKind>, ErrorKind> {
         Self::nix_cmp_ordering_(self, other, co, span).await
     }
@@ -754,7 +750,7 @@ impl Value {
         myself: Self,
         other: Self,
         co: GenCo,
-        span: LightSpan,
+        span: Span,
     ) -> Result<Result<Ordering, CatchableErrorKind>, ErrorKind> {
         // this is a stack of ((v1,v2),peq) triples to be compared;
         // after each triple is popped off of the stack, v1 is
@@ -820,7 +816,7 @@ impl Value {
     }
 
     // TODO(amjoseph): de-asyncify this (when called directly by the VM)
-    pub async fn force(self, co: &GenCo, span: LightSpan) -> Result<Value, ErrorKind> {
+    pub async fn force(self, co: &GenCo, span: Span) -> Result<Value, ErrorKind> {
         if let Value::Thunk(thunk) = self {
             // TODO(amjoseph): use #[tailcall::mutual]
             return Thunk::force_(thunk, co, span).await;
@@ -829,7 +825,7 @@ impl Value {
     }
 
     // need two flavors, because async
-    pub async fn force_owned_genco(self, co: GenCo, span: LightSpan) -> Result<Value, ErrorKind> {
+    pub async fn force_owned_genco(self, co: GenCo, span: Span) -> Result<Value, ErrorKind> {
         if let Value::Thunk(thunk) = self {
             // TODO(amjoseph): use #[tailcall::mutual]
             return Thunk::force_(thunk, &co, span).await;

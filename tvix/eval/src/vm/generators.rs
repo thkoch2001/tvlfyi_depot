@@ -81,7 +81,7 @@ pub enum VMRequest {
     EnterLambda {
         lambda: Rc<Lambda>,
         upvalues: Rc<Upvalues>,
-        light_span: LightSpan,
+        span: Span,
     },
 
     /// Emit a runtime warning (already containing a span) through the VM.
@@ -198,7 +198,7 @@ pub enum VMResponse {
     Directory(Vec<(bytes::Bytes, FileType)>),
 
     /// VM response with a span to use at the current point.
-    Span(LightSpan),
+    Span(Span),
 
     /// [std::io::Reader] produced by the VM in response to some IO operation.
     Reader(Box<dyn std::io::Read>),
@@ -234,7 +234,7 @@ where
 {
     /// Helper function to re-enqueue the current generator while it
     /// is awaiting a value.
-    fn reenqueue_generator(&mut self, name: &'static str, span: LightSpan, generator: Generator) {
+    fn reenqueue_generator(&mut self, name: &'static str, span: Span, generator: Generator) {
         self.frames.push(Frame::Generator {
             name,
             generator,
@@ -244,7 +244,7 @@ where
     }
 
     /// Helper function to enqueue a new generator.
-    pub(super) fn enqueue_generator<F, G>(&mut self, name: &'static str, span: LightSpan, gen: G)
+    pub(super) fn enqueue_generator<F, G>(&mut self, name: &'static str, span: Span, gen: G)
     where
         F: Future<Output = Result<Value, ErrorKind>> + 'static,
         G: FnOnce(GenCo) -> F,
@@ -265,7 +265,7 @@ where
     pub(crate) fn run_generator(
         &mut self,
         name: &'static str,
-        span: LightSpan,
+        span: Span,
         frame_id: usize,
         state: GeneratorState,
         mut generator: Generator,
@@ -375,12 +375,12 @@ where
                         VMRequest::EnterLambda {
                             lambda,
                             upvalues,
-                            light_span,
+                            span,
                         } => {
                             self.reenqueue_generator(name, span, generator);
 
                             self.frames.push(Frame::CallFrame {
-                                span: light_span,
+                                span,
                                 call_frame: CallFrame {
                                     lambda,
                                     upvalues,
@@ -683,12 +683,12 @@ pub(crate) async fn request_enter_lambda(
     co: &GenCo,
     lambda: Rc<Lambda>,
     upvalues: Rc<Upvalues>,
-    light_span: LightSpan,
+    span: Span,
 ) -> Value {
     let msg = VMRequest::EnterLambda {
         lambda,
         upvalues,
-        light_span,
+        span,
     };
 
     match co.yield_(msg).await {
@@ -767,7 +767,7 @@ pub(crate) async fn request_read_dir(co: &GenCo, path: PathBuf) -> Vec<(bytes::B
     }
 }
 
-pub(crate) async fn request_span(co: &GenCo) -> LightSpan {
+pub(crate) async fn request_span(co: &GenCo) -> Span {
     match co.yield_(VMRequest::Span).await {
         VMResponse::Span(span) => span,
         msg => panic!(
