@@ -3,11 +3,11 @@
 
 import
   std/[options, os, osproc, streams, strtabs, strutils, tables, times],
-  pkg/preserves,
+  pkg/preserves, pkg/preserves/sugar,
   pkg/syndicate,
   pkg/syndicate/protocols/gatekeeper,
   pkg/syndicate/relays,
-  ./nix_actor/[nix_api, nix_api_expr, nix_values],
+  ./nix_actor/[nix_api, nix_api_expr, nix_api_store, nix_values, utils],
   ./nix_actor/protocol
 
 proc echo(args: varargs[string, `$`]) {.used.} =
@@ -35,40 +35,20 @@ proc commandlineArgs(detail: ResolveDetail; args: varargs[string]): seq[string] 
 proc commandlineEnv(detail: ResolveDetail): StringTableRef =
   newStringTable({"NIX_PATH": detail.lookupPath.join ":"})
 
-proc realise(facet: Facet; detail: ResolveDetail; drv: string; log: Option[Cap], resp: Cap) =
-  # TODO: run this process asynchronously with nim-sys.
-  var p: Process
-  try:
-    p = startProcess(
-        detail.findCommand("nix-store"),
-        args = detail.commandlineArgs("--realise", drv),
-        env = detail.commandlineEnv(),
-        options = {},
-      )
-    facet.onStop do (turn: Turn):
-      if p.running:
-        p.kill()
-    var
-      errors = errorStream(p)
-      line = "".toPreserves
-    while true:
-      if errors.readLine(line.string):
-        if log.isSome:
-          facet.run do (turn: Turn):
-            message(turn, log.get, line)
-      elif not p.running: break
-      initDuration(milliseconds = 250).some.runOnce
-    var storePaths = p.outputStream.readAll.strip.split
-    doAssert storePaths != @[]
-    facet.run do (turn: Turn):
-      for path in storePaths:
-        discard publish(turn, resp, RealiseSuccess(
-            storePath: path, drvPath: drv))
-  except CatchableError as err:
-    facet.run do (turn: Turn):
-      discard publish(turn, resp, Error(message: err.msg))
-  finally:
-    close(p)
+proc realiseCallback(userdata: pointer; a, b: cstring) {.cdecl.} =
+  echo "realiseCallback(nil, ", a, ", ", b, ")"
+
+proc realise(turn: Turn; store: Store; path: string; resp: Cap) =
+  mitNix:
+    let storePath = nix.store_parse_path(store, path)
+    assert not storePath.isNil
+    defer: store_path_free(storePath)
+    turn.facet.run do (turn: Turn):
+      discard nix.store_realise(store, storePath, nil, realiseCallback)
+      if nix.store_is_valid_path(store, storePath):
+        discard publish(turn, resp, initRecord("ok", %path))
+      else:
+        discard publish(turn, resp, initRecord("error", %"not a valid store path"))
 
 proc eval(store: Store; state: EvalState; expr: string): EvalResult =
   defer: close(state) # Single-use state.
@@ -109,10 +89,11 @@ proc serve(turn: Turn; detail: ResolveDetail; store: Store; ds: Cap) =
     let state = newState(store, detail.lookupPath)
     discard publish(turn, resp, evalFile(store, state, path, args))
 
-  during(turn, ds, Realise.grabWithin) do (drv: string, log: Value, resp: Cap):
-    realise(turn.facet, detail, drv, log.unembed(Cap), resp)
+  during(turn, ds, Realise.grabWithin) do (drv: string, resp: Cap):
+    realise(turn, store, drv, resp)
 
 proc main() =
+  initLibstore()
   initLibexpr()
 
   runActor("main") do (turn: Turn):
@@ -122,7 +103,6 @@ proc main() =
         let
           store = openStore(detail.`store-uri`)
           ds = turn.newDataspace()
-            # TODO: attenuate this dataspace to only the assertions we observe.
         linkActor(turn, "nix-actor") do (turn: Turn):
           serve(turn, detail, store, ds)
         discard publish(turn, observer, ResolvedAccepted(responderSession: ds))

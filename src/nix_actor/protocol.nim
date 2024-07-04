@@ -13,7 +13,6 @@ type
   AttrSet* = Table[Symbol, Value]
   Realise* {.preservesRecord: "realise".} = object
     `drvPath`*: string
-    `log`* {.preservesEmbedded.}: Value
     `outputs`* {.preservesEmbedded.}: Value
 
   Derivation* {.preservesRecord: "drv".} = object
@@ -36,8 +35,9 @@ type
     `expr`*: string
 
   RealiseSuccess* {.preservesRecord: "ok".} = object
-    `storePath`*: string
     `drvPath`*: string
+    `outName`*: string
+    `outPath`*: string
 
   EvalFile* {.preservesRecord: "eval-file".} = object
     `path`*: string

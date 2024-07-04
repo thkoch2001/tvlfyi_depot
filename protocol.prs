@@ -48,8 +48,8 @@ Derivation = <drv @drvPath string @storePath string> .
 
 # Asserted to nix-actor.
 # @drvPath is realised and each output is asserted to @outputs.
-Realise = <realise @drvPath string @log #:string @outputs #:RealiseResult> .
+Realise = <realise @drvPath string @outputs #:RealiseResult> .
 RealiseResult = Error / RealiseSuccess .
-RealiseSuccess = <ok @storePath string @drvPath string> .
+RealiseSuccess = <ok @drvPath string @outName string @outPath string> .
 
 AttrSet = {symbol: any ...:...} .

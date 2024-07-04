@@ -9,7 +9,6 @@ type
   ExternalValue* {.header: "nix_api_value.h", importc.} = distinct pointer
   ListBuilder* {.header: "nix_api_value.h", importc.} = distinct pointer
   RealisedString* {.header: "nix_api_value.h", importc: "nix_realised_string".} = distinct pointer
-  GetStringCallback* = proc (start: cstring; n: cuint; data: pointer) {.cdecl.}
 
 proc alloc_value*(context: NixContext; state: EvalState): Value {.nix_api_value.}
 

@@ -29,8 +29,9 @@ $results ? ?any [
   $nix <eval-file "/home/emery/src/nix_actor/test.nix" { time: builtins.currentTime } $results>
 
   # Realise all observed store derivations.
-  $results ? <ok <drv ?drvPath>> [
-    $nix  <realise $drvPath $nixLog $results>
+  $results ? <ok <drv ?drvPath ?storePath>> [
+    # $nix  <realise $drvPath $nixLog $results>
+    $nix  <realise $storePath $nixLog $results>
   ]
 
 ]
