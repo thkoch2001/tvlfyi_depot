@@ -4367,6 +4367,7 @@ dependencies = [
  "dirs",
  "nix-compat",
  "rnix",
+ "rowan",
  "rustyline",
  "thiserror",
  "tikv-jemallocator",
