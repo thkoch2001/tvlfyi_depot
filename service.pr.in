@@ -1,0 +1,13 @@
+<daemon @name@ {
+  argv: [ "@mainProgram@" ]
+  clearEnv: #t
+  protocol: application/syndicate
+}>
+
+? <q <service nix ?detail>> [
+  <require-service <daemon @name@>>
+  ? <service-object <daemon @name@> ?obj> [
+    let ?rewriter = <* $config [<rewrite ?resp <a <service nix $detail> $resp>>]>
+    $obj <resolve <nix-actor $detail> $rewriter>
+  ]
+]
