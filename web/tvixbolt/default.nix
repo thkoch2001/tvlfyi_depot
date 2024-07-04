@@ -46,7 +46,7 @@ let
 
      [dependencies.tvix-eval]
     -path = "../../tvix/eval"
-    +path = "${depot.tvix.crates.workspaceMembers.tvix-eval.build.src}"
+    +path = "${../../tvix/eval}"
      default-features = false
 
      [dependencies.serde]
