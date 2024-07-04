@@ -556,6 +556,16 @@ impl Compiler<'_, '_> {
         self.scope_mut().end_scope();
     }
 
+    /// Emit definitions for all variables in the top-level global env passed to the evaluation (eg
+    /// local variables in the REPL)
+    fn compile_env(&mut self, env: &HashMap<SmolStr, Value>) {
+        let mut bindings = TrackedBindings::new();
+        for (name, value) in env {
+            let key_slot = KeySlot::None { name: name.clone() };
+            todo!("{name} = {value:?}");
+        }
+    }
+
     /// Actually binds all tracked bindings by emitting the bytecode that places
     /// them in their stack slots.
     fn bind_values(&mut self, bindings: TrackedBindings) {

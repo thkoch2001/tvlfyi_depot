@@ -193,6 +193,7 @@ impl<'source, 'observer> Compiler<'source, 'observer> {
     pub(crate) fn new(
         location: Option<PathBuf>,
         globals: Rc<GlobalsMap>,
+        context: Option<&HashMap<String, Value>>,
         source: &'source SourceCode,
         file: &'source codemap::File,
         observer: &'observer mut dyn CompilerObserver,
@@ -1549,6 +1550,7 @@ fn compile_src_builtin(
             &parsed.tree().expr().unwrap(),
             None,
             weak.upgrade().unwrap(),
+            None,
             &source,
             &file,
             &mut crate::observer::NoOpObserver {},
@@ -1655,11 +1657,12 @@ pub fn compile(
     expr: &ast::Expr,
     location: Option<PathBuf>,
     globals: Rc<GlobalsMap>,
+    context: Option<&HashMap<String, Value>>,
     source: &SourceCode,
     file: &codemap::File,
     observer: &mut dyn CompilerObserver,
 ) -> EvalResult<CompilationOutput> {
-    let mut c = Compiler::new(location, globals.clone(), source, file, observer)?;
+    let mut c = Compiler::new(location, globals.clone(), context, source, file, observer)?;
 
     let root_span = c.span_for(expr);
     let root_slot = c.scope_mut().declare_phantom(root_span, false);

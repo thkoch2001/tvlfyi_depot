@@ -1,7 +1,9 @@
+mod assignment;
 mod repl;
 
 use clap::Parser;
 use repl::Repl;
+use std::collections::HashMap;
 use std::rc::Rc;
 use std::{fs, path::PathBuf};
 use tracing::{instrument, Level, Span};
@@ -150,6 +152,9 @@ impl AllowIncomplete {
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 struct IncompleteInput;
 
+/// Top-level variables defined in the context of an evaluation
+pub type Context = HashMap<String, Value>;
+
 /// Interprets the given code snippet, printing out warnings, errors
 /// and the result itself. The return value indicates whether
 /// evaluation succeeded.
@@ -161,6 +166,7 @@ fn interpret(
     args: &Args,
     explain: bool,
     allow_incomplete: AllowIncomplete,
+    context: Option<&Context>,
 ) -> Result<bool, IncompleteInput> {
     let span = Span::current();
     span.pb_start();
@@ -173,6 +179,9 @@ fn interpret(
     );
     eval.strict = args.strict;
     eval.builtins.extend(impure_builtins());
+    if let Some(context) = context {
+        eval.context = Some(context);
+    }
     add_derivation_builtins(&mut eval, Rc::clone(&tvix_store_io));
     add_fetcher_builtins(&mut eval, Rc::clone(&tvix_store_io));
     add_import_builtins(&mut eval, tvix_store_io);
@@ -298,6 +307,7 @@ fn main() {
             &args,
             false,
             AllowIncomplete::RequireComplete,
+            None, // TODO(aspen): Pass in --arg/--argstr here
         )
         .unwrap()
         {
@@ -325,6 +335,7 @@ fn run_file(io_handle: Rc<TvixStoreIO>, mut path: PathBuf, args: &Args) {
             args,
             false,
             AllowIncomplete::RequireComplete,
+            None,
         )
         .unwrap()
     };
