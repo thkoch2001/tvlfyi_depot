@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://static.tvl.su/latest/terminal.min.css">
+    <link rel="stylesheet" href="index.css">
+    <title>Tvixbolt</title>
+  </head>
+  <body>
+    <script type="module">
+      import init, { main } from './tvixbolt.js';
+
+      async function run() {
+        await init();
+	main();
+      }
+
+      run();
+    </script>
+  </body>
