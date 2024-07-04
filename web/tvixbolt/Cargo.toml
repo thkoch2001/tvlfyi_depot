@@ -3,24 +3,13 @@ name = "tvixbolt"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+crate-type = ["cdylib"]
+
 [dependencies]
 yew = "0.19.3"
 yew-router = "0.16"
-codemap = "0.1.3"
-serde_urlencoded = "*" # pinned by yew
-rnix = "0.11.0"
-
-# needs to be in sync with nixpkgs
-wasm-bindgen = "= 0.2.92"
-
-[dependencies.tvix-eval]
-path = "../../tvix/eval"
-default-features = false
-
-[dependencies.serde]
-version = "*" # pinned by yew
-features = [ "derive" ]
-
-[dependencies.web-sys]
-version = "*" # pinned by yew
-features = [ "HtmlDetailsElement" ]
+tvix-eval = { path = "../../tvix/eval", default-features = false }
+serde = { version = "1.0.203", features = ["derive"] }
+web-sys = { version = "0.3.69", features = ["HtmlDetailsElement"] }
+wasm-bindgen = "0.2.92"
