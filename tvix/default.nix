@@ -2,86 +2,9 @@
 { pkgs, lib, depot, ... }:
 
 let
-  # crate override for crates that need protobuf
-  protobufDep = prev: (prev.nativeBuildInputs or [ ]) ++ [ pkgs.buildPackages.protobuf ];
-
-  # On Darwin, some crates producing binaries need to be able to link against security.
-  darwinDeps = lib.optionals pkgs.stdenv.isDarwin (with pkgs.buildPackages.darwin.apple_sdk.frameworks; [
-    Security
-    SystemConfiguration
-  ]);
-
   # Load the crate2nix crate tree.
   crates = pkgs.callPackage ./Cargo.nix {
-    defaultCrateOverrides = pkgs.defaultCrateOverrides // {
-      nix-compat = prev: {
-        src = depot.tvix.utils.filterRustCrateSrc rec {
-          root = prev.src.origSrc;
-          extraFileset = (root + "/testdata");
-        };
-      };
-      tvix-build = prev: {
-        src = depot.tvix.utils.filterRustCrateSrc rec {
-          root = prev.src.origSrc;
-          extraFileset = (lib.fileset.fileFilter (f: f.hasExt "proto") root);
-        };
-        PROTO_ROOT = depot.tvix.build.protos.protos;
-        nativeBuildInputs = protobufDep prev;
-        buildInputs = darwinDeps;
-      };
-
-      tvix-castore = prev: {
-        src = depot.tvix.utils.filterRustCrateSrc rec {
-          root = prev.src.origSrc;
-          extraFileset = (lib.fileset.fileFilter (f: f.hasExt "proto") root);
-        };
-        PROTO_ROOT = depot.tvix.castore.protos.protos;
-        nativeBuildInputs = protobufDep prev;
-      };
-
-      tvix-cli = prev: {
-        src = depot.tvix.utils.filterRustCrateSrc { root = prev.src.origSrc; };
-        buildInputs = prev.buildInputs or [ ] ++ darwinDeps;
-      };
-
-      tvix-store = prev: {
-        src = depot.tvix.utils.filterRustCrateSrc rec {
-          root = prev.src.origSrc;
-          extraFileset = (lib.fileset.fileFilter (f: f.hasExt "proto") root);
-        };
-        PROTO_ROOT = depot.tvix.store.protos.protos;
-        nativeBuildInputs = protobufDep prev;
-        # fuse-backend-rs uses DiskArbitration framework to handle mount/unmount on Darwin
-        buildInputs = prev.buildInputs or [ ]
-          ++ darwinDeps
-          ++ lib.optional pkgs.stdenv.isDarwin pkgs.buildPackages.darwin.apple_sdk.frameworks.DiskArbitration;
-      };
-
-      tvix-eval-builtin-macros = prev: {
-        src = depot.tvix.utils.filterRustCrateSrc { root = prev.src.origSrc; };
-      };
-
-      tvix-eval = prev: {
-        src = depot.tvix.utils.filterRustCrateSrc rec {
-          root = prev.src.origSrc;
-          extraFileset = (root + "/proptest-regressions");
-        };
-      };
-
-      tvix-glue = prev: {
-        src = depot.tvix.utils.filterRustCrateSrc {
-          root = prev.src.origSrc;
-        };
-      };
-
-      tvix-serde = prev: {
-        src = depot.tvix.utils.filterRustCrateSrc { root = prev.src.origSrc; };
-      };
-
-      tvix-tracing = prev: {
-        src = depot.tvix.utils.filterRustCrateSrc { root = prev.src.origSrc; };
-      };
-    };
+    defaultCrateOverrides = depot.tvix.utils.defaultCrateOverridesForPkgs pkgs;
   };
 
   # Cargo dependencies to be used with nixpkgs rustPlatform functions.
