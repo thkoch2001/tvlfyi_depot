@@ -579,7 +579,7 @@ impl Compiler<'_, '_> {
 
                 KeySlot::Static { slot, name } => {
                     let span = self.scope()[slot].span;
-                    self.emit_constant(name.as_str().into(), &span);
+                    self.emit_constant(name.as_str().into(), *span);
                     self.scope_mut().mark_initialised(slot);
                 }
 
