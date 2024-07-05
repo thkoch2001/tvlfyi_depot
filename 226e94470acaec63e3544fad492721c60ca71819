@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1bd80c6b_52a599cc",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 475,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-07-05T03:44:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "51d775f2_7f5f93dc",
+      "revId": "226e94470acaec63e3544fad492721c60ca71819",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "18bfa87f_683cfd72",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-07-04T18:45:34Z",
       "side": 1,
       "message": "Do we still want to keep this?",
+      "revId": "226e94470acaec63e3544fad492721c60ca71819",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d28c44e_6269fa77",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1001,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-07-05T03:44:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18bfa87f_683cfd72",
       "revId": "226e94470acaec63e3544fad492721c60ca71819",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
