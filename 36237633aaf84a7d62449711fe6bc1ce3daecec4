@@ -56,6 +56,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "0ed9aff7_43608909",
+        "filename": "tvix/cli/Cargo.toml",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-06T18:38:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "407134ea_2d7493b0",
+      "revId": "36237633aaf84a7d62449711fe6bc1ce3daecec4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "e4bca77f_02b4482c",
         "filename": "tvix/cli/src/lib.rs",
         "patchSetId": 2
