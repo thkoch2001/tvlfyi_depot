@@ -265,18 +265,19 @@ fn eval(model: &Model) -> Output {
         return out;
     }
 
-    let mut eval = tvix_eval::Evaluation::new_pure();
-    let source = eval.source_map();
+    let mut eval_builder = tvix_eval::Evaluation::builder_pure();
+    let source = eval_builder.source_map().clone();
 
     let result = {
         let mut compiler_observer = DisassemblingObserver::new(source.clone(), &mut out.bytecode);
-        eval.compiler_observer = Some(&mut compiler_observer);
+        eval_builder.set_compiler_observer(Some(&mut compiler_observer));
 
         let mut runtime_observer = TracingObserver::new(&mut out.trace);
         if model.trace {
-            eval.runtime_observer = Some(&mut runtime_observer);
+            eval_builder.set_runtime_observer(Some(&mut runtime_observer));
         }
 
+        let eval = eval_builder.build();
         eval.evaluate(&model.code, Some("/nixbolt".into()))
     };
 
