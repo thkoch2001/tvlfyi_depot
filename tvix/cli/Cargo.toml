@@ -26,9 +26,13 @@ thiserror = "1.0.38"
 tokio = "1.28.0"
 tracing = "0.1.40"
 tracing-indicatif = "0.3.6"
+expect-test = "1.5.0"
 
 [dependencies.wu-manber]
 git = "https://github.com/tvlfyi/wu-manber.git"
+
+[dev-dependencies]
+expect-test = "1.5.0"
 
 [target.'cfg(not(target_env = "msvc"))'.dependencies]
 tikv-jemallocator = "0.5"
