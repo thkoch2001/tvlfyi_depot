@@ -67,6 +67,24 @@
       "message": "can we use rstest and case here? it\u0027s nice for consistency.",
       "revId": "36237633aaf84a7d62449711fe6bc1ce3daecec4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5675f454_286d1ed4",
+        "filename": "tvix/cli/tests/repl.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-06T15:14:10Z",
+      "side": 1,
+      "message": "check `tvix/glue/src/fetchers/decompression.rs` for an example, except we\u0027d have two params here.",
+      "parentUuid": "9f1d8b4b_720bccbf",
+      "revId": "36237633aaf84a7d62449711fe6bc1ce3daecec4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
