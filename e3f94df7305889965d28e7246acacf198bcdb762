@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c05efb5_fb6af0d3",
+        "filename": "tvix/cli/src/main.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-07-06T13:38:54Z",
+      "side": 1,
+      "message": "No, I don\u0027t love this tbh. I\u0027ll change it in a follow-up for sure.",
+      "parentUuid": "8b056bb0_5672a0ac",
+      "revId": "e3f94df7305889965d28e7246acacf198bcdb762",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fb8a3395_2b9437e4",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c8cdf1d_3b03d66a",
+        "filename": "tvix/eval/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-07-06T13:38:54Z",
+      "side": 1,
+      "message": "yeah, agreed. Done.",
+      "parentUuid": "fb8a3395_2b9437e4",
+      "revId": "e3f94df7305889965d28e7246acacf198bcdb762",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78246115_512239ef",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-07-06T12:30:07Z",
       "side": 1,
       "message": "We should only have one variant of these, not both `[with_]foo` builder methods.\n\nI\u0027d probably keep the `with_` for setters to make it clear (so `with_import(bool)`, `with_io_handle`, `with_compiler_observer`, …), and use `add_` explicitly for places that don\u0027t override (`add_src_builtin`, `add_builtins`).",
+      "revId": "e3f94df7305889965d28e7246acacf198bcdb762",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fd6e6e1_c0f90c19",
+        "filename": "tvix/eval/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-07-06T13:38:54Z",
+      "side": 1,
+      "message": "I soft-disagree, actually - I quite like having a more \"maximalist\" interface to builders, since the intent is to be used as a \"nice\" API for users.\n\nFeel free to push back if you feel more strongly about it than I do, though.",
+      "parentUuid": "78246115_512239ef",
       "revId": "e3f94df7305889965d28e7246acacf198bcdb762",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -83,6 +137,24 @@
       "side": 1,
       "message": "(ah yes, and the operations doing actual filesystem IO should probably just be feature-flagged on `target_family \u003d \"unix\"` to make them not be pulled in in the wasm case)",
       "parentUuid": "4c6198cd_f4a17e6b",
+      "revId": "e3f94df7305889965d28e7246acacf198bcdb762",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3dc2d26_39b9e8d7",
+        "filename": "tvix/eval/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-07-06T13:38:54Z",
+      "side": 1,
+      "message": "Would you mind doing this yourself in a follow-up? I think you probably know more about what you think this should look like than me.",
+      "parentUuid": "df4b395c_8f5fc70e",
       "revId": "e3f94df7305889965d28e7246acacf198bcdb762",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
