@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dc5c3c9_1e44dc89",
+        "filename": "tvix/cli/Cargo.toml",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-06T14:57:14Z",
+      "side": 1,
+      "message": "both in dev and non-dev?",
+      "revId": "36237633aaf84a7d62449711fe6bc1ce3daecec4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4bca77f_02b4482c",
+        "filename": "tvix/cli/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 211,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-06T14:57:14Z",
+      "side": 1,
+      "message": "nice! this is gonna make it easier to replace stdout with the wrapped thing that doesn\u0027t garble progress bars (https://cl.tvl.fyi/c/depot/+/11860)",
+      "revId": "36237633aaf84a7d62449711fe6bc1ce3daecec4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd40a7cf_ec6ff6ac",
+        "filename": "tvix/cli/src/repl.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-06T14:57:14Z",
+      "side": 1,
+      "message": "small docstring please",
+      "revId": "36237633aaf84a7d62449711fe6bc1ce3daecec4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f1d8b4b_720bccbf",
+        "filename": "tvix/cli/tests/repl.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-06T14:57:14Z",
+      "side": 1,
+      "message": "can we use rstest and case here? it\u0027s nice for consistency.",
+      "revId": "36237633aaf84a7d62449711fe6bc1ce3daecec4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
