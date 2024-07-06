@@ -20,6 +20,40 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb8a3395_2b9437e4",
+        "filename": "tvix/eval/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-06T12:30:07Z",
+      "side": 1,
+      "message": "This isn\u0027t really used anywhere (yet), and if we go with the approach suggested in https://cl.tvl.fyi/c/depot/+/11956/comment/8b056bb0_5672a0ac/, there should be little reason to provide this, so I\u0027d prefer removing it.",
+      "revId": "e3f94df7305889965d28e7246acacf198bcdb762",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78246115_512239ef",
+        "filename": "tvix/eval/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 172,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-06T12:30:07Z",
+      "side": 1,
+      "message": "We should only have one variant of these, not both `[with_]foo` builder methods.\n\nI\u0027d probably keep the `with_` for setters to make it clear (so `with_import(bool)`, `with_io_handle`, `with_compiler_observer`, …), and use `add_` explicitly for places that don\u0027t override (`add_src_builtin`, `add_builtins`).",
+      "revId": "e3f94df7305889965d28e7246acacf198bcdb762",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4c6198cd_f4a17e6b",
         "filename": "tvix/eval/src/lib.rs",
         "patchSetId": 3
