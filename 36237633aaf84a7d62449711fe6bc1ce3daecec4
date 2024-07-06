@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "d88774bb_f0f0a7e3",
+        "filename": "tvix/cli/Cargo.toml",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-07-06T15:32:36Z",
+      "side": 1,
+      "message": "oops.",
+      "parentUuid": "3dc5c3c9_1e44dc89",
+      "revId": "36237633aaf84a7d62449711fe6bc1ce3daecec4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "e4bca77f_02b4482c",
         "filename": "tvix/cli/src/lib.rs",
         "patchSetId": 2
@@ -48,6 +66,24 @@
       "writtenOn": "2024-07-06T14:57:14Z",
       "side": 1,
       "message": "small docstring please",
+      "revId": "36237633aaf84a7d62449711fe6bc1ce3daecec4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "223fddb8_cf014c66",
+        "filename": "tvix/cli/src/repl.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-07-06T15:32:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dd40a7cf_ec6ff6ac",
       "revId": "36237633aaf84a7d62449711fe6bc1ce3daecec4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -101,6 +137,24 @@
       "side": 1,
       "message": "I don\u0027t think we can, since this is intended to allow multiple back-and-forth round trips with the REPL. lmk if you disagree",
       "parentUuid": "5675f454_286d1ed4",
+      "revId": "36237633aaf84a7d62449711fe6bc1ce3daecec4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d4dccc5_b082172c",
+        "filename": "tvix/cli/tests/repl.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-07-06T15:32:36Z",
+      "side": 1,
+      "message": "\u003cflokli\u003e well, dismiss the comment then",
+      "parentUuid": "f17e548b_0bd5bd56",
       "revId": "36237633aaf84a7d62449711fe6bc1ce3daecec4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
