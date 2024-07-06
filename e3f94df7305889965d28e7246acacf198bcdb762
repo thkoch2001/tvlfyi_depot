@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8b056bb0_5672a0ac",
+        "filename": "tvix/cli/src/main.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-06T11:48:27Z",
+      "side": 1,
+      "message": "Are you happy with keeping this pattern, of something else taking the builder and then adding things to it?\n\nI feel like I\u0027d rather see these `add_*_builtins` functions to be refactored to return a `impl IntoIterator\u003cItem \u003d (\u0026\u0027static str, Value)\u003e` that can then be fed to `add_builtins` here.\n\nOf course, in a followup, but still worthy to have this conversation here.",
+      "revId": "e3f94df7305889965d28e7246acacf198bcdb762",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c6198cd_f4a17e6b",
+        "filename": "tvix/eval/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-06T11:48:27Z",
+      "side": 1,
+      "message": "I\u0027d prefer explicitly asking for an IO impl in the constructor (and maybe have a `Default` impl using that with `DummyIO`), and having an `enable_import()` modifier to flip that boolean.\n\nThis whole pure/impure distinction is a bit misleading, also see https://b.tvl.fyi/issues/404.",
+      "revId": "e3f94df7305889965d28e7246acacf198bcdb762",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
