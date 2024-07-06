@@ -33,6 +33,24 @@
       "message": "please add a small docstring describing what this does (globals setup, `storeDir` builtin, consuming the builder, return `Evaluation` struct).",
       "revId": "0b5992a568978bddde91ba3a6e6aa2f6307aff41",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55d56f0e_0b6687df",
+        "filename": "tvix/eval/src/lib.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-07-06T15:15:22Z",
+      "side": 1,
+      "message": "always happy to add docstrings :)",
+      "parentUuid": "eaba3e8e_3eac0e91",
+      "revId": "0b5992a568978bddde91ba3a6e6aa2f6307aff41",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
