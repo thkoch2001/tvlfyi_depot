@@ -33,6 +33,24 @@
       "message": "I\u0027d prefer explicitly asking for an IO impl in the constructor (and maybe have a `Default` impl using that with `DummyIO`), and having an `enable_import()` modifier to flip that boolean.\n\nThis whole pure/impure distinction is a bit misleading, also see https://b.tvl.fyi/issues/404.",
       "revId": "e3f94df7305889965d28e7246acacf198bcdb762",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df4b395c_8f5fc70e",
+        "filename": "tvix/eval/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 227,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-06T11:51:21Z",
+      "side": 1,
+      "message": "(ah yes, and the operations doing actual filesystem IO should probably just be feature-flagged on `target_family \u003d \"unix\"` to make them not be pulled in in the wasm case)",
+      "parentUuid": "4c6198cd_f4a17e6b",
+      "revId": "e3f94df7305889965d28e7246acacf198bcdb762",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
