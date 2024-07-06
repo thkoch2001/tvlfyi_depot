@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d25bd517_e1cb0a3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-06T15:10:41Z",
+      "side": 1,
+      "message": "Nice!",
+      "revId": "0b5992a568978bddde91ba3a6e6aa2f6307aff41",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eaba3e8e_3eac0e91",
+        "filename": "tvix/eval/src/lib.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-06T15:10:41Z",
+      "side": 1,
+      "message": "please add a small docstring describing what this does (globals setup, `storeDir` builtin, consuming the builder, return `Evaluation` struct).",
+      "revId": "0b5992a568978bddde91ba3a6e6aa2f6307aff41",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
