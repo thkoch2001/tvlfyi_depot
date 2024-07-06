@@ -85,6 +85,24 @@
       "parentUuid": "9f1d8b4b_720bccbf",
       "revId": "36237633aaf84a7d62449711fe6bc1ce3daecec4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f17e548b_0bd5bd56",
+        "filename": "tvix/cli/tests/repl.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-07-06T15:19:16Z",
+      "side": 1,
+      "message": "I don\u0027t think we can, since this is intended to allow multiple back-and-forth round trips with the REPL. lmk if you disagree",
+      "parentUuid": "5675f454_286d1ed4",
+      "revId": "36237633aaf84a7d62449711fe6bc1ce3daecec4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
