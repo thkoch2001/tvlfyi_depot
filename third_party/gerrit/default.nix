@@ -1,139 +1,88 @@
 { depot, pkgs, ... }:
 
 let
-  bazelRunScript = pkgs.writeShellScriptBin "bazel-run" ''
-    yarn config set cache-folder "$bazelOut/external/yarn_cache"
-    export HOME="$bazelOut/external/home"
-    mkdir -p "$bazelOut/external/home"
-    exec /bin/bazel "$@"
-  '';
-  bazelTop = pkgs.buildFHSUserEnv {
-    name = "bazel";
-    targetPkgs = pkgs: [
-      (pkgs.bazel_5.override { enableNixHacks = true; })
-      pkgs.jdk17_headless
-      pkgs.zlib
-      pkgs.python3
-      pkgs.curl
-      pkgs.nodejs
-      pkgs.yarn
-      pkgs.git
-      bazelRunScript
-    ];
-    runScript = "/bin/bazel-run";
-  };
-  bazel = bazelTop // { override = x: bazelTop; };
-  version = "3.9.1";
+  inherit (depot.nix) buildBazelPackageNG;
+  inherit (buildBazelPackageNG) bazelRulesJavaHook bazelRulesNodeJS5Hook;
 in
-pkgs.lib.makeOverridable pkgs.buildBazelPackage {
+pkgs.lib.makeOverridable depot.nix.buildBazelPackageNG rec {
   pname = "gerrit";
-  inherit version;
+  version = "3.10.0";
 
-  src = pkgs.fetchgit {
+  bazel = pkgs.bazel_7;
+
+  src = (pkgs.fetchgit {
     url = "https://gerrit.googlesource.com/gerrit";
-    rev = "620a819cbf3c64fff7a66798822775ad42c91d8e";
-    branchName = "v${version}";
-    sha256 = "sha256:1mdxbgnx3mpxand4wq96ic38bb4yh45q271h40jrk7dk23sgmz02";
+    rev = "v${version}";
     fetchSubmodules = true;
-  };
+    deepClone = true;
+    hash = "sha256-IYk/hYCrJ1GTrw/sdxFVxBg+TXRtVzayGgyU5t7H3hw=";
+  }).overrideAttrs (_: {
+    env.NIX_PREFETCH_GIT_CHECKOUT_HOOK = ''
+      pushd "$dir" >/dev/null
+      ${pkgs.python3}/bin/python tools/workspace_status_release.py > .version
+      popd >/dev/null
+
+      # delete all the .git; we can't do this using fetchgit if deepClone is on,
+      # but our mischief has already been achieved by the python command above :)
+      find "$dir" -name .git -print0 | xargs -0 rm -rf
+    '';
+  });
+  depsHash = "sha256-Z6pvnL8bv09K4wKaatUCsnXAtSno+BJO6rTKhDsHY44=";
 
   patches = [
     ./0001-Syntax-highlight-nix.patch
     ./0002-Syntax-highlight-rules.pl.patch
     ./0003-Add-titles-to-CLs-over-HTTP.patch
+
+    ./gerrit-cl-431977-bump-sshd.patch
   ];
 
-  bazelTargets = [ "release" "api-skip-javadoc" ];
-  inherit bazel;
+  nativeBuildInputs = with pkgs; [
+    bazelRulesJavaHook
+    bazelRulesNodeJS5Hook
 
-  bazelFlags = [
-    "--repository_cache="
-    "--disk_cache="
+    curl
+    jdk
+    python3
+    unzip
   ];
 
-  removeRulesCC = false;
-  fetchConfigured = true;
+  prePatch = ''
+    rm .bazelversion
 
-  fetchAttrs = {
-    sha256 = "sha256:119mqli75c9fy05ddrlh2brjxb354yvv1ijjkk1y1yqcaqppwwb8";
-    preBuild = ''
-      rm .bazelversion
-    '';
+    ln -sf ${./bazelrc} user.bazelrc
 
-    installPhase = ''
-      runHook preInstall
+    ln -sf ${./workspace_overrides.bzl} workspace_overrides.bzl
+    substituteInPlace WORKSPACE \
+      --replace-fail 'load("@io_bazel_rules_webtesting//web:repositories.bzl"' 'load("//:workspace_overrides.bzl"' \
+      --replace-fail 'load("@io_bazel_rules_webtesting//web/versioned:browsers-0.3.3.bzl"' 'load("//:workspace_overrides.bzl"'
 
-      # Remove all built in external workspaces, Bazel will recreate them when building
-      rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker}
-      rm -rf $bazelOut/external/{embedded_jdk,\@embedded_jdk.marker}
-      rm -rf $bazelOut/external/{local_config_cc,\@local_config_cc.marker}
-      rm -rf $bazelOut/external/{local_*,\@local_*.marker}
+    patchShebangs Documentation/replace_macros.py
+  '';
 
-      # Clear markers
-      find $bazelOut/external -name '@*\.marker' -exec sh -c 'echo > {}' \;
+  postPatch = ''
+    sed -Ei 's,^(STABLE_BUILD_GERRIT_LABEL.*)$,\1-dirty-nix,' .version
+  '';
 
-      # Remove all vcs files
-      rm -rf $(find $bazelOut/external -type d -name .git)
-      rm -rf $(find $bazelOut/external -type d -name .svn)
-      rm -rf $(find $bazelOut/external -type d -name .hg)
+  preBuild = ''
+    export GERRIT_CACHE_HOME=$HOME/gerrit-cache
+  '';
 
-      # Removing top-level symlinks along with their markers.
-      # This is needed because they sometimes point to temporary paths (?).
-      # For example, in Tensorflow-gpu build:
-      #sha256:06bmzbcb9717s4b016kcbn8nr9pgaz04i8bnzg7ybkbdwpl8vxvv"; platforms -> NIX_BUILD_TOP/tmp/install/35282f5123611afa742331368e9ae529/_embedded_binaries/platforms
-      find $bazelOut/external -maxdepth 1 -type l | while read symlink; do
-        name="$(basename "$symlink")"
-        rm -rf "$symlink" "$bazelOut/external/@$name.marker"
-      done
+  extraCacheInstall = ''
+    cp -R $GERRIT_CACHE_HOME $out/gerrit-cache
+  '';
 
-      # Patching symlinks to remove build directory reference
-      find $bazelOut/external -type l | while read symlink; do
-        new_target="$(readlink "$symlink" | sed "s,$NIX_BUILD_TOP,NIX_BUILD_TOP,")"
-        rm "$symlink"
-        ln -sf "$new_target" "$symlink"
-      done
+  extraBuildSetup = ''
+    ln -sf $cache/gerrit-cache $GERRIT_CACHE_HOME
+  '';
+  extraBuildInstall = ''
+    mkdir -p "$out"/share/api/
+    unzip bazel-bin/api-skip-javadoc.zip -d "$out"/share/api
+  '';
 
-      echo '${bazel.name}' > $bazelOut/external/.nix-bazel-version
-
-      # Gerrit fixups:
-      # Normalize permissions on .yarn-{tarball,metadata} files
-      test -d $bazelOut/external/yarn_cache && find $bazelOut/external/yarn_cache \( -name .yarn-tarball.tgz -or -name .yarn-metadata.json \) -exec chmod 644 {} +
-
-      mkdir $bazelOut/_bits/
-      find . -name node_modules -prune -print | while read d; do
-        echo "$d" "$(dirname $d)"
-        mkdir -p $bazelOut/_bits/$(dirname $d)
-        cp -R "$d" "$bazelOut/_bits/$(dirname $d)/node_modules"
-      done
-
-      (cd $bazelOut/ && tar czf $out --sort=name --mtime='@1' --owner=0 --group=0 --numeric-owner external/ _bits/)
-
-      runHook postInstall
-    '';
-  };
-
-  buildAttrs = {
-    preConfigure = ''
-      rm .bazelversion
-
-      [ "$(ls -A $bazelOut/_bits)" ] && cp -R $bazelOut/_bits/* ./ || true
-    '';
-    postPatch = ''
-      # Disable all errorprone checks, since we might be using a different version.
-      sed -i \
-        -e '/-Xep:/d' \
-        -e '/-XepExcludedPaths:/a "-XepDisableAllChecks",' \
-        tools/BUILD
-    '';
-    installPhase = ''
-      mkdir -p "$out"/webapps/ "$out"/share/api/
-      cp bazel-bin/release.war "$out"/webapps/gerrit-${version}.war
-      unzip bazel-bin/api-skip-javadoc.zip -d "$out"/share/api
-    '';
-
-    nativeBuildInputs = with pkgs; [
-      unzip
-    ];
+  bazelTargets = {
+    "//:release" = "$out/webapps/gerrit-${version}.war";
+    "//:api-skip-javadoc" = null;
   };
 
   passthru = {
@@ -154,5 +103,5 @@ pkgs.lib.makeOverridable pkgs.buildBazelPackage {
     ];
   };
 
-  meta.ci.targets = [ "deps" ];
+  meta.ci.targets = [ "cache" ];
 }
