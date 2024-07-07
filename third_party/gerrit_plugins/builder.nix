@@ -2,30 +2,33 @@
 {
   buildGerritBazelPlugin =
     { name
+    , version
     , src
-    , depsOutputHash
+    , depsHash ? null 
     , overlayPluginCmd ? ''
         cp -R "${src}" "$out/plugins/${name}"
+        echo "STABLE_BUILD_${lib.toUpper name}_LABEL v${version}-nix${if patches != [] then "-dirty" else ""}" >> $out/.version
       ''
+    , postOverlayPlugin ? ""
     , postPatch ? ""
     , patches ? [ ]
-    }: ((depot.third_party.gerrit.override {
+    }: ((depot.third_party.gerrit.override (old: {
       name = "${name}.jar";
 
       src = pkgs.runCommandLocal "${name}-src" { } ''
         cp -R "${depot.third_party.gerrit.src}" "$out"
-        chmod +w "$out/plugins"
+        chmod -R +w "$out"
         ${overlayPluginCmd}
+        ${postOverlayPlugin}
       '';
+      depsHash = (if depsHash != null then depsHash else old.depsHash);
 
-      bazelTargets = [ "//plugins/${name}" ];
-    }).overrideAttrs (super: {
-      deps = super.deps.overrideAttrs (superDeps: {
-        outputHash = depsOutputHash;
-      });
-      installPhase = ''
-        cp "bazel-bin/plugins/${name}/${name}.jar" "$out"
-      '';
+      bazelTargets = {
+        "//plugins/${name}" = "$out";
+      };
+
+      extraBuildInstall = "";
+    })).overrideAttrs (super: {
       postPatch = ''
         ${super.postPatch or ""}
         pushd "plugins/${name}"
