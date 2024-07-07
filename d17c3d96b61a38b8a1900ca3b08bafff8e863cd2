@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e202b254_dc540225",
+        "filename": "third_party/gerrit_plugins/code-owners/.default.nix.swp",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-07T22:02:18Z",
+      "side": 0,
+      "message": "👀",
+      "revId": "d17c3d96b61a38b8a1900ca3b08bafff8e863cd2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
