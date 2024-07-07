@@ -3,7 +3,7 @@
 (depot.tvix.crates.workspaceMembers.tvix-cli.build.override {
   runTests = true;
   testPreRun = ''
-    export SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt;
+    export SSL_CERT_FILE=/dev/null
   '';
 }).overrideAttrs (finalAttrs: previousAttrs:
 
@@ -30,7 +30,7 @@ let
   mkExprBenchmark = { expr, description }:
     let name = "tvix-cli-benchmark-${description}"; in
     (pkgs.runCommand name { } ''
-      export SSL_CERT_FILE=${pkgs.cacert.out}/etc/ssl/certs/ca-bundle.crt
+      export SSL_CERT_FILE=/dev/null
       ${lib.escapeShellArgs [
         "${pkgs.time}/bin/time"
         "--format" "${benchmark-gnutime-format-string description}"
@@ -54,7 +54,7 @@ let
       name = "tvix-eval-test-${builtins.replaceStrings [".drv"] ["-drv"] attrpath}";
     in
     (pkgs.runCommand name { } ''
-      export SSL_CERT_FILE=${pkgs.cacert.out}/etc/ssl/certs/ca-bundle.crt
+      export SSL_CERT_FILE=/dev/null
       TVIX_OUTPUT=$(${tvix-cli}/bin/tvix -E '(import ${pkgs.path} {}).${attrpath}')
       EXPECTED='${/* the verbatim expected Tvix output: */ "=> \"${builtins.unsafeDiscardStringContext expectedPath}\" :: string"}'
 
