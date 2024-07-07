@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "358ad357_12b5c5c2",
+        "filename": "nix/buildBazelPackageNG/buildBazelPackageNG.nix",
+        "patchSetId": 6
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-07T22:14:22Z",
+      "side": 1,
+      "message": "stray whitespace",
+      "revId": "93e5f0dad96817f85a92854afc9e242c09aa7328",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
