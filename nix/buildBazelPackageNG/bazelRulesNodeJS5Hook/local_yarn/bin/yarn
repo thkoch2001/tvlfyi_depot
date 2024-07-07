@@ -1,0 +1,2 @@
+#!/bin/sh
+exec "__YARN__/bin/yarn" "$@"

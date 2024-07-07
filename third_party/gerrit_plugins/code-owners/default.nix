@@ -5,11 +5,11 @@ let
 in
 buildGerritBazelPlugin rec {
   name = "code-owners";
-  depsOutputHash = "sha256:0jv62cc1kpgsmwk119i9njmqn6w6k8frlbgcw87y8nfbpprmcf01";
+  version = "7de40d8";
   src = pkgs.fetchgit {
     url = "https://gerrit.googlesource.com/plugins/code-owners";
-    rev = "e654ae5bda2085bce9a99942bec440e004a114f3";
-    sha256 = "sha256:14d3x3iqskgw16pvyaa0swh252agj84p9pzlf24l8lgx9d7y4biz";
+    rev = "7de40d8b30e55eb64316b6fc3d0d00da9caddade";
+    hash = "sha256-0sLwUcG9RN1o9vZGW8ErwL7UgJapgYoo8XMGsWLO25Q=";
   };
   patches = [
     ./using-usernames.patch
