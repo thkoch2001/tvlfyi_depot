@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df26d84d_e2cc3b92",
+        "filename": ".swp",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2024-07-07T20:56:31Z",
+      "side": 1,
+      "message": "How did I manage to do this.",
+      "revId": "0f4a8518c3d521410a4a00f20db392cc63e500d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
