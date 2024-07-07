@@ -53,7 +53,7 @@ let
         buildCommand = ''
           touch $out
           # Ensure we can construct http clients.
-          export SSL_CERT_FILE="${pkgs.cacert.out}/etc/ssl/certs/ca-bundle.crt"
+          export SSL_CERT_FILE=/dev/null
 
           ${preStart}
 
