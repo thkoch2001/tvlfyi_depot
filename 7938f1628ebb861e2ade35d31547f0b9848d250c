@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd30a399_eb9729a5",
+        "filename": "tvix/eval/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 206,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-07-07T14:45:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "95d5477c_d8cdf326",
+      "revId": "7938f1628ebb861e2ade35d31547f0b9848d250c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "467af833_14050eff",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-07-07T14:31:25Z",
       "side": 1,
       "message": "add a docstring, explaining this constructs an EvaluationBuilder again, preserving which fields/config, and the usecase (repl)",
+      "revId": "7938f1628ebb861e2ade35d31547f0b9848d250c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96a77aba_39a2219c",
+        "filename": "tvix/eval/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 383,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-07-07T14:45:15Z",
+      "side": 1,
+      "message": "was this on the wrong line?\n\nadded docstrings to all the new things, and to this method, regardless.",
+      "parentUuid": "467af833_14050eff",
       "revId": "7938f1628ebb861e2ade35d31547f0b9848d250c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
