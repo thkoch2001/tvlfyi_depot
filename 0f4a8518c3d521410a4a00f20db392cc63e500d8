@@ -16,6 +16,24 @@
       "message": "How did I manage to do this.",
       "revId": "0f4a8518c3d521410a4a00f20db392cc63e500d8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04450c43_47a7bb11",
+        "filename": ".swp",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2024-07-07T20:57:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df26d84d_e2cc3b92",
+      "revId": "0f4a8518c3d521410a4a00f20db392cc63e500d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
