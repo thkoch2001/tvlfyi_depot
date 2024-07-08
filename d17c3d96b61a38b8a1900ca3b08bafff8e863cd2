@@ -16,6 +16,24 @@
       "message": "👀",
       "revId": "d17c3d96b61a38b8a1900ca3b08bafff8e863cd2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be618c3b_f046f14c",
+        "filename": "third_party/gerrit_plugins/code-owners/.default.nix.swp",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000000
+      },
+      "writtenOn": "2024-07-08T00:01:25Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "e202b254_dc540225",
+      "revId": "d17c3d96b61a38b8a1900ca3b08bafff8e863cd2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
