@@ -27,14 +27,12 @@ pkgs.lib.makeOverridable depot.nix.buildBazelPackageNG rec {
       find "$dir" -name .git -print0 | xargs -0 rm -rf
     '';
   });
-  depsHash = "sha256-Z6pvnL8bv09K4wKaatUCsnXAtSno+BJO6rTKhDsHYv4=";
+  depsHash = "sha256-OS2kLXjtuWf+XRyQO2qGvEaAOvxqu20+gXR+fsCvpMc=";
 
   patches = [
     ./0001-Syntax-highlight-nix.patch
     ./0002-Syntax-highlight-rules.pl.patch
     ./0003-Add-titles-to-CLs-over-HTTP.patch
-
-    ./gerrit-cl-431977-bump-sshd.patch
   ];
 
   nativeBuildInputs = with pkgs; [
