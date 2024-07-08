@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5f72b48_d0bf2ff2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-08T09:35:14Z",
+      "side": 1,
+      "message": "This can be abandoned, seems cl/11963 fixed our reproducibility issues.",
+      "revId": "a585f453563c095c0d1e308715ddf14b392f9e1e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78a69230_122fa563",
