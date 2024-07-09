@@ -1,12 +1,9 @@
-{ lib, pkgs, ... }:
+{ pkgs, depot, ... }:
 
 (pkgs.callPackage ./Cargo.nix {
-  defaultCrateOverrides = pkgs.defaultCrateOverrides // {
-
-    ring = prev: {
-      links = ''ring_core_${lib.replaceStrings ["."] ["_"] prev.version}'';
+  defaultCrateOverrides = (depot.tvix.utils.defaultCrateOverridesForPkgs pkgs) // {
+    turbofetch = prev: {
+      src = depot.tvix.utils.filterRustCrateSrc { root = prev.src.origSrc; };
     };
   };
-}).rootCrate.build.override {
-  runTests = true;
-}
+}).rootCrate.build
