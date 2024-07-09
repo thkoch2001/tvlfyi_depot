@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d5f0eba2_4c248c30",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-09T10:20:46Z",
+      "side": 1,
+      "message": "https://github.com/vi/tokio-listener/pull/7 has been sent, the other thing we\u0027re still waiting for is https://github.com/open-telemetry/opentelemetry-rust/pull/1674",
+      "revId": "623c8fea38ae6052e4e85f798c436c8c2236f206",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
