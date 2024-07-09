@@ -1,15 +1,13 @@
-{ pkgs, ... }:
+{ pkgs, depot, lib, ... }:
 
-let
-  crates = import ./Cargo.nix {
-    inherit pkgs;
-    nixpkgs = pkgs.path;
-
-    defaultCrateOverrides = pkgs.defaultCrateOverrides // {
-      crunch-v2 = prev: {
-        nativeBuildInputs = (prev.nativeBuildInputs or [ ]) ++ [ pkgs.buildPackages.protobuf ];
+(pkgs.callPackage ./Cargo.nix {
+  defaultCrateOverrides = (depot.tvix.utils.defaultCrateOverridesForPkgs pkgs) // {
+    crunch-v2 = prev: {
+      src = depot.tvix.utils.filterRustCrateSrc rec {
+        root = prev.src.origSrc;
+        extraFileset = lib.fileset.fileFilter (f: f.hasExt "proto") root;
       };
+      nativeBuildInputs = [ pkgs.protobuf ];
     };
   };
-in
-crates.rootCrate.build
+}).rootCrate.build
