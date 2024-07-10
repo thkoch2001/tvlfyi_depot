@@ -7,7 +7,7 @@
       "bom-ref": "pkg:nim/nix_actor",
       "name": "nix_actor",
       "description": "Syndicated Nix Actor",
-      "version": "20240704",
+      "version": "20240710",
       "authors": [
         {
           "name": "Emery Hemingway"

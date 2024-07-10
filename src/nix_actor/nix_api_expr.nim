@@ -22,7 +22,7 @@ proc state_free*(state: EvalState) {.nix_api_expr.}
 
 proc gc_incref*(context: NixContext; `object`: pointer): nix_err {.nix_api_expr.}
 
-proc gc_decref*(context: NixContext; `object`: pointer): nix_err {.nix_api_expr.}
+proc gc_decref*(context: NixContext; `object`: pointer|Value): nix_err {.nix_api_expr.}
 
 proc gc_now*() {.nix_api_expr.}
 

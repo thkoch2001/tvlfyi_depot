@@ -6,7 +6,7 @@ import
   pkg/preserves, pkg/preserves/sugar,
   pkg/syndicate,
   pkg/syndicate/protocols/gatekeeper,
-  pkg/syndicate/relays,
+  pkg/syndicate/[patterns, relays],
   ./nix_actor/[nix_api, nix_api_expr, nix_api_store, nix_values, utils],
   ./nix_actor/protocol
 
@@ -15,82 +15,45 @@ proc echo(args: varargs[string, `$`]) {.used.} =
 
 type
   Value = preserves.Value
+  RepoEntity = ref object of Entity
+    self: Cap
+    store: Store
+    state: EvalState
+    root: NixValue
 
-proc findCommand(detail: ResolveDetail; cmd: string): string =
-  for dir in detail.`command-path`:
-    result = dir / cmd
-    if result.fileExists:
-      return
-  raise newException(OSError, "could not find " & cmd)
+proc newRepoEntity(turn: Turn; detail: RepoResolveDetail): RepoEntity =
+  let entity = RepoEntity()
+  turn.onStop do (turn: Turn):
+    if not entity.state.isNil:
+      entity.state.close()
+    if not entity.store.isNil:
+      entity.store.close()
+  entity.store = openStore(detail.store)
+  entity.state = newState(entity.store, detail.lookupPath)
+  entity.root = entity.state.evalFromString("import " & detail.`import`, "")
+  if detail.args.isSome:
+    var na = detail.args.get.toNix(entity.state)
+    entity.root = entity.state.apply(entity.root, na)
+  entity.self = newCap(turn, entity)
+  entity
 
-proc commandlineArgs(detail: ResolveDetail; args: varargs[string]): seq[string] =
-  result = newSeqOfCap[string](detail.options.len * 2 + args.len)
-  for sym, val in detail.options:
-    result.add("--" & $sym)
-    if not val.isString "":
-      result.add(val.jsonText)
-  for arg in args:
-    result.add arg
-
-proc commandlineEnv(detail: ResolveDetail): StringTableRef =
-  newStringTable({"NIX_PATH": detail.lookupPath.join ":"})
-
-proc realiseCallback(userdata: pointer; a, b: cstring) {.cdecl.} =
-  echo "realiseCallback(nil, ", a, ", ", b, ")"
-
-proc realise(turn: Turn; store: Store; path: string; resp: Cap) =
-  mitNix:
-    let storePath = nix.store_parse_path(store, path)
-    assert not storePath.isNil
-    defer: store_path_free(storePath)
-    turn.facet.run do (turn: Turn):
-      discard nix.store_realise(store, storePath, nil, realiseCallback)
-      if nix.store_is_valid_path(store, storePath):
-        discard publish(turn, resp, initRecord("ok", %path))
-      else:
-        discard publish(turn, resp, initRecord("error", %"not a valid store path"))
-
-proc eval(store: Store; state: EvalState; expr: string): EvalResult =
-  defer: close(state) # Single-use state.
-  var nixVal: NixValue
-  try:
-    nixVal = state.evalFromString(expr, "")
-    state.force(nixVal)
-    result = EvalResult(orKind: EvalResultKind.ok)
-    result.ok.result = nixVal.toPreserves(state).unthunkAll
-    result.ok.expr = expr
-  except CatchableError as err:
-    reset result
-    result.err.message = err.msg
-
-proc evalFile(store: Store; state: EvalState; path: string; prArgs: Value): EvalFileResult =
-  defer: close(state) # Single-use state.
-  var
-    fn, arg, res: NixValue
-  try:
-    arg = prArgs.toNix(state)
-    fn = state.evalFromString("import " & path, "")
-    res = apply(state, fn, arg)
-    state.force(res)
-    result = EvalFileResult(orKind: EvalFileResultKind.ok)
-    result.ok.result = res.toPreserves(state).unthunkAll
-    result.ok.args = prArgs
-    result.ok.path = path
-  except CatchableError as err:
-    reset result
-    result.err.message = err.msg
-
-proc serve(turn: Turn; detail: ResolveDetail; store: Store; ds: Cap) =
-  during(turn, ds, Eval.grabWithin) do (expr: string, resp: Cap):
-    let state = newState(store, detail.lookupPath)
-    discard publish(turn, resp, eval(store, state, expr))
-
-  during(turn, ds, EvalFile.grabWithin) do (path: string, args: Value, resp: Cap):
-    let state = newState(store, detail.lookupPath)
-    discard publish(turn, resp, evalFile(store, state, path, args))
-
-  during(turn, ds, Realise.grabWithin) do (drv: string, resp: Cap):
-    realise(turn, store, drv, resp)
+method publish(repo: RepoEntity; turn: Turn; a: AssertionRef; h: Handle) =
+  ## Respond to observations with dataspace semantics, minus retraction
+  ## of assertions in response to the retraction of observations.
+  ## This entity is scoped to immutable data so this shouldn't be a problem.
+  var obs: Observe
+  if obs.fromPreserves(a.value) and obs.observer of Cap:
+    var analysis = analyse(obs.pattern)
+    var captures = newSeq[Value](analysis.capturePaths.len)
+    for i, path in analysis.constPaths:
+      var v = repo.state.step(repo.root, path)
+      if v.isNone or v.get != analysis.constValues[i]:
+        return
+    for i, path in analysis.capturePaths:
+      var v = repo.state.step(repo.root, path)
+      if v.isSome:
+        captures[i] = v.get.unthunkAll
+    discard publish(turn, Cap obs.observer, captures)
 
 proc main() =
   initLibstore()
@@ -98,15 +61,11 @@ proc main() =
 
   runActor("main") do (turn: Turn):
     resolveEnvironment(turn) do (turn: Turn; relay: Cap):
-      let pat = Resolve?:{ 0: ResolveStep.grabWithin, 1: grab() }
-      during(turn, relay, pat) do (detail: ResolveDetail; observer: Cap):
-        let
-          store = openStore(detail.`store-uri`)
-          ds = turn.newDataspace()
-        linkActor(turn, "nix-actor") do (turn: Turn):
-          serve(turn, detail, store, ds)
-        discard publish(turn, observer, ResolvedAccepted(responderSession: ds))
-      do:
-        close(store)
+
+      let resolvePat = Resolve?:{ 0: RepoResolveStep.grabWithin, 1: grab() }
+      during(turn, relay, resolvePat) do (detail: RepoResolveDetail; observer: Cap):
+        linkActor(turn, "nix-repo") do (turn: Turn):
+          let repo = newRepoEntity(turn, detail)
+          discard publish(turn, observer, ResolvedAccepted(responderSession: repo.self))
 
 main()

@@ -1,103 +1,49 @@
 
 import
-  preserves, std/tables
+  preserves, std/tables, std/options
 
 type
   Error* {.preservesRecord: "error".} = object
     `message`*: string
 
-  Eval* {.preservesRecord: "eval".} = object
-    `expr`*: string
-    `result`* {.preservesEmbedded.}: Value
+  RepoArgsKind* {.pure.} = enum
+    `present`, `absent`
+  RepoArgsPresent* {.preservesDictionary.} = object
+    `args`*: Value
+
+  RepoArgsAbsent* {.preservesDictionary.} = object
+  
+  `RepoArgs`* {.preservesOr.} = object
+    case orKind*: RepoArgsKind
+    of RepoArgsKind.`present`:
+        `present`*: RepoArgsPresent
+
+    of RepoArgsKind.`absent`:
+        `absent`*: RepoArgsAbsent
+
+  
+  RepoResolveStep* {.preservesRecord: "nix-repo".} = object
+    `detail`*: RepoResolveDetail
 
   AttrSet* = Table[Symbol, Value]
-  Realise* {.preservesRecord: "realise".} = object
-    `drvPath`*: string
-    `outputs`* {.preservesEmbedded.}: Value
+  RepoResolveDetailArgs* = Option[Value]
+  RepoResolveDetailImport* = string
+  RepoResolveDetailLookupPath* = seq[string]
+  RepoResolveDetailStore* = string
+  `RepoResolveDetail`* {.preservesDictionary.} = object
+    `args`*: Option[Value]
+    `import`*: string
+    `lookupPath`*: seq[string]
+    `store`*: string
 
   Derivation* {.preservesRecord: "drv".} = object
     `drvPath`*: string
     `storePath`*: string
 
-  RealiseResultKind* {.pure.} = enum
-    `Error`, `RealiseSuccess`
-  `RealiseResult`* {.preservesOr.} = object
-    case orKind*: RealiseResultKind
-    of RealiseResultKind.`Error`:
-        `error`*: Error
-
-    of RealiseResultKind.`RealiseSuccess`:
-        `realisesuccess`*: RealiseSuccess
-
-  
-  EvalSuccess* {.preservesRecord: "ok".} = object
-    `result`*: Value
-    `expr`*: string
-
-  RealiseSuccess* {.preservesRecord: "ok".} = object
-    `drvPath`*: string
-    `outName`*: string
-    `outPath`*: string
-
-  EvalFile* {.preservesRecord: "eval-file".} = object
-    `path`*: string
-    `args`*: Value
-    `result`* {.preservesEmbedded.}: Value
-
-  EvalResultKind* {.pure.} = enum
-    `err`, `ok`
-  `EvalResult`* {.preservesOr.} = object
-    case orKind*: EvalResultKind
-    of EvalResultKind.`err`:
-        `err`*: Error
-
-    of EvalResultKind.`ok`:
-        `ok`*: EvalSuccess
-
-  
-  ResolveStep* {.preservesRecord: "nix-actor".} = object
-    `detail`*: ResolveDetail
-
-  EvalFileResultKind* {.pure.} = enum
-    `err`, `ok`
-  `EvalFileResult`* {.preservesOr.} = object
-    case orKind*: EvalFileResultKind
-    of EvalFileResultKind.`err`:
-        `err`*: Error
-
-    of EvalFileResultKind.`ok`:
-        `ok`*: EvalFileSuccess
-
-  
-  EvalFileSuccess* {.preservesRecord: "ok".} = object
-    `result`*: Value
-    `args`*: Value
-    `path`*: string
-
-  ResolveDetail* {.preservesDictionary.} = object
-    `command-path`*: seq[string]
-    `lookupPath`*: seq[string]
-    `options`*: AttrSet
-    `store-uri`*: string
-
-proc `$`*(x: Error | Eval | AttrSet | Realise | Derivation | RealiseResult |
-    EvalSuccess |
-    RealiseSuccess |
-    EvalFile |
-    EvalResult |
-    ResolveStep |
-    EvalFileResult |
-    EvalFileSuccess |
-    ResolveDetail): string =
+proc `$`*(x: Error | RepoArgs | RepoResolveStep | AttrSet | RepoResolveDetail |
+    Derivation): string =
   `$`(toPreserves(x))
 
-proc encode*(x: Error | Eval | AttrSet | Realise | Derivation | RealiseResult |
-    EvalSuccess |
-    RealiseSuccess |
-    EvalFile |
-    EvalResult |
-    ResolveStep |
-    EvalFileResult |
-    EvalFileSuccess |
-    ResolveDetail): seq[byte] =
+proc encode*(x: Error | RepoArgs | RepoResolveStep | AttrSet | RepoResolveDetail |
+    Derivation): seq[byte] =
   encode(toPreserves(x))

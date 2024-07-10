@@ -1,47 +1,36 @@
 #!/usr/bin/env -S syndicate-server --config
 
-let ?nixConfig = {
-    command-path: [ "/run/current-system/sw/bin" ]
+let ?nixStepDetail = {
+    import: "<nixpkgs>"
     lookupPath: [
       "nixpkgs=/home/repo/nixpkgs/channel",
       "nixos-config=/etc/nixos/configuration.nix",
       "/nix/var/nix/profiles/per-user/root/channels",
     ]
-    options: { }
-    store-uri: "auto"
+    store: "auto"
   }
 
-let ?nixLog = dataspace
-$nixLog ?? ?line [
-  $log ! <log "nix-results-log" { line: $line }>
-]
-
-let ?results = dataspace
-$results ? ?any [
-  $log ! <log "nix-results" { line: $any }>
-]
-
-<q <service nix $nixConfig>>
-? <a <service nix $nixConfig <accepted ?nix>>> [
-
-  $nix <eval "builtins.trace \"This is only a test.\" builtins.nixVersion" $results>
-
-  $nix <eval-file "/home/emery/src/nix_actor/test.nix" { time: builtins.currentTime } $results>
-
-  # Realise all observed store derivations.
-  $results ? <ok <drv ?drvPath ?storePath>> [
-    # $nix  <realise $drvPath $nixLog $results>
-    $nix  <realise $storePath $nixLog $results>
+<q <service nix-repo $nixStepDetail>>
+? <a <service nix-repo $nixStepDetail> <accepted ?repo>> $repo [
+  ? { hello: { meta: { homepage: ?x } } } [
+    $log ! <log "nix-repo" {line: $x }>
   ]
-
+  ? { nim: ?nim } [
+    ? { nim: { passthru: ?passthru } } [
+      ? { nim: { passthru: { nim: { buildInputs: [ ?bi ] } } } } [
+        $log ! <log "nim" { line: $nim passthru: $passthru first-build-input: $bi } >
+      ]
+    ]
+  ]
 ]
 
-? <q <service nix ?detail>> [
-  $log ! <log "service" { line: "nix service requested" }>
+# Service instantiation.
+? <q <service nix-repo ?detail>> [
+  $log ! <log "service" { line: "nix-repo service requested" }>
   <require-service <daemon nix-actor>>
   ? <service-object <daemon nix-actor> ?obj> [
-    let ?rewriter = <* $config [<rewrite ?resp <a <service nix $detail $resp>>>]>
-    $obj <resolve <nix-actor $detail> $rewriter>
+    let ?rewriter = <* $config [<rewrite ?resp <a <service nix-repo $detail> $resp>>]>
+    $obj <resolve <nix-repo $detail> $rewriter>
   ]
 ]
 

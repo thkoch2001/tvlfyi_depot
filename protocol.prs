@@ -1,10 +1,12 @@
 version 1 .
 
-# Gatekeeper step to access nix-actor.
-ResolveStep = <nix-actor @detail ResolveDetail> .
-ResolveDetail = {
-  # PATH to search for Nix utilities.
-  command-path: [string ...]
+# Gatekeeper step to access a Nix repository.
+RepoResolveStep = <nix-repo @detail RepoResolveDetail> .
+RepoResolveDetail = {
+
+  # Path to a repository to import.
+  # This string is evaluated so it can include "<…>" paths.
+  import: string
 
   # List of strings corresponding to entries in NIX_PATH.
   # For example:
@@ -14,28 +16,15 @@ ResolveDetail = {
   #  ]
   lookupPath: [string ...]
 
-  # Command line options.
-  options: AttrSet
+  # Store URI selector, use "auto" unless you know exactly what you need.
+  store: string
+} & @args RepoArgs .
 
-  # Store selector, use "auto" unless you know exactly what you need.
-  store-uri: string
-} .
+# Arguments to call the imported expression with if it is a function.
+RepoArgs = @present { args: any } / @absent {} .
 
 # Common error type.
 Error = <error @message string>.
-
-# Asserted to nix-actor.
-# @expr is evaluated and asserted to @result.
-Eval = <eval @expr string @result #:EvalResult> .
-EvalResult = @err Error / @ok EvalSuccess .
-EvalSuccess = <ok @result any @expr string> .
-
-# Asserted to nix-actor.
-# @file is imported as a function, @args are applied, and the result asserted
-# to @result.
-EvalFile = <eval-file @path string @args any @result #:EvalFileResult> .
-EvalFileResult = @err Error / @ok EvalFileSuccess .
-EvalFileSuccess = <ok @result any @args any @path string> .
 
 # Represents a Nix derivation.
 # The @storePath can be realized as store object from @drvPath.
@@ -45,11 +34,5 @@ EvalFileSuccess = <ok @result any @args any @path string> .
 # attrset is not feasible because otherwise lazy values would explode into
 # complete dependency trees.
 Derivation = <drv @drvPath string @storePath string> .
-
-# Asserted to nix-actor.
-# @drvPath is realised and each output is asserted to @outputs.
-Realise = <realise @drvPath string @outputs #:RealiseResult> .
-RealiseResult = Error / RealiseSuccess .
-RealiseSuccess = <ok @drvPath string @outName string @outPath string> .
 
 AttrSet = {symbol: any ...:...} .
