@@ -232,6 +232,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "820589a7_aef0e04b",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 21
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-07-12T21:07:56Z",
+      "side": 1,
+      "message": "This type is needed as a placeholder. We use std::mem::replace further down to take the current instantiation state and replace it with Poisoned, and later swap it back. If we panic while determining the new state, the Poisoned error will remain there in the instantiation state (inside a Poisoned mutex, so other threads attempting to look at this would probably already panic while attempting to lock the mutex).",
+      "parentUuid": "0dfbd4f6_712548d4",
+      "revId": "3b305014bfe4a8a173e78b037841d8f688390015",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "16028ab8_8140b939",
         "filename": "tvix/castore/src/composition.rs",
         "patchSetId": 21
@@ -314,6 +332,24 @@
       "side": 1,
       "message": "As for the typdef, I\u0027m thinking of a better name for the `DeserializeWithRegistry\u003cBox\u003cdyn ServiceBuilder\u003cOutput \u003d Arc\u003c…\u003e\u003e\u003e\u003e\u003e` part (and keep `T` as a generic around).\n\nWe can keep the IntoIter thing for later, and have a `from_iter` something thing.\nBut let\u0027s add a comment on why we\u0027re explicitly picking HashMap here.",
       "parentUuid": "a7ddd2ce_55eae6d0",
+      "revId": "3b305014bfe4a8a173e78b037841d8f688390015",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3b08cc74_8ce2e3f3",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 21
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-07-12T21:07:56Z",
+      "side": 1,
+      "message": "I have added a from_iter variant and a comment about why we still want the HashMap variant.\nI don\u0027t think it\u0027s particularly high priority to add a typedef, since as can be seen in the examples it is never actually necessary to type out this type on the user side, and we only type it out once.",
+      "parentUuid": "d40c5866_8ceb23a2",
       "revId": "3b305014bfe4a8a173e78b037841d8f688390015",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }

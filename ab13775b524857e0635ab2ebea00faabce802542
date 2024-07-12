@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "809bd0a7_48601822",
+        "filename": "tvix/castore/src/blobservice/combinator.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-07-12T21:07:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6ed75637_32310f8e",
+      "revId": "ab13775b524857e0635ab2ebea00faabce802542",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7eb60c0f_d7c2442f",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-07-12T14:33:15Z",
       "side": 1,
       "message": "docstring",
+      "revId": "ab13775b524857e0635ab2ebea00faabce802542",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "25254277_04f83bc4",
+        "filename": "tvix/castore/src/blobservice/mod.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-07-12T21:07:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7eb60c0f_d7c2442f",
       "revId": "ab13775b524857e0635ab2ebea00faabce802542",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -65,6 +101,24 @@
       "writtenOn": "2024-07-12T14:33:15Z",
       "side": 1,
       "message": "is it possible to move this line to the top, does it still register as docstring for `Registry`?",
+      "revId": "ab13775b524857e0635ab2ebea00faabce802542",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "35cf665b_a4b2c5ca",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-07-12T21:07:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78a683b0_f6d639cc",
       "revId": "ab13775b524857e0635ab2ebea00faabce802542",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
