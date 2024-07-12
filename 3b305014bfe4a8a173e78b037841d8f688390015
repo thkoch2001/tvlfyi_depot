@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "158277bb_9367cacc",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 21
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-12T10:56:02Z",
+      "side": 1,
+      "message": "The lower part can probably also be a docstring.",
+      "revId": "3b305014bfe4a8a173e78b037841d8f688390015",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1e812989_5b4c8c4b",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 21
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-12T10:56:02Z",
+      "side": 1,
+      "message": "is it still possible to call this from the outside?",
+      "revId": "3b305014bfe4a8a173e78b037841d8f688390015",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05220122_4a3968bb",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 21
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-12T10:56:02Z",
+      "side": 1,
+      "message": "move up",
+      "revId": "3b305014bfe4a8a173e78b037841d8f688390015",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da84bf55_05d0f335",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 21
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-12T10:56:02Z",
+      "side": 1,
+      "message": "is it possible to have the name of the store we tried to construct, at least in the Failed case?",
+      "revId": "3b305014bfe4a8a173e78b037841d8f688390015",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6bc79218_498806ba",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 21
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-12T10:56:02Z",
+      "side": 1,
+      "message": "that\u0027s if it panics in another thread? can we also just panic instead?",
+      "revId": "3b305014bfe4a8a173e78b037841d8f688390015",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16028ab8_8140b939",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 21
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-12T10:56:02Z",
+      "side": 1,
+      "message": "can we have a Box\u003cdyn Error\u003e here?",
+      "revId": "3b305014bfe4a8a173e78b037841d8f688390015",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a027db81_0c5cef9a",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 21
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-12T10:56:02Z",
+      "side": 1,
+      "message": "Can we have a typedef for the value in here? and does it need to be a hash set, or can it be on any IntoIter with these keys and values?",
+      "revId": "3b305014bfe4a8a173e78b037841d8f688390015",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
