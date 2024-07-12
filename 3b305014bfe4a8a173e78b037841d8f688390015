@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "efdf766f_4b52d3d9",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 21
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-12T14:33:15Z",
+      "side": 1,
+      "message": "Ok",
+      "parentUuid": "2289b63e_0e380957",
+      "revId": "3b305014bfe4a8a173e78b037841d8f688390015",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1e812989_5b4c8c4b",
@@ -143,6 +161,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "9dae907e_8345ca5e",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 21
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-12T14:33:15Z",
+      "side": 1,
+      "message": "Tracing alone can only be used to poop out log lines etc., but having the instance_name as a field here allows for better programmatic error reporting too.\n\nWe can deal with this in a followup CL though.",
+      "parentUuid": "67783b30_a056eea0",
+      "revId": "3b305014bfe4a8a173e78b037841d8f688390015",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6bc79218_498806ba",
         "filename": "tvix/castore/src/composition.rs",
         "patchSetId": 21
@@ -172,6 +208,24 @@
       "side": 1,
       "message": "I don\u0027t get the question",
       "parentUuid": "6bc79218_498806ba",
+      "revId": "3b305014bfe4a8a173e78b037841d8f688390015",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0dfbd4f6_712548d4",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 21
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-12T14:33:15Z",
+      "side": 1,
+      "message": "When do we construct the `Poisoned` kind? Can we instead just panic there too?",
+      "parentUuid": "cf1f9071_2510621d",
       "revId": "3b305014bfe4a8a173e78b037841d8f688390015",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -242,6 +296,24 @@
       "side": 1,
       "message": "Yes and no, it is helpful to have a concrete type here from a user perspective,  because then the type of the deserialize() call before it can be inferred.",
       "parentUuid": "a027db81_0c5cef9a",
+      "revId": "3b305014bfe4a8a173e78b037841d8f688390015",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d40c5866_8ceb23a2",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 21
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-12T14:33:15Z",
+      "side": 1,
+      "message": "As for the typdef, I\u0027m thinking of a better name for the `DeserializeWithRegistry\u003cBox\u003cdyn ServiceBuilder\u003cOutput \u003d Arc\u003c…\u003e\u003e\u003e\u003e\u003e` part (and keep `T` as a generic around).\n\nWe can keep the IntoIter thing for later, and have a `from_iter` something thing.\nBut let\u0027s add a comment on why we\u0027re explicitly picking HashMap here.",
+      "parentUuid": "a7ddd2ce_55eae6d0",
       "revId": "3b305014bfe4a8a173e78b037841d8f688390015",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }

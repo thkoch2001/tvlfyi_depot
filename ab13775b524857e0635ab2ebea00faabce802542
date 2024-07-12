@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ed75637_32310f8e",
+        "filename": "tvix/castore/src/blobservice/combinator.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-12T14:33:15Z",
+      "side": 1,
+      "message": "Please move this below the definition of `CombinedBlobService` itself.\n\nThis also applies to the other implementations",
+      "revId": "ab13775b524857e0635ab2ebea00faabce802542",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7eb60c0f_d7c2442f",
+        "filename": "tvix/castore/src/blobservice/mod.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-12T14:33:15Z",
+      "side": 1,
+      "message": "docstring",
+      "revId": "ab13775b524857e0635ab2ebea00faabce802542",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf4b2472_6ae5a761",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-12T14:33:15Z",
+      "side": 1,
+      "message": "Note to self: check doctest for this",
+      "revId": "ab13775b524857e0635ab2ebea00faabce802542",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78a683b0_f6d639cc",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-12T14:33:15Z",
+      "side": 1,
+      "message": "is it possible to move this line to the top, does it still register as docstring for `Registry`?",
+      "revId": "ab13775b524857e0635ab2ebea00faabce802542",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bde767bb_f23bc627",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-12T14:33:15Z",
+      "side": 1,
+      "message": "docstring, can be short and refer to the module-level docs. but there should be a one/twoliner.\n\nAlso explain the type parameters",
+      "revId": "ab13775b524857e0635ab2ebea00faabce802542",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5a9e3b2_ddc68801",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 25
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-12T14:33:15Z",
+      "side": 1,
+      "message": "docstring",
+      "revId": "ab13775b524857e0635ab2ebea00faabce802542",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
