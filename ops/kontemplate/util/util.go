@@ -29,13 +29,29 @@ func Merge(in1 *map[string]interface{}, in2 *map[string]interface{}) *map[string
 		return in1
 	}
 
+	// The maps are map[string]interface{} with unknown depth.
+	// Loop over both maps into every level and merge them.
 	new := make(map[string]interface{})
+
 	for k, v := range *in1 {
 		new[k] = v
 	}
 
 	for k, v := range *in2 {
-		new[k] = v
+		if existing, ok := new[k]; ok {
+			// If both values are maps, merge them recursively
+			if existingMap, ok := existing.(map[string]interface{}); ok {
+				if newMap, ok := v.(map[string]interface{}); ok {
+					new[k] = *Merge(&existingMap, &newMap)
+				} else {
+					new[k] = v
+				}
+			} else {
+				new[k] = v
+			}
+		} else {
+			new[k] = v
+		}
 	}
 
 	return &new
