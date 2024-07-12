@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2289b63e_0e380957",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 21
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-07-12T11:51:53Z",
+      "side": 1,
+      "message": "I\u0027m not sure how, I wouldn\u0027t want to throw all this information at a user (even someone within tvix trying to use the composition module), so unless there\u0027s some way to have hidden docstrings I\u0027d rather keep it as a comment",
+      "parentUuid": "158277bb_9367cacc",
+      "revId": "3b305014bfe4a8a173e78b037841d8f688390015",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1e812989_5b4c8c4b",
         "filename": "tvix/castore/src/composition.rs",
         "patchSetId": 21
