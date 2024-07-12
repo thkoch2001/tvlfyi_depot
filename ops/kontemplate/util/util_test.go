@@ -47,6 +47,9 @@ func TestMergeWithNilMap(t *testing.T) {
 func TestMergeMaps(t *testing.T) {
 	map1 := map[string]interface{}{
 		"foo": "bar",
+		"baz": map[string]interface{}{
+			"qux": "quux",
+		},
 	}
 
 	map2 := map[string]interface{}{
@@ -56,6 +59,9 @@ func TestMergeMaps(t *testing.T) {
 	result := Merge(&map1, &map2)
 	expected := map[string]interface{}{
 		"foo": "bar",
+		"baz": map[string]interface{}{
+			"qux": "quux",
+		},
 		"bar": "baz",
 	}
 
