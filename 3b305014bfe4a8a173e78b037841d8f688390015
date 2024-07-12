@@ -266,6 +266,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8e7fe5e_09711c25",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 21
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-12T21:42:49Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "820589a7_aef0e04b",
+      "revId": "3b305014bfe4a8a173e78b037841d8f688390015",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "16028ab8_8140b939",
@@ -368,6 +386,24 @@
       "side": 1,
       "message": "I have added a from_iter variant and a comment about why we still want the HashMap variant.\nI don\u0027t think it\u0027s particularly high priority to add a typedef, since as can be seen in the examples it is never actually necessary to type out this type on the user side, and we only type it out once.",
       "parentUuid": "d40c5866_8ceb23a2",
+      "revId": "3b305014bfe4a8a173e78b037841d8f688390015",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3959371e_5f7851f6",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 21
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-12T21:42:49Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "3b08cc74_8ce2e3f3",
       "revId": "3b305014bfe4a8a173e78b037841d8f688390015",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
