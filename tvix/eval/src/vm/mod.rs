@@ -146,8 +146,8 @@ impl CallFrame {
     /// Increment this frame's instruction pointer and return the operation that
     /// the pointer moved past.
     fn inc_ip(&mut self) -> OpCode {
-        let op = self.chunk()[self.ip];
-        self.ip += 1;
+        let (op, ip) = unsafe { self.chunk().read_and_inc(self.ip) };
+        self.ip = ip;
         op
     }
 
@@ -1323,7 +1323,9 @@ where
     //
     // We exploit the fact that the compiler emits a final instruction
     // with the span of the entire file for top-level expressions.
-    let root_span = lambda.chunk.get_span(CodeIdx(lambda.chunk.code.len() - 1));
+    let root_span = lambda
+        .chunk
+        .get_span(lambda.chunk.last_op_idx().expect("empty chunk"));
 
     let mut vm = VM::new(
         nix_search_path,

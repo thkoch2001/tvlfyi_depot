@@ -10,6 +10,7 @@ use bstr::{BString, ByteVec};
 use codemap::Span;
 use lexical_core::format::CXX_LITERAL;
 use serde::Deserialize;
+use test_strategy::Arbitrary;
 
 #[cfg(feature = "arbitrary")]
 mod arbitrary;
@@ -24,6 +25,7 @@ mod thunk;
 
 use crate::errors::{CatchableErrorKind, ErrorKind};
 use crate::opcode::StackIdx;
+use crate::packed_encode::PackedEncode;
 use crate::vm::generators::{self, GenCo};
 use crate::AddContext;
 pub use attrs::NixAttrs;
@@ -168,7 +170,7 @@ macro_rules! gen_is {
 }
 
 /// Describes what input types are allowed when coercing a `Value` to a string
-#[derive(Clone, Copy, PartialEq, Eq, Debug)]
+#[derive(Clone, Copy, PartialEq, Eq, Debug, PackedEncode, Arbitrary)]
 pub struct CoercionKind {
     /// If false only coerce already "stringly" types like strings and paths, but
     /// also coerce sets that have a `__toString` attribute. In Tvix, this is
@@ -185,6 +187,11 @@ pub struct CoercionKind {
     /// store path is the result of the coercion (equivalent to the
     /// `copyToStore` argument of `EvalState::coerceToString` in C++ Nix).
     pub import_paths: bool,
+}
+impl CoercionKind {
+    pub(crate) fn push(&self, code: &mut Vec<u8>) {
+        code.extend([self.strong as u8, self.import_paths as u8]);
+    }
 }
 
 impl<T> From<T> for Value
