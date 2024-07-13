@@ -1,7 +1,9 @@
 use std::io::Write;
-use std::ops::{Index, IndexMut};
+use std::mem::size_of;
+use std::ops::Index;
 
-use crate::opcode::{CodeIdx, ConstantIdx, OpCode};
+use crate::opcode::{self, CodeIdx, ConstantIdx, JumpOffset, OpCode};
+use crate::packed_encode::PackedEncode;
 use crate::value::Value;
 use crate::SourceCode;
 
@@ -30,7 +32,8 @@ struct SourceSpan {
 /// emitted by the compiler.
 #[derive(Debug, Default)]
 pub struct Chunk {
-    pub code: Vec<OpCode>,
+    code: Vec<u8>,
+    last_op_size: Option<usize>,
     pub constants: Vec<Value>,
     spans: Vec<SourceSpan>,
 }
@@ -43,6 +46,7 @@ impl Index<ConstantIdx> for Chunk {
     }
 }
 
+/*
 impl Index<CodeIdx> for Chunk {
     type Output = OpCode;
 
@@ -56,13 +60,43 @@ impl IndexMut<CodeIdx> for Chunk {
         &mut self.code[index.0]
     }
 }
+*/
 
 impl Chunk {
     pub fn push_op(&mut self, data: OpCode, span: codemap::Span) -> CodeIdx {
         let idx = self.code.len();
-        self.code.push(data);
+        data.push(&mut self.code);
+        self.last_op_size = Some(self.code.len() - idx);
         self.push_span(span, idx);
         CodeIdx(idx)
+    }
+
+    pub unsafe fn change_op(&mut self, idx: CodeIdx, new_op: OpCode) {
+        self.code[idx.0] = new_op.discriminant();
+    }
+
+    pub unsafe fn patch_jump(&mut self, idx: CodeIdx) {
+        let offset = JumpOffset(self.last_op_idx().unwrap().0 - idx.0);
+
+        if cfg!(debug_assertions) {
+            let op = unsafe { OpCode::read(&self.code[idx.0..]) }.0;
+            debug_assert!(
+                matches!(
+                    op,
+                    OpCode::OpJump(_)
+                        | OpCode::OpJumpIfFalse(_)
+                        | OpCode::OpJumpIfTrue(_)
+                        | OpCode::OpJumpIfCatchable(_)
+                        | OpCode::OpJumpIfNotFound(_)
+                        | OpCode::OpJumpIfNoFinaliseRequest(_)
+                ),
+                "attempted to patch unsupported op: {:?}",
+                op
+            );
+        }
+
+        self.code[(idx.0 + 1)..(idx.0 + 1 + size_of::<usize>())]
+            .copy_from_slice(&offset.0.to_ne_bytes());
     }
 
     /// Get the first span of a chunk, no questions asked.
@@ -70,9 +104,17 @@ impl Chunk {
         self.spans[0].span
     }
 
-    /// Return a reference to the last op in the chunk, if any
-    pub fn last_op(&self) -> Option<&OpCode> {
-        self.code.last()
+    /// Return the last op in the chunk, if any
+    pub fn last_op(&self) -> Option<OpCode> {
+        self.last_op_size.map(|off| unsafe {
+            let (op, size) = OpCode::read(&self.code[(self.code.len() - off)..]);
+            debug_assert_eq!(size, off);
+            op
+        })
+    }
+
+    pub fn last_op_idx(&self) -> Option<CodeIdx> {
+        Some(CodeIdx(self.code.len() - self.last_op_size?))
     }
 
     /// Pop the last operation from the chunk and clean up its tracked
@@ -155,20 +197,25 @@ impl Chunk {
             write!(writer, "{:4}\t", line)?;
         }
 
-        match self[idx] {
-            OpCode::OpConstant(idx) => {
-                let val_str = match &self[idx] {
-                    Value::Thunk(t) => t.debug_repr(),
-                    Value::Closure(c) => format!("closure({:p})", c.lambda),
-                    val => format!("{}", val),
-                };
+        todo!()
+        // match self[idx] {
+        //     OpCode::OpConstant(idx) => {
+        //         let val_str = match &self[idx] {
+        //             Value::Thunk(t) => t.debug_repr(),
+        //             Value::Closure(c) => format!("closure({:p})", c.lambda),
+        //             val => format!("{}", val),
+        //         };
 
-                writeln!(writer, "OpConstant({}@{})", val_str, idx.0)
-            }
-            op => writeln!(writer, "{:?}", op),
-        }?;
+        //         writeln!(writer, "OpConstant({}@{})", val_str, idx.0)
+        //     }
+        //     op => writeln!(writer, "{:?}", op),
+        // }?;
 
-        Ok(())
+        // Ok(())
+    }
+
+    pub fn op_codes(&self) -> opcode::Iter {
+        unsafe { opcode::Iter::new(&self.code) }
     }
 
     /// Extend this chunk with the content of another, moving out of the other
@@ -180,7 +227,7 @@ impl Chunk {
         // Some operations need to be modified in certain ways before being
         // valid as part of the new chunk.
         let const_count = self.constants.len();
-        for (idx, op) in other.code.iter().enumerate() {
+        for (idx, op) in other.op_codes().enumerate() {
             let span = other.get_span(CodeIdx(idx));
             match op {
                 // As the constants shift, the index needs to be moved relatively.
@@ -190,17 +237,25 @@ impl Chunk {
 
                 // Other operations either operate on relative offsets, or no
                 // offsets, and are safe to keep as-is.
-                _ => self.push_op(*op, span),
+                _ => self.push_op(op, span),
             };
         }
 
         self.constants.extend(other.constants);
         self.spans.extend(other.spans);
     }
+
+    #[inline]
+    pub(crate) unsafe fn read_and_inc(&self, ip: CodeIdx) -> (OpCode, CodeIdx) {
+        let (op, size) = OpCode::read(&self.code[ip.0..]);
+        (op, CodeIdx(ip.0 + size))
+    }
 }
 
 #[cfg(test)]
 mod tests {
+    use itertools::Itertools;
+
     use super::*;
     use crate::test_utils::dummy_span;
 
@@ -212,7 +267,7 @@ mod tests {
     fn push_op() {
         let mut chunk = Chunk::default();
         chunk.push_op(OpCode::OpAdd, dummy_span());
-        assert_eq!(chunk.code.last().unwrap(), &OpCode::OpAdd);
+        assert_eq!(*chunk.code.last().unwrap(), OpCode::OpAdd.discriminant());
     }
 
     #[test]
@@ -225,7 +280,7 @@ mod tests {
 
         assert_eq!(
             chunk.code,
-            vec![OpCode::OpAdd],
+            vec![OpCode::OpAdd.discriminant()],
             "code should not have changed"
         );
     }
@@ -240,7 +295,10 @@ mod tests {
         other.push_op(OpCode::OpSub, span);
         other.push_op(OpCode::OpMul, span);
 
-        let expected_code = vec![OpCode::OpAdd, OpCode::OpSub, OpCode::OpMul];
+        let expected_code = vec![OpCode::OpAdd, OpCode::OpSub, OpCode::OpMul]
+            .into_iter()
+            .map(|op| op.discriminant())
+            .collect_vec();
 
         chunk.extend(other);
 
@@ -278,7 +336,8 @@ mod tests {
         ];
 
         assert_eq!(
-            chunk.code, expected_code,
+            chunk.op_codes().collect_vec(),
+            expected_code,
             "code should have been extended and rewritten"
         );
 

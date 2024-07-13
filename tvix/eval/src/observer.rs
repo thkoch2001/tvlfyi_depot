@@ -99,22 +99,24 @@ impl<W: Write> DisassemblingObserver<W> {
     }
 
     fn lambda_header(&mut self, kind: &str, lambda: &Rc<Lambda>) {
-        let _ = writeln!(
-            &mut self.writer,
-            "=== compiled {} @ {:p} ({} ops) ===",
-            kind,
-            *lambda,
-            lambda.chunk.code.len()
-        );
+        // let _ = writeln!(
+        //     &mut self.writer,
+        //     "=== compiled {} @ {:p} ({} ops) ===",
+        //     kind,
+        //     *lambda,
+        //     lambda.chunk.code.len()
+        // );
+        todo!()
     }
 
     fn disassemble_chunk(&mut self, chunk: &Chunk) {
+        todo!()
         // calculate width of the widest address in the chunk
-        let width = format!("{:#x}", chunk.code.len() - 1).len();
+        // let width = format!("{:#x}", chunk.code.len() - 1).len();
 
-        for (idx, _) in chunk.code.iter().enumerate() {
-            let _ = chunk.disassemble_op(&mut self.writer, &self.source, width, CodeIdx(idx));
-        }
+        // for (idx, _) in chunk.code.iter().enumerate() {
+        //     let _ = chunk.disassemble_op(&mut self.writer, &self.source, width, CodeIdx(idx));
+        // }
     }
 }
 
