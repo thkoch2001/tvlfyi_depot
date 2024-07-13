@@ -104,16 +104,16 @@ impl<W: Write> DisassemblingObserver<W> {
             "=== compiled {} @ {:p} ({} ops) ===",
             kind,
             *lambda,
-            lambda.chunk.code.len()
+            lambda.chunk.op_codes().count()
         );
     }
 
     fn disassemble_chunk(&mut self, chunk: &Chunk) {
         // calculate width of the widest address in the chunk
-        let width = format!("{:#x}", chunk.code.len() - 1).len();
+        let width = format!("{:#x}", chunk.code_len() - 1).len();
 
-        for (idx, _) in chunk.code.iter().enumerate() {
-            let _ = chunk.disassemble_op(&mut self.writer, &self.source, width, CodeIdx(idx));
+        for (idx, _) in chunk.enumerate_op_codes() {
+            let _ = chunk.disassemble_op(&mut self.writer, &self.source, width, idx);
         }
     }
 }

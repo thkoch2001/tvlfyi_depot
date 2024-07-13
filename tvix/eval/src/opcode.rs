@@ -1,17 +1,28 @@
 //! This module implements the instruction set running on the abstract
 //! machine implemented by tvix.
 
+use std::fmt::{self, Debug};
 use std::ops::{AddAssign, Sub};
+
+use test_strategy::Arbitrary;
+
+use crate::packed_encode::PackedEncode;
 
 /// Index of a constant in the current code chunk.
 #[repr(transparent)]
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PackedEncode, Arbitrary)]
 pub struct ConstantIdx(pub usize);
 
 /// Index of an instruction in the current code chunk.
 #[repr(transparent)]
-#[derive(Clone, Copy, Debug)]
+#[derive(Clone, Copy, PackedEncode, Arbitrary)]
 pub struct CodeIdx(pub usize);
+
+impl Debug for CodeIdx {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{:#02x}", self.0)
+    }
+}
 
 impl AddAssign<usize> for CodeIdx {
     fn add_assign(&mut self, rhs: usize) {
@@ -31,25 +42,25 @@ impl Sub<usize> for CodeIdx {
 /// *relative to* the VM value stack_base of the CallFrame
 /// containing the opcode which contains this StackIdx.
 #[repr(transparent)]
-#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd, PackedEncode, Arbitrary)]
 pub struct StackIdx(pub usize);
 
 /// Index of an upvalue within a closure's bound-variable upvalue
 /// list.  This is an absolute index into the Upvalues of the
 /// CallFrame containing the opcode which contains this UpvalueIdx.
 #[repr(transparent)]
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PackedEncode, Arbitrary)]
 pub struct UpvalueIdx(pub usize);
 
 /// Offset by which an instruction pointer should change in a jump.
 #[repr(transparent)]
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PackedEncode, Arbitrary)]
 pub struct JumpOffset(pub usize);
 
 /// Provided count for an instruction (could represent e.g. a number
 /// of elements).
 #[repr(transparent)]
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PackedEncode, Arbitrary)]
 pub struct Count(pub usize);
 
 /// All variants of this enum carry a bounded amount of data to
@@ -71,7 +82,8 @@ pub struct Count(pub usize);
 /// Unless otherwise specified, operations leave their result at the
 /// top of the stack.
 #[warn(variant_size_differences)]
-#[derive(Clone, Copy, Debug, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, PartialEq, Eq, PackedEncode, Arbitrary)]
+#[repr(u8)]
 pub enum OpCode {
     /// Push a constant onto the stack.
     OpConstant(ConstantIdx),
@@ -281,4 +293,95 @@ pub enum OpCode {
     DataUpvalueIdx(UpvalueIdx),
     /// Populate dynamic upvalues by saving a copy of the with-stack.
     DataCaptureWith,
+}
+
+impl OpCode {
+    pub fn discriminant(&self) -> u8 {
+        unsafe { *<*const _>::from(self).cast::<u8>() }
+    }
+}
+
+pub struct Iter<'a> {
+    data: &'a [u8],
+    ix: usize,
+}
+
+impl<'a> Iter<'a> {
+    pub unsafe fn new(data: &'a [u8]) -> Self {
+        Self { data, ix: 0 }
+    }
+}
+
+impl<'a> Iterator for Iter<'a> {
+    type Item = OpCode;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.ix == self.data.len() {
+            return None;
+        }
+        let (op, off) = unsafe { OpCode::read(&self.data[self.ix..]) };
+        self.ix += off;
+        Some(op)
+    }
+}
+
+pub struct Enumerate<'a> {
+    data: &'a [u8],
+    ix: usize,
+}
+
+impl<'a> Enumerate<'a> {
+    pub unsafe fn new(data: &'a [u8]) -> Self {
+        Self { data, ix: 0 }
+    }
+}
+
+impl<'a> Iterator for Enumerate<'a> {
+    type Item = (CodeIdx, OpCode);
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.ix == self.data.len() {
+            return None;
+        }
+        let (op, off) = unsafe { OpCode::read(&self.data[self.ix..]) };
+        let ix = self.ix;
+        self.ix += off;
+        Some((CodeIdx(ix), op))
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use test_strategy::proptest;
+
+    use super::*;
+
+    #[test]
+    fn op_finalize_encode() {
+        let val = OpCode::OpFinalise(StackIdx(0));
+        let mut encoded = vec![];
+        val.push(&mut encoded);
+        let (res, len) = unsafe { OpCode::read(&encoded) };
+        assert_eq!(res, val);
+        assert_eq!(len, encoded.len());
+    }
+
+    #[proptest]
+    fn single_opcode_packed_encode_round_trip(val: OpCode) {
+        let mut encoded = vec![];
+        val.push(&mut encoded);
+        let (res, len) = unsafe { OpCode::read(&encoded) };
+        assert_eq!(res, val);
+        assert_eq!(len, encoded.len());
+    }
+
+    #[proptest]
+    fn opcodes_packed_encode_round_trip(ops: Vec<OpCode>) {
+        let mut encoded = vec![];
+        for op in &ops {
+            op.push(&mut encoded);
+        }
+        let res = unsafe { Iter::new(&encoded) }.collect::<Vec<_>>();
+        assert_eq!(res, ops);
+    }
 }

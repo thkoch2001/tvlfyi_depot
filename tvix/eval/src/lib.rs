@@ -29,6 +29,7 @@ mod vm;
 mod warnings;
 
 mod nix_search_path;
+mod packed_encode;
 #[cfg(all(test, feature = "arbitrary"))]
 mod properties;
 #[cfg(test)]

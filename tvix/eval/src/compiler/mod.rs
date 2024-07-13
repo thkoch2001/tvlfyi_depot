@@ -722,7 +722,7 @@ impl Compiler<'_, '_> {
         // set that is lacking a key, because that thunk is never
         // evaluated). If anything is missing, just move on. We may
         // want to emit warnings here in the future.
-        if let Some(OpCode::OpConstant(ConstantIdx(idx))) = self.chunk().code.last().cloned() {
+        if let Some(OpCode::OpConstant(ConstantIdx(idx))) = self.chunk().last_op() {
             let constant = &mut self.chunk().constants[idx];
             if let Value::Attrs(attrs) = constant {
                 let mut path_iter = path.attrs();
@@ -1293,7 +1293,10 @@ impl Compiler<'_, '_> {
             if !self.scope()[outer_slot].must_thunk {
                 // The closure has upvalues, but is not recursive.  Therefore no thunk is required,
                 // which saves us the overhead of Rc<RefCell<>>
-                self.chunk()[code_idx] = OpCode::OpClosure(blueprint_idx);
+                unsafe {
+                    self.chunk()
+                        .change_op(code_idx, OpCode::OpClosure(blueprint_idx));
+                }
             } else {
                 // This case occurs when a closure has upvalue-references to itself but does not need a
                 // finaliser.  Since no OpFinalise will be emitted later on we synthesize one here.
@@ -1373,19 +1376,8 @@ impl Compiler<'_, '_> {
     /// not known at the time when the jump operation itself is
     /// emitted.
     fn patch_jump(&mut self, idx: CodeIdx) {
-        let offset = JumpOffset(self.chunk().code.len() - 1 - idx.0);
-
-        match &mut self.chunk().code[idx.0] {
-            OpCode::OpJump(n)
-            | OpCode::OpJumpIfFalse(n)
-            | OpCode::OpJumpIfTrue(n)
-            | OpCode::OpJumpIfCatchable(n)
-            | OpCode::OpJumpIfNotFound(n)
-            | OpCode::OpJumpIfNoFinaliseRequest(n) => {
-                *n = offset;
-            }
-
-            op => panic!("attempted to patch unsupported op: {:?}", op),
+        unsafe {
+            self.chunk().patch_jump(idx);
         }
     }
 
@@ -1460,7 +1452,7 @@ impl Compiler<'_, '_> {
     }
 
     fn emit_force<N: ToSpan>(&mut self, node: &N) {
-        if let Some(&OpCode::OpConstant(c)) = self.chunk().last_op() {
+        if let Some(OpCode::OpConstant(c)) = self.chunk().last_op() {
             if !self.chunk().get_constant(c).unwrap().is_thunk() {
                 // Optimization: Don't emit a force op for non-thunk constants, since they don't
                 // need one!

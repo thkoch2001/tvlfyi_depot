@@ -1,0 +1,8 @@
+# Seeds for failure cases proptest has generated in the past. It is
+# automatically read and these particular cases re-run before any
+# novel cases are generated.
+#
+# It is recommended to check this file in to source control so that
+# everyone who runs the test benefits from these saved cases.
+cc 9e69b2a04fff433d58a3ed72d245b95f3f2b3301e29f0688a89c7c8f564244c0 # shrinks to input = _OpcodePackedEncodeRoundTripArgs { ops: [OpConstant(ConstantIdx(0))] }
+cc d7a95789c7729d224626b9bccc8a82cf8f05e546c863ff31ce0ca12c77843932 # shrinks to input = _SingleOpcodePackedEncodeRoundTripArgs { val: OpFinalise(StackIdx(0)) }
