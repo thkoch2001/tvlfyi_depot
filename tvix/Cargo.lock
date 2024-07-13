@@ -1049,6 +1049,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c34f04666d835ff5d62e058c3995147c06f42fe86ff053337632bca83e42702d"
 
 [[package]]
+name = "enum-kinds"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4e40a16955681d469ab3da85aaa6b42ff656b3c67b52e1d8d3dd36afe97fd462"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
+]
+
+[[package]]
 name = "enum-primitive-derive"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1679,8 +1690,6 @@ dependencies = [
 [[package]]
 name = "imbl"
 version = "3.0.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bc3be8d8cd36f33a46b1849f31f837c44d9fa87223baee3b4bd96b8f11df81eb"
 dependencies = [
  "bitmaps",
  "imbl-sized-chunks",
@@ -2211,6 +2220,17 @@ name = "num-conv"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "51d515d32fb182ee37cda2ccdcb92950d6a3c2893aa280e540671c2cd0f3b1d9"
+
+[[package]]
+name = "num-derive"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ed3955f1a9c7c0c15e092f9c887db08b1fc683305fdf6eb6684f22555355e202"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.48",
+]
 
 [[package]]
 name = "num-traits"
@@ -4412,12 +4432,15 @@ dependencies = [
  "criterion",
  "data-encoding",
  "dirs",
+ "enum-kinds",
  "genawaiter",
  "imbl",
  "itertools 0.12.0",
  "lazy_static",
  "lexical-core",
  "md-5",
+ "num-derive",
+ "num-traits",
  "os_str_bytes",
  "path-clean",
  "pretty_assertions",
@@ -4437,6 +4460,7 @@ dependencies = [
  "tikv-jemallocator",
  "toml",
  "tvix-eval-builtin-macros",
+ "tvix-eval-opcode-macros",
 ]
 
 [[package]]
@@ -4447,6 +4471,15 @@ dependencies = [
  "quote",
  "syn 1.0.109",
  "tvix-eval",
+]
+
+[[package]]
+name = "tvix-eval-opcode-macros"
+version = "0.0.1"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 1.0.109",
 ]
 
 [[package]]
