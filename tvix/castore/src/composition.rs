@@ -69,7 +69,8 @@
 //! });
 //!
 //! let blob_services_configs = with_registry(&REG, || serde_json::from_value(blob_services_configs_json))?;
-//! let blob_service_composition = Composition::<dyn BlobService>::from_configs(blob_services_configs);
+//! let mut blob_service_composition = Composition::<dyn BlobService>::new();
+//! blob_service_composition.extend_with_configs(blob_services_configs);
 //! let blob_service = blob_service_composition.build("default").await?;
 //! # Ok(())
 //! # })
@@ -341,31 +342,43 @@ pub enum CompositionError {
     Failed(String, Arc<dyn std::error::Error + Send + Sync>),
 }
 
-impl<T: ?Sized + Send + Sync + 'static> Composition<T> {
-    pub fn from_configs(
-        // Keep the concrete `HashMap` type here since it allows for type
-        // inference of what type is previously being deserialized.
-        configs: HashMap<String, DeserializeWithRegistry<Box<dyn ServiceBuilder<Output = T>>>>,
-    ) -> Self {
-        Self::from_configs_iter(configs)
-    }
-
-    pub fn from_configs_iter(
-        configs: impl IntoIterator<
+impl<T: ?Sized + Send + Sync + 'static>
+    Extend<(
+        String,
+        DeserializeWithRegistry<Box<dyn ServiceBuilder<Output = T>>>,
+    )> for Composition<T>
+{
+    fn extend<I>(&mut self, configs: I)
+    where
+        I: IntoIterator<
             Item = (
                 String,
                 DeserializeWithRegistry<Box<dyn ServiceBuilder<Output = T>>>,
             ),
         >,
-    ) -> Self {
-        Composition {
-            stores: std::sync::Mutex::new(
-                configs
-                    .into_iter()
-                    .map(|(k, v)| (k, InstantiationState::Config(v.0)))
-                    .collect(),
-            ),
+    {
+        self.stores.lock().unwrap().extend(
+            configs
+                .into_iter()
+                .map(|(k, v)| (k, InstantiationState::Config(v.0))),
+        )
+    }
+}
+
+impl<T: ?Sized + Send + Sync + 'static> Composition<T> {
+    pub fn new() -> Self {
+        Self {
+            stores: Default::default(),
         }
+    }
+
+    pub fn extend_with_configs(
+        &mut self,
+        // Keep the concrete `HashMap` type here since it allows for type
+        // inference of what type is previously being deserialized.
+        configs: HashMap<String, DeserializeWithRegistry<Box<dyn ServiceBuilder<Output = T>>>>,
+    ) {
+        self.extend(configs);
     }
 
     pub async fn build(&self, entrypoint: &str) -> Result<Arc<T>, CompositionError> {
