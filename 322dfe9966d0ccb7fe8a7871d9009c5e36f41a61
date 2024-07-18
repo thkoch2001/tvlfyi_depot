@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab7bd28a_ce4803f2",
+        "filename": "tvix/castore/src/directoryservice/sled.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-18T18:33:21Z",
+      "side": 1,
+      "message": "```suggestion\n                \"Temporary SledDirectoryService can not have path\".into(),\n```",
+      "revId": "322dfe9966d0ccb7fe8a7871d9009c5e36f41a61",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
