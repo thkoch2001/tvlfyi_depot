@@ -16,6 +16,24 @@
       "message": "```suggestion\n            \"Instantiating a CombinedBlobService from a url is not supported\".into(),\n```",
       "revId": "7026b87fb950538bc40a62fc91bd8092883939e5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dbdeff11_68814f89",
+        "filename": "tvix/castore/src/blobservice/combinator.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-07-18T18:44:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddc823db_ee781dc7",
+      "revId": "7026b87fb950538bc40a62fc91bd8092883939e5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
