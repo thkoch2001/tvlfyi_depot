@@ -23,7 +23,7 @@ pub async fn construct_services(
     (
         Arc<dyn BlobService>,
         Arc<dyn DirectoryService>,
-        Box<dyn PathInfoService>,
+        Arc<dyn PathInfoService>,
         Box<dyn NarCalculationService>,
     ),
     Box<dyn std::error::Error + Send + Sync>,
@@ -35,8 +35,7 @@ pub async fn construct_services(
 
     let path_info_service = pathinfoservice::from_addr(
         path_info_service_addr.as_ref(),
-        blob_service.clone(),
-        directory_service.clone(),
+        None, // TODO
     )
     .await?;
 
