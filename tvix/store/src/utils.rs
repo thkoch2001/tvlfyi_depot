@@ -5,14 +5,14 @@ use std::{
 };
 use tokio::io::{self, AsyncWrite};
 
-use tvix_castore::{
-    blobservice::{self, BlobService},
-    directoryservice::{self, DirectoryService},
-};
+use tvix_castore::{blobservice::BlobService, directoryservice::DirectoryService};
 use url::Url;
 
+use crate::composition::{
+    with_registry, Composition, DeserializeWithRegistry, ServiceBuilder, REG,
+};
 use crate::nar::{NarCalculationService, SimpleRenderer};
-use crate::pathinfoservice::{self, PathInfoService};
+use crate::pathinfoservice::PathInfoService;
 
 /// Construct the store handles from their addrs.
 pub async fn construct_services(
@@ -23,22 +23,30 @@ pub async fn construct_services(
     (
         Arc<dyn BlobService>,
         Arc<dyn DirectoryService>,
-        Box<dyn PathInfoService>,
+        Arc<dyn PathInfoService>,
         Box<dyn NarCalculationService>,
     ),
     Box<dyn std::error::Error + Send + Sync>,
 > {
-    let blob_service: Arc<dyn BlobService> =
-        blobservice::from_addr(blob_service_addr.as_ref()).await?;
-    let directory_service: Arc<dyn DirectoryService> =
-        directoryservice::from_addr(directory_service_addr.as_ref()).await?;
-
-    let path_info_service = pathinfoservice::from_addr(
-        path_info_service_addr.as_ref(),
-        blob_service.clone(),
-        directory_service.clone(),
-    )
-    .await?;
+    let mut comp = Composition::default();
+    #[allow(clippy::type_complexity)]
+    let (blob_service_config, directory_service_config, path_info_service_config): (
+        DeserializeWithRegistry<Box<dyn ServiceBuilder<Output = dyn BlobService>>>,
+        DeserializeWithRegistry<Box<dyn ServiceBuilder<Output = dyn DirectoryService>>>,
+        DeserializeWithRegistry<Box<dyn ServiceBuilder<Output = dyn PathInfoService>>>,
+    ) = with_registry(&REG, || {
+        Ok::<_, Box<dyn std::error::Error + Send + Sync>>((
+            Url::parse(blob_service_addr.as_ref())?.try_into()?,
+            Url::parse(directory_service_addr.as_ref())?.try_into()?,
+            Url::parse(path_info_service_addr.as_ref())?.try_into()?,
+        ))
+    })?;
+    comp.extend(vec![("default".into(), blob_service_config)]);
+    comp.extend(vec![("default".into(), directory_service_config)]);
+    comp.extend(vec![("default".into(), path_info_service_config)]);
+    let blob_service: Arc<dyn BlobService> = comp.build("default").await?;
+    let directory_service: Arc<dyn DirectoryService> = comp.build("default").await?;
+    let path_info_service: Arc<dyn PathInfoService> = comp.build("default").await?;
 
     // HACK: The grpc client also implements NarCalculationService, and we
     // really want to use it (otherwise we'd need to fetch everything again for hashing).
