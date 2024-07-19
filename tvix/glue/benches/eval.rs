@@ -27,14 +27,14 @@ fn interpret(code: &str) {
     // piece of code. b/262
     let (blob_service, directory_service, path_info_service, nar_calculation_service) =
         TOKIO_RUNTIME
-            .block_on(async { construct_services("memory://", "memory://", "memory://").await })
+            .block_on(async { construct_services("memory://", "memory://", "memory://", None).await })
             .unwrap();
 
     // We assemble a complete store in memory.
     let tvix_store_io = Rc::new(TvixStoreIO::new(
         blob_service,
         directory_service,
-        path_info_service.into(),
+        path_info_service,
         nar_calculation_service.into(),
         Arc::<DummyBuildService>::default(),
         TOKIO_RUNTIME.handle().clone(),
