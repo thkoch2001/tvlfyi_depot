@@ -642,13 +642,13 @@ mod tests {
         let tokio_runtime = tokio::runtime::Runtime::new().unwrap();
         let (blob_service, directory_service, path_info_service, nar_calculation_service) =
             tokio_runtime
-                .block_on(async { construct_services("memory://", "memory://", "memory://").await })
+                .block_on(async { construct_services("memory://", "memory://", "memory://", None).await })
                 .unwrap();
 
         let io = Rc::new(TvixStoreIO::new(
             blob_service,
             directory_service,
-            path_info_service.into(),
+            path_info_service,
             nar_calculation_service.into(),
             Arc::<DummyBuildService>::default(),
             tokio_runtime.handle().clone(),
