@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "34fbd4e2_c4498925",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-07-19T20:58:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "604e1f01_e9e79b82",
+      "revId": "2e16c363ae503ef457f82b293d613264f16e8c36",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a4a7507b_6d3f26b9",
