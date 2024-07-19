@@ -16,7 +16,6 @@ use tracing::{info, info_span, instrument, Level, Span};
 use tracing_indicatif::span_ext::IndicatifSpanExt as _;
 use tvix_castore::import::fs::ingest_path;
 use tvix_store::nar::NarCalculationService;
-use tvix_store::pathinfoservice::CachePathInfoService;
 use tvix_store::proto::NarInfo;
 use tvix_store::proto::PathInfo;
 
@@ -215,26 +214,9 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error + Send + Sync
                     blob_service_addr,
                     directory_service_addr,
                     path_info_service_addr,
+                    remote_path_info_service_addr,
                 )
                 .await?;
-
-            // if remote_path_info_service_addr has been specified,
-            // update path_info_service to point to a cache combining the two.
-            let path_info_service = if let Some(addr) = remote_path_info_service_addr {
-                let remote_path_info_service = tvix_store::pathinfoservice::from_addr(
-                    &addr,
-                    blob_service.clone(),
-                    directory_service.clone(),
-                )
-                .await?;
-
-                let path_info_service =
-                    CachePathInfoService::new(path_info_service, remote_path_info_service);
-
-                Box::new(path_info_service) as Box<dyn PathInfoService>
-            } else {
-                path_info_service
-            };
 
             let mut server = Server::builder().layer(
                 ServiceBuilder::new()
@@ -257,7 +239,7 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error + Send + Sync
                     GRPCDirectoryServiceWrapper::new(directory_service),
                 ))
                 .add_service(PathInfoServiceServer::new(GRPCPathInfoServiceWrapper::new(
-                    Arc::from(path_info_service),
+                    path_info_service,
                     nar_calculation_service,
                 )));
 
@@ -299,11 +281,11 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error + Send + Sync
                     blob_service_addr,
                     directory_service_addr,
                     path_info_service_addr,
+                    None,
                 )
                 .await?;
 
-            // Arc PathInfoService and NarCalculationService, as we clone it .
-            let path_info_service: Arc<dyn PathInfoService> = path_info_service.into();
+            // Arc NarCalculationService, as we clone it .
             let nar_calculation_service: Arc<dyn NarCalculationService> =
                 nar_calculation_service.into();
 
@@ -350,6 +332,7 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error + Send + Sync
                     blob_service_addr,
                     directory_service_addr,
                     path_info_service_addr,
+                    None,
                 )
                 .await?;
 
@@ -364,9 +347,6 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error + Send + Sync
 
             let reference_graph: ReferenceGraph<'_> =
                 serde_json::from_slice(reference_graph_json.as_slice())?;
-
-            // Arc the PathInfoService, as we clone it .
-            let path_info_service: Arc<dyn PathInfoService> = path_info_service.into();
 
             let lookups_span = info_span!(
                 "lookup pathinfos",
@@ -468,6 +448,7 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error + Send + Sync
                     blob_service_addr,
                     directory_service_addr,
                     path_info_service_addr,
+                    None,
                 )
                 .await?;
 
@@ -475,7 +456,7 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error + Send + Sync
                 let fs = make_fs(
                     blob_service,
                     directory_service,
-                    Arc::from(path_info_service),
+                    path_info_service,
                     list_root,
                     show_xattr,
                 );
@@ -523,7 +504,7 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error + Send + Sync
                 let fs = make_fs(
                     blob_service,
                     directory_service,
-                    Arc::from(path_info_service),
+                    path_info_service,
                     list_root,
                     show_xattr,
                 );
