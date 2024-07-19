@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "604e1f01_e9e79b82",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-07-19T14:24:56Z",
+      "side": 1,
+      "message": "intended fixme? can you describe a bit more",
+      "revId": "2e16c363ae503ef457f82b293d613264f16e8c36",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4a7507b_6d3f26b9",
+        "filename": "tvix/store/src/pathinfoservice/nix_http.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 323,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-07-19T14:24:56Z",
+      "side": 1,
+      "message": "should be removed?",
+      "revId": "2e16c363ae503ef457f82b293d613264f16e8c36",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5bc29521_b15f0e1b",
+        "filename": "tvix/store/src/utils.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-07-19T14:24:56Z",
+      "side": 1,
+      "message": "what is it needed to do?",
+      "revId": "2e16c363ae503ef457f82b293d613264f16e8c36",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
