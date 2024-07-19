@@ -14,22 +14,25 @@ mod tests;
 
 use futures::stream::BoxStream;
 use tonic::async_trait;
+use tvix_castore::composition::{Registry, ServiceBuilder};
 use tvix_castore::Error;
 
 use crate::proto::PathInfo;
 
-pub use self::combinators::Cache as CachePathInfoService;
+pub use self::combinators::{
+    Cache as CachePathInfoService, CacheConfig as CachePathInfoServiceConfig,
+};
 pub use self::from_addr::from_addr;
-pub use self::grpc::GRPCPathInfoService;
-pub use self::lru::LruPathInfoService;
-pub use self::memory::MemoryPathInfoService;
-pub use self::nix_http::NixHTTPPathInfoService;
-pub use self::sled::SledPathInfoService;
+pub use self::grpc::{GRPCPathInfoService, GRPCPathInfoServiceConfig};
+pub use self::lru::{LruPathInfoService, LruPathInfoServiceConfig};
+pub use self::memory::{MemoryPathInfoService, MemoryPathInfoServiceConfig};
+pub use self::nix_http::{NixHTTPPathInfoService, NixHTTPPathInfoServiceConfig};
+pub use self::sled::{SledPathInfoService, SledPathInfoServiceConfig};
 
 #[cfg(feature = "cloud")]
 mod bigtable;
 #[cfg(feature = "cloud")]
-pub use self::bigtable::BigtablePathInfoService;
+pub use self::bigtable::{BigtableParameters, BigtablePathInfoService};
 
 #[cfg(any(feature = "fuse", feature = "virtiofs"))]
 pub use self::fs::make_fs;
@@ -69,5 +72,21 @@ where
 
     fn list(&self) -> BoxStream<'static, Result<PathInfo, Error>> {
         self.as_ref().list()
+    }
+}
+
+/// Registers the builtin PathInfoService implementations with the registry
+pub(crate) fn register_pathinfo_services(reg: &mut Registry) {
+    reg.register::<Box<dyn ServiceBuilder<Output = dyn PathInfoService>>, CachePathInfoServiceConfig>("cache");
+    reg.register::<Box<dyn ServiceBuilder<Output = dyn PathInfoService>>, GRPCPathInfoServiceConfig>("grpc");
+    reg.register::<Box<dyn ServiceBuilder<Output = dyn PathInfoService>>, LruPathInfoServiceConfig>("lru");
+    reg.register::<Box<dyn ServiceBuilder<Output = dyn PathInfoService>>, MemoryPathInfoServiceConfig>("memory");
+    reg.register::<Box<dyn ServiceBuilder<Output = dyn PathInfoService>>, NixHTTPPathInfoServiceConfig>("nix");
+    reg.register::<Box<dyn ServiceBuilder<Output = dyn PathInfoService>>, SledPathInfoServiceConfig>("sled");
+    #[cfg(feature = "cloud")]
+    {
+        reg.register::<Box<dyn ServiceBuilder<Output = dyn PathInfoService>>, BigtableParameters>(
+            "bigtable",
+        );
     }
 }
