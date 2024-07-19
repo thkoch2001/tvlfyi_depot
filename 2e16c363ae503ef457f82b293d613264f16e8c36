@@ -68,6 +68,24 @@
       "message": "what is it needed to do?",
       "revId": "2e16c363ae503ef457f82b293d613264f16e8c36",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c6a06598_1016a230",
+        "filename": "tvix/store/src/utils.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-07-19T17:21:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5bc29521_b15f0e1b",
+      "revId": "2e16c363ae503ef457f82b293d613264f16e8c36",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
