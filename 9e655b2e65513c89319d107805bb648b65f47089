@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c5574bc_fbb212cd",
+        "filename": "tvix/nar-bridge/src/nar.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-07-20T14:03:55Z",
+      "side": 1,
+      "message": "Can also panic on small input or non-UTF-8 boundary",
+      "revId": "9e655b2e65513c89319d107805bb648b65f47089",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
