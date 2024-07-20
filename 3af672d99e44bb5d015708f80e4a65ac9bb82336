@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "360c97e1_f4e95da8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-07-20T18:22:41Z",
+      "side": 1,
+      "message": "This is obsolete with CL/11983",
+      "revId": "3af672d99e44bb5d015708f80e4a65ac9bb82336",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
