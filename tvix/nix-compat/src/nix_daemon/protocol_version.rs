@@ -1,3 +1,5 @@
+static PROTOCOL_VERSION: ProtocolVersion = ProtocolVersion::from_parts(1, 37);
+
 /// Protocol versions are represented as a u16.
 /// The upper 8 bits are the major version, the lower bits the minor.
 /// This is not aware of any endianness, use [crate::wire::read_u64] to get an
@@ -17,6 +19,12 @@ impl ProtocolVersion {
 
     pub fn minor(&self) -> u8 {
         (self.0 & 0x00ff) as u8
+    }
+}
+
+impl Default for ProtocolVersion {
+    fn default() -> Self {
+        PROTOCOL_VERSION
     }
 }
 
@@ -42,6 +50,12 @@ impl Ord for ProtocolVersion {
 impl From<u16> for ProtocolVersion {
     fn from(value: u16) -> Self {
         Self::from_parts(((value & 0xff00) >> 8) as u8, (value & 0x00ff) as u8)
+    }
+}
+
+impl From<(u8, u8)> for ProtocolVersion {
+    fn from((major, minor): (u8, u8)) -> Self {
+        Self::from_parts(major, minor)
     }
 }
 
