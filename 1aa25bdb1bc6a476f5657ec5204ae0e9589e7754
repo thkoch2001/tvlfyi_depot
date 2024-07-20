@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0afab9b_1311c45e",
+        "filename": "tvix/store/src/composition.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-07-20T17:31:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6d3b5ede_ddf53a68",
+      "revId": "1aa25bdb1bc6a476f5657ec5204ae0e9589e7754",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "20336459_ca02c97b",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf909824_a3953fd9",
+        "filename": "tvix/store/src/composition.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-07-20T17:31:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20336459_ca02c97b",
+      "revId": "1aa25bdb1bc6a476f5657ec5204ae0e9589e7754",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8375162_ee8205ac",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-07-20T15:03:01Z",
       "side": 1,
       "message": "```suggestion\n/// registry. This is useful for creating your own registry with the built-in\n```",
+      "revId": "1aa25bdb1bc6a476f5657ec5204ae0e9589e7754",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8d94e2c6_7c7ce9ef",
+        "filename": "tvix/store/src/composition.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-07-20T17:31:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a8375162_ee8205ac",
       "revId": "1aa25bdb1bc6a476f5657ec5204ae0e9589e7754",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
