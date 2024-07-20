@@ -56,12 +56,6 @@ pub async fn from_addr(
                 return Err(Error::StorageError("no host allowed".to_string()));
             }
 
-            if url.path() == "/" {
-                return Err(Error::StorageError(
-                    "cowardly refusing to open / with sled".to_string(),
-                ));
-            }
-
             // TODO: expose other parameters as URL parameters?
 
             Box::new(if url.path().is_empty() {
