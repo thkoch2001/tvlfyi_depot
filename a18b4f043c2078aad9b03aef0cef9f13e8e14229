@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "872b57c7_9a27144e",
+        "filename": "tvix/nar-bridge/src/nar.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-20T14:51:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62521557_3774f794",
+      "revId": "a18b4f043c2078aad9b03aef0cef9f13e8e14229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14702ac6_9b7b90c6",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-07-20T12:35:46Z",
       "side": 1,
       "message": "If s it shorter than 32 chars or if there is not a UTF-8 boundary at 32 this will panic.",
+      "revId": "a18b4f043c2078aad9b03aef0cef9f13e8e14229",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46f5fd4e_e5d61114",
+        "filename": "tvix/nar-bridge/src/narinfo.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-20T14:51:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "14702ac6_9b7b90c6",
       "revId": "a18b4f043c2078aad9b03aef0cef9f13e8e14229",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
