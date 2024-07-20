@@ -45,7 +45,7 @@ let
           depot.tvix.store
           depot.tvix.boot.runVM
         ] ++ lib.optionals (isClosure && useNarBridge) [
-          depot.tvix.nar-bridge-go
+          depot.tvix.nar-bridge
           pkgs.curl
           pkgs.parallel
           pkgs.xz.bin
@@ -85,10 +85,9 @@ let
           tvix-store --otlp=false copy
         '' + lib.optionalString (isClosure && useNarBridge) ''
           echo "Starting nar-bridge…"
-          nar-bridge-http \
+          nar-bridge \
             --otlp=false \
-            --store-addr=unix://$PWD/tvix-store.sock \
-            --listen-addr=$PWD/nar-bridge.sock &
+            -l $PWD/nar-bridge.sock &
 
           # Wait for the socket to be created.
           while [ ! -e $PWD/nar-bridge.sock ]; do sleep 1; done
