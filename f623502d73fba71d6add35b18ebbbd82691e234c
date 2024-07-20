@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6fab929_7888f780",
+        "filename": "tvix/nix-compat/src/nix_daemon/de/bytes.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-20T15:17:26Z",
+      "side": 1,
+      "message": "This seems to be tests for the code in `tvix/nix-compat/src/nix_daemon/de/reader.rs`, not `NixDeserialize for …`, or am I missing something?",
+      "revId": "f623502d73fba71d6add35b18ebbbd82691e234c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea4f4a90_76d7ae23",
+        "filename": "tvix/nix-compat/src/nix_daemon/de/reader.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-20T15:17:26Z",
+      "side": 1,
+      "message": "```suggestion\n        // SAFETY: This is guaranteed to be the number of initialized (and read)\n```",
+      "revId": "f623502d73fba71d6add35b18ebbbd82691e234c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1d9a46be_c84e9a66",
+        "filename": "tvix/nix-compat/src/nix_daemon/de/reader.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-20T15:17:26Z",
+      "side": 1,
+      "message": "👀",
+      "revId": "f623502d73fba71d6add35b18ebbbd82691e234c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ae2c353_5aae0893",
+        "filename": "tvix/nix-compat/src/nix_daemon/de/reader.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 376,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-20T15:17:26Z",
+      "side": 1,
+      "message": "This",
+      "revId": "f623502d73fba71d6add35b18ebbbd82691e234c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22f7b5b4_8f7e8673",
+        "filename": "tvix/nix-compat/src/nix_daemon/de/reader.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 486,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-20T15:17:26Z",
+      "side": 1,
+      "message": "TODO",
+      "revId": "f623502d73fba71d6add35b18ebbbd82691e234c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cca5cd28_247b9704",
+        "filename": "tvix/nix-compat/src/nix_daemon/de/reader.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 487,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-20T15:17:26Z",
+      "side": 1,
+      "message": "TODO",
+      "revId": "f623502d73fba71d6add35b18ebbbd82691e234c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0000dd44_7772d1b0",
+        "filename": "tvix/nix-compat/src/nix_daemon/de/reader.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 492,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-20T15:17:26Z",
+      "side": 1,
+      "message": "You need to add a [wait](https://docs.rs/tokio-test/latest/tokio_test/io/struct.Builder.html#method.wait) in between, otherwise `tokio_test` does deduplicate these two.",
+      "revId": "f623502d73fba71d6add35b18ebbbd82691e234c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
