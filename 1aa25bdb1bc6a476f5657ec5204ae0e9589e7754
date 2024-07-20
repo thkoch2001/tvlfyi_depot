@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6d3b5ede_ddf53a68",
+        "filename": "tvix/store/src/composition.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-20T15:03:01Z",
+      "side": 1,
+      "message": "```suggestion\n    /// The provided registry of tvix_store, which has all the built-in\n```",
+      "revId": "1aa25bdb1bc6a476f5657ec5204ae0e9589e7754",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20336459_ca02c97b",
+        "filename": "tvix/store/src/composition.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-20T15:03:01Z",
+      "side": 1,
+      "message": "```suggestion\n/// Register the built-in services of tvix_castore and tvix_store with the given\n```",
+      "revId": "1aa25bdb1bc6a476f5657ec5204ae0e9589e7754",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8375162_ee8205ac",
+        "filename": "tvix/store/src/composition.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-20T15:03:01Z",
+      "side": 1,
+      "message": "```suggestion\n/// registry. This is useful for creating your own registry with the built-in\n```",
+      "revId": "1aa25bdb1bc6a476f5657ec5204ae0e9589e7754",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
