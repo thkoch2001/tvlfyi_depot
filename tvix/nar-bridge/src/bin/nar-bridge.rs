@@ -60,7 +60,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
     let app = nar_bridge::gen_router(cli.priority).with_state(state);
 
     let listen_address = &cli.listen_args.listen_address.unwrap_or_else(|| {
-        "[::]:8000"
+        "[::]:9000"
             .parse()
             .expect("invalid fallback listen address")
     });
