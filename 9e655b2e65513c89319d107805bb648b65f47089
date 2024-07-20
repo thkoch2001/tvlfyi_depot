@@ -16,6 +16,24 @@
       "message": "Can also panic on small input or non-UTF-8 boundary",
       "revId": "9e655b2e65513c89319d107805bb648b65f47089",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d47f12a_c3d57697",
+        "filename": "tvix/nar-bridge/src/nar.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-20T14:51:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c5574bc_fbb212cd",
+      "revId": "9e655b2e65513c89319d107805bb648b65f47089",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
