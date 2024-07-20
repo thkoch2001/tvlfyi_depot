@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5542e6e_7f5182c9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-20T12:28:23Z",
+      "side": 1,
+      "message": "know",
+      "revId": "315765a5df15b542116d5b75fe2a27ea54bbffe7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b77b8e5f_882e45fa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-20T12:28:23Z",
+      "side": 1,
+      "message": "two minor nits",
+      "revId": "315765a5df15b542116d5b75fe2a27ea54bbffe7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e81adafe_e914fa0d",
+        "filename": "tvix/docs/src/nix-daemon/handshake.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-20T12:28:23Z",
+      "side": 1,
+      "message": "Some of these are ASCII too (see `nix-compat/src/nix_daemon/worker_protocol.rs`). Do you think it makes sense to add this too?",
+      "revId": "315765a5df15b542116d5b75fe2a27ea54bbffe7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
