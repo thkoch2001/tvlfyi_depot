@@ -15,8 +15,8 @@ let
     # and the outputHash as value.
     outputHashes = builtins.listToAttrs
       (map
-        (crateName:
-          (lib.nameValuePair "${crateName}-${crates.internal.crates.${crateName}.version}" crates.internal.crates.${crateName}.src.outputHash)
+        (k:
+          (lib.nameValuePair "${crates.internal.crates.${k}.crateName}-${crates.internal.crates.${k}.version}" crates.internal.crates.${k}.src.outputHash)
         ) [
         "wu-manber"
       ]);
