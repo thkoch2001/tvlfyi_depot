@@ -17,7 +17,7 @@ pub mod tests;
 mod traverse;
 mod utils;
 
-pub use self::combinators::{Cache, CacheConfig};
+pub use self::combinators::{Cache, CacheConfig, Router, RouterConfig};
 pub use self::directory_graph::DirectoryGraph;
 pub use self::from_addr::from_addr;
 pub use self::grpc::{GRPCDirectoryService, GRPCDirectoryServiceConfig};
@@ -133,6 +133,7 @@ pub(crate) fn register_directory_services(reg: &mut Registry) {
     reg.register::<Box<dyn ServiceBuilder<Output = dyn DirectoryService>>, super::directoryservice::ObjectStoreDirectoryServiceConfig>("objectstore");
     reg.register::<Box<dyn ServiceBuilder<Output = dyn DirectoryService>>, super::directoryservice::MemoryDirectoryServiceConfig>("memory");
     reg.register::<Box<dyn ServiceBuilder<Output = dyn DirectoryService>>, super::directoryservice::CacheConfig>("cache");
+    reg.register::<Box<dyn ServiceBuilder<Output = dyn DirectoryService>>, super::directoryservice::RouterConfig>("router");
     reg.register::<Box<dyn ServiceBuilder<Output = dyn DirectoryService>>, super::directoryservice::GRPCDirectoryServiceConfig>("grpc");
     reg.register::<Box<dyn ServiceBuilder<Output = dyn DirectoryService>>, super::directoryservice::SledDirectoryServiceConfig>("sled");
     #[cfg(feature = "cloud")]

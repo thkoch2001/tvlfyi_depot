@@ -179,3 +179,75 @@ impl ServiceBuilder for CacheConfig {
         }))
     }
 }
+
+#[derive(Clone)]
+pub struct Router<DS1, DS2> {
+    writes: DS1,
+    reads: DS2,
+}
+
+#[async_trait]
+impl<DS1, DS2> DirectoryService for Router<DS1, DS2>
+where
+    DS1: DirectoryService + Clone + 'static,
+    DS2: DirectoryService + Clone + 'static,
+{
+    #[instrument(skip(self, digest), fields(directory.digest = %digest))]
+    async fn get(&self, digest: &B3Digest) -> Result<Option<proto::Directory>, Error> {
+        self.reads.get(digest).await
+    }
+
+    #[instrument(skip_all)]
+    async fn put(&self, directory: proto::Directory) -> Result<B3Digest, Error> {
+        self.writes.put(directory).await
+    }
+
+    #[instrument(skip_all, fields(directory.digest = %root_directory_digest))]
+    fn get_recursive(
+        &self,
+        root_directory_digest: &B3Digest,
+    ) -> BoxStream<'static, Result<proto::Directory, Error>> {
+        self.reads.get_recursive(root_directory_digest)
+    }
+
+    #[instrument(skip_all)]
+    fn put_multiple_start(&self) -> Box<(dyn DirectoryPutter + 'static)> {
+        self.writes.put_multiple_start()
+    }
+}
+
+#[derive(serde::Deserialize, Debug)]
+#[serde(deny_unknown_fields)]
+pub struct RouterConfig {
+    writes: String,
+    reads: String,
+}
+
+impl TryFrom<url::Url> for RouterConfig {
+    type Error = Box<dyn std::error::Error + Send + Sync>;
+    fn try_from(_url: url::Url) -> Result<Self, Self::Error> {
+        Err(Error::StorageError(
+            "Instantiating a CombinedDirectoryService from a url is not supported".into(),
+        )
+        .into())
+    }
+}
+
+#[async_trait]
+impl ServiceBuilder for RouterConfig {
+    type Output = dyn DirectoryService;
+    async fn build<'a>(
+        &'a self,
+        _instance_name: &str,
+        context: &CompositionContext,
+    ) -> Result<Arc<dyn DirectoryService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
+        let (writes, reads) = futures::join!(
+            context.resolve(self.writes.clone()),
+            context.resolve(self.reads.clone())
+        );
+        Ok(Arc::new(Router {
+            writes: writes?,
+            reads: reads?,
+        }))
+    }
+}
