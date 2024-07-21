@@ -78,6 +78,15 @@ pub async fn construct_services(
     construct_services_from_configs(configs).await
 }
 
+/// Adds a prefix to all keys of a (K, V) iterator
+fn add_prefix<K: std::fmt::Display, V>(
+    prefix: &'static str,
+    iter: impl IntoIterator<Item = (K, V)>,
+) -> impl Iterator<Item = (String, V)> {
+    iter.into_iter()
+        .map(move |(k, v)| (format!("{}{}", prefix, k), v))
+}
+
 /// Construct the store handles from their addrs.
 pub async fn construct_services_from_configs(
     configs: CompositionConfigs,
@@ -92,9 +101,11 @@ pub async fn construct_services_from_configs(
 > {
     let mut comp = Composition::default();
 
-    comp.extend(configs.blobservices);
-    comp.extend(configs.directoryservices);
-    comp.extend(configs.pathinfoservices);
+    // We add prefixes to the names of the services, so that the type of the service is
+    // recognizable from the error messages etc.
+    comp.extend(add_prefix("blobservices.", configs.blobservices));
+    comp.extend(add_prefix("directoryservices.", configs.directoryservices));
+    comp.extend(add_prefix("pathinfoservices.", configs.pathinfoservices));
 
     let blob_service: Arc<dyn BlobService> = comp.build("default").await?;
     let directory_service: Arc<dyn DirectoryService> = comp.build("default").await?;
