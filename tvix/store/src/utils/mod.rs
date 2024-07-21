@@ -7,13 +7,15 @@ use std::{
 use tokio::io::{self, AsyncWrite};
 
 use tvix_castore::{blobservice::BlobService, directoryservice::DirectoryService};
-use url::Url;
 
 use crate::composition::{
     with_registry, Composition, DeserializeWithRegistry, ServiceBuilder, REG,
 };
 use crate::nar::{NarCalculationService, SimpleRenderer};
 use crate::pathinfoservice::PathInfoService;
+pub use clap::*;
+
+mod clap;
 
 #[derive(serde::Deserialize, Default)]
 pub struct CompositionConfigs {
@@ -29,38 +31,9 @@ pub struct CompositionConfigs {
     >,
 }
 
-pub fn addrs_to_configs(
-    blob_service_addr: impl AsRef<str>,
-    directory_service_addr: impl AsRef<str>,
-    path_info_service_addr: impl AsRef<str>,
-) -> Result<CompositionConfigs, Box<dyn std::error::Error + Send + Sync>> {
-    let mut configs: CompositionConfigs = Default::default();
-
-    let blob_service_url = Url::parse(blob_service_addr.as_ref())?;
-    let directory_service_url = Url::parse(directory_service_addr.as_ref())?;
-    let path_info_service_url = Url::parse(path_info_service_addr.as_ref())?;
-
-    configs.blobservices.insert(
-        "default".into(),
-        with_registry(&REG, || blob_service_url.try_into())?,
-    );
-    configs.directoryservices.insert(
-        "default".into(),
-        with_registry(&REG, || directory_service_url.try_into())?,
-    );
-    configs.pathinfoservices.insert(
-        "default".into(),
-        with_registry(&REG, || path_info_service_url.try_into())?,
-    );
-
-    Ok(configs)
-}
-
 /// Construct the store handles from their addrs.
 pub async fn construct_services(
-    blob_service_addr: impl AsRef<str>,
-    directory_service_addr: impl AsRef<str>,
-    path_info_service_addr: impl AsRef<str>,
+    urls: impl Into<ServiceUrls>,
 ) -> Result<
     (
         Arc<dyn BlobService>,
@@ -70,15 +43,11 @@ pub async fn construct_services(
     ),
     Box<dyn std::error::Error + Send + Sync>,
 > {
-    let configs = addrs_to_configs(
-        blob_service_addr,
-        directory_service_addr,
-        path_info_service_addr,
-    )?;
+    let configs = addrs_to_configs(urls)?;
     construct_services_from_configs(configs).await
 }
 
-/// Construct the store handles from their addrs.
+/// Construct the store handles from a set of configs.
 pub async fn construct_services_from_configs(
     configs: CompositionConfigs,
 ) -> Result<
