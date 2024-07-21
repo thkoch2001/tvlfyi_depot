@@ -53,6 +53,12 @@ pub struct ServiceUrls {
     /// "remote" one.
     #[arg(long, env)]
     remote_path_info_service_addr: Option<String>,
+
+    /// Path to a TOML file describing the way the services should be composed
+    /// Experimental because the format is not final.
+    /// If specified, the other service addrs are ignored.
+    #[arg(long, env)]
+    experimental_store_composition: Option<String>,
 }
 
 /// like ServiceUrls, but with different clap defaults
@@ -69,6 +75,9 @@ pub struct ServiceUrlsGrpc {
 
     #[arg(long, env)]
     remote_path_info_service_addr: Option<String>,
+
+    #[arg(long, env)]
+    experimental_store_composition: Option<String>,
 }
 
 /// like ServiceUrls, but with different clap defaults
@@ -85,6 +94,9 @@ pub struct ServiceUrlsMemory {
 
     #[arg(long, env)]
     remote_path_info_service_addr: Option<String>,
+
+    #[arg(long, env)]
+    experimental_store_composition: Option<String>,
 }
 
 impl From<ServiceUrlsGrpc> for ServiceUrls {
@@ -94,6 +106,7 @@ impl From<ServiceUrlsGrpc> for ServiceUrls {
             directory_service_addr: urls.directory_service_addr,
             path_info_service_addr: urls.path_info_service_addr,
             remote_path_info_service_addr: urls.remote_path_info_service_addr,
+            experimental_store_composition: urls.experimental_store_composition,
         }
     }
 }
@@ -105,14 +118,21 @@ impl From<ServiceUrlsMemory> for ServiceUrls {
             directory_service_addr: urls.directory_service_addr,
             path_info_service_addr: urls.path_info_service_addr,
             remote_path_info_service_addr: urls.remote_path_info_service_addr,
+            experimental_store_composition: urls.experimental_store_composition,
         }
     }
 }
 
-pub fn addrs_to_configs(
+pub async fn addrs_to_configs(
     urls: impl Into<ServiceUrls>,
 ) -> Result<CompositionConfigs, Box<dyn std::error::Error + Send + Sync>> {
     let urls: ServiceUrls = urls.into();
+
+    if let Some(conf_path) = urls.experimental_store_composition {
+        let conf_text = tokio::fs::read_to_string(conf_path).await?;
+        return Ok(with_registry(&REG, || toml::from_str(&conf_text))?);
+    }
+
     let mut configs: CompositionConfigs = Default::default();
 
     let blob_service_url = Url::parse(&urls.blob_service_addr)?;
@@ -171,7 +191,7 @@ pub async fn construct_services(
     ),
     Box<dyn std::error::Error + Send + Sync>,
 > {
-    let configs = addrs_to_configs(urls)?;
+    let configs = addrs_to_configs(urls).await?;
     construct_services_from_configs(configs).await
 }
 
