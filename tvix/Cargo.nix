@@ -15987,6 +15987,11 @@ rec {
             packageId = "bytes";
           }
           {
+            name = "clap";
+            packageId = "clap";
+            usesDefaultFeatures = false;
+          }
+          {
             name = "data-encoding";
             packageId = "data-encoding";
           }
