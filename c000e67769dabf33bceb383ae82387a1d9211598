@@ -16,6 +16,24 @@
       "message": "`None` actually is interpreted by Nix as `Some(\"bzip\")` - see `nix-compat/src/narinfo/mod.rs`, L66.\n\nCan you update this here to match and add a comment?",
       "revId": "c000e67769dabf33bceb383ae82387a1d9211598",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a641d861_909a4ca0",
+        "filename": "tvix/store/src/pathinfoservice/nix_http.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-21T17:29:16Z",
+      "side": 1,
+      "message": "Some(\"none\") is never produced, so we agreed to just not handle it (and consider it invalid).",
+      "parentUuid": "b371e849_f8beb1de",
+      "revId": "c000e67769dabf33bceb383ae82387a1d9211598",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
