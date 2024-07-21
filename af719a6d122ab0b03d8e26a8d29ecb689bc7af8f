@@ -16,6 +16,24 @@
       "message": "#[cfg(feature\u003d\"xp-store-composition\")]\n\nLet\u0027s still gate this behind a feature flag.",
       "revId": "af719a6d122ab0b03d8e26a8d29ecb689bc7af8f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c81a5dc_17f39f61",
+        "filename": "tvix/store/src/utils.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-07-21T17:29:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3dcef189_5750001b",
+      "revId": "af719a6d122ab0b03d8e26a8d29ecb689bc7af8f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
