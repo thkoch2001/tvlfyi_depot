@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b60aecd0_933c6461",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-07-21T21:22:58Z",
+      "side": 1,
+      "message": "Ideally, you should verify that Nix can verify your NAR as well as an integration test.",
+      "revId": "b1dfcd2f7d28e82698b86ee71c7c4121632de503",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
