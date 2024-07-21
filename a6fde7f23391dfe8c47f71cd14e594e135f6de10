@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "230d4a6e_fad296d4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-21T16:15:16Z",
+      "side": 1,
+      "message": "Let\u0027s include a small info in the commit message that we still have the store name to identify, and retain the full chain for recursion errors.",
+      "revId": "a6fde7f23391dfe8c47f71cd14e594e135f6de10",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
