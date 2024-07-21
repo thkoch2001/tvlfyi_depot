@@ -254,4 +254,9 @@
     email = "toastal@posteo.net";
     password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$txwVjPn9kKPUgsZnPtpyaA$pE0ISDGScCE4JCKcmbnzC+GZZ4PP6MqKJKmR/sxo6TY";
   }
+  {
+    username = "sinavir";
+    email = "tvix@sinavir.fr";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$5GXvoN/enVljV97yE/Zasg$OrgY9/ge2LoxNm9OOqxh/kKLxoAvU54MbQa9WWiT0jY";
+  }
 ]
