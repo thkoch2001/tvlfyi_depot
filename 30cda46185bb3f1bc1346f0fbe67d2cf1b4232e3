@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a7fa746_feb2c0b5",
+        "filename": "tvix/store/src/pathinfoservice/redb.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-21T16:55:01Z",
+      "side": 1,
+      "message": "This also does do disk io, please wrap it in spawn_blocking too (maybe both in one, depending on how annoying the errors are).",
+      "revId": "30cda46185bb3f1bc1346f0fbe67d2cf1b4232e3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "101a3d65_beaf2881",
+        "filename": "tvix/store/src/pathinfoservice/redb.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 79,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-21T16:55:01Z",
+      "side": 1,
+      "message": "```suggestion\n                            warn!(err\u003d%e, \"failed to decode stored PathInfo\");\n```\n\nThis can use structured fields.",
+      "revId": "30cda46185bb3f1bc1346f0fbe67d2cf1b4232e3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4f71f65_d63dab0e",
+        "filename": "tvix/store/src/pathinfoservice/redb.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-21T16:55:01Z",
+      "side": 1,
+      "message": "same",
+      "revId": "30cda46185bb3f1bc1346f0fbe67d2cf1b4232e3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
