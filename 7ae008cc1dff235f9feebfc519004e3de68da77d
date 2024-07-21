@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dffe96ad_d8b6b5ad",
+        "filename": "tvix/docs/src/build/index.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-07-21T21:17:53Z",
+      "side": 1,
+      "message": "```suggestion\nThe `Build` response message would then be extended with an `outputs_needles`\n```",
+      "revId": "7ae008cc1dff235f9feebfc519004e3de68da77d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
