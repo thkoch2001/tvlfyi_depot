@@ -118,7 +118,6 @@ pub fn addrs_to_configs(
     let blob_service_url = Url::parse(&urls.blob_service_addr)?;
     let directory_service_url = Url::parse(&urls.directory_service_addr)?;
     let path_info_service_url = Url::parse(&urls.path_info_service_addr)?;
-    let remote_path_info_service_url = Url::parse(&urls.remote_path_info_service_addr)?;
 
     configs.blobservices.insert(
         "default".into(),
@@ -135,9 +134,9 @@ pub fn addrs_to_configs(
 
     // if remote_path_info_service_addr has been specified,
     // update path_info_service to point to a cache combining the two.
-    if let Some(addr) = remote_path_info_service_addr {
-        use tvix_store::composition::{with_registry, DeserializeWithRegistry, REG};
-        use tvix_store::pathinfoservice::CachePathInfoServiceConfig;
+    if let Some(addr) = urls.remote_path_info_service_addr {
+        use crate::composition::{with_registry, DeserializeWithRegistry, REG};
+        use crate::pathinfoservice::CachePathInfoServiceConfig;
 
         let remote_url = url::Url::parse(&addr)?;
         let remote_config = with_registry(&REG, || remote_url.try_into())?;
