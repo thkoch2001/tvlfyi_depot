@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4cf1b64f_ebc52325",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 483,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-21T16:16:30Z",
+      "side": 1,
+      "message": "add a docstring explaining what this does.",
+      "revId": "011249d580b8c3bec827cac5b1d0a8afa86b1d1b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7e090d8f_7d5549ac",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 506,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-21T16:16:30Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "011249d580b8c3bec827cac5b1d0a8afa86b1d1b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
