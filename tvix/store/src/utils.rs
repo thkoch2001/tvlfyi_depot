@@ -47,6 +47,12 @@ pub struct ServiceUrls {
 
     #[arg(long, env, default_value = "sled:///var/lib/tvix-store/pathinfo.sled")]
     path_info_service_addr: String,
+
+    /// URL to a PathInfoService that's considered "remote".
+    /// If set, the other one is considered "local", and a "cache" for the
+    /// "remote" one.
+    #[arg(long, env)]
+    remote_path_info_service_addr: Option<String>,
 }
 
 /// like ServiceUrls, but with different clap defaults
@@ -60,6 +66,9 @@ pub struct ServiceUrlsGrpc {
 
     #[arg(long, env, default_value = "grpc+http://[::1]:8000")]
     path_info_service_addr: String,
+
+    #[arg(long, env)]
+    remote_path_info_service_addr: Option<String>,
 }
 
 /// like ServiceUrls, but with different clap defaults
@@ -73,6 +82,9 @@ pub struct ServiceUrlsMemory {
 
     #[arg(long, env, default_value = "memory://")]
     path_info_service_addr: String,
+
+    #[arg(long, env)]
+    remote_path_info_service_addr: Option<String>,
 }
 
 impl From<ServiceUrlsGrpc> for ServiceUrls {
@@ -81,6 +93,7 @@ impl From<ServiceUrlsGrpc> for ServiceUrls {
             blob_service_addr: urls.blob_service_addr,
             directory_service_addr: urls.directory_service_addr,
             path_info_service_addr: urls.path_info_service_addr,
+            remote_path_info_service_addr: urls.remote_path_info_service_addr,
         }
     }
 }
@@ -91,6 +104,7 @@ impl From<ServiceUrlsMemory> for ServiceUrls {
             blob_service_addr: urls.blob_service_addr,
             directory_service_addr: urls.directory_service_addr,
             path_info_service_addr: urls.path_info_service_addr,
+            remote_path_info_service_addr: urls.remote_path_info_service_addr,
         }
     }
 }
@@ -104,6 +118,7 @@ pub fn addrs_to_configs(
     let blob_service_url = Url::parse(&urls.blob_service_addr)?;
     let directory_service_url = Url::parse(&urls.directory_service_addr)?;
     let path_info_service_url = Url::parse(&urls.path_info_service_addr)?;
+    let remote_path_info_service_url = Url::parse(&urls.remote_path_info_service_addr)?;
 
     configs.blobservices.insert(
         "default".into(),
@@ -117,6 +132,30 @@ pub fn addrs_to_configs(
         "default".into(),
         with_registry(&REG, || path_info_service_url.try_into())?,
     );
+
+    // if remote_path_info_service_addr has been specified,
+    // update path_info_service to point to a cache combining the two.
+    if let Some(addr) = remote_path_info_service_addr {
+        use tvix_store::composition::{with_registry, DeserializeWithRegistry, REG};
+        use tvix_store::pathinfoservice::CachePathInfoServiceConfig;
+
+        let remote_url = url::Url::parse(&addr)?;
+        let remote_config = with_registry(&REG, || remote_url.try_into())?;
+
+        let local = configs.pathinfoservices.insert(
+            "default".into(),
+            DeserializeWithRegistry(Box::new(CachePathInfoServiceConfig {
+                near: "local".into(),
+                far: "remote".into(),
+            })),
+        );
+        configs
+            .pathinfoservices
+            .insert("local".into(), local.unwrap());
+        configs
+            .pathinfoservices
+            .insert("remote".into(), remote_config);
+    }
 
     Ok(configs)
 }
