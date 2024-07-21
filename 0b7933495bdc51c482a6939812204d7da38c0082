@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "252d4d9c_ba75d277",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-21T16:33:05Z",
+      "side": 1,
+      "message": "I\u0027m more inclined to just express this via xp-store-composition for now. Otherwise we\u0027d also need to add remote_{blob,directory}_service_url parameters, and allow configuring behaviour of the cache in front...",
+      "revId": "0b7933495bdc51c482a6939812204d7da38c0082",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
