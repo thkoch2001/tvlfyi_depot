@@ -16,6 +16,24 @@
       "message": "This is busylooping during construction if pointed to a non-memory location.",
       "revId": "0f6008544737772cbba09eff4ccaa122aa7a39a4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0a712dab_767bc125",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-07-21T16:31:31Z",
+      "side": 1,
+      "message": "Fixed. It was an recursion error when converting from redb:DatabaseError to castore::Error using into().",
+      "parentUuid": "64494f6a_6351a266",
+      "revId": "0f6008544737772cbba09eff4ccaa122aa7a39a4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
