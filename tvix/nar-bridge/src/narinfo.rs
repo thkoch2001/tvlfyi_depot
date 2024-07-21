@@ -135,8 +135,6 @@ pub async fn put(
 
     match maybe_root_node {
         Some(root_node) => {
-            info!(narinfo.store_path=%narinfo.store_path, narinfo.store_path=?narinfo.store_path, "NARINFO STORE PATH");
-
             // Set the root node from the lookup.
             // We need to rename the node to the narinfo storepath basename, as
             // that's where it's stored in PathInfo.
