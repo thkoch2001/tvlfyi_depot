@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cec0cee3_94b7c3d1",
+        "filename": "tvix/store/src/utils.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-21T16:59:36Z",
+      "side": 1,
+      "message": "Maybe wrap this all in `mod clap { … }`, or put in a separate file?\n\nThen that file could have a mod comment describing what we use these for.",
+      "revId": "2c09753ef68b471d7470861f6586a0aff5ff8cb4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f81e2956_4f412821",
+        "filename": "tvix/store/src/utils.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-21T16:59:36Z",
+      "side": 1,
+      "message": "`ServiceUrlsLocal` sounds a bit nicer, might help to add a comment describing this is the clap args we use when connecting to a local thing usually.",
+      "revId": "2c09753ef68b471d7470861f6586a0aff5ff8cb4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "34c26e20_df2882dd",
+        "filename": "tvix/store/src/utils.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-21T16:59:36Z",
+      "side": 1,
+      "message": "different how? Let\u0027s explain the usecase, this is for commands usually connecting to a local tvix daemon.",
+      "revId": "2c09753ef68b471d7470861f6586a0aff5ff8cb4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5978603f_4e265d62",
+        "filename": "tvix/store/src/utils.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-21T16:59:36Z",
+      "side": 1,
+      "message": "```suggestion\npub struct ServiceUrlsClient {\n```",
+      "revId": "2c09753ef68b471d7470861f6586a0aff5ff8cb4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0372f8cb_0f9ab052",
+        "filename": "tvix/store/src/utils.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-21T16:59:36Z",
+      "side": 1,
+      "message": "for ephemeral stores",
+      "revId": "2c09753ef68b471d7470861f6586a0aff5ff8cb4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
