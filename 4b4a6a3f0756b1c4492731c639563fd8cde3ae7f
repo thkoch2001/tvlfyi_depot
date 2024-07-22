@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d0d629b1_de2ad3c3",
+        "filename": "tvix/nix-compat/src/nix_daemon/de/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-22T12:40:10Z",
+      "side": 1,
+      "message": "ok, what about `s/You can also specify a size limit on the returned bytes./A size limit on the returned bytes has to be specified./`?",
+      "parentUuid": "00db6816_7695ee1b",
+      "revId": "4b4a6a3f0756b1c4492731c639563fd8cde3ae7f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2a157403_bded1f17",
         "filename": "tvix/nix-compat/src/nix_daemon/de/mod.rs",
         "patchSetId": 5
