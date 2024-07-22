@@ -43,7 +43,7 @@ pub async fn construct_services(
     ),
     Box<dyn std::error::Error + Send + Sync>,
 > {
-    let configs = addrs_to_configs(urls)?;
+    let configs = addrs_to_configs(urls).await?;
     construct_services_from_configs(configs).await
 }
 
