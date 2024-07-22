@@ -16322,6 +16322,10 @@ rec {
             name = "tempfile";
             packageId = "tempfile";
           }
+          {
+            name = "tokio-test";
+            packageId = "tokio-test";
+          }
         ];
         features = {
           "default" = [ "nix_tests" ];
