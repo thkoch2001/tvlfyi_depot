@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c55eb2ea_654ac934",
+        "filename": "tvix/nix-compat/src/nix_daemon/de/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-07-22T02:16:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e61e040_0a31f19e",
+      "revId": "4b4a6a3f0756b1c4492731c639563fd8cde3ae7f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eb167d3b_d8b75404",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-07-22T00:41:42Z",
       "side": 1,
       "message": "```suggestion\n    /// You can also specify a size limit on the returned bytes.\n```",
+      "revId": "4b4a6a3f0756b1c4492731c639563fd8cde3ae7f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00db6816_7695ee1b",
+        "filename": "tvix/nix-compat/src/nix_daemon/de/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-07-22T02:16:35Z",
+      "side": 1,
+      "message": "With try_read_bytes_limited you __have__ to specify a limit on the size. Saying __can__ kind of implies to me that it is optional.",
+      "parentUuid": "eb167d3b_d8b75404",
       "revId": "4b4a6a3f0756b1c4492731c639563fd8cde3ae7f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "24609d96_8cb584cd",
+        "filename": "tvix/nix-compat/src/nix_daemon/de/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-07-22T02:16:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2a157403_bded1f17",
+      "revId": "4b4a6a3f0756b1c4492731c639563fd8cde3ae7f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cbb4e92a_7a04e5db",
@@ -69,6 +123,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4428b6fd_19b9c5be",
+        "filename": "tvix/nix-compat/src/nix_daemon/de/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-07-22T02:16:35Z",
+      "side": 1,
+      "message": "Doh! I am a copy paste idiot.\nDone.",
+      "parentUuid": "cbb4e92a_7a04e5db",
+      "revId": "4b4a6a3f0756b1c4492731c639563fd8cde3ae7f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce24703b_978c8fae",
@@ -82,6 +154,24 @@
       "writtenOn": "2024-07-22T00:41:42Z",
       "side": 1,
       "message": "same rewording suggestion as further up.",
+      "revId": "4b4a6a3f0756b1c4492731c639563fd8cde3ae7f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "31d53875_e30f37c2",
+        "filename": "tvix/nix-compat/src/nix_daemon/de/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-07-22T02:16:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce24703b_978c8fae",
       "revId": "4b4a6a3f0756b1c4492731c639563fd8cde3ae7f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -105,6 +195,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5b9176de_d9ae03a5",
+        "filename": "tvix/nix-compat/src/nix_daemon/de/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-07-22T02:16:35Z",
+      "side": 1,
+      "message": "The idea is that read_bytes_limited is just for when you know that the bytes must be within a limit (like it could be used for a StorePath which we know has a bound on its size to reject early anything that isn\u0027t in that range). To prevent bad lengths sent from a user a NixRead implementation really should have a limit that applies to all *_bytes_* calls. NixReader has such a limit. read_bytes is just a convenience method for when the called doesn\u0027t know or care about the length of the returned bytes.",
+      "parentUuid": "3236fb11_e2fc5435",
+      "revId": "4b4a6a3f0756b1c4492731c639563fd8cde3ae7f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b03dd010_002ba9a1",
         "filename": "tvix/nix-compat/src/nix_daemon/protocol_version.rs",
         "patchSetId": 5
@@ -116,6 +224,24 @@
       "writtenOn": "2024-07-22T00:41:42Z",
       "side": 1,
       "message": "It\u0027s a bit magic, I\u0027d prefer the explicit constructor tbh",
+      "revId": "4b4a6a3f0756b1c4492731c639563fd8cde3ae7f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a7781d9_94b6cae9",
+        "filename": "tvix/nix-compat/src/nix_daemon/protocol_version.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-07-22T02:16:35Z",
+      "side": 1,
+      "message": "I like magic (sometimes too much for my own good). But here it reads nicer in tests to me when I specify:\n```\nlet mut mock \u003d Builder::new()\n        .version((1, 20))\n        .read_number(89)\n        .read_slice(b\"klomp\")\n        .build();\n```\nThan\n```\nlet mut mock \u003d Builder::new()\n        .version(ProtocolVersion::from_parts(1,20))\n        .read_number(89)\n        .read_slice(b\"klomp\")\n        .build();\n```\nAnd this is a helper for tests. When dealing with the actual protocol you always get the protocol version from the handshake.",
+      "parentUuid": "b03dd010_002ba9a1",
       "revId": "4b4a6a3f0756b1c4492731c639563fd8cde3ae7f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
