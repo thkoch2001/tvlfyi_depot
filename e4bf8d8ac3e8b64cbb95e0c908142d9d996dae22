@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00d8f391_f25fe087",
+        "filename": "tvix/store/Cargo.toml",
+        "patchSetId": 8
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-22T00:23:35Z",
+      "side": 1,
+      "message": "this is optional on the feature flag.",
+      "revId": "e4bf8d8ac3e8b64cbb95e0c908142d9d996dae22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
