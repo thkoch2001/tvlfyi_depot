@@ -16409,6 +16409,10 @@ rec {
             packageId = "data-encoding";
           }
           {
+            name = "ed25519";
+            packageId = "ed25519";
+          }
+          {
             name = "futures";
             packageId = "futures";
           }
