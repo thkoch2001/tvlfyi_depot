@@ -26,6 +26,7 @@ members = [
   "eval/builtin-macros",
   "glue",
   "nix-compat",
+  "nix-compat-derive",
   "serde",
   "store",
   "tracing",
