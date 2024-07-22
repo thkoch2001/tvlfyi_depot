@@ -16,6 +16,24 @@
       "message": "It maintains a single K/V pointing from output hash to the protobuf-encoded PathInfo.",
       "revId": "322a958e0dcd9c3a2a818f6ee7197a3b4fbad768",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4f276f7_eb656f1c",
+        "filename": "tvix/store/src/pathinfoservice/redb.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-07-22T13:11:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0e72d4d_7622eda9",
+      "revId": "322a958e0dcd9c3a2a818f6ee7197a3b4fbad768",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
