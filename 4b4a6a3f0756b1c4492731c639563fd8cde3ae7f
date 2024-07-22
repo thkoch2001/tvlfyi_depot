@@ -244,6 +244,24 @@
       "parentUuid": "b03dd010_002ba9a1",
       "revId": "4b4a6a3f0756b1c4492731c639563fd8cde3ae7f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7993315a_30ae7811",
+        "filename": "tvix/nix-compat/src/nix_daemon/protocol_version.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-07-22T11:24:19Z",
+      "side": 1,
+      "message": "This is now gated behind `#[cfg(any(test, feature \u003d \"test\"))]` the same as the mock reader.",
+      "parentUuid": "9a7781d9_94b6cae9",
+      "revId": "4b4a6a3f0756b1c4492731c639563fd8cde3ae7f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
