@@ -16,6 +16,24 @@
       "message": "please add to the powerset, this would have caught it.",
       "revId": "eb626e7211510d3de86ed190eb113469a45a96b1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc4e45be_9088b1b3",
+        "filename": "tvix/store/Cargo.toml",
+        "patchSetId": 2
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-07-22T15:56:40Z",
+      "side": 1,
+      "message": "will do in a separate cl",
+      "parentUuid": "7b8c87d6_689ad0de",
+      "revId": "eb626e7211510d3de86ed190eb113469a45a96b1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
