@@ -126,12 +126,9 @@
 
 (use-package f)
 
-(use-package go-mode
-  :bind (:map go-mode-map ("C-c C-r" . recompile))
-  :hook ((go-mode . (lambda ()
-                      (setq tab-width 2)
-                      (setq-local compile-command
-                                  (concat "go build " buffer-file-name))))))
+(use-package go-ts-mode
+  :custom
+  (go-ts-mode-indent-offset 4))
 
 (use-package haskell-mode)
 
