@@ -55,6 +55,26 @@ rec {
       # File a bug if you depend on any for non-debug work!
       debug = internal.debugCrate { inherit packageId; };
     };
+    "nix-compat-derive" = rec {
+      packageId = "nix-compat-derive";
+      build = internal.buildRustCrateWithFeatures {
+        packageId = "nix-compat-derive";
+      };
+
+      # Debug support which might change between releases.
+      # File a bug if you depend on any for non-debug work!
+      debug = internal.debugCrate { inherit packageId; };
+    };
+    "nix-compat-derive-tests" = rec {
+      packageId = "nix-compat-derive-tests";
+      build = internal.buildRustCrateWithFeatures {
+        packageId = "nix-compat-derive-tests";
+      };
+
+      # Debug support which might change between releases.
+      # File a bug if you depend on any for non-debug work!
+      debug = internal.debugCrate { inherit packageId; };
+    };
     "tvix-build" = rec {
       packageId = "tvix-build";
       build = internal.buildRustCrateWithFeatures {
@@ -913,7 +933,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             features = [ "full" "visit-mut" ];
           }
         ];
@@ -987,7 +1007,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             features = [ "full" "visit-mut" ];
           }
         ];
@@ -2303,7 +2323,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             features = [ "full" ];
           }
         ];
@@ -2922,7 +2942,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             features = [ "full" ];
           }
         ];
@@ -2985,7 +3005,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             features = [ "full" "extra-traits" ];
           }
         ];
@@ -3015,7 +3035,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
           }
         ];
 
@@ -3456,7 +3476,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
           }
         ];
 
@@ -4264,7 +4284,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             features = [ "full" ];
           }
         ];
@@ -7378,6 +7398,12 @@ rec {
             packageId = "glob";
           }
           {
+            name = "nix-compat-derive";
+            packageId = "nix-compat-derive";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+          {
             name = "nom";
             packageId = "nom";
           }
@@ -7459,11 +7485,106 @@ rec {
           "async" = [ "tokio" ];
           "bytes" = [ "dep:bytes" ];
           "default" = [ "async" "wire" ];
+          "nix-compat-derive" = [ "dep:nix-compat-derive" ];
           "pin-project-lite" = [ "dep:pin-project-lite" ];
           "tokio" = [ "dep:tokio" ];
-          "wire" = [ "tokio" "pin-project-lite" "bytes" ];
+          "wire" = [ "tokio" "pin-project-lite" "bytes" "nix-compat-derive" ];
         };
-        resolvedDefaultFeatures = [ "async" "bytes" "default" "pin-project-lite" "tokio" "wire" ];
+        resolvedDefaultFeatures = [ "async" "bytes" "default" "nix-compat-derive" "pin-project-lite" "test" "tokio" "wire" ];
+      };
+      "nix-compat-derive" = rec {
+        crateName = "nix-compat-derive";
+        version = "0.1.0";
+        edition = "2021";
+        src = lib.cleanSourceWith { filter = sourceFilter; src = ./nix-compat-derive; };
+        procMacro = true;
+        dependencies = [
+          {
+            name = "proc-macro2";
+            packageId = "proc-macro2";
+            features = [ "proc-macro" ];
+          }
+          {
+            name = "quote";
+            packageId = "quote";
+            features = [ "proc-macro" ];
+          }
+          {
+            name = "syn";
+            packageId = "syn 2.0.72";
+            features = [ "full" "extra-traits" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "hex-literal";
+            packageId = "hex-literal";
+          }
+          {
+            name = "pretty_assertions";
+            packageId = "pretty_assertions";
+          }
+          {
+            name = "rstest";
+            packageId = "rstest";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "io-util" "macros" ];
+          }
+          {
+            name = "tokio-test";
+            packageId = "tokio-test";
+          }
+        ];
+        features = {
+          "default" = [ "external" ];
+        };
+        resolvedDefaultFeatures = [ "default" "external" ];
+      };
+      "nix-compat-derive-tests" = rec {
+        crateName = "nix-compat-derive-tests";
+        version = "0.1.0";
+        edition = "2021";
+        src = lib.cleanSourceWith { filter = sourceFilter; src = ./nix-compat-derive-tests; };
+        devDependencies = [
+          {
+            name = "hex-literal";
+            packageId = "hex-literal";
+          }
+          {
+            name = "nix-compat";
+            packageId = "nix-compat";
+            features = [ "test" "wire" ];
+          }
+          {
+            name = "nix-compat-derive";
+            packageId = "nix-compat-derive";
+          }
+          {
+            name = "pretty_assertions";
+            packageId = "pretty_assertions";
+          }
+          {
+            name = "rstest";
+            packageId = "rstest";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "io-util" "macros" ];
+          }
+          {
+            name = "tokio-test";
+            packageId = "tokio-test";
+          }
+          {
+            name = "trybuild";
+            packageId = "trybuild";
+          }
+        ];
+
       };
       "nom" = rec {
         crateName = "nom";
@@ -8620,7 +8741,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             features = [ "full" "visit-mut" ];
           }
         ];
@@ -8952,7 +9073,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             usesDefaultFeatures = false;
             features = [ "full" ];
           }
@@ -8965,7 +9086,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             usesDefaultFeatures = false;
             features = [ "parsing" ];
           }
@@ -8976,9 +9097,10 @@ rec {
       };
       "proc-macro2" = rec {
         crateName = "proc-macro2";
-        version = "1.0.76";
+        version = "1.0.86";
         edition = "2021";
-        sha256 = "136cp0fgl6rg5ljm3b1xpc0bn0lyvagzzmxvbxgk5hxml36mdz4m";
+        sha256 = "0xrv22p8lqlfdf1w0pj4si8n2ws4aw0kilmziwf0vpv5ys6rwway";
+        libName = "proc_macro2";
         authors = [
           "David Tolnay <dtolnay@gmail.com>"
           "Alex Crichton <alex@alexcrichton.com>"
@@ -9216,7 +9338,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             optional = true;
             features = [ "full" ];
           }
@@ -9308,7 +9430,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             optional = true;
             features = [ "full" ];
           }
@@ -9356,7 +9478,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             features = [ "extra-traits" ];
           }
         ];
@@ -9393,7 +9515,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             features = [ "extra-traits" ];
           }
         ];
@@ -9848,9 +9970,9 @@ rec {
       };
       "quote" = rec {
         crateName = "quote";
-        version = "1.0.35";
+        version = "1.0.36";
         edition = "2018";
-        sha256 = "1vv8r2ncaz4pqdr78x7f138ka595sp2ncr1sa2plm4zxbsmwj7i9";
+        sha256 = "19xcmh445bg6simirnnd4fvkmp6v2qiwxh5f6rw4a70h76pnm9qg";
         authors = [
           "David Tolnay <dtolnay@gmail.com>"
         ];
@@ -10992,7 +11114,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             features = [ "full" "parsing" "extra-traits" "visit" "visit-mut" ];
           }
           {
@@ -11031,7 +11153,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             features = [ "full" "extra-traits" ];
           }
         ];
@@ -11911,7 +12033,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             usesDefaultFeatures = false;
             features = [ "clone-impls" "derive" "parsing" "printing" "proc-macro" ];
           }
@@ -12225,7 +12347,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             features = [ "extra-traits" "full" "parsing" ];
           }
         ];
@@ -12795,11 +12917,11 @@ rec {
         };
         resolvedDefaultFeatures = [ "clone-impls" "default" "derive" "extra-traits" "full" "parsing" "printing" "proc-macro" "quote" "visit" "visit-mut" ];
       };
-      "syn 2.0.48" = rec {
+      "syn 2.0.72" = rec {
         crateName = "syn";
-        version = "2.0.48";
+        version = "2.0.72";
         edition = "2021";
-        sha256 = "0gqgfygmrxmp8q32lia9p294kdd501ybn6kn2h4gqza0irik2d8g";
+        sha256 = "1bx8wwx4ylyjz51dwd83b22j46wm3r3h80ic7wyhkn5dyadrnjyw";
         authors = [
           "David Tolnay <dtolnay@gmail.com>"
         ];
@@ -12822,12 +12944,11 @@ rec {
         ];
         features = {
           "default" = [ "derive" "parsing" "printing" "clone-impls" "proc-macro" ];
-          "printing" = [ "quote" ];
-          "proc-macro" = [ "proc-macro2/proc-macro" "quote/proc-macro" ];
-          "quote" = [ "dep:quote" ];
+          "printing" = [ "dep:quote" ];
+          "proc-macro" = [ "proc-macro2/proc-macro" "quote?/proc-macro" ];
           "test" = [ "syn-test-suite/all-features" ];
         };
-        resolvedDefaultFeatures = [ "clone-impls" "default" "derive" "extra-traits" "full" "parsing" "printing" "proc-macro" "quote" "visit" "visit-mut" ];
+        resolvedDefaultFeatures = [ "clone-impls" "default" "derive" "extra-traits" "full" "parsing" "printing" "proc-macro" "visit" "visit-mut" ];
       };
       "sync_wrapper 0.1.2" = rec {
         crateName = "sync_wrapper";
@@ -13008,7 +13129,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
           }
         ];
 
@@ -13290,9 +13411,9 @@ rec {
       };
       "tokio" = rec {
         crateName = "tokio";
-        version = "1.35.1";
+        version = "1.38.1";
         edition = "2021";
-        sha256 = "01613rkziqp812a288ga65aqygs254wgajdi57v8brivjkx4x6y8";
+        sha256 = "1ps6b9404r4w7psqwl2qxbhnf6cmvandaj4pw0wg85h6z2lsnb7b";
         authors = [
           "Tokio Contributors <team@tokio.rs>"
         ];
@@ -13554,9 +13675,9 @@ rec {
       };
       "tokio-macros" = rec {
         crateName = "tokio-macros";
-        version = "2.2.0";
+        version = "2.3.0";
         edition = "2021";
-        sha256 = "0fwjy4vdx1h9pi4g2nml72wi0fr27b5m954p13ji9anyy8l1x2jv";
+        sha256 = "16nkan0x9b62hnqmjqcyd71j1mgpda2sv7gfm2mvbm39l2cfjnjz";
         procMacro = true;
         authors = [
           "Tokio Contributors <team@tokio.rs>"
@@ -13572,7 +13693,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             features = [ "full" ];
           }
         ];
@@ -14476,7 +14597,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
           }
         ];
         features = {
@@ -14515,7 +14636,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
           }
         ];
         features = {
@@ -14930,7 +15051,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             usesDefaultFeatures = false;
             features = [ "full" "parsing" "printing" "visit-mut" "clone-impls" "extra-traits" "proc-macro" ];
           }
@@ -15495,6 +15616,45 @@ rec {
           "Sean McArthur <sean@seanmonstar.com>"
         ];
 
+      };
+      "trybuild" = rec {
+        crateName = "trybuild";
+        version = "1.0.98";
+        edition = "2021";
+        sha256 = "0qlg4951wmha0i9ggb1k3yzv54yyhyf8a5dakdfdiganhf3nalmm";
+        authors = [
+          "David Tolnay <dtolnay@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "glob";
+            packageId = "glob";
+          }
+          {
+            name = "serde";
+            packageId = "serde";
+          }
+          {
+            name = "serde_derive";
+            packageId = "serde_derive";
+          }
+          {
+            name = "serde_json";
+            packageId = "serde_json";
+          }
+          {
+            name = "termcolor";
+            packageId = "termcolor";
+          }
+          {
+            name = "toml";
+            packageId = "toml 0.8.15";
+          }
+        ];
+        features = {
+          "diff" = [ "dissimilar" ];
+          "dissimilar" = [ "dep:dissimilar" ];
+        };
       };
       "tvix-build" = rec {
         crateName = "tvix-build";
@@ -16793,7 +16953,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             features = [ "full" ];
           }
         ];
@@ -17466,7 +17626,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             features = [ "full" ];
           }
           {
@@ -17556,7 +17716,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
             features = [ "visit" "full" ];
           }
           {
@@ -20002,7 +20162,7 @@ rec {
           }
           {
             name = "syn";
-            packageId = "syn 2.0.48";
+            packageId = "syn 2.0.72";
           }
         ];
 
