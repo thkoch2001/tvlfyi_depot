@@ -16,6 +16,24 @@
       "message": "this is optional on the feature flag.",
       "revId": "e4bf8d8ac3e8b64cbb95e0c908142d9d996dae22",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "69adc75c_7b1da4f3",
+        "filename": "tvix/store/Cargo.toml",
+        "patchSetId": 8
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-07-22T12:47:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00d8f391_f25fe087",
+      "revId": "e4bf8d8ac3e8b64cbb95e0c908142d9d996dae22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
