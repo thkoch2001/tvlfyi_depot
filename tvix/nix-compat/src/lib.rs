@@ -17,3 +17,6 @@ pub mod nix_daemon;
 pub use nix_daemon::worker_protocol;
 #[cfg(feature = "wire")]
 pub use nix_daemon::ProtocolVersion;
+
+#[cfg(feature = "wire")]
+pub use ::nix_compat_derive::NixDeserialize;
