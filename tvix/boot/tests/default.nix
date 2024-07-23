@@ -65,8 +65,8 @@ let
               --otlp=false \
               daemon -l $PWD/tvix-store.sock &
 
-          # Wait for the socket to be created.
-          while [ ! -e $PWD/tvix-store.sock ]; do sleep 1; done
+          # Wait for the service to report healthy.
+          timeout 22 sh -c "until ${pkgs.ip2unix}/bin/ip2unix -r out,path=$PWD/tvix-store.sock ${pkgs.grpc-health-check}/bin/grpc-health-check --address 127.0.0.1 --port 8080; do sleep 1; done"
 
           # Export env vars so that subsequent tvix-store commands will talk to
           # our tvix-store daemon over the unix socket.
