@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98369b79_bd1d9aa5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-23T20:52:01Z",
+      "side": 1,
+      "message": "this could be reworded a bit to make it clearer when the sigs are added (during upload):\n\n...except that it dynamically signs all PathInfo on put with the provided signer...",
+      "revId": "a6bff0cc25cbc9f2fad897d8782d172e8045427c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c25bff7_44452cb0",
+        "filename": "tvix/store/src/pathinfoservice/signing_wrapper.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-23T20:52:01Z",
+      "side": 1,
+      "message": "needs a docstring describing the behaviour.\n\nAlso, document the keyfile format that\u0027s expected, which is the nix one! (as we use the parse_keypair function from there).",
+      "revId": "a6bff0cc25cbc9f2fad897d8782d172e8045427c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
