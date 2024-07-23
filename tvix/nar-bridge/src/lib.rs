@@ -1,6 +1,7 @@
 use axum::http::StatusCode;
 use axum::routing::{head, put};
 use axum::{routing::get, Router};
+use axum_prometheus::PrometheusMetricLayerBuilder;
 use lru::LruCache;
 use parking_lot::RwLock;
 use std::num::NonZeroUsize;
@@ -49,6 +50,11 @@ impl AppState {
 }
 
 pub fn gen_router(priority: u64) -> Router<AppState> {
+    let (prometheus_layer, metric_handle) = PrometheusMetricLayerBuilder::new()
+        .with_prefix("nar_bridge")
+        .with_default_metrics()
+        .build_pair();
+
     Router::new()
         .route("/", get(root))
         // FUTUREWORK: respond for NARs that we still have in root_nodes (at least HEAD)
@@ -61,6 +67,8 @@ pub fn gen_router(priority: u64) -> Router<AppState> {
         .route("/:narinfo_str", head(narinfo::head))
         .route("/:narinfo_str", put(narinfo::put))
         .route("/nix-cache-info", get(move || nix_cache_info(priority)))
+        .route("/metrics", get(|| async move { metric_handle.render() }))
+        .layer(prometheus_layer)
 }
 
 async fn root() -> &'static str {

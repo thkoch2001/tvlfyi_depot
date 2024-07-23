@@ -5,29 +5,30 @@ edition = "2021"
 
 [dependencies]
 axum = { version = "0.7.5", features = ["http2"] }
-tower = "0.4.13"
-tower-http = { version = "0.5", features = ["trace"] }
+axum-prometheus = "0.7.0"
 bytes = "1.4.0"
 clap = { version = "4.0", features = ["derive", "env"] }
 data-encoding = "2.3.3"
 futures = "0.3.30"
 itertools = "0.12.0"
-prost = "0.13.1"
+lru = "0.12.3"
 nix-compat = { path = "../nix-compat", features = ["async"] }
+parking_lot = "0.12.3"
+prost = "0.13.1"
+serde = { version = "1.0.204", features = ["derive"] }
 thiserror = "1.0.56"
 tokio = { version = "1.32.0" }
 tokio-listener = { version = "0.4.2", features = [ "axum07", "clap", "multi-listener", "sd_listen" ] }
 tokio-util = { version = "0.7.9", features = ["io", "io-util", "compat"] }
 tonic = { version = "0.12.0", features = ["tls", "tls-roots"] }
+tower = "0.4.13"
+tower-http = { version = "0.5", features = ["trace"] }
+tracing = "0.1.37"
+tracing-subscriber = "0.3.16"
 tvix-castore = { path = "../castore" }
 tvix-store = { path = "../store" }
 tvix-tracing = { path = "../tracing", features = ["tonic", "axum"] }
-tracing = "0.1.37"
-tracing-subscriber = "0.3.16"
 url = "2.4.0"
-serde = { version = "1.0.204", features = ["derive"] }
-lru = "0.12.3"
-parking_lot = "0.12.3"
 
 [build-dependencies]
 prost-build = "0.13.1"
