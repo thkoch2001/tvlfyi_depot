@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "32fafa40_7b94ed99",
+        "filename": "tvix/nar-bridge/Cargo.toml",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-23T14:17:45Z",
+      "side": 1,
+      "message": "pls sort this",
+      "revId": "3aedf1527d9ade5a33d73ba5c64b17ae304be304",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
