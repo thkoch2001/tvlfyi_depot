@@ -34,6 +34,24 @@
       "parentUuid": "33f74f4f_13b4a2c0",
       "revId": "4c76eb55cca482b6e387119a2559d933a8028be8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be5b12b2_19143d76",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-07-23T14:12:10Z",
+      "side": 1,
+      "message": "There isn\u0027t any double buffering as such you just can\u0027t trigger the situation fixed in cl/11812 here because the amount of bytes read to detect compression and put into WithPreexistingBuffer is smaller than the buffer in BufReader. The first thing BufReader does is fill its buffer which is a larger read than buffer in WithPreexistingBuffer and the bug is for reads smaller than the buffer in WithPreexistingBuffer.\n\nYou also wont be able to test it by doing a small read on the decompressed stream as that is independant of compressed input stream.\n\nIf you want to test for the bug you need to test with WithPreexistingBuffer directly.\n\nWe also can\u0027t implement `AsyncBufRead` for `DecompressedReader` since non of the underlying decoders implement ´AsyncBufRead`",
+      "parentUuid": "9cddf955_a8f723e2",
+      "revId": "4c76eb55cca482b6e387119a2559d933a8028be8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
