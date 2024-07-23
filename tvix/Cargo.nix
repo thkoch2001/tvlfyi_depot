@@ -1460,6 +1460,77 @@ rec {
         };
         resolvedDefaultFeatures = [ "tracing" ];
       };
+      "axum-prometheus" = rec {
+        crateName = "axum-prometheus";
+        version = "0.7.0";
+        edition = "2021";
+        sha256 = "1m3mr1fzna03j92sc4f4nzazsq9j5pbxw94k2bfmnvrpyn2jb7kk";
+        dependencies = [
+          {
+            name = "axum";
+            packageId = "axum 0.7.5";
+          }
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "futures-core";
+            packageId = "futures-core";
+          }
+          {
+            name = "http";
+            packageId = "http 1.1.0";
+          }
+          {
+            name = "http-body";
+            packageId = "http-body 1.0.0";
+          }
+          {
+            name = "matchit";
+            packageId = "matchit 0.7.3";
+          }
+          {
+            name = "metrics";
+            packageId = "metrics";
+          }
+          {
+            name = "metrics-exporter-prometheus";
+            packageId = "metrics-exporter-prometheus";
+            optional = true;
+            usesDefaultFeatures = false;
+            features = [ "http-listener" ];
+          }
+          {
+            name = "once_cell";
+            packageId = "once_cell";
+          }
+          {
+            name = "pin-project";
+            packageId = "pin-project";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "rt-multi-thread" "macros" ];
+          }
+          {
+            name = "tower";
+            packageId = "tower";
+          }
+          {
+            name = "tower-http";
+            packageId = "tower-http";
+          }
+        ];
+        features = {
+          "default" = [ "prometheus" ];
+          "metrics-exporter-prometheus" = [ "dep:metrics-exporter-prometheus" ];
+          "prometheus" = [ "metrics-exporter-prometheus" ];
+          "push-gateway" = [ "metrics-exporter-prometheus/push-gateway" ];
+        };
+        resolvedDefaultFeatures = [ "default" "metrics-exporter-prometheus" "prometheus" ];
+      };
       "backtrace" = rec {
         crateName = "backtrace";
         version = "0.3.69";
@@ -6883,6 +6954,211 @@ rec {
         features = { };
         resolvedDefaultFeatures = [ "default" ];
       };
+      "metrics" = rec {
+        crateName = "metrics";
+        version = "0.23.0";
+        edition = "2018";
+        sha256 = "0q9jkpbrp0qs1b1lpsf81lri4hygns3mh1nmyaxdyiw30dbxnjl8";
+        authors = [
+          "Toby Lawrence <toby@nuclearfurnace.com>"
+        ];
+        dependencies = [
+          {
+            name = "ahash";
+            packageId = "ahash";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "portable-atomic";
+            packageId = "portable-atomic";
+            usesDefaultFeatures = false;
+            target = { target, features }: ("32" == target."pointer_width" or null);
+            features = [ "fallback" ];
+          }
+        ];
+
+      };
+      "metrics-exporter-prometheus" = rec {
+        crateName = "metrics-exporter-prometheus";
+        version = "0.15.3";
+        edition = "2018";
+        sha256 = "1rh899q53fnbmcp0q37ja2rv62gc2fr0h2a6f3wnnrirgd1ciw5l";
+        authors = [
+          "Toby Lawrence <toby@nuclearfurnace.com>"
+        ];
+        dependencies = [
+          {
+            name = "base64";
+            packageId = "base64 0.22.1";
+            usesDefaultFeatures = false;
+            features = [ "std" ];
+          }
+          {
+            name = "http-body-util";
+            packageId = "http-body-util";
+            optional = true;
+          }
+          {
+            name = "hyper";
+            packageId = "hyper 1.4.1";
+            optional = true;
+            features = [ "server" "client" ];
+          }
+          {
+            name = "hyper-util";
+            packageId = "hyper-util";
+            optional = true;
+            features = [ "tokio" "service" "client" "client-legacy" "http1" ];
+          }
+          {
+            name = "indexmap";
+            packageId = "indexmap 2.1.0";
+            usesDefaultFeatures = false;
+            features = [ "std" ];
+          }
+          {
+            name = "ipnet";
+            packageId = "ipnet";
+            optional = true;
+          }
+          {
+            name = "metrics";
+            packageId = "metrics";
+          }
+          {
+            name = "metrics-util";
+            packageId = "metrics-util";
+            usesDefaultFeatures = false;
+            features = [ "recency" "registry" "summary" ];
+          }
+          {
+            name = "quanta";
+            packageId = "quanta";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "thiserror";
+            packageId = "thiserror";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            optional = true;
+            features = [ "rt" "net" "time" "rt-multi-thread" ];
+          }
+          {
+            name = "tracing";
+            packageId = "tracing";
+            optional = true;
+          }
+        ];
+        devDependencies = [
+          {
+            name = "tracing";
+            packageId = "tracing";
+          }
+        ];
+        features = {
+          "_hyper-client" = [ "http-body-util" "hyper/client" "hyper-util/client" "hyper-util/http1" "hyper-util/client-legacy" "hyper-rustls" ];
+          "_hyper-server" = [ "http-body-util" "hyper/server" "hyper-util/server-auto" ];
+          "async-runtime" = [ "tokio" "hyper-util/tokio" ];
+          "default" = [ "http-listener" "push-gateway" ];
+          "http-body-util" = [ "dep:http-body-util" ];
+          "http-listener" = [ "async-runtime" "ipnet" "tracing" "_hyper-server" ];
+          "hyper" = [ "dep:hyper" ];
+          "hyper-rustls" = [ "dep:hyper-rustls" ];
+          "hyper-util" = [ "dep:hyper-util" ];
+          "ipnet" = [ "dep:ipnet" ];
+          "push-gateway" = [ "async-runtime" "tracing" "_hyper-client" ];
+          "tokio" = [ "dep:tokio" ];
+          "tracing" = [ "dep:tracing" ];
+          "uds-listener" = [ "http-listener" ];
+        };
+        resolvedDefaultFeatures = [ "_hyper-server" "async-runtime" "http-body-util" "http-listener" "hyper" "hyper-util" "ipnet" "tokio" "tracing" ];
+      };
+      "metrics-util" = rec {
+        crateName = "metrics-util";
+        version = "0.17.0";
+        edition = "2018";
+        sha256 = "0a78qf3x9kmy5pxyi20gradic9k7qins3a54y7rgjmf9cl208na2";
+        authors = [
+          "Toby Lawrence <toby@nuclearfurnace.com>"
+        ];
+        dependencies = [
+          {
+            name = "crossbeam-epoch";
+            packageId = "crossbeam-epoch";
+            optional = true;
+            usesDefaultFeatures = false;
+            features = [ "alloc" "std" ];
+          }
+          {
+            name = "crossbeam-utils";
+            packageId = "crossbeam-utils";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "hashbrown";
+            packageId = "hashbrown 0.14.3";
+            optional = true;
+            usesDefaultFeatures = false;
+            features = [ "ahash" ];
+          }
+          {
+            name = "metrics";
+            packageId = "metrics";
+          }
+          {
+            name = "num_cpus";
+            packageId = "num_cpus";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "quanta";
+            packageId = "quanta";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "sketches-ddsketch";
+            packageId = "sketches-ddsketch";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+        ];
+        devDependencies = [
+          {
+            name = "sketches-ddsketch";
+            packageId = "sketches-ddsketch";
+          }
+        ];
+        features = {
+          "ahash" = [ "dep:ahash" ];
+          "aho-corasick" = [ "dep:aho-corasick" ];
+          "crossbeam-epoch" = [ "dep:crossbeam-epoch" ];
+          "crossbeam-utils" = [ "dep:crossbeam-utils" ];
+          "debugging" = [ "indexmap" "ordered-float" "registry" ];
+          "default" = [ "debugging" "handles" "layers" "summary" "recency" "registry" ];
+          "handles" = [ "crossbeam-epoch" "crossbeam-utils" ];
+          "hashbrown" = [ "dep:hashbrown" ];
+          "indexmap" = [ "dep:indexmap" ];
+          "layer-filter" = [ "aho-corasick" ];
+          "layer-router" = [ "radix_trie" ];
+          "layers" = [ "layer-filter" "layer-router" ];
+          "num_cpus" = [ "dep:num_cpus" ];
+          "ordered-float" = [ "dep:ordered-float" ];
+          "quanta" = [ "dep:quanta" ];
+          "radix_trie" = [ "dep:radix_trie" ];
+          "recency" = [ "registry" "quanta" ];
+          "registry" = [ "crossbeam-epoch" "crossbeam-utils" "handles" "hashbrown" "num_cpus" ];
+          "sketches-ddsketch" = [ "dep:sketches-ddsketch" ];
+          "summary" = [ "sketches-ddsketch" ];
+        };
+        resolvedDefaultFeatures = [ "crossbeam-epoch" "crossbeam-utils" "handles" "hashbrown" "num_cpus" "quanta" "recency" "registry" "sketches-ddsketch" "summary" ];
+      };
       "mime" = rec {
         crateName = "mime";
         version = "0.3.17";
@@ -7009,6 +7285,10 @@ rec {
             name = "axum";
             packageId = "axum 0.7.5";
             features = [ "http2" ];
+          }
+          {
+            name = "axum-prometheus";
+            packageId = "axum-prometheus";
           }
           {
             name = "bytes";
@@ -9633,6 +9913,62 @@ rec {
         ];
 
       };
+      "quanta" = rec {
+        crateName = "quanta";
+        version = "0.12.3";
+        edition = "2021";
+        sha256 = "19cds3yg3ri0wrypn7b3j2x8qf1w9rkw5yl4nah2i4k1fyj6flcf";
+        authors = [
+          "Toby Lawrence <toby@nuclearfurnace.com>"
+        ];
+        dependencies = [
+          {
+            name = "crossbeam-utils";
+            packageId = "crossbeam-utils";
+          }
+          {
+            name = "libc";
+            packageId = "libc";
+            target = { target, features }: (!(("windows" == target."os" or null) || ("wasm32" == target."arch" or null)));
+          }
+          {
+            name = "once_cell";
+            packageId = "once_cell";
+          }
+          {
+            name = "raw-cpuid";
+            packageId = "raw-cpuid";
+            target = { target, features }: ("x86" == target."arch" or null);
+          }
+          {
+            name = "raw-cpuid";
+            packageId = "raw-cpuid";
+            target = { target, features }: ("x86_64" == target."arch" or null);
+          }
+          {
+            name = "wasi";
+            packageId = "wasi";
+            target = { target, features }: (("wasm32" == target."arch" or null) && ("wasi" == target."os" or null));
+          }
+          {
+            name = "web-sys";
+            packageId = "web-sys";
+            target = { target, features }: (("wasm32" == target."arch" or null) && ("unknown" == target."os" or null));
+            features = [ "Window" "Performance" ];
+          }
+          {
+            name = "winapi";
+            packageId = "winapi";
+            target = { target, features }: ("windows" == target."os" or null);
+            features = [ "profileapi" ];
+          }
+        ];
+        features = {
+          "default" = [ "flaky_tests" ];
+          "prost" = [ "prost-types" ];
+          "prost-types" = [ "dep:prost-types" ];
+        };
+      };
       "quick-error" = rec {
         crateName = "quick-error";
         version = "1.2.3";
@@ -10018,6 +10354,32 @@ rec {
         features = {
           "serde" = [ "dep:serde" ];
           "serde1" = [ "serde" ];
+        };
+      };
+      "raw-cpuid" = rec {
+        crateName = "raw-cpuid";
+        version = "11.1.0";
+        edition = "2018";
+        crateBin = [ ];
+        sha256 = "138dm4mqmmkdd1g5gkf90dlj2bnlxp0yy4d56r5xbyz3rwby77nb";
+        authors = [
+          "Gerd Zellweger <mail@gerdzellweger.com>"
+        ];
+        dependencies = [
+          {
+            name = "bitflags";
+            packageId = "bitflags 2.4.2";
+          }
+        ];
+        features = {
+          "clap" = [ "dep:clap" ];
+          "cli" = [ "display" "clap" ];
+          "display" = [ "std" "termimad" "serde_json" "serialize" ];
+          "serde" = [ "dep:serde" ];
+          "serde_derive" = [ "dep:serde_derive" ];
+          "serde_json" = [ "dep:serde_json" ];
+          "serialize" = [ "serde" "serde_derive" ];
+          "termimad" = [ "dep:termimad" ];
         };
       };
       "rayon" = rec {
@@ -12362,6 +12724,19 @@ rec {
           "std" = [ "alloc" "rand_core?/std" ];
         };
         resolvedDefaultFeatures = [ "alloc" "std" ];
+      };
+      "sketches-ddsketch" = rec {
+        crateName = "sketches-ddsketch";
+        version = "0.2.2";
+        edition = "2018";
+        sha256 = "0p6n1v0p0773d0b5qnsnw526g7hhlb08bx95wm0zb09xnwa6qqw5";
+        authors = [
+          "Mike Heffner <mikeh@fesnel.com>"
+        ];
+        features = {
+          "serde" = [ "dep:serde" ];
+          "use_serde" = [ "serde" "serde/derive" ];
+        };
       };
       "slab" = rec {
         crateName = "slab";
@@ -18088,7 +18463,7 @@ rec {
           "XrViewerPose" = [ "XrPose" ];
           "XrWebGlLayer" = [ "EventTarget" "XrLayer" ];
         };
-        resolvedDefaultFeatures = [ "AbortController" "AbortSignal" "Blob" "BlobPropertyBag" "CanvasRenderingContext2d" "Document" "DomRect" "DomRectReadOnly" "Element" "Event" "EventTarget" "File" "FormData" "Headers" "HtmlCanvasElement" "HtmlElement" "MessageEvent" "Node" "QueuingStrategy" "ReadableByteStreamController" "ReadableStream" "ReadableStreamByobReader" "ReadableStreamByobRequest" "ReadableStreamDefaultController" "ReadableStreamDefaultReader" "ReadableStreamGetReaderOptions" "ReadableStreamReadResult" "ReadableStreamReaderMode" "ReadableStreamType" "ReadableWritablePair" "Request" "RequestCredentials" "RequestInit" "RequestMode" "Response" "ServiceWorkerGlobalScope" "StreamPipeOptions" "TransformStream" "TransformStreamDefaultController" "Transformer" "UnderlyingSink" "UnderlyingSource" "Window" "Worker" "WorkerGlobalScope" "WritableStream" "WritableStreamDefaultController" "WritableStreamDefaultWriter" ];
+        resolvedDefaultFeatures = [ "AbortController" "AbortSignal" "Blob" "BlobPropertyBag" "CanvasRenderingContext2d" "Document" "DomRect" "DomRectReadOnly" "Element" "Event" "EventTarget" "File" "FormData" "Headers" "HtmlCanvasElement" "HtmlElement" "MessageEvent" "Node" "Performance" "QueuingStrategy" "ReadableByteStreamController" "ReadableStream" "ReadableStreamByobReader" "ReadableStreamByobRequest" "ReadableStreamDefaultController" "ReadableStreamDefaultReader" "ReadableStreamGetReaderOptions" "ReadableStreamReadResult" "ReadableStreamReaderMode" "ReadableStreamType" "ReadableWritablePair" "Request" "RequestCredentials" "RequestInit" "RequestMode" "Response" "ServiceWorkerGlobalScope" "StreamPipeOptions" "TransformStream" "TransformStreamDefaultController" "Transformer" "UnderlyingSink" "UnderlyingSource" "Window" "Worker" "WorkerGlobalScope" "WritableStream" "WritableStreamDefaultController" "WritableStreamDefaultWriter" ];
       };
       "web-time" = rec {
         crateName = "web-time";
@@ -18209,7 +18584,7 @@ rec {
         features = {
           "debug" = [ "impl-debug" ];
         };
-        resolvedDefaultFeatures = [ "basetsd" "consoleapi" "errhandlingapi" "fileapi" "handleapi" "knownfolders" "minwindef" "ntstatus" "objbase" "processenv" "processthreadsapi" "shellapi" "shlobj" "std" "stringapiset" "synchapi" "sysinfoapi" "winbase" "wincon" "winerror" "winnt" "winuser" ];
+        resolvedDefaultFeatures = [ "basetsd" "consoleapi" "errhandlingapi" "fileapi" "handleapi" "knownfolders" "minwindef" "ntstatus" "objbase" "processenv" "processthreadsapi" "profileapi" "shellapi" "shlobj" "std" "stringapiset" "synchapi" "sysinfoapi" "winbase" "wincon" "winerror" "winnt" "winuser" ];
       };
       "winapi-i686-pc-windows-gnu" = rec {
         crateName = "winapi-i686-pc-windows-gnu";
