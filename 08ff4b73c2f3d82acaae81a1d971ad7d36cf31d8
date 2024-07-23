@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7f501d6_2bfc130b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-23T13:40:48Z",
+      "side": 1,
+      "message": "Can you add some docs, especially for `nix_compat_derive::NixDeserialize`?\n\nI did a `cargo doc` and it\u0027s pretty empty - some usage example, like in https://docs.rs/clap/latest/clap/_derive/index.html would probably help ;-)",
+      "revId": "08ff4b73c2f3d82acaae81a1d971ad7d36cf31d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9922a93_4952592d",
+        "filename": "tvix/nix-compat-derive/src/de.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-23T13:40:48Z",
+      "side": 1,
+      "message": "TODO",
+      "revId": "08ff4b73c2f3d82acaae81a1d971ad7d36cf31d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "727fd881_046836a3",
+        "filename": "tvix/nix-compat-derive/src/internal/attrs.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-23T13:40:48Z",
+      "side": 1,
+      "message": "👀",
+      "revId": "08ff4b73c2f3d82acaae81a1d971ad7d36cf31d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c9bcfb5_cee88f34",
+        "filename": "tvix/nix-compat-derive/src/internal/attrs.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-23T13:40:48Z",
+      "side": 1,
+      "message": "Can we get a listing of these somewhere in the docs?",
+      "revId": "08ff4b73c2f3d82acaae81a1d971ad7d36cf31d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7946726c_d40e4520",
+        "filename": "tvix/nix-compat-derive/src/internal/attrs.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-23T13:40:48Z",
+      "side": 1,
+      "message": "Can we get a listing of these somewhere in the docs?",
+      "revId": "08ff4b73c2f3d82acaae81a1d971ad7d36cf31d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "688c4473_52284c05",
+        "filename": "tvix/nix-compat-derive/src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-23T13:40:48Z",
+      "side": 1,
+      "message": "👀",
+      "revId": "08ff4b73c2f3d82acaae81a1d971ad7d36cf31d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
