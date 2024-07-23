@@ -33,6 +33,40 @@
       "message": "needs a docstring describing the behaviour.\n\nAlso, document the keyfile format that\u0027s expected, which is the nix one! (as we use the parse_keypair function from there).",
       "revId": "a6bff0cc25cbc9f2fad897d8782d172e8045427c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5cad3af_a5074429",
+        "filename": "tvix/store/src/pathinfoservice/signing_wrapper.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-07-23T20:54:02Z",
+      "side": 1,
+      "message": "missing message error here",
+      "revId": "a6bff0cc25cbc9f2fad897d8782d172e8045427c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a763fbf_27b23ca0",
+        "filename": "tvix/store/src/pathinfoservice/signing_wrapper.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-07-23T20:54:02Z",
+      "side": 1,
+      "message": "`PathBuf`, not `Box\u003cPath\u003e`\nstore the key in memory, not the keyfile",
+      "revId": "a6bff0cc25cbc9f2fad897d8782d172e8045427c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
