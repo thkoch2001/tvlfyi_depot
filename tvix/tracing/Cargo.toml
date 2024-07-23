@@ -49,6 +49,3 @@ reqwest = [
 axum = [
   "dep:axum",
 ]
-
-[lints]
-workspace = true

@@ -4,8 +4,8 @@ syntax = "proto3";
 
 package tvix.store.v1;
 
-import "tvix/castore/protos/castore.proto";
-import "tvix/store/protos/pathinfo.proto";
+import "castore/protos/castore.proto";
+import "store/protos/pathinfo.proto";
 
 option go_package = "code.tvl.fyi/tvix/store-go;storev1";
 

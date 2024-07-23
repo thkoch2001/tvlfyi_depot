@@ -126,6 +126,3 @@ tonic-reflection = ["dep:tonic-reflection"]
 # Requires the following packages in $PATH:
 # cbtemulator, google-cloud-bigtable-tool
 integration = []
-
-[lints]
-workspace = true
