@@ -16,6 +16,24 @@
       "message": "pls sort this",
       "revId": "3aedf1527d9ade5a33d73ba5c64b17ae304be304",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc5ebae6_aa43e590",
+        "filename": "tvix/nar-bridge/Cargo.toml",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-07-23T14:29:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "32fafa40_7b94ed99",
+      "revId": "3aedf1527d9ade5a33d73ba5c64b17ae304be304",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
