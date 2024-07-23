@@ -89,8 +89,8 @@ let
             --otlp=false \
             -l $PWD/nar-bridge.sock &
 
-          # Wait for the socket to be created.
-          while [ ! -e $PWD/nar-bridge.sock ]; do sleep 1; done
+          # Wait for nar-bridge to report healthy.
+          timeout 22 sh -c "until ${pkgs.curl}/bin/curl -s --unix-socket $PWD/nar-bridge.sock http:///nix-binary-cache; do sleep 1; done"
 
           # Upload. We can't use nix copy --to http://…, as it wants access to the nix db.
           # However, we can use mkBinaryCache to assemble .narinfo and .nar.xz to upload,
