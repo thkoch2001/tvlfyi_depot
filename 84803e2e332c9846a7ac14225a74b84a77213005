@@ -34,6 +34,24 @@
       "parentUuid": "afe84ba7_9734d886",
       "revId": "84803e2e332c9846a7ac14225a74b84a77213005",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50099dd5_aafefe0e",
+        "filename": "tvix/castore/src/directoryservice/grpc.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-24T20:43:12Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "f09f0044_77f9b422",
+      "revId": "84803e2e332c9846a7ac14225a74b84a77213005",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
