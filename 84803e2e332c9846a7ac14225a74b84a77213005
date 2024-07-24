@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afe84ba7_9734d886",
+        "filename": "tvix/castore/src/directoryservice/grpc.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-24T20:31:54Z",
+      "side": 1,
+      "message": "please add a FUTUREWORK comment here mentioning why we don\u0027t use the order validator here (as it\u0027s not streaming).",
+      "revId": "84803e2e332c9846a7ac14225a74b84a77213005",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
