@@ -16,6 +16,24 @@
       "message": "please add a FUTUREWORK comment here mentioning why we don\u0027t use the order validator here (as it\u0027s not streaming).",
       "revId": "84803e2e332c9846a7ac14225a74b84a77213005",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f09f0044_77f9b422",
+        "filename": "tvix/castore/src/directoryservice/grpc.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-07-24T20:34:39Z",
+      "side": 1,
+      "message": "The OrderValidator is streaming, but it validates the order and not the completeness of the graph. I\u0027m not sure right now if it will ever make sense to use it here and would like to focus on the bugfix.",
+      "parentUuid": "afe84ba7_9734d886",
+      "revId": "84803e2e332c9846a7ac14225a74b84a77213005",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
