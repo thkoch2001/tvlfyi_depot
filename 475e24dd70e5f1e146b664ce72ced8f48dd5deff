@@ -33,6 +33,23 @@
       "message": "Blocked on https://github.com/Ptrskay3/axum-prometheus/issues/63.",
       "revId": "475e24dd70e5f1e146b664ce72ced8f48dd5deff",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d707b6bb_672407f6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-25T09:52:16Z",
+      "side": 1,
+      "message": "Upstream replied and proposed a way to do this (which might require more custom code). Another option would be to use https://docs.rs/opentelemetry-otlp/latest/opentelemetry_otlp/ for pushing metrics, which doesn\u0027t do any HTTP at all.\n\nAt least for `tvix-store deamon` that\u0027d be my preference anyways, though we probably can have both (?) for things that do expose HTTP handlers if we want to.",
+      "revId": "475e24dd70e5f1e146b664ce72ced8f48dd5deff",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
