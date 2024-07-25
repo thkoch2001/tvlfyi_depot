@@ -11,6 +11,7 @@ use crate::{B3Digest, Error};
 
 #[derive(Clone, Default)]
 pub struct MemoryBlobService {
+    instance_name: String,
     db: Arc<RwLock<HashMap<B3Digest, Vec<u8>>>>,
 }
 
@@ -58,10 +59,13 @@ impl ServiceBuilder for MemoryBlobServiceConfig {
     type Output = dyn BlobService;
     async fn build<'a>(
         &'a self,
-        _instance_name: &str,
+        instance_name: &str,
         _context: &CompositionContext,
     ) -> Result<Arc<dyn BlobService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
-        Ok(Arc::new(MemoryBlobService::default()))
+        Ok(Arc::new(MemoryBlobService {
+            instance_name: instance_name.to_string(),
+            ..Default::default()
+        }))
     }
 }
 
