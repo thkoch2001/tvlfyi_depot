@@ -16,6 +16,8 @@ use super::{BlobReader, BlobService, BlobWriter, ChunkedReader};
 /// blobservice again, before falling back to the remote one.
 /// The remote BlobService is never written to.
 pub struct CombinedBlobService<BL, BR> {
+    instance_name: String,
+
     local: BL,
     remote: BR,
 }
@@ -27,6 +29,7 @@ where
 {
     fn clone(&self) -> Self {
         Self {
+            instance_name: self.instance_name.clone(),
             local: self.local.clone(),
             remote: self.remote.clone(),
         }
@@ -113,7 +116,7 @@ impl ServiceBuilder for CombinedBlobServiceConfig {
     type Output = dyn BlobService;
     async fn build<'a>(
         &'a self,
-        _instance_name: &str,
+        instance_name: &str,
         context: &CompositionContext,
     ) -> Result<Arc<dyn BlobService>, Box<dyn std::error::Error + Send + Sync>> {
         let (local, remote) = futures::join!(
@@ -121,6 +124,7 @@ impl ServiceBuilder for CombinedBlobServiceConfig {
             context.resolve(self.remote.clone())
         );
         Ok(Arc::new(CombinedBlobService {
+            instance_name: instance_name.to_string(),
             local: local?,
             remote: remote?,
         }))

@@ -64,6 +64,8 @@ use super::{BlobReader, BlobService, BlobWriter, ChunkedReader};
 /// all keys stored so far, but no promises ;-)
 #[derive(Clone)]
 pub struct ObjectStoreBlobService {
+    instance_name: String,
+
     object_store: Arc<dyn ObjectStore>,
     base_path: Path,
 
@@ -294,7 +296,7 @@ impl ServiceBuilder for ObjectStoreBlobServiceConfig {
     type Output = dyn BlobService;
     async fn build<'a>(
         &'a self,
-        _instance_name: &str,
+        instance_name: &str,
         _context: &CompositionContext,
     ) -> Result<Arc<dyn BlobService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
         let (object_store, path) = object_store::parse_url_opts(
@@ -302,6 +304,7 @@ impl ServiceBuilder for ObjectStoreBlobServiceConfig {
             &self.object_store_options,
         )?;
         Ok(Arc::new(ObjectStoreBlobService {
+            instance_name: instance_name.to_string(),
             object_store: Arc::new(object_store),
             base_path: path,
             avg_chunk_size: self.avg_chunk_size,

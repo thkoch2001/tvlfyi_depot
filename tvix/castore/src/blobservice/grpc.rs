@@ -24,6 +24,8 @@ use tracing::{instrument, Instrument as _};
 /// Connects to a (remote) tvix-store BlobService over gRPC.
 #[derive(Clone)]
 pub struct GRPCBlobService<T> {
+    instance_name: String,
+
     /// The internal reference to a gRPC client.
     /// Cloning it is cheap, and it internally handles concurrent requests.
     grpc_client: proto::blob_service_client::BlobServiceClient<T>,
@@ -32,7 +34,10 @@ pub struct GRPCBlobService<T> {
 impl<T> GRPCBlobService<T> {
     /// construct a [GRPCBlobService] from a [proto::blob_service_client::BlobServiceClient].
     pub fn from_client(grpc_client: proto::blob_service_client::BlobServiceClient<T>) -> Self {
-        Self { grpc_client }
+        Self {
+            grpc_client,
+            instance_name: "".to_string()
+        }
     }
 }
 
@@ -205,13 +210,15 @@ impl ServiceBuilder for GRPCBlobServiceConfig {
     type Output = dyn BlobService;
     async fn build<'a>(
         &'a self,
-        _instance_name: &str,
+        instance_name: &str,
         _context: &CompositionContext,
     ) -> Result<Arc<dyn BlobService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
         let client = proto::blob_service_client::BlobServiceClient::new(
             crate::tonic::channel_from_url(&self.url.parse()?).await?,
         );
-        Ok(Arc::new(GRPCBlobService::from_client(client)))
+        let mut grpc_service = GRPCBlobService::from_client(client);
+        grpc_service.instance_name = instance_name.to_string();
+        Ok(Arc::new(grpc_service))
     }
 }
 
