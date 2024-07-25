@@ -151,17 +151,21 @@ impl BlobService for ObjectStoreBlobService {
                 // the gRPC server surface (explicitly document behaviour in the
                 // proto docs)
                 if let Some(chunks) = self.chunks(digest).await? {
-                    let chunked_reader = ChunkedReader::from_chunks(
-                        chunks.into_iter().map(|chunk| {
-                            (
-                                chunk.digest.try_into().expect("invalid b3 digest"),
-                                chunk.size,
-                            )
-                        }),
-                        Arc::new(self.clone()) as Arc<dyn BlobService>,
-                    );
+                    if chunks.is_empty() {
+                        Ok(None)
+                    } else {
+                        let chunked_reader = ChunkedReader::from_chunks(
+                            chunks.into_iter().map(|chunk| {
+                                (
+                                    chunk.digest.try_into().expect("invalid b3 digest"),
+                                    chunk.size,
+                                )
+                            }),
+                            Arc::new(self.clone()) as Arc<dyn BlobService>,
+                        );
 
-                    Ok(Some(Box::new(chunked_reader)))
+                        Ok(Some(Box::new(chunked_reader)))
+                    }
                 } else {
                     // This is neither a chunk nor a blob, return None.
                     Ok(None)
@@ -243,6 +247,30 @@ impl BlobService for ObjectStoreBlobService {
             // error checking for blob
             Err(err) => Err(err.into()),
         }
+    }
+
+    #[instrument(skip_all)]
+    async fn write_chunk(&self, chunk_data: &[u8]) -> io::Result<()> {
+        let chunk_digest: B3Digest = blake3::hash(&chunk_data).as_bytes().into();
+        let chunk_path = derive_chunk_path(&self.base_path, &chunk_digest);
+        upload_chunk(
+            self.object_store.clone(),
+            chunk_digest,
+            chunk_path,
+            chunk_data.to_vec(),
+        )
+        .await?;
+        Ok(())
+    }
+
+    #[instrument(skip_all)]
+    async fn write_meta(&self, digest: &B3Digest, chunk_meta: Vec<ChunkMeta>) -> io::Result<()> {
+        upload_chunk_meta(
+            self.object_store.clone(),
+            self.base_path.clone(),
+            digest,
+            chunk_meta
+        ).await
     }
 }
 
@@ -361,13 +389,25 @@ async fn chunk_and_upload<R: AsyncRead + Unpin>(
         chunks
     };
 
+    // check for Blob, if it doesn't exist, persist.
+    let blob_digest: B3Digest = b3_r.digest().into();
+
+    upload_chunk_meta(object_store, base_path, &blob_digest, chunks).await?;
+
+    Ok(blob_digest)
+}
+
+async fn upload_chunk_meta(
+    object_store: Arc<dyn ObjectStore>,
+    base_path: Path,
+    blob_digest: &B3Digest,
+    chunks: Vec<ChunkMeta>
+) -> io::Result<()> {
     let stat_blob_response = StatBlobResponse {
         chunks,
         bao: "".into(), // still todo
     };
 
-    // check for Blob, if it doesn't exist, persist.
-    let blob_digest: B3Digest = b3_r.digest().into();
     let blob_path = derive_blob_path(&base_path, &blob_digest);
 
     match object_store.head(&blob_path).await {
@@ -396,7 +436,7 @@ async fn chunk_and_upload<R: AsyncRead + Unpin>(
         }
     }
 
-    Ok(blob_digest)
+    Ok(())
 }
 
 /// upload chunk if it doesn't exist yet.
