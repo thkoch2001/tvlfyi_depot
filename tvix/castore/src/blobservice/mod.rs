@@ -58,6 +58,14 @@ pub trait BlobService: Send + Sync {
         // granular chunks available.
         Ok(Some(vec![]))
     }
+
+    async fn write_chunk(&self, _data: &[u8]) -> io::Result<()> {
+        unimplemented!()
+    }
+
+    async fn write_meta(&self, _digest: &B3Digest, _chunk_meta: Vec<ChunkMeta>) -> io::Result<()> {
+        unimplemented!()
+    }
 }
 
 #[async_trait]
@@ -79,6 +87,14 @@ where
 
     async fn chunks(&self, digest: &B3Digest) -> io::Result<Option<Vec<ChunkMeta>>> {
         self.as_ref().chunks(digest).await
+    }
+
+    async fn write_chunk(&self, data: &[u8]) -> io::Result<()> {
+        self.as_ref().write_chunk(data).await
+    }
+
+    async fn write_meta(&self, digest: &B3Digest, chunk_meta: Vec<ChunkMeta>) -> io::Result<()> {
+        self.as_ref().write_meta(digest, chunk_meta).await
     }
 }
 

@@ -6,7 +6,7 @@ use tracing::instrument;
 use crate::composition::{CompositionContext, ServiceBuilder};
 use crate::{B3Digest, Error};
 
-use super::{BlobReader, BlobService, BlobWriter, ChunkedReader};
+use super::{BlobReader, BlobService, BlobWriter, ChunkedReader, ChunkMeta};
 
 /// Combinator for a BlobService, using a "local" and "remote" blobservice.
 /// Requests are tried in (and returned from) the local store first, only if
@@ -20,6 +20,7 @@ pub struct CombinedBlobService<BL, BR> {
 
     local: BL,
     remote: BR,
+    writeback: bool,
 }
 
 impl<BL, BR> Clone for CombinedBlobService<BL, BR>
@@ -32,6 +33,7 @@ where
             instance_name: self.instance_name.clone(),
             local: self.local.clone(),
             remote: self.remote.clone(),
+            writeback: self.writeback,
         }
     }
 }
@@ -47,44 +49,66 @@ where
         Ok(self.local.as_ref().has(digest).await? || self.remote.as_ref().has(digest).await?)
     }
 
-    #[instrument(skip(self, digest), fields(blob.digest=%digest), err)]
-    async fn open_read(&self, digest: &B3Digest) -> std::io::Result<Option<Box<dyn BlobReader>>> {
-        if self.local.as_ref().has(digest).await? {
-            // local store has the blob, so we can assume it also has all chunks.
-            self.local.as_ref().open_read(digest).await
-        } else {
-            // Local store doesn't have the blob.
-            // Ask the remote one for the list of chunks,
-            // and create a chunked reader that uses self.open_read() for
-            // individual chunks. There's a chance we already have some chunks
-            // locally, meaning we don't need to fetch them all from the remote
-            // BlobService.
-            match self.remote.as_ref().chunks(digest).await? {
-                // blob doesn't exist on the remote side either, nothing we can do.
-                None => Ok(None),
-                Some(remote_chunks) => {
-                    // if there's no more granular chunks, or the remote
-                    // blobservice doesn't support chunks, read the blob from
-                    // the remote blobservice directly.
-                    if remote_chunks.is_empty() {
-                        return self.remote.as_ref().open_read(digest).await;
+    async fn chunks(&self, digest: &B3Digest) -> std::io::Result<Option<Vec<ChunkMeta>>> {
+        match self.local.as_ref().chunks(digest).await? {
+            Some(local_chunks) => Ok(Some(local_chunks)),
+            None => {
+                match self.remote.as_ref().chunks(digest).await? {
+                    Some(remote_chunks) => {
+                        self.local.write_meta(digest, remote_chunks.clone()).await?;
+                        Ok(Some(remote_chunks))
                     }
-                    // otherwise, a chunked reader, which will always try the
-                    // local backend first.
-
-                    let chunked_reader = ChunkedReader::from_chunks(
-                        remote_chunks.into_iter().map(|chunk| {
-                            (
-                                chunk.digest.try_into().expect("invalid b3 digest"),
-                                chunk.size,
-                            )
-                        }),
-                        Arc::new(self.clone()) as Arc<dyn BlobService>,
-                    );
-                    Ok(Some(Box::new(chunked_reader)))
+                    None => Ok(None),
                 }
             }
         }
+    }
+
+    #[instrument(skip(self, digest), fields(blob.digest=%digest), err)]
+    async fn open_read(&self, digest: &B3Digest) -> std::io::Result<Option<Box<dyn BlobReader>>> {
+        let chunks = match self.chunks(digest).await? {
+            Some(chunks) => chunks,
+            // blob doesn't exist on the remote side either, nothing we can do.
+            None => return Ok(None),
+        };
+
+        // if there's no more granular chunks, or the remote
+        // blobservice doesn't support chunks, read the blob from
+        // the remote blobservice directly.
+        if chunks.is_empty() {
+            return match self.local.as_ref().open_read(digest).await? {
+                Some(chunk) => Ok(Some(chunk)),
+                None => {
+                    match self.remote.as_ref().open_read(digest).await? {
+                        Some(mut chunk) => {
+                            if self.writeback {
+                                use tokio::io::AsyncReadExt;
+                                let mut buf = vec![];
+                                chunk.read_to_end(&mut buf).await?;
+                                self.local.write_chunk(&buf).await?;
+                                Ok(Some(Box::new(std::io::Cursor::new(buf))))
+                            } else {
+                                Ok(Some(chunk))
+                            }
+                        }
+                        None => Ok(None)
+                    }
+                }
+            };
+        }
+
+        // otherwise, a chunked reader, which will always try the
+        // local backend first.
+        let chunked_reader = ChunkedReader::from_chunks(
+            chunks.into_iter().map(|chunk| {
+                (
+                    chunk.digest.try_into().expect("invalid b3 digest"),
+                    chunk.size,
+                )
+            }),
+            Arc::new(self.clone()) as Arc<dyn BlobService>,
+        );
+        Ok(Some(Box::new(chunked_reader)))
     }
 
     #[instrument(skip_all)]
@@ -99,6 +123,7 @@ where
 pub struct CombinedBlobServiceConfig {
     local: String,
     remote: String,
+    writeback: bool,
 }
 
 impl TryFrom<url::Url> for CombinedBlobServiceConfig {
@@ -127,6 +152,7 @@ impl ServiceBuilder for CombinedBlobServiceConfig {
             instance_name: instance_name.to_string(),
             local: local?,
             remote: remote?,
+            writeback: self.writeback,
         }))
     }
 }
