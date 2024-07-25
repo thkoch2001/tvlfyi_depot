@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "93f35e31_5b1647d4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2024-07-25T17:25:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98369b79_bd1d9aa5",
+      "revId": "a6bff0cc25cbc9f2fad897d8782d172e8045427c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1c25bff7_44452cb0",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-07-23T20:52:01Z",
       "side": 1,
       "message": "needs a docstring describing the behaviour.\n\nAlso, document the keyfile format that\u0027s expected, which is the nix one! (as we use the parse_keypair function from there).",
+      "revId": "a6bff0cc25cbc9f2fad897d8782d172e8045427c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e92e2917_62098ec3",
+        "filename": "tvix/store/src/pathinfoservice/signing_wrapper.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2024-07-25T17:25:56Z",
+      "side": 1,
+      "message": "I put the description in the service builder since it is the one the create the signer. The path info service doesn\u0027t enfore the signer to use a signing key (S is a ed25519::signature::Signer)",
+      "parentUuid": "1c25bff7_44452cb0",
       "revId": "a6bff0cc25cbc9f2fad897d8782d172e8045427c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4edac505_5f30c588",
+        "filename": "tvix/store/src/pathinfoservice/signing_wrapper.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2024-07-25T17:25:56Z",
+      "side": 1,
+      "message": "Oups",
+      "parentUuid": "e5cad3af_a5074429",
+      "revId": "a6bff0cc25cbc9f2fad897d8782d172e8045427c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9a763fbf_27b23ca0",
@@ -65,6 +119,24 @@
       "writtenOn": "2024-07-23T20:54:02Z",
       "side": 1,
       "message": "`PathBuf`, not `Box\u003cPath\u003e`\nstore the key in memory, not the keyfile",
+      "revId": "a6bff0cc25cbc9f2fad897d8782d172e8045427c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9303173e_7ce3373e",
+        "filename": "tvix/store/src/pathinfoservice/signing_wrapper.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2024-07-25T17:25:56Z",
+      "side": 1,
+      "message": "Ack.\n\nThis is the configuration. The keyfile is stored in memory (in SigningKey struct)",
+      "parentUuid": "9a763fbf_27b23ca0",
       "revId": "a6bff0cc25cbc9f2fad897d8782d172e8045427c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
