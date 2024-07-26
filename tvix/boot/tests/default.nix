@@ -172,6 +172,7 @@ depot.nix.readTree.drvTargets
   closure-nixos = (mkBootTest {
     blobServiceAddr = "objectstore+file:///build/blobs";
     pathInfoServiceAddr = "redb:///build/pathinfo.redb";
+    directoryServiceAddr = "redb:///build/directories.redb";
     path = testSystem;
     isClosure = true;
     vmCmdline = "init=${testSystem}/init panic=-1"; # reboot immediately on panic
