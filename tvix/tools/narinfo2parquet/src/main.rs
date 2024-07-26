@@ -114,6 +114,9 @@ struct FrameBuilder {
     store_path_hash_str: StringChunkedBuilder,
     store_path_hash: BinaryChunkedBuilder,
     store_path_name: StringChunkedBuilder,
+    deriver_hash_str: StringChunkedBuilder,
+    deriver_hash: BinaryChunkedBuilder,
+    deriver_name: StringChunkedBuilder,
     nar_hash: BinaryChunkedBuilder,
     nar_size: PrimitiveChunkedBuilder<UInt64Type>,
     references: ListBinaryChunkedBuilder,
@@ -133,6 +136,9 @@ impl Default for FrameBuilder {
             store_path_hash_str: StringChunkedBuilder::new("store_path_hash_str", 0, 0),
             store_path_hash: BinaryChunkedBuilder::new("store_path_hash", 0, 0),
             store_path_name: StringChunkedBuilder::new("store_path_name", 0, 0),
+            deriver_hash_str: StringChunkedBuilder::new("deriver_hash_str", 0, 0),
+            deriver_hash: BinaryChunkedBuilder::new("deriver_hash", 0, 0),
+            deriver_name: StringChunkedBuilder::new("deriver_name", 0, 0),
             nar_hash: BinaryChunkedBuilder::new("nar_hash", 0, 0),
             nar_size: PrimitiveChunkedBuilder::new("nar_size", 0),
             references: ListBinaryChunkedBuilder::new("references", 0, 0),
@@ -159,9 +165,19 @@ impl FrameBuilder {
     fn push(&mut self, entry: &NarInfo) {
         self.store_path_hash_str
             .append_value(nixbase32::encode(entry.store_path.digest()));
-
         self.store_path_hash.append_value(entry.store_path.digest());
         self.store_path_name.append_value(entry.store_path.name());
+
+        if let Some(deriver) = &entry.deriver {
+            self.deriver_hash_str
+                .append_value(nixbase32::encode(deriver.digest()));
+            self.deriver_hash.append_value(deriver.digest());
+            self.deriver_name.append_value(deriver.name());
+        } else {
+            self.deriver_hash_str.append_null();
+            self.deriver_hash.append_null();
+            self.deriver_name.append_null();
+        }
 
         self.nar_hash.append_value(&entry.nar_hash);
         self.nar_size.append_value(entry.nar_size);
@@ -247,6 +263,9 @@ impl FrameBuilder {
             "store_path_hash_str" => self.store_path_hash_str.finish().into_series(),
             "store_path_hash" => self.store_path_hash.finish().into_series(),
             "store_path_name" => self.store_path_name.finish().into_series(),
+            "deriver_hash_str" => self.deriver_hash_str.finish().into_series(),
+            "deriver_hash" => self.deriver_hash.finish().into_series(),
+            "deriver_name" => self.deriver_name.finish().into_series(),
             "nar_hash" => self.nar_hash.finish().into_series(),
             "nar_size" => self.nar_size.finish().into_series(),
             "references" => self.references.finish().into_series(),
