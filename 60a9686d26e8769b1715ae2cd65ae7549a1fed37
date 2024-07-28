@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "295460d6_be5b90ac",
+        "filename": "tvix/glue/src/refscan.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-28T22:07:04Z",
+      "side": 1,
+      "message": "this can be any bytes pattern, no? nothing store path specific here.",
+      "revId": "60a9686d26e8769b1715ae2cd65ae7549a1fed37",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
