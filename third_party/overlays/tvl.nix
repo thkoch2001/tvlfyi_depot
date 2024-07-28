@@ -140,6 +140,14 @@ depot.nix.readTree.drvTargets {
     patches = (old.patches or [ ]) ++ [ ./patches/tpm2-pkcs11-190-dbupgrade.patch ];
   });
 
+  # Dependencies isn't supported by Python 3.12
+  parquet-tools = super.parquet-tools.override {
+    python3Packages = self.python311Packages;
+  };
+  html5validator = super.html5validator.override {
+    python3 = self.python311;
+  };
+
   # macFUSE bump containing fix for https://github.com/osxfuse/osxfuse/issues/974
   # https://github.com/NixOS/nixpkgs/pull/320197
   fuse =
