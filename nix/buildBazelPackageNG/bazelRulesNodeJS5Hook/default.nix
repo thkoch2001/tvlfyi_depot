@@ -37,7 +37,9 @@ let
       cp -R . $out
     '';
   };
-in makeSetupHook {
+in
+makeSetupHook
+{
   name = "bazelbuild-rules_nodejs-5-hook";
   propagatedBuildInputs = [
     nodejs
