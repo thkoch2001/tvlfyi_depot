@@ -1,30 +1,30 @@
-From 2bde6e420571c6dc0ff25246620b4c987987f6be Mon Sep 17 00:00:00 2001
+From 5895f4ed8163780446665b99b8d5dc31d6f2b791 Mon Sep 17 00:00:00 2001
 From: Hans de Goede <hdegoede@redhat.com>
 Date: Tue, 19 Dec 2023 15:45:51 +0100
-Subject: [PATCH 20/21] ov01a1s HACK
+Subject: [PATCH 2/3] ov01a1s HACK
 
 Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 ---
- src/libcamera/camera_sensor.cpp            | 6 ++++++
- src/libcamera/software_isp/debayer_cpu.cpp | 8 ++++++++
+ src/libcamera/sensor/camera_sensor.cpp     | 6 ++++++
+ src/libcamera/software_isp/debayer_cpu.cpp | 7 +++++++
  src/libcamera/software_isp/swstats_cpu.cpp | 4 ++++
- 3 files changed, 18 insertions(+)
+ 3 files changed, 17 insertions(+)
 
-diff --git a/src/libcamera/camera_sensor.cpp b/src/libcamera/camera_sensor.cpp
-index f19f72ea..7ad4b9ef 100644
---- a/src/libcamera/camera_sensor.cpp
-+++ b/src/libcamera/camera_sensor.cpp
-@@ -34,6 +34,9 @@
+diff --git a/src/libcamera/sensor/camera_sensor.cpp b/src/libcamera/sensor/camera_sensor.cpp
+index 77c396b9..628b12f4 100644
+--- a/src/libcamera/sensor/camera_sensor.cpp
++++ b/src/libcamera/sensor/camera_sensor.cpp
+@@ -33,6 +33,9 @@
+  */
  
  namespace libcamera {
- 
++	
 +// HACK HACK
 +bool is_ov01a1s = false;
-+
+ 
  LOG_DEFINE_CATEGORY(CameraSensor)
  
- /**
-@@ -426,6 +429,9 @@ int CameraSensor::initProperties()
+@@ -442,6 +445,9 @@ int CameraSensor::initProperties()
  	model_ = subdev_->model();
  	properties_.set(properties::Model, utils::toAscii(model_));
  
@@ -35,7 +35,7 @@ index f19f72ea..7ad4b9ef 100644
  	int ret = generateId();
  	if (ret)
 diff --git a/src/libcamera/software_isp/debayer_cpu.cpp b/src/libcamera/software_isp/debayer_cpu.cpp
-index 3be3cdfe..d6599805 100644
+index 8254bbe9..10ea29b1 100644
 --- a/src/libcamera/software_isp/debayer_cpu.cpp
 +++ b/src/libcamera/software_isp/debayer_cpu.cpp
 @@ -23,6 +23,7 @@
@@ -46,7 +46,7 @@ index 3be3cdfe..d6599805 100644
  /**
   * \class DebayerCpu
   * \brief Class for debayering on the CPU
-@@ -262,6 +263,9 @@ int DebayerCpu::getInputConfig(PixelFormat inputFormat, DebayerInputConfig &conf
+@@ -275,6 +276,9 @@ int DebayerCpu::getInputConfig(PixelFormat inputFormat, DebayerInputConfig &conf
  	BayerFormat bayerFormat =
  		BayerFormat::fromPixelFormat(inputFormat);
  
@@ -56,7 +56,7 @@ index 3be3cdfe..d6599805 100644
  	if ((bayerFormat.bitDepth == 8 || bayerFormat.bitDepth == 10 || bayerFormat.bitDepth == 12) &&
  	    bayerFormat.packing == BayerFormat::Packing::None &&
  	    isStandardBayerOrder(bayerFormat.order)) {
-@@ -330,7 +334,11 @@ int DebayerCpu::setDebayerFunctions(PixelFormat inputFormat, PixelFormat outputF
+@@ -343,6 +347,9 @@ int DebayerCpu::setDebayerFunctions(PixelFormat inputFormat, PixelFormat outputF
  	BayerFormat bayerFormat =
  		BayerFormat::fromPixelFormat(inputFormat);
  
@@ -64,12 +64,10 @@ index 3be3cdfe..d6599805 100644
 +		bayerFormat.order = BayerFormat::IGIG_GBGR_IGIG_GRGB;
 +
  	xShift_ = 0;
-+
  	swapRedBlueGains_ = false;
  
- 	switch (outputFormat) {
 diff --git a/src/libcamera/software_isp/swstats_cpu.cpp b/src/libcamera/software_isp/swstats_cpu.cpp
-index be310f56..cda1894a 100644
+index 815c4d4f..0b310f80 100644
 --- a/src/libcamera/software_isp/swstats_cpu.cpp
 +++ b/src/libcamera/software_isp/swstats_cpu.cpp
 @@ -19,6 +19,7 @@
@@ -80,7 +78,7 @@ index be310f56..cda1894a 100644
  /**
   * \class SwStatsCpu
   * \brief Class for gathering statistics on the CPU
-@@ -271,6 +272,9 @@ int SwStatsCpu::configure(const StreamConfiguration &inputCfg)
+@@ -367,6 +368,9 @@ int SwStatsCpu::configure(const StreamConfiguration &inputCfg)
  	BayerFormat bayerFormat =
  		BayerFormat::fromPixelFormat(inputCfg.pixelFormat);
  
@@ -91,5 +89,5 @@ index be310f56..cda1894a 100644
  	    setupStandardBayerOrder(bayerFormat.order) == 0) {
  		switch (bayerFormat.bitDepth) {
 -- 
-2.43.2
+2.45.2
 
