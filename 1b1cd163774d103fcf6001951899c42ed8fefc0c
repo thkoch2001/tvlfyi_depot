@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "319b8ba5_f7cb4702",
+        "filename": "tvix/glue/src/refscan.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-28T21:27:44Z",
+      "side": 1,
+      "message": "make this a FUTUREWORK, or want to still address it in this CL?",
+      "revId": "1b1cd163774d103fcf6001951899c42ed8fefc0c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
