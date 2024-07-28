@@ -1033,9 +1033,9 @@ rec {
       };
       "imbl" = rec {
         crateName = "imbl";
-        version = "2.0.3";
+        version = "3.0.0";
         edition = "2018";
-        sha256 = "11bhchs0d1bbbmr8ari4y4d62vqxs7xg4fkhjlhgbv98h0n193cp";
+        sha256 = "1sw1vw8qysyr9cxyxfi3fal9ykf46zw337w4n533mwrnrpcfhfxw";
         authors = [
           "Bodil Stokke <bodil@bodil.org>"
           "Joe Neeman <joeneeman@gmail.com>"
@@ -1082,6 +1082,7 @@ rec {
           "rayon" = [ "dep:rayon" ];
           "refpool" = [ "dep:refpool" ];
           "serde" = [ "dep:serde" ];
+          "triomphe" = [ "dep:triomphe" ];
         };
         resolvedDefaultFeatures = [ "serde" ];
       };
@@ -2033,7 +2034,7 @@ rec {
           }
           {
             name = "rustc-hash";
-            packageId = "rustc-hash";
+            packageId = "rustc-hash 1.1.0";
           }
           {
             name = "text-size";
@@ -2045,7 +2046,7 @@ rec {
           "serde1" = [ "serde" "text-size/serde" ];
         };
       };
-      "rustc-hash" = rec {
+      "rustc-hash 1.1.0" = rec {
         crateName = "rustc-hash";
         version = "1.1.0";
         edition = "2015";
@@ -2055,6 +2056,20 @@ rec {
         ];
         features = {
           "default" = [ "std" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
+      };
+      "rustc-hash 2.0.0" = rec {
+        crateName = "rustc-hash";
+        version = "2.0.0";
+        edition = "2021";
+        sha256 = "0lni0lf846bzrf3jvci6jaf4142n1mdqxvcpczk5ch9pfgyk8c2q";
+        authors = [
+          "The Rust Project Developers"
+        ];
+        features = {
+          "default" = [ "std" ];
+          "rand" = [ "dep:rand" "std" ];
         };
         resolvedDefaultFeatures = [ "default" "std" ];
       };
@@ -2755,6 +2770,10 @@ rec {
           {
             name = "rowan";
             packageId = "rowan";
+          }
+          {
+            name = "rustc-hash";
+            packageId = "rustc-hash 2.0.0";
           }
           {
             name = "serde";
