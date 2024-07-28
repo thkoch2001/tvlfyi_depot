@@ -11,8 +11,8 @@
 let
   systemFor = sys: (depot.ops.nixos.nixosFor sys).system;
 in
-depot.nix.readTree.drvTargets rec {
-  testSystem = systemFor ({ modulesPath, pkgs, ... }: {
+(depot.nix.readTree.drvTargets rec {
+  testSystem = (systemFor ({ modulesPath, pkgs, ... }: {
     imports = [
       # Import the module, this is something a user would do in their config.
       ./config.nix
@@ -39,7 +39,10 @@ depot.nix.readTree.drvTargets rec {
 
     # Shut off the warning.
     system.stateVersion = "24.05";
-  });
+  })) // {
+    # 2024-07-28 aspen: The patches no longer cleanly apply on upstream
+    meta.broken = true;
+  };
 
   # Make sure the firmware requested by the driver is present in our firmware.
   # We do have a .zst suffix here, but that's fine, since request_firmware does
@@ -54,4 +57,4 @@ depot.nix.readTree.drvTargets rec {
     # all good, succeed build
     touch $out
   '';
-}
+})

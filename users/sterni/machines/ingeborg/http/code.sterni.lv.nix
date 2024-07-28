@@ -167,10 +167,22 @@ in
 {
   imports = [
     ./nginx.nix
-    ./fcgiwrap.nix
   ];
 
   config = {
+    services.fcgiwrap.cgit = {
+      process = {
+        user = "http";
+        group = "http";
+      };
+      # Default value doesn't work as documented
+      # https://github.com/NixOS/nixpkgs/pull/318599/files#r1673885083
+      socket = {
+        user = "http";
+        group = "http";
+      };
+    };
+
     services.nginx.virtualHosts."${virtualHost}" = {
       enableACME = true;
       forceSSL = true;
@@ -185,7 +197,7 @@ in
           fastcgi_param    QUERY_STRING    $args;
           fastcgi_param    HTTP_HOST       $server_name;
           fastcgi_param    CGIT_CONFIG     ${cgitConfig};
-          fastcgi_pass     unix:${toString config.services.fcgiwrap.socketAddress};
+          fastcgi_pass     unix:${toString config.services.fcgiwrap.cgit.socket.address};
         }
       '';
     };

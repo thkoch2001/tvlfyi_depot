@@ -80,7 +80,6 @@ in
   };
 
   # Enable sound.
-  sound.enable = true;
   hardware.pulseaudio.enable = true;
 
   users.mutableUsers = true;
