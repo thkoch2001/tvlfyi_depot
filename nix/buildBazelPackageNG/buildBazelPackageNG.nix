@@ -16,12 +16,16 @@
 
 let
   cleanAttrs = lib.flip removeAttrs [
-    "bazelTargets" "depsHash" "extraCacheInstall" "extraBuildSetup" "extraBuildInstall"
+    "bazelTargets"
+    "depsHash"
+    "extraCacheInstall"
+    "extraBuildSetup"
+    "extraBuildInstall"
   ];
   attrs = cleanAttrs baseAttrs;
 
   base = stdenv.mkDerivation (attrs // {
-    nativeBuildInputs = (attrs.nativeBuildInputs or []) ++ [
+    nativeBuildInputs = (attrs.nativeBuildInputs or [ ]) ++ [
       bazel
     ];
 
@@ -69,7 +73,7 @@ let
 
     inherit cache;
 
-    nativeBuildInputs = (base.nativeBuildInputs or []) ++ [
+    nativeBuildInputs = (base.nativeBuildInputs or [ ]) ++ [
       coreutils
     ];
 
@@ -102,4 +106,5 @@ let
       runHook postInstall
     '';
   });
-in build
+in
+build
