@@ -4,7 +4,7 @@
     { name
     , version
     , src
-    , depsHash ? null 
+    , depsHash ? null
     , overlayPluginCmd ? ''
         cp -R "${src}" "$out/plugins/${name}"
         echo "STABLE_BUILD_${lib.toUpper name}_LABEL v${version}-nix${if patches != [] then "-dirty" else ""}" >> $out/.version
