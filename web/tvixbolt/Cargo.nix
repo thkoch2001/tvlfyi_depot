@@ -2939,6 +2939,19 @@ rec {
           "simd-adler32" = [ "dep:simd-adler32" ];
         };
       };
+      "nohash-hasher" = rec {
+        crateName = "nohash-hasher";
+        version = "0.2.0";
+        edition = "2018";
+        sha256 = "0lf4p6k01w4wm7zn4grnihzj8s7zd5qczjmzng7wviwxawih5x9b";
+        authors = [
+          "Parity Technologies <admin@parity.io>"
+        ];
+        features = {
+          "default" = [ "std" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
+      };
       "nom8" = rec {
         crateName = "nom8";
         version = "0.2.0";
@@ -4634,6 +4647,10 @@ rec {
           {
             name = "md-5";
             packageId = "md-5";
+          }
+          {
+            name = "nohash-hasher";
+            packageId = "nohash-hasher";
           }
           {
             name = "os_str_bytes";
