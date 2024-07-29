@@ -10,7 +10,7 @@ use std::{
 
 use bstr::ByteSlice;
 
-use crate::proto::validate_node_name;
+use crate::directoryservice::Directory;
 
 /// Represents a Path in the castore model.
 /// These are always relative, and platform-independent, which distinguishes
@@ -38,7 +38,7 @@ impl Path {
         if !bytes.is_empty() {
             // Ensure all components are valid castore node names.
             for component in bytes.split_str(b"/") {
-                validate_node_name(component).ok()?;
+                Directory::validate_node_name(component).ok()?;
             }
         }
 
