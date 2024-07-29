@@ -135,7 +135,7 @@ htmlUi = do
                     Html.mkVal <$> (runTransaction $ getTorrentById dat)
                 ),
                 ( "snips/redacted/getTorrentFile",
-                  respond.html $ \span -> do
+                  respond.htmlOrReferer $ \span -> do
                     dat <- torrentIdMp span
                     runTransaction $ do
                       inserted <- redactedGetTorrentFileAndInsert dat
@@ -292,6 +292,17 @@ htmlUi = do
             />
         |]
 
+-- | Reload the current page (via the Referer header) if the browser has Javascript disabled (and thus htmx does not work). This should make post requests work out of the box.
+htmxOrReferer :: Wai.Request -> Wai.Response -> Wai.Response
+htmxOrReferer req act = do
+  let fnd h = req & Wai.requestHeaders & List.find (\(hdr, _) -> hdr == h)
+  let referer = fnd "Referer"
+  if
+    | Just _ <- fnd "Hx-Request" -> act
+    | Nothing <- referer -> act
+    | Just (_, rfr) <- referer -> do
+        Wai.responseLBS seeOther303 [("Location", rfr)] ""
+
 htmlPageChrome :: (ToHtml a) => Text -> a -> Html
 htmlPageChrome title body =
   Html.docTypeHtml $
@@ -350,6 +361,8 @@ data HandlerResponses m = HandlerResponses
     html :: (Otel.Span -> m Html) -> m ResponseReceived,
     -- | render html after parsing some query arguments
     htmlWithQueryArgs :: forall a. (Parse Query a -> (a -> Otel.Span -> m Html) -> m ResponseReceived),
+    -- | render html or reload the page via the Referer header if no htmx
+    htmlOrReferer :: (Otel.Span -> m Html) -> m ResponseReceived,
     -- | render a plain wai response
     plain :: (m Wai.Response -> m ResponseReceived)
   }
@@ -363,7 +376,7 @@ runHandlers ::
   m ResponseReceived
 runHandlers defaultHandler handlers req respond = withRunInIO $ \runInIO -> do
   let path = req & Wai.pathInfo & Text.intercalate "/"
-  let html act =
+  let html' resp act =
         Otel.inSpan'
           [fmt|Route /{path}|]
           ( Otel.defaultSpanArguments
@@ -376,8 +389,11 @@ runHandlers defaultHandler handlers req respond = withRunInIO $ \runInIO -> do
           )
           ( \span -> do
               res <- act span <&> (\h -> T2 (label @"html" h) (label @"extraHeaders" []))
-              liftIO $ respond . Wai.responseLBS Http.ok200 ([("Content-Type", "text/html")] <> res.extraHeaders) . Html.renderHtml $ res.html
+              liftIO $ respond (resp res)
           )
+  let htmlResp res = Wai.responseLBS Http.ok200 ([("Content-Type", "text/html")] <> res.extraHeaders) . Html.renderHtml $ res.html
+  let html = html' htmlResp
+  let htmlOrReferer = html' $ \res -> htmxOrReferer req (htmlResp res)
 
   let handlerResponses =
         ( HandlerResponses
@@ -401,7 +417,8 @@ runHandlers defaultHandler handlers req respond = withRunInIO $ \runInIO -> do
                               <h1>Error:</h1>
                               <pre>{err & prettyErrorTree}</pre>
                             |]
-                      )
+                      ),
+              htmlOrReferer
             }
         )
   let handler =
@@ -542,7 +559,17 @@ getBestTorrentsData artistFilter = do
 mkBestTorrentsTable :: [TorrentData (Label "percentDone" Percentage)] -> Html
 mkBestTorrentsTable fresh = do
   let localTorrent b = case b.torrentStatus of
-        NoTorrentFileYet -> [hsx|<button hx-post="snips/redacted/getTorrentFile" hx-swap="outerHTML" hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentId)]}>Upload Torrent</button>|]
+        NoTorrentFileYet ->
+          [hsx|
+        <form method="post">
+          <input type="hidden" name="torrent-id" value={b.torrentId & show} />
+          <button
+            formaction="snips/redacted/getTorrentFile"
+            hx-post="snips/redacted/getTorrentFile"
+            hx-swap="outerHTML"
+            hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentId)]}>Upload Torrent</button>
+        </form>
+        |]
         InTransmission info -> [hsx|{info.transmissionInfo.percentDone.unPercentage}% done|]
         NotInTransmissionYet -> [hsx|<button hx-post="snips/redacted/startTorrentFile" hx-swap="outerHTML" hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentId)]}>Start Torrent</button>|]
   let bestRows =
