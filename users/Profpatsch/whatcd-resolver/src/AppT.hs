@@ -12,6 +12,8 @@ import Data.Pool (Pool)
 import Data.Text qualified as Text
 import Database.PostgreSQL.Simple qualified as Postgres
 import GHC.Stack qualified
+import Json.Enc
+import Json.Enc qualified as Enc
 import Label
 import OpenTelemetry.Trace qualified as Otel hiding (getTracer, inSpan, inSpan')
 import OpenTelemetry.Trace.Core qualified as Otel hiding (inSpan, inSpan')
@@ -27,7 +29,8 @@ data Context = Context
     tracer :: Otel.Tracer,
     pgFormat :: PgFormatPool,
     pgConnPool :: Pool Postgres.Connection,
-    transmissionSessionId :: IORef (Maybe ByteString)
+    transmissionSessionId :: IORef (Maybe ByteString),
+    redactedApiKey :: ByteString
   }
 
 newtype AppT m a = AppT {unAppT :: ReaderT Context m a}
@@ -66,6 +69,15 @@ addAttribute span key a = Otel.addAttribute span ("_." <> key) a
 -- | Add the attributes to the span, prefixing each key with the `_` namespace (to easier distinguish our application’s tags from standard tags)
 addAttributes :: (MonadIO m) => Otel.Span -> HashMap Text Otel.Attribute -> m ()
 addAttributes span attrs = Otel.addAttributes span $ attrs & HashMap.mapKeys ("_." <>)
+
+-- | Create an otel attribute from a json encoder
+jsonAttribute :: Enc -> Otel.Attribute
+jsonAttribute e = e & Enc.encToTextPretty & Otel.toAttribute
+
+orThrowAppErrorNewSpan :: (MonadThrow m, MonadOtel m) => Text -> Either ErrorTree a -> m a
+orThrowAppErrorNewSpan msg = \case
+  Left err -> appThrowTreeNewSpan msg err
+  Right a -> pure a
 
 appThrowTreeNewSpan :: (MonadThrow m, MonadOtel m) => Text -> ErrorTree -> m a
 appThrowTreeNewSpan spanName exc = inSpan' spanName $ \span -> do
@@ -127,7 +139,7 @@ recordException span dat = liftIO $ do
           HashMap.fromList
             [ ("exception.type", Otel.toAttribute @Text dat.type_),
               ("exception.message", Otel.toAttribute @Text dat.message),
-              ("exception.stacktrace", Otel.toAttribute @Text $ Text.unlines $ map stringToText callStack)
+              ("exception.stacktrace", Otel.toAttribute @Text $ Text.unlines $ Prelude.map stringToText callStack)
             ],
         ..
       }

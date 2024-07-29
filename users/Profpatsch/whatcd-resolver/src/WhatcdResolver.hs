@@ -11,7 +11,7 @@ import Control.Monad.Reader
 import Data.Aeson qualified as Json
 import Data.Aeson.BetterErrors qualified as Json
 import Data.Aeson.KeyMap qualified as KeyMap
-import Data.Error.Tree (prettyErrorTree)
+import Data.Error.Tree
 import Data.HashMap.Strict qualified as HashMap
 import Data.List qualified as List
 import Data.Map.Strict qualified as Map
@@ -52,6 +52,7 @@ import Postgres.Decoder qualified as Dec
 import Postgres.MonadPostgres
 import Pretty
 import Redacted
+import RunCommand (runCommandExpect0)
 import System.Directory qualified as Dir
 import System.Directory qualified as Xdg
 import System.Environment qualified as Env
@@ -469,7 +470,8 @@ snipsRedactedSearch ::
     HasField "searchstr" r ByteString,
     MonadThrow m,
     MonadTransmission m,
-    MonadOtel m
+    MonadOtel m,
+    MonadRedacted m
   ) =>
   r ->
   m Html
@@ -758,6 +760,12 @@ runAppWith appT = withTracer $ \tracer -> withDb $ \db -> do
         {- unusedResourceOpenTime -} 10
         {- max resources across all stripes -} 20
   transmissionSessionId <- newIORef Nothing
+  redactedApiKey <-
+    Env.lookupEnv "WHATCD_RESOLVER_REDACTED_API_KEY" >>= \case
+      Just k -> pure (k & stringToBytesUtf8)
+      Nothing -> runStderrLoggingT $ do
+        logInfo "WHATCD_RESOLVER_REDACTED_API_KEY was not set, trying pass"
+        runCommandExpect0 "pass" ["internet/redacted/api-keys/whatcd-resolver"]
   let newAppT = do
         logInfo [fmt|Running with config: {showPretty config}|]
         logInfo [fmt|Connected to database at {db & TmpPg.toDataDirectory} on socket {db & TmpPg.toConnectionString}|]
