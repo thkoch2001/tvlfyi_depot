@@ -33,9 +33,11 @@ data Context = Context
 newtype AppT m a = AppT {unAppT :: ReaderT Context m a}
   deriving newtype (Functor, Applicative, Monad, MonadIO, MonadUnliftIO, MonadThrow)
 
-data AppException = AppException Text
-  deriving stock (Show)
+newtype AppException = AppException Text
   deriving anyclass (Exception)
+
+instance Show AppException where
+  showsPrec _ (AppException t) = ("AppException: "++) . (textToString t++)
 
 -- *  Logging & Opentelemetry
 
