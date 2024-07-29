@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6108c96_79f5fe56",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-07-29T13:49:18Z",
+      "side": 1,
+      "message": "| Command | Mean [s] | Min [s] | Max [s] | Relative |\n|:---|---:|---:|---:|---:|\n| `tvix-store --otlp\u003dfalse import --blob-service-addr memory:// --path-info-service-addr memory:// --directory-service-addr sled:// ./nixpkgs/pkgs/` | 3.218 ± 0.031 | 3.167 | 3.269 | 1.05 ± 0.01 |\n| `tvix-store --otlp\u003dfalse import --blob-service-addr memory:// --path-info-service-addr memory:// --directory-service-addr redb:// ./nixpkgs/pkgs/` | 3.055 ± 0.017 | 3.034 | 3.081 | 1.00 |",
+      "revId": "6022fa2e394ee3aafb26a9a1bc30e1d10315d085",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
