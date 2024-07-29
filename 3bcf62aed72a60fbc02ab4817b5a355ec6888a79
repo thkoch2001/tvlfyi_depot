@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4d8b586_7fc47ae8",
+        "filename": "tvix/castore/src/directoryservice/redb.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-07-29T12:01:56Z",
+      "side": 1,
+      "message": "Will do the same for pathinfoservice in a different CL.",
+      "parentUuid": "e434f9dc_7843e7e6",
+      "revId": "3bcf62aed72a60fbc02ab4817b5a355ec6888a79",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "1ae03d01_1d9681ba",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-07-26T21:08:55Z",
       "side": 1,
       "message": "```suggestion\n        // Retrieves the protobuf-encoded Directory for the corresponding digest.\n```",
+      "revId": "3bcf62aed72a60fbc02ab4817b5a355ec6888a79",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "985f4965_bd7cc251",
+        "filename": "tvix/castore/src/directoryservice/redb.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-07-29T12:01:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1ae03d01_1d9681ba",
       "revId": "3bcf62aed72a60fbc02ab4817b5a355ec6888a79",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bd69371e_989cf7bd",
+        "filename": "tvix/castore/src/directoryservice/redb.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-07-29T12:01:56Z",
+      "side": 1,
+      "message": "I mean it would still be a String, I have to to_string() it for now.",
+      "parentUuid": "fff98517_a2d168b7",
+      "revId": "3bcf62aed72a60fbc02ab4817b5a355ec6888a79",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "030c97f4_b687350f",
@@ -65,6 +119,24 @@
       "writtenOn": "2024-07-26T21:08:55Z",
       "side": 1,
       "message": "same as above, log a `warn!`, add fields there, and remove the templating from the error message.",
+      "revId": "3bcf62aed72a60fbc02ab4817b5a355ec6888a79",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "63d7271a_89482edb",
+        "filename": "tvix/castore/src/directoryservice/redb.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-07-29T12:01:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "030c97f4_b687350f",
       "revId": "3bcf62aed72a60fbc02ab4817b5a355ec6888a79",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -86,6 +158,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89394429_90c30931",
+        "filename": "tvix/castore/src/directoryservice/redb.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-07-29T12:01:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "39226044_47dec469",
+      "revId": "3bcf62aed72a60fbc02ab4817b5a355ec6888a79",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2703c148_568d49fd",
@@ -99,6 +189,24 @@
       "writtenOn": "2024-07-26T21:08:55Z",
       "side": 1,
       "message": "```suggestion\n                return Err(Error::StorageError(\"failed to parse Directory\".to_string()));\n```",
+      "revId": "3bcf62aed72a60fbc02ab4817b5a355ec6888a79",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5df6068_cc8bab3d",
+        "filename": "tvix/castore/src/directoryservice/redb.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-07-29T12:01:56Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2703c148_568d49fd",
       "revId": "3bcf62aed72a60fbc02ab4817b5a355ec6888a79",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -122,6 +230,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "37d4bd1d_0d1dd789",
+        "filename": "tvix/castore/src/directoryservice/redb.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-07-29T12:01:56Z",
+      "side": 1,
+      "message": "What do you mean by transaction?",
+      "parentUuid": "044a55fb_1146d7ba",
+      "revId": "3bcf62aed72a60fbc02ab4817b5a355ec6888a79",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a3d52de9_3e27a99a",
         "filename": "tvix/castore/src/directoryservice/redb.rs",
         "patchSetId": 1
@@ -133,6 +259,24 @@
       "writtenOn": "2024-07-26T21:08:55Z",
       "side": 1,
       "message": "We can probably just create a temporary variant if `path` is `None`?",
+      "revId": "3bcf62aed72a60fbc02ab4817b5a355ec6888a79",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "df69d2be_c9d8e5fe",
+        "filename": "tvix/castore/src/directoryservice/redb.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 250,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-07-29T12:01:56Z",
+      "side": 1,
+      "message": "I don\u0027t think this decision is part of the scope of this CL. It seems more composition related or generally about other services too, we do it like this for sled too and in pathinfo as well.",
+      "parentUuid": "a3d52de9_3e27a99a",
       "revId": "3bcf62aed72a60fbc02ab4817b5a355ec6888a79",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
