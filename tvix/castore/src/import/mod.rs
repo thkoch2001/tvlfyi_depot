@@ -4,14 +4,14 @@
 //! Specific implementations, such as ingesting from the filesystem, live in
 //! child modules.
 
+use crate::directoryservice::Directory;
+use crate::directoryservice::DirectoryNode;
 use crate::directoryservice::DirectoryPutter;
 use crate::directoryservice::DirectoryService;
+use crate::directoryservice::FileNode;
+use crate::directoryservice::Node;
+use crate::directoryservice::SymlinkNode;
 use crate::path::{Path, PathBuf};
-use crate::proto::node::Node;
-use crate::proto::Directory;
-use crate::proto::DirectoryNode;
-use crate::proto::FileNode;
-use crate::proto::SymlinkNode;
 use crate::B3Digest;
 use futures::{Stream, StreamExt};
 use tracing::Level;
@@ -98,27 +98,27 @@ where
                         IngestionError::UploadDirectoryError(entry.path().to_owned(), e)
                     })?;
 
-                Node::Directory(DirectoryNode {
+                Node::Directory(DirectoryNode::new(
                     name,
-                    digest: directory_digest.into(),
-                    size: directory_size,
-                })
+                    directory_digest,
+                    directory_size,
+                ).map_err(|e| IngestionError::UploadDirectoryError(entry.path().to_owned(), crate::Error::StorageError(e.to_string())))?)
             }
-            IngestionEntry::Symlink { ref target, .. } => Node::Symlink(SymlinkNode {
-                name,
-                target: target.to_owned().into(),
-            }),
+            IngestionEntry::Symlink { ref target, .. } => Node::Symlink(SymlinkNode::new(
+                name.into(),
+                target.to_owned().into(),
+            ).map_err(|e| IngestionError::UploadDirectoryError(entry.path().to_owned(), crate::Error::StorageError(e.to_string())))?),
             IngestionEntry::Regular {
                 size,
                 executable,
                 digest,
                 ..
-            } => Node::File(FileNode {
+            } => Node::File(FileNode::new(
                 name,
-                digest: digest.to_owned().into(),
-                size: *size,
-                executable: *executable,
-            }),
+                digest.to_owned().into(),
+                *size,
+                *executable,
+            ).map_err(|e| IngestionError::UploadDirectoryError(entry.path().to_owned(), crate::Error::StorageError(e.to_string())))?),
         };
 
         let parent = entry
@@ -210,7 +210,7 @@ mod test {
 
     use crate::fixtures::{DIRECTORY_COMPLICATED, DIRECTORY_WITH_KEEP, EMPTY_BLOB_DIGEST};
     use crate::proto::node::Node;
-    use crate::proto::{Directory, DirectoryNode, FileNode, SymlinkNode};
+    use crate::directoryservice::{Directory, DirectoryNode, FileNode, SymlinkNode};
     use crate::{directoryservice::MemoryDirectoryService, fixtures::DUMMY_DIGEST};
 
     use super::ingest_entries;

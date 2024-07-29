@@ -1,7 +1,8 @@
 use std::collections::HashSet;
 use tracing::warn;
 
-use crate::{proto::Directory, B3Digest};
+use super::{Directory};
+use crate::B3Digest;
 
 pub trait OrderValidator {
     /// Update the order validator's state with the directory
@@ -102,7 +103,7 @@ mod tests {
     use super::{LeavesToRootValidator, RootToLeavesValidator};
     use crate::directoryservice::order_validator::OrderValidator;
     use crate::fixtures::{DIRECTORY_A, DIRECTORY_B, DIRECTORY_C};
-    use crate::proto::Directory;
+    use crate::directoryservice::Directory;
     use rstest::rstest;
 
     #[rstest]

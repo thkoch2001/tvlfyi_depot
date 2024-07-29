@@ -10,10 +10,8 @@ use petgraph::{
 use tracing::instrument;
 
 use super::order_validator::{LeavesToRootValidator, OrderValidator, RootToLeavesValidator};
-use crate::{
-    proto::{self, Directory, DirectoryNode},
-    B3Digest,
-};
+use super::{Directory, DirectoryNode};
+use crate::B3Digest;
 
 #[derive(thiserror::Error, Debug)]
 pub enum Error {
@@ -88,7 +86,7 @@ fn check_edge(dir: &DirectoryNode, child: &Directory) -> Result<(), Error> {
 impl DirectoryGraph<LeavesToRootValidator> {
     /// Insert a new Directory into the closure
     #[instrument(level = "trace", skip_all, fields(directory.digest=%directory.digest(), directory.size=%directory.size()), err)]
-    pub fn add(&mut self, directory: proto::Directory) -> Result<(), Error> {
+    pub fn add(&mut self, directory: Directory) -> Result<(), Error> {
         if !self.order_validator.add_directory(&directory) {
             return Err(Error::ValidationError(
                 "unknown directory was referenced".into(),
@@ -108,7 +106,7 @@ impl DirectoryGraph<RootToLeavesValidator> {
 
     /// Insert a new Directory into the closure
     #[instrument(level = "trace", skip_all, fields(directory.digest=%directory.digest(), directory.size=%directory.size()), err)]
-    pub fn add(&mut self, directory: proto::Directory) -> Result<(), Error> {
+    pub fn add(&mut self, directory: Directory) -> Result<(), Error> {
         let digest = directory.digest();
         if !self.order_validator.digest_allowed(&digest) {
             return Err(Error::ValidationError("unexpected digest".into()));
@@ -129,12 +127,7 @@ impl<O: OrderValidator> DirectoryGraph<O> {
     }
 
     /// Adds a directory which has already been confirmed to be in-order to the graph
-    pub fn add_order_unchecked(&mut self, directory: proto::Directory) -> Result<(), Error> {
-        // Do some basic validation
-        directory
-            .validate()
-            .map_err(|e| Error::ValidationError(e.to_string()))?;
-
+    pub fn add_order_unchecked(&mut self, directory: Directory) -> Result<(), Error> {
         let digest = directory.digest();
 
         // Teach the graph about the existence of a node with this digest
@@ -271,14 +264,14 @@ impl ValidatedDirectoryGraph {
 mod tests {
     use crate::{
         fixtures::{DIRECTORY_A, DIRECTORY_B, DIRECTORY_C},
-        proto::{self, Directory},
     };
+    use crate::directory_service::{Directory, SymlinkNode, DirectoryNode};
     use lazy_static::lazy_static;
     use rstest::rstest;
 
     lazy_static! {
         pub static ref BROKEN_DIRECTORY : Directory = Directory {
-            symlinks: vec![proto::SymlinkNode {
+            symlinks: vec![SymlinkNode {
                 name: "".into(), // invalid name!
                 target: "doesntmatter".into(),
             }],
@@ -286,7 +279,7 @@ mod tests {
         };
 
         pub static ref BROKEN_PARENT_DIRECTORY: Directory = Directory {
-            directories: vec![proto::DirectoryNode {
+            directories: vec![DirectoryNode {
                 name: "foo".into(),
                 digest: DIRECTORY_A.digest().into(),
                 size: DIRECTORY_A.size() + 42, // wrong!

@@ -1,5 +1,3 @@
-use crate::proto::Directory;
-use crate::{proto, B3Digest, Error};
 use futures::stream::BoxStream;
 use prost::Message;
 use std::ops::Deref;
@@ -8,9 +6,10 @@ use std::sync::Arc;
 use tonic::async_trait;
 use tracing::{instrument, warn};
 
-use super::utils::traverse_directory;
-use super::{DirectoryGraph, DirectoryPutter, DirectoryService, LeavesToRootValidator};
+use crate::{proto, B3Digest, Error};
 use crate::composition::{CompositionContext, ServiceBuilder};
+use super::utils::traverse_directory;
+use super::{DirectoryGraph, DirectoryPutter, DirectoryService, LeavesToRootValidator, Directory};
 
 #[derive(Clone)]
 pub struct SledDirectoryService {
@@ -44,7 +43,7 @@ impl SledDirectoryService {
 #[async_trait]
 impl DirectoryService for SledDirectoryService {
     #[instrument(skip(self, digest), fields(directory.digest = %digest))]
-    async fn get(&self, digest: &B3Digest) -> Result<Option<proto::Directory>, Error> {
+    async fn get(&self, digest: &B3Digest) -> Result<Option<Directory>, Error> {
         let resp = tokio::task::spawn_blocking({
             let db = self.db.clone();
             let digest = digest.clone();
@@ -93,7 +92,7 @@ impl DirectoryService for SledDirectoryService {
     }
 
     #[instrument(skip(self, directory), fields(directory.digest = %directory.digest()))]
-    async fn put(&self, directory: proto::Directory) -> Result<B3Digest, Error> {
+    async fn put(&self, directory: Directory) -> Result<B3Digest, Error> {
         tokio::task::spawn_blocking({
             let db = self.db.clone();
             move || {
@@ -120,7 +119,7 @@ impl DirectoryService for SledDirectoryService {
     fn get_recursive(
         &self,
         root_directory_digest: &B3Digest,
-    ) -> BoxStream<'static, Result<proto::Directory, Error>> {
+    ) -> BoxStream<'static, Result<Directory, Error>> {
         traverse_directory(self.clone(), root_directory_digest)
     }
 
@@ -215,7 +214,7 @@ pub struct SledDirectoryPutter {
 #[async_trait]
 impl DirectoryPutter for SledDirectoryPutter {
     #[instrument(level = "trace", skip_all, fields(directory.digest=%directory.digest()), err)]
-    async fn put(&mut self, directory: proto::Directory) -> Result<(), Error> {
+    async fn put(&mut self, directory: Directory) -> Result<(), Error> {
         match self.directory_validator {
             None => return Err(Error::StorageError("already closed".to_string())),
             Some(ref mut validator) => {

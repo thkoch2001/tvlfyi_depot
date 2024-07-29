@@ -1,6 +1,5 @@
-use super::DirectoryService;
+use super::{DirectoryService, NamedNode, Node};
 use crate::{
-    proto::{node::Node, NamedNode},
     B3Digest, Error, Path,
 };
 use tracing::{instrument, warn};

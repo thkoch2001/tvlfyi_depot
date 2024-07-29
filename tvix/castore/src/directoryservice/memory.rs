@@ -1,4 +1,4 @@
-use crate::{proto, B3Digest, Error};
+use crate::{B3Digest, Error};
 use futures::stream::BoxStream;
 use std::collections::HashMap;
 use std::sync::Arc;
@@ -7,18 +7,18 @@ use tonic::async_trait;
 use tracing::{instrument, warn};
 
 use super::utils::traverse_directory;
-use super::{DirectoryPutter, DirectoryService, SimplePutter};
+use super::{DirectoryPutter, DirectoryService, SimplePutter, Directory};
 use crate::composition::{CompositionContext, ServiceBuilder};
 
 #[derive(Clone, Default)]
 pub struct MemoryDirectoryService {
-    db: Arc<RwLock<HashMap<B3Digest, proto::Directory>>>,
+    db: Arc<RwLock<HashMap<B3Digest, Directory>>>,
 }
 
 #[async_trait]
 impl DirectoryService for MemoryDirectoryService {
     #[instrument(skip(self, digest), fields(directory.digest = %digest))]
-    async fn get(&self, digest: &B3Digest) -> Result<Option<proto::Directory>, Error> {
+    async fn get(&self, digest: &B3Digest) -> Result<Option<Directory>, Error> {
         let db = self.db.read().await;
 
         match db.get(digest) {
@@ -52,7 +52,7 @@ impl DirectoryService for MemoryDirectoryService {
     }
 
     #[instrument(skip(self, directory), fields(directory.digest = %directory.digest()))]
-    async fn put(&self, directory: proto::Directory) -> Result<B3Digest, Error> {
+    async fn put(&self, directory: Directory) -> Result<B3Digest, Error> {
         let digest = directory.digest();
 
         // validate the directory itself.
@@ -74,7 +74,7 @@ impl DirectoryService for MemoryDirectoryService {
     fn get_recursive(
         &self,
         root_directory_digest: &B3Digest,
-    ) -> BoxStream<'static, Result<proto::Directory, Error>> {
+    ) -> BoxStream<'static, Result<Directory, Error>> {
         traverse_directory(self.clone(), root_directory_digest)
     }
 

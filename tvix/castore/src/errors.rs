@@ -1,6 +1,7 @@
 use thiserror::Error;
 use tokio::task::JoinError;
 use tonic::Status;
+use bstr::ByteSlice;
 
 /// Errors related to communication with the store.
 #[derive(Debug, Error, PartialEq)]
@@ -11,6 +12,39 @@ pub enum Error {
     #[error("internal storage error: {0}")]
     StorageError(String),
 }
+
+/// Errors that can occur during the validation of [Directory] messages.
+#[derive(Debug, thiserror::Error)]
+pub enum ValidateDirectoryError {
+    /// Elements are not in sorted order
+    #[error("{:?} is not sorted", .0.as_bstr())]
+    WrongSorting(Vec<u8>),
+    /// Multiple elements with the same name encountered
+    #[error("{:?} is a duplicate name", .0.as_bstr())]
+    DuplicateName(Vec<u8>),
+    /// Invalid node
+    #[error("invalid node with name {:?}: {:?}", .0.as_bstr(), .1.to_string())]
+    InvalidNode(Vec<u8>, ValidateNodeError),
+    #[error("Total size exceeds u32::MAX")]
+    SizeOverflow,
+}
+
+/// Errors that occur during Node validation
+#[derive(Debug, thiserror::Error)]
+pub enum ValidateNodeError {
+    #[error("No node set")]
+    NoNodeSet,
+    /// Invalid digest length encountered
+    #[error("{0}")]
+    Digest(#[from] crate::digests::Error),
+    /// Invalid name encountered
+    #[error("Invalid name: {}", .0.as_bstr())]
+    InvalidName(Vec<u8>),
+    /// Invalid symlink target
+    #[error("Invalid symlink target: {}", .0.as_bstr())]
+    InvalidSymlinkTarget(Vec<u8>),
+}
+
 
 impl From<JoinError> for Error {
     fn from(value: JoinError) -> Self {

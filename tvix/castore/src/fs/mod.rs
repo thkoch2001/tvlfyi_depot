@@ -15,11 +15,9 @@ use self::{
     inode_tracker::InodeTracker,
     inodes::{DirectoryInodeData, InodeData},
 };
-use crate::proto as castorepb;
 use crate::{
     blobservice::{BlobReader, BlobService},
-    directoryservice::DirectoryService,
-    proto::{node::Node, NamedNode},
+    directoryservice::{DirectoryService, Node},
     B3Digest,
 };
 use bstr::ByteVec;
@@ -198,7 +196,7 @@ where
                 let children = {
                     let mut inode_tracker = self.inode_tracker.write();
 
-                    let children: Vec<(u64, castorepb::node::Node)> = directory
+                    let children: Vec<(u64, Node)> = directory
                         .nodes()
                         .map(|child_node| {
                             let (inode_data, _) = InodeData::from_node(child_node.clone());

@@ -9,7 +9,7 @@ use std::sync::Arc;
 use tonic::async_trait;
 use tracing::{instrument, trace, warn};
 
-use super::{utils::traverse_directory, DirectoryPutter, DirectoryService, SimplePutter};
+use super::{utils::traverse_directory, DirectoryPutter, DirectoryService, SimplePutter, Directory};
 use crate::composition::{CompositionContext, ServiceBuilder};
 use crate::{proto, B3Digest, Error};
 
@@ -149,7 +149,7 @@ fn derive_directory_key(digest: &B3Digest) -> String {
 #[async_trait]
 impl DirectoryService for BigtableDirectoryService {
     #[instrument(skip(self, digest), err, fields(directory.digest = %digest))]
-    async fn get(&self, digest: &B3Digest) -> Result<Option<proto::Directory>, Error> {
+    async fn get(&self, digest: &B3Digest) -> Result<Option<Directory>, Error> {
         let mut client = self.client.clone();
         let directory_key = derive_directory_key(digest);
 
@@ -252,7 +252,7 @@ impl DirectoryService for BigtableDirectoryService {
     }
 
     #[instrument(skip(self, directory), err, fields(directory.digest = %directory.digest()))]
-    async fn put(&self, directory: proto::Directory) -> Result<B3Digest, Error> {
+    async fn put(&self, directory: Directory) -> Result<B3Digest, Error> {
         let directory_digest = directory.digest();
         let mut client = self.client.clone();
         let directory_key = derive_directory_key(&directory_digest);
@@ -310,7 +310,7 @@ impl DirectoryService for BigtableDirectoryService {
     fn get_recursive(
         &self,
         root_directory_digest: &B3Digest,
-    ) -> BoxStream<'static, Result<proto::Directory, Error>> {
+    ) -> BoxStream<'static, Result<Directory, Error>> {
         traverse_directory(self.clone(), root_directory_digest)
     }
 
