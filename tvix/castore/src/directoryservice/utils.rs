@@ -1,3 +1,4 @@
+use super::Directory;
 use super::DirectoryService;
 use crate::proto;
 use crate::B3Digest;
@@ -8,14 +9,14 @@ use std::collections::{HashSet, VecDeque};
 use tracing::instrument;
 use tracing::warn;
 
-/// Traverses a [proto::Directory] from the root to the children.
+/// Traverses a [Directory] from the root to the children.
 ///
 /// This is mostly BFS, but directories are only returned once.
 #[instrument(skip(directory_service))]
 pub fn traverse_directory<'a, DS: DirectoryService + 'static>(
     directory_service: DS,
     root_directory_digest: &B3Digest,
-) -> BoxStream<'a, Result<proto::Directory, Error>> {
+) -> BoxStream<'a, Result<Directory, Error>> {
     // The list of all directories that still need to be traversed. The next
     // element is picked from the front, new elements are enqueued at the
     // back.
