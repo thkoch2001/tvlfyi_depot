@@ -77,10 +77,10 @@ where
         match request.into_inner().node {
             None => Err(Status::invalid_argument("no root node sent")),
             Some(root_node) => {
-                if let Err(e) = root_node.validate() {
+                let root_node = (&root_node).try_into().map_err(|e| {
                     warn!(err = %e, "invalid root node");
-                    Err(Status::invalid_argument("invalid root node"))?
-                }
+                    Status::invalid_argument("invalid root node")
+                })?;
 
                 match self.nar_calculation_service.calculate_nar(&root_node).await {
                     Ok((nar_size, nar_sha256)) => Ok(Response::new(proto::CalculateNarResponse {

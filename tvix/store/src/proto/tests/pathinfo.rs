@@ -37,7 +37,7 @@ fn validate_pathinfo(
         name: DUMMY_PATH.into(),
         digest: Bytes::new(),
         size: 0,
-}, Err(ValidatePathInfoError::InvalidRootNode(castorepb::ValidateNodeError::InvalidDigestLen(0))))]
+}, Err(ValidatePathInfoError::InvalidRootNode(tvix_castore::ValidateNodeError::InvalidDigestLen(0))))]
 #[case::invalid_node_name_no_storepath(castorepb::DirectoryNode {
         name: "invalid".into(),
         digest: DUMMY_DIGEST.clone().into(),
@@ -76,7 +76,7 @@ fn validate_directory(
         digest: Bytes::new(),
         ..Default::default()
     },
-    Err(ValidatePathInfoError::InvalidRootNode(castorepb::ValidateNodeError::InvalidDigestLen(0)))
+    Err(ValidatePathInfoError::InvalidRootNode(tvix_castore::ValidateNodeError::InvalidDigestLen(0)))
 )]
 #[case::invalid_node_name(
     castorepb::FileNode {
