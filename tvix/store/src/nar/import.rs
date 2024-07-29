@@ -7,12 +7,11 @@ use tokio::{
 };
 use tvix_castore::{
     blobservice::BlobService,
-    directoryservice::DirectoryService,
+    directoryservice::{DirectoryService, NamedNode, Node},
     import::{
         blobs::{self, ConcurrentBlobUploader},
         ingest_entries, IngestionEntry, IngestionError,
     },
-    proto::{node::Node, NamedNode},
     PathBuf,
 };
 

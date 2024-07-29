@@ -8,9 +8,10 @@ use rstest_reuse::{self, *};
 
 use super::DirectoryService;
 use crate::directoryservice;
+use crate::directoryservice::{Directory, DirectoryNode, FileNode, Node, SymlinkNode};
 use crate::{
-    fixtures::{DIRECTORY_A, DIRECTORY_B, DIRECTORY_C, DIRECTORY_D},
-    proto::{self, Directory},
+    fixtures::{DIRECTORY_A, DIRECTORY_B, DIRECTORY_C, DIRECTORY_D, DUMMY_DIGEST},
+    ValidateDirectoryError,
 };
 
 mod utils;
@@ -41,10 +42,10 @@ async fn test_non_exist(directory_service: impl DirectoryService) {
 
     // recursive get
     assert_eq!(
-        Vec::<Result<proto::Directory, crate::Error>>::new(),
+        Vec::<Result<Directory, crate::Error>>::new(),
         directory_service
             .get_recursive(&DIRECTORY_A.digest())
-            .collect::<Vec<Result<proto::Directory, crate::Error>>>()
+            .collect::<Vec<Result<Directory, crate::Error>>>()
             .await
     );
 }
@@ -214,37 +215,16 @@ async fn upload_reject_dangling_pointer(directory_service: impl DirectoryService
 
 /// Try uploading a Directory failing its internal validation, ensure it gets
 /// rejected.
-#[apply(directory_services)]
 #[tokio::test]
-async fn upload_reject_failing_validation(directory_service: impl DirectoryService) {
-    let broken_directory = Directory {
-        symlinks: vec![proto::SymlinkNode {
-            name: "".into(), // wrong!
-            target: "doesntmatter".into(),
-        }],
-        ..Default::default()
-    };
-    assert!(broken_directory.validate().is_err());
-
-    // Try to upload via single upload.
+async fn upload_reject_failing_validation() {
     assert!(
-        directory_service
-            .put(broken_directory.clone())
-            .await
-            .is_err(),
-        "single upload must fail"
-    );
-
-    // Try to upload via put_multiple. We're a bit more permissive here, the
-    // intermediate .put() might succeed, due to client-side bursting (in the
-    // case of gRPC), but then the close MUST fail.
-    let mut handle = directory_service.put_multiple_start();
-    if handle.put(broken_directory).await.is_ok() {
-        assert!(
-            handle.close().await.is_err(),
-            "when succeeding put, close must fail"
+        SymlinkNode::new(
+            "".into(), // wrong!
+            "doesntmatter".into(),
         )
-    }
+        .is_err(),
+        "invalid symlink entry be rejected"
+    );
 }
 
 /// Try uploading a Directory that refers to a previously-uploaded directory.
@@ -253,17 +233,19 @@ async fn upload_reject_failing_validation(directory_service: impl DirectoryServi
 #[apply(directory_services)]
 #[tokio::test]
 async fn upload_reject_wrong_size(directory_service: impl DirectoryService) {
-    let wrong_parent_directory = Directory {
-        directories: vec![proto::DirectoryNode {
-            name: "foo".into(),
-            digest: DIRECTORY_A.digest().into(),
-            size: DIRECTORY_A.size() + 42, // wrong!
-        }],
-        ..Default::default()
+    let wrong_parent_directory = {
+        let mut dir = Directory::new();
+        dir.add(Node::Directory(
+            DirectoryNode::new(
+                "foo".into(),
+                DIRECTORY_A.digest().into(),
+                DIRECTORY_A.size() + 42, // wrong!
+            )
+            .unwrap(),
+        ))
+        .unwrap();
+        dir
     };
-
-    // Make sure isolated validation itself is ok
-    assert!(wrong_parent_directory.validate().is_ok());
 
     // Now upload both. Ensure it either fails during the second put, or during
     // the close.
@@ -275,4 +257,90 @@ async fn upload_reject_wrong_size(directory_service: impl DirectoryService) {
             "when second put succeeds, close must fail"
         )
     }
+}
+
+#[test]
+fn add_nodes_to_directory() {
+    let mut d = Directory::new();
+
+    d.add(Node::Directory(
+        DirectoryNode::new("b".into(), DUMMY_DIGEST.clone(), 1).unwrap(),
+    ))
+    .unwrap();
+    d.add(Node::Directory(
+        DirectoryNode::new("a".into(), DUMMY_DIGEST.clone(), 1).unwrap(),
+    ))
+    .unwrap();
+    d.add(Node::Directory(
+        DirectoryNode::new("z".into(), DUMMY_DIGEST.clone(), 1).unwrap(),
+    ))
+    .unwrap();
+
+    d.add(Node::File(
+        FileNode::new("f".into(), DUMMY_DIGEST.clone(), 1, true).unwrap(),
+    ))
+    .unwrap();
+    d.add(Node::File(
+        FileNode::new("c".into(), DUMMY_DIGEST.clone(), 1, true).unwrap(),
+    ))
+    .unwrap();
+    d.add(Node::File(
+        FileNode::new("g".into(), DUMMY_DIGEST.clone(), 1, true).unwrap(),
+    ))
+    .unwrap();
+
+    d.add(Node::Symlink(
+        SymlinkNode::new("t".into(), "a".into()).unwrap(),
+    ))
+    .unwrap();
+    d.add(Node::Symlink(
+        SymlinkNode::new("o".into(), "a".into()).unwrap(),
+    ))
+    .unwrap();
+    d.add(Node::Symlink(
+        SymlinkNode::new("e".into(), "a".into()).unwrap(),
+    ))
+    .unwrap();
+
+    // Convert to proto struct and back to ensure we are not generating any invalid structures
+    crate::directoryservice::Directory::try_from(crate::proto::Directory::from(d))
+        .expect("directory should be valid");
+}
+
+#[test]
+fn validate_overflow() {
+    let mut d = Directory::new();
+
+    d.add(Node::Directory(
+        DirectoryNode::new("foo".into(), DUMMY_DIGEST.clone(), u64::MAX).unwrap(),
+    ))
+    .unwrap();
+
+    // Convert to proto struct and back to ensure we rejecting the invalid structure
+    match crate::directoryservice::Directory::try_from(crate::proto::Directory::from(d))
+        .expect_err("must fail")
+    {
+        ValidateDirectoryError::SizeOverflow => {}
+        _ => panic!("unexpected error"),
+    }
+}
+
+#[test]
+fn add_duplicate_node_to_directory() {
+    let mut d = Directory::new();
+
+    d.add(Node::Directory(
+        DirectoryNode::new("a".into(), DUMMY_DIGEST.clone(), 1).unwrap(),
+    ))
+    .unwrap();
+    assert_eq!(
+        format!(
+            "{}",
+            d.add(Node::File(
+                FileNode::new("a".into(), DUMMY_DIGEST.clone(), 1, true).unwrap(),
+            ))
+            .expect_err("adding duplicate dir entry must fail")
+        ),
+        "\"a\" is a duplicate name"
+    );
 }
