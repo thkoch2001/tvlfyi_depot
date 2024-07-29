@@ -1,8 +1,5 @@
-use super::DirectoryService;
-use crate::{
-    proto::{node::Node, NamedNode},
-    B3Digest, Error, Path,
-};
+use super::{DirectoryService, NamedNode, Node};
+use crate::{B3Digest, Error, Path};
 use tracing::{instrument, warn};
 
 /// This descends from a (root) node to the given (sub)path, returning the Node
@@ -48,11 +45,11 @@ where
                 // could stop as soon as e.name is larger than the search string.
                 if let Some(child_node) = directory.nodes().find(|n| n.get_name() == component) {
                     // child node found, update prev_node to that and continue.
-                    parent_node = child_node;
+                    parent_node = child_node.clone();
                 } else {
                     // child node not found means there's no such element inside the directory.
                     return Ok(None);
-                }
+                };
             }
         }
     }

@@ -5,13 +5,13 @@ use std::{path::PathBuf, sync::Arc};
 use tonic::async_trait;
 use tracing::{instrument, warn};
 
+use super::{
+    traverse_directory, Directory, DirectoryGraph, DirectoryPutter, DirectoryService,
+    LeavesToRootValidator,
+};
 use crate::{
     composition::{CompositionContext, ServiceBuilder},
     digests, proto, B3Digest, Error,
-};
-
-use super::{
-    traverse_directory, DirectoryGraph, DirectoryPutter, DirectoryService, LeavesToRootValidator,
 };
 
 const DIRECTORY_TABLE: TableDefinition<[u8; digests::B3_LEN], Vec<u8>> =
@@ -69,7 +69,7 @@ fn create_schema(db: &redb::Database) -> Result<(), redb::Error> {
 #[async_trait]
 impl DirectoryService for RedbDirectoryService {
     #[instrument(skip(self, digest), fields(directory.digest = %digest))]
-    async fn get(&self, digest: &B3Digest) -> Result<Option<proto::Directory>, Error> {
+    async fn get(&self, digest: &B3Digest) -> Result<Option<Directory>, Error> {
         let db = self.db.clone();
 
         // Retrieves the protobuf-encoded Directory for the corresponding digest.
@@ -125,7 +125,7 @@ impl DirectoryService for RedbDirectoryService {
     }
 
     #[instrument(skip(self, directory), fields(directory.digest = %directory.digest()))]
-    async fn put(&self, directory: proto::Directory) -> Result<B3Digest, Error> {
+    async fn put(&self, directory: Directory) -> Result<B3Digest, Error> {
         tokio::task::spawn_blocking({
             let db = self.db.clone();
             move || {
@@ -158,7 +158,7 @@ impl DirectoryService for RedbDirectoryService {
     fn get_recursive(
         &self,
         root_directory_digest: &B3Digest,
-    ) -> BoxStream<'static, Result<proto::Directory, Error>> {
+    ) -> BoxStream<'static, Result<Directory, Error>> {
         // FUTUREWORK: Ideally we should have all of the directory traversing happen in a single
         // redb transaction to avoid constantly closing and opening new transactions for the
         // database.
@@ -185,7 +185,7 @@ pub struct RedbDirectoryPutter {
 #[async_trait]
 impl DirectoryPutter for RedbDirectoryPutter {
     #[instrument(level = "trace", skip_all, fields(directory.digest=%directory.digest()), err)]
-    async fn put(&mut self, directory: proto::Directory) -> Result<(), Error> {
+    async fn put(&mut self, directory: Directory) -> Result<(), Error> {
         match self.directory_validator {
             None => return Err(Error::StorageError("already closed".to_string())),
             Some(ref mut validator) => {
