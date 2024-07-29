@@ -27,11 +27,16 @@ import Optional
 import Postgres.Decoder qualified as Dec
 import Postgres.MonadPostgres
 import Pretty
-import RunCommand (runCommandExpect0)
 import Prelude hiding (span)
 
+class MonadRedacted m where
+  getRedactedApiKey :: m ByteString
+
+instance (MonadIO m) => MonadRedacted (AppT m) where
+  getRedactedApiKey = AppT (asks (.redactedApiKey))
+
 redactedSearch ::
-  (MonadLogger m, MonadThrow m, MonadOtel m) =>
+  (MonadThrow m, MonadOtel m, MonadRedacted m) =>
   [(ByteString, ByteString)] ->
   Json.Parse ErrorTree a ->
   m a
@@ -48,7 +53,8 @@ redactedGetTorrentFile ::
   ( MonadLogger m,
     MonadThrow m,
     HasField "torrentId" dat Int,
-    MonadOtel m
+    MonadOtel m,
+    MonadRedacted m
   ) =>
   dat ->
   m ByteString
@@ -71,7 +77,7 @@ redactedGetTorrentFile dat = inSpan' "Redacted Get Torrent File" $ \span -> do
 mkRedactedTorrentLink :: Arg "torrentGroupId" Int -> Text
 mkRedactedTorrentLink torrentId = [fmt|https://redacted.ch/torrents.php?id={torrentId.unArg}|]
 
-exampleSearch :: (MonadThrow m, MonadLogger m, MonadPostgres m, MonadOtel m) => m (Transaction m ())
+exampleSearch :: (MonadThrow m, MonadLogger m, MonadPostgres m, MonadOtel m, MonadRedacted m) => m (Transaction m ())
 exampleSearch = do
   t1 <-
     redactedSearchAndInsert
@@ -108,7 +114,8 @@ redactedSearchAndInsert ::
   ( MonadLogger m,
     MonadPostgres m,
     MonadThrow m,
-    MonadOtel m
+    MonadOtel m,
+    MonadRedacted m
   ) =>
   [(ByteString, ByteString)] ->
   m (Transaction m ())
@@ -289,12 +296,13 @@ redactedGetTorrentFileAndInsert ::
     MonadPostgres m,
     MonadThrow m,
     MonadLogger m,
-    MonadOtel m
+    MonadOtel m,
+    MonadRedacted m
   ) =>
   r ->
   Transaction m (Label "torrentFile" ByteString)
 redactedGetTorrentFileAndInsert dat = inSpan' "Redacted Get Torrent File and Insert" $ \span -> do
-  bytes <- redactedGetTorrentFile dat
+  bytes <- lift $ redactedGetTorrentFile dat
   execute
     [sql|
     UPDATE redacted.torrents_json
@@ -468,15 +476,14 @@ getBestTorrents opts = do
 -- | Do a request to the redacted API. If you know what that is, you know how to find the API docs.
 mkRedactedApiRequest ::
   ( MonadThrow m,
-    MonadIO m,
-    MonadLogger m,
     HasField "action" p ByteString,
-    HasField "actionArgs" p [(ByteString, Maybe ByteString)]
+    HasField "actionArgs" p [(ByteString, Maybe ByteString)],
+    MonadRedacted m
   ) =>
   p ->
   m Http.Request
 mkRedactedApiRequest dat = do
-  authKey <- runCommandExpect0 "pass" ["internet/redacted/api-keys/whatcd-resolver"]
+  authKey <- getRedactedApiKey
   pure $
     [fmt|https://redacted.ch/ajax.php|]
       & Http.setRequestMethod "GET"
@@ -558,10 +565,10 @@ httpJson opts parser req = inSpan' "HTTP Request (JSON)" $ \span -> do
 
 redactedApiRequestJson ::
   ( MonadThrow m,
-    MonadLogger m,
     HasField "action" p ByteString,
     HasField "actionArgs" p [(ByteString, Maybe ByteString)],
-    MonadOtel m
+    MonadOtel m,
+    MonadRedacted m
   ) =>
   p ->
   Json.Parse ErrorTree a ->
