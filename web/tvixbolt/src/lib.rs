@@ -12,7 +12,8 @@ use web_sys::HtmlDetailsElement;
 use web_sys::HtmlTextAreaElement;
 use yew::prelude::*;
 use yew::TargetCast;
-use yew_router::{prelude::*, AnyRoute};
+use yew_router::history::BrowserHistory;
+use yew_router::history::History;
 
 #[derive(Clone)]
 enum Msg {
@@ -117,7 +118,7 @@ impl Component for Model {
             Msg::NoOp => {}
         }
 
-        let _ = BrowserHistory::new().replace_with_query(AnyRoute::new("/"), self.clone());
+        let _ = BrowserHistory::new().replace_with_query("/", self.clone());
 
         true
     }
@@ -314,5 +315,5 @@ fn eval(model: &Model) -> Output {
 
 #[wasm_bindgen]
 pub fn main() {
-    yew::start_app::<Model>();
+    yew::Renderer::<Model>::new().render();
 }
