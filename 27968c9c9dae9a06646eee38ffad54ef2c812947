@@ -16,6 +16,24 @@
       "message": "@flokli@flokli.de what do you think about this? Should the assert just be removed or do we keep it?",
       "revId": "27968c9c9dae9a06646eee38ffad54ef2c812947",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e04cf97f_bff8db2b",
+        "filename": "tvix/glue/src/refscan.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-30T18:06:56Z",
+      "side": 1,
+      "message": "Do we have sufficient test case coverage for the AsyncBufRead impl? ;-)\n\nI think we currently only test the AsyncRead impl.",
+      "parentUuid": "9034e04f_812be4d2",
+      "revId": "27968c9c9dae9a06646eee38ffad54ef2c812947",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
