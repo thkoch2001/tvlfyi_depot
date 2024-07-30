@@ -34,7 +34,7 @@ export PATH=$PATH:$PWD/target/release-with-debug
 Secondly, configure tvix to use the local backend:
 
 ```
-export BLOB_SERVICE_ADDR=sled://$PWD/blobs.sled
+export BLOB_SERVICE_ADDR=objectstore+file://$PWD/blobs
 export DIRECTORY_SERVICE_ADDR=sled://$PWD/directories.sled
 export PATH_INFO_SERVICE_ADDR=sled://$PWD/pathinfo.sled
 ```
