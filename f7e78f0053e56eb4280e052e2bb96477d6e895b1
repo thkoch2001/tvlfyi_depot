@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5497ea63_f70583cc",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-30T19:40:31Z",
+      "side": 1,
+      "message": "Thanks! I was getting a bit braindead while trying to fix the regression.",
+      "revId": "f7e78f0053e56eb4280e052e2bb96477d6e895b1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
