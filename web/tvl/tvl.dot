@@ -27,7 +27,7 @@ digraph tvl {
     flokli [href="https://flokli.de/"];
     fzakaria [href="https://fzakaria.com/"];
     ghuntley [href="https://ghuntley.com/"];
-    grfn [href="http://gws.fyi"];
+    aspen [href="http://gws.fyi"];
     implr [href="https://twitter.com/implring"];
     isomer [href="https://www.lorier.net/"];
     j4m3s [href="https://github.com/j4m3s-s"];
@@ -118,7 +118,7 @@ digraph tvl {
     fzakaria -> google;
 
     // random primary
-    grfn -> wpcarro;
+    aspen -> wpcarro;
     aurora -> eve;
     cynthia -> benjojo;
     eta -> unspecific;
@@ -156,7 +156,7 @@ digraph tvl {
     lukegb -> benjojo;
     espes -> benjojo;
     espes -> aurora;
-    grfn -> nix;
+    aspen -> nix;
     edef -> nix;
     ezemtsov -> nix;
     raitobezarius -> nix;
