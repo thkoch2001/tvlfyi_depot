@@ -28,6 +28,7 @@ let
 
     [formatter.rust]
     command = "${pkgs.rustfmt}/bin/rustfmt"
+    options = ["--edition", "2021"]
     includes = [ "*.rs" ]
     excludes = [
       "users/tazjin/*",
@@ -53,10 +54,12 @@ let
   '';
 in
 depotfmt.overrideAttrs (_: {
-  passthru.config = config;
-  passthru.meta.ci.extraSteps.check = {
-    label = "depot formatting check";
-    command = check;
-    alwaysRun = true;
+  passthru = {
+    inherit config check;
+    meta.ci.extraSteps.check = {
+      label = "depot formatting check";
+      command = check;
+      alwaysRun = true;
+    };
   };
 })
