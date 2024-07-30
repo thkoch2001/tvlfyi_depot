@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b5ff8ca2_2cf4a256",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-07-30T16:09:19Z",
+      "side": 1,
+      "message": "I believe there\u0027s an open PR to make it the default hasher in std. Worth noting.",
+      "revId": "e7f7bc27a1f367039ef719618d6c77cef3b195e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
