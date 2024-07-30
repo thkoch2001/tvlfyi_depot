@@ -247,6 +247,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19994f4e_b41c3b7c",
+        "filename": "tvix/nix-compat/src/nix_daemon/de/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-30T18:01:00Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "5b9176de_d9ae03a5",
+      "revId": "4b4a6a3f0756b1c4492731c639563fd8cde3ae7f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b03dd010_002ba9a1",

@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fe413b2a_87016cac",
+        "filename": "tvix/nix-compat/src/nix_daemon/de/mod.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-30T18:01:00Z",
+      "side": 1,
+      "message": "```suggestion\n/// Like serde the `Error` trait allows `NixRead` implementations to add\n```",
+      "revId": "078a8aa7b0610e2bbf63ebbb1fa24cdd03e6bf5d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a82cb4c_6a3312ba",
+        "filename": "tvix/nix-compat/src/nix_daemon/de/mod.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-30T18:01:00Z",
+      "side": 1,
+      "message": "```suggestion\n/// custom error handling of `NixDeserialize`\n```",
+      "revId": "078a8aa7b0610e2bbf63ebbb1fa24cdd03e6bf5d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17f8333e_8979c95d",
+        "filename": "tvix/nix-compat/src/nix_daemon/protocol_version.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-30T18:01:00Z",
+      "side": 1,
+      "message": "DEFAULT_ maybe?\n\nAnd add a docstring that this is the latest version this code currently supports.",
+      "revId": "078a8aa7b0610e2bbf63ebbb1fa24cdd03e6bf5d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df5f8d09_ea51bfa5",
+        "filename": "tvix/nix-compat/src/nix_daemon/protocol_version.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-30T18:01:00Z",
+      "side": 1,
+      "message": "Mmh, this seems entirely optional for this CL. Please introduce this in the same CL where the consumer is actually using it.",
+      "revId": "078a8aa7b0610e2bbf63ebbb1fa24cdd03e6bf5d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
