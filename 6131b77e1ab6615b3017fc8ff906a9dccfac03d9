@@ -16,6 +16,24 @@
       "message": "```suggestion\npkill nar-bridge; pkill tvix-store\n```",
       "revId": "6131b77e1ab6615b3017fc8ff906a9dccfac03d9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "17ed63d9_97f0fd54",
+        "filename": "tvix/boot/README.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-07-30T12:59:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5e112cf_19139884",
+      "revId": "6131b77e1ab6615b3017fc8ff906a9dccfac03d9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
