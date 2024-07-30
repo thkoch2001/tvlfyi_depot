@@ -73,11 +73,8 @@ in
         cargo metadata > /dev/null
 
         ${pkgs.crate2nix}/bin/crate2nix generate --all-features
-        ${pkgs.treefmt}/bin/treefmt Cargo.nix \
-          --no-cache \
-          --on-unmatched=debug \
-          --config-file=${depot.tools.depotfmt.config} \
-          --tree-root=.
+        # Reuse depotfmt wrapper that can be used inside a sandbox.
+        ${depot.tools.depotfmt.check} Cargo.nix
 
         # technically unnecessary, but provides more-helpful output in case of error
         diff -ur Cargo.nix ${src}/Cargo.nix
