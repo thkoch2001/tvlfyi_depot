@@ -16,6 +16,24 @@
       "message": "This should also be updated to the rust version.",
       "revId": "fa529d7cb0f91658932ca894cf2fbeae5da396b5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04f1ac70_112b2903",
+        "filename": "tvix/boot/README.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-30T12:53:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "042d1cb0_84504135",
+      "revId": "fa529d7cb0f91658932ca894cf2fbeae5da396b5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
