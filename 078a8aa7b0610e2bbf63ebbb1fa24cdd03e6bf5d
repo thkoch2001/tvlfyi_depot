@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d77a82a6_44f3fd21",
+        "filename": "tvix/nix-compat/src/nix_daemon/de/int.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-30T18:01:38Z",
+      "side": 1,
+      "message": "```suggestion\n    // FUTUREWORK: Test this on supported hardware\n```",
+      "revId": "078a8aa7b0610e2bbf63ebbb1fa24cdd03e6bf5d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "fe413b2a_87016cac",
         "filename": "tvix/nix-compat/src/nix_daemon/de/mod.rs",
         "patchSetId": 9
