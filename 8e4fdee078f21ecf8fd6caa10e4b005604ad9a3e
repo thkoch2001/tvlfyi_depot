@@ -16,6 +16,24 @@
       "message": "Can we test with /dev/null?",
       "revId": "8e4fdee078f21ecf8fd6caa10e4b005604ad9a3e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11a37c80_ea1f7d2a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-07-31T00:56:45Z",
+      "side": 1,
+      "message": "no, sadly - cpp nix complains when reading from a device file :( it was the first thing I tried.",
+      "parentUuid": "f36fab08_25ce958e",
+      "revId": "8e4fdee078f21ecf8fd6caa10e4b005604ad9a3e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
