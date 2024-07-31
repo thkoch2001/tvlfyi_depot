@@ -11,7 +11,6 @@ pkgs.mkShell {
     pkgs.go
     pkgs.grpcurl
     pkgs.hyperfine
-    pkgs.nix_2_3 # b/313
     pkgs.pkg-config
     pkgs.rust-analyzer
     pkgs.rustc

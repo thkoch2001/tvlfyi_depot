@@ -110,15 +110,16 @@ compare_strict_eval_tests! {
     literal_int("1");
     add_ints("1 + 1");
     add_lists("[1 2] ++ [3 4]");
-    add_paths(r#"[
-        (./. + "/")
-        (./foo + "bar")
-        (let name = "bar"; in ./foo + name)
-        (let name = "bar"; in ./foo + "${name}")
-        (let name = "bar"; in ./foo + "/" + "${name}")
-        (let name = "bar"; in ./foo + "/${name}")
-        (./. + ./.)
-    ]"#);
+    // b/313
+    // add_paths(r#"[
+    //     (./. + "/")
+    //     (./foo + "bar")
+    //     (let name = "bar"; in ./foo + name)
+    //     (let name = "bar"; in ./foo + "${name}")
+    //     (let name = "bar"; in ./foo + "/" + "${name}")
+    //     (let name = "bar"; in ./foo + "/${name}")
+    //     (./. + ./.)
+    // ]"#);
 }
 
 // TODO(sterni): tvix_tests should gain support for something similar in the future,
