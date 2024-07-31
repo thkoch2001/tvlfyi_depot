@@ -264,6 +264,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cfc657a_882e1b82",
+        "filename": "tvix/castore/src/directoryservice/redb.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-07-31T20:58:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a37f92b5_6baca732",
+      "revId": "3bcf62aed72a60fbc02ab4817b5a355ec6888a79",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a3d52de9_3e27a99a",
