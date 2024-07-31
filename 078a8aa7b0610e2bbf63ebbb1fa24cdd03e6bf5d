@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "545dca67_9b8f2d9a",
+        "filename": "tvix/nix-compat/src/nix_daemon/de/int.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-07-31T12:13:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d77a82a6_44f3fd21",
+      "revId": "078a8aa7b0610e2bbf63ebbb1fa24cdd03e6bf5d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe413b2a_87016cac",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-07-30T18:01:00Z",
       "side": 1,
       "message": "```suggestion\n/// Like serde the `Error` trait allows `NixRead` implementations to add\n```",
+      "revId": "078a8aa7b0610e2bbf63ebbb1fa24cdd03e6bf5d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8eff8661_c5e26249",
+        "filename": "tvix/nix-compat/src/nix_daemon/de/mod.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-07-31T12:13:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe413b2a_87016cac",
       "revId": "078a8aa7b0610e2bbf63ebbb1fa24cdd03e6bf5d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "21f96196_0402ef6d",
+        "filename": "tvix/nix-compat/src/nix_daemon/de/mod.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-07-31T12:13:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a82cb4c_6a3312ba",
+      "revId": "078a8aa7b0610e2bbf63ebbb1fa24cdd03e6bf5d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "17f8333e_8979c95d",
@@ -69,6 +123,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ade28c56_e5e5bfd6",
+        "filename": "tvix/nix-compat/src/nix_daemon/protocol_version.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-07-31T12:13:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "17f8333e_8979c95d",
+      "revId": "078a8aa7b0610e2bbf63ebbb1fa24cdd03e6bf5d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df5f8d09_ea51bfa5",
@@ -82,6 +154,24 @@
       "writtenOn": "2024-07-30T18:01:00Z",
       "side": 1,
       "message": "Mmh, this seems entirely optional for this CL. Please introduce this in the same CL where the consumer is actually using it.",
+      "revId": "078a8aa7b0610e2bbf63ebbb1fa24cdd03e6bf5d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0decef4_8321d61d",
+        "filename": "tvix/nix-compat/src/nix_daemon/protocol_version.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-07-31T12:13:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df5f8d09_ea51bfa5",
       "revId": "078a8aa7b0610e2bbf63ebbb1fa24cdd03e6bf5d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
