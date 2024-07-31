@@ -41,6 +41,7 @@ pkgs.makeOverridable
       tree-sitter-rust
       tree-sitter-sql
       tree-sitter-toml
+      tree-sitter-typescript
       tree-sitter-yaml
     ]);
 
