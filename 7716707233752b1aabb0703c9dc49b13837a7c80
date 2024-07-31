@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "405161aa_d8f6b4ce",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-07-31T20:42:56Z",
+      "side": 1,
+      "message": "Why does the behavior of nixpkgs-fmt change? There hasn\u0027t been a new release I don\u0027t think. Or are the changes due to treefmt?",
+      "revId": "7716707233752b1aabb0703c9dc49b13837a7c80",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "91191fc5_a8b8a677",
