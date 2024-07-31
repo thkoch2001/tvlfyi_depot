@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "96aaa300_3bfbebcc",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 19
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-31T20:55:02Z",
+      "side": 1,
+      "message": "I see little changes - slightly different behaviour of rustfmt, as well as the nix formatter removing some more trailing whitespaces?\n\nI assume that\u0027s because these tools were updated…",
+      "parentUuid": "405161aa_d8f6b4ce",
+      "revId": "7716707233752b1aabb0703c9dc49b13837a7c80",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "91191fc5_a8b8a677",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 19
