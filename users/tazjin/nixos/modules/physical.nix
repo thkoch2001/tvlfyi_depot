@@ -93,6 +93,9 @@ in
     # Run services & configure programs for all machines.
     services.fwupd.enable = true;
 
+    # Use Nix 2.3
+    services.nix.package = pkgs.nix_2_3;
+
     # Disable the broken NetworkManager-wait-online.service
     systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
 

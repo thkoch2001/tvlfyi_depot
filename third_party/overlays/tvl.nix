@@ -4,23 +4,6 @@
 
 self: super:
 depot.nix.readTree.drvTargets {
-  nix_2_3 = (super.nix_2_3.override {
-    # flaky tests, long painful build, see https://github.com/NixOS/nixpkgs/pull/266443
-    withAWS = false;
-  });
-  nix = self.nix_2_3 // {
-    # avoid duplicate pipeline step
-    meta = self.nix_2_3.meta or { } // {
-      ci = self.nix_2_3.meta.ci or { } // {
-        skip = true;
-      };
-    };
-  };
-  nix_latest = super.nix.override ({
-    # flaky tests, long painful build, see https://github.com/NixOS/nixpkgs/pull/266443
-    withAWS = false;
-  });
-
   home-manager = super.home-manager.overrideAttrs (_: {
     src = depot.third_party.sources.home-manager;
     version = "git-"
