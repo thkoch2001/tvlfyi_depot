@@ -16,6 +16,24 @@
       "message": "```suggestion\n  # Dependencies are not supported by Python 3.12\n```\n\nFWIW, `parquet-tools` does build on nixpkgs master (since 3a30db4a28808ae1f3564857ee35c467211b84f4, dated 2024-07-19).\n\nI\u0027m a bit surprised we still need this override.",
       "revId": "0d390607c4df0e6d02c2606be70de0338bea1bf3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b95e1e12_7a65732c",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 16
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-07-31T01:05:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7683e1e4_9a2726ac",
+      "revId": "0d390607c4df0e6d02c2606be70de0338bea1bf3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
