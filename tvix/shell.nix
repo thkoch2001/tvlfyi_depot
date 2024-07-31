@@ -53,7 +53,6 @@ pkgs.mkShell {
     pkgs.mdbook-admonish
     pkgs.mdbook-d2
     pkgs.mdbook-plantuml
-    pkgs.nix_2_3 # b/313
     pkgs.pkg-config
     pkgs.rust-analyzer
     pkgs.rustc
