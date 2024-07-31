@@ -248,6 +248,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a37f92b5_6baca732",
+        "filename": "tvix/castore/src/directoryservice/redb.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-07-31T20:35:06Z",
+      "side": 1,
+      "message": "`traverse_directory` does currently run individual get()\u0027s, and in there you do a `db.begin_read()?;` to open a read-only transaction, just to get that single element.\n\nA future version of this should could open a read-only transaction in redb, and do the traversal on its own, while keeping that transaction open.\n\nAgain, this is FUTUREWORK material, but let\u0027s add a remark here.",
+      "parentUuid": "37d4bd1d_0d1dd789",
+      "revId": "3bcf62aed72a60fbc02ab4817b5a355ec6888a79",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a3d52de9_3e27a99a",
         "filename": "tvix/castore/src/directoryservice/redb.rs",
         "patchSetId": 1
