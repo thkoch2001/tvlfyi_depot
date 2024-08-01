@@ -157,8 +157,8 @@ depot.nix.readTree.drvTargets
   });
   docs-persistent = (mkBootTest {
     blobServiceAddr = "objectstore+file:///build/blobs";
-    directoryServiceAddr = "sled:///build/directories.sled";
-    pathInfoServiceAddr = "sled:///build/pathinfo.sled";
+    directoryServiceAddr = "redb:///build/directories.redb";
+    pathInfoServiceAddr = "redb:///build/pathinfo.redb";
     path = ../../docs;
     importPathName = "docs";
   });
