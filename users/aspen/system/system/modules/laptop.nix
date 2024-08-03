@@ -20,4 +20,11 @@
     criticalPowerAction = "Hibernate";
     percentageAction = 3;
   };
+
+  services.libinput = {
+    touchpad = {
+      naturalScrolling = true;
+      disableWhileTyping = true;
+    };
+  };
 }
