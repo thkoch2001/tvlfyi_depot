@@ -9,7 +9,7 @@
 let
   testRoot = ../eval/src/tests;
 
-  inherit (pkgs.buildPackages) nix nix_latest;
+  inherit (pkgs.nixVersions) minimum latest;
 
   parseTest = dir: baseName:
     let
@@ -44,50 +44,54 @@ let
     # C++ Nix can't TCO
     "eval-okay-tail-call-1.nix" = true;
     # Ordering change after 2.3
-    "eval-okay-xml.nix" = [ nix ];
+    "eval-okay-xml.nix" = [ minimum ];
     # Missing builtins in Nix 2.3
-    "eval-okay-ceil.nix" = [ nix ];
-    "eval-okay-floor-ceil.nix" = [ nix ];
-    "eval-okay-floor.nix" = [ nix ];
-    "eval-okay-groupBy.nix" = [ nix ];
-    "eval-okay-zipAttrsWith.nix" = [ nix ];
-    "eval-okay-builtins-group-by-propagate-catchable.nix" = [ nix ];
+    "eval-okay-ceil.nix" = [ minimum ];
+    "eval-okay-floor-ceil.nix" = [ minimum ];
+    "eval-okay-floor.nix" = [ minimum ];
+    "eval-okay-groupBy.nix" = [ minimum ];
+    "eval-okay-zipAttrsWith.nix" = [ minimum ];
+    "eval-okay-builtins-group-by-propagate-catchable.nix" = [ minimum ];
     # Comparable lists are not in Nix 2.3
-    "eval-okay-sort.nix" = [ nix ];
-    "eval-okay-compare-lists.nix" = [ nix ];
-    "eval-okay-value-pointer-compare.nix" = [ nix ];
-    "eval-okay-builtins-genericClosure-pointer-equality.nix" = [ nix ];
-    "eval-okay-list-comparison.nix" = [ nix ];
+    "eval-okay-sort.nix" = [ minimum ];
+    "eval-okay-compare-lists.nix" = [ minimum ];
+    "eval-okay-value-pointer-compare.nix" = [ minimum ];
+    "eval-okay-builtins-genericClosure-pointer-equality.nix" = [ minimum ];
+    "eval-okay-list-comparison.nix" = [ minimum ];
     # getAttrPos gains support for functionArgs-returned sets after 2.3
-    "eval-okay-getattrpos-functionargs.nix" = [ nix ];
+    "eval-okay-getattrpos-functionargs.nix" = [ minimum ];
     # groupBy appeared (long) after 2.3
-    "eval-okay-builtins-groupby-thunk.nix" = [ nix ];
+    "eval-okay-builtins-groupby-thunk.nix" = [ minimum ];
     # import is no longer considered a curried primop in Nix > 2.3
-    "eval-okay-import-display.nix" = [ nix ];
+    "eval-okay-import-display.nix" = [ minimum ];
     # Cycle detection and formatting changed sometime after Nix 2.3
-    "eval-okay-cycle-display-cpp-nix-2.13.nix" = [ nix ];
+    "eval-okay-cycle-display-cpp-nix-2.13.nix" = [ minimum ];
     # builtins.replaceStrings becomes lazier in Nix 2.16
-    "eval-okay-replacestrings.nix" = [ nix ];
+    "eval-okay-replacestrings.nix" = [ minimum ];
     # builtins.readFileType is added in Nix 2.15
-    "eval-okay-readFileType.nix" = [ nix ];
+    "eval-okay-readFileType.nix" = [ minimum ];
     # builtins.fromTOML gains support for timestamps in Nix 2.16
-    "eval-okay-fromTOML-timestamps.nix" = [ nix ];
+    "eval-okay-fromTOML-timestamps.nix" = [ minimum ];
     # identifier formatting changed in Nix 2.17 due to cppnix commit
     # b72bc4a972fe568744d98b89d63adcd504cb586c
-    "eval-okay-identifier-formatting.nix" = [ nix ];
+    "eval-okay-identifier-formatting.nix" = [ minimum ];
 
     # Differing strictness in the function argument for some builtins in Nix 2.18
     # https://github.com/NixOS/nix/issues/9779
-    "eval-okay-builtins-map-propagate-catchable.nix" = [ nix_latest ];
-    "eval-okay-builtins-gen-list-propagate-catchable.nix" = [ nix_latest ];
+    "eval-okay-builtins-map-propagate-catchable.nix" = [ latest ];
+    "eval-okay-builtins-gen-list-propagate-catchable.nix" = [ latest ];
     "eval-okay-builtins-replace-strings-propagate-catchable.nix" =
-      [ nix_latest ];
-    "eval-okay-builtins-map-function-strictness.nix" = [ nix_latest ];
-    "eval-okay-builtins-genList-function-strictness.nix" = [ nix_latest ];
+      [ latest ];
+    "eval-okay-builtins-map-function-strictness.nix" = [ latest ];
+    "eval-okay-builtins-genList-function-strictness.nix" = [ latest ];
 
     # TODO(sterni): support diffing working directory and home relative paths
     # like C++ Nix test suite (using string replacement).
     "eval-okay-path-antiquotation.nix" = true;
+
+    # The output of dirOf (and maybe other filesystem builtins) have changed in Nix 2.23
+    # when they switched to using std::filesystem, https://github.com/NixOS/nix/pull/10658.
+    "eval-okay-dirof.nix" = [ latest ];
   };
 
   runCppNixLangTests = cpp-nix:
@@ -221,6 +225,6 @@ let
 in
 
 depot.nix.readTree.drvTargets {
-  "nix-2.3" = runCppNixLangTests nix;
-  "nix-${lib.versions.majorMinor nix_latest.version}" = runCppNixLangTests nix_latest;
+  "nix-${lib.versions.majorMinor minimum.version}" = runCppNixLangTests minimum;
+  "nix-${lib.versions.majorMinor latest.version}" = runCppNixLangTests latest;
 }
