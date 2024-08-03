@@ -99,6 +99,8 @@ depot.nix.readTree.drvTargets {
 
   crate2nix = super.crate2nix.overrideAttrs (old: {
     patches = old.patches or [ ] ++ [
+      # TODO(Kranzes): Remove in next release.
+      ./patches/crate2nix-0001-Fix-Use-mkDerivation-with-src-instead-of-runCommand.patch
       # https://github.com/nix-community/crate2nix/pull/301
       ./patches/crate2nix-tests-debug.patch
     ];
