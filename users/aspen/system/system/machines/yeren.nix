@@ -118,7 +118,7 @@
     lightdm-greeter.fprintAuth = true;
   };
 
-  hardware.opengl.driSupport32Bit = true;
+  hardware.graphics.enable32Bit = true;
 
   hardware.pulseaudio.extraConfig = ''
     load-module module-remap-source source_name=KompleteAudio6_1 source_properties=device.description=KompleteAudio6Input1 master=alsa_input.usb-Native_Instruments_Komplete_Audio_6_458E0FFD-00.multichannel-input remix=no channels=1 master_channel_map=front-left channel_map=mono
