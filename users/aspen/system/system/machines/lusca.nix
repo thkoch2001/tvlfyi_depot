@@ -130,7 +130,7 @@
 
   hardware.sensor.iio.enable = true;
 
-  hardware.opengl.driSupport32Bit = true;
+  hardware.graphics.enable32Bit = true;
 
   # TPM
   security.tpm2 = {
