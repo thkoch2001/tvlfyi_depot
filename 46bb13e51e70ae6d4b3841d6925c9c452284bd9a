@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c16c6ffb_05cc35db",
+        "filename": "tvix/verify-lang-tests/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-03T22:04:54Z",
+      "side": 1,
+      "message": "please duplicate this test into two, so we can still test all other values on other nix versions.",
+      "revId": "46bb13e51e70ae6d4b3841d6925c9c452284bd9a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
