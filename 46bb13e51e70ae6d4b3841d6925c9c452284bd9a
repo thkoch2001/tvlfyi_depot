@@ -16,6 +16,24 @@
       "message": "please duplicate this test into two, so we can still test all other values on other nix versions.",
       "revId": "46bb13e51e70ae6d4b3841d6925c9c452284bd9a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2283959b_3ea98639",
+        "filename": "tvix/verify-lang-tests/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-03T22:42:57Z",
+      "side": 1,
+      "message": "Do you mean we will have two dirOf test files, one with the trailing slashes and one without?",
+      "parentUuid": "c16c6ffb_05cc35db",
+      "revId": "46bb13e51e70ae6d4b3841d6925c9c452284bd9a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
