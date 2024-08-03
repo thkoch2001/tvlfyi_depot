@@ -70,7 +70,7 @@ let
     "eval-okay-cycle-display-cpp-nix-2.13.nix" = [ nix_2_3 ];
     # builtins.replaceStrings becomes lazier in Nix 2.16
     "eval-okay-replacestrings.nix" = [ nix_2_3 ];
-    # builtins.readFileType is added in Nix 2.15
+    # builtins.readFileType is added in Nix 2.14
     "eval-okay-readFileType.nix" = [ nix_2_3 ];
     # builtins.fromTOML gains support for timestamps in Nix 2.16
     "eval-okay-fromTOML-timestamps.nix" = [ nix_2_3 ];
