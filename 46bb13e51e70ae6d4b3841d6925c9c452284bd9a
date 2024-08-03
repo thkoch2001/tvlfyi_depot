@@ -34,6 +34,24 @@
       "parentUuid": "c16c6ffb_05cc35db",
       "revId": "46bb13e51e70ae6d4b3841d6925c9c452284bd9a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bff1d1f_6cb8fb46",
+        "filename": "tvix/verify-lang-tests/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-03T23:50:18Z",
+      "side": 1,
+      "message": "I duplicating the tests should probably be in a different CL. After looking at skip-list there are other cases where a behavior has changed over time, e.g. XML ordering. I think that stuff should be its own CL, what do you think?",
+      "parentUuid": "2283959b_3ea98639",
+      "revId": "46bb13e51e70ae6d4b3841d6925c9c452284bd9a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
