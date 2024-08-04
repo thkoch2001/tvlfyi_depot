@@ -16,7 +16,6 @@ import IHP.HSX.QQ (hsx)
 import Json qualified
 import Label
 import MyPrelude
-import Network.HTTP.Client.Conduit qualified as Http
 import Network.HTTP.Types.URI qualified as Url
 import Network.URI (URI)
 import Optional

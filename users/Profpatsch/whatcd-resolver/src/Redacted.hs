@@ -19,8 +19,6 @@ import Http qualified
 import Json qualified
 import Label
 import MyPrelude
-import Network.HTTP.Client.Conduit qualified as Http
-import Network.HTTP.Simple qualified as Http
 import Network.HTTP.Types
 import Network.Wai.Parse qualified as Wai
 import OpenTelemetry.Trace qualified as Otel hiding (getTracer, inSpan, inSpan')
@@ -503,17 +501,17 @@ httpTorrent span req =
     >>= assertM
       span
       ( \resp -> do
-          let statusCode = resp & Http.responseStatus & (.statusCode)
+          let statusCode = resp & Http.getResponseStatus & (.statusCode)
               contentType =
                 resp
-                  & Http.responseHeaders
+                  & Http.getResponseHeaders
                   & List.lookup "content-type"
                   <&> Wai.parseContentType
                   <&> (\(ct, _mimeAttributes) -> ct)
           if
             | statusCode == 200,
               Just "application/x-bittorrent" <- contentType ->
-                Right $ (resp & Http.responseBody)
+                Right $ (resp & Http.getResponseBody)
             | statusCode == 200,
               Just otherType <- contentType ->
                 Left [fmt|Redacted returned a non-torrent body, with content-type "{otherType}"|]
