@@ -16,6 +16,24 @@
       "message": "I\u0027d personally prefer using nix_2_3 and nix_2_23 here (or however they\u0027re called) to make it more explicit.",
       "revId": "97341a7294ed24cfc037f4677fd518aab86f1c37",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0e424a1e_b06e1523",
+        "filename": "tvix/verify-lang-tests/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-04T12:26:35Z",
+      "side": 1,
+      "message": "I thought it\u0027d be nice to have it automatically update for us so we can stay updated on breakages, don\u0027t you think?",
+      "parentUuid": "5dfb4e53_7b8740f1",
+      "revId": "97341a7294ed24cfc037f4677fd518aab86f1c37",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
