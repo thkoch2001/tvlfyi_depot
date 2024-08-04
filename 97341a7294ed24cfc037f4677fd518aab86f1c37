@@ -70,6 +70,24 @@
       "parentUuid": "5700b0d3_6bd517e2",
       "revId": "97341a7294ed24cfc037f4677fd518aab86f1c37",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "262d35a8_a4f3c0c6",
+        "filename": "tvix/verify-lang-tests/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-04T14:43:24Z",
+      "side": 1,
+      "message": "Settled on a different solution, see diff.",
+      "parentUuid": "c64739a0_485d1f2d",
+      "revId": "97341a7294ed24cfc037f4677fd518aab86f1c37",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
