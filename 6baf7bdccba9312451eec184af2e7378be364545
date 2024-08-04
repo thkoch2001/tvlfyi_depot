@@ -16,6 +16,24 @@
       "message": "docstring",
       "revId": "6baf7bdccba9312451eec184af2e7378be364545",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6e8fa77_7a551906",
+        "filename": "tvix/eval/src/vm/generators.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 210,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-04T13:32:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "519e8f71_61069171",
+      "revId": "6baf7bdccba9312451eec184af2e7378be364545",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
