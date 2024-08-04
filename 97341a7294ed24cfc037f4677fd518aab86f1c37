@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5dfb4e53_7b8740f1",
+        "filename": "tvix/verify-lang-tests/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-04T07:20:32Z",
+      "side": 1,
+      "message": "I\u0027d personally prefer using nix_2_3 and nix_2_23 here (or however they\u0027re called) to make it more explicit.",
+      "revId": "97341a7294ed24cfc037f4677fd518aab86f1c37",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

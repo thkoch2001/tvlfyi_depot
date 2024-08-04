@@ -52,6 +52,24 @@
       "parentUuid": "2283959b_3ea98639",
       "revId": "46bb13e51e70ae6d4b3841d6925c9c452284bd9a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "833fdc78_01dfeca6",
+        "filename": "tvix/verify-lang-tests/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-04T07:20:32Z",
+      "side": 1,
+      "message": "The XML stuff should be a separate CL, yes, but this CL shouldn\u0027t just disable all of `eval-okay-dirof.nix` for non-latest nix versions.",
+      "parentUuid": "1bff1d1f_6cb8fb46",
+      "revId": "46bb13e51e70ae6d4b3841d6925c9c452284bd9a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
