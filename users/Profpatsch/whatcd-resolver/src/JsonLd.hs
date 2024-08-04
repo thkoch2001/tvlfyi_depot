@@ -11,16 +11,15 @@ import Data.Map.Strict qualified as Map
 import Data.Set (Set)
 import Data.Set qualified as Set
 import Html qualified
+import Http
 import IHP.HSX.QQ (hsx)
 import Json qualified
 import Label
 import MyPrelude
 import Network.HTTP.Client.Conduit qualified as Http
-import Network.HTTP.Simple qualified as Http
 import Network.HTTP.Types.URI qualified as Url
 import Network.URI (URI)
 import Optional
-import Redacted
 import Text.Blaze.Html (Html)
 import Prelude hiding (span)
 

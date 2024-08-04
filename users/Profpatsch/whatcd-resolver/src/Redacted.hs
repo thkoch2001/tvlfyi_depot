@@ -15,6 +15,7 @@ import Database.PostgreSQL.Simple (Binary (Binary), Only (..))
 import Database.PostgreSQL.Simple.SqlQQ (sql)
 import Database.PostgreSQL.Simple.Types (PGArray (PGArray))
 import FieldParser qualified as Field
+import Http qualified
 import Json qualified
 import Label
 import MyPrelude
@@ -522,47 +523,6 @@ httpTorrent span req =
             | code <- statusCode -> Left [fmt|Redacted returned an non-200 error code, code {code}: {resp & showPretty}|]
       )
 
-httpJson ::
-  ( MonadThrow m,
-    MonadOtel m
-  ) =>
-  (Optional (Label "contentType" ByteString)) ->
-  Json.Parse ErrorTree b ->
-  Http.Request ->
-  m b
-httpJson opts parser req = inSpan' "HTTP Request (JSON)" $ \span -> do
-  let opts' = opts.withDefault (label @"contentType" "application/json")
-  Http.httpBS req
-    >>= assertM
-      span
-      ( \resp -> do
-          let statusCode = resp & Http.responseStatus & (.statusCode)
-              contentType =
-                resp
-                  & Http.responseHeaders
-                  & List.lookup "content-type"
-                  <&> Wai.parseContentType
-                  <&> (\(ct, _mimeAttributes) -> ct)
-          if
-            | statusCode == 200,
-              Just ct <- contentType,
-              ct == opts'.contentType ->
-                Right $ (resp & Http.responseBody)
-            | statusCode == 200,
-              Just otherType <- contentType ->
-                Left [fmt|Server returned a non-json body, with content-type "{otherType}"|]
-            | statusCode == 200,
-              Nothing <- contentType ->
-                Left [fmt|Server returned a body with unspecified content type|]
-            | code <- statusCode -> Left [fmt|Server returned an non-200 error code, code {code}: {resp & showPretty}|]
-      )
-    >>= assertM
-      span
-      ( \body ->
-          Json.parseStrict parser body
-            & first (Json.parseErrorTree "could not parse redacted response")
-      )
-
 redactedApiRequestJson ::
   ( MonadThrow m,
     HasField "action" p ByteString,
@@ -576,4 +536,4 @@ redactedApiRequestJson ::
 redactedApiRequestJson dat parser =
   do
     mkRedactedApiRequest dat
-    >>= httpJson defaults parser
+    >>= Http.httpJson defaults parser

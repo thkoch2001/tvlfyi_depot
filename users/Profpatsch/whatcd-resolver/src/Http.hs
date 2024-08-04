@@ -4,27 +4,35 @@ module Http
   ( doRequestJson,
     RequestOptions (..),
     mkRequestOptions,
-    setRequestMethod,
-    setRequestBodyLBS,
-    setRequestHeader,
-    getResponseStatus,
-    getResponseHeader,
-    getResponseBody,
+    httpJson,
+    Http.setRequestMethod,
+    Http.setRequestBodyLBS,
+    Http.setRequestHeader,
+    Http.getResponseStatus,
+    Http.getResponseHeader,
+    Http.getResponseBody,
   )
 where
 
 import AppT
+import Data.Aeson.BetterErrors qualified as Json
 import Data.CaseInsensitive (CI (original))
 import Data.Char qualified as Char
+import Data.Error.Tree
 import Data.List qualified as List
 import Data.Text qualified as Text
 import Data.Text.Punycode qualified as Punycode
+import Json qualified
 import Json.Enc qualified as Enc
+import Label
 import MyPrelude
 import Network.HTTP.Client
-import Network.HTTP.Simple
+import Network.HTTP.Client qualified as Http
+import Network.HTTP.Simple qualified as Http
 import Network.HTTP.Types.Status (Status (..))
+import Network.Wai.Parse qualified as Wai
 import Optional
+import Pretty
 import Prelude hiding (span)
 
 data RequestOptions = RequestOptions
@@ -32,7 +40,7 @@ data RequestOptions = RequestOptions
     host :: Text,
     port :: Optional Int,
     path :: Optional [Text],
-    headers :: Optional [Header],
+    headers :: Optional [Http.Header],
     usePlainHttp :: Optional Bool
   }
 
@@ -47,6 +55,47 @@ mkRequestOptions opts =
       usePlainHttp = defaults
     }
 
+httpJson ::
+  ( MonadThrow m,
+    MonadOtel m
+  ) =>
+  (Optional (Label "contentType" ByteString)) ->
+  Json.Parse ErrorTree b ->
+  Http.Request ->
+  m b
+httpJson opts parser req = inSpan' "HTTP Request (JSON)" $ \span -> do
+  let opts' = opts.withDefault (label @"contentType" "application/json")
+  Http.httpBS req
+    >>= assertM
+      span
+      ( \resp -> do
+          let statusCode = resp & Http.responseStatus & (.statusCode)
+              contentType =
+                resp
+                  & Http.responseHeaders
+                  & List.lookup "content-type"
+                  <&> Wai.parseContentType
+                  <&> (\(ct, _mimeAttributes) -> ct)
+          if
+            | statusCode == 200,
+              Just ct <- contentType,
+              ct == opts'.contentType ->
+                Right $ (resp & Http.responseBody)
+            | statusCode == 200,
+              Just otherType <- contentType ->
+                Left [fmt|Server returned a non-json body, with content-type "{otherType}"|]
+            | statusCode == 200,
+              Nothing <- contentType ->
+                Left [fmt|Server returned a body with unspecified content type|]
+            | code <- statusCode -> Left [fmt|Server returned an non-200 error code, code {code}: {resp & showPretty}|]
+      )
+    >>= assertM
+      span
+      ( \body ->
+          Json.parseStrict parser body
+            & first (Json.parseErrorTree "could not parse redacted response")
+      )
+
 doRequestJson ::
   (MonadOtel m) =>
   RequestOptions ->
@@ -56,16 +105,16 @@ doRequestJson opts val = inSpan' "HTTP Request (JSON)" $ \span -> do
   addAttribute span "request.xh" (requestToXhCommandLine opts val)
   resp <-
     defaultRequest {secure = not (opts & optsUsePlainHttp)}
-      & setRequestHost (opts & optsHost)
-      & setRequestPort (opts & optsPort)
+      & Http.setRequestHost (opts & optsHost)
+      & Http.setRequestPort (opts & optsPort)
       -- TODO: is this automatically escaped by the library?
-      & setRequestPath (opts & optsPath)
-      & setRequestHeaders (opts & optsHeaders)
-      & setRequestMethod opts.method
-      & setRequestBodyLBS (Enc.encToBytesUtf8Lazy val)
-      & httpBS
-  let code = resp & getResponseStatus & (.statusCode)
-  let msg = resp & getResponseStatus & (.statusMessage) & bytesToTextUtf8Lenient
+      & Http.setRequestPath (opts & optsPath)
+      & Http.setRequestHeaders (opts & optsHeaders)
+      & Http.setRequestMethod opts.method
+      & Http.setRequestBodyLBS (Enc.encToBytesUtf8Lazy val)
+      & Http.httpBS
+  let code = resp & Http.getResponseStatus & (.statusCode)
+  let msg = resp & Http.getResponseStatus & (.statusMessage) & bytesToTextUtf8Lenient
   addAttribute
     span
     "request.response.status"
@@ -87,7 +136,7 @@ optsPort opts = opts.port.withDefault (if opts & optsUsePlainHttp then 80 else 4
 optsPath :: RequestOptions -> ByteString
 optsPath opts = opts.path.withDefault [] & Text.intercalate "/" & ("/" <>) & textToBytesUtf8
 
-optsHeaders :: RequestOptions -> [Header]
+optsHeaders :: RequestOptions -> [Http.Header]
 optsHeaders opts = opts.headers.withDefault []
 
 -- | Create a string that can be pasted on the command line to invoke the same HTTP request via the `xh` tool (curl but nicer syntax)
