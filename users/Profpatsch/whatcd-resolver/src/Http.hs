@@ -5,11 +5,15 @@ module Http
     RequestOptions (..),
     mkRequestOptions,
     httpJson,
+    Http.httpBS,
+    Http.Request,
     Http.setRequestMethod,
+    Http.setQueryString,
     Http.setRequestBodyLBS,
     Http.setRequestHeader,
     Http.getResponseStatus,
     Http.getResponseHeader,
+    Http.getResponseHeaders,
     Http.getResponseBody,
   )
 where
