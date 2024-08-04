@@ -1,8 +1,9 @@
 { config, lib, pkgs, ... }:
 
 {
-  virtualisation.docker.enable = true;
-  users.users.aspen.extraGroups = [ "docker" ];
+  imports = [
+    ./containers.nix
+  ];
 
   security.pam.loginLimits = [
     {
