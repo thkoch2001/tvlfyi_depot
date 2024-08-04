@@ -34,6 +34,24 @@
       "parentUuid": "5dfb4e53_7b8740f1",
       "revId": "97341a7294ed24cfc037f4677fd518aab86f1c37",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5700b0d3_6bd517e2",
+        "filename": "tvix/verify-lang-tests/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-04T12:39:58Z",
+      "side": 1,
+      "message": "We entirely loose any versioning here, and use whatever minimum and latest versions nixpkgs has.\n\nIIRC, nixpkgs doesn\u0027t want to provide too many different versions, so maybe we can add a warning if what\u0027s latest there doesn\u0027t match with what we assume to be latest here?",
+      "parentUuid": "0e424a1e_b06e1523",
+      "revId": "97341a7294ed24cfc037f4677fd518aab86f1c37",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
