@@ -16,6 +16,24 @@
       "message": "@flokli@flokli.de some help on the CI failure here would be appreciated; I cannot for the life of me figure out why this is failing. I\u0027ve tried running `mg run //tools:crate2nix-generate` multiple times to no avail",
       "revId": "e97269a615a107104867f851a7a5aee3979338e9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b4c37ac2_e1047336",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-04T12:43:21Z",
+      "side": 1,
+      "message": "https://cl.tvl.fyi/c/depot/+/12132 probably. @personal@ilanjoselevich.com, can you rebase this out of chain and land it?",
+      "parentUuid": "4dad0851_e147d2ff",
+      "revId": "e97269a615a107104867f851a7a5aee3979338e9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
