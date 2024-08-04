@@ -52,6 +52,24 @@
       "parentUuid": "0e424a1e_b06e1523",
       "revId": "97341a7294ed24cfc037f4677fd518aab86f1c37",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c64739a0_485d1f2d",
+        "filename": "tvix/verify-lang-tests/default.nix",
+        "patchSetId": 5
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-04T13:24:25Z",
+      "side": 1,
+      "message": "I think setting nix_2_23 probably doesn\u0027t make sense, as you mentioned, versions don\u0027t stick for long, even before the changes in this CL we set it to \"latest\" (just with a dead attribute that was no longer updated). We can have a binding with a \"last verified version\" and if it doesn\u0027t match nixVersions.latest we send a warning/trace. I think It\u0027s fine setting minimum if we assume 2.3 will be the minimum for a while, the only time where that won\u0027t be the case is if they drop 2.3 out of nixpkgs, and at that point we have a bigger problem.",
+      "parentUuid": "5700b0d3_6bd517e2",
+      "revId": "97341a7294ed24cfc037f4677fd518aab86f1c37",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
