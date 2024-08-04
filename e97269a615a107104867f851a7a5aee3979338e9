@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4dad0851_e147d2ff",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 10
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-04T01:25:32Z",
+      "side": 1,
+      "message": "@flokli@flokli.de some help on the CI failure here would be appreciated; I cannot for the life of me figure out why this is failing. I\u0027ve tried running `mg run //tools:crate2nix-generate` multiple times to no avail",
+      "revId": "e97269a615a107104867f851a7a5aee3979338e9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
