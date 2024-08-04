@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "048b9bc4_0a75bf20",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-04T07:15:08Z",
+      "side": 1,
+      "message": "link to the upstream PR/commit pls",
+      "revId": "e7415b9724745877a2c6676e0c7a2372c0b211b2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
