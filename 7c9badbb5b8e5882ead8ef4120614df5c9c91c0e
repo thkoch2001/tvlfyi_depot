@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f9ab63b_a2f51e32",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-05T10:50:24Z",
+      "side": 1,
+      "message": "Please rebase the chain on top of latest canon, so the formatting checks don\u0027t block this anymore from going in.",
+      "revId": "7c9badbb5b8e5882ead8ef4120614df5c9c91c0e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
