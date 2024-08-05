@@ -12,7 +12,6 @@ import Data.Aeson.KeyMap qualified as KeyMap
 import Data.Error.Tree
 import Data.List qualified as List
 import Database.PostgreSQL.Simple (Binary (Binary), Only (..))
-import Database.PostgreSQL.Simple.SqlQQ (sql)
 import Database.PostgreSQL.Simple.Types (PGArray (PGArray))
 import FieldParser qualified as Field
 import Http qualified
