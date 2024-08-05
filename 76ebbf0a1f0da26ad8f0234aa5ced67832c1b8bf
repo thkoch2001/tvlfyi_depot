@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37058cd3_7f8a7201",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-05T10:52:07Z",
+      "side": 1,
+      "message": "Out of curiosity, did you try this with cl/12061 (firefox benchmark)?",
+      "revId": "76ebbf0a1f0da26ad8f0234aa5ced67832c1b8bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f45a91ed_e465b7c8",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-05T10:52:07Z",
+      "side": 1,
+      "message": "Do you want to think more before landing this CL, or should this be reclassified to FUTUREWORK?",
+      "revId": "76ebbf0a1f0da26ad8f0234aa5ced67832c1b8bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
