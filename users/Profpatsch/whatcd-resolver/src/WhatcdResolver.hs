@@ -18,7 +18,6 @@ import Data.Map.Strict qualified as Map
 import Data.Pool qualified as Pool
 import Data.Text qualified as Text
 import Database.PostgreSQL.Simple qualified as Postgres
-import Database.PostgreSQL.Simple.SqlQQ (sql)
 import Database.PostgreSQL.Simple.Types (PGArray (PGArray))
 import Database.Postgres.Temp qualified as TmpPg
 import FieldParser (FieldParser, FieldParser' (..))
@@ -778,7 +777,14 @@ runAppWith :: AppT IO a -> IO (Either TmpPg.StartError a)
 runAppWith appT = withTracer $ \tracer -> withDb $ \db -> do
   tool <- readTools (label @"toolsEnvVar" "WHATCD_RESOLVER_TOOLS") (readTool "pg_format")
   pgFormat <- initPgFormatPool (label @"pgFormat" tool)
-  let config = label @"logDatabaseQueries" LogDatabaseQueries
+  prettyPrintDatabaseQueries <-
+    Env.lookupEnv "WHATCD_RESOLVER_PRETTY_PRINT_DATABASE_QUERIES" <&> \case
+      Just _ -> PrettyPrintDatabaseQueries
+      Nothing -> DontPrettyPrintDatabaseQueries
+  let config =
+        T2
+          (label @"logDatabaseQueries" LogDatabaseQueries)
+          (label @"prettyPrintDatabaseQueries" prettyPrintDatabaseQueries)
   pgConnPool <-
     Pool.newPool $
       Pool.defaultPoolConfig

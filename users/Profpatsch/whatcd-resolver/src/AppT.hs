@@ -25,7 +25,7 @@ import UnliftIO
 import Prelude hiding (span)
 
 data Context = Context
-  { config :: Label "logDatabaseQueries" DebugLogDatabaseQueries,
+  { config :: T2 "logDatabaseQueries" DebugLogDatabaseQueries "prettyPrintDatabaseQueries" PrettyPrintDatabaseQueries,
     tracer :: Otel.Tracer,
     pgFormat :: PgFormatPool,
     pgConnPool :: Pool Postgres.Connection,
@@ -40,7 +40,7 @@ newtype AppException = AppException Text
   deriving anyclass (Exception)
 
 instance Show AppException where
-  showsPrec _ (AppException t) = ("AppException: "++) . (textToString t++)
+  showsPrec _ (AppException t) = ("AppException: " ++) . (textToString t ++)
 
 -- *  Logging & Opentelemetry
 
@@ -147,14 +147,17 @@ recordException span dat = liftIO $ do
 -- * Postgres
 
 instance (MonadThrow m, MonadUnliftIO m) => MonadPostgres (AppT m) where
-  execute = executeImpl (AppT ask) (AppT $ asks (.config.logDatabaseQueries))
-  executeMany = executeManyImpl (AppT ask) (AppT $ asks (.config.logDatabaseQueries))
-  executeManyReturningWith = executeManyReturningWithImpl (AppT ask) (AppT $ asks (.config.logDatabaseQueries))
-  queryWith = queryWithImpl (AppT ask) (AppT $ asks (.config.logDatabaseQueries))
+  execute = executeImpl (AppT ask) dbConfig
+  executeMany = executeManyImpl (AppT ask) dbConfig
+  executeManyReturningWith = executeManyReturningWithImpl (AppT ask) dbConfig
+  queryWith = queryWithImpl (AppT ask) dbConfig
   queryWith_ = queryWithImpl_ (AppT ask)
 
-  foldRowsWithAcc = foldRowsWithAccImpl (AppT ask) (AppT $ asks (.config.logDatabaseQueries))
+  foldRowsWithAcc = foldRowsWithAccImpl (AppT ask) dbConfig
   runTransaction = runPGTransaction
+
+dbConfig :: (Monad m) => AppT m (DebugLogDatabaseQueries, PrettyPrintDatabaseQueries)
+dbConfig = AppT $ asks (\c -> (c.config.logDatabaseQueries, c.config.prettyPrintDatabaseQueries))
 
 runPGTransaction :: (MonadUnliftIO m) => Transaction (AppT m) a -> AppT m a
 runPGTransaction (Transaction transaction) = do
