@@ -25,10 +25,14 @@ import UnliftIO
 import Prelude hiding (span)
 
 data Context = Context
-  { config :: T2 "logDatabaseQueries" DebugLogDatabaseQueries "prettyPrintDatabaseQueries" PrettyPrintDatabaseQueries,
+  { pgConfig ::
+      T2
+        "logDatabaseQueries"
+        DebugLogDatabaseQueries
+        "prettyPrintDatabaseQueries"
+        PrettyPrintDatabaseQueries,
+    pgConnPool :: (Pool Postgres.Connection),
     tracer :: Otel.Tracer,
-    pgFormat :: PgFormatPool,
-    pgConnPool :: Pool Postgres.Connection,
     transmissionSessionId :: IORef (Maybe ByteString),
     redactedApiKey :: ByteString
   }
@@ -147,17 +151,24 @@ recordException span dat = liftIO $ do
 -- * Postgres
 
 instance (MonadThrow m, MonadUnliftIO m) => MonadPostgres (AppT m) where
-  execute = executeImpl (AppT ask) dbConfig
-  executeMany = executeManyImpl (AppT ask) dbConfig
-  executeManyReturningWith = executeManyReturningWithImpl (AppT ask) dbConfig
-  queryWith = queryWithImpl (AppT ask) dbConfig
-  queryWith_ = queryWithImpl_ (AppT ask)
+  execute = executeImpl dbConfig
+  executeMany = executeManyImpl dbConfig
+  executeManyReturningWith = executeManyReturningWithImpl dbConfig
+  queryWith = queryWithImpl dbConfig
+  queryWith_ = queryWithImpl_ (dbConfig <&> snd)
 
-  foldRowsWithAcc = foldRowsWithAccImpl (AppT ask) dbConfig
+  foldRowsWithAcc = foldRowsWithAccImpl dbConfig
   runTransaction = runPGTransaction
 
 dbConfig :: (Monad m) => AppT m (DebugLogDatabaseQueries, PrettyPrintDatabaseQueries)
-dbConfig = AppT $ asks (\c -> (c.config.logDatabaseQueries, c.config.prettyPrintDatabaseQueries))
+dbConfig =
+  AppT $
+    asks
+      ( \c ->
+          ( c.pgConfig.logDatabaseQueries,
+            c.pgConfig.prettyPrintDatabaseQueries
+          )
+      )
 
 runPGTransaction :: (MonadUnliftIO m) => Transaction (AppT m) a -> AppT m a
 runPGTransaction (Transaction transaction) = do

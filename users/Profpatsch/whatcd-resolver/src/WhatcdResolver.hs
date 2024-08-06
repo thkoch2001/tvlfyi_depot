@@ -776,12 +776,13 @@ httpTorrent span req =
 runAppWith :: AppT IO a -> IO (Either TmpPg.StartError a)
 runAppWith appT = withTracer $ \tracer -> withDb $ \db -> do
   tool <- readTools (label @"toolsEnvVar" "WHATCD_RESOLVER_TOOLS") (readTool "pg_format")
-  pgFormat <- initPgFormatPool (label @"pgFormat" tool)
   prettyPrintDatabaseQueries <-
-    Env.lookupEnv "WHATCD_RESOLVER_PRETTY_PRINT_DATABASE_QUERIES" <&> \case
-      Just _ -> PrettyPrintDatabaseQueries
-      Nothing -> DontPrettyPrintDatabaseQueries
-  let config =
+    Env.lookupEnv "WHATCD_RESOLVER_PRETTY_PRINT_DATABASE_QUERIES" >>= \case
+      Nothing -> pure DontPrettyPrintDatabaseQueries
+      Just _ -> do
+        pgFormat <- initPgFormatPool (label @"pgFormat" tool)
+        pure $ PrettyPrintDatabaseQueries pgFormat
+  let pgConfig =
         T2
           (label @"logDatabaseQueries" LogDatabaseQueries)
           (label @"prettyPrintDatabaseQueries" prettyPrintDatabaseQueries)
@@ -800,7 +801,7 @@ runAppWith appT = withTracer $ \tracer -> withDb $ \db -> do
         logInfo "WHATCD_RESOLVER_REDACTED_API_KEY was not set, trying pass"
         runCommandExpect0 "pass" ["internet/redacted/api-keys/whatcd-resolver"]
   let newAppT = do
-        logInfo [fmt|Running with config: {showPretty config}|]
+        logInfo [fmt|Running with config: {showPretty pgConfig}|]
         logInfo [fmt|Connected to database at {db & TmpPg.toDataDirectory} on socket {db & TmpPg.toConnectionString}|]
         appT
   runReaderT newAppT.unAppT Context {..}
