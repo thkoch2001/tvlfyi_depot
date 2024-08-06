@@ -364,14 +364,13 @@ data TorrentData transmissionInfo = TorrentData
     torrentId :: Int,
     seedingWeight :: Int,
     artists :: [T2 "artistId" Int "artistName" Text],
-    torrentJson :: Json.Value,
     torrentGroupJson :: TorrentGroupJson,
     torrentStatus :: TorrentStatus transmissionInfo
   }
 
 data TorrentGroupJson = TorrentGroupJson
   { groupName :: Text,
-    groupYear :: Int
+    groupYear :: Natural
   }
 
 data TorrentStatus transmissionInfo
@@ -420,8 +419,9 @@ getBestTorrents opts = do
         tg.group_id,
         t.torrent_id,
         t.seeding_weight,
-        t.full_json_result AS torrent_json,
-        tg.full_json_result AS torrent_group_json,
+        t.full_json_result->'artists' AS artists,
+        tg.full_json_result->>'groupName' AS group_name,
+        tg.full_json_result->>'groupYear' AS group_year,
         t.torrent_file IS NOT NULL AS has_torrent_file,
         t.transmission_torrent_hash
       FROM filtered_torrents f
@@ -442,19 +442,15 @@ getBestTorrents opts = do
         groupId <- Dec.fromField @Int
         torrentId <- Dec.fromField @Int
         seedingWeight <- Dec.fromField @Int
-        (torrentJson, artists) <- Dec.json $ do
-          val <- Json.asValue
-          artists <- Json.keyOrDefault "artists" [] $ Json.eachInArray $ do
+        artists <- Dec.json $
+          Json.eachInArray $ do
             id_ <- Json.keyLabel @"artistId" "id" (Json.asIntegral @_ @Int)
             name <- Json.keyLabel @"artistName" "name" Json.asText
             pure $ T2 id_ name
-          pure (val, artists)
-        torrentGroupJson <-
-          ( Dec.json $ do
-              groupName <- Json.key "groupName" Json.asText
-              groupYear <- Json.key "groupYear" (Json.asIntegral @_ @Int)
-              pure $ TorrentGroupJson {..}
-            )
+        torrentGroupJson <- do
+          groupName <- Dec.text
+          groupYear <- Dec.textParse Field.decimalNatural
+          pure $ TorrentGroupJson {..}
         hasTorrentFile <- Dec.fromField @Bool
         transmissionTorrentHash <-
           Dec.fromField @(Maybe Text)
