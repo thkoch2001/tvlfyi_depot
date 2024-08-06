@@ -388,6 +388,7 @@ runHandlers defaultHandler handlers req respond = withRunInIO $ \runInIO -> do
           )
           ( \span -> do
               res <- act span <&> (\h -> T2 (label @"html" h) (label @"extraHeaders" []))
+              addEventSimple span "Got Html result, rendering…"
               liftIO $ respond (resp res)
           )
   let htmlResp res = Wai.responseLBS Http.ok200 ([("Content-Type", "text/html")] <> res.extraHeaders) . Html.renderHtml $ res.html
@@ -443,6 +444,24 @@ singleQueryArgument field inner =
         more -> Left [fmt|More than one value for query argument "{field}": {show more}, at {ctx & Parse.showContext}|]
     )
     >>> Parse.fieldParser inner
+
+singleQueryArgumentMay :: Text -> FieldParser ByteString to -> Parse Http.Query (Maybe to)
+singleQueryArgumentMay field inner =
+  Parse.mkParsePushContext
+    field
+    ( \(ctx, qry) -> case qry
+        & mapMaybe
+          ( \(k, v) ->
+              if k == (field & textToBytesUtf8)
+                then Just v
+                else Nothing
+          ) of
+        [] -> Right Nothing
+        [Nothing] -> Left [fmt|Expected one query argument with a value, but "{field}" was a query flag|]
+        [Just one] -> Right (Just one)
+        more -> Left [fmt|More than one value for query argument "{field}": {show more}, at {ctx & Parse.showContext}|]
+    )
+    >>> Parse.maybe (Parse.fieldParser inner)
 
 -- | Make sure we can parse the given Text into an URI.
 textToURI :: Parse Text URI
@@ -518,6 +537,9 @@ getBestTorrentsTable dat = do
   fresh <- getBestTorrentsData dat
   pure $ mkBestTorrentsTable fresh
 
+doIfJust :: (Applicative f) => (a -> f ()) -> Maybe a -> f ()
+doIfJust = traverse_
+
 getBestTorrentsData ::
   ( MonadTransmission m,
     MonadThrow m,
@@ -527,7 +549,8 @@ getBestTorrentsData ::
   ) =>
   Maybe (Label "artistRedactedId" Natural) ->
   Transaction m [TorrentData (Label "percentDone" Percentage)]
-getBestTorrentsData artistFilter = do
+getBestTorrentsData artistFilter = inSpan' "get torrents table data" $ \span -> do
+  artistFilter & doIfJust (\a -> addAttribute span "artist-filter.redacted-id" (a.artistRedactedId & showToText & Otel.toAttribute))
   bestStale :: [TorrentData ()] <- getBestTorrents GetBestTorrentsFilter {onlyArtist = artistFilter, onlyDownloaded = False}
   actual <-
     getAndUpdateTransmissionTorrentsStatus
@@ -596,7 +619,7 @@ mkBestTorrentsTable fresh = do
                       {Html.toHtml @Text b.torrentGroupJson.groupName}
                     </a>
                   </td>
-                  <td>{Html.toHtml @Int b.torrentGroupJson.groupYear}</td>
+                  <td>{Html.toHtml @Natural b.torrentGroupJson.groupYear}</td>
                   <td>{Html.toHtml @Int b.seedingWeight}</td>
                   <td><details hx-trigger="toggle once" hx-post="snips/redacted/torrentDataJson" hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentId)]}></details></td>
                   </tr>

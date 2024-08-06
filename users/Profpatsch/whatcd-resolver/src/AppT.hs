@@ -74,6 +74,16 @@ addAttribute span key a = Otel.addAttribute span ("_." <> key) a
 addAttributes :: (MonadIO m) => Otel.Span -> HashMap Text Otel.Attribute -> m ()
 addAttributes span attrs = Otel.addAttributes span $ attrs & HashMap.mapKeys ("_." <>)
 
+addEventSimple :: (MonadIO m) => Otel.Span -> Text -> m ()
+addEventSimple span name =
+  Otel.addEvent
+    span
+    Otel.NewEvent
+      { Otel.newEventName = name,
+        Otel.newEventTimestamp = Nothing,
+        Otel.newEventAttributes = mempty
+      }
+
 -- | Create an otel attribute from a json encoder
 jsonAttribute :: Enc -> Otel.Attribute
 jsonAttribute e = e & Enc.encToTextPretty & Otel.toAttribute

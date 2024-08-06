@@ -8,6 +8,8 @@ import Data.Typeable (Typeable)
 import Database.PostgreSQL.Simple (Binary (fromBinary))
 import Database.PostgreSQL.Simple.FromField qualified as PG
 import Database.PostgreSQL.Simple.FromRow qualified as PG
+import FieldParser (FieldParser)
+import FieldParser qualified as Field
 import Json qualified
 import Label
 import PossehlAnalyticsPrelude
@@ -24,12 +26,65 @@ bytea = fromField @(Binary ByteString) <&> (.fromBinary)
 byteaMay :: Decoder (Maybe ByteString)
 byteaMay = fromField @(Maybe (Binary ByteString)) <&> fmap (.fromBinary)
 
+-- | Parse a `text` field.
+text :: Decoder Text
+text = fromField @Text
+
+-- | Parse a nullable `text` field.
+textMay :: Decoder (Maybe Text)
+textMay = fromField @(Maybe Text)
+
+-- | Parse a `text` field, and then use a 'FieldParser' to convert the result further.
+textParse :: (Typeable to) => FieldParser Text to -> Decoder to
+textParse = parse @Text
+
+-- | Parse a nullable `text` field, and then use a 'FieldParser' to convert the result further.
+textParseMay :: (Typeable to) => FieldParser Text to -> Decoder (Maybe to)
+textParseMay = parseMay @Text
+
+-- | Parse a type implementing 'FromField', and then use a 'FieldParser' to convert the result further.
+parse ::
+  forall from to.
+  ( PG.FromField from,
+    Typeable to
+  ) =>
+  FieldParser from to ->
+  Decoder to
+parse parser = Decoder $ PG.fieldWith $ \field bytes -> do
+  val <- PG.fromField @from field bytes
+  case Field.runFieldParser parser val of
+    Left err ->
+      PG.returnError
+        PG.ConversionFailed
+        field
+        (err & prettyError & textToString)
+    Right a -> pure a
+
+-- | Parse a nullable type implementing 'FromField', and then use a 'FieldParser' to convert the result further.
+parseMay ::
+  forall from to.
+  ( PG.FromField from,
+    Typeable to
+  ) =>
+  FieldParser from to ->
+  Decoder (Maybe to)
+parseMay parser = Decoder $ PG.fieldWith $ \field bytes -> do
+  val <- PG.fromField @(Maybe from) field bytes
+  case Field.runFieldParser parser <$> val of
+    Nothing -> pure Nothing
+    Just (Left err) ->
+      PG.returnError
+        PG.ConversionFailed
+        field
+        (err & prettyError & textToString)
+    Just (Right a) -> pure (Just a)
+
 -- | Turn any type that implements 'PG.fromField' into a 'Decoder'. Use type applications to prevent accidental conversions:
 --
 -- @
 -- fromField @Text :: Decoder Text
 -- @
-fromField :: PG.FromField a => Decoder a
+fromField :: (PG.FromField a) => Decoder a
 fromField = Decoder $ PG.fieldWith PG.fromField
 
 -- | Turn any type that implements 'PG.fromField' into a 'Decoder' and wrap the result into the given 'Label'. Use type applications to prevent accidental conversions:
@@ -37,7 +92,7 @@ fromField = Decoder $ PG.fieldWith PG.fromField
 -- @
 -- fromField @"myField" @Text :: Decoder (Label "myField" Text)
 -- @
-fromFieldLabel :: forall lbl a. PG.FromField a => Decoder (Label lbl a)
+fromFieldLabel :: forall lbl a. (PG.FromField a) => Decoder (Label lbl a)
 fromFieldLabel = label @lbl <$> fromField
 
 -- | Parse fields out of a json value returned from the database.
@@ -55,7 +110,7 @@ fromFieldLabel = label @lbl <$> fromField
 --
 -- Also note: `->>` will coerce the json value to @text@, regardless of the content.
 -- So the JSON object @{"foo": {}}"@ would be returned as the text: @"{\"foo\": {}}"@.
-json :: Typeable a => Json.ParseT ErrorTree Identity a -> Decoder a
+json :: (Typeable a) => Json.ParseT ErrorTree Identity a -> Decoder a
 json parser = Decoder $ PG.fieldWith $ \field bytes -> do
   val <- PG.fromField @Json.Value field bytes
   case Json.parseValue parser val of
@@ -81,7 +136,7 @@ json parser = Decoder $ PG.fieldWith $ \field bytes -> do
 --
 -- Also note: `->>` will coerce the json value to @text@, regardless of the content.
 -- So the JSON object @{"foo": {}}"@ would be returned as the text: @"{\"foo\": {}}"@.
-jsonMay :: Typeable a => Json.ParseT ErrorTree Identity a -> Decoder (Maybe a)
+jsonMay :: (Typeable a) => Json.ParseT ErrorTree Identity a -> Decoder (Maybe a)
 jsonMay parser = Decoder $ PG.fieldWith $ \field bytes -> do
   val <- PG.fromField @(Maybe Json.Value) field bytes
   case Json.parseValue parser <$> val of
