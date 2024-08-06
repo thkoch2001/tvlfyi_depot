@@ -370,20 +370,19 @@ addErrorInformation msg io =
 -- print the query that was run and the query parameters,
 -- then rethrow inside an 'Error'.
 handlePGException ::
-  forall a params tools m.
+  forall a params m.
   ( ToRow params,
     MonadUnliftIO m,
-    MonadLogger m,
-    HasField "pgFormat" tools PgFormatPool
+    MonadLogger m
   ) =>
-  tools ->
+  PrettyPrintDatabaseQueries ->
   Text ->
   Query ->
   -- | Depending on whether we used `format` or `formatMany`.
   Either params (NonEmpty params) ->
   IO a ->
   Transaction m a
-handlePGException tools queryType query' params io = do
+handlePGException prettyQuery queryType query' params io = do
   withRunInIO $ \unliftIO ->
     io
       `catches` [ Handler $ unliftIO . logQueryException @SqlError,
@@ -397,9 +396,10 @@ handlePGException tools queryType query' params io = do
     throwErr err = liftIO $ throwAsError $ prettyErrorTree $ nestedMultiError "A Postgres query failed" err
     logQueryException :: (Exception e) => e -> Transaction m a
     logQueryException exc = do
-      formattedQuery <- case params of
-        Left one -> pgFormatQuery' tools query' one
-        Right many -> pgFormatQueryMany' tools query' many
+      formattedQuery <-
+        case params of
+          Left one -> pgFormatQuery' prettyQuery query' one
+          Right many -> pgFormatQueryMany' prettyQuery query' many
       throwErr
         ( singleError [fmt|Query Type: {queryType}|]
             :| [ nestedError "Exception" (exc & showPretty & newError & singleError),
@@ -533,55 +533,52 @@ runPGTransactionImpl zoom (Transaction transaction) = do
       unliftIO $ runReaderT transaction conn
 
 executeImpl ::
-  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools PgFormatPool, Otel.MonadTracer m) =>
-  m tools ->
+  (ToRow params, MonadUnliftIO m, MonadLogger m, Otel.MonadTracer m) =>
   m (DebugLogDatabaseQueries, PrettyPrintDatabaseQueries) ->
   Query ->
   params ->
   Transaction m (Label "numberOfRowsAffected" Natural)
 {-# INLINE executeImpl #-}
-executeImpl zoomTools zoomDbOptions qry params =
+executeImpl zoomDbOptions qry params =
   Otel.inSpan' "Postgres Query (execute)" Otel.defaultSpanArguments $ \span -> do
-    tools <- lift @Transaction zoomTools
     (logDatabaseQueries, prettyQuery) <- lift @Transaction zoomDbOptions
-    traceQueryIfEnabled tools span logDatabaseQueries prettyQuery qry (HasSingleParam params)
+    traceQueryIfEnabled span logDatabaseQueries prettyQuery qry (HasSingleParam params)
     conn <- Transaction ask
     PG.execute conn qry params
-      & handlePGException tools "execute" qry (Left params)
+      & handlePGException prettyQuery "execute" qry (Left params)
       >>= toNumberOfRowsAffected "executeImpl"
 
 executeImpl_ ::
-  (MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools PgFormatPool, Otel.MonadTracer m) =>
-  m tools ->
+  ( MonadUnliftIO m,
+    MonadLogger m,
+    Otel.MonadTracer m
+  ) =>
   m (DebugLogDatabaseQueries, PrettyPrintDatabaseQueries) ->
   Query ->
   Transaction m (Label "numberOfRowsAffected" Natural)
 {-# INLINE executeImpl_ #-}
-executeImpl_ zoomTools zoomDbOptions qry =
+executeImpl_ zoomDbOptions qry =
   Otel.inSpan' "Postgres Query (execute)" Otel.defaultSpanArguments $ \span -> do
-    tools <- lift @Transaction zoomTools
     (logDatabaseQueries, prettyQuery) <- lift @Transaction zoomDbOptions
-    traceQueryIfEnabled @() tools span logDatabaseQueries prettyQuery qry HasNoParams
+    traceQueryIfEnabled @() span logDatabaseQueries prettyQuery qry HasNoParams
     conn <- Transaction ask
     PG.execute_ conn qry
-      & handlePGException tools "execute_" qry (Left ())
+      & handlePGException prettyQuery "execute_" qry (Left ())
       >>= toNumberOfRowsAffected "executeImpl_"
 
 executeManyImpl ::
-  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools PgFormatPool, Otel.MonadTracer m) =>
-  m tools ->
+  (ToRow params, MonadUnliftIO m, MonadLogger m, Otel.MonadTracer m) =>
   m (DebugLogDatabaseQueries, PrettyPrintDatabaseQueries) ->
   Query ->
   NonEmpty params ->
   Transaction m (Label "numberOfRowsAffected" Natural)
-executeManyImpl zoomTools zoomDbOptions qry params =
+executeManyImpl zoomDbOptions qry params =
   Otel.inSpan' "Postgres Query (executeMany)" Otel.defaultSpanArguments $ \span -> do
-    tools <- lift @Transaction zoomTools
     (logDatabaseQueries, prettyQuery) <- lift @Transaction zoomDbOptions
-    traceQueryIfEnabled tools span logDatabaseQueries prettyQuery qry (HasMultiParams params)
+    traceQueryIfEnabled span logDatabaseQueries prettyQuery qry (HasMultiParams params)
     conn <- Transaction ask
     PG.executeMany conn qry (params & toList)
-      & handlePGException tools "executeMany" qry (Right params)
+      & handlePGException prettyQuery "executeMany" qry (Right params)
       >>= toNumberOfRowsAffected "executeManyImpl"
 
 toNumberOfRowsAffected :: (MonadIO m) => Text -> Int64 -> m (Label "numberOfRowsAffected" Natural)
@@ -595,31 +592,31 @@ toNumberOfRowsAffected functionName i64 =
     <&> label @"numberOfRowsAffected"
 
 executeManyReturningWithImpl ::
-  (ToRow params, MonadUnliftIO m, MonadLogger m, HasField "pgFormat" tools PgFormatPool, Otel.MonadTracer m) =>
-  m tools ->
+  ( ToRow params,
+    MonadUnliftIO m,
+    MonadLogger m,
+    Otel.MonadTracer m
+  ) =>
   m (DebugLogDatabaseQueries, PrettyPrintDatabaseQueries) ->
   Query ->
   NonEmpty params ->
   Decoder r ->
   Transaction m [r]
 {-# INLINE executeManyReturningWithImpl #-}
-executeManyReturningWithImpl zoomTools zoomDbOptions qry params (Decoder fromRow) = do
+executeManyReturningWithImpl zoomDbOptions qry params (Decoder fromRow) = do
   Otel.inSpan' "Postgres Query (executeManyReturning)" Otel.defaultSpanArguments $ \span -> do
-    tools <- lift @Transaction zoomTools
     (logDatabaseQueries, prettyQuery) <- lift @Transaction zoomDbOptions
-    traceQueryIfEnabled tools span logDatabaseQueries prettyQuery qry (HasMultiParams params)
+    traceQueryIfEnabled span logDatabaseQueries prettyQuery qry (HasMultiParams params)
     conn <- Transaction ask
     PG.returningWith fromRow conn qry (params & toList)
-      & handlePGException tools "executeManyReturning" qry (Right params)
+      & handlePGException prettyQuery "executeManyReturning" qry (Right params)
 
 foldRowsWithAccImpl ::
   ( ToRow params,
     MonadUnliftIO m,
     MonadLogger m,
-    HasField "pgFormat" tools PgFormatPool,
     Otel.MonadTracer m
   ) =>
-  m tools ->
   m (DebugLogDatabaseQueries, PrettyPrintDatabaseQueries) ->
   Query ->
   params ->
@@ -628,11 +625,10 @@ foldRowsWithAccImpl ::
   (a -> row -> Transaction m a) ->
   Transaction m a
 {-# INLINE foldRowsWithAccImpl #-}
-foldRowsWithAccImpl zoomTools zoomDbOptions qry params (Decoder rowParser) accumulator f = do
+foldRowsWithAccImpl zoomDbOptions qry params (Decoder rowParser) accumulator f = do
   Otel.inSpan' "Postgres Query (foldRowsWithAcc)" Otel.defaultSpanArguments $ \span -> do
-    tools <- lift @Transaction zoomTools
     (logDatabaseQueries, prettyQuery) <- lift @Transaction zoomDbOptions
-    traceQueryIfEnabled tools span logDatabaseQueries prettyQuery qry (HasSingleParam params)
+    traceQueryIfEnabled span logDatabaseQueries prettyQuery qry (HasSingleParam params)
     conn <- Transaction ask
     withRunInIO
       ( \runInIO ->
@@ -645,17 +641,18 @@ foldRowsWithAccImpl zoomTools zoomDbOptions qry params (Decoder rowParser) accum
               params
               accumulator
               (\acc row -> runInIO $ f acc row)
-              & handlePGException tools "fold" qry (Left params)
+              & handlePGException prettyQuery "fold" qry (Left params)
               & runInIO
       )
 
 pgFormatQueryNoParams' ::
-  (MonadIO m, MonadLogger m, HasField "pgFormat" tools PgFormatPool) =>
-  tools ->
+  (MonadIO m, MonadLogger m) =>
+  PrettyPrintDatabaseQueries ->
   Query ->
   Transaction m ByteString
-pgFormatQueryNoParams' tools q =
-  lift $ pgFormatQueryByteString tools q.fromQuery
+pgFormatQueryNoParams' prettyQuery q = case prettyQuery of
+  DontPrettyPrintDatabaseQueries -> pure q.fromQuery
+  PrettyPrintDatabaseQueries pool -> lift $ pgFormatQueryByteString pool q.fromQuery
 
 pgFormatQuery ::
   (ToRow params, MonadIO m) =>
@@ -686,40 +683,36 @@ queryWithImpl ::
   ( ToRow params,
     MonadUnliftIO m,
     MonadLogger m,
-    HasField "pgFormat" tools PgFormatPool,
     Otel.MonadTracer m
   ) =>
-  m tools ->
   m (DebugLogDatabaseQueries, PrettyPrintDatabaseQueries) ->
   Query ->
   params ->
   Decoder r ->
   Transaction m [r]
 {-# INLINE queryWithImpl #-}
-queryWithImpl zoomTools zoomDbOptions qry params (Decoder fromRow) = do
+queryWithImpl zoomDbOptions qry params (Decoder fromRow) = do
   Otel.inSpan' "Postgres Query (queryWith)" Otel.defaultSpanArguments $ \span -> do
-    tools <- lift @Transaction zoomTools
     (logDatabaseQueries, prettyQuery) <- lift @Transaction zoomDbOptions
-    traceQueryIfEnabled tools span logDatabaseQueries prettyQuery qry (HasSingleParam params)
+    traceQueryIfEnabled span logDatabaseQueries prettyQuery qry (HasSingleParam params)
     conn <- Transaction ask
     PG.queryWith fromRow conn qry params
-      & handlePGException tools "query" qry (Left params)
+      & handlePGException prettyQuery "query" qry (Left params)
 
 queryWithImpl_ ::
   ( MonadUnliftIO m,
-    MonadLogger m,
-    HasField "pgFormat" tools PgFormatPool
+    MonadLogger m
   ) =>
-  m tools ->
+  m PrettyPrintDatabaseQueries ->
   Query ->
   Decoder r ->
   Transaction m [r]
 {-# INLINE queryWithImpl_ #-}
-queryWithImpl_ zoomTools qry (Decoder fromRow) = do
-  tools <- lift @Transaction zoomTools
+queryWithImpl_ zoomDbOptions qry (Decoder fromRow) = do
+  prettyQuery <- lift @Transaction zoomDbOptions
   conn <- Transaction ask
   liftIO (PG.queryWith_ fromRow conn qry)
-    & handlePGException tools "query" qry (Left ())
+    & handlePGException prettyQuery "query" qry (Left ())
 
 data SingleRowError = SingleRowError
   { -- | How many columns were actually returned by the query
@@ -733,30 +726,32 @@ instance Exception SingleRowError where
 pgFormatQuery' ::
   ( MonadIO m,
     ToRow params,
-    MonadLogger m,
-    HasField "pgFormat" tools PgFormatPool
+    MonadLogger m
   ) =>
-  tools ->
+  PrettyPrintDatabaseQueries ->
   Query ->
   params ->
   Transaction m ByteString
-pgFormatQuery' tools q p =
-  pgFormatQuery q p
-    >>= lift . pgFormatQueryByteString tools
+pgFormatQuery' prettyQuery q p = case prettyQuery of
+  DontPrettyPrintDatabaseQueries -> pgFormatQuery q p
+  PrettyPrintDatabaseQueries pool ->
+    pgFormatQuery q p
+      >>= lift . pgFormatQueryByteString pool
 
 pgFormatQueryMany' ::
   ( MonadIO m,
     ToRow params,
-    MonadLogger m,
-    HasField "pgFormat" tools PgFormatPool
+    MonadLogger m
   ) =>
-  tools ->
+  PrettyPrintDatabaseQueries ->
   Query ->
   NonEmpty params ->
   Transaction m ByteString
-pgFormatQueryMany' tools q p =
-  pgFormatQueryMany q p
-    >>= lift . pgFormatQueryByteString tools
+pgFormatQueryMany' prettyQuery q p = case prettyQuery of
+  DontPrettyPrintDatabaseQueries -> pgFormatQueryMany q p
+  PrettyPrintDatabaseQueries pool ->
+    pgFormatQueryMany q p
+      >>= lift . pgFormatQueryByteString pool
 
 -- | Read the executable name "pg_format"
 postgresToolsParser :: ToolParserT IO (Label "pgFormat" Tool)
@@ -764,17 +759,16 @@ postgresToolsParser = label @"pgFormat" <$> readTool "pg_format"
 
 pgFormatQueryByteString ::
   ( MonadIO m,
-    MonadLogger m,
-    HasField "pgFormat" tools PgFormatPool
+    MonadLogger m
   ) =>
-  tools ->
+  PgFormatPool ->
   ByteString ->
   m ByteString
-pgFormatQueryByteString tools queryBytes = do
+pgFormatQueryByteString pool queryBytes = do
   res <-
     liftIO $
       runPgFormat
-        tools.pgFormat
+        pool
         (queryBytes)
   case res.exitCode of
     ExitSuccess -> pure (res.formatted)
@@ -832,8 +826,11 @@ data PrettyPrintDatabaseQueries
   = -- | Do not pretty-print database querios
     DontPrettyPrintDatabaseQueries
   | -- | Pretty-print database queries, slow
-    PrettyPrintDatabaseQueries
-  deriving stock (Show, Enum, Bounded)
+    PrettyPrintDatabaseQueries PgFormatPool
+
+instance Show PrettyPrintDatabaseQueries where
+  show DontPrettyPrintDatabaseQueries = "DontPrettyPrintDatabaseQueries"
+  show (PrettyPrintDatabaseQueries _) = "PrettyPrintDatabaseQueries"
 
 data HasQueryParams param
   = HasNoParams
@@ -845,29 +842,25 @@ traceQueryIfEnabled ::
   ( ToRow params,
     MonadUnliftIO m,
     MonadLogger m,
-    HasField "pgFormat" tools PgFormatPool,
     Otel.MonadTracer m
   ) =>
-  tools ->
   Otel.Span ->
   DebugLogDatabaseQueries ->
   PrettyPrintDatabaseQueries ->
   Query ->
   HasQueryParams params ->
   Transaction m ()
-traceQueryIfEnabled tools span logDatabaseQueries prettyQuery qry params = do
+traceQueryIfEnabled span logDatabaseQueries prettyQuery qry params = do
   -- In case we have query logging enabled, we want to do that
-  let formattedQuery = case prettyQuery of
-        DontPrettyPrintDatabaseQueries -> pure qry.fromQuery
-        PrettyPrintDatabaseQueries -> do
-          withEvent
-            span
-            "Query Format start"
-            "Query Format end"
-            $ case params of
-              HasNoParams -> pgFormatQueryNoParams' tools qry
-              HasSingleParam p -> pgFormatQuery' tools qry p
-              HasMultiParams ps -> pgFormatQueryMany' tools qry ps
+  let formattedQuery =
+        withEvent
+          span
+          "Query Format start"
+          "Query Format end"
+          $ case params of
+            HasNoParams -> pgFormatQueryNoParams' prettyQuery qry
+            HasSingleParam p -> pgFormatQuery' prettyQuery qry p
+            HasMultiParams ps -> pgFormatQueryMany' prettyQuery qry ps
 
   let doLog errs =
         Otel.addAttributes
@@ -884,7 +877,7 @@ traceQueryIfEnabled tools span logDatabaseQueries prettyQuery qry params = do
         q <- formattedQuery
         Otel.inSpan "Postgres EXPLAIN Query" Otel.defaultSpanArguments $ do
           queryWithImpl_
-            (pure tools)
+            (pure prettyQuery)
             ( "EXPLAIN "
                 <> (
                      -- TODO: this is not nice, but the only way to get the `executeMany` form to work with this
