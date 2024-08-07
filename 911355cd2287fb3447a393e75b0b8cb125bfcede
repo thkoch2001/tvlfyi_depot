@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "143541e9_ef442774",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 14
+      },
+      "lineNbr": 403,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-07T13:53:14Z",
+      "side": 1,
+      "message": "Should be FxHashMap",
+      "revId": "911355cd2287fb3447a393e75b0b8cb125bfcede",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
