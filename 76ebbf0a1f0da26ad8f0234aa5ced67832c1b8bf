@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "65a7c896_26b7913a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-07T01:22:34Z",
+      "side": 1,
+      "message": "yeah, I tried the tip of the chain (I added the firefox benchmark after this chain). Unsurprisingly it shows even more of an improvement - like 10% overall.",
+      "parentUuid": "37058cd3_7f8a7201",
+      "revId": "76ebbf0a1f0da26ad8f0234aa5ced67832c1b8bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f45a91ed_e465b7c8",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-08-05T10:52:07Z",
       "side": 1,
       "message": "Do you want to think more before landing this CL, or should this be reclassified to FUTUREWORK?",
+      "revId": "76ebbf0a1f0da26ad8f0234aa5ced67832c1b8bf",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "00291577_d83c4890",
+        "filename": "tvix/eval/src/value/string.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 710,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-07T01:22:34Z",
+      "side": 1,
+      "message": "no, I want to leave this as a TODO, but I don\u0027t think this is necessary to fix before landing.",
+      "parentUuid": "f45a91ed_e465b7c8",
       "revId": "76ebbf0a1f0da26ad8f0234aa5ced67832c1b8bf",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
