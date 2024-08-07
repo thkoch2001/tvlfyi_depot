@@ -175,7 +175,7 @@ pub async fn construct_services_from_configs(
     ),
     Box<dyn std::error::Error + Send + Sync>,
 > {
-    let mut comp = Composition::default();
+    let mut comp = Composition::new(&REG);
 
     comp.extend(configs.blobservices);
     comp.extend(configs.directoryservices);

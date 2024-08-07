@@ -49,7 +49,10 @@ pub async fn from_addr(
     })?
     .0;
     let path_info_service = path_info_service_config
-        .build("anonymous", context.unwrap_or(&CompositionContext::blank()))
+        .build(
+            "anonymous",
+            context.unwrap_or(&CompositionContext::blank(&REG)),
+        )
         .await?;
 
     Ok(path_info_service)

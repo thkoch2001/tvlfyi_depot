@@ -41,7 +41,7 @@ pub async fn from_addr(
     })?
     .0;
     let directory_service = directory_service_config
-        .build("anonymous", &CompositionContext::blank())
+        .build("anonymous", &CompositionContext::blank(&REG))
         .await?;
 
     Ok(directory_service)
