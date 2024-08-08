@@ -1,0 +1,137 @@
+#+title:making tvix-eval faster (draft)
+#+OPTIONS: toc:nil num:nil
+#+HTML_HEAD: <title>aspen smith</title>
+#+HTML_HEAD: <link rel="stylesheet" href="../main.css">
+#+DATE: <2024-08-07 Wed>
+
+i've been working a lot lately on [[https://tvix.dev][tvix]], a rewrite of nix in rust aimed at better
+performance, extensibility, maintainability, and modularity. specifically, i
+tend to focus a lot on the implementation of the nix language evaluator. the
+idea here is that unlike [[https://github.com/NixOS/nix][the reference implementation of nix]], which we usually
+refer to as "c++nix", which is a [[https://craftinginterpreters.com/a-tree-walk-interpreter.html][tree-walking]] interpreter, tvix uses a
+stack-based virtual machine, with an explicit compilation step that compiles the
+nix expression AST produced by [[https://github.com/nix-community/rnix-parser][the parser]]. the idea is that for
+frequently-executed code (which hopefully comprises the majority of the executed
+code), the better cache-friendliness of bytecode (stored in a big
+memory-adjacent vector) gives better enough performance to amortize the cost of
+having to do an up-front compilation step. plus, since the bytecode is at a
+lower abstraction level than the AST, it's hypothetically nicer to work with for
+a language implementer and easier to write bytecode-level optimizations on[fn:1].
+
+unsurprisingly to anyone who's worked on a project like this before, all those
+hypothetical imagined performance gains don't come automatically. tvix got
+pretty close (but not 100% of the way!) to bug-for-bug compatible with c++nix
+as of around the beginning of this year, and the evaluator was sitting at about
+6x slower than nix for the simplest of benchmarks[fn:2]:
+
+#+name: tvix-january-2024
+#+begin_src shell :eval never-export :results html :exports results :dir ~/code/depot.jan1-2024/tvix
+echo '<pre>'
+hyperfine --warmup 1 --style color \
+    "nix-instantiate --eval -E '(import ../../nixpkgs {}).hello.outPath'" \
+    "target/release/tvix -E '(import ../../nixpkgs {}).hello.outPath' --no-warnings" \
+    | $(nix-build '<nixpkgs>' -A aha)/bin/aha -n
+echo '</pre>'
+#+end_src
+
+#+RESULTS: tvix-january-2024
+#+begin_export html
+<pre>
+<span style="font-weight:bold;">Benchmark </span><span style="font-weight:bold;">1</span>: nix-instantiate --eval -E '(import ../../nixpkgs {}).hello.outPath'
+  Time (<span style="font-weight:bold;color:green;">mean</span> ± <span style="color:green;">σ</span>):     <span style="font-weight:bold;color:green;">176.9 ms</span> ± <span style="color:green;">  2.9 ms</span>    [User: <span style="color:blue;">125.2 ms</span>, System: <span style="color:blue;">50.6 ms</span>]
+  Range (<span style="color:teal;">min</span> … <span style="color:purple;">max</span>):   <span style="color:teal;">173.1 ms</span> … <span style="color:purple;">181.9 ms</span>    16 runs
+
+<span style="font-weight:bold;">Benchmark </span><span style="font-weight:bold;">2</span>: target/release/tvix -E '(import ../../nixpkgs {}).hello.outPath' --no-warnings
+  Time (<span style="font-weight:bold;color:green;">mean</span> ± <span style="color:green;">σ</span>):     <span style="font-weight:bold;color:green;"> 1.069 s</span> ± <span style="color:green;"> 0.007 s</span>    [User: <span style="color:blue;">0.848 s</span>, System: <span style="color:blue;">0.226 s</span>]
+  Range (<span style="color:teal;">min</span> … <span style="color:purple;">max</span>):   <span style="color:teal;"> 1.061 s</span> … <span style="color:purple;"> 1.082 s</span>    10 runs
+
+<span style="font-weight:bold;">Relative speed comparison</span>
+  <span style="font-weight:bold;color:green;">      1.00</span>          nix-instantiate --eval -E '(import ../../nixpkgs {}).hello.outPath'
+  <span style="font-weight:bold;color:green;">      6.04</span> ± <span style="color:green;"> 0.11</span>  target/release/tvix -E '(import ../../nixpkgs {}).hello.outPath' --no-warnings
+</pre>
+#+end_export
+
+this is not much to panic over, to be honest. we've been aggressively focused on
+testing, correctness, and completeness of the implementation before focusing on
+optimizations, while carefully designing to allow for future optimizations as we
+build. "[[https://wiki.c2.com/?PrematureOptimization][about 97% of the time, premature optimization is the root of all evil]]"
+and all that.
+
+but eventually premature becomes mature, and it's time to start optimizing!
+
+this year so far, i've been spending some of my spare time working on various
+optimizations for the tvix language, using some function of low-hangingness of
+the fruit and fun (this is a side project after all!) to prioritize my efforts.
+let's take a whirlwind tour through the optimizations i've done so far.
+
+* TODO nan-boxing (failed!)
+
+* TODO making ~Value~ smaller
+
+* TODO pascal strings
+
+* TODO jemalloc
+
+* TODO packed bytecode encoding (failed!)
+
+* TODO string interning
+
+* today
+
+after all that work, we've gone from 6 times slower than nix all the way down to
+only about 4 times slower. there's still a long way to go, but i'm really proud
+of the progress!
+
+#+name: tvix-today
+#+begin_src shell :eval never-export :results html :exports results :dir ~/code/depot/tvix
+echo '<pre>'
+hyperfine --warmup 1 --style color \
+    "target/release/tvix -E '(import ../../nixpkgs {}).hello.outPath' --no-warnings" \
+    "nix-instantiate --eval -E '(import ../../nixpkgs {}).hello.outPath'" \
+    | $(nix-build '<nixpkgs>' -A aha)/bin/aha -n
+echo '</pre>'
+#+end_src
+
+#+RESULTS: tvix-today
+#+begin_export html
+<pre>
+<span style="font-weight:bold;">Benchmark </span><span style="font-weight:bold;">1</span>: target/release/tvix -E '(import ../../nixpkgs {}).hello.outPath' --no-warnings
+  Time (<span style="font-weight:bold;color:green;">mean</span> ± <span style="color:green;">σ</span>):     <span style="font-weight:bold;color:green;">760.4 ms</span> ± <span style="color:green;">  8.7 ms</span>    [User: <span style="color:blue;">635.4 ms</span>, System: <span style="color:blue;">122.7 ms</span>]
+  Range (<span style="color:teal;">min</span> … <span style="color:purple;">max</span>):   <span style="color:teal;">747.6 ms</span> … <span style="color:purple;">772.7 ms</span>    10 runs
+
+<span style="font-weight:bold;">Benchmark </span><span style="font-weight:bold;">2</span>: nix-instantiate --eval -E '(import ../../nixpkgs {}).hello.outPath'
+  Time (<span style="font-weight:bold;color:green;">mean</span> ± <span style="color:green;">σ</span>):     <span style="font-weight:bold;color:green;">175.0 ms</span> ± <span style="color:green;">  1.9 ms</span>    [User: <span style="color:blue;">124.8 ms</span>, System: <span style="color:blue;">49.2 ms</span>]
+  Range (<span style="color:teal;">min</span> … <span style="color:purple;">max</span>):   <span style="color:teal;">172.8 ms</span> … <span style="color:purple;">179.5 ms</span>    16 runs
+
+<span style="font-weight:bold;">Summary</span>
+  <span style="color:teal;">nix-instantiate --eval -E '(import ../../nixpkgs {}).hello.outPath'</span> ran
+<span style="font-weight:bold;color:green;">    4.34</span> ± <span style="color:green;">0.07</span> times faster than <span style="color:purple;">target/release/tvix -E '(import ../../nixpkgs {}).hello.outPath' --no-warnings</span>
+</pre>
+#+end_export
+
+* TODO future work
+
+** TODO better string context representation
+
+** TODO pointer tagging (maybe!)
+
+** TODO faster iteration for attribute sets
+
+** TODO hashconsing???
+
+** TODO parallel evaluation
+
+** TODO garbage collection
+
+** TODO bytecode-level optimizations, finally
+
+* Footnotes
+
+[fn:1] the fantastic book Crafting Interpreters, which is available for free in
+HTML form online but you should totally buy a copy of, has a much more in-depth
+explanation of the advantage of bytecode VMs over tree-walkers. [[https://craftinginterpreters.com/chunks-of-bytecode.html][here's the
+chapter]], but you really should just go read the whole book.
+
+[fn:2] this benchmark in particular was run on [[https://code.tvl.fyi/commit/?id=3307791855fcce717c9265fab8868e3d8b5443ea][~3307791~]], mostly because that's
+the first tvix commit of 2024. by the way, these fancy benchmarks are courtesy
+of [[https://github.com/sharkdp/hyperfine][~hyperfine~]]
