@@ -1,0 +1,248 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7480a632_404e2b0d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-08T21:32:24Z",
+      "side": 1,
+      "message": "We should also mention that the default implementation for PathInfoService and DirectoryService is now using redb instead of sled.",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88d8e813_217b9f3c",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-08T21:32:24Z",
+      "side": 1,
+      "message": "There\u0027s no such thing as \"focus too deep\"\n\n```suggestion\nEven though we don\u0027t want to linger for too long on performance improvements\n```",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28ed8f9b_287e52ff",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-08T21:32:24Z",
+      "side": 1,
+      "message": "Consistency\n\n```suggestion\nperformance improvements. Expect a detailed blog post around that soon after\n```",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4e3a1fa5_877ab13c",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 110,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-08T21:32:24Z",
+      "side": 1,
+      "message": "Clarity\n\n```suggestion\nWe\u0027re still considering these outputs as early prototypes, and will refine them as\n```",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1da88588_292e0c60",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 130,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-08T21:32:24Z",
+      "side": 1,
+      "message": "```suggestion\nWe plan to properly host these as a website, hopefully providing a better introduction\n```",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "420e4aff_4acbf4e8",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-08T21:32:24Z",
+      "side": 1,
+      "message": "You give an overview \"of\" X, not \"into\" X.\n\n```suggestion\nand overview of Tvix, while adding more content over time.\n```",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57ef7b9f_f5d28781",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-08T21:32:24Z",
+      "side": 1,
+      "message": "```suggestion\nrunning some more tests for filesystem related builtins such as `readDir` in our test suite.\n```",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ae6320cd_606e3076",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-08T21:32:24Z",
+      "side": 1,
+      "message": "It\u0027s clearer to continue talking from a \"we\" perspective than talking about the \"last update\" itself.\n\n```suggestion\nabout the Tvix Store Model in the last update, but we didn\u0027t go into too much\n```",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea26696d_9f3dc4bf",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-08T21:32:24Z",
+      "side": 1,
+      "message": "```suggestion\nIt\u0027s currently behind a `xp-store-composition` feature flag, which adds the\n```",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "06319cfa_2af80559",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-08T21:32:24Z",
+      "side": 1,
+      "message": "Why just \"can\"? Does it not expect a TOML file?\n```suggestion\n`--experimental-store-composition` CLI arg that should point to a TOML file\n```",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb614a8a_f7580f1c",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-08T21:32:24Z",
+      "side": 1,
+      "message": "```suggestion\nspecifying the composition configuration. This serves as an alternative to the CLI args for the\n```",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2d262dd6_d7636f2a",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-08T21:32:24Z",
+      "side": 1,
+      "message": "Reads better, I believe the meaning stayed the same?\n\n```suggestion\nWe\u0027re still not 100% sure how to best expose this functionality, in terms of the appropriate level of granularity, in a user-friendly format.\n```",
+      "range": {
+        "startLine": 191,
+        "startChar": 0,
+        "endLine": 192,
+        "endChar": 66
+      },
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1bf566df_c12fda35",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-08T21:32:24Z",
+      "side": 1,
+      "message": "Random closing parenthesis\n```suggestion\nThere\u0027s also some more combinators and refactors missing, but please let us\n```",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89ddb375_2e710f36",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-08T21:32:24Z",
+      "side": 1,
+      "message": "```suggestion\nThere\u0027s been a lot of progress, which would not have been possible without our\n```",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
