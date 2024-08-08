@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "96712fdd_e34d6f2c",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-08T21:51:59Z",
+      "side": 1,
+      "message": "But it\u0027s not just \"spending too much time\", it\u0027s also \"making the code very complex optimizing for a case that\u0027ll be totally irrelevant later on\".",
+      "parentUuid": "a8dbb555_8be79bf0",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "28ed8f9b_287e52ff",
         "filename": "web/tvl/blog/2024-08-tvix-update.md",
         "patchSetId": 1
@@ -329,6 +347,24 @@
       "side": 1,
       "message": "Of course, but this is talking about the CLI flag itself that expects a TOML file.",
       "parentUuid": "924047ed_a5fb7d7f",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac476753_54d1563c",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-08T21:51:59Z",
+      "side": 1,
+      "message": "It must either point to a TOML file, or may be not set. It is still totally permissible to ignore this parameter and only set the other options only. \n\nThat\u0027s what I wanted to signal with \"can\".\nI\u0027ll think about a better wording a bit.",
+      "parentUuid": "0cfea408_8fa3e83c",
       "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
