@@ -62,11 +62,129 @@ but eventually premature becomes mature, and it's time to start optimizing!
 this year so far, i've been spending some of my spare time working on various
 optimizations for the tvix language, using some function of low-hangingness of
 the fruit and fun (this is a side project after all!) to prioritize my efforts.
-let's take a whirlwind tour through the optimizations i've done so far.
-
-* TODO nan-boxing (failed!)
+let's take a whirlwind tour through the optimizations i've done so far. in
+roughly chronlological order:
 
 * TODO making ~Value~ smaller
+
+* ACTIVE nan-boxing (failed!)
+
+the next optimization attempt really was just me maximizing the "fun" variable,
+to the detriment of all others. it's tough to figure out who invented nan
+boxing, but the first time i read about it was in this blog post's favorite book
+crafting interpreters, [[https://piotrduperas.com/posts/nan-boxing][in the optimization chapter]], and later [[https://piotrduperas.com/posts/nan-boxing][this fantastic
+post]] by piotr duperas which went into a lot more of the detail on how to
+implement it, and which i basically followed along paragraph-by-paragraph while
+implementing nan-boxing for tvix.
+
+basically the idea is that you can make representation of your ~Value~ type even
+smaller by taking the 51 spare bits in a quiet NaN value (read the linked posts
+for more information) and using those to represent additional types of value -
+including eg pointers to heap allocations etc.
+
+getting this working in tvix was a /lot/ of work. the actual memory
+representation is "just" [[https://cl.tvl.fyi/c/depot/+/10806][an enormous pile of unsafe code and bit-level
+operations]] to construct pointers of dubious provenance, [[https://cl.tvl.fyi/c/depot/+/10807][some extra work to
+wrap those pointers in a type-safe api that cooperates well with the borrow
+checker and doesn't leak every piece of memory ever]], and finally [[https://cl.tvl.fyi/c/depot/+/10811][a little bit
+more unsafe hackery to make values safely impl ~Clone~]] - but tvix (very
+sensibly) uses a rust enum for its value representation! as is (perhaps
+unfortunately) common in idiomatic rust, the internal details of this enum end
+up getting used all over the place in the codebase - most notably pattern
+matched on and constructed directly! this means we can't just change the
+internal representation of the ~Value~ type to something other than a
+conventional Rust enum without breaking every single consumer! i noodled for a
+while on what a good design for this would look like - i wanted to make sure the
+call site was as ergonomic, safe, and obvious as possible, ideally without
+resorting to huge numbers of hard-to-debug macros. after poking around for the
+actual users of the api, i ended up settling on a design where we have
+/separate/ ~V~, ~VRef~ and ~VMut~ enums with owned, borrowed, and mutably
+borrowed projections of the underlying data respectively. it looks something
+like this:
+
+#+begin_src rust
+pub enum V {
+    Null,
+    Bool(bool),
+    Integer(i64),
+    Float(f64),
+    String(NixString),
+    Path(PathBuf),
+    Attrs(NixAttrs),
+    List(NixList),
+    // ... etc.
+}
+#+end_src
+
+#+begin_src rust
+pub enum VRef<'a> {
+    Null,
+    Bool(bool),
+    Integer(i64),
+    Float(f64),
+    String(StringRef<'a>),
+    Path(&'a PathBuf),
+    Attrs(&'a NixAttrs),
+    List(&'a NixList),
+    // ... etc.
+}
+#+end_src
+
+#+begin_src rust
+pub enum VMut<'a> {
+    Null,
+    Bool(bool),
+    Integer(i64),
+    Float(f64),
+    String(StringRefMut<'a>),
+    Path(&'a mut PathBuf),
+    Attrs(&'a mut NixAttrs),
+    List(&'a mut NixList),
+    // ... etc.
+}
+#+end_src
+
+
+and then we have accessor methods to turn a ~Value~ into one of either ~V~,
+~VRef~, or ~VMut~:
+
+#+begin_src rust
+impl Value {
+    #[inline(always)]
+    pub fn into_match(self) -> V {
+        // ...
+    }
+
+    #[inline(always)]
+    pub fn match_ref(&self) -> VRef {
+        // ...
+    }
+
+    #[inline(always)]
+    pub fn match_mut(&mut self) -> VMut {
+        // ...
+    }
+}
+#+end_src
+
+which we can then use at the call site any time we would otherwise match on a
+~Value~ (either in an owned, borrowing, or mutably borrowing way). the call site
+ends up actually looking reasonably clean:
+
+#+begin_src rust
+fn do_something_with_a_value(val: &Value) {
+    match value.match_ref() {
+        VRef::String(s) => do_something_with_a_string(s);
+        VRef::Int(i) => do_something_with_an_int(i);
+        // ...
+    }
+}
+#+end_src
+
+the idea here is that once the optimizer kicks in, we never actually /construct/
+any of these enums; matching on their discriminant is supposed to be a proxy for
+the underlying bit operation you're doing on the NaN-boxed value. that's the
+reason for the (usually somewhat aggressive ~#[inline(always)]~).
 
 * TODO pascal strings
 
