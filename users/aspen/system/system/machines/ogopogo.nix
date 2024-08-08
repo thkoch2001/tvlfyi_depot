@@ -95,13 +95,4 @@
       wal_level = "logical";
     };
   };
-
-  nix.settings.substituters = [ "ssh://grfn@172.16.0.5" ];
-  nix.settings.trusted-substituters = [ "ssh://grfn@172.16.0.5" ];
-  programs.ssh.knownHosts.mugwump = {
-    extraHostNames = [ "172.16.0.5" ];
-    publicKeyFile = pkgs.writeText "mugwump.pub" ''
-      ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFE2fxPgWO+zeQoLBTgsgxP7Vg7QNHlrQ+Rb3fHFTomB
-    '';
-  };
 }
