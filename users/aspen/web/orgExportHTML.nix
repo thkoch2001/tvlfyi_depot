@@ -51,7 +51,7 @@ runCommand outName { inherit src; } ''
       --kill
     rm file.org
     substitute file.html "$2" \
-      --replace '<title>&lrm;</title>' ""
+      --replace-quiet '<title>&lrm;</title>' ""
     rm file.html
   }
 
