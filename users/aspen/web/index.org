@@ -34,6 +34,13 @@ that's wire-compatible with postgresql and mysql, based on [[https://github.com/
 - https://sacrosanct.bandcamp.com/, a post-rock project with a [[https://bandcamp.com/h34rken][friend of mine]]
 - [[https://soundcloud.com/missingggg][my current soundcloud]], releasing instrumental music under the name *missing*
 - i play bass in [[https://goodcry.band][good cry]], a rock band based in brooklyn
+- my friend [[https://tasshin.com/][tasshin]] and i wrote, recorded and made music videos for 6 songs
+  together:
+  - [[https://www.youtube.com/watch?v=uX11-ClOf5k&list=PLXcbtcE8U1zcQsIWV7uzz-fUm2o9ggSbW&index=5][u're welcome bro]]
+  - [[https://www.youtube.com/watch?v=i1ZNdzkkJe4&list=PLXcbtcE8U1zcQsIWV7uzz-fUm2o9ggSbW&index=4]["cool"]]
+  - [[https://www.youtube.com/watch?v=5GOciie5Pjk&list=PLXcbtcE8U1zcQsIWV7uzz-fUm2o9ggSbW&index=3][being love]]
+  - [[https://www.youtube.com/watch?v=ew-rhBQmGpY&list=PLXcbtcE8U1zcQsIWV7uzz-fUm2o9ggSbW&index=2][gonna]]
+  - [[https://www.youtube.com/watch?v=GJBTaH2EozQ&list=PLXcbtcE8U1zcQsIWV7uzz-fUm2o9ggSbW&index=1][love like there's no tomorrow]]
 - you can also find a log of all the music I listen to [[https://www.last.fm/user/wildgriffin45][on last.fm]]
 
 * contact
