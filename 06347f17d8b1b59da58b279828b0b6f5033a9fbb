@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "40215e08_2986b96d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000107
+      },
+      "writtenOn": "2024-08-08T22:26:12Z",
+      "side": 1,
+      "message": "Thanks for these updates!",
+      "revId": "06347f17d8b1b59da58b279828b0b6f5033a9fbb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f972c611_f7a07310",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000107
+      },
+      "writtenOn": "2024-08-08T22:26:12Z",
+      "side": 1,
+      "message": "Missing a `p`\n```suggestion\nVery early, during bootstrapping, nixpkgs relies on some `builtin:fetchurl`\n```",
+      "revId": "06347f17d8b1b59da58b279828b0b6f5033a9fbb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d957b541_4e27a2b4",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000107
+      },
+      "writtenOn": "2024-08-08T22:26:12Z",
+      "side": 1,
+      "message": "Maybe `These have been` or `This has been`?\n```suggestion\nThese have been consolidated into a mdbook (at `//tvix/docs`).\n```",
+      "revId": "06347f17d8b1b59da58b279828b0b6f5033a9fbb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
