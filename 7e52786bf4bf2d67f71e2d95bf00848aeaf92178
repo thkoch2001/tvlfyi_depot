@@ -109,6 +109,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "16604e84_eb5ca3a3",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-08T21:59:38Z",
+      "side": 1,
+      "message": "do you have an alternative proposal that might fit better here?",
+      "parentUuid": "118cc6d1_54db97bc",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "28ed8f9b_287e52ff",
         "filename": "web/tvl/blog/2024-08-tvix-update.md",
         "patchSetId": 1
