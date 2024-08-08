@@ -34,6 +34,24 @@
       "parentUuid": "19e1a3c8_36461508",
       "revId": "46fb4cdfb9ccc78ac1d1b0c7dd5aae8a02ab83c2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55f4eeec_35a9427c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-08T00:23:05Z",
+      "side": 1,
+      "message": "less obviously good on my desktop though:\n```\nBenchmarking hello outpath: Warming up for 3.0000 s\nWarning: Unable to complete 10 samples in 30.0s. You may wish to increase target time to 48.6s or enable flat sampling.\nhello outpath           time:   [880.10 ms 881.85 ms 882.75 ms]\n                        change: [-2.8481% -2.5468% -2.2355%] (p \u003d 0.00 \u003c 0.05)\n                        Performance has improved.\n\nBenchmarking firefox outpath: Warming up for 3.0000 s\nWarning: Unable to complete 10 samples in 30.0s. You may wish to increase target time to 86.4s.\nfirefox outpath         time:   [8.6788 s 8.6972 s 8.7155 s]\n                        change: [+0.3281% +0.5568% +0.7787%] (p \u003d 0.00 \u003c 0.05)\n                        Change within noise threshold.\n```",
+      "parentUuid": "4691453d_52891bdc",
+      "revId": "46fb4cdfb9ccc78ac1d1b0c7dd5aae8a02ab83c2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
