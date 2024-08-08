@@ -31,5 +31,12 @@
       content = ./2024-02-tvix-update.md;
       author = "flokli";
     }
+    {
+      key = "tvix-update-august-24";
+      title = "Tvix Status - August '24";
+      date = 1723219370;
+      content = ./2024-08-tvix-update.md;
+      author = "flokli";
+    }
   ];
 }
