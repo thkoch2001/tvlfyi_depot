@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "118cc6d1_54db97bc",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-08T21:56:19Z",
+      "side": 1,
+      "message": "Correct, but that wasn\u0027t mentioned or implied with \"focus too deep\" either IMO.",
+      "parentUuid": "96712fdd_e34d6f2c",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "28ed8f9b_287e52ff",
         "filename": "web/tvl/blog/2024-08-tvix-update.md",
         "patchSetId": 1
