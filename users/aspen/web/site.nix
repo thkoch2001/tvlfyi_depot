@@ -4,9 +4,8 @@ let
 
   orgExportHTML = import ./orgExportHTML.nix args;
 
-in
-
-{
+in {
   index = orgExportHTML ./index.org;
   recipes = orgExportHTML ./recipes;
+  blog = orgExportHTML ./blog;
 }
