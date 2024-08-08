@@ -13,7 +13,7 @@ my name is aspen smith and i'm a software engineer and musician.
 
 i'm currently a software engineer at jane street.
 
-before that, i worked on database internals at [[https://readyset.io/][readyset]], an incrementally
+previously, i worked on database internals at [[https://readyset.io/][readyset]], an incrementally
 maintained, partially stateful materialized view maintenance system for sql
 that's wire-compatible with postgresql and mysql, based on [[https://github.com/mit-pdos/noria][noria]].
 
