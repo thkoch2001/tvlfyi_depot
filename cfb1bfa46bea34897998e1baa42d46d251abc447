@@ -34,6 +34,24 @@
       "parentUuid": "d507f07c_d4f0893d",
       "revId": "cfb1bfa46bea34897998e1baa42d46d251abc447",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74b7604e_c34d5eb8",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-09T12:08:48Z",
+      "side": 1,
+      "message": "Maybe at least mention that it\u0027s the default now?",
+      "parentUuid": "f0b7d07c_dcda01db",
+      "revId": "cfb1bfa46bea34897998e1baa42d46d251abc447",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
