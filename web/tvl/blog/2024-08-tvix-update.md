@@ -72,7 +72,7 @@ fix some correctness issues there.
 Even though we don't want to focus too much on performance improvements
 until all features of Nix are properly understood and representable with our
 architecture, there's been some work on removing some obvious and low-risk
-performance improvements. Expect a detailed blog post around that soon after
+performance bottlenecks. Expect a detailed blog post around that soon after
 this one!
 
 ## Tracing / O11Y Support
