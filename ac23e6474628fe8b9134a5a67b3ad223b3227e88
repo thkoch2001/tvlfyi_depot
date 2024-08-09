@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4b7e109_06eb1115",
+        "filename": "tvix/verify-lang-tests/default.nix",
+        "patchSetId": 16
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-09T13:28:33Z",
+      "side": 1,
+      "message": "Let\u0027s call this let binding nix_2_3. All comments that explicitly select this are also referring to Nix 2.3, and I don\u0027t think the minimum will be bumped for quite some time.",
+      "revId": "ac23e6474628fe8b9134a5a67b3ad223b3227e88",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79d27998_99d0f42e",
+        "filename": "tvix/verify-lang-tests/default.nix",
+        "patchSetId": 16
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-09T13:28:33Z",
+      "side": 1,
+      "message": "...but keep this alias.",
+      "revId": "ac23e6474628fe8b9134a5a67b3ad223b3227e88",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

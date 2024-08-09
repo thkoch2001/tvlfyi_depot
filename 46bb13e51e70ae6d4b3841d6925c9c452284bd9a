@@ -88,6 +88,24 @@
       "parentUuid": "833fdc78_01dfeca6",
       "revId": "46bb13e51e70ae6d4b3841d6925c9c452284bd9a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42fe75ef_c9bf9f45",
+        "filename": "tvix/verify-lang-tests/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-09T13:28:33Z",
+      "side": 1,
+      "message": "I meant, can we still test the parts that didn\u0027t change with nix_latest_verified.\n\nAka, add a `eval-okay-dirof-minimal` variant, testing everything except the changed behaviour. and yes, this could be a followup CL, but I want to avoid entirely flying blind on this for future nix versions.",
+      "parentUuid": "a002138f_572734b0",
+      "revId": "46bb13e51e70ae6d4b3841d6925c9c452284bd9a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
