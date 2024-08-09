@@ -106,6 +106,24 @@
       "parentUuid": "a002138f_572734b0",
       "revId": "46bb13e51e70ae6d4b3841d6925c9c452284bd9a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65f72989_1a4b7719",
+        "filename": "tvix/verify-lang-tests/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 94,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-09T14:00:15Z",
+      "side": 1,
+      "message": "Ok, I\u0027ll do that in a followup CL.",
+      "parentUuid": "42fe75ef_c9bf9f45",
+      "revId": "46bb13e51e70ae6d4b3841d6925c9c452284bd9a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
