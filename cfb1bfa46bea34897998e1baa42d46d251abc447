@@ -52,6 +52,24 @@
       "parentUuid": "f0b7d07c_dcda01db",
       "revId": "cfb1bfa46bea34897998e1baa42d46d251abc447",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "262f71e5_45dcfbc6",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-09T15:36:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "74b7604e_c34d5eb8",
+      "revId": "cfb1bfa46bea34897998e1baa42d46d251abc447",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
