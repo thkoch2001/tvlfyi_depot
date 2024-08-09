@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6ad6aab_f3f76232",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-09T09:19:11Z",
+      "side": 1,
+      "message": "Yes, I also forgot to mention the bigtable backends and the removal of the simplefs one, all done now.",
+      "parentUuid": "7480a632_404e2b0d",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88d8e813_217b9f3c",
@@ -121,6 +139,24 @@
       "side": 1,
       "message": "do you have an alternative proposal that might fit better here?",
       "parentUuid": "118cc6d1_54db97bc",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "19af208e_8b68a536",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-09T09:19:11Z",
+      "side": 1,
+      "message": "I changed this to \"focus too much\". There\u0027s some mention of risk in doing useless/later obsolete optimisations, as well as a reference to a future blogpost, let\u0027s leave it to that.",
+      "parentUuid": "16604e84_eb5ca3a3",
       "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -247,6 +283,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d582e3e_995d1d66",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-09T09:19:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "420e4aff_4acbf4e8",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57ef7b9f_f5d28781",
@@ -334,6 +388,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac6d95f0_a2e5ede7",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 186,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-09T09:19:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea26696d_9f3dc4bf",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "06319cfa_2af80559",
@@ -401,6 +473,24 @@
       "side": 1,
       "message": "It must either point to a TOML file, or may be not set. It is still totally permissible to ignore this parameter and only set the other options only. \n\nThat\u0027s what I wanted to signal with \"can\".\nI\u0027ll think about a better wording a bit.",
       "parentUuid": "0cfea408_8fa3e83c",
+      "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5585f80_74089e24",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-09T09:19:11Z",
+      "side": 1,
+      "message": "I reworded this differently:\n\n```\nIt\u0027s currently behind a `xp-store-composition` feature flag, which adds the\noptional `--experimental-store-composition` CLI arg, pointing to a TOML file\nspecifying the composition configuration. If set, this has priority over the old\nCLI args for the three (single) stores.\n```\n\nThis should make it clear it\u0027s an optional argument, but if set, must point to a TOML file.",
+      "parentUuid": "ac476753_54d1563c",
       "revId": "7e52786bf4bf2d67f71e2d95bf00848aeaf92178",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
