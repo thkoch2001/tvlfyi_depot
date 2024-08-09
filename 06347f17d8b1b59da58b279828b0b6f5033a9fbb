@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "774dfeeb_58422229",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-09T09:06:31Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "f972c611_f7a07310",
+      "revId": "06347f17d8b1b59da58b279828b0b6f5033a9fbb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d957b541_4e27a2b4",
@@ -48,6 +66,24 @@
       "writtenOn": "2024-08-08T22:26:12Z",
       "side": 1,
       "message": "Maybe `These have been` or `This has been`?\n```suggestion\nThese have been consolidated into a mdbook (at `//tvix/docs`).\n```",
+      "revId": "06347f17d8b1b59da58b279828b0b6f5033a9fbb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2b05397b_0ee4fdb9",
+        "filename": "web/tvl/blog/2024-08-tvix-update.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-09T09:06:31Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "d957b541_4e27a2b4",
       "revId": "06347f17d8b1b59da58b279828b0b6f5033a9fbb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
