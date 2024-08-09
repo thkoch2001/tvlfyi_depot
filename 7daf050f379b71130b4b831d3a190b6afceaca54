@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f928c99d_08235e02",
+        "filename": "users/aspen/web/blog/making-tvix-eval-faster.org",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-09T16:29:19Z",
+      "side": 1,
+      "message": "This doesn\u0027t seem to be integrated to the website build. I did a `mg build //users/aspen/web`, but it didn\u0027t show up there.\n\nAlso, maybe make the deployment script separate, so it becomes possible to review the website locally without being able to sync to your S3 bucket to view ;-)",
+      "revId": "7daf050f379b71130b4b831d3a190b6afceaca54",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
