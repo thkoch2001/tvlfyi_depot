@@ -45,7 +45,7 @@ file from the internet, clone of a git repo). These needed to be implemented
 for completeness. We implemented pretty much all downloads of Tarballs, NARs and
 plain files, except git repositories, which are left for later.
 
-Instead of doing these fetches immediately, we added a generic `Fetch` struct
+Instead of doing these fetches immediately, we added a generic `Fetch` type
 that allows describing such fetches *before actually doing them*, similar to
 being able to describe builds, and use the same "Drive builds on IO" machinery
 to delay these fetches to the point where it's needed. We also show progress
@@ -53,7 +53,7 @@ bars when doing fetches.
 
 Very early, during bootstrapping, nixpkgs relies on some `builtin:fetchurl`
 "fake" Derivation, which has some special handling logic in Nix. We implemented
-these quirks, by converting it to our generic `Fetch` struct and dealing with
+these quirks, by converting it to instances of our `Fetch` type and dealing with
 it there in a consistent fashion.
 
 ### More fixes, Refscan
@@ -159,8 +159,8 @@ store backends as the rest of Tvix.
 We landed some fixes in [crate2nix][crate2nix], the tool we're using to for
 per-crate incremental builds of Tvix.
 
-It now supports the corner cases needed to build WASM - so now [Tvixbolt]
-[tvixbolt] is built with it, too.
+It now supports the corner cases needed to build WASM - so now
+[Tvixbolt][tvixbolt] is built with it, too.
 
 We also fixed some bugs in how test directories are prepared, which unlocked
 running some more tests for filesystem related builtins such as `readDir` in our test suite.
