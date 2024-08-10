@@ -34,6 +34,24 @@
       "parentUuid": "5cc7aa06_005c1606",
       "revId": "4f37087b5c83f07458a22371ba28b9f99688b6f2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95e336da_5c49abd8",
+        "filename": "tvix/cli/tests/repl.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-10T20:26:43Z",
+      "side": 1,
+      "message": "It needs to exist, but it doesn\u0027t seem to need to be a directory:\n\n```\n❯ NIX_PATH\u003dnixpkgs\u003d/homeless-shelter ../target/release-with-debug/tvix\ntvix-repl\u003e \u003cnixpkgs\u003e\n⠁ Evaluating…                                             (0s)       0/0      error[E008]: Nix path entry could not be resolved: path \u0027nixpkgs\u0027 was not found in the Nix search path\n --\u003e [code]:1:1\n  |\n1 | \u003cnixpkgs\u003e\n  | ^^^^^^^^^\n\ntvix-repl\u003e \n❯ NIX_PATH\u003dnixpkgs\u003d/dev/null ../target/release-with-debug/tvix\ntvix-repl\u003e \u003cnixpkgs\u003e\n\u003d\u003e /dev/null :: path\n```\n\nNix (2.18):\n```\n❯ NIX_PATH\u003dnixpkgs\u003d/dev/null nix repl\nWelcome to Nix 2.18.5. Type :? for help.\n\nnix-repl\u003e \u003cnixpkgs\u003e\n/dev/null\n\nnix-repl\u003e           \n❯ NIX_PATH\u003dnixpkgs\u003d/dev/null2 nix repl\nWelcome to Nix 2.18.5. Type :? for help.\n\nnix-repl\u003e \u003cnixpkgs\u003e\nwarning: Nix search path entry \u0027/dev/null2\u0027 does not exist, ignoring\nerror:\n       … while calling the \u0027findFile\u0027 builtin\n\n         at «string»:1:1:\n\n            1| \u003cnixpkgs\u003e\n             | ^\n\n       error: file \u0027nixpkgs\u0027 was not found in the Nix search path (add it using $NIX_PATH or -I)\n\n       at «none»:0: (source not available)\n```\n\nLet\u0027s use `/dev/null` or `/tmp`?",
+      "parentUuid": "f6dcebe7_1f9c19cd",
+      "revId": "4f37087b5c83f07458a22371ba28b9f99688b6f2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
