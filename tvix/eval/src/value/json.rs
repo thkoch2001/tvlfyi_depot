@@ -37,9 +37,9 @@ impl Value {
 
             Value::Path(p) => {
                 let imported = generators::request_path_import(co, *p).await;
-                let path = imported.to_string_lossy().to_string();
-                context = context.append(crate::NixContextElement::Plain(path.clone()));
-                Json::String(path)
+                let path = imported.to_string_lossy();
+                context = context.append(crate::NixContextElement::Plain(path.clone().into()));
+                Json::String(path.to_string())
             }
 
             Value::List(l) => {
