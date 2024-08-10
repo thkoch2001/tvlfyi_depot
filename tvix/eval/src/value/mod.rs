@@ -32,7 +32,7 @@ pub(crate) use function::Formals;
 pub use function::{Closure, Lambda};
 pub use list::NixList;
 pub use path::canon_path;
-pub use string::{NixContext, NixContextElement, NixString};
+pub use string::{InternedString, NixContext, NixContextElement, NixString};
 pub use thunk::Thunk;
 
 pub use self::thunk::ThunkSet;
@@ -353,9 +353,8 @@ impl Value {
                     let imported = generators::request_path_import(co, *p).await;
                     // When we import a path from the evaluator, we must attach
                     // its original path as its context.
-                    context = context.append(NixContextElement::Plain(
-                        imported.to_string_lossy().to_string(),
-                    ));
+                    context =
+                        context.append(NixContextElement::Plain(imported.to_string_lossy().into()));
                     Ok(imported.into_os_string().into_encoded_bytes().into())
                 }
                 (

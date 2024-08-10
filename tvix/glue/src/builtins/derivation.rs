@@ -24,7 +24,7 @@ fn populate_inputs(drv: &mut Derivation, full_context: NixContext, known_paths: 
     for element in full_context.iter() {
         match element {
             NixContextElement::Plain(source) => {
-                let sp = StorePathRef::from_absolute_path(source.as_bytes())
+                let sp = StorePathRef::from_absolute_path(source.as_str().as_bytes())
                     .expect("invalid store path")
                     .to_owned();
                 drv.input_sources.insert(sp);
@@ -38,7 +38,8 @@ fn populate_inputs(drv: &mut Derivation, full_context: NixContext, known_paths: 
                 // We assume derivations to be passed validated, so ignoring rest
                 // and expecting parsing is ok.
                 let (derivation, _rest) =
-                    StorePath::from_absolute_path_full(derivation_str).expect("valid store path");
+                    StorePath::from_absolute_path_full(derivation_str.as_str())
+                        .expect("valid store path");
 
                 #[cfg(debug_assertions)]
                 assert!(
@@ -49,18 +50,18 @@ fn populate_inputs(drv: &mut Derivation, full_context: NixContext, known_paths: 
 
                 match drv.input_derivations.entry(derivation.clone()) {
                     btree_map::Entry::Vacant(entry) => {
-                        entry.insert(BTreeSet::from([name.clone()]));
+                        entry.insert(BTreeSet::from([name.to_string()]));
                     }
 
                     btree_map::Entry::Occupied(mut entry) => {
-                        entry.get_mut().insert(name.clone());
+                        entry.get_mut().insert(name.to_string());
                     }
                 }
             }
 
             NixContextElement::Derivation(drv_path) => {
-                let (derivation, _rest) =
-                    StorePath::from_absolute_path_full(drv_path).expect("valid store path");
+                let (derivation, _rest) = StorePath::from_absolute_path_full(drv_path.as_str())
+                    .expect("valid store path");
 
                 #[cfg(debug_assertions)]
                 assert!(
@@ -498,8 +499,8 @@ pub(crate) mod derivation_builtins {
                         name.clone(),
                         NixString::new_context_from(
                             NixContextElement::Single {
-                                name: name.clone(),
-                                derivation: drv_path.to_absolute_path(),
+                                name: name.into(),
+                                derivation: drv_path.to_absolute_path().into(),
                             }
                             .into(),
                             output.path.as_ref().unwrap().to_absolute_path(),
@@ -509,7 +510,7 @@ pub(crate) mod derivation_builtins {
                 .chain(std::iter::once((
                     "drvPath".to_owned(),
                     NixString::new_context_from(
-                        NixContextElement::Derivation(drv_path.to_absolute_path()).into(),
+                        NixContextElement::Derivation(drv_path.to_absolute_path().into()).into(),
                         drv_path.to_absolute_path(),
                     ),
                 ))),
@@ -630,7 +631,7 @@ pub(crate) mod derivation_builtins {
         })?;
 
         let abs_path = store_path.to_absolute_path();
-        let context: NixContext = NixContextElement::Plain(abs_path.clone()).into();
+        let context: NixContext = NixContextElement::Plain(abs_path.as_str().into()).into();
 
         Ok(Value::from(NixString::new_context_from(context, abs_path)))
     }

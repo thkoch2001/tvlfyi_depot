@@ -316,10 +316,11 @@ mod import_builtins {
         // We need to attach context to the final output path.
         let outpath = output_path.to_absolute_path();
 
-        Ok(
-            NixString::new_context_from(NixContextElement::Plain(outpath.clone()).into(), outpath)
-                .into(),
+        Ok(NixString::new_context_from(
+            NixContextElement::Plain(outpath.as_str().into()).into(),
+            outpath,
         )
+        .into())
     }
 
     #[builtin("filterSource")]
@@ -357,10 +358,11 @@ mod import_builtins {
             })?
             .to_absolute_path();
 
-        Ok(
-            NixString::new_context_from(NixContextElement::Plain(outpath.clone()).into(), outpath)
-                .into(),
+        Ok(NixString::new_context_from(
+            NixContextElement::Plain(outpath.as_str().into()).into(),
+            outpath,
         )
+        .into())
     }
 
     #[builtin("storePath")]

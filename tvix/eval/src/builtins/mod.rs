@@ -717,20 +717,22 @@ mod pure_builtins {
 
         let added_context = added_context.to_attrs()?;
         for (context_key, context_element) in added_context.into_iter() {
+            let context_key = context_key.into();
+
             // Invariant checks:
             // - TODO: context_key must be a syntactically valid store path.
             // - Perform a deep force `context_element`.
             let context_element = context_element.to_attrs()?;
             if let Some(path) = context_element.select("path") {
                 if path.as_bool()? {
-                    ctx_elements.insert(NixContextElement::Plain(context_key.to_string()));
+                    ctx_elements.insert(NixContextElement::Plain(context_key));
                 }
             }
             if let Some(all_outputs) = context_element.select("allOutputs") {
                 if all_outputs.as_bool()? {
                     // TODO: check if `context_key` is a derivation path.
                     // This may require realization.
-                    ctx_elements.insert(NixContextElement::Derivation(context_key.to_string()));
+                    ctx_elements.insert(NixContextElement::Derivation(context_key));
                 }
             }
             if let Some(some_outputs) = context_element.select("outputs") {
@@ -740,8 +742,8 @@ mod pure_builtins {
                 for output in some_outputs.into_iter() {
                     let output = output.to_str()?;
                     ctx_elements.insert(NixContextElement::Single {
-                        derivation: context_key.to_string(),
-                        name: output.to_string(),
+                        derivation: context_key,
+                        name: output.into(),
                     });
                 }
             }
@@ -1673,7 +1675,7 @@ mod placeholder_builtins {
             let mut context = NixContext::new();
             context.extend(c.into_iter().map(|elem| match elem {
                 crate::NixContextElement::Derivation(drv_path) => {
-                    crate::NixContextElement::Plain(drv_path.to_string())
+                    crate::NixContextElement::Plain(drv_path.into())
                 }
                 elem => elem.clone(),
             }));

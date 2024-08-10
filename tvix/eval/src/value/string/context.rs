@@ -1,22 +1,174 @@
 use rustc_hash::FxHashSet;
 use serde::Serialize;
+use std::borrow::Cow;
+use std::cell::RefCell;
+use std::collections::HashMap;
+use std::fmt::{self, Debug, Display};
 
 use super::NixString;
+
+#[derive(Clone, Copy, Debug, PartialEq, Eq, Hash)]
+pub struct InternedStringId(usize);
+
+#[derive(Default)]
+pub struct Interner {
+    map: HashMap<&'static str, InternedStringId>,
+    vec: Vec<&'static str>,
+    buf: String,
+    full: Vec<String>,
+}
+
+impl Interner {
+    // pub fn with_capacity(cap: usize) -> Self {
+    //     Interner {
+    //         buf: String::with_capacity(cap),
+    //         ..Default::default()
+    //     }
+    // }
+
+    pub fn intern<S: AsRef<str>>(&mut self, name: S) -> InternedStringId {
+        let name = name.as_ref();
+        if let Some(&id) = self.map.get(name) {
+            return id;
+        }
+
+        let name = self.alloc(name);
+        let id = InternedStringId(self.vec.len());
+
+        self.map.insert(name, id);
+        self.vec.push(name);
+
+        debug_assert!(self.lookup(id) == name);
+        debug_assert!(self.intern(name) == id);
+
+        id
+    }
+
+    pub fn lookup<'a>(&'a self, id: InternedStringId) -> &'static str {
+        self.vec[id.0]
+    }
+
+    fn alloc<'a>(&'a mut self, name: &str) -> &'static str {
+        let cap = self.buf.capacity();
+        if cap < self.buf.len() + name.len() {
+            let new_cap = (cap.max(name.len()) + 1).next_power_of_two();
+            let new_buf = String::with_capacity(new_cap);
+            let old_buf = std::mem::replace(&mut self.buf, new_buf);
+            self.full.push(old_buf);
+        }
+
+        let interned: &'a str = {
+            let start = self.buf.len();
+            self.buf.push_str(name);
+            &self.buf[start..]
+        };
+
+        unsafe {
+            // This is sound for two reasons:
+            //
+            // 1. This function (Interner::alloc) is private, which
+            //    prevents users from allocating a supposedly static
+            //    reference.
+            //
+            // 2. Interner::lookup explicitly shortens the lifetime of
+            //    references that are handed out to that of the
+            //    reference to self.
+            return &*(interned as *const str);
+        }
+    }
+}
+
+thread_local! {
+    static INTERNER: RefCell<Interner> = Default::default();
+}
+
+#[derive(Clone, Copy, Hash, PartialEq, Eq)]
+pub struct InternedString(InternedStringId);
+
+impl InternedString {
+    pub fn as_str(self) -> &'static str {
+        INTERNER.with(|i| i.borrow().lookup(self.0))
+    }
+
+    pub fn to_string(self) -> String {
+        self.as_str().to_owned()
+    }
+}
+
+impl Serialize for InternedString {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.as_str())
+    }
+}
+
+impl Display for InternedString {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        f.write_str(self.as_str())
+    }
+}
+
+impl Debug for InternedString {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{:?}", self.as_str())
+    }
+}
+
+impl From<InternedString> for NixString {
+    fn from(value: InternedString) -> Self {
+        NixString::from(value.as_str())
+    }
+}
+
+impl<'a> From<&'a str> for InternedString {
+    fn from(value: &'a str) -> Self {
+        INTERNER.with(|i| InternedString(i.borrow_mut().intern(value)))
+    }
+}
+
+impl<'a> From<&'a String> for InternedString {
+    fn from(value: &'a String) -> Self {
+        InternedString::from(value.as_str())
+    }
+}
+
+impl From<String> for InternedString {
+    fn from(value: String) -> Self {
+        InternedString::from(value.as_str())
+    }
+}
+
+impl From<NixString> for InternedString {
+    fn from(value: NixString) -> Self {
+        InternedString::from(std::str::from_utf8(&value).unwrap())
+    }
+}
+
+impl<'a> From<Cow<'a, str>> for InternedString {
+    fn from(value: Cow<'a, str>) -> Self {
+        InternedString::from(value.as_ref())
+    }
+}
 
 #[derive(Clone, Debug, Serialize, Hash, PartialEq, Eq)]
 pub enum NixContextElement {
     /// A plain store path (e.g. source files copied to the store)
-    Plain(String),
+    Plain(InternedString),
 
     /// Single output of a derivation, represented by its name and its derivation path.
-    Single { name: String, derivation: String },
+    Single {
+        name: InternedString,
+        derivation: InternedString,
+    },
 
     /// A reference to a complete derivation
     /// including its source and its binary closure.
     /// It is used for the `drvPath` attribute context.
     /// The referred string is the store path to
     /// the derivation path.
-    Derivation(String),
+    Derivation(InternedString),
 }
 
 /// Nix context strings representation in Tvix. This tracks a set of different kinds of string
@@ -138,7 +290,7 @@ impl NixContext {
 
     /// Produces a list of owned references to this current context,
     /// no matter its type.
-    pub fn to_owned_references(self) -> Vec<String> {
+    pub fn to_owned_references(self) -> Vec<InternedString> {
         self.0
             .into_iter()
             .map(|ctx| match ctx {

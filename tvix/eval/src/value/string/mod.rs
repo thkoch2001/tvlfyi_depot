@@ -23,7 +23,7 @@ use serde::Deserialize;
 
 mod context;
 
-pub use context::{NixContext, NixContextElement};
+pub use context::{InternedString, NixContext, NixContextElement};
 
 /// This type is never instantiated, but serves to document the memory layout of the actual heap
 /// allocation for Nix strings.
