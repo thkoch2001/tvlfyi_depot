@@ -83,3 +83,12 @@ test_repl!(explain() {
         => a 2-item attribute set
     "#]];
 });
+
+test_repl!(reference_nix_path() {
+    "builtins.typeOf <nixpkgs>" => expect![[r#"
+        => "path" :: string
+    "#]];
+    "builtins.typeOf <nixpkgs>" => expect![[r#"
+        => "path" :: string
+    "#]];
+});
