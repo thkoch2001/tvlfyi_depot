@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 use std::rc::Rc;
 
+use color_eyre::eyre::Result;
 use rustc_hash::FxHashMap;
 use rustyline::{error::ReadlineError, Editor};
 use smol_str::SmolStr;
@@ -98,9 +99,9 @@ pub struct Repl<'a> {
 }
 
 impl<'a> Repl<'a> {
-    pub fn new(io_handle: Rc<TvixStoreIO>, args: &'a Args) -> Self {
-        let rl = Editor::<()>::new().expect("should be able to launch rustyline");
-        Self {
+    pub fn new(io_handle: Rc<TvixStoreIO>, args: &'a Args) -> Result<Self> {
+        let rl = Editor::<()>::new()?;
+        Ok(Self {
             multiline_input: None,
             rl,
             env: FxHashMap::default(),
@@ -108,10 +109,10 @@ impl<'a> Repl<'a> {
             args,
             source_map: Default::default(),
             globals: None,
-        }
+        })
     }
 
-    pub fn run(&mut self) {
+    pub fn run(&mut self) -> Result<()> {
         if self.args.compile_only {
             eprintln!("warning: `--compile-only` has no effect on REPL usage!");
         }
@@ -153,8 +154,10 @@ impl<'a> Repl<'a> {
         }
 
         if let Some(path) = history_path {
-            self.rl.save_history(&path).unwrap();
+            self.rl.save_history(&path)?;
         }
+
+        Ok(())
     }
 
     /// Send a line of user input to the REPL. Returns a result indicating the output to show to the

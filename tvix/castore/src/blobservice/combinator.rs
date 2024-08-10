@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use eyre::{Report, Result};
 use tonic::async_trait;
 use tracing::instrument;
 
@@ -99,7 +100,7 @@ pub struct CombinedBlobServiceConfig {
 }
 
 impl TryFrom<url::Url> for CombinedBlobServiceConfig {
-    type Error = Box<dyn std::error::Error + Send + Sync>;
+    type Error = Report;
     fn try_from(_url: url::Url) -> Result<Self, Self::Error> {
         Err(Error::StorageError(
             "Instantiating a CombinedBlobService from a url is not supported".into(),
@@ -111,11 +112,12 @@ impl TryFrom<url::Url> for CombinedBlobServiceConfig {
 #[async_trait]
 impl ServiceBuilder for CombinedBlobServiceConfig {
     type Output = dyn BlobService;
+
     async fn build<'a>(
         &'a self,
         _instance_name: &str,
         context: &CompositionContext,
-    ) -> Result<Arc<dyn BlobService>, Box<dyn std::error::Error + Send + Sync>> {
+    ) -> Result<Arc<dyn BlobService>> {
         let (local, remote) = futures::join!(
             context.resolve(self.local.clone()),
             context.resolve(self.remote.clone())

@@ -1,3 +1,4 @@
+use eyre::{Report, Result};
 use parking_lot::RwLock;
 use std::io::{self, Cursor, Write};
 use std::task::Poll;
@@ -43,7 +44,7 @@ impl BlobService for MemoryBlobService {
 pub struct MemoryBlobServiceConfig {}
 
 impl TryFrom<url::Url> for MemoryBlobServiceConfig {
-    type Error = Box<dyn std::error::Error + Send + Sync>;
+    type Error = Report;
     fn try_from(url: url::Url) -> Result<Self, Self::Error> {
         // memory doesn't support host or path in the URL.
         if url.has_host() || !url.path().is_empty() {
@@ -60,7 +61,7 @@ impl ServiceBuilder for MemoryBlobServiceConfig {
         &'a self,
         _instance_name: &str,
         _context: &CompositionContext,
-    ) -> Result<Arc<dyn BlobService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
+    ) -> Result<Arc<dyn BlobService>> {
         Ok(Arc::new(MemoryBlobService::default()))
     }
 }

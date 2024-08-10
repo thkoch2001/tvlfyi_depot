@@ -1,6 +1,7 @@
 use std::sync::Arc;
 
 use crate::proto::PathInfo;
+use eyre::{Report, Result};
 use futures::stream::BoxStream;
 use nix_compat::nixbase32;
 use tonic::async_trait;
@@ -71,7 +72,7 @@ pub struct CacheConfig {
 }
 
 impl TryFrom<url::Url> for CacheConfig {
-    type Error = Box<dyn std::error::Error + Send + Sync>;
+    type Error = Report;
     fn try_from(_url: url::Url) -> Result<Self, Self::Error> {
         Err(Error::StorageError(
             "Instantiating a CombinedPathInfoService from a url is not supported".into(),
@@ -83,11 +84,12 @@ impl TryFrom<url::Url> for CacheConfig {
 #[async_trait]
 impl ServiceBuilder for CacheConfig {
     type Output = dyn PathInfoService;
+
     async fn build<'a>(
         &'a self,
         _instance_name: &str,
         context: &CompositionContext,
-    ) -> Result<Arc<dyn PathInfoService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
+    ) -> Result<Arc<dyn PathInfoService>> {
         let (near, far) = futures::join!(
             context.resolve(self.near.clone()),
             context.resolve(self.far.clone())

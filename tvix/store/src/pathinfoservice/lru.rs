@@ -1,4 +1,5 @@
 use async_stream::try_stream;
+use eyre::{Report, Result};
 use futures::stream::BoxStream;
 use lru::LruCache;
 use nix_compat::nixbase32;
@@ -68,7 +69,7 @@ pub struct LruPathInfoServiceConfig {
 }
 
 impl TryFrom<url::Url> for LruPathInfoServiceConfig {
-    type Error = Box<dyn std::error::Error + Send + Sync>;
+    type Error = Report;
     fn try_from(_url: url::Url) -> Result<Self, Self::Error> {
         Err(Error::StorageError(
             "Instantiating a LruPathInfoService from a url is not supported".into(),
@@ -80,11 +81,12 @@ impl TryFrom<url::Url> for LruPathInfoServiceConfig {
 #[async_trait]
 impl ServiceBuilder for LruPathInfoServiceConfig {
     type Output = dyn PathInfoService;
+
     async fn build<'a>(
         &'a self,
         _instance_name: &str,
         _context: &CompositionContext,
-    ) -> Result<Arc<dyn PathInfoService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
+    ) -> Result<Arc<dyn PathInfoService>> {
         Ok(Arc::new(LruPathInfoService::with_capacity(self.capacity)))
     }
 }

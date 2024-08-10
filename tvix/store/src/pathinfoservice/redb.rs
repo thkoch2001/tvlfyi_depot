@@ -1,6 +1,7 @@
 use super::PathInfoService;
 use crate::proto::PathInfo;
 use data_encoding::BASE64;
+use eyre::{Report, Result};
 use futures::{stream::BoxStream, StreamExt};
 use prost::Message;
 use redb::{Database, ReadableTable, TableDefinition};
@@ -164,7 +165,7 @@ pub struct RedbPathInfoServiceConfig {
 }
 
 impl TryFrom<url::Url> for RedbPathInfoServiceConfig {
-    type Error = Box<dyn std::error::Error + Send + Sync>;
+    type Error = Report;
     fn try_from(url: url::Url) -> Result<Self, Self::Error> {
         // redb doesn't support host, and a path can be provided (otherwise it'll live in memory only)
         if url.has_host() {
@@ -188,11 +189,12 @@ impl TryFrom<url::Url> for RedbPathInfoServiceConfig {
 #[async_trait]
 impl ServiceBuilder for RedbPathInfoServiceConfig {
     type Output = dyn PathInfoService;
+
     async fn build<'a>(
         &'a self,
         _instance_name: &str,
         _context: &CompositionContext,
-    ) -> Result<Arc<dyn PathInfoService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
+    ) -> Result<Arc<dyn PathInfoService>> {
         match self {
             RedbPathInfoServiceConfig {
                 is_temporary: true,
