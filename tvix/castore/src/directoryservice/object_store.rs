@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use std::sync::Arc;
 
 use data_encoding::HEXLOWER;
+use eyre::{Report, Result};
 use futures::future::Either;
 use futures::stream::BoxStream;
 use futures::SinkExt;
@@ -180,7 +181,7 @@ pub struct ObjectStoreDirectoryServiceConfig {
 }
 
 impl TryFrom<url::Url> for ObjectStoreDirectoryServiceConfig {
-    type Error = Box<dyn std::error::Error + Send + Sync>;
+    type Error = Report;
     fn try_from(url: url::Url) -> Result<Self, Self::Error> {
         // We need to convert the URL to string, strip the prefix there, and then
         // parse it back as url, as Url::set_scheme() rejects some of the transitions we want to do.
@@ -208,11 +209,12 @@ impl TryFrom<url::Url> for ObjectStoreDirectoryServiceConfig {
 #[async_trait]
 impl ServiceBuilder for ObjectStoreDirectoryServiceConfig {
     type Output = dyn DirectoryService;
+
     async fn build<'a>(
         &'a self,
         _instance_name: &str,
         _context: &CompositionContext,
-    ) -> Result<Arc<dyn DirectoryService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
+    ) -> Result<Arc<dyn DirectoryService>> {
         let (object_store, path) = object_store::parse_url_opts(
             &self.object_store_url.parse()?,
             &self.object_store_options,

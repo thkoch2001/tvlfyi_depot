@@ -5,6 +5,7 @@ use crate::composition::{CompositionContext, ServiceBuilder};
 use crate::proto::{self, get_directory_request::ByWhat};
 use crate::{B3Digest, Error};
 use async_stream::try_stream;
+use eyre::{Report, Result};
 use futures::stream::BoxStream;
 use std::sync::Arc;
 use tokio::spawn;
@@ -236,7 +237,7 @@ pub struct GRPCDirectoryServiceConfig {
 }
 
 impl TryFrom<url::Url> for GRPCDirectoryServiceConfig {
-    type Error = Box<dyn std::error::Error + Send + Sync>;
+    type Error = Report;
     fn try_from(url: url::Url) -> Result<Self, Self::Error> {
         //   This is normally grpc+unix for unix sockets, and grpc+http(s) for the HTTP counterparts.
         // - In the case of unix sockets, there must be a path, but may not be a host.
@@ -255,7 +256,7 @@ impl ServiceBuilder for GRPCDirectoryServiceConfig {
         &'a self,
         _instance_name: &str,
         _context: &CompositionContext,
-    ) -> Result<Arc<dyn DirectoryService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
+    ) -> Result<Arc<dyn DirectoryService>> {
         let client = proto::directory_service_client::DirectoryServiceClient::new(
             crate::tonic::channel_from_url(&self.url.parse()?).await?,
         );

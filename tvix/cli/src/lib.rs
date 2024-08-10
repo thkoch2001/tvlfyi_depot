@@ -1,6 +1,7 @@
 use std::path::PathBuf;
 use std::rc::Rc;
 
+use color_eyre::eyre::Result;
 use rustc_hash::FxHashMap;
 use smol_str::SmolStr;
 use std::fmt::Write;
@@ -26,37 +27,36 @@ pub mod repl;
 pub use args::Args;
 pub use repl::Repl;
 
-pub fn init_io_handle(tokio_runtime: &tokio::runtime::Runtime, args: &Args) -> Rc<TvixStoreIO> {
+pub fn init_io_handle(
+    tokio_runtime: &tokio::runtime::Runtime,
+    args: &Args,
+) -> Result<Rc<TvixStoreIO>> {
     let (blob_service, directory_service, path_info_service, nar_calculation_service) =
-        tokio_runtime
-            .block_on(tvix_store::utils::construct_services(
-                args.service_addrs.clone(),
-            ))
-            .expect("unable to setup {blob|directory|pathinfo}service before interpreter setup");
+        tokio_runtime.block_on(tvix_store::utils::construct_services(
+            args.service_addrs.clone(),
+        ))?;
 
-    let build_service = tokio_runtime
-        .block_on({
-            let blob_service = blob_service.clone();
-            let directory_service = directory_service.clone();
-            async move {
-                buildservice::from_addr(
-                    &args.build_service_addr,
-                    blob_service.clone(),
-                    directory_service.clone(),
-                )
-                .await
-            }
-        })
-        .expect("unable to setup buildservice before interpreter setup");
+    let build_service = tokio_runtime.block_on({
+        let blob_service = blob_service.clone();
+        let directory_service = directory_service.clone();
+        async move {
+            buildservice::from_addr(
+                &args.build_service_addr,
+                blob_service.clone(),
+                directory_service.clone(),
+            )
+            .await
+        }
+    })?;
 
-    Rc::new(TvixStoreIO::new(
+    Ok(Rc::new(TvixStoreIO::new(
         blob_service.clone(),
         directory_service.clone(),
         path_info_service,
         nar_calculation_service.into(),
         build_service.into(),
         tokio_runtime.handle().clone(),
-    ))
+    )))
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
