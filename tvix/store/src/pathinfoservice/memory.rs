@@ -1,6 +1,7 @@
 use super::PathInfoService;
 use crate::proto::PathInfo;
 use async_stream::try_stream;
+use eyre::{Report, Result};
 use futures::stream::BoxStream;
 use nix_compat::nixbase32;
 use std::{collections::HashMap, sync::Arc};
@@ -66,7 +67,7 @@ impl PathInfoService for MemoryPathInfoService {
 pub struct MemoryPathInfoServiceConfig {}
 
 impl TryFrom<url::Url> for MemoryPathInfoServiceConfig {
-    type Error = Box<dyn std::error::Error + Send + Sync>;
+    type Error = Report;
     fn try_from(url: url::Url) -> Result<Self, Self::Error> {
         // memory doesn't support host or path in the URL.
         if url.has_host() || !url.path().is_empty() {
@@ -79,11 +80,12 @@ impl TryFrom<url::Url> for MemoryPathInfoServiceConfig {
 #[async_trait]
 impl ServiceBuilder for MemoryPathInfoServiceConfig {
     type Output = dyn PathInfoService;
+
     async fn build<'a>(
         &'a self,
         _instance_name: &str,
         _context: &CompositionContext,
-    ) -> Result<Arc<dyn PathInfoService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
+    ) -> Result<Arc<dyn PathInfoService>> {
         Ok(Arc::new(MemoryPathInfoService::default()))
     }
 }

@@ -1,6 +1,7 @@
 use bigtable_rs::{bigtable, google::bigtable::v2 as bigtable_v2};
 use bytes::Bytes;
 use data_encoding::HEXLOWER;
+use eyre::{Report, Result};
 use futures::stream::BoxStream;
 use prost::Message;
 use serde::{Deserialize, Serialize};
@@ -350,11 +351,12 @@ pub struct BigtableParameters {
 #[async_trait]
 impl ServiceBuilder for BigtableParameters {
     type Output = dyn DirectoryService;
+
     async fn build<'a>(
         &'a self,
         _instance_name: &str,
         _context: &CompositionContext,
-    ) -> Result<Arc<dyn DirectoryService>, Box<dyn std::error::Error + Send + Sync>> {
+    ) -> Result<Arc<dyn DirectoryService>> {
         Ok(Arc::new(
             BigtableDirectoryService::connect(self.clone()).await?,
         ))
@@ -362,7 +364,8 @@ impl ServiceBuilder for BigtableParameters {
 }
 
 impl TryFrom<url::Url> for BigtableParameters {
-    type Error = Box<dyn std::error::Error + Send + Sync>;
+    type Error = Report;
+
     fn try_from(mut url: url::Url) -> Result<Self, Self::Error> {
         // parse the instance name from the hostname.
         let instance_name = url

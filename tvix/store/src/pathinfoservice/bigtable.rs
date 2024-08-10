@@ -5,6 +5,7 @@ use async_stream::try_stream;
 use bigtable_rs::{bigtable, google::bigtable::v2 as bigtable_v2};
 use bytes::Bytes;
 use data_encoding::HEXLOWER;
+use eyre::{Report, Result};
 use futures::stream::BoxStream;
 use nix_compat::nixbase32;
 use prost::Message;
@@ -418,11 +419,12 @@ fn default_timeout() -> Option<std::time::Duration> {
 #[async_trait]
 impl ServiceBuilder for BigtableParameters {
     type Output = dyn PathInfoService;
+
     async fn build<'a>(
         &'a self,
         _instance_name: &str,
         _context: &CompositionContext,
-    ) -> Result<Arc<dyn PathInfoService>, Box<dyn std::error::Error + Send + Sync>> {
+    ) -> Result<Arc<dyn PathInfoService>> {
         Ok(Arc::new(
             BigtablePathInfoService::connect(self.clone()).await?,
         ))
@@ -430,7 +432,7 @@ impl ServiceBuilder for BigtableParameters {
 }
 
 impl TryFrom<url::Url> for BigtableParameters {
-    type Error = Box<dyn std::error::Error + Send + Sync>;
+    type Error = Report;
     fn try_from(mut url: url::Url) -> Result<Self, Self::Error> {
         // parse the instance name from the hostname.
         let instance_name = url

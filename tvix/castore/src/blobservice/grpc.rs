@@ -4,6 +4,7 @@ use crate::{
     proto::{self, stat_blob_response::ChunkMeta},
     B3Digest,
 };
+use eyre::{Report, Result};
 use futures::sink::SinkExt;
 use std::{
     io::{self, Cursor},
@@ -188,7 +189,7 @@ pub struct GRPCBlobServiceConfig {
 }
 
 impl TryFrom<url::Url> for GRPCBlobServiceConfig {
-    type Error = Box<dyn std::error::Error + Send + Sync>;
+    type Error = Report;
     fn try_from(url: url::Url) -> Result<Self, Self::Error> {
         //   normally grpc+unix for unix sockets, and grpc+http(s) for the HTTP counterparts.
         // - In the case of unix sockets, there must be a path, but may not be a host.
@@ -203,11 +204,12 @@ impl TryFrom<url::Url> for GRPCBlobServiceConfig {
 #[async_trait]
 impl ServiceBuilder for GRPCBlobServiceConfig {
     type Output = dyn BlobService;
+
     async fn build<'a>(
         &'a self,
         _instance_name: &str,
         _context: &CompositionContext,
-    ) -> Result<Arc<dyn BlobService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
+    ) -> Result<Arc<dyn BlobService>> {
         let client = proto::blob_service_client::BlobServiceClient::new(
             crate::tonic::channel_from_url(&self.url.parse()?).await?,
         );

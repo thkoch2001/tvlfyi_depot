@@ -1519,7 +1519,7 @@ rec {
           "verify-winapi" = [ "winapi/dbghelp" "winapi/handleapi" "winapi/libloaderapi" "winapi/memoryapi" "winapi/minwindef" "winapi/processthreadsapi" "winapi/synchapi" "winapi/tlhelp32" "winapi/winbase" "winapi/winnt" ];
           "winapi" = [ "dep:winapi" ];
         };
-        resolvedDefaultFeatures = [ "default" "std" ];
+        resolvedDefaultFeatures = [ "default" "gimli-symbolize" "std" ];
       };
       "base64 0.21.7" = rec {
         crateName = "base64";
@@ -2378,6 +2378,85 @@ rec {
           {
             name = "termcolor";
             packageId = "termcolor";
+          }
+        ];
+
+      };
+      "color-eyre" = rec {
+        crateName = "color-eyre";
+        version = "0.6.3";
+        edition = "2018";
+        sha256 = "1m9shifr9sdw0drszzyhvaq5jysrsiki44bl7m1gfdzj8rg6y52m";
+        authors = [
+          "Jane Lusby <jlusby@yaah.dev>"
+        ];
+        dependencies = [
+          {
+            name = "backtrace";
+            packageId = "backtrace";
+            features = [ "gimli-symbolize" ];
+          }
+          {
+            name = "color-spantrace";
+            packageId = "color-spantrace";
+            optional = true;
+          }
+          {
+            name = "eyre";
+            packageId = "eyre";
+          }
+          {
+            name = "indenter";
+            packageId = "indenter";
+          }
+          {
+            name = "once_cell";
+            packageId = "once_cell";
+          }
+          {
+            name = "owo-colors";
+            packageId = "owo-colors";
+          }
+          {
+            name = "tracing-error";
+            packageId = "tracing-error";
+            optional = true;
+          }
+        ];
+        features = {
+          "capture-spantrace" = [ "tracing-error" "color-spantrace" ];
+          "color-spantrace" = [ "dep:color-spantrace" ];
+          "default" = [ "track-caller" "capture-spantrace" ];
+          "issue-url" = [ "url" ];
+          "tracing-error" = [ "dep:tracing-error" ];
+          "url" = [ "dep:url" ];
+        };
+        resolvedDefaultFeatures = [ "capture-spantrace" "color-spantrace" "default" "tracing-error" "track-caller" ];
+      };
+      "color-spantrace" = rec {
+        crateName = "color-spantrace";
+        version = "0.2.1";
+        edition = "2018";
+        sha256 = "1hkjgaqixrishwiq3lxxy1d4c3mvlv6avcj3ifwy50p3lyrf2syd";
+        authors = [
+          "Jane Lusby <jlusby@yaah.dev>"
+        ];
+        dependencies = [
+          {
+            name = "once_cell";
+            packageId = "once_cell";
+          }
+          {
+            name = "owo-colors";
+            packageId = "owo-colors";
+          }
+          {
+            name = "tracing-core";
+            packageId = "tracing-core";
+          }
+          {
+            name = "tracing-error";
+            packageId = "tracing-error";
           }
         ];
 
@@ -3705,6 +3784,31 @@ rec {
           }
         ];
 
+      };
+      "eyre" = rec {
+        crateName = "eyre";
+        version = "0.6.12";
+        edition = "2018";
+        sha256 = "1v1a3vb9gs5zkwp4jzkcfnpg0gvyp4ifydzx37f4qy14kzcibnbw";
+        authors = [
+          "David Tolnay <dtolnay@gmail.com>"
+          "Jane Lusby <jlusby42@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "indenter";
+            packageId = "indenter";
+          }
+          {
+            name = "once_cell";
+            packageId = "once_cell";
+          }
+        ];
+        features = {
+          "default" = [ "auto-install" "track-caller" ];
+          "pyo3" = [ "dep:pyo3" ];
+        };
+        resolvedDefaultFeatures = [ "auto-install" "default" "track-caller" ];
       };
       "fastcdc" = rec {
         crateName = "fastcdc";
@@ -5896,6 +6000,17 @@ rec {
           "ringbuffer" = [ "array-ops" ];
         };
         resolvedDefaultFeatures = [ "default" "std" ];
+      };
+      "indenter" = rec {
+        crateName = "indenter";
+        version = "0.3.3";
+        edition = "2018";
+        sha256 = "10y6i6y4ls7xsfsc1r3p5j2hhbxhaqnk5zzk8aj52b14v05ba8yf";
+        authors = [
+          "Jane Lusby <jlusby@yaah.dev>"
+        ];
+        features = { };
+        resolvedDefaultFeatures = [ "default" ];
       };
       "indexmap 1.9.3" = rec {
         crateName = "indexmap";
@@ -8449,6 +8564,19 @@ rec {
           "Daniel Salvadori <danaugrs@gmail.com>"
         ];
 
+      };
+      "owo-colors" = rec {
+        crateName = "owo-colors";
+        version = "3.5.0";
+        edition = "2018";
+        sha256 = "0vyvry6ba1xmpd45hpi6savd8mbx09jpmvnnwkf6z62pk6s4zc61";
+        authors = [
+          "jam1garner <8260240+jam1garner@users.noreply.github.com>"
+        ];
+        features = {
+          "supports-color" = [ "dep:supports-color" ];
+          "supports-colors" = [ "supports-color" ];
+        };
       };
       "parking" = rec {
         crateName = "parking";
@@ -14988,6 +15116,35 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "once_cell" "std" "valuable" ];
       };
+      "tracing-error" = rec {
+        crateName = "tracing-error";
+        version = "0.2.0";
+        edition = "2018";
+        sha256 = "0vi0rns7r8iny2milg0kikz1mhgcl9wz5clpy1vi4jrq1wffr1nn";
+        authors = [
+          "Eliza Weisman <eliza@buoyant.io>"
+          "Jane Lusby <jlusby@yaah.dev>"
+          "Tokio Contributors <team@tokio.rs>"
+        ];
+        dependencies = [
+          {
+            name = "tracing";
+            packageId = "tracing";
+            usesDefaultFeatures = false;
+            features = [ "std" ];
+          }
+          {
+            name = "tracing-subscriber";
+            packageId = "tracing-subscriber";
+            usesDefaultFeatures = false;
+            features = [ "registry" "fmt" ];
+          }
+        ];
+        features = {
+          "default" = [ "traced-error" ];
+        };
+        resolvedDefaultFeatures = [ "default" "traced-error" ];
+      };
       "tracing-futures" = rec {
         crateName = "tracing-futures";
         version = "0.2.5";
@@ -15662,6 +15819,10 @@ rec {
             packageId = "erased-serde";
           }
           {
+            name = "eyre";
+            packageId = "eyre";
+          }
+          {
             name = "fastcdc";
             packageId = "fastcdc";
             features = [ "tokio" ];
@@ -15906,6 +16067,10 @@ rec {
             name = "clap";
             packageId = "clap";
             features = [ "derive" "env" ];
+          }
+          {
+            name = "color-eyre";
+            packageId = "color-eyre";
           }
           {
             name = "dirs";
@@ -16405,10 +16570,6 @@ rec {
         src = lib.cleanSourceWith { filter = sourceFilter; src = ./store; };
         dependencies = [
           {
-            name = "anyhow";
-            packageId = "anyhow";
-          }
-          {
             name = "async-compression";
             packageId = "async-compression";
             features = [ "tokio" "bzip2" "gzip" "xz" "zstd" ];
@@ -16447,6 +16608,10 @@ rec {
           {
             name = "data-encoding";
             packageId = "data-encoding";
+          }
+          {
+            name = "eyre";
+            packageId = "eyre";
           }
           {
             name = "futures";
