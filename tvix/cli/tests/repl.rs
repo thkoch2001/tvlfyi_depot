@@ -9,7 +9,10 @@ macro_rules! test_repl {
         #[test]
         fn $name() {
             let tokio_runtime = tokio::runtime::Runtime::new().unwrap();
-            let args = tvix_cli::Args::parse_from(Vec::<OsString>::new());
+            let args = tvix_cli::Args::parse_from(vec![
+              OsString::from("--nix-search-path".to_owned()),
+              OsString::from("nixpkgs=/nix/store/fpl1r6gqz3zcf3vwl8jqc7rnbdx5p6ng-nixpkgs-src".to_owned()),
+            ]);
             let mut repl = tvix_cli::Repl::new(init_io_handle(&tokio_runtime, &args), &args);
             $({
                 let result = repl.send($send.into());
@@ -81,5 +84,14 @@ test_repl!(deep_print() {
 test_repl!(explain() {
     ":d { x = 1; y = [ 2 3 4 ]; }" => expect![[r#"
         => a 2-item attribute set
+    "#]];
+});
+
+test_repl!(reference_nix_path() {
+    "<nixpkgs>" => expect![[r#"
+        => /nix/store/fpl1r6gqz3zcf3vwl8jqc7rnbdx5p6ng-nixpkgs-src :: path
+    "#]];
+    "<nixpkgs>" => expect![[r#"
+        => /nix/store/fpl1r6gqz3zcf3vwl8jqc7rnbdx5p6ng-nixpkgs-src :: path
     "#]];
 });
