@@ -58,7 +58,9 @@ pub use crate::warnings::{EvalWarning, WarningKind};
 pub use builtin_macros;
 use smol_str::SmolStr;
 
-pub use crate::value::{Builtin, CoercionKind, NixAttrs, NixList, NixString, Value};
+pub use crate::value::{
+    Builtin, CoercionKind, InternedString, NixAttrs, NixList, NixString, Value,
+};
 
 #[cfg(feature = "impure")]
 pub use crate::io::StdIO;
