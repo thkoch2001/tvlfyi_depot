@@ -14,7 +14,7 @@ macro_rules! test_repl {
               OsString::from("--nix-search-path"),
               OsString::from("nixpkgs=/tmp"),
             ]);
-            let mut repl = tvix_cli::Repl::new(init_io_handle(&tokio_runtime, &args), &args);
+            let mut repl = tvix_cli::Repl::new(init_io_handle(&tokio_runtime, &args), &args).unwrap();
             $({
                 let result = repl.send($send.into());
                 $expect.assert_eq(result.output())

@@ -7,6 +7,7 @@ use std::{
 };
 
 use data_encoding::HEXLOWER;
+use eyre::{Report, Result};
 use fastcdc::v2020::AsyncStreamCDC;
 use futures::Future;
 use object_store::{path::Path, ObjectStore};
@@ -258,7 +259,7 @@ pub struct ObjectStoreBlobServiceConfig {
 }
 
 impl TryFrom<url::Url> for ObjectStoreBlobServiceConfig {
-    type Error = Box<dyn std::error::Error + Send + Sync>;
+    type Error = Report;
     /// Constructs a new [ObjectStoreBlobService] from a [Url] supported by
     /// [object_store].
     /// Any path suffix becomes the base path of the object store.
@@ -292,11 +293,12 @@ impl TryFrom<url::Url> for ObjectStoreBlobServiceConfig {
 #[async_trait]
 impl ServiceBuilder for ObjectStoreBlobServiceConfig {
     type Output = dyn BlobService;
+
     async fn build<'a>(
         &'a self,
         _instance_name: &str,
         _context: &CompositionContext,
-    ) -> Result<Arc<dyn BlobService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
+    ) -> Result<Arc<dyn BlobService>> {
         let (object_store, path) = object_store::parse_url_opts(
             &self.object_store_url.parse()?,
             &self.object_store_options,

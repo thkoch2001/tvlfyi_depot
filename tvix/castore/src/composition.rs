@@ -32,7 +32,7 @@
 //! }
 //!
 //! impl TryFrom<url::Url> for MyBlobServiceConfig {
-//!     type Error = Box<dyn std::error::Error + Send + Sync>;
+//!     type Error = Report;
 //!     fn try_from(url: url::Url) -> Result<Self, Self::Error> {
 //!         todo!()
 //!     }
@@ -90,6 +90,7 @@
 //! Continue with Example 2, with my_registry instead of REG
 
 use erased_serde::deserialize;
+use eyre::{Report, Result};
 use futures::future::BoxFuture;
 use futures::FutureExt;
 use lazy_static::lazy_static;
@@ -125,8 +126,8 @@ use tonic::async_trait;
 // I said it was ugly...
 #[derive(Default)]
 pub struct Registry(BTreeMap<(TypeId, &'static str), Box<dyn Any + Sync>>);
-pub type FromUrlSeed<T> =
-    Box<dyn Fn(url::Url) -> Result<T, Box<dyn std::error::Error + Send + Sync>> + Sync>;
+pub type FromUrlSeed<T> = Box<dyn Fn(url::Url) -> Result<T> + Sync>;
+
 pub struct RegistryEntry<T> {
     serde_deserialize_seed: BoxFnSeed<DeserializeWithRegistry<T>>,
     from_url_seed: FromUrlSeed<DeserializeWithRegistry<T>>,
@@ -175,9 +176,7 @@ impl Registry {
     /// then convert it into a `Box<dyn FooTrait>` using From::from.
     pub fn register<
         T: 'static,
-        C: DeserializeOwned
-            + TryFrom<url::Url, Error = Box<dyn std::error::Error + Send + Sync>>
-            + Into<T>,
+        C: DeserializeOwned + TryFrom<url::Url, Error = Report> + Into<T>,
     >(
         &mut self,
         type_name: &'static str,
@@ -220,7 +219,8 @@ enum TryFromUrlError {
 }
 
 impl<T: 'static> TryFrom<url::Url> for DeserializeWithRegistry<T> {
-    type Error = Box<dyn std::error::Error + Send + Sync>;
+    type Error = Report;
+
     fn try_from(url: url::Url) -> Result<Self, Self::Error> {
         let tag = url.scheme().split('+').next().unwrap();
         // same as in the SeedFactory impl: using find() and not get() because of https://github.com/rust-lang/rust/issues/80389
@@ -292,7 +292,7 @@ impl<'a> CompositionContext<'a> {
     pub async fn resolve<T: ?Sized + Send + Sync + 'static>(
         &self,
         entrypoint: String,
-    ) -> Result<Arc<T>, Box<dyn std::error::Error + Send + Sync + 'static>> {
+    ) -> Result<Arc<T>> {
         // disallow recursion
         if self
             .stack
@@ -315,11 +315,12 @@ impl<'a> CompositionContext<'a> {
 /// used to instantiate it.
 pub trait ServiceBuilder: Send + Sync {
     type Output: ?Sized;
+
     async fn build(
         &self,
         instance_name: &str,
         context: &CompositionContext,
-    ) -> Result<Arc<Self::Output>, Box<dyn std::error::Error + Send + Sync + 'static>>;
+    ) -> Result<Arc<Self::Output>>;
 }
 
 impl<T: ?Sized, S: ServiceBuilder<Output = T> + 'static> From<S>
@@ -350,7 +351,7 @@ pub enum CompositionError {
     #[error("store construction panicked {0}")]
     Poisoned(String),
     #[error("instantiation of service {0} failed: {1}")]
-    Failed(String, Arc<dyn std::error::Error + Send + Sync>),
+    Failed(String, Arc<Report>),
 }
 
 impl<T: ?Sized + Send + Sync + 'static>
@@ -434,13 +435,12 @@ impl Composition {
                         new_context
                             .stack
                             .push((TypeId::of::<T>(), entrypoint.clone()));
-                        let res =
-                            config.build(&entrypoint, &new_context).await.map_err(|e| {
-                                match e.downcast() {
-                                    Ok(e) => *e,
-                                    Err(e) => CompositionError::Failed(entrypoint, e.into()),
-                                }
-                            });
+                        let res = config.build(&entrypoint, &new_context).await.map_err(|e| {
+                            match e.downcast::<CompositionError>() {
+                                Ok(e) => e,
+                                Err(e) => CompositionError::Failed(entrypoint, Arc::new(e)),
+                            }
+                        });
                         tx.send(Some(res.clone())).unwrap();
                         res
                     })
