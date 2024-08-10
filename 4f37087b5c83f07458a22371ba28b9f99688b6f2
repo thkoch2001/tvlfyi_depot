@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cc7aa06_005c1606",
+        "filename": "tvix/cli/tests/repl.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-10T19:38:09Z",
+      "side": 1,
+      "message": "This will break as soon as that\u0027s GC\u0027ed from whitby.\n\nI assume this is only to test things out?\n\nMaybe we just need to set `NIX_PATH` for the test derivation, the same way we set ` SSL_CERT_FILE`?",
+      "revId": "4f37087b5c83f07458a22371ba28b9f99688b6f2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
