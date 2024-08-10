@@ -49,24 +49,29 @@ let
 
   # Constructs a Derivation invoking tvix-cli inside a build, ensures the
   # calculated tvix output path matches what's passed in externally.
-  mkNixpkgsEvalTest = attrpath: expectedPath:
-    let
-      name = "tvix-eval-test-${builtins.replaceStrings [".drv"] ["-drv"] attrpath}";
-    in
-    (pkgs.runCommand name { } ''
-      export SSL_CERT_FILE=/dev/null
-      TVIX_OUTPUT=$(${tvix-cli}/bin/tvix -E '(import ${pkgs.path} {}).${attrpath}')
-      EXPECTED='${/* the verbatim expected Tvix output: */ "=> \"${builtins.unsafeDiscardStringContext expectedPath}\" :: string"}'
+  mkNixpkgsEvalTest =
+    { attrPath ? null # An attribute that must already be accessible from `pkgs`. Should evaluate to a store path.
+    , expr ? null # A Nix expression that should evaluate to a store path.
+    , expectedPath # The expected store path that should match one of the above.
+    }:
+      assert lib.assertMsg (attrPath != null || expr != null) "Either 'attrPath' or 'expr' must be set.";
+      let
+        name = "tvix-eval-test-${builtins.replaceStrings [".drv"] ["-drv"] (if expr != null then "custom-expr" else attrPath)}";
+      in
+      (pkgs.runCommand name { } ''
+        export SSL_CERT_FILE=/dev/null
+        TVIX_OUTPUT=$(${tvix-cli}/bin/tvix --no-warnings -E '${if expr != null then expr else "(import ${pkgs.path} {}).${attrPath}"}')
+        EXPECTED='${/* the verbatim expected Tvix output: */ "=> \"${builtins.unsafeDiscardStringContext expectedPath}\" :: string"}'
 
-      echo "Tvix output: ''${TVIX_OUTPUT}"
-      if [ "$TVIX_OUTPUT" != "$EXPECTED" ]; then
-        echo "Correct would have been ''${EXPECTED}"
-        exit 1
-      fi
+        echo "Tvix output: ''${TVIX_OUTPUT}"
+        if [ "$TVIX_OUTPUT" != "$EXPECTED" ]; then
+          echo "Correct would have been ''${EXPECTED}"
+          exit 1
+        fi
 
-      echo "Output was correct."
-      touch $out
-    '');
+        echo "Output was correct."
+        touch $out
+      '');
 
 
   benchmarks = {
@@ -79,13 +84,24 @@ let
   };
 
   evalTests = {
-    eval-nixpkgs-stdenv-drvpath = (mkNixpkgsEvalTest "stdenv.drvPath" pkgs.stdenv.drvPath);
-    eval-nixpkgs-stdenv-outpath = (mkNixpkgsEvalTest "stdenv.outPath" pkgs.stdenv.outPath);
-    eval-nixpkgs-hello-outpath = (mkNixpkgsEvalTest "hello.outPath" pkgs.hello.outPath);
-    eval-nixpkgs-firefox-outpath = (mkNixpkgsEvalTest "firefox.outPath" pkgs.firefox.outPath);
-    eval-nixpkgs-firefox-drvpath = (mkNixpkgsEvalTest "firefox.drvPath" pkgs.firefox.drvPath);
-    eval-nixpkgs-cross-stdenv-outpath = (mkNixpkgsEvalTest "pkgsCross.aarch64-multiplatform.stdenv.outPath" pkgs.pkgsCross.aarch64-multiplatform.stdenv.outPath);
-    eval-nixpkgs-cross-hello-outpath = (mkNixpkgsEvalTest "pkgsCross.aarch64-multiplatform.hello.outPath" pkgs.pkgsCross.aarch64-multiplatform.hello.outPath);
+    eval-nixpkgs-stdenv-drvpath = (mkNixpkgsEvalTest { attrPath = "stdenv.drvPath"; expectedPath = pkgs.stdenv.drvPath; });
+    eval-nixpkgs-stdenv-outpath = (mkNixpkgsEvalTest { attrPath = "stdenv.outPath"; expectedPath = pkgs.stdenv.outPath; });
+    eval-nixpkgs-hello-outpath = (mkNixpkgsEvalTest { attrPath = "hello.outPath"; expectedPath = pkgs.hello.outPath; });
+    eval-nixpkgs-firefox-outpath = (mkNixpkgsEvalTest { attrPath = "firefox.outPath"; expectedPath = pkgs.firefox.outPath; });
+    eval-nixpkgs-firefox-drvpath = (mkNixpkgsEvalTest { attrPath = "firefox.drvPath"; expectedPath = pkgs.firefox.drvPath; });
+    eval-nixpkgs-cross-stdenv-outpath = (mkNixpkgsEvalTest { attrPath = "pkgsCross.aarch64-multiplatform.stdenv.outPath"; expectedPath = pkgs.pkgsCross.aarch64-multiplatform.stdenv.outPath; });
+    eval-nixpkgs-cross-hello-outpath = (mkNixpkgsEvalTest { attrPath = "pkgsCross.aarch64-multiplatform.hello.outPath"; expectedPath = pkgs.pkgsCross.aarch64-multiplatform.hello.outPath; });
+    # Our CI runner currently uses Nix version lower than 2.12, which means it uses the old JSON library.
+    # The NixOS docs generate a JSON file with all the NixOS options, and so output is different between Tvix (and Nix 2.12+) and our CI runner's Nix version,
+    # so we disable the NixOS docs generation for now. TODO(kranzes): Re-enable NixOS docs once the CI runner is using a newer Nix version.
+    eval-nixpkgs-nixos-gnome-installer-drvpath = (mkNixpkgsEvalTest {
+      expr = "(import ${pkgs.path}/nixos/release.nix { configuration = { documentation.nixos.enable = (import ${pkgs.path}/lib).mkForce false; }; }).iso_gnome.${pkgs.system}.drvPath";
+      expectedPath = (import "${pkgs.path}/nixos/release.nix" { configuration.documentation.nixos.enable = lib.mkForce false; }).iso_gnome.${pkgs.system}.drvPath;
+    });
+    eval-nixpkgs-nixos-gnome-installer-outpath = (mkNixpkgsEvalTest {
+      expr = "(import ${pkgs.path}/nixos/release.nix { configuration = { documentation.nixos.enable = (import ${pkgs.path}/lib).mkForce false; }; }).iso_gnome.${pkgs.system}.outPath";
+      expectedPath = (import "${pkgs.path}/nixos/release.nix" { configuration.documentation.nixos.enable = lib.mkForce false; }).iso_gnome.${pkgs.system}.outPath;
+    });
   };
 in
 {
