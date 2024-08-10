@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a80588d_899dab80",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 11
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-10T19:03:18Z",
+      "side": 1,
+      "message": "seems to be basically a wash for perf sadly:\n```\nfirefox outpath         time:   [7.3700 s 7.4063 s 7.4434 s]\n                        change: [-1.9644% -0.0310% +1.6302%] (p \u003d 0.97 \u003e 0.05)\n                        No change in performance detected.\n                        ```",
+      "revId": "b5e5f924c1ff40eeb45520238add5826eccd8571",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
