@@ -6,7 +6,7 @@ use std::{
 };
 use tokio::io::{self, AsyncWrite};
 
-use eyre::Result;
+use eyre::{Context, Result};
 use tvix_castore::{blobservice::BlobService, directoryservice::DirectoryService};
 use url::Url;
 
@@ -126,21 +126,24 @@ pub async fn addrs_to_configs(urls: impl Into<ServiceUrls>) -> Result<Compositio
 
     let mut configs: CompositionConfigs = Default::default();
 
-    let blob_service_url = Url::parse(&urls.blob_service_addr)?;
-    let directory_service_url = Url::parse(&urls.directory_service_addr)?;
-    let path_info_service_url = Url::parse(&urls.path_info_service_addr)?;
-
     configs.blobservices.insert(
         "default".into(),
-        with_registry(&REG, || blob_service_url.try_into())?,
+        with_registry(&REG, || Url::parse(&urls.blob_service_addr)?.try_into())
+            .wrap_err("Failed to parse blob service URL")?,
     );
     configs.directoryservices.insert(
         "default".into(),
-        with_registry(&REG, || directory_service_url.try_into())?,
+        with_registry(&REG, || {
+            Url::parse(&urls.directory_service_addr)?.try_into()
+        })
+        .wrap_err("Failed to parse directory service URL")?,
     );
     configs.pathinfoservices.insert(
         "default".into(),
-        with_registry(&REG, || path_info_service_url.try_into())?,
+        with_registry(&REG, || {
+            Url::parse(&urls.path_info_service_addr)?.try_into()
+        })
+        .wrap_err("Failed to parse path info service URL")?,
     );
 
     Ok(configs)
