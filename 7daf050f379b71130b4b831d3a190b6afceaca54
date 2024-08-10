@@ -34,6 +34,24 @@
       "parentUuid": "f928c99d_08235e02",
       "revId": "7daf050f379b71130b4b831d3a190b6afceaca54",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac55233d_93ff0eb4",
+        "filename": "users/aspen/web/blog/making-tvix-eval-faster.org",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-10T15:03:28Z",
+      "side": 1,
+      "message": "you absolutely can review the website locally:\n```\nmg build //users/aspen/web:website\n```",
+      "parentUuid": "7aa4de85_1cfd1731",
+      "revId": "7daf050f379b71130b4b831d3a190b6afceaca54",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
