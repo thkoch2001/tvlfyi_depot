@@ -52,6 +52,24 @@
       "parentUuid": "7aa4de85_1cfd1731",
       "revId": "7daf050f379b71130b4b831d3a190b6afceaca54",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fcf49395_90048a38",
+        "filename": "users/aspen/web/blog/making-tvix-eval-faster.org",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-10T15:27:29Z",
+      "side": 1,
+      "message": "Yes, I did review it. I\u0027m just not too familiar with .org, so I couldn\u0027t render it anywhere other than my text editor. No comments on the contents yet, happy to take another look once there\u0027s more.",
+      "parentUuid": "ac55233d_93ff0eb4",
+      "revId": "7daf050f379b71130b4b831d3a190b6afceaca54",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
