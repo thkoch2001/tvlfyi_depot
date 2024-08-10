@@ -1,5 +1,6 @@
 use super::PathInfoService;
 use crate::{nar::ingest_nar_and_hash, proto::PathInfo};
+use eyre::{Report, Result};
 use futures::{stream::BoxStream, TryStreamExt};
 use nix_compat::{
     narinfo::{self, NarInfo},
@@ -265,7 +266,7 @@ pub struct NixHTTPPathInfoServiceConfig {
 }
 
 impl TryFrom<Url> for NixHTTPPathInfoServiceConfig {
-    type Error = Box<dyn std::error::Error + Send + Sync>;
+    type Error = Report;
     fn try_from(url: Url) -> Result<Self, Self::Error> {
         let mut public_keys: Option<Vec<String>> = None;
         for (_, v) in url
@@ -292,11 +293,12 @@ impl TryFrom<Url> for NixHTTPPathInfoServiceConfig {
 #[async_trait]
 impl ServiceBuilder for NixHTTPPathInfoServiceConfig {
     type Output = dyn PathInfoService;
+
     async fn build<'a>(
         &'a self,
         _instance_name: &str,
         context: &CompositionContext,
-    ) -> Result<Arc<dyn PathInfoService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
+    ) -> Result<Arc<dyn PathInfoService>> {
         let (blob_service, directory_service) = futures::join!(
             context.resolve(self.blob_service.clone()),
             context.resolve(self.directory_service.clone())

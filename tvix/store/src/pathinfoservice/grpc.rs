@@ -4,6 +4,7 @@ use crate::{
     proto::{self, ListPathInfoRequest, PathInfo},
 };
 use async_stream::try_stream;
+use eyre::{Report, Result};
 use futures::stream::BoxStream;
 use nix_compat::nixbase32;
 use std::sync::Arc;
@@ -158,7 +159,7 @@ pub struct GRPCPathInfoServiceConfig {
 }
 
 impl TryFrom<url::Url> for GRPCPathInfoServiceConfig {
-    type Error = Box<dyn std::error::Error + Send + Sync>;
+    type Error = Report;
     fn try_from(url: url::Url) -> Result<Self, Self::Error> {
         //   normally grpc+unix for unix sockets, and grpc+http(s) for the HTTP counterparts.
         // - In the case of unix sockets, there must be a path, but may not be a host.
@@ -173,11 +174,12 @@ impl TryFrom<url::Url> for GRPCPathInfoServiceConfig {
 #[async_trait]
 impl ServiceBuilder for GRPCPathInfoServiceConfig {
     type Output = dyn PathInfoService;
+
     async fn build<'a>(
         &'a self,
         _instance_name: &str,
         _context: &CompositionContext,
-    ) -> Result<Arc<dyn PathInfoService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
+    ) -> Result<Arc<dyn PathInfoService>> {
         let client = proto::path_info_service_client::PathInfoServiceClient::new(
             tvix_castore::tonic::channel_from_url(&self.url.parse()?).await?,
         );

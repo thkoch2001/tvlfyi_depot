@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use eyre::{Report, Result};
 use futures::stream::BoxStream;
 use futures::StreamExt;
 use futures::TryFutureExt;
@@ -152,7 +153,7 @@ pub struct CacheConfig {
 }
 
 impl TryFrom<url::Url> for CacheConfig {
-    type Error = Box<dyn std::error::Error + Send + Sync>;
+    type Error = Report;
     fn try_from(_url: url::Url) -> Result<Self, Self::Error> {
         Err(Error::StorageError(
             "Instantiating a CombinedDirectoryService from a url is not supported".into(),
@@ -164,11 +165,12 @@ impl TryFrom<url::Url> for CacheConfig {
 #[async_trait]
 impl ServiceBuilder for CacheConfig {
     type Output = dyn DirectoryService;
+
     async fn build<'a>(
         &'a self,
         _instance_name: &str,
         context: &CompositionContext,
-    ) -> Result<Arc<dyn DirectoryService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
+    ) -> Result<Arc<dyn DirectoryService>> {
         let (near, far) = futures::join!(
             context.resolve(self.near.clone()),
             context.resolve(self.far.clone())

@@ -6,6 +6,7 @@ use std::{
 };
 use tokio::io::{self, AsyncWrite};
 
+use eyre::Result;
 use tvix_castore::{blobservice::BlobService, directoryservice::DirectoryService};
 use url::Url;
 
@@ -114,9 +115,7 @@ impl From<ServiceUrlsMemory> for ServiceUrls {
     }
 }
 
-pub async fn addrs_to_configs(
-    urls: impl Into<ServiceUrls>,
-) -> Result<CompositionConfigs, Box<dyn std::error::Error + Send + Sync>> {
+pub async fn addrs_to_configs(urls: impl Into<ServiceUrls>) -> Result<CompositionConfigs> {
     let urls: ServiceUrls = urls.into();
 
     #[cfg(feature = "xp-store-composition")]
@@ -150,15 +149,12 @@ pub async fn addrs_to_configs(
 /// Construct the store handles from their addrs.
 pub async fn construct_services(
     urls: impl Into<ServiceUrls>,
-) -> Result<
-    (
-        Arc<dyn BlobService>,
-        Arc<dyn DirectoryService>,
-        Arc<dyn PathInfoService>,
-        Box<dyn NarCalculationService>,
-    ),
-    Box<dyn std::error::Error + Send + Sync>,
-> {
+) -> Result<(
+    Arc<dyn BlobService>,
+    Arc<dyn DirectoryService>,
+    Arc<dyn PathInfoService>,
+    Box<dyn NarCalculationService>,
+)> {
     let configs = addrs_to_configs(urls).await?;
     construct_services_from_configs(configs).await
 }
@@ -166,15 +162,12 @@ pub async fn construct_services(
 /// Construct the store handles from their addrs.
 pub async fn construct_services_from_configs(
     configs: CompositionConfigs,
-) -> Result<
-    (
-        Arc<dyn BlobService>,
-        Arc<dyn DirectoryService>,
-        Arc<dyn PathInfoService>,
-        Box<dyn NarCalculationService>,
-    ),
-    Box<dyn std::error::Error + Send + Sync>,
-> {
+) -> Result<(
+    Arc<dyn BlobService>,
+    Arc<dyn DirectoryService>,
+    Arc<dyn PathInfoService>,
+    Box<dyn NarCalculationService>,
+)> {
     let mut comp = Composition::default();
 
     comp.extend(configs.blobservices);

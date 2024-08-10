@@ -1,4 +1,5 @@
 use clap::Parser;
+use color_eyre::eyre::Result;
 use mimalloc::MiMalloc;
 use std::rc::Rc;
 use std::{fs, path::PathBuf};
@@ -49,48 +50,11 @@ fn lint(code: &str, path: Option<PathBuf>, args: &Args) -> bool {
     result.errors.is_empty()
 }
 
-fn main() {
-    let args = Args::parse();
-
-    let _ = tvix_tracing::TracingBuilder::default()
-        .level(args.log_level)
-        .enable_progressbar()
-        .build()
-        .expect("unable to set up tracing subscriber");
-    let tokio_runtime = tokio::runtime::Runtime::new().expect("failed to setup tokio runtime");
-
-    let io_handle = init_io_handle(&tokio_runtime, &args);
-
-    if let Some(file) = &args.script {
-        run_file(io_handle, file.clone(), &args)
-    } else if let Some(expr) = &args.expr {
-        if !interpret(
-            io_handle,
-            expr,
-            None,
-            &args,
-            false,
-            AllowIncomplete::RequireComplete,
-            None, // TODO(aspen): Pass in --arg/--argstr here
-            None,
-            None,
-        )
-        .unwrap()
-        .finalize()
-        {
-            std::process::exit(1);
-        }
-    } else {
-        let mut repl = Repl::new(io_handle, &args);
-        repl.run()
-    }
-}
-
-fn run_file(io_handle: Rc<TvixStoreIO>, mut path: PathBuf, args: &Args) {
+fn run_file(io_handle: Rc<TvixStoreIO>, mut path: PathBuf, args: &Args) -> Result<()> {
     if path.is_dir() {
         path.push("default.nix");
     }
-    let contents = fs::read_to_string(&path).expect("failed to read the input file");
+    let contents = fs::read_to_string(&path)?;
 
     let success = if args.compile_only {
         lint(&contents, Some(path), args)
@@ -112,5 +76,45 @@ fn run_file(io_handle: Rc<TvixStoreIO>, mut path: PathBuf, args: &Args) {
 
     if !success {
         std::process::exit(1);
+    }
+    Ok(())
+}
+
+fn main() -> Result<()> {
+    color_eyre::install()?;
+    let args = Args::parse();
+
+    let _ = tvix_tracing::TracingBuilder::default()
+        .level(args.log_level)
+        .enable_progressbar()
+        .build()?;
+    let tokio_runtime = tokio::runtime::Runtime::new()?;
+
+    let io_handle = init_io_handle(&tokio_runtime, &args)?;
+
+    if let Some(file) = &args.script {
+        run_file(io_handle, file.clone(), &args)
+    } else if let Some(expr) = &args.expr {
+        if !interpret(
+            io_handle,
+            expr,
+            None,
+            &args,
+            false,
+            AllowIncomplete::RequireComplete,
+            None, // TODO(aspen): Pass in --arg/--argstr here
+            None,
+            None,
+        )
+        .unwrap()
+        .finalize()
+        {
+            std::process::exit(1);
+        } else {
+            Ok(())
+        }
+    } else {
+        let mut repl = Repl::new(io_handle, &args)?;
+        repl.run()
     }
 }

@@ -1,6 +1,7 @@
 use super::PathInfoService;
 use crate::proto::PathInfo;
 use async_stream::try_stream;
+use eyre::{Report, Result};
 use futures::stream::BoxStream;
 use nix_compat::nixbase32;
 use prost::Message;
@@ -133,7 +134,7 @@ pub struct SledPathInfoServiceConfig {
 }
 
 impl TryFrom<url::Url> for SledPathInfoServiceConfig {
-    type Error = Box<dyn std::error::Error + Send + Sync>;
+    type Error = Report;
     fn try_from(url: url::Url) -> Result<Self, Self::Error> {
         // sled doesn't support host, and a path can be provided (otherwise
         // it'll live in memory only).
@@ -164,7 +165,7 @@ impl ServiceBuilder for SledPathInfoServiceConfig {
         &'a self,
         _instance_name: &str,
         _context: &CompositionContext,
-    ) -> Result<Arc<dyn PathInfoService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
+    ) -> Result<Arc<dyn PathInfoService>> {
         match self {
             SledPathInfoServiceConfig {
                 is_temporary: true,
