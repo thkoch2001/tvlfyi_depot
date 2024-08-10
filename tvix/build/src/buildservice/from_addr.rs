@@ -1,4 +1,5 @@
 use super::{grpc::GRPCBuildService, BuildService, DummyBuildService};
+use eyre::{bail, Result};
 use tvix_castore::{blobservice::BlobService, directoryservice::DirectoryService};
 use url::Url;
 
@@ -14,35 +15,29 @@ pub async fn from_addr<BS, DS>(
     uri: &str,
     _blob_service: BS,
     _directory_service: DS,
-) -> std::io::Result<Box<dyn BuildService>>
+) -> Result<Box<dyn BuildService>>
 where
     BS: AsRef<dyn BlobService> + Send + Sync + Clone + 'static,
     DS: AsRef<dyn DirectoryService> + Send + Sync + Clone + 'static,
 {
-    let url = Url::parse(uri)
-        .map_err(|e| std::io::Error::other(format!("unable to parse url: {}", e)))?;
+    let url = Url::parse(uri)?;
 
-    Ok(match url.scheme() {
+    match url.scheme() {
         // dummy doesn't care about parameters.
-        "dummy" => Box::<DummyBuildService>::default(),
+        "dummy" => Ok(Box::<DummyBuildService>::default()),
         scheme => {
             if scheme.starts_with("grpc+") {
                 let client = crate::proto::build_service_client::BuildServiceClient::new(
-                    tvix_castore::tonic::channel_from_url(&url)
-                        .await
-                        .map_err(std::io::Error::other)?,
+                    tvix_castore::tonic::channel_from_url(&url).await?,
                 );
                 // FUTUREWORK: also allow responding to {blob,directory}_service
                 // requests from the remote BuildService?
-                Box::new(GRPCBuildService::from_client(client))
+                Ok(Box::new(GRPCBuildService::from_client(client)))
             } else {
-                Err(std::io::Error::other(format!(
-                    "unknown scheme: {}",
-                    url.scheme()
-                )))?
+                bail!("Unknown URI scheme: {}", url.scheme())
             }
         }
-    })
+    }
 }
 
 #[cfg(test)]

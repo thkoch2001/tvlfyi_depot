@@ -4845,6 +4845,7 @@ version = "0.1.0"
 dependencies = [
  "bytes",
  "clap",
+ "eyre",
  "itertools 0.12.0",
  "mimalloc",
  "prost 0.13.1",
