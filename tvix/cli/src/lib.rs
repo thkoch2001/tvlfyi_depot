@@ -1,7 +1,7 @@
 use std::path::PathBuf;
 use std::rc::Rc;
 
-use color_eyre::eyre::Result;
+use color_eyre::eyre::{Context, Result};
 use rustc_hash::FxHashMap;
 use smol_str::SmolStr;
 use std::fmt::Write;
@@ -36,18 +36,20 @@ pub fn init_io_handle(
             args.service_addrs.clone(),
         ))?;
 
-    let build_service = tokio_runtime.block_on({
-        let blob_service = blob_service.clone();
-        let directory_service = directory_service.clone();
-        async move {
-            buildservice::from_addr(
-                &args.build_service_addr,
-                blob_service.clone(),
-                directory_service.clone(),
-            )
-            .await
-        }
-    })?;
+    let build_service = tokio_runtime
+        .block_on({
+            let blob_service = blob_service.clone();
+            let directory_service = directory_service.clone();
+            async move {
+                buildservice::from_addr(
+                    &args.build_service_addr,
+                    blob_service.clone(),
+                    directory_service.clone(),
+                )
+                .await
+            }
+        })
+        .wrap_err("Could not initialize build service")?;
 
     Ok(Rc::new(TvixStoreIO::new(
         blob_service.clone(),
