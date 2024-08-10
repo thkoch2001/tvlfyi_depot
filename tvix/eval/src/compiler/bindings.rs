@@ -605,7 +605,7 @@ impl Compiler<'_, '_> {
                         c.emit_force(&namespace);
 
                         c.emit_constant(name.as_str().into(), &span);
-                        c.push_op(OpCode::OpAttrsSelect, &span);
+                        c.push_op(Op::AttrsSelect, &span);
                     })
                 }
 
@@ -632,7 +632,8 @@ impl Compiler<'_, '_> {
             if self.scope()[idx].needs_finaliser {
                 let stack_idx = self.scope().stack_index(idx);
                 let span = self.scope()[idx].span;
-                self.push_op(OpCode::OpFinalise(stack_idx), &OrEntireFile(span));
+                self.push_op(Op::Finalise, &OrEntireFile(span));
+                self.push_uvarint(stack_idx.0 as u64)
             }
         }
     }
@@ -667,7 +668,8 @@ impl Compiler<'_, '_> {
         self.bind_values(bindings);
 
         if kind.is_attrs() {
-            self.push_op(OpCode::OpAttrs(Count(count)), node);
+            self.push_op(Op::Attrs, node);
+            self.push_uvarint(count as u64);
         }
 
         if count == 0 {
@@ -697,7 +699,7 @@ impl Compiler<'_, '_> {
         self.scope_mut().end_scope();
 
         self.emit_constant("body".into(), node);
-        self.push_op(OpCode::OpAttrsSelect, node);
+        self.push_op(Op::AttrsSelect, node);
     }
 
     /// Is the given identifier defined *by the user* in any current scope?
@@ -719,7 +721,8 @@ impl Compiler<'_, '_> {
             LocalPosition::Unknown => {
                 // Are we possibly dealing with an upvalue?
                 if let Some(idx) = self.resolve_upvalue(self.contexts.len() - 1, ident, node) {
-                    self.push_op(OpCode::OpGetUpvalue(idx), node);
+                    self.push_op(Op::GetUpvalue, node);
+                    self.push_uvarint(idx.0 as u64);
                     return;
                 }
 
@@ -742,7 +745,7 @@ impl Compiler<'_, '_> {
                     self.thunk(slot, node, |c, _| {
                         c.context_mut().captures_with_stack = true;
                         c.emit_constant(ident.into(), node);
-                        c.push_op(OpCode::OpResolveWith, node);
+                        c.push_op(Op::ResolveWith, node);
                     });
                     return;
                 }
@@ -753,7 +756,8 @@ impl Compiler<'_, '_> {
 
             LocalPosition::Known(idx) => {
                 let stack_idx = self.scope().stack_index(idx);
-                self.push_op(OpCode::OpGetLocal(stack_idx), node);
+                self.push_op(Op::GetLocal, node);
+                self.push_uvarint(stack_idx.0 as u64);
             }
 
             // This identifier is referring to a value from the same scope which
@@ -764,7 +768,8 @@ impl Compiler<'_, '_> {
                     node,
                     UpvalueKind::Local(idx),
                 );
-                compiler.push_op(OpCode::OpGetUpvalue(upvalue_idx), node);
+                compiler.push_op(Op::GetUpvalue, node);
+                compiler.push_uvarint(upvalue_idx.0 as u64);
             }),
         };
     }
