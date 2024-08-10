@@ -16,6 +16,24 @@
       "message": "This doesn\u0027t seem to be integrated to the website build. I did a `mg build //users/aspen/web`, but it didn\u0027t show up there.\n\nAlso, maybe make the deployment script separate, so it becomes possible to review the website locally without being able to sync to your S3 bucket to view ;-)",
       "revId": "7daf050f379b71130b4b831d3a190b6afceaca54",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7aa4de85_1cfd1731",
+        "filename": "users/aspen/web/blog/making-tvix-eval-faster.org",
+        "patchSetId": 6
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-10T14:59:39Z",
+      "side": 1,
+      "message": "\u003e This doesn\u0027t seem to be integrated to the website build. I did a `mg build //users/aspen/web`, but it didn\u0027t show up there.\n\nyeah, it\u0027s a draft.\n\n\u003e Also, maybe make the deployment script separate, so it becomes possible to review the website locally without being able to sync to your S3 bucket to view ;-)\n\nI mean, you can just review the source, right? it\u0027s plain text.",
+      "parentUuid": "f928c99d_08235e02",
+      "revId": "7daf050f379b71130b4b831d3a190b6afceaca54",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
