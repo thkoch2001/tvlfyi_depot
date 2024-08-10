@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "20829d45_5e181f8e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-10T21:16:12Z",
+      "side": 1,
+      "message": "It seems that I\u0027m only able to reproduce the same hash with the newer Nix versions like 2.23 for example, but with 2.3 it produced a different hash and the test fails, our CI runner uses 2.3.",
+      "revId": "024f48441b33d69806298309b5b8737ad76fbe90",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
