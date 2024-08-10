@@ -1583,6 +1583,7 @@ dependencies = [
  "tabwriter",
  "toml",
  "tvix-eval-builtin-macros",
+ "vu128",
 ]
 
 [[package]]
@@ -1635,6 +1636,12 @@ name = "version_check"
 version = "0.9.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
+
+[[package]]
+name = "vu128"
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c51a178c8f3f425d86542b14f3dce9e16e86bb86328e2293745e6744ebd62e11"
 
 [[package]]
 name = "wasi"
