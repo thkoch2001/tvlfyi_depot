@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2880ec3d_97a6584a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-11T14:26:57Z",
+      "side": 1,
+      "message": "they can be *implemented* by third-party crates, but they aren\u0027t *returned to* third party crates, which is the main issue with error types like eyre and anyhow.\n\npassing around Box\u003cdyn std::error::Error\u003e is a pretty strong antipattern in rust - as you have detected, it\u0027s extremely unergonomic and results in terrible user experience (with minimal reporting and context to errors, eg just getting \"url missing scheme\" or whatever if you pass a bad url to one of the four top-level URL options). eyre gets us error context, code tracing, span tracing, nice reporting, structured errors, etc. for \"free\".\n\nI really think we shouldn\u0027t be hamstringing the development and user experience of tvix-the-application just to cater to a hypothetical, nonexistent future third-party user.",
+      "parentUuid": "914c5d58_8082557f",
+      "revId": "5dd76f8ba45843ce8bb99656d618323f9b7bb78a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1c37c850_9b7bfd4f",
         "filename": "tvix/cli/default.nix",
         "patchSetId": 3
