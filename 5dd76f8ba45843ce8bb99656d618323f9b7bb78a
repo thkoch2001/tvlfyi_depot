@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7c08ee07_2d87097f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-11T14:44:06Z",
+      "side": 1,
+      "message": "i also strongly feel that we should not be using `io::Result` in as many places as we are. if you ever construct an io::Result, something has gone horribly wrong",
+      "parentUuid": "2880ec3d_97a6584a",
+      "revId": "5dd76f8ba45843ce8bb99656d618323f9b7bb78a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1c37c850_9b7bfd4f",
         "filename": "tvix/cli/default.nix",
         "patchSetId": 3
