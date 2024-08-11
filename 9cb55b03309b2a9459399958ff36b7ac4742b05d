@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e599f248_92f7639c",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-11T21:14:25Z",
+      "side": 1,
+      "message": "Initially I wanted to keep this pub(crate) and simply add another method to TvixStoreIO that uses KnownPaths::get_derivation and just returns the result of get_derivations, but that\u0027s not possible because you cannot return borrowed data from a RefCell. So I had to make this public and run the inner get_derivations from tvix-cli. I\u0027m not too worried about making known_paths public in TvixStoreIO as KnownPaths itself is already public and has public methods (though the struct fields are still private). Let me know what y\u0027all think.",
+      "revId": "9cb55b03309b2a9459399958ff36b7ac4742b05d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
