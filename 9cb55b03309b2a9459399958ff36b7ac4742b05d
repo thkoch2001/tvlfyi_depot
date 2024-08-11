@@ -20,6 +20,41 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2901c13b_771f89c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-11T21:44:59Z",
+      "side": 1,
+      "message": "as it doesn\u0027t do anything anymore during evaluation itself, simply collects shortly after, I think it\u0027s fine to simply have this renting boolean check.",
+      "parentUuid": "b8bc4d30_d2c59c08",
+      "revId": "9cb55b03309b2a9459399958ff36b7ac4742b05d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10f68eef_f291c4ed",
+        "filename": "tvix/glue/src/known_paths.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-11T21:44:59Z",
+      "side": 1,
+      "message": "add a separate test case pls, the derivation dumping mechanism isn\u0027t part of the plhappy path. of course, you can reuse the fixtures.",
+      "revId": "9cb55b03309b2a9459399958ff36b7ac4742b05d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e599f248_92f7639c",
         "filename": "tvix/glue/src/tvix_store_io.rs",
         "patchSetId": 1
@@ -31,6 +66,24 @@
       "writtenOn": "2024-08-11T21:14:25Z",
       "side": 1,
       "message": "Initially I wanted to keep this pub(crate) and simply add another method to TvixStoreIO that uses KnownPaths::get_derivation and just returns the result of get_derivations, but that\u0027s not possible because you cannot return borrowed data from a RefCell. So I had to make this public and run the inner get_derivations from tvix-cli. I\u0027m not too worried about making known_paths public in TvixStoreIO as KnownPaths itself is already public and has public methods (though the struct fields are still private). Let me know what y\u0027all think.",
+      "revId": "9cb55b03309b2a9459399958ff36b7ac4742b05d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "43ae356d_aceadb82",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-11T21:44:59Z",
+      "side": 1,
+      "message": "I think it\u0027s fine for now, this really is quite minimal.",
+      "parentUuid": "e599f248_92f7639c",
       "revId": "9cb55b03309b2a9459399958ff36b7ac4742b05d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
