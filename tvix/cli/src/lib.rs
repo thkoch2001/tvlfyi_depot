@@ -241,7 +241,7 @@ pub fn interpret(
 ) -> Result<InterpretResult, IncompleteInput> {
     let mut output = String::new();
     let result = evaluate(
-        tvix_store_io,
+        tvix_store_io.clone(),
         code,
         path,
         args,
@@ -256,6 +256,11 @@ pub fn interpret(
             writeln!(&mut output, "=> {}", value.explain()).unwrap();
         } else if args.raw {
             writeln!(&mut output, "{}", value.to_contextful_str().unwrap()).unwrap();
+        } else if args.build {
+            tvix_store_io
+                .as_ref()
+                .realize_path(&value.to_path().unwrap())
+                .unwrap();
         } else {
             writeln!(&mut output, "=> {} :: {}", value, value.type_of()).unwrap();
         }

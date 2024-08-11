@@ -24,6 +24,7 @@ fn state_dir() -> Option<PathBuf> {
 pub(crate) enum ReplCommand<'a> {
     Expr(&'a str),
     Assign(Assignment<'a>),
+    Build(&'a str),
     Explain(&'a str),
     Print(&'a str),
     Quit,
@@ -38,6 +39,7 @@ The following commands are supported:
 
   <expr>       Evaluate a Nix language expression and print the result, along with its inferred type
   <x> = <expr> Bind the result of an expression to a variable
+  :b <expr>    Evaluate a Nix language expression and build the resulting derivation
   :d <expr>    Evaluate a Nix language expression and print a detailed description of the result
   :p <expr>    Evaluate a Nix language expression and print the result recursively
   :q           Exit the REPL
@@ -50,6 +52,8 @@ The following commands are supported:
                 return Self::Explain(without_prefix);
             } else if let Some(without_prefix) = input.strip_prefix(":p ") {
                 return Self::Print(without_prefix);
+            } else if let Some(without_prefix) = input.strip_prefix(":b ") {
+                return Self::Build(without_prefix);
             }
 
             let input = input.trim_end();
@@ -143,7 +147,7 @@ impl<'a> Repl<'a> {
                         break;
                     }
                 }
-                Err(ReadlineError::Interrupted) | Err(ReadlineError::Eof) => break,
+                Err(ReadlineError::Eof | ReadlineError::Interrupted) => break,
 
                 Err(err) => {
                     eprintln!("error: {}", err);
@@ -217,6 +221,20 @@ impl<'a> Repl<'a> {
                     Err(incomplete) => Err(incomplete),
                 }
             }
+            ReplCommand::Build(input) => interpret(
+                Rc::clone(&self.io_handle),
+                input,
+                None,
+                &Args {
+                    build: true,
+                    ..(self.args.clone())
+                },
+                false,
+                AllowIncomplete::Allow,
+                Some(&self.env),
+                self.globals.clone(),
+                Some(self.source_map.clone()),
+            ),
             ReplCommand::Explain(input) => interpret(
                 Rc::clone(&self.io_handle),
                 input,
