@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b8bc4d30_d2c59c08",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-11T21:15:23Z",
+      "side": 1,
+      "message": "Should this functionality be gated behind a feature flag? It doesn\u0027t add any extra dependencies and it isn\u0027t enabled by default unless you pass the `--drv-dumpdir` CLI arg.",
+      "revId": "9cb55b03309b2a9459399958ff36b7ac4742b05d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e599f248_92f7639c",
         "filename": "tvix/glue/src/tvix_store_io.rs",
         "patchSetId": 1
