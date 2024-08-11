@@ -20,6 +20,7 @@ use std::{cmp::Ordering, ops::DerefMut, path::PathBuf, rc::Rc};
 
 use crate::{
     arithmetic_op,
+    builtins::coerce_value_to_path,
     chunk::Chunk,
     cmp_op,
     compiler::GlobalsMap,
@@ -1306,6 +1307,31 @@ async fn final_deep_force(co: GenCo) -> Result<Value, ErrorKind> {
     Ok(generators::request_deep_force(&co, value).await)
 }
 
+async fn realize_store_path(co: GenCo) -> Result<Value, ErrorKind> {
+    let value = generators::request_stack_pop(&co).await;
+    let path = match coerce_value_to_path(&co, value).await? {
+        Ok(path) => path,
+        Err(cek) => return Err(ErrorKind::CatchableError(cek)),
+    };
+    generators::request_realize_store_path(&co, path).await
+}
+
+/// Specification for how to handle top-level values returned by evaluation
+#[derive(Debug, Clone, Copy, Default)]
+pub enum EvalMode {
+    /// The default. Values are returned from evaluations as-is, without any extra forcing or
+    /// special handling
+    #[default]
+    Lazy,
+
+    /// Strictly and deeply evaluate top-level values returned by evaluation
+    Strict,
+
+    /// Ensure the top-level value returned by evaluation, which should represent a store path, is
+    /// built.
+    Build,
+}
+
 pub fn run_lambda<IO>(
     nix_search_path: NixSearchPath,
     io_handle: IO,
@@ -1313,7 +1339,7 @@ pub fn run_lambda<IO>(
     source: SourceCode,
     globals: Rc<GlobalsMap>,
     lambda: Rc<Lambda>,
-    strict: bool,
+    mode: EvalMode,
 ) -> EvalResult<RuntimeResult>
 where
     IO: AsRef<dyn EvalIO> + 'static,
@@ -1337,8 +1363,12 @@ where
 
     // When evaluating strictly, synthesise a frame that will instruct
     // the VM to deep-force the final value before returning it.
-    if strict {
-        vm.enqueue_generator("final_deep_force", root_span, final_deep_force);
+    match mode {
+        EvalMode::Lazy => {}
+        EvalMode::Strict => vm.enqueue_generator("final_deep_force", root_span, final_deep_force),
+        EvalMode::Build => {
+            vm.enqueue_generator("realize_store_path", root_span, realize_store_path)
+        }
     }
 
     vm.frames.push(Frame::CallFrame {
