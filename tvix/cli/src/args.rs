@@ -59,6 +59,10 @@ pub struct Args {
     #[clap(long)]
     pub strict: bool,
 
+    /// Ensure that the store path returned by the evaluation is built.
+    #[clap(long)]
+    pub build: bool,
+
     #[clap(flatten)]
     pub service_addrs: ServiceUrlsMemory,
 

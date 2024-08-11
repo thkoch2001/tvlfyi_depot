@@ -103,7 +103,9 @@ pub fn evaluate(
     .enable_import()
     .env(env);
 
-    if args.strict {
+    if args.build {
+        eval_builder = eval_builder.mode(EvalMode::Build);
+    } else if args.strict {
         eval_builder = eval_builder.mode(EvalMode::Strict);
     }
 

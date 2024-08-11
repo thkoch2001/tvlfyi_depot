@@ -17,7 +17,9 @@ static GLOBAL: MiMalloc = MiMalloc;
 fn lint(code: &str, path: Option<PathBuf>, args: &Args) -> bool {
     let mut eval_builder = tvix_eval::Evaluation::builder_impure();
 
-    if args.strict {
+    if args.build {
+        eval_builder = eval_builder.mode(EvalMode::Build);
+    } else if args.strict {
         eval_builder = eval_builder.mode(EvalMode::Strict);
     }
 
