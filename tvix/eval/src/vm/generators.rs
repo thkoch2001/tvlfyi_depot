@@ -842,7 +842,6 @@ pub(crate) async fn request_read_file_type(co: &GenCo, path: PathBuf) -> FileTyp
 }
 
 #[cfg_attr(not(feature = "impure"), allow(unused))]
-#[allow(dead_code)] // TODO(aspen): used later in the chain
 pub(crate) async fn request_realize_store_path(
     co: &GenCo,
     path: PathBuf,
