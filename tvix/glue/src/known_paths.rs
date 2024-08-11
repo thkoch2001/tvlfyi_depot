@@ -129,6 +129,11 @@ impl KnownPaths {
             .get(output_path)
             .map(|(name, fetch)| (name.to_owned(), fetch.to_owned()))
     }
+
+    /// Returns an iterator over all known derivations and their store path.
+    pub fn get_derivations(&self) -> impl Iterator<Item = (&StorePath, &Derivation)> {
+        self.derivations.iter().map(|(k, v)| (k, &v.1))
+    }
 }
 
 #[cfg(test)]
@@ -204,6 +209,14 @@ mod tests {
         assert_eq!(
             Some(&BAR_DRV.clone()),
             known_paths.get_drv_by_drvpath(&BAR_DRV_PATH)
+        );
+
+        // Test get_derivations
+        assert_eq!(
+            Some((&BAR_DRV_PATH.clone(), &BAR_DRV.clone())),
+            known_paths
+                .get_derivations()
+                .find(|(s, d)| (*s, *d) == (&BAR_DRV_PATH, &BAR_DRV))
         );
 
         // Test get_drv_path_for_output_path

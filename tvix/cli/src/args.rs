@@ -64,4 +64,8 @@ pub struct Args {
 
     #[arg(long, env, default_value = "dummy://")]
     pub build_service_addr: String,
+
+    /// Path to a directory to dump all derivation files into.
+    #[clap(long)]
+    pub drv_dumpdir: Option<PathBuf>,
 }
