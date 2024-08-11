@@ -72,6 +72,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1a81b771_3d0d77d1",
+        "filename": "tvix/cli/src/main.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-11T14:27:27Z",
+      "side": 1,
+      "message": "eyre::Result is nice in that it\u0027s explicitly compatible with std::result::Result.",
+      "parentUuid": "82054d1e_02591819",
+      "revId": "5dd76f8ba45843ce8bb99656d618323f9b7bb78a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2966a5be_7de7d3e2",
         "filename": "web/tvixbolt/Cargo.nix",
         "patchSetId": 3
