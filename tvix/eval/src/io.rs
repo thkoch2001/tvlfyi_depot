@@ -67,6 +67,13 @@ pub trait EvalIO {
     /// Open the file at the specified path to a `io::Read`.
     fn open(&self, path: &Path) -> io::Result<Box<dyn io::Read>>;
 
+    /// Ensure the given path is built.
+    ///
+    /// If it is a store path, this fetches or builds it. If it is a regular filesystem path instead
+    /// of a store path, this function only checks that the path exists (and returns an error if it
+    /// does not).
+    fn realize(&self, path: &Path) -> io::Result<()>;
+
     /// Return the [FileType] of the given path, or an error if it doesn't
     /// exist.
     fn file_type(&self, path: &Path) -> io::Result<FileType>;
@@ -119,6 +126,10 @@ impl EvalIO for StdIO {
         Ok(Box::new(File::open(path)?))
     }
 
+    fn realize(&self, _path: &Path) -> io::Result<()> {
+        Ok(())
+    }
+
     fn file_type(&self, path: &Path) -> io::Result<FileType> {
         let file_type = std::fs::symlink_metadata(path)?;
 
@@ -167,39 +178,35 @@ impl EvalIO for StdIO {
 /// IO is not available but code should "pretend" that it is.
 pub struct DummyIO;
 
+fn not_implemented<T>() -> io::Result<T> {
+    Err(io::Error::new(
+        io::ErrorKind::Unsupported,
+        "I/O methods are not implemented in DummyIO",
+    ))
+}
+
 impl EvalIO for DummyIO {
     fn path_exists(&self, _: &Path) -> io::Result<bool> {
-        Err(io::Error::new(
-            io::ErrorKind::Unsupported,
-            "I/O methods are not implemented in DummyIO",
-        ))
+        not_implemented()
     }
 
     fn open(&self, _: &Path) -> io::Result<Box<dyn io::Read>> {
-        Err(io::Error::new(
-            io::ErrorKind::Unsupported,
-            "I/O methods are not implemented in DummyIO",
-        ))
+        not_implemented()
+    }
+
+    fn realize(&self, _: &Path) -> io::Result<()> {
+        not_implemented()
     }
 
     fn file_type(&self, _: &Path) -> io::Result<FileType> {
-        Err(io::Error::new(
-            io::ErrorKind::Unsupported,
-            "I/O methods are not implemented in DummyIO",
-        ))
+        not_implemented()
     }
 
     fn read_dir(&self, _: &Path) -> io::Result<Vec<(bytes::Bytes, FileType)>> {
-        Err(io::Error::new(
-            io::ErrorKind::Unsupported,
-            "I/O methods are not implemented in DummyIO",
-        ))
+        not_implemented()
     }
 
     fn import_path(&self, _: &Path) -> io::Result<PathBuf> {
-        Err(io::Error::new(
-            io::ErrorKind::Unsupported,
-            "I/O methods are not implemented in DummyIO",
-        ))
+        not_implemented()
     }
 }
