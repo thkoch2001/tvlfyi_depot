@@ -74,6 +74,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dbf87c2f_9b010999",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-11T14:55:31Z",
+      "side": 1,
+      "message": "\u003e i also strongly feel that we should not be using io::Result in as many places as we are. if you ever construct an io::Result, something has gone horribly wrong\n\nI agree, we should wrap io errors and attach some more context where useful - in addition to all the logging and tracing we have. Revamping the errors for castore/store components in general is another big topic on the list we should focus on.",
+      "parentUuid": "91f08b15_e403081d",
+      "revId": "5dd76f8ba45843ce8bb99656d618323f9b7bb78a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1c37c850_9b7bfd4f",
         "filename": "tvix/cli/default.nix",
         "patchSetId": 3
