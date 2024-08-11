@@ -61,6 +61,10 @@ fn main() {
 
     let io_handle = init_io_handle(&tokio_runtime, &args);
 
+    if let Some(dumpdir) = &args.drv_dumpdir {
+        fs::create_dir_all(dumpdir).expect("failed to create drv dumpdir");
+    }
+
     if let Some(file) = &args.script {
         run_file(io_handle, file.clone(), &args)
     } else if let Some(expr) = &args.expr {
