@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3f8f9f61_c1f11e98",
+        "filename": "tvix/eval/src/io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-11T16:05:00Z",
+      "side": 1,
+      "message": "This is called \"realize\" in Nix, and can include substitution",
+      "revId": "d53455c6bb30b9bafcf20738df3cc2a02c0319aa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "98553b1d_65235ea1",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-11T16:05:00Z",
+      "side": 1,
+      "message": "`realize_store_path`",
+      "revId": "d53455c6bb30b9bafcf20738df3cc2a02c0319aa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eeb64037_4028d5d3",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-11T16:05:00Z",
+      "side": 1,
+      "message": "Absorb this comment into the docstring?",
+      "revId": "d53455c6bb30b9bafcf20738df3cc2a02c0319aa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
