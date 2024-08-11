@@ -20,6 +20,7 @@ use std::{cmp::Ordering, ops::DerefMut, path::PathBuf, rc::Rc};
 
 use crate::{
     arithmetic_op,
+    builtins::coerce_value_to_path,
     chunk::Chunk,
     cmp_op,
     compiler::GlobalsMap,
@@ -1306,6 +1307,15 @@ async fn final_deep_force(co: GenCo) -> Result<Value, ErrorKind> {
     Ok(generators::request_deep_force(&co, value).await)
 }
 
+async fn build_store_path(co: GenCo) -> Result<Value, ErrorKind> {
+    let value = generators::request_stack_pop(&co).await;
+    let path = match coerce_value_to_path(&co, value).await? {
+        Ok(path) => path,
+        Err(cek) => return Err(ErrorKind::CatchableError(cek)),
+    };
+    generators::request_build_store_path(&co, path).await
+}
+
 /// Specification for how to handle top-level values returned by evaluation
 #[derive(Debug, Clone, Copy, Default)]
 pub enum EvalMode {
@@ -1316,6 +1326,10 @@ pub enum EvalMode {
 
     /// Strictly and deeply evaluate top-level values returned by evaluation
     Strict,
+
+    /// Ensure the top-level value returned by evaluation, which should represent a store path, is
+    /// built.
+    Build,
 }
 
 pub fn run_lambda<IO>(
@@ -1352,6 +1366,7 @@ where
     match mode {
         EvalMode::Lazy => {}
         EvalMode::Strict => vm.enqueue_generator("final_deep_force", root_span, final_deep_force),
+        EvalMode::Build => vm.enqueue_generator("build_store_path", root_span, build_store_path),
     }
 
     vm.frames.push(Frame::CallFrame {
