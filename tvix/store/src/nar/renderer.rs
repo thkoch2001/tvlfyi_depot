@@ -10,8 +10,7 @@ use tracing::{instrument, Span};
 use tracing_indicatif::span_ext::IndicatifSpanExt;
 use tvix_castore::{
     blobservice::BlobService,
-    directoryservice::DirectoryService,
-    proto::{self as castorepb, NamedNode},
+    directoryservice::{DirectoryService, NamedNode, Node},
 };
 
 pub struct SimpleRenderer<BS, DS> {
@@ -36,7 +35,7 @@ where
 {
     async fn calculate_nar(
         &self,
-        root_node: &castorepb::node::Node,
+        root_node: &Node,
     ) -> Result<(u64, [u8; 32]), tvix_castore::Error> {
         calculate_size_and_sha256(
             root_node,
@@ -52,7 +51,7 @@ where
 /// NAR output.
 #[instrument(skip_all, fields(indicatif.pb_show=1))]
 pub async fn calculate_size_and_sha256<BS, DS>(
-    root_node: &castorepb::node::Node,
+    root_node: &Node,
     blob_service: BS,
     directory_service: DS,
 ) -> Result<(u64, [u8; 32]), RenderError>
@@ -80,13 +79,13 @@ where
     Ok((cw.count(), h.finalize().into()))
 }
 
-/// Accepts a [castorepb::node::Node] pointing to the root of a (store) path,
+/// Accepts a [Node] pointing to the root of a (store) path,
 /// and uses the passed blob_service and directory_service to perform the
 /// necessary lookups as it traverses the structure.
 /// The contents in NAR serialization are writen to the passed [AsyncWrite].
 pub async fn write_nar<W, BS, DS>(
     mut w: W,
-    proto_root_node: &castorepb::node::Node,
+    proto_root_node: &Node,
     blob_service: BS,
     directory_service: DS,
 ) -> Result<(), RenderError>
@@ -115,7 +114,7 @@ where
 /// This consumes the node.
 async fn walk_node<BS, DS>(
     nar_node: nar_writer::Node<'_, '_>,
-    proto_node: &castorepb::node::Node,
+    proto_node: &Node,
     blob_service: BS,
     directory_service: DS,
 ) -> Result<(BS, DS), RenderError>
@@ -124,20 +123,14 @@ where
     DS: DirectoryService + Send,
 {
     match proto_node {
-        castorepb::node::Node::Symlink(proto_symlink_node) => {
+        Node::Symlink(proto_symlink_node) => {
             nar_node
                 .symlink(&proto_symlink_node.target)
                 .await
                 .map_err(RenderError::NARWriterError)?;
         }
-        castorepb::node::Node::File(proto_file_node) => {
-            let digest_len = proto_file_node.digest.len();
-            let digest = proto_file_node.digest.clone().try_into().map_err(|_| {
-                RenderError::StoreError(io::Error::new(
-                    io::ErrorKind::Other,
-                    format!("invalid digest len {} in file node", digest_len),
-                ))
-            })?;
+        Node::File(proto_file_node) => {
+            let digest = proto_file_node.digest();
 
             let mut blob_reader = match blob_service
                 .open_read(&digest)
@@ -160,7 +153,7 @@ where
                 .await
                 .map_err(RenderError::NARWriterError)?;
         }
-        castorepb::node::Node::Directory(proto_directory_node) => {
+        Node::Directory(proto_directory_node) => {
             let digest_len = proto_directory_node.digest.len();
             let digest = proto_directory_node
                 .digest
