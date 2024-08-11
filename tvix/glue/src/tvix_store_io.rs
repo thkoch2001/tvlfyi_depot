@@ -97,32 +97,29 @@ impl TvixStoreIO {
         }
     }
 
-    /// for a given [StorePath] and additional [Path] inside the store path,
-    /// look up the [PathInfo], and if it exists, and then use
-    /// [directoryservice::descend_to] to return the
-    /// [Node] specified by `sub_path`.
-    ///
-    /// In case there is no PathInfo yet, this means we need to build it
-    /// (which currently is stubbed out still).
-    #[instrument(skip(self, store_path), fields(store_path=%store_path, indicatif.pb_show=1), ret(level = Level::TRACE), err)]
-    async fn store_path_to_node(
-        &self,
-        store_path: &StorePath,
-        sub_path: &Path,
-    ) -> io::Result<Option<Node>> {
+    /// Ensure that the given store path is built, and return its root node
+    #[instrument(
+        skip(self, store_path),
+        fields(store_path=%store_path, indicatif.pb_show=1),
+        ret(level = Level::TRACE),
+        err
+    )]
+    async fn build_store_path(&self, store_path: &StorePath) -> io::Result<Option<Node>> {
         // Find the root node for the store_path.
         // It asks the PathInfoService first, but in case there was a Derivation
         // produced that would build it, fall back to triggering the build.
         // To populate the input nodes, it might recursively trigger builds of
         // its dependencies too.
-        let root_node = match self
+        match self
             .path_info_service
             .as_ref()
             .get(*store_path.digest())
             .await?
         {
             // if we have a PathInfo, we know there will be a root_node (due to validation)
-            Some(path_info) => path_info.node.expect("no node").node.expect("no node"),
+            Some(path_info) => Ok(Some(
+                path_info.node.expect("no node").node.expect("no node"),
+            )),
             // If there's no PathInfo found, this normally means we have to
             // trigger the build (and insert into PathInfoService, after
             // reference scanning).
@@ -159,7 +156,7 @@ impl TvixStoreIO {
                             "store path returned from fetcher must match store path we have in fetchers"
                         );
 
-                        root_node
+                        Ok(Some(root_node))
                     }
                     None => {
                         // Look up the derivation for this output path.
@@ -329,21 +326,39 @@ impl TvixStoreIO {
                         }
 
                         // find the output for the store path requested
-                        build_result
-                            .outputs
-                            .into_iter()
-                            .find(|output_node| {
-                                output_node.node.as_ref().expect("invalid node").get_name()
-                                    == store_path.to_string().as_bytes()
-                            })
-                            .expect("build didn't produce the store path")
-                            .node
-                            .expect("invalid node")
+                        Ok(Some(
+                            build_result
+                                .outputs
+                                .into_iter()
+                                .find(|output_node| {
+                                    output_node.node.as_ref().expect("invalid node").get_name()
+                                        == store_path.to_string().as_bytes()
+                                })
+                                .expect("build didn't produce the store path")
+                                .node
+                                .expect("invalid node"),
+                        ))
                     }
                 }
             }
-        };
+        }
+    }
 
+    /// for a given [StorePath] and additional [Path] inside the store path,
+    /// look up the [PathInfo], and if it exists, and then use
+    /// [directoryservice::descend_to] to return the
+    /// [Node] specified by `sub_path`.
+    #[instrument(skip(self, store_path), fields(store_path=%store_path, indicatif.pb_show=1), ret(level = Level::TRACE), err)]
+    async fn store_path_to_node(
+        &self,
+        store_path: &StorePath,
+        sub_path: &Path,
+    ) -> io::Result<Option<Node>> {
+        let root_node = if let Some(node) = self.build_store_path(store_path).await? {
+            node
+        } else {
+            return Ok(None);
+        };
         // now with the root_node and sub_path, descend to the node requested.
         // We convert sub_path to the castore model here.
         let sub_path = tvix_castore::PathBuf::from_host_path(sub_path, true)?;
@@ -507,6 +522,20 @@ impl EvalIO for TvixStoreIO {
             // The store path is no store path, so do regular StdIO.
             self.std_io.open(path)
         }
+    }
+
+    #[instrument(skip(self), err)]
+    fn build(&self, path: &Path) -> io::Result<()> {
+        let (store_path, _sub_path) = StorePath::from_absolute_path_full(&path.to_string_lossy())
+            .map_err(|e| {
+            io::Error::new(
+                io::ErrorKind::InvalidInput,
+                format!("Invalid store path: {e}"),
+            )
+        })?;
+        self.tokio_handle
+            .block_on(self.build_store_path(&store_path))?;
+        Ok(())
     }
 
     #[instrument(skip(self), ret(level = Level::TRACE), err)]

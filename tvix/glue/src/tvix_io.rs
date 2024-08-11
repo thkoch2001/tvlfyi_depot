@@ -60,6 +60,10 @@ where
         self.actual.as_ref().open(path)
     }
 
+    fn build(&self, path: &Path) -> io::Result<()> {
+        self.actual.as_ref().build(path)
+    }
+
     fn file_type(&self, path: &Path) -> io::Result<FileType> {
         self.actual.as_ref().file_type(path)
     }
