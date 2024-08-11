@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c0f938fe_0d755737",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-11T22:21:03Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "2901c13b_771f89c7",
+      "revId": "9cb55b03309b2a9459399958ff36b7ac4742b05d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "10f68eef_f291c4ed",
@@ -49,6 +67,24 @@
       "writtenOn": "2024-08-11T21:44:59Z",
       "side": 1,
       "message": "add a separate test case pls, the derivation dumping mechanism isn\u0027t part of the plhappy path. of course, you can reuse the fixtures.",
+      "revId": "9cb55b03309b2a9459399958ff36b7ac4742b05d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aeaa90e3_a0348de3",
+        "filename": "tvix/glue/src/known_paths.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 214,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-11T22:21:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "10f68eef_f291c4ed",
       "revId": "9cb55b03309b2a9459399958ff36b7ac4742b05d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -84,6 +120,24 @@
       "side": 1,
       "message": "I think it\u0027s fine for now, this really is quite minimal.",
       "parentUuid": "e599f248_92f7639c",
+      "revId": "9cb55b03309b2a9459399958ff36b7ac4742b05d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c15c7ff_10a6798e",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-11T22:21:03Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "43ae356d_aceadb82",
       "revId": "9cb55b03309b2a9459399958ff36b7ac4742b05d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
