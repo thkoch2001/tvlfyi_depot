@@ -111,6 +111,9 @@ pub enum VMRequest {
     /// Request that the VM reads the given path.
     ReadDir(PathBuf),
 
+    /// Request that the given store path is built.
+    BuildStorePath(PathBuf),
+
     /// Request a reasonable span from the VM.
     Span,
 
@@ -178,6 +181,7 @@ impl Display for VMRequest {
             }
             VMRequest::PathExists(p) => write!(f, "path_exists({})", p.to_string_lossy()),
             VMRequest::ReadDir(p) => write!(f, "read_dir({})", p.to_string_lossy()),
+            VMRequest::BuildStorePath(p) => write!(f, "build_store_path({})", p.to_string_lossy()),
             VMRequest::Span => write!(f, "span"),
             VMRequest::TryForce(v) => write!(f, "try_force({})", v.type_of()),
             VMRequest::ToJson(v) => write!(f, "to_json({})", v.type_of()),
@@ -476,6 +480,18 @@ where
                                 })
                                 .with_span(span, self)?;
                             message = VMResponse::Directory(dir);
+                        }
+
+                        VMRequest::BuildStorePath(path) => {
+                            self.io_handle
+                                .as_ref()
+                                .build(&path)
+                                .map_err(|e| ErrorKind::IO {
+                                    path: Some(path),
+                                    error: e.into(),
+                                })
+                                .with_span(span, self)?;
+                            message = VMResponse::Empty;
                         }
 
                         VMRequest::Span => {
@@ -816,6 +832,21 @@ pub(crate) async fn request_to_json(
 pub(crate) async fn request_read_file_type(co: &GenCo, path: PathBuf) -> FileType {
     match co.yield_(VMRequest::ReadFileType(path)).await {
         VMResponse::FileType(file_type) => file_type,
+        msg => panic!(
+            "Tvix bug: VM responded with incorrect generator message: {}",
+            msg
+        ),
+    }
+}
+
+#[cfg_attr(not(feature = "impure"), allow(unused))]
+#[allow(dead_code)] // TODO(aspen): used later in the chain
+pub(crate) async fn request_build_store_path(
+    co: &GenCo,
+    path: PathBuf,
+) -> Result<Value, ErrorKind> {
+    match co.yield_(VMRequest::BuildStorePath(path.clone())).await {
+        VMResponse::Empty => Ok(path.into()),
         msg => panic!(
             "Tvix bug: VM responded with incorrect generator message: {}",
             msg
