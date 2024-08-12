@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bd4a1a1_e8a83ea7",
+        "filename": "tvix/nix-compat/src/nar/listing/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T17:14:29Z",
+      "side": 1,
+      "message": "Validating what? Do you mean verifying the contents of the NAR, or something like that?",
+      "revId": "2c5867a7eddcb7653a879f43a3839b46cce2551c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cbedf11_21fa6cc8",
+        "filename": "tvix/nix-compat/src/nar/listing/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T17:14:29Z",
+      "side": 1,
+      "message": "can we enforce this to be 1, and refuse deserializing otherwise?",
+      "revId": "2c5867a7eddcb7653a879f43a3839b46cce2551c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "40c6b597_305b7e15",
+        "filename": "tvix/nix-compat/src/nar/listing/test.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T17:14:29Z",
+      "side": 1,
+      "message": "Do you want to ensure the contents equal to some expected content? Or at least ensure it does roundtrip (deriving Serialize)",
+      "revId": "2c5867a7eddcb7653a879f43a3839b46cce2551c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
