@@ -34,6 +34,24 @@
       "parentUuid": "20829d45_5e181f8e",
       "revId": "024f48441b33d69806298309b5b8737ad76fbe90",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9a8acf9_358a324c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-12T14:15:43Z",
+      "side": 1,
+      "message": "It\u0027s https://github.com/NixOS/nix/issues/8259. We need to backport json library change to 2.3, or upgrade the CI runner to to \u003d\u003c2.12",
+      "parentUuid": "2b6842ff_bbdbcdd5",
+      "revId": "024f48441b33d69806298309b5b8737ad76fbe90",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
