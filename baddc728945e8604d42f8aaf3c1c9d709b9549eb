@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77f40af4_7ca1d70d",
+        "filename": "tvix/cli/src/args.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T09:33:47Z",
+      "side": 1,
+      "message": "Make the docstring a bit more helpful:\n\n```\n/// An optional path in which Derivations encountered during evaluation\n/// are dumped into, after evaluation.\n///\n/// If it doesn\u0027t exist, the directory is created.\n/// Files dumped there are named like they would show up in `/nix/store`,\n/// if produced by Nix. Existing files are not overwritten.\n///\n/// This is only for debugging and diffing purposes for post-eval inspection;\n/// Tvix does not read from these.\n```",
+      "revId": "baddc728945e8604d42f8aaf3c1c9d709b9549eb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7989d2ad_edd49e1d",
+        "filename": "tvix/cli/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T09:33:47Z",
+      "side": 1,
+      "message": "I tried out the CL, I never saw the message appearing.\n\nAre you sure we\u0027re even inside a span that has progress reporting enabled?\n\nIn any case, I assume the dumping to be quite fast, and this more of a debugging thing than a user-facing thing we report progress for. This code also doesn\u0027t update the progress, set a total and increment the counter either…\n\nAfter all, it\u0027s just writing a bunch of small files to a scratch dir, for debugging purposes, so I\u0027m wondering if it\u0027s all worth it. Maybe just drop the progress bar stuff (this line)?",
+      "revId": "baddc728945e8604d42f8aaf3c1c9d709b9549eb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c889e37_bbfd8d5d",
+        "filename": "tvix/cli/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T09:33:47Z",
+      "side": 1,
+      "message": "Drop this line, either the file already failed to be written previously, or not, in which it can be observed in the result directory.",
+      "revId": "baddc728945e8604d42f8aaf3c1c9d709b9549eb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea8cd010_16957ec6",
+        "filename": "tvix/cli/src/main.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T09:33:47Z",
+      "side": 1,
+      "message": "I\u0027d just move this over to the other `if let Some(dumpdir) \u003d \u0026args.drv_dumpdir` in `lib.rs`, before L179.",
+      "revId": "baddc728945e8604d42f8aaf3c1c9d709b9549eb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
