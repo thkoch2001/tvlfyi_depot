@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0af30139_181355d7",
+        "filename": "tvix/cli/src/args.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-12T13:14:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "77f40af4_7ca1d70d",
+      "revId": "baddc728945e8604d42f8aaf3c1c9d709b9549eb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7989d2ad_edd49e1d",
@@ -53,6 +71,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d06ce279_5317cac7",
+        "filename": "tvix/cli/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-12T13:14:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a06d507_f1b60509",
+      "revId": "baddc728945e8604d42f8aaf3c1c9d709b9549eb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7c889e37_bbfd8d5d",
@@ -66,6 +102,24 @@
       "writtenOn": "2024-08-12T09:33:47Z",
       "side": 1,
       "message": "Drop this line, either the file already failed to be written previously, or not, in which it can be observed in the result directory.",
+      "revId": "baddc728945e8604d42f8aaf3c1c9d709b9549eb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b187e44_45b317f2",
+        "filename": "tvix/cli/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-12T13:14:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7c889e37_bbfd8d5d",
       "revId": "baddc728945e8604d42f8aaf3c1c9d709b9549eb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -101,6 +155,24 @@
       "side": 1,
       "message": "I don\u0027t want to call create_dir_all everytime I run a eval something.",
       "parentUuid": "ea8cd010_16957ec6",
+      "revId": "baddc728945e8604d42f8aaf3c1c9d709b9549eb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1265c7be_178c8f06",
+        "filename": "tvix/cli/src/main.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-12T13:14:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "abbe48fa_49130363",
       "revId": "baddc728945e8604d42f8aaf3c1c9d709b9549eb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
