@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8a06d507_f1b60509",
+        "filename": "tvix/cli/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-12T12:37:02Z",
+      "side": 1,
+      "message": "It\u0027s so quick that you only notice it if you add a `sleep`. Idk what it\u0027s supposed to look like, but you do see the loading animation with the \"Dumping derivations...\" text. I think it\u0027s fine the way it is, not really harmful, we exit out of the span right after when we return from the function anyway. But I can also drop it, doesn\u0027t really matter, your call.",
+      "parentUuid": "7989d2ad_edd49e1d",
+      "revId": "baddc728945e8604d42f8aaf3c1c9d709b9549eb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7c889e37_bbfd8d5d",
         "filename": "tvix/cli/src/lib.rs",
         "patchSetId": 3
@@ -65,6 +83,24 @@
       "writtenOn": "2024-08-12T09:33:47Z",
       "side": 1,
       "message": "I\u0027d just move this over to the other `if let Some(dumpdir) \u003d \u0026args.drv_dumpdir` in `lib.rs`, before L179.",
+      "revId": "baddc728945e8604d42f8aaf3c1c9d709b9549eb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "abbe48fa_49130363",
+        "filename": "tvix/cli/src/main.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-12T12:37:02Z",
+      "side": 1,
+      "message": "I don\u0027t want to call create_dir_all everytime I run a eval something.",
+      "parentUuid": "ea8cd010_16957ec6",
       "revId": "baddc728945e8604d42f8aaf3c1c9d709b9549eb",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
