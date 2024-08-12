@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7ae5a086_944a3d6e",
+        "filename": "tvix/nix-compat/src/nar/listing/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T17:22:16Z",
+      "side": 1,
+      "message": "Listing could just be an enum with a V1, and this the serde tag for it - no need to implement custom deserializers.",
+      "parentUuid": "5cbedf11_21fa6cc8",
+      "revId": "2c5867a7eddcb7653a879f43a3839b46cce2551c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "40c6b597_305b7e15",
         "filename": "tvix/nix-compat/src/nar/listing/test.rs",
         "patchSetId": 1
