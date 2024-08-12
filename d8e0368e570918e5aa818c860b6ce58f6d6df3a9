@@ -1,0 +1,61 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ca290fc_363a9a2d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-12T23:40:05Z",
+      "side": 1,
+      "message": "slightly improves `hello.outPath`, interestingly:\n\n```\nhello outpath           time:   [740.96 ms 743.44 ms 746.89 ms]\n                        change: [-5.7899% -4.7440% -3.4337%] (p \u003d 0.00 \u003c 0.05)\n                        Performance has improved.\n\nfirefox outpath         time:   [7.6895 s 7.8224 s 7.9557 s]\n                        change: [-0.6795% +1.7886% +3.9943%] (p \u003d 0.18 \u003e 0.05)\n                        No change in performance detected.\n```",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 53
+      },
+      "revId": "d8e0368e570918e5aa818c860b6ce58f6d6df3a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "31e87c2b_a7d1cde8",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-12T23:40:05Z",
+      "side": 1,
+      "message": "```suggestion\n        let mut out \u003d Vec::with_capacity(length)\n```",
+      "revId": "d8e0368e570918e5aa818c860b6ce58f6d6df3a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5446728c_d59595f6",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-12T23:40:05Z",
+      "side": 1,
+      "message": "```suggestion\n        let mut out \u003d Vec::with_capacity(list.len());\n```\n\nor somethingl ike that, you\u0027ll need to do this after converting it to a list but that\u0027ll be easy",
+      "revId": "d8e0368e570918e5aa818c860b6ce58f6d6df3a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
