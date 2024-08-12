@@ -246,7 +246,7 @@ mod pure_builtins {
 
     #[builtin("concatLists")]
     async fn builtin_concat_lists(co: GenCo, lists: Value) -> Result<Value, ErrorKind> {
-        let mut out = imbl::Vector::new();
+        let mut out = Vec::new();
 
         for value in lists.to_list()? {
             let list = try_value!(generators::request_force(&co, value).await).to_list()?;
@@ -259,7 +259,7 @@ mod pure_builtins {
     #[builtin("concatMap")]
     async fn builtin_concat_map(co: GenCo, f: Value, list: Value) -> Result<Value, ErrorKind> {
         let list = list.to_list()?;
-        let mut res = imbl::Vector::new();
+        let mut res = Vec::new();
         for val in list {
             let out = generators::request_call_with(&co, f.clone(), [val]).await;
             let out = try_value!(generators::request_force(&co, out).await);
@@ -387,13 +387,13 @@ mod pure_builtins {
     #[builtin("filter")]
     async fn builtin_filter(co: GenCo, pred: Value, list: Value) -> Result<Value, ErrorKind> {
         let list: NixList = list.to_list()?;
-        let mut out = imbl::Vector::new();
+        let mut out = Vec::new();
 
         for value in list {
             let result = generators::request_call_with(&co, pred.clone(), [value.clone()]).await;
             let verdict = try_value!(generators::request_force(&co, result).await);
             if verdict.as_bool()? {
-                out.push_back(value);
+                out.push(value);
             }
         }
 
@@ -481,7 +481,7 @@ mod pure_builtins {
 
         let operator = attrs.select_required("operator")?;
 
-        let mut res = imbl::Vector::new();
+        let mut res = Vec::new();
         let mut done_keys: Vec<Value> = vec![];
 
         while let Some(val) = work_set.pop_front() {
@@ -499,7 +499,7 @@ mod pure_builtins {
                 continue;
             }
 
-            res.push_back(val.clone());
+            res.push(val.clone());
 
             let op_result = generators::request_force(
                 &co,
@@ -520,14 +520,14 @@ mod pure_builtins {
         #[lazy] generator: Value,
         length: Value,
     ) -> Result<Value, ErrorKind> {
-        let mut out = imbl::Vector::<Value>::new();
+        let mut out = Vec::new();
         let len = length.as_int()?;
         // the best span we can get…
         let span = generators::request_span(&co).await;
 
         for i in 0..len {
             let val = Value::Thunk(Thunk::new_suspended_call(generator.clone(), i.into(), span));
-            out.push_back(val);
+            out.push(val);
         }
 
         Ok(Value::List(out.into()))
@@ -548,7 +548,7 @@ mod pure_builtins {
 
     #[builtin("groupBy")]
     async fn builtin_group_by(co: GenCo, f: Value, list: Value) -> Result<Value, ErrorKind> {
-        let mut res: BTreeMap<NixString, imbl::Vector<Value>> = BTreeMap::new();
+        let mut res: BTreeMap<NixString, Vec<Value>> = BTreeMap::new();
         for val in list.to_list()? {
             let key = try_value!(
                 generators::request_force(
@@ -559,7 +559,7 @@ mod pure_builtins {
             )
             .to_str()?;
 
-            res.entry(key).or_default().push_back(val);
+            res.entry(key).or_default().push(val);
         }
         Ok(Value::attrs(NixAttrs::from_iter(
             res.into_iter()
@@ -665,7 +665,7 @@ mod pure_builtins {
                     vec_attrs.push(("outputs", Value::List(outputs
                                 .into_iter()
                                 .map(|s| s.into())
-                                .collect::<Vector<Value>>()
+                                .collect::<Vec<Value>>()
                                 .into()
                     )));
                 }
@@ -974,14 +974,14 @@ mod pure_builtins {
 
     #[builtin("map")]
     async fn builtin_map(co: GenCo, #[lazy] f: Value, list: Value) -> Result<Value, ErrorKind> {
-        let mut out = imbl::Vector::<Value>::new();
+        let mut out = Vec::new();
 
         // the best span we can get…
         let span = generators::request_span(&co).await;
 
         for val in list.to_list()? {
             let result = Value::Thunk(Thunk::new_suspended_call(f.clone(), val, span));
-            out.push_back(result)
+            out.push(result)
         }
 
         Ok(Value::List(out.into()))
@@ -1040,7 +1040,7 @@ mod pure_builtins {
                         // and then a compressor name will be extracted from that.
                         grp.map(|g| Value::from(g.as_str())).unwrap_or(Value::Null)
                     })
-                    .collect::<imbl::Vector<Value>>()
+                    .collect::<Vec<Value>>()
                     .into(),
             )),
             None => Ok(Value::Null),
@@ -1083,17 +1083,17 @@ mod pure_builtins {
 
     #[builtin("partition")]
     async fn builtin_partition(co: GenCo, pred: Value, list: Value) -> Result<Value, ErrorKind> {
-        let mut right: imbl::Vector<Value> = Default::default();
-        let mut wrong: imbl::Vector<Value> = Default::default();
+        let mut right: Vec<Value> = Default::default();
+        let mut wrong: Vec<Value> = Default::default();
 
         let list: NixList = list.to_list()?;
         for elem in list {
             let result = generators::request_call_with(&co, pred.clone(), [elem.clone()]).await;
 
             if try_value!(generators::request_force(&co, result).await).as_bool()? {
-                right.push_back(elem);
+                right.push(elem);
             } else {
-                wrong.push_back(elem);
+                wrong.push(elem);
             };
         }
 
@@ -1248,12 +1248,12 @@ mod pure_builtins {
         let re = Regex::new(re.to_str()?).unwrap();
         let mut capture_locations = re.capture_locations();
         let num_captures = capture_locations.len();
-        let mut ret = imbl::Vector::new();
+        let mut ret = Vec::new();
         let mut pos = 0;
 
         while let Some(thematch) = re.captures_read_at(&mut capture_locations, text, pos) {
             // push the unmatched characters preceding the match
-            ret.push_back(Value::from(NixString::new_inherit_context_from(
+            ret.push(Value::from(NixString::new_inherit_context_from(
                 &s,
                 &text[pos..thematch.start()],
             )));
@@ -1262,7 +1262,7 @@ mod pure_builtins {
             // group in the regex, containing the characters
             // matched by that capture group, or null if no match.
             // We skip capture 0; it represents the whole match.
-            let v: imbl::Vector<Value> = (1..num_captures)
+            let v: Vec<Value> = (1..num_captures)
                 .map(|i| capture_locations.get(i))
                 .map(|o| {
                     o.map(|(start, end)| {
@@ -1273,7 +1273,7 @@ mod pure_builtins {
                     .unwrap_or(Value::Null)
                 })
                 .collect();
-            ret.push_back(Value::List(NixList::from(v)));
+            ret.push(Value::List(NixList::from(v)));
             if pos == text.len() {
                 break;
             }
@@ -1283,7 +1283,7 @@ mod pure_builtins {
         // push the unmatched characters following the last match
         // Here, a surprising thing happens: we silently discard the original
         // context. This is as intended, Nix does the same.
-        ret.push_back(Value::from(&text[pos..]));
+        ret.push(Value::from(&text[pos..]));
 
         Ok(Value::List(NixList::from(ret)))
     }
