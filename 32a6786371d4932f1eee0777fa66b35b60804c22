@@ -1,0 +1,357 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18f49126_b95e861e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T10:23:32Z",
+      "side": 1,
+      "message": "Still needs a commit message :-)\n\n```\nrefactor(tvix/castore): use Directory struct separate from proto one\n\nThis uses our own data type to deal with Directories in the castore model.\n\nIt makes some undesired states unrepresentable, removing the need for conversions and checking in various places:\n\n - In the protobuf, blake3 digests could have a wrong length, as proto doesn\u0027t know fixed-size fields. We now use `B3Digest`, which makes cloning cheaper, and removes the need to do size-checking everywhere.\n - In the protobuf, we had three different lists for `files`, `symlinks` and `directories`. This was mostly a protobuf size optimization, but made interacting with them a bit awkward. This has now been replaced with a list of enums, and convenience iterators to get various nodes, and add new ones.\n```",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ac972ac_c09374c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T10:23:32Z",
+      "side": 1,
+      "message": "Very happy about the direction this is going, thanks!",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "043301c5_69c71539",
+        "filename": "tvix/castore/src/directoryservice/memory.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T10:23:32Z",
+      "side": 1,
+      "message": "We can probably just store the non-proto variant in the MemoryDirectoryService.",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff8a9da1_55fe6880",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T10:23:32Z",
+      "side": 1,
+      "message": "The name restrictions sounds more like something that should be on the `[Node]` type, and link to it.",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aebf8ced_f8051e86",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T10:23:32Z",
+      "side": 1,
+      "message": "It doesn\u0027t necessarily need to be inside a Directory, if we think about root nodes.\n\nProposal:\n\n\n```suggestion\n/// A DirectoryNode is a pointer to a [Directory], by its [Directory::digest].\n/// It also gives it a `name` and `size`.\n/// Such a node is either an element in the [Directory] it itself is contained in,\n/// or a standalone root node.\n```",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67acb3e2_b3f3fd64",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T10:23:32Z",
+      "side": 1,
+      "message": "```suggestion\n    /// Calculated by summing up the numbers of nodes, and for each directory.\n    /// its size field. Can be used for inode allocation.\n```",
+      "range": {
+        "startLine": 190,
+        "startChar": 4,
+        "endLine": 192,
+        "endChar": 20
+      },
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "38a5070c_8dd28ac6",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T10:23:32Z",
+      "side": 1,
+      "message": "```suggestion\n/// A FileNode represents a regular or executable file in a Directory or at the root.\n```",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ac6a0d3_a570a477",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T10:23:32Z",
+      "side": 1,
+      "message": "```suggestion\n/// A SymlinkNode represents a symbolic link in a Directory or at the root.\n```",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "da5346a4_dc04b73d",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T10:23:32Z",
+      "side": 1,
+      "message": "I\u0027d probably put the restrictions for the `name` fields in here.",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "be191e40_1d2808b4",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T10:23:32Z",
+      "side": 1,
+      "message": "Copy docstring from above, mention this checks the size to not overflow.",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "383aa2da_2aa27492",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T10:23:32Z",
+      "side": 1,
+      "message": "```suggestion\n    /// [SymlinkNode]) in an ordered fashion.\n```\n\nWe don\u0027t have individual lists anymore.",
+      "range": {
+        "startLine": 443,
+        "startChar": 4,
+        "endLine": 444,
+        "endChar": 71
+      },
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6db7fd81_882f7889",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T10:23:32Z",
+      "side": 1,
+      "message": "This comment is wrong, this only iterates over directories.\n\n```suggestion\n    /// Iterates over all [FileNode]s in the directory, in an ordered fashion.\n```",
+      "range": {
+        "startLine": 449,
+        "startChar": 4,
+        "endLine": 451,
+        "endChar": 71
+      },
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "03360b68_6b9a6eef",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T10:23:32Z",
+      "side": 1,
+      "message": "The comment is wrong, this only iterates over directories.\n\n```suggestion\n    /// Iterates over all [DirectoryNode]s in the directory, in an ordered fashion.\n```",
+      "range": {
+        "startLine": 459,
+        "startChar": 4,
+        "endLine": 461,
+        "endChar": 71
+      },
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "13f79f64_a095aab0",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T10:23:32Z",
+      "side": 1,
+      "message": "For completeness, `symlinks()`?",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eacc5bc9_e38d8d60",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T10:23:32Z",
+      "side": 1,
+      "message": "```suggestion\n    /// This assumes all previously added [Node]s to be sorted.\n```\n\nThis part can probably be left a regular comment before the `let pos` (mentioning we don\u0027t expose the `Vec\u003cNode\u003e` to extenrals.",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0aab0a0_203ca56e",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T10:23:32Z",
+      "side": 1,
+      "message": "\"Unsupported\" doesn\u0027t specify behaviour if you still try to ;-)\n\n```suggestion\n    /// Inserting an element that already exists with the same name in the directory is illegal and returns an error.\n```",
+      "range": {
+        "startLine": 472,
+        "startChar": 4,
+        "endLine": 473,
+        "endChar": 18
+      },
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "221726e6_a9da0382",
+        "filename": "tvix/castore/src/directoryservice/tests/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T10:23:32Z",
+      "side": 1,
+      "message": "This is not uploading, but constructing a SymlinkNode. Update docstring and test name pls.\n\nMaybe we can construct all three *Node like this?",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8081450d_77cd5880",
+        "filename": "tvix/castore/src/directoryservice/tests/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T10:23:32Z",
+      "side": 1,
+      "message": "I like these tests, but I feel like they shouldn\u0027t be in this file.\n\nThis one is more for applying a set of tests to all directory services.\n\nCan you move the tests testing the data structure operations to a `#[cfg(test)]\\nmod test {` inside `tvix/castore/src/directoryservice/mod.rs`?",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "070ec4e4_72569708",
+        "filename": "tvix/castore/src/proto/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T10:23:32Z",
+      "side": 1,
+      "message": "This can probably still keep its docstring :-)",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

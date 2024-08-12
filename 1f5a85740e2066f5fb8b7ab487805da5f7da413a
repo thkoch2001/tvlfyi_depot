@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfafeb25_94a51452",
+        "filename": "tvix/castore/src/proto/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 446,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-12T10:23:32Z",
+      "side": 0,
+      "message": "very happy about this mess being gone, thank you ❤️",
+      "revId": "1f5a85740e2066f5fb8b7ab487805da5f7da413a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
