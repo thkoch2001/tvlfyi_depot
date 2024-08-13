@@ -364,6 +364,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2bcf82a_67b52009",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T11:40:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f208772_12fda17b",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "be191e40_1d2808b4",
@@ -674,6 +692,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bea7944_b7afe4f2",
+        "filename": "tvix/castore/src/directoryservice/tests/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T11:40:52Z",
+      "side": 1,
+      "message": "This test case is now directory_reject_invalid_name",
+      "parentUuid": "221726e6_a9da0382",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8081450d_77cd5880",
@@ -687,6 +723,24 @@
       "writtenOn": "2024-08-12T10:23:32Z",
       "side": 1,
       "message": "I like these tests, but I feel like they shouldn\u0027t be in this file.\n\nThis one is more for applying a set of tests to all directory services.\n\nCan you move the tests testing the data structure operations to a `#[cfg(test)]\\nmod test {` inside `tvix/castore/src/directoryservice/mod.rs`?",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0833aca5_9bb3f097",
+        "filename": "tvix/castore/src/directoryservice/tests/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T11:40:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8081450d_77cd5880",
       "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
