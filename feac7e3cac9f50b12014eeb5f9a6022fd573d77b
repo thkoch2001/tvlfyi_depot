@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e5c2fc7a_3630a36f",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-13T08:36:55Z",
+      "side": 1,
+      "message": "As we learnt, these are specific to nodes inside a directory - so it should maybe be inside the impl of Directory (without taking any \u0026self), and the docstring be updated (\"intermediate node\" is a bit unclear)",
+      "revId": "feac7e3cac9f50b12014eeb5f9a6022fd573d77b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6793c590_91aa21b3",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-13T08:36:55Z",
+      "side": 1,
+      "message": "There should be a line in there explaining this function validates the (stricter) name requirements for nodes inside directories.",
+      "revId": "feac7e3cac9f50b12014eeb5f9a6022fd573d77b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
