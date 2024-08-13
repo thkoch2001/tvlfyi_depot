@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcee7242_79988abb",
+        "filename": "tvix/eval/src/value/string/context.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-13T08:30:08Z",
+      "side": 1,
+      "message": "The struct itself and all methods need docstrings, and should get some tests too.",
+      "revId": "cca99792f179c72e97fa0651ff7508c2a8dd5a2f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0d701019_2911dcba",
+        "filename": "tvix/eval/src/value/string/context.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-13T08:30:08Z",
+      "side": 1,
+      "message": "still want to use this I assume?",
+      "revId": "cca99792f179c72e97fa0651ff7508c2a8dd5a2f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9b6251d6_6413604e",
+        "filename": "tvix/eval/src/value/string/context.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-13T08:30:08Z",
+      "side": 1,
+      "message": "please use the SAFETY convention here.",
+      "revId": "cca99792f179c72e97fa0651ff7508c2a8dd5a2f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88f4a7ba_9ddc92a6",
+        "filename": "tvix/eval/src/value/string/context.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-13T08:30:08Z",
+      "side": 1,
+      "message": "Docstring, explaining what it does and when we use it over NixString",
+      "revId": "cca99792f179c72e97fa0651ff7508c2a8dd5a2f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
