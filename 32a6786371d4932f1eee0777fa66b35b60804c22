@@ -88,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8ebd5e1_9878c32c",
+        "filename": "tvix/castore/src/directoryservice/memory.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-13T09:16:05Z",
+      "side": 1,
+      "message": "It\u0027s a tradeoff between memory consumption and time spent for parsing / validation. We can benchmark it on real-world usecases in a followup.",
+      "parentUuid": "c7f55b3d_ea54f224",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ff8a9da1_55fe6880",
