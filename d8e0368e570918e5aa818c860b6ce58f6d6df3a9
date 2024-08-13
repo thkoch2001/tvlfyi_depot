@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "74c73b1f_b89a35b4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-08-13T08:57:51Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "7ca290fc_363a9a2d",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 23,
+        "endChar": 53
+      },
+      "revId": "d8e0368e570918e5aa818c860b6ce58f6d6df3a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "31e87c2b_a7d1cde8",
@@ -41,6 +65,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8455aeaf_fb3eb7c6",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 523,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-08-13T08:57:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "31e87c2b_a7d1cde8",
+      "revId": "d8e0368e570918e5aa818c860b6ce58f6d6df3a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5446728c_d59595f6",
@@ -54,6 +96,24 @@
       "writtenOn": "2024-08-12T23:40:05Z",
       "side": 1,
       "message": "```suggestion\n        let mut out \u003d Vec::with_capacity(list.len());\n```\n\nor somethingl ike that, you\u0027ll need to do this after converting it to a list but that\u0027ll be easy",
+      "revId": "d8e0368e570918e5aa818c860b6ce58f6d6df3a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "778c8b2e_c6ecbe56",
+        "filename": "tvix/eval/src/builtins/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 977,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-08-13T08:57:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5446728c_d59595f6",
       "revId": "d8e0368e570918e5aa818c860b6ce58f6d6df3a9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
