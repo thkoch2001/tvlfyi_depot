@@ -180,6 +180,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c4bcebbc_842933ae",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T08:40:42Z",
+      "side": 1,
+      "message": "outdated?",
+      "parentUuid": "da5346a4_dc04b73d",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "be191e40_1d2808b4",
         "filename": "tvix/castore/src/directoryservice/mod.rs",
         "patchSetId": 6
