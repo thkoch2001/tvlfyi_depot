@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4506eb5f_44d1cc8a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-13T08:31:26Z",
+      "side": 1,
+      "message": "This is probably a good thing to land in terms of readability, even if the poking around doesn\u0027t end up being fruitful. Can you address the clippy lint and we land this?",
+      "revId": "4b850a78b18eac0b5c8439907007ce1b7c5df02c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
