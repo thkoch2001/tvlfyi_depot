@@ -16,6 +16,24 @@
       "message": "Do you think it would be worth the overhead to have this function return back `name` wrapped in something like a `ValidBytes` newtype, which `DirectoryNode` and `FileNode` use as a field instead of `Bytes`?\n\nTying the validation into the constructors one way or another seems nice. I think you had this in the prior patchset if I read it correctly.",
       "revId": "db672079737f92c9de5500229caae7e4ec781257",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f5a32d3_3de97699",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T08:27:30Z",
+      "side": 1,
+      "message": "We noticed that some names are _only_ valid as keys in a directory.\nA top-level node is allowed to have an empty name for example, and we do have that in several places.",
+      "parentUuid": "049f8d43_ef0f00bd",
+      "revId": "db672079737f92c9de5500229caae7e4ec781257",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
