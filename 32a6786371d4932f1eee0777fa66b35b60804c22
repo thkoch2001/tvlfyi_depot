@@ -348,6 +348,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8f208772_12fda17b",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-13T09:18:05Z",
+      "side": 1,
+      "message": "In terms of where we have name restrictions, yes. we should however update the docstrong to point to the name restrictions in Directory::add.",
+      "parentUuid": "c4bcebbc_842933ae",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "be191e40_1d2808b4",
         "filename": "tvix/castore/src/directoryservice/mod.rs",
         "patchSetId": 6
