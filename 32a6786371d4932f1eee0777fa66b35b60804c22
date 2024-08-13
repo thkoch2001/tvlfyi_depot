@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "bcbcddbe_8ee2c5d4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T09:05:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "18f49126_b95e861e",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "6ac972ac_c09374c6",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 6
@@ -48,6 +66,24 @@
       "writtenOn": "2024-08-12T10:23:32Z",
       "side": 1,
       "message": "We can probably just store the non-proto variant in the MemoryDirectoryService.",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7f55b3d_ea54f224",
+        "filename": "tvix/castore/src/directoryservice/memory.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T09:05:38Z",
+      "side": 1,
+      "message": "Are you sure? The proto variant is more compact in memory",
+      "parentUuid": "043301c5_69c71539",
       "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -87,6 +123,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc9f7e05_14baedb1",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T09:05:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d95f88cf_3215738b",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aebf8ced_f8051e86",
@@ -100,6 +154,24 @@
       "writtenOn": "2024-08-12T10:23:32Z",
       "side": 1,
       "message": "It doesn\u0027t necessarily need to be inside a Directory, if we think about root nodes.\n\nProposal:\n\n\n```suggestion\n/// A DirectoryNode is a pointer to a [Directory], by its [Directory::digest].\n/// It also gives it a `name` and `size`.\n/// Such a node is either an element in the [Directory] it itself is contained in,\n/// or a standalone root node.\n```",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ea8004b_8338dad6",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 182,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T09:05:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aebf8ced_f8051e86",
       "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -127,6 +199,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f5158907_bc1fb9f7",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 192,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T09:05:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "67acb3e2_b3f3fd64",
+      "range": {
+        "startLine": 190,
+        "startChar": 4,
+        "endLine": 192,
+        "endChar": 20
+      },
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "38a5070c_8dd28ac6",
@@ -144,6 +240,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22245f8b_a7a97864",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T09:05:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "38a5070c_8dd28ac6",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0ac6a0d3_a570a477",
@@ -157,6 +271,24 @@
       "writtenOn": "2024-08-12T10:23:32Z",
       "side": 1,
       "message": "```suggestion\n/// A SymlinkNode represents a symbolic link in a Directory or at the root.\n```",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8767e1d7_022b93b3",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T09:05:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0ac6a0d3_a570a477",
       "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -213,6 +345,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "665ba7ce_c45677f6",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T09:05:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "be191e40_1d2808b4",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "383aa2da_2aa27492",
@@ -226,6 +376,30 @@
       "writtenOn": "2024-08-12T10:23:32Z",
       "side": 1,
       "message": "```suggestion\n    /// [SymlinkNode]) in an ordered fashion.\n```\n\nWe don\u0027t have individual lists anymore.",
+      "range": {
+        "startLine": 443,
+        "startChar": 4,
+        "endLine": 444,
+        "endChar": 71
+      },
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "358fb465_865a3776",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 444,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T09:05:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "383aa2da_2aa27492",
       "range": {
         "startLine": 443,
         "startChar": 4,
@@ -259,6 +433,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7aed6354_b5ecb2db",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T09:05:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6db7fd81_882f7889",
+      "range": {
+        "startLine": 449,
+        "startChar": 4,
+        "endLine": 451,
+        "endChar": 71
+      },
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "03360b68_6b9a6eef",
@@ -272,6 +470,30 @@
       "writtenOn": "2024-08-12T10:23:32Z",
       "side": 1,
       "message": "The comment is wrong, this only iterates over directories.\n\n```suggestion\n    /// Iterates over all [DirectoryNode]s in the directory, in an ordered fashion.\n```",
+      "range": {
+        "startLine": 459,
+        "startChar": 4,
+        "endLine": 461,
+        "endChar": 71
+      },
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0360cf16_5d7e0120",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 461,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T09:05:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "03360b68_6b9a6eef",
       "range": {
         "startLine": 459,
         "startChar": 4,
@@ -299,6 +521,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a039cabc_9fe6deee",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 467,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T09:05:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "13f79f64_a095aab0",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eacc5bc9_e38d8d60",
@@ -316,6 +556,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "88f0a025_e22e9201",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 470,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T09:05:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eacc5bc9_e38d8d60",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e0aab0a0_203ca56e",
@@ -329,6 +587,30 @@
       "writtenOn": "2024-08-12T10:23:32Z",
       "side": 1,
       "message": "\"Unsupported\" doesn\u0027t specify behaviour if you still try to ;-)\n\n```suggestion\n    /// Inserting an element that already exists with the same name in the directory is illegal and returns an error.\n```",
+      "range": {
+        "startLine": 472,
+        "startChar": 4,
+        "endLine": 473,
+        "endChar": 18
+      },
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ec4a0e4_f48f83f4",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 473,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T09:05:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e0aab0a0_203ca56e",
       "range": {
         "startLine": 472,
         "startChar": 4,
@@ -386,6 +668,24 @@
       "writtenOn": "2024-08-12T10:23:32Z",
       "side": 1,
       "message": "This can probably still keep its docstring :-)",
+      "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3d177cd_8bc9e95b",
+        "filename": "tvix/castore/src/proto/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T09:05:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "070ec4e4_72569708",
       "revId": "32a6786371d4932f1eee0777fa66b35b60804c22",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }

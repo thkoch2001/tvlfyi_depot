@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de81ced8_9b3155ae",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T09:05:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e5c2fc7a_3630a36f",
+      "revId": "feac7e3cac9f50b12014eeb5f9a6022fd573d77b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6793c590_91aa21b3",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-08-13T08:36:55Z",
       "side": 1,
       "message": "There should be a line in there explaining this function validates the (stricter) name requirements for nodes inside directories.",
+      "revId": "feac7e3cac9f50b12014eeb5f9a6022fd573d77b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2619a518_ff95a8c0",
+        "filename": "tvix/castore/src/directoryservice/mod.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 471,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-13T09:05:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6793c590_91aa21b3",
       "revId": "feac7e3cac9f50b12014eeb5f9a6022fd573d77b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
