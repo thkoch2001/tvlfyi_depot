@@ -4,46 +4,64 @@ let ?nixStepDetail = {
     import: "<nixpkgs>"
     lookupPath: [
       "nixpkgs=/home/repo/nixpkgs/channel",
-      "nixos-config=/etc/nixos/configuration.nix",
-      "/nix/var/nix/profiles/per-user/root/channels",
     ]
     store: "auto"
   }
 
-<q <service nix-repo $nixStepDetail>>
-? <a <service nix-repo $nixStepDetail> <accepted ?repo>> $repo [
-  ? { hello: { meta: { homepage: ?x } } } [
+<require-service <service nix-repo $nixStepDetail>>
+
+? <service-object <service nix-repo $nixStepDetail> <error ?reason>> [
+  $log ! <log "nix-repo" { line: $reason }>
+]
+
+? <service-object <service nix-repo $nixStepDetail> <ok ?repo>>
+$repo
+[
+  $log ! <log "nix-repo" {line: $repo }>
+  ? { hello: { meta: { homepage: ?x } } }
+  [
     $log ! <log "nix-repo" {line: $x }>
   ]
-  ? { nim: ?nim } [
-    ? { nim: { passthru: ?passthru } } [
-      ? { nim: { passthru: { nim: { buildInputs: [ ?bi ] } } } } [
+  ? { nim: ?nim }
+  [
+    ? { nim: { passthru: ?passthru } }
+    [
+      ? { nim: { passthru: { nim: { buildInputs: [ ?bi ] } } } }
+      [
         $log ! <log "nim" { line: $nim passthru: $passthru first-build-input: $bi } >
       ]
     ]
   ]
 ]
 
-# Service instantiation.
-? <q <service nix-repo ?detail>> [
-  $log ! <log "service" { line: "nix-repo service requested" }>
+@"Service instantiation."
+? <require-service <service nix-repo ?detail>>
+[
   <require-service <daemon nix-actor>>
-  ? <service-object <daemon nix-actor> ?obj> [
-    let ?rewriter = <* $config [<rewrite ?resp <a <service nix-repo $detail> $resp>>]>
-    $obj <resolve <nix-repo $detail> $rewriter>
+  ? <service-object <daemon nix-actor> ?obj>
+  [
+    $log ! <log "nix-actor" { line: "nix actor service-object available" }>
+    $obj <resolve <nix-repo $detail> <* $config [
+      <or [
+        <rewrite <accepted ?body> <service-object <service nix-repo $detail>    <ok $body>>>
+        <rewrite <rejected ?body> <service-object <service nix-repo $detail> <error $body>>>
+      ]>
+    ]>>
   ]
 ]
 
-# The authors build system creates this file.
-<require-service <config-watcher "/home/emery/src/config/built/nix-actor.pr" $.>>
-
-? <built nix-actor ?path ?sum> [
-  <daemon nix-actor {
-    argv: [ $path ]
-    clearEnv: #t
-    env: {
-      BUILD_SUM: $sum
-    }
-    protocol: application/syndicate
-  }>
-]
+@"The authors build system creates this file."
+<require-service <config-watcher "/home/emery/src/config/built/nix-actor.pr" {
+  config: <* $config [
+    <rewrite <built ?name ?path ?sum> <daemon $name {
+      argv: [
+        $path
+      ]
+      clearEnv: #t
+      env: {
+        BUILD_SUM: $sum
+      }
+      protocol: application/syndicate
+    }>>
+  ]>
+}>>
