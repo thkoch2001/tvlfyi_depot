@@ -170,7 +170,7 @@ in
   ];
 
   config = {
-    services.fcgiwrap.cgit = {
+    services.fcgiwrap.instances.cgit = {
       process = {
         user = "http";
         group = "http";
@@ -197,7 +197,7 @@ in
           fastcgi_param    QUERY_STRING    $args;
           fastcgi_param    HTTP_HOST       $server_name;
           fastcgi_param    CGIT_CONFIG     ${cgitConfig};
-          fastcgi_pass     unix:${toString config.services.fcgiwrap.cgit.socket.address};
+          fastcgi_pass     unix:${toString config.services.fcgiwrap.instances.cgit.socket.address};
         }
       '';
     };
