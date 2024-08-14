@@ -34,6 +34,24 @@
       "parentUuid": "9034e04f_812be4d2",
       "revId": "27968c9c9dae9a06646eee38ffad54ef2c812947",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b8269f6_db5a32da",
+        "filename": "tvix/glue/src/refscan.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-08-14T16:18:33Z",
+      "side": 1,
+      "message": "Well if the implementations were independant it might make sense to test both but the `AsyncRead` implementation just calls `poll_fill_buf`, copies some data, calls `consume` and literally nothing else so there isn\u0027t anything non-trivial to test in `AsyncRead`.\n\nAs for test coverage the 4 cases cover surprisingly much.",
+      "parentUuid": "e04cf97f_bff8db2b",
+      "revId": "27968c9c9dae9a06646eee38ffad54ef2c812947",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
