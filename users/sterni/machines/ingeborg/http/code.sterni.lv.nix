@@ -170,7 +170,7 @@ in
   ];
 
   config = {
-    services.fcgiwrap.cgit = {
+    services.fcgiwrap.instances.cgit = {
       process = {
         user = "http";
         group = "http";
