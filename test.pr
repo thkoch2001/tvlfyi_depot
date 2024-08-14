@@ -48,7 +48,13 @@ let ?nixStoreDetail = { uri: "auto" params: {} }
 ? <service-object <service nix-store $nixStoreDetail> <ok ?store>>
 $store
 [
-  <check-path "/nix/store/c2nszmh6li1r2q5z0aiajlga1rdyqwha-alacritty-0.13.2" <* $trace [<rewrite ?result <path-check $result>>]> >
+  ? ?any
+  [
+    $log ! <log "store" { line: $any }>
+  ]
+  <check-path "/nix/store/c2nszmh6li1r2q5z0aiajlga1rdyqwha-alacritty-0.13.2" <* $trace [
+    <rewrite ?result <path-check $result>>
+  ]>>
 ]
 
 @"Repo service instantiation."

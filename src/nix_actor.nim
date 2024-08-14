@@ -85,16 +85,35 @@ proc newStoreEntity(turn: Turn; detail: StoreResolveDetail): StoreEntity =
   entity.self = newCap(turn, entity)
   entity
 
+proc serve(entity: StoreEntity; turn: Turn; checkPath: CheckStorePath) =
+  try:
+    let v = entity.store.isValidPath(checkPath.path)
+    publish(turn, checkPath.valid.Cap, initRecord("ok", %v))
+  except CatchableError as err:
+    publish(turn, checkPath.valid.Cap, initRecord("error", %err.msg))
+
+proc serve(entity: StoreEntity; turn: Turn; obs: Observe) =
+  let facet = turn.facet
+  if obs.pattern.matches(initRecord("uri", %"")):
+    entity.store.getUri do (s: string):
+      facet.run do (turn: Turn):
+        publish(turn, obs.observer.Cap, obs.pattern.capture(initRecord("uri", %s)).get)
+  if obs.pattern.matches(initRecord("version", %"")):
+    entity.store.getVersion do (s: string):
+      facet.run do (turn: Turn):
+        publish(turn, obs.observer.Cap, obs.pattern.capture(initRecord("version", %s)).get)
+
 method publish(entity: StoreEntity; turn: Turn; a: AssertionRef; h: Handle) =
   var
+    # orc doesn't handle this as a union object
+    observe: Observe
     checkPath: CheckStorePath
-    continuation: Cap
-  if checkPath.fromPreserves(a.value) and continuation.fromPreserves(checkPath.valid):
-    try:
-      let v = entity.store.isValidPath(checkPath.path)
-      publish(turn, continuation, initRecord("ok", %v))
-    except CatchableError as err:
-      publish(turn, continuation, initRecord("error", %err.msg))
+  if checkPath.fromPreserves(a.value):
+    entity.serve(turn, checkPath)
+  elif observe.fromPreserves(a.value):
+    entity.serve(turn, observe)
+  else:
+    echo "unhandled assertion ", a.value
 
 proc main() =
   initLibstore()

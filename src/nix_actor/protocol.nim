@@ -46,7 +46,7 @@ type
 
   CheckStorePath* {.preservesRecord: "check-path".} = object
     `path`*: string
-    `valid`* {.preservesEmbedded.}: Value
+    `valid`* {.preservesEmbedded.}: EmbeddedRef
 
   StoreResolveStep* {.preservesRecord: "nix-store".} = object
     `detail`*: StoreResolveDetail

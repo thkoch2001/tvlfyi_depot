@@ -14,6 +14,19 @@ export NixContext, Store, EvalState, Value, ValueType,
 {.passC: staticExec"$PKG_CONFIG --cflags nix-expr-c".}
 {.passL: staticExec"$PKG_CONFIG --libs nix-expr-c".}
 
+type
+  StringCallback = proc (s: string) {.closure.}
+  StringCallbackState = object
+    callback: StringCallback
+
+proc receiveString(start: cstring; n: cuint; state: pointer) {.cdecl.} =
+  let state = cast[ptr StringCallbackState](state)
+  assert not state.isNil
+  var buf = newString(n)
+  if n > 0:
+    copyMem(buf[0].addr, start, buf.len)
+  state.callback(buf)
+
 proc initLibstore*() =
   mitNix:
     discard nix.libstore_init()
@@ -33,6 +46,18 @@ proc openStore*(uri = "auto", params: openarray[string] = []): Store =
   assert not result.isNil
 
 proc close*(store: Store) = store_free(store)
+
+proc getUri*(store: Store; cb: StringCallback) =
+  mitNix:
+    let state = new StringCallbackState
+    state.callback = cb
+    discard nix.store_get_uri(store, receiveString, state[].addr)
+
+proc getVersion*(store: Store; cb: StringCallback) =
+  mitNix:
+    let state = new StringCallbackState
+    state.callback = cb
+    discard nix.store_get_version(store, receiveString, state[].addr)
 
 proc isValidPath*(store: Store; path: string): bool =
   assert not store.isNil
