@@ -1,4 +1,12 @@
-#!/usr/bin/env -S syndicate-server --config
+#!/usr/bin/env -S syndicate-server --control --config
+
+let ?trace = dataspace
+$trace
+? ?any
+[
+  $log ! <log "trace" { "+++": $any } >
+  ?- [ $log ! <log "trace" { "---": $any } > ]
+]
 
 let ?nixStepDetail = {
     import: "<nixpkgs>"
@@ -8,7 +16,7 @@ let ?nixStepDetail = {
     store: "auto"
   }
 
-<require-service <service nix-repo $nixStepDetail>>
+# <require-service <service nix-repo $nixStepDetail>>
 
 ? <service-object <service nix-repo $nixStepDetail> <error ?reason>> [
   $log ! <log "nix-repo" { line: $reason }>
@@ -34,7 +42,16 @@ $repo
   ]
 ]
 
-@"Service instantiation."
+let ?nixStoreDetail = { uri: "auto" params: {} }
+
+<require-service <service nix-store $nixStoreDetail>>
+? <service-object <service nix-store $nixStoreDetail> <ok ?store>>
+$store
+[
+  <check-path "/nix/store/c2nszmh6li1r2q5z0aiajlga1rdyqwha-alacritty-0.13.2" <* $trace [<rewrite ?result <path-check $result>>]> >
+]
+
+@"Repo service instantiation."
 ? <require-service <service nix-repo ?detail>>
 [
   <require-service <daemon nix-actor>>
@@ -45,6 +62,22 @@ $repo
       <or [
         <rewrite <accepted ?body> <service-object <service nix-repo $detail>    <ok $body>>>
         <rewrite <rejected ?body> <service-object <service nix-repo $detail> <error $body>>>
+      ]>
+    ]>>
+  ]
+]
+
+@"Store service instantiation."
+? <require-service <service nix-store ?detail>>
+[
+  <require-service <daemon nix-actor>>
+  ? <service-object <daemon nix-actor> ?obj>
+  [
+    $log ! <log "nix-actor" { line: "nix actor service-object available" }>
+    $obj <resolve <nix-store $detail> <* $config [
+      <or [
+        <rewrite <accepted ?body> <service-object <service nix-store $detail>    <ok $body>>>
+        <rewrite <rejected ?body> <service-object <service nix-store $detail> <error $body>>>
       ]>
     ]>>
   ]

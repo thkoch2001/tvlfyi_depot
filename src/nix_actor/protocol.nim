@@ -40,10 +40,27 @@ type
     `drvPath`*: string
     `storePath`*: string
 
+  StoreResolveDetail* {.preservesDictionary.} = object
+    `params`*: AttrSet
+    `uri`*: string
+
+  CheckStorePath* {.preservesRecord: "check-path".} = object
+    `path`*: string
+    `valid`* {.preservesEmbedded.}: Value
+
+  StoreResolveStep* {.preservesRecord: "nix-store".} = object
+    `detail`*: StoreResolveDetail
+
 proc `$`*(x: Error | RepoArgs | RepoResolveStep | AttrSet | RepoResolveDetail |
-    Derivation): string =
+    Derivation |
+    StoreResolveDetail |
+    CheckStorePath |
+    StoreResolveStep): string =
   `$`(toPreserves(x))
 
 proc encode*(x: Error | RepoArgs | RepoResolveStep | AttrSet | RepoResolveDetail |
-    Derivation): seq[byte] =
+    Derivation |
+    StoreResolveDetail |
+    CheckStorePath |
+    StoreResolveStep): seq[byte] =
   encode(toPreserves(x))

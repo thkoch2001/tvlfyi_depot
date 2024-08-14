@@ -49,50 +49,57 @@ proc callThru(state: EvalState; nv: NixValue): NixValue =
       else:
         return
 
-proc toPreserves*(state: EvalState; value: NixValue): Value {.gcsafe.} =
+proc toPreserves*(state: EvalState; value: NixValue; nix: NixContext): Value {.gcsafe.} =
   var value = callThru(state, value)
-  mitNix:
-    let kind = nix.get_type(value)
-    case kind
-    of NIX_TYPE_INT:
-      result = nix.getInt(value).toPreserves
-    of NIX_TYPE_FLOAT:
-      result = nix.getFloat(value).toPreserves
-    of NIX_TYPE_BOOL:
-      result = nix.getBool(value).toPreserves
-    of NIX_TYPE_STRING:
-      let thunk = StringThunkRef()
-      let err = nix.getString(value, thunkString, thunk[].addr)
-      doAssert err == NIX_OK, $err
-      result = thunk.embed
-    of NIX_TYPE_PATH:
-      result = ($nix.getPathString(value)).toPreserves
-    of NIX_TYPE_NULL:
-      result = initRecord("null")
-    of NIX_TYPE_ATTRS:
-      if nix.has_attr_byname(value, state, "outPath"):
-        result = state.toPreserves(nix.get_attr_byname(value, state, "outPath"))
-      # TODO: eager string conversion with __toString attribute?
-      else:
-        let n = nix.getAttrsSize(value)
-        result = initDictionary(int n)
-        var i: cuint
-        while i < n:
-          let (key, val) = get_attr_byidx(value, state, i)
-          result[($key).toSymbol] = state.toPreserves(val)
-          inc(i)
-    of NIX_TYPE_LIST:
-      let n = nix.getListSize(value)
-      result = initSequence(n)
+
+  let kind = nix.get_type(value)
+  case kind
+  of NIX_TYPE_INT:
+    result = nix.getInt(value).toPreserves
+  of NIX_TYPE_FLOAT:
+    result = nix.getFloat(value).toPreserves
+  of NIX_TYPE_BOOL:
+    result = nix.getBool(value).toPreserves
+  of NIX_TYPE_STRING:
+    let thunk = StringThunkRef()
+    let err = nix.getString(value, thunkString, thunk[].addr)
+    doAssert err == NIX_OK, $err
+    result = thunk.embed
+  of NIX_TYPE_PATH:
+    result = ($nix.getPathString(value)).toPreserves
+  of NIX_TYPE_NULL:
+    result = initRecord("null")
+  of NIX_TYPE_ATTRS:
+    if nix.has_attr_byname(value, state, "__toString"):
+      var str = nix.get_attr_byname(value, state, "__toString")
+      if nix.get_type(str) == NIX_TYPE_FUNCTION:
+        str = state.apply(str, value)
+      result = state.toPreserves(str, nix)
+    elif nix.has_attr_byname(value, state, "outPath"):
+      result = state.toPreserves(nix.get_attr_byname(value, state, "outPath"), nix)
+    else:
+      let n = nix.getAttrsSize(value)
+      result = initDictionary(int n)
       var i: cuint
       while i < n:
-        var val = nix.getListByIdx(value, state, i)
-        result[i] = state.toPreserves(val)
+        let (key, val) = get_attr_byidx(value, state, i)
+        result[($key).toSymbol] = state.toPreserves(val, nix)
         inc(i)
-    of NIX_TYPE_THUNK, NIX_TYPE_FUNCTION:
-      raiseAssert "cannot preserve thunk or function"
-    of NIX_TYPE_EXTERNAL:
-      result = "«external»".toPreserves
+  of NIX_TYPE_LIST:
+    let n = nix.getListSize(value)
+    result = initSequence(n)
+    var i: cuint
+    while i < n:
+      var val = nix.getListByIdx(value, state, i)
+      result[i] = state.toPreserves(val, nix)
+      inc(i)
+  of NIX_TYPE_THUNK, NIX_TYPE_FUNCTION:
+    raiseAssert "cannot preserve thunk or function"
+  of NIX_TYPE_EXTERNAL:
+    result = "«external»".toPreserves
+
+proc toPreserves*(state: EvalState; value: NixValue): Value {.gcsafe.} =
+  mitNix: result = toPreserves(state, value, nix)
 
 proc translate*(nix: NixContext; state: EvalState; pr: preserves.Value): NixValue =
   try:

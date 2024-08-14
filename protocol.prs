@@ -35,4 +35,13 @@ Error = <error @message string>.
 # complete dependency trees.
 Derivation = <drv @drvPath string @storePath string> .
 
+# Gatekeeper step to access a Nix store.
+StoreResolveStep = <nix-store @detail StoreResolveDetail> .
+StoreResolveDetail = {
+  params: AttrSet
+  uri: string
+} .
+
+CheckStorePath = <check-path @path string @valid #:bool> .
+
 AttrSet = {symbol: any ...:...} .

@@ -22,7 +22,7 @@ proc initLibexpr*() =
   mitNix:
     discard nix.libexpr_init()
 
-proc openStore*(uri = "auto", params: varargs[string]): Store =
+proc openStore*(uri = "auto", params: openarray[string] = []): Store =
   mitNix:
     if params.len == 0:
       result = nix.store_open(uri, nil)
@@ -33,6 +33,17 @@ proc openStore*(uri = "auto", params: varargs[string]): Store =
   assert not result.isNil
 
 proc close*(store: Store) = store_free(store)
+
+proc isValidPath*(store: Store; path: string): bool =
+  assert not store.isNil
+  assert path != ""
+  mitNix:
+    assert not nix.isNil
+    let sp = nix.store_parse_path(store, path)
+    if sp.isNil:
+      raise newException(CatchableError, "store_parse_path failed")
+    defer: store_path_free(sp)
+    result = nix.store_is_valid_path(store, sp)
 
 proc newState*(store: Store; lookupPath: openarray[string]): EvalState =
   mitNix:
