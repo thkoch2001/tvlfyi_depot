@@ -16,7 +16,7 @@ let
     personal = {
       primary = true;
       address = "root@gws.fyi";
-      aliases = [ "aspen@gws.fyi" "aspen@gws.fyi" ];
+      aliases = [ "aspen@gws.fyi" ];
       passEntry = "root-gws-msmtp";
     };
   };
