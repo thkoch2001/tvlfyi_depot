@@ -3,6 +3,7 @@ use thiserror::Error;
 use tokio::task::JoinError;
 use tonic::Status;
 
+
 /// Errors related to communication with the store.
 #[derive(Debug, Error, PartialEq)]
 pub enum Error {
