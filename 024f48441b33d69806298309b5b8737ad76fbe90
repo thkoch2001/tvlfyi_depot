@@ -70,6 +70,24 @@
       "parentUuid": "f9a8acf9_358a324c",
       "revId": "024f48441b33d69806298309b5b8737ad76fbe90",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "068b5fcb_7a16c24f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-15T01:36:06Z",
+      "side": 1,
+      "message": "I managed to get the paths to match by only disabling the NixOS docs generation. I left a comment and a TODO for now.",
+      "parentUuid": "f24b6709_4be841e2",
+      "revId": "024f48441b33d69806298309b5b8737ad76fbe90",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
