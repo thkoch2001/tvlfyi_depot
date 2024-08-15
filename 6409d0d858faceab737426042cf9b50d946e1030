@@ -34,6 +34,23 @@
       "parentUuid": "9d785368_fb546e81",
       "revId": "6409d0d858faceab737426042cf9b50d946e1030",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf7fed61_45179823",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-08-15T19:19:36Z",
+      "side": 1,
+      "message": "We should have a PathComponent struct which wraps a Bytes and represents a valid directory entry name, to make the validation visible in the type.",
+      "revId": "6409d0d858faceab737426042cf9b50d946e1030",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
