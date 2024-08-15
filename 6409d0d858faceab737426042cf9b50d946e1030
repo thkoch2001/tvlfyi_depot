@@ -68,6 +68,42 @@
       "message": "We should have a PathComponent struct which wraps a Bytes and represents a valid directory entry name, to make the validation visible in the type.",
       "revId": "6409d0d858faceab737426042cf9b50d946e1030",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "79a86949_68a3b9a8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-15T19:32:46Z",
+      "side": 1,
+      "message": "The proto `Node` struct is only used in places where there is a surrounding context giving it a name - either inside a directory, or as the \"contents\" of a `PathInfo` or `BuildRequest` input.\n\nWe can maybe rename it to a slightly more fitting name once the rest of the migration is done, but changing the structure in the directories would change their hashes, which is nothing we should be doing lightly, especially if it\u0027s just \"a slightly prettier proto structure\" without an actual impact in terms of valid representations.",
+      "parentUuid": "2139187f_1771f300",
+      "revId": "6409d0d858faceab737426042cf9b50d946e1030",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "37351e42_08fe45df",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-15T19:32:46Z",
+      "side": 1,
+      "message": "Agreed, but this can be a followup. I\u0027d like to first migrate `BuildRequest` and `PathInfo` to the stricter types to disentangle the protos further.",
+      "parentUuid": "33e50268_29357476",
+      "revId": "6409d0d858faceab737426042cf9b50d946e1030",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
