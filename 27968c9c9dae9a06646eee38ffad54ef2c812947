@@ -52,6 +52,24 @@
       "parentUuid": "e04cf97f_bff8db2b",
       "revId": "27968c9c9dae9a06646eee38ffad54ef2c812947",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1f1b95a_3e963345",
+        "filename": "tvix/glue/src/refscan.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-15T20:52:12Z",
+      "side": 1,
+      "message": "I think we can remove it, yes. Please do.",
+      "parentUuid": "0b8269f6_db5a32da",
+      "revId": "27968c9c9dae9a06646eee38ffad54ef2c812947",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
