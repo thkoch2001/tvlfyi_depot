@@ -35,7 +35,7 @@ in
     targets = [ "integration-tests" ] ++ lib.filter (x: lib.hasPrefix "with-features" x || x == "no-features") (lib.attrNames passthru);
     extraSteps.import-docs = (mkImportCheck "tvix/docs/src/store" ../docs/src/store);
   };
-  passthru = (depot.tvix.utils.mkFeaturePowerset {
+  passthru = old.passthru // (depot.tvix.utils.mkFeaturePowerset {
     inherit (old) crateName;
     features = ([ "cloud" "fuse" "otlp" "tonic-reflection" "xp-store-composition" ]
       # virtiofs feature currently fails to build on Darwin

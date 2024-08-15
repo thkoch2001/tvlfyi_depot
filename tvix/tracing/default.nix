@@ -4,8 +4,8 @@
   runTests = true;
 }).overrideAttrs (old: rec {
   meta.ci.targets = lib.filter (x: lib.hasPrefix "with-features" x || x == "no-features") (lib.attrNames passthru);
-  passthru = depot.tvix.utils.mkFeaturePowerset {
+  passthru = old.passthru // (depot.tvix.utils.mkFeaturePowerset {
     inherit (old) crateName;
     features = [ "otlp" "tracy" "tonic" "reqwest" "axum" ];
-  };
+  });
 })

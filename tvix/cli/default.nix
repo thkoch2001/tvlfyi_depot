@@ -94,5 +94,5 @@ in
   };
 
   # Expose benchmarks and evalTests as standard CI targets.
-  passthru = benchmarks // evalTests;
+  passthru = previousAttrs.passthru // benchmarks // evalTests;
 })
