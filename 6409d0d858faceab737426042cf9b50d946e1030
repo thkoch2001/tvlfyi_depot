@@ -140,6 +140,24 @@
       "parentUuid": "79a86949_68a3b9a8",
       "revId": "6409d0d858faceab737426042cf9b50d946e1030",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a6814221_15410ad0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-16T14:48:17Z",
+      "side": 1,
+      "message": "Turns out, we can introduce that validated component type without causing too much of a mess before tackling `BuildRequest` and `PathInfo` stricter types. See https://cl.tvl.fyi/c/depot/+/12217, which now adds a strict type for path components.",
+      "parentUuid": "cf5c9ba3_554520bc",
+      "revId": "6409d0d858faceab737426042cf9b50d946e1030",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
