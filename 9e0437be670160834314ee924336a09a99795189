@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a9642ed7_42c8ce79",
+        "filename": "tvix/build/src/proto/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-16T16:32:30Z",
+      "side": 1,
+      "message": "This is actually wrong, a PathComponent may not be empty. Made this a `bytes::Bytes`, which is cheap to convert into from a PathComponent.",
+      "parentUuid": "0ee7f702_105e2c86",
+      "revId": "9e0437be670160834314ee924336a09a99795189",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dd38606c_00008cc9",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-08-16T15:19:38Z",
       "side": 1,
       "message": "When should this be used over `components`?",
+      "revId": "9e0437be670160834314ee924336a09a99795189",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3be0379_bcf78fe4",
+        "filename": "tvix/castore/src/path/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-16T16:32:30Z",
+      "side": 1,
+      "message": "In case you only need a (compile-time-checked) reference - The `PathComponent` one is owned.",
+      "parentUuid": "dd38606c_00008cc9",
       "revId": "9e0437be670160834314ee924336a09a99795189",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
