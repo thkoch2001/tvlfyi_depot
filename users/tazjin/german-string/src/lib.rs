@@ -66,10 +66,22 @@ impl GermanString {
         }
     }
 
-    fn len(&self) -> usize {
+    pub fn len(&self) -> usize {
         // SAFETY: The length field is located in the same location for both
         // variants, reading it from either is safe.
         unsafe { self.0.small.len as usize }
+    }
+
+    pub fn as_bytes(&self) -> &[u8] {
+        if self.len() > 12 {
+            unsafe { std::slice::from_raw_parts(self.0.large.data, self.len()) }
+        } else {
+            unsafe { &self.0.small.data.as_ref()[..self.len()] }
+        }
+    }
+
+    pub fn as_str(&self) -> Result<&str, std::str::Utf8Error> {
+        std::str::from_utf8(self.as_bytes())
     }
 }
 
@@ -81,5 +93,59 @@ impl Drop for GermanString {
                 std::alloc::dealloc(self.0.large.data, layout);
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_empty_string() {
+        let empty = GermanString::new_transient(b"");
+
+        assert_eq!(empty.len(), 0, "empty string should be empty");
+        assert_eq!(empty.as_bytes(), b"", "empty string should contain nothing");
+        assert_eq!(
+            empty.as_str().expect("empty string is valid UTF-8"),
+            "",
+            "empty string should contain empty string"
+        );
+    }
+
+    #[test]
+    fn test_short_string() {
+        let short = GermanString::new_transient(b"meow");
+
+        assert_eq!(short.len(), 4, "'meow' is four characters");
+        assert_eq!(
+            short.as_bytes(),
+            b"meow",
+            "short string returns correct bytes"
+        );
+        assert_eq!(
+            short.as_str().expect("'meow' is valid UTF-8"),
+            "meow",
+            "short string returns correct string"
+        );
+    }
+
+    #[test]
+    fn test_long_string() {
+        let input: &str = "This code was written at https://signal.live";
+        let long = GermanString::new_transient(input.as_bytes());
+
+        assert_eq!(long.len(), 44, "long string has correct length");
+        assert_eq!(
+            long.as_bytes(),
+            input.as_bytes(),
+            "long string returns correct bytes"
+        );
+
+        assert_eq!(
+            long.as_str().expect("input is valid UTF-8"),
+            input,
+            "long string returns correct string"
+        );
     }
 }
