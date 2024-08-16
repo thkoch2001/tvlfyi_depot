@@ -730,7 +730,8 @@ migrate = inSpan "Database Migration" $ do
     CREATE OR REPLACE FUNCTION calc_seeding_weight(full_json_result jsonb) RETURNS int AS $$
     BEGIN
       RETURN
-        ((full_json_result->'seeders')::integer*3
+        -- three times seeders plus one times snatches
+        (3 * (full_json_result->'seeders')::integer
         + (full_json_result->'snatches')::integer
         )
         -- prefer remasters by multiplying them with 3
@@ -738,7 +739,26 @@ migrate = inSpan "Database Migration" $ do
             WHEN full_json_result->>'remasterTitle' ILIKE '%remaster%'
             THEN 3
             ELSE 1
-          END);
+          END)
+        -- slightly push mp3 V0, to make sure it’s preferred over 320 CBR
+        * (CASE
+            WHEN full_json_result->>'encoding' ILIKE '%v0%'
+            THEN 2
+            ELSE 1
+          END)
+        -- remove 24bit torrents from the result (wayyy too big)
+        * (CASE
+            WHEN full_json_result->>'encoding' ILIKE '%24bit%'
+            THEN 0
+            ELSE 1
+          END)
+        -- discount FLACS, so we only use them when there’s no mp3 alternative (to save space)
+        / (CASE
+            WHEN full_json_result->>'encoding' ILIKE '%lossless%'
+            THEN 5
+            ELSE 1
+          END)
+        ;
     END;
     $$ LANGUAGE plpgsql IMMUTABLE;
 
