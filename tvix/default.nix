@@ -40,58 +40,10 @@ in
 {
   inherit crates protos;
 
-  # Run crate2nix generate, ensure the output doesn't differ afterwards
-  # (and doesn't fail).
-  #
-  # Currently this re-downloads every crate every time
-  # crate2nix-check (but not crate2nix) is built.
-  # TODO(amjoseph): be less wasteful with bandwidth.
-  #
-  crate2nix-check =
-    let
-      outputHashAlgo = "sha256";
-    in
-    pkgs.stdenv.mkDerivation {
-      inherit src;
-
-      # Important: we include the hash of all Cargo related files in the derivation name.
-      # This forces the FOD to be rebuilt/re-verified whenever one of them changes.
-      name = "tvix-crate2nix-check-" + builtins.substring 0 8 (builtins.hashString "sha256"
-        (lib.concatMapStrings (f: builtins.hashFile "sha256" f)
-          ([ ./Cargo.toml ./Cargo.lock ] ++ (map (m: ./. + "/${m}/Cargo.toml") (lib.importTOML ./Cargo.toml).workspace.members))
-        )
-      );
-
-      nativeBuildInputs = with pkgs; [ git cacert cargo ];
-      buildPhase = ''
-        export CARGO_HOME=$(mktemp -d)
-
-        # The following command can be omitted, in which case
-        # crate2nix-generate will run it automatically, but won't show the
-        # output, which makes it look like the build is somehow "stuck" for a
-        # minute or two.
-        cargo metadata > /dev/null
-
-        ${pkgs.crate2nix}/bin/crate2nix generate --all-features
-        ${pkgs.treefmt}/bin/treefmt Cargo.nix \
-          --no-cache \
-          --on-unmatched=debug \
-          --config-file=${depot.tools.depotfmt.config} \
-          --tree-root=.
-
-        # technically unnecessary, but provides more-helpful output in case of error
-        diff -ur Cargo.nix ${src}/Cargo.nix
-
-        # the FOD hash will check that the (re-)generated Cargo.nix matches the committed Cargo.nix
-        cp Cargo.nix $out
-      '';
-
-      # This is an FOD in order to allow `cargo` to perform network access.
-      outputHashMode = "flat";
-      inherit outputHashAlgo;
-      outputHash = builtins.hashFile outputHashAlgo ./Cargo.nix;
-      env.SSL_CERT_FILE = "${pkgs.cacert.out}/etc/ssl/certs/ca-bundle.crt";
-    };
+  crate2nix-check = depot.tvix.utils.mkCrate2nixCheck {
+    relCrateDir = "tvix";
+    workspace = true;
+  };
 
   # Provide the Tvix logo in both .webp and .png format.
   logo = pkgs.runCommand "logo"
@@ -165,5 +117,5 @@ in
     "rust-docs"
   ];
 
-  utils = import ./utils.nix { inherit lib depot; };
+  utils = import ./utils.nix { inherit lib depot pkgs; };
 }
