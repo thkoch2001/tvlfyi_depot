@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "438c613b_bf82727f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000107
+      },
+      "writtenOn": "2024-08-16T15:48:45Z",
+      "side": 1,
+      "message": "It\u0027s fun watching this ADT evolve from a collection of byte fields into a set of types that express each field\u0027s constraints.",
+      "revId": "9c5339bb8363fe272cb437177a12c9c4cc491aaa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "571d9446_2a561e36",
+        "filename": "tvix/castore/src/directoryservice/object_store.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1000107
+      },
+      "writtenOn": "2024-08-16T15:48:45Z",
+      "side": 1,
+      "message": "```suggestion\n        // Ensure the directory doesn\u0027t contain other directory children\n```",
+      "revId": "9c5339bb8363fe272cb437177a12c9c4cc491aaa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7e03aab_bf5ab0bf",
+        "filename": "tvix/castore/src/nodes/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000107
+      },
+      "writtenOn": "2024-08-16T15:48:45Z",
+      "side": 1,
+      "message": "Not sure, but I think maybe you meant\n```suggestion\n        /// Calculated by summing up the numbers of nodes, and for each directory,\n```",
+      "revId": "9c5339bb8363fe272cb437177a12c9c4cc491aaa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
