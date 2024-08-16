@@ -65,4 +65,21 @@ impl GermanString {
             GermanString(GSRepr { large })
         }
     }
+
+    fn len(&self) -> usize {
+        // SAFETY: The length field is located in the same location for both
+        // variants, reading it from either is safe.
+        unsafe { self.0.small.len as usize }
+    }
+}
+
+impl Drop for GermanString {
+    fn drop(&mut self) {
+        if self.len() > 12 {
+            let layout = Layout::array::<u8>(self.len()).unwrap();
+            unsafe {
+                std::alloc::dealloc(self.0.large.data, layout);
+            }
+        }
+    }
 }
