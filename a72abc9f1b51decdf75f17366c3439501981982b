@@ -16,6 +16,24 @@
       "message": "```suggestion\n```\nstale TODO",
       "revId": "a72abc9f1b51decdf75f17366c3439501981982b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8e4c5ac_51fcc5d2",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-16T15:26:01Z",
+      "side": 1,
+      "message": "Thanks, fixed.",
+      "parentUuid": "28e80bfc_6a433c41",
+      "revId": "a72abc9f1b51decdf75f17366c3439501981982b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
