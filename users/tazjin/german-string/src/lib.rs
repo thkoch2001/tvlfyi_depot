@@ -117,6 +117,8 @@ impl PartialEq for GermanString {
     }
 }
 
+impl Eq for GermanString {}
+
 impl Debug for GermanString {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
         String::from_utf8_lossy(self.as_bytes()).fmt(f)
@@ -126,6 +128,18 @@ impl Debug for GermanString {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use proptest::prelude::*;
+
+    impl Arbitrary for GermanString {
+        type Parameters = <String as Arbitrary>::Parameters;
+        type Strategy = BoxedStrategy<Self>;
+
+        fn arbitrary_with(args: Self::Parameters) -> Self::Strategy {
+            any_with::<String>(args)
+                .prop_map(|s| GermanString::new_transient(s.as_bytes()))
+                .boxed()
+        }
+    }
 
     #[test]
     fn test_empty_string() {
@@ -174,5 +188,25 @@ mod tests {
             input,
             "long string returns correct string"
         );
+    }
+
+    // Test [`Eq`] implementation.
+    proptest! {
+        #[test]
+        fn test_reflexivity(x: GermanString) {
+            prop_assert!(x == x);
+        }
+
+        #[test]
+        fn test_symmetry(x: GermanString, y: GermanString) {
+            prop_assert_eq!(x == y, y == x);
+        }
+
+        #[test]
+        fn test_transitivity(x: GermanString, y: GermanString, z: GermanString) {
+            if x == y && y == z {
+                assert!(x == z);
+            }
+        }
     }
 }
