@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ee7f702_105e2c86",
+        "filename": "tvix/build/src/proto/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-08-16T15:19:38Z",
+      "side": 1,
+      "message": "Maybe add a `PathComponent::new()` or `Default` impl so we don\u0027t have to do a `try_into().unwrap()`?",
+      "revId": "9e0437be670160834314ee924336a09a99795189",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd38606c_00008cc9",
+        "filename": "tvix/castore/src/path/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-08-16T15:19:38Z",
+      "side": 1,
+      "message": "When should this be used over `components`?",
+      "revId": "9e0437be670160834314ee924336a09a99795189",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
