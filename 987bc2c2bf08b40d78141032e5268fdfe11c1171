@@ -50,6 +50,24 @@
       "message": "Should we store it in the digraph edge weight?",
       "revId": "987bc2c2bf08b40d78141032e5268fdfe11c1171",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4feaad90_61bfa1c9",
+        "filename": "tvix/castore/src/directoryservice/directory_graph.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-16T15:17:39Z",
+      "side": 1,
+      "message": "Already discussed in https://cl.tvl.fyi/c/depot/+/12205/comment/e744cade_56bead8f/",
+      "parentUuid": "50a7b213_b516f507",
+      "revId": "987bc2c2bf08b40d78141032e5268fdfe11c1171",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
