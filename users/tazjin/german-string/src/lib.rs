@@ -38,6 +38,10 @@ impl GermanString {
     // strings are destroyed when the object is destroyed. Persistent strings
     // are not supported yet.
     pub fn new_transient(bytes: &[u8]) -> GermanString {
+        if bytes.len() > u32::MAX as usize {
+            panic!("GermanString maximum length is {} bytes", u32::MAX);
+        }
+
         if bytes.len() <= 12 {
             let mut s = GSSmall {
                 len: bytes.len() as u32,
