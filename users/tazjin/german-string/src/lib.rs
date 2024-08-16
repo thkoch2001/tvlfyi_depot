@@ -100,6 +100,22 @@ impl Drop for GermanString {
     }
 }
 
+impl PartialEq for GermanString {
+    fn eq(&self, other: &GermanString) -> bool {
+        if self.len() != other.len() {
+            return false;
+        }
+
+        unsafe {
+            if self.len() <= 12 {
+                return self.0.small.data[..self.len()] == other.0.small.data[..other.len()];
+            }
+            return self.0.large.prefix == other.0.large.prefix
+                && self.as_bytes() == other.as_bytes();
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
