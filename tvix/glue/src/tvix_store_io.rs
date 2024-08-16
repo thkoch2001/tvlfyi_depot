@@ -562,15 +562,11 @@ impl EvalIO for TvixStoreIO {
                         })? {
                             let mut children: Vec<(bytes::Bytes, FileType)> = Vec::new();
                             // TODO: into_nodes() to avoid cloning
-                            for (name, node) in directory.nodes() {
+                            for (name, node) in directory.into_nodes() {
                                 children.push(match node {
-                                    Node::Directory { .. } => {
-                                        (name.clone().into(), FileType::Directory)
-                                    }
+                                    Node::Directory { .. } => (name.into(), FileType::Directory),
                                     Node::File { .. } => (name.clone().into(), FileType::Regular),
-                                    Node::Symlink { .. } => {
-                                        (name.clone().into(), FileType::Symlink)
-                                    }
+                                    Node::Symlink { .. } => (name.into(), FileType::Symlink),
                                 })
                             }
                             Ok(children)
