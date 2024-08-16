@@ -1,4 +1,5 @@
 use std::alloc::Layout;
+use std::fmt::{Debug, Formatter};
 
 #[derive(Clone, Copy)]
 #[repr(C)]
@@ -113,6 +114,12 @@ impl PartialEq for GermanString {
             return self.0.large.prefix == other.0.large.prefix
                 && self.as_bytes() == other.as_bytes();
         }
+    }
+}
+
+impl Debug for GermanString {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
+        String::from_utf8_lossy(self.as_bytes()).fmt(f)
     }
 }
 
