@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "086c2f30_3df08005",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-08-16T15:09:04Z",
+      "side": 1,
+      "message": "Nice! This looks much better",
+      "revId": "987bc2c2bf08b40d78141032e5268fdfe11c1171",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e744cade_56bead8f",
@@ -14,6 +31,23 @@
       "writtenOn": "2024-08-16T14:52:50Z",
       "side": 1,
       "message": "@yuka@yuka.dev This name was just meant for error reporting, is it?\n\nAlso see https://cl.tvl.fyi/c/depot/+/12216, which creates a type alias \"Edge\" containing two fields.\n\nI feel I\u0027d like to stop tracking the names in here for now, WDYT?",
+      "revId": "987bc2c2bf08b40d78141032e5268fdfe11c1171",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50a7b213_b516f507",
+        "filename": "tvix/castore/src/directoryservice/directory_graph.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-08-16T15:09:04Z",
+      "side": 1,
+      "message": "Should we store it in the digraph edge weight?",
       "revId": "987bc2c2bf08b40d78141032e5268fdfe11c1171",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
