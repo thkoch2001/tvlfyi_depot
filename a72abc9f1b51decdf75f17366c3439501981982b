@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28e80bfc_6a433c41",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 564,
+      "author": {
+        "id": 1000085
+      },
+      "writtenOn": "2024-08-16T15:21:14Z",
+      "side": 1,
+      "message": "```suggestion\n```\nstale TODO",
+      "revId": "a72abc9f1b51decdf75f17366c3439501981982b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
