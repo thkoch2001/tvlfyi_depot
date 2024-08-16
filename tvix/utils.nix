@@ -1,4 +1,4 @@
-{ lib, depot, ... }:
+{ lib, depot, pkgs, ... }:
 
 {
   mkFeaturePowerset = { crateName, features, override ? { } }:
@@ -125,4 +125,80 @@
         src = depot.tvix.utils.filterRustCrateSrc { root = prev.src.origSrc; };
       };
     };
+
+  # This creates a derivation that checks whether the Cargo.nix file is up-to-date.
+  mkCrate2nixCheck =
+    { relCrateDir # A string with the path to the directory with Cargo.{toml,lock,nix}, relative to the repo's root. e.g. "web/tvixbolt".
+    , workspace ? false # Whether the Cargo project is a workspace with members.
+    }:
+    lib.throwIfNot (lib.isString relCrateDir) "The relCrateDir argument to mkCrate2nixCheck must be a string."
+      pkgs.stdenvNoCC.mkDerivation
+      rec {
+        # Important: we include the hash of all Cargo related files in the derivation name.
+        # This forces the FOD to be rebuilt/re-verified whenever one of them changes.
+        name = "crate2nix-check-" + builtins.substring 0 8 (builtins.hashString "sha256"
+          (lib.concatMapStrings (f: builtins.hashFile "sha256" f)
+            ([ "${src}/${relCrateDir}/Cargo.toml" "${src}/${relCrateDir}/Cargo.lock" ]
+              ++ lib.optionals workspace (map (m: "${src}/${relCrateDir}/${m}/Cargo.toml") (lib.importTOML "${src}/${relCrateDir}/Cargo.toml").workspace.members))
+          )
+        );
+
+        src = lib.fileset.toSource rec {
+          root = ../.;
+          fileset = (lib.fileset.intersection
+            (lib.fileset.fromSource (depot.third_party.gitignoreSource root))
+            (lib.fileset.unions (map
+              (p:
+                (lib.fileset.fileFilter
+                  (f:
+                    f.name == "Cargo.toml"
+                    || f.name == "Cargo.lock"
+                    || f.name == "Cargo.nix"
+                    || f.name == "crate-hashes.json"
+                    || f.hasExt "rs" # Technically we don't need all of the .rs files, but it's less fragile like this.
+                  )
+                  p)) [
+              (root + "/tvix")
+              (root + "/${relCrateDir}")
+            ])));
+        };
+
+        sourceRoot = "${src.name}/${relCrateDir}";
+
+        nativeBuildInputs = with pkgs; [
+          cacert
+          cargo
+        ];
+
+        buildPhase = ''
+          export CARGO_HOME=$(mktemp -d)
+
+          # The following command can be omitted, in which case
+          # crate2nix-generate will run it automatically, but won't show the
+          # output, which makes it look like the build is somehow "stuck" for a
+          # minute or two.
+          cargo metadata > /dev/null
+
+          # Generate a new Cargo.nix
+          ${pkgs.crate2nix}/bin/crate2nix generate --all-features
+          # Format it
+          ${pkgs.treefmt}/bin/treefmt Cargo.nix \
+            --no-cache \
+            --on-unmatched=debug \
+            --config-file=${depot.tools.depotfmt.config} \
+            --tree-root=.
+
+
+          # Technically unnecessary, but provides more-helpful output in case of error.
+          diff -ur Cargo.nix "${src}/${relCrateDir}"
+
+          # The FOD hash will check that the (re-)generated Cargo.nix matches the already existing Cargo.nix.
+          cp Cargo.nix $out
+        '';
+
+        # This is an FOD in order to allow `cargo` to perform network access.
+        outputHashMode = "flat";
+        outputHashAlgo = "sha256";
+        outputHash = builtins.hashFile "sha256" "${src}/${relCrateDir}/Cargo.nix";
+      };
 }
