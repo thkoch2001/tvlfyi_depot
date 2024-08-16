@@ -81,8 +81,9 @@ pub async fn get(
 
     let url = format!(
         "nar/tvix-castore/{}?narsize={}",
-        data_encoding::BASE64URL_NOPAD
-            .encode(&castorepb::Node::from_name_and_node("".into(), root_node).encode_to_vec()),
+        data_encoding::BASE64URL_NOPAD.encode(
+            &castorepb::Node::from_name_and_node("".into(), root_node).encode_to_vec()
+        ),
         narinfo.nar_size,
     );
 
