@@ -20,11 +20,19 @@ in
       mv src/*.{html,css} $out
   '';
 
-  passthru.serve = pkgs.writeShellScriptBin "tvixbolt-serve" ''
-    ${lib.getExe pkgs.simple-http-server} \
-        --index \
-        --nocache \
-        "$@" \
-        ${depot.web.tvixbolt}
-  '';
+  passthru = {
+    serve = pkgs.writeShellScriptBin "tvixbolt-serve" ''
+      ${lib.getExe pkgs.simple-http-server} \
+          --index \
+          --nocache \
+          "$@" \
+          ${depot.web.tvixbolt}
+    '';
+
+    crate2nix-check = depot.tvix.utils.mkCrate2nixCheck {
+      relCrateDir = "web/tvixbolt";
+    };
+    meta.ci.targets = [ "crate2nix-check" ];
+  };
+
 })
