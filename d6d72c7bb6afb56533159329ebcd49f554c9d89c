@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "780172eb_978bbfce",
+        "filename": "tvix/castore/src/nodes/symlink_target.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-16T16:24:55Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "40552f5c_ed570831",
+      "revId": "d6d72c7bb6afb56533159329ebcd49f554c9d89c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "23dd6766_27a38dea",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-08-16T15:48:45Z",
       "side": 1,
       "message": "Are `.` and `..` allowed as component names within a `SymlinkTarget`?\n\nIf not, then maybe we can unify some of the validation logic with `Path::from_bytes`, passing the bytes through a `Path` and back out again. If I\u0027m understanding correctly, though, this might also require some special handling (or further unification) around representing root as either an empty sequence of bytes or a sequence of one `/` byte.\n\nEven if `.` and `..` are allowed in symlink targets, I suppose you could extract this out as a function and call it from within `PathComponent::is_valid_name` before layering on additional checks for `/`, `.`, and `..`. Of course, while it\u0027s nice to express the relationship between these validations in code, it\u0027s also just refactoring a single check for `\\0` bytes at that point.",
+      "revId": "d6d72c7bb6afb56533159329ebcd49f554c9d89c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d25ad522_e76803dd",
+        "filename": "tvix/castore/src/nodes/symlink_target.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-16T16:24:55Z",
+      "side": 1,
+      "message": "No, symlinks can perfectly fine contain pretty much everything, except be entirely empty or contain nul bytes.\n\nI\u0027d like to keep these checks separate, to avoid any assumptions these two things are related in any way, (other than not being allowed to be entirely empty or containing nul bytes).",
+      "parentUuid": "23dd6766_27a38dea",
       "revId": "d6d72c7bb6afb56533159329ebcd49f554c9d89c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
