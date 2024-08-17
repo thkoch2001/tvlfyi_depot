@@ -1,5 +1,5 @@
 use crate::proto::{Directory, DirectoryError, DirectoryNode, FileNode, SymlinkNode};
-use crate::ValidateNodeError;
+use crate::{PathComponentError, ValidateNodeError};
 
 use hex_literal::hex;
 
@@ -162,9 +162,7 @@ fn validate_invalid_names() {
             ..Default::default()
         };
         match crate::Directory::try_from(d).expect_err("must fail") {
-            DirectoryError::InvalidName(n) => {
-                assert_eq!(n.as_ref(), b"\0")
-            }
+            DirectoryError::InvalidName(PathComponentError::Null) => {}
             _ => panic!("unexpected error"),
         };
     }
@@ -179,9 +177,7 @@ fn validate_invalid_names() {
             ..Default::default()
         };
         match crate::Directory::try_from(d).expect_err("must fail") {
-            DirectoryError::InvalidName(n) => {
-                assert_eq!(n.as_ref(), b".")
-            }
+            DirectoryError::InvalidName(PathComponentError::CurDir) => {}
             _ => panic!("unexpected error"),
         };
     }
@@ -197,9 +193,7 @@ fn validate_invalid_names() {
             ..Default::default()
         };
         match crate::Directory::try_from(d).expect_err("must fail") {
-            DirectoryError::InvalidName(n) => {
-                assert_eq!(n.as_ref(), b"..")
-            }
+            DirectoryError::InvalidName(PathComponentError::Parent) => {}
             _ => panic!("unexpected error"),
         };
     }
@@ -213,9 +207,7 @@ fn validate_invalid_names() {
             ..Default::default()
         };
         match crate::Directory::try_from(d).expect_err("must fail") {
-            DirectoryError::InvalidName(n) => {
-                assert_eq!(n.as_ref(), b"\x00")
-            }
+            DirectoryError::InvalidName(PathComponentError::Null) => {}
             _ => panic!("unexpected error"),
         };
     }
@@ -229,9 +221,21 @@ fn validate_invalid_names() {
             ..Default::default()
         };
         match crate::Directory::try_from(d).expect_err("must fail") {
-            DirectoryError::InvalidName(n) => {
-                assert_eq!(n.as_ref(), b"foo/bar")
-            }
+            DirectoryError::InvalidName(PathComponentError::Slashes) => {}
+            _ => panic!("unexpected error"),
+        };
+    }
+
+    {
+        let d = Directory {
+            symlinks: vec![SymlinkNode {
+                name: bytes::Bytes::copy_from_slice("X".repeat(500).into_bytes().as_slice()),
+                target: "foo".into(),
+            }],
+            ..Default::default()
+        };
+        match crate::Directory::try_from(d).expect_err("must fail") {
+            DirectoryError::InvalidName(PathComponentError::TooLong) => {}
             _ => panic!("unexpected error"),
         };
     }
