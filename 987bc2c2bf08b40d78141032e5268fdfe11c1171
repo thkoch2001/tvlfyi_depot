@@ -68,6 +68,24 @@
       "parentUuid": "50a7b213_b516f507",
       "revId": "987bc2c2bf08b40d78141032e5268fdfe11c1171",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "956ad56a_95b73189",
+        "filename": "tvix/castore/src/directoryservice/directory_graph.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 177,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-17T09:45:42Z",
+      "side": 1,
+      "message": "Or well, `PathComponent` is a `bytes::Bytes`, so cloning isn\u0027t that costly.\n\nI added it to the Edge type, and then realized we don\u0027t use the `B3Digest` in there, ever. So that\u0027s now gone, and `PathComponent` is in :-)\n\nDone in https://cl.tvl.fyi/c/depot/+/12224, got too messy to squash it into here.",
+      "parentUuid": "e744cade_56bead8f",
+      "revId": "987bc2c2bf08b40d78141032e5268fdfe11c1171",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
