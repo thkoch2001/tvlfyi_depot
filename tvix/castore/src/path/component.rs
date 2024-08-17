@@ -1,6 +1,3 @@
-// TODO: split out this error
-use crate::DirectoryError;
-
 use bstr::ByteSlice;
 use std::fmt::{self, Debug, Display};
 
@@ -26,65 +23,64 @@ impl From<PathComponent> for bytes::Bytes {
     }
 }
 
-pub(super) fn is_valid_name<B: AsRef<[u8]>>(name: B) -> bool {
+pub(super) fn validate_name<B: AsRef<[u8]>>(name: B) -> Result<B, PathComponentError> {
     let v = name.as_ref();
 
-    !v.is_empty() && v != *b".." && v != *b"." && !v.contains(&0x00) && !v.contains(&b'/')
+    if v.is_empty() {
+        return Err(PathComponentError::Empty);
+    }
+    if v == *b".." {
+        return Err(PathComponentError::DotDot);
+    }
+    if v == *b"." {
+        return Err(PathComponentError::Dot);
+    }
+    if v.contains(&0x00) {
+        return Err(PathComponentError::NullBytes);
+    }
+    if v.contains(&b'/') {
+        return Err(PathComponentError::Slashes);
+    }
+
+    Ok(name)
 }
 
 impl TryFrom<bytes::Bytes> for PathComponent {
-    type Error = DirectoryError;
+    type Error = PathComponentError;
 
     fn try_from(value: bytes::Bytes) -> Result<Self, Self::Error> {
-        if !is_valid_name(&value) {
-            return Err(DirectoryError::InvalidName(value));
-        }
-
-        Ok(Self { inner: value })
+        Ok(Self {
+            inner: validate_name(value)?,
+        })
     }
 }
 
 impl TryFrom<&'static [u8]> for PathComponent {
-    type Error = DirectoryError;
+    type Error = PathComponentError;
 
     fn try_from(value: &'static [u8]) -> Result<Self, Self::Error> {
-        if !is_valid_name(value) {
-            return Err(DirectoryError::InvalidName(bytes::Bytes::from_static(
-                value,
-            )));
-        }
         Ok(Self {
-            inner: bytes::Bytes::from_static(value),
+            inner: bytes::Bytes::from_static(validate_name(value)?),
         })
     }
 }
 
 impl TryFrom<&str> for PathComponent {
-    type Error = DirectoryError;
+    type Error = PathComponentError;
 
     fn try_from(value: &str) -> Result<Self, Self::Error> {
-        if !is_valid_name(value) {
-            return Err(DirectoryError::InvalidName(bytes::Bytes::copy_from_slice(
-                value.as_bytes(),
-            )));
-        }
         Ok(Self {
-            inner: bytes::Bytes::copy_from_slice(value.as_bytes()),
+            inner: bytes::Bytes::copy_from_slice(validate_name(value.as_bytes())?),
         })
     }
 }
 
 impl TryFrom<&std::ffi::CStr> for PathComponent {
-    type Error = DirectoryError;
+    type Error = PathComponentError;
 
     fn try_from(value: &std::ffi::CStr) -> Result<Self, Self::Error> {
-        if !is_valid_name(value.to_bytes()) {
-            return Err(DirectoryError::InvalidName(bytes::Bytes::copy_from_slice(
-                value.to_bytes(),
-            )));
-        }
         Ok(Self {
-            inner: bytes::Bytes::copy_from_slice(value.to_bytes()),
+            inner: bytes::Bytes::copy_from_slice(validate_name(value.to_bytes())?),
         })
     }
 }
@@ -99,4 +95,19 @@ impl Display for PathComponent {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         Display::fmt(self.inner.as_bstr(), f)
     }
+}
+
+/// Errors created when parsing / validating [PathComponent].
+#[derive(Debug, PartialEq, Eq, thiserror::Error)]
+pub enum PathComponentError {
+    #[error("is empty")]
+    Empty,
+    #[error("is '..'")]
+    DotDot,
+    #[error("is '.'")]
+    Dot,
+    #[error("contains null bytes")]
+    NullBytes,
+    #[error("contains slashes")]
+    Slashes,
 }
