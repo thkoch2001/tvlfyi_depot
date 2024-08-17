@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2fc53170_3fe39e43",
+        "filename": "tvix/castore/src/path/component.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-17T20:14:37Z",
+      "side": 1,
+      "message": "TODO: add tests",
+      "revId": "5da4f722d8639c05c77acdcbe1b0fffd651d7e69",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
