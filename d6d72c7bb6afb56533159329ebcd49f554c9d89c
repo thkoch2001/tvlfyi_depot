@@ -87,6 +87,24 @@
       "parentUuid": "d25ad522_e76803dd",
       "revId": "d6d72c7bb6afb56533159329ebcd49f554c9d89c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "02aa352d_78e6d1e4",
+        "filename": "tvix/castore/src/nodes/symlink_target.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000107
+      },
+      "writtenOn": "2024-08-17T13:02:18Z",
+      "side": 1,
+      "message": "Sorry, forgot to hit reply. That makes sense, thanks for the explanation.",
+      "parentUuid": "d25ad522_e76803dd",
+      "revId": "d6d72c7bb6afb56533159329ebcd49f554c9d89c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
