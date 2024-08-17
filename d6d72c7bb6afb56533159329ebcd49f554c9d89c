@@ -69,6 +69,24 @@
       "parentUuid": "23dd6766_27a38dea",
       "revId": "d6d72c7bb6afb56533159329ebcd49f554c9d89c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fb210d5_e0e8ad8d",
+        "filename": "tvix/castore/src/nodes/symlink_target.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-17T09:46:00Z",
+      "side": 1,
+      "message": "Resolved",
+      "parentUuid": "d25ad522_e76803dd",
+      "revId": "d6d72c7bb6afb56533159329ebcd49f554c9d89c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
