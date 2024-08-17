@@ -1,4 +1,4 @@
-{ lib, depot, ... }:
+{ pkgs, lib, depot, ... }:
 
 {
   mkFeaturePowerset = { crateName, features, override ? { } }:
@@ -124,5 +124,24 @@
       tvix-tracing = prev: {
         src = depot.tvix.utils.filterRustCrateSrc { root = prev.src.origSrc; };
       };
+    };
+
+  # This creates an extraStep in CI to check whether the Cargo.nix file is up-to-date.
+  mkCrate2nixCheck =
+    relCrateDir: # A string with the path to the directory with Cargo.{toml,lock,nix}, relative to the repo's root. e.g. "web/tvixbolt".
+    {
+      label = "crate2nix check for ${relCrateDir}";
+      needsOutput = true;
+      alwaysRun = true;
+      command = pkgs.writeShellScript "crate2nix-check-for-${lib.replaceStrings [ "/" ] ["-"] relCrateDir}" ''
+        cd ${relCrateDir}
+        ${depot.tools.crate2nix-generate}/bin/crate2nix-generate
+        if [[ -n "$(git status --porcelain -unormal)" ]]; then
+            echo "----------------------------------------------------------------------------------------------------"
+            echo "Cargo.nix needs to be updated, run 'mg run //tools/crate2nix-generate' in ${relCrateDir}"
+            echo "----------------------------------------------------------------------------------------------------"
+            exit 1
+        fi
+      '';
     };
 }
