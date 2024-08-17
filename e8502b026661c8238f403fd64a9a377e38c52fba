@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12610793_4461b5df",
+        "filename": "tvix/castore/src/nodes/directory.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-08-17T21:50:00Z",
+      "side": 1,
+      "message": "Preferably just `use std::collections::btree_map::{self, BTreeMap};`",
+      "revId": "e8502b026661c8238f403fd64a9a377e38c52fba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
