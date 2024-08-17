@@ -119,6 +119,14 @@ let
           grep "${assertVMOutput}" output.txt
         '';
         requiredSystemFeatures = [ "kvm" ];
+        # HACK: The boot tests are sometimes flaky, and we don't want them to
+        # periodically fail other build. Have Buildkite auto-retry them 2 times
+        # on failure.
+        # Logs for individual failures are still available, so it won't hinder
+        # flakiness debuggability.
+        meta.ci.buildkiteExtraStepArgs = {
+          retry.automatic = true;
+        };
       } // lib.optionalAttrs (isClosure && !useNarBridge) {
         __structuredAttrs = true;
         exportReferencesGraph.closure = [ path ];
