@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b30d0918_ed7adfdc",
+        "filename": "tvix/castore/src/nodes/symlink_target.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-17T20:14:50Z",
+      "side": 1,
+      "message": "TODO: add tests",
+      "revId": "c5051a4cd6411ea0e73e091358c7d32ae8ad778c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
