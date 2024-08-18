@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77597351_f0d8f8f2",
+        "filename": "tvix/castore/src/path/component.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-08-18T16:27:47Z",
+      "side": 1,
+      "message": "```suggestion\n/// The maximum length an individual path component can have.\n/// Linux allows 255 bytes, so we pick that.\npub const MAX_NAME_LEN: usize \u003d 255;\n```\n\nThis is what I meant by https://cl.tvl.fyi/c/depot/+/12229/comment/f9aee3e0_78ca415b, since the original version seemed to imply that 256 bytes of actual name were permitted, and then followed it up with `MAX_NAME_LEN \u003d 255`.\nThe 256th byte is an ABI detail that isn\u0027t worth mentioning.",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 36
+      },
+      "revId": "3358020ec5139d6608f68f686dc65c8bd0f7fda3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
