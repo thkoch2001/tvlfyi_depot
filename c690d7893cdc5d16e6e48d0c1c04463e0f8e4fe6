@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf1fea31_211659d4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-18T19:33:19Z",
+      "side": 1,
+      "message": "-2 for the cfg(debug_assertions) issue",
+      "revId": "c690d7893cdc5d16e6e48d0c1c04463e0f8e4fe6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3dc081cb_d1f68250",
