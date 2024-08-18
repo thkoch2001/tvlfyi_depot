@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "838dc0c7_36e9571c",
+        "filename": "tvix/castore/src/path/component.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-18T15:52:45Z",
+      "side": 1,
+      "message": "I wrote\n\n```\n/// The maximum length an individual path component can have.\n/// Linux allows 256 bytes of null-terminated string, so 255 bytes of actual\n/// name, so we pick that.\n```",
+      "parentUuid": "f9aee3e0_78ca415b",
+      "revId": "48f385e18d76cb6b3aa6574c37f4f0af3230467d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58b7b692_e0dc6031",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-08-18T14:50:04Z",
       "side": 1,
       "message": "nit: I think I might prefer this as a `match`, with `_ if v.contains(…) \u003d\u003e` for the final three cases.",
+      "revId": "48f385e18d76cb6b3aa6574c37f4f0af3230467d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f404d08d_27abb337",
+        "filename": "tvix/castore/src/path/component.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-18T15:52:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "58b7b692_e0dc6031",
       "revId": "48f385e18d76cb6b3aa6574c37f4f0af3230467d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
