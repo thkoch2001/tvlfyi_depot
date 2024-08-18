@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "df0e5ce5_09e5b011",
+        "filename": "tvix/eval/src/io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-18T17:46:46Z",
+      "side": 1,
+      "message": "Done. I actually almost called it that, but decided against it briefly.",
+      "parentUuid": "3f8f9f61_c1f11e98",
+      "revId": "d53455c6bb30b9bafcf20738df3cc2a02c0319aa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "98553b1d_65235ea1",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "22c8c181_8cc21802",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 107,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-18T17:46:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98553b1d_65235ea1",
+      "revId": "d53455c6bb30b9bafcf20738df3cc2a02c0319aa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eeb64037_4028d5d3",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-08-11T16:05:00Z",
       "side": 1,
       "message": "Absorb this comment into the docstring?",
+      "revId": "d53455c6bb30b9bafcf20738df3cc2a02c0319aa",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9803d450_0bc19608",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-18T17:46:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eeb64037_4028d5d3",
       "revId": "d53455c6bb30b9bafcf20738df3cc2a02c0319aa",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
