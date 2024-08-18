@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9aee3e0_78ca415b",
+        "filename": "tvix/castore/src/path/component.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-08-18T14:50:04Z",
+      "side": 1,
+      "message": "Specifically, it allows 256 bytes of *null-terminated* string, ie up to 255 bytes of actual name. The 256th byte is just an ABI detail.",
+      "revId": "48f385e18d76cb6b3aa6574c37f4f0af3230467d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "58b7b692_e0dc6031",
+        "filename": "tvix/castore/src/path/component.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-08-18T14:50:04Z",
+      "side": 1,
+      "message": "nit: I think I might prefer this as a `match`, with `_ if v.contains(…) \u003d\u003e` for the final three cases.",
+      "revId": "48f385e18d76cb6b3aa6574c37f4f0af3230467d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
