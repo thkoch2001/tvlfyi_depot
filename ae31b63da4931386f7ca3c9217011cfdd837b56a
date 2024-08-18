@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "768cb1b1_ec8c52c5",
+        "filename": "tvix/castore/src/path/component.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-18T13:03:09Z",
+      "side": 1,
+      "message": "I added another PathComponentError::Convert, which holds the original data, as well as an inner error specifying what went wrong (that one being the `source()` of the error.\n\nThis allows a consumer to both figure out the actual length of the original buffer (as it gets it back), as well as reporting it further up if so desired. What do you think?",
+      "parentUuid": "bb318dfa_611eeb56",
+      "revId": "ae31b63da4931386f7ca3c9217011cfdd837b56a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0adbb48_53198b6d",
         "filename": "tvix/castore/src/path/component.rs",
         "patchSetId": 5
