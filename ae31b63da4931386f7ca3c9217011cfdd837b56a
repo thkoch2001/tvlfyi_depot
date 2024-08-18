@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7ae12209_2218d63c",
+        "filename": "tvix/castore/src/path/component.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-08-18T07:29:50Z",
+      "side": 1,
+      "message": "maybe add the actual length in the enum",
+      "revId": "ae31b63da4931386f7ca3c9217011cfdd837b56a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0adbb48_53198b6d",
+        "filename": "tvix/castore/src/path/component.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-08-18T07:29:50Z",
+      "side": 1,
+      "message": "interpolate the actual length",
+      "revId": "ae31b63da4931386f7ca3c9217011cfdd837b56a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
