@@ -1,4 +1,5 @@
 use std::alloc::Layout;
+use std::cmp::Ordering;
 use std::fmt::{Debug, Formatter};
 
 #[derive(Clone, Copy)]
@@ -119,6 +120,54 @@ impl PartialEq for GermanString {
 
 impl Eq for GermanString {}
 
+impl Ord for GermanString {
+    fn cmp(&self, other: &GermanString) -> Ordering {
+        match (self.len().cmp(&12), other.len().cmp(&12)) {
+            // two small strings
+            (Ordering::Less | Ordering::Equal, Ordering::Less | Ordering::Equal) => unsafe {
+                self.0.small.data[..self.len()].cmp(&other.0.small.data[..other.len()])
+            },
+            // two large strings
+            (Ordering::Greater, Ordering::Greater) => unsafe {
+                match self.0.large.prefix.cmp(&other.0.large.prefix) {
+                    Ordering::Equal => self.as_bytes().cmp(other.as_bytes()),
+                    ordering => ordering,
+                }
+            },
+
+            // LHS large, RHS small
+            (Ordering::Greater, _) => {
+                let prefix_ordering =
+                    unsafe { self.0.large.prefix.as_slice().cmp(&other.0.small.data[..4]) };
+
+                if prefix_ordering != Ordering::Equal {
+                    return prefix_ordering;
+                }
+
+                self.as_bytes().cmp(other.as_bytes())
+            }
+
+            // LHS small, RHS large
+            (_, Ordering::Greater) => {
+                let prefix_ordering =
+                    unsafe { self.0.small.data[..4].cmp(other.0.large.prefix.as_slice()) };
+
+                if prefix_ordering != Ordering::Equal {
+                    return prefix_ordering;
+                }
+
+                self.as_bytes().cmp(other.as_bytes())
+            }
+        }
+    }
+}
+
+impl PartialOrd for GermanString {
+    fn partial_cmp(&self, other: &GermanString) -> Option<Ordering> {
+        Some(self.cmp(other))
+    }
+}
+
 impl Debug for GermanString {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), std::fmt::Error> {
         String::from_utf8_lossy(self.as_bytes()).fmt(f)
@@ -212,6 +261,19 @@ mod tests {
         }
 
         // Test [`Eq`] implementation.
+        #[test]
+        fn test_eq(lhs: Vec<u8>, rhs: Vec<u8>) {
+            let lhs_gs = GermanString::new_transient(lhs.as_slice());
+            let rhs_gs = GermanString::new_transient(rhs.as_slice());
+
+            assert_eq!(
+                (lhs == rhs),
+                (lhs_gs == rhs_gs),
+                "Eq should match between std::String and GermanString ({:?} == {:?})",
+                lhs, rhs,
+            );
+        }
+
         #[test]
         fn test_reflexivity(x: GermanString) {
             prop_assert!(x == x);
