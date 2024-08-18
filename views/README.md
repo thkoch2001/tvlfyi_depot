@@ -8,9 +8,9 @@ individual content and usage information.
 Testing changes locally
 -----------------------
 
-Generally, when iterating on these files, it's best to locally invoke `josh-
-filter` (from `//third_party//josh`) locally to inspect how the workspace would
-look like:
+Generally, when iterating on these files, it's best to locally invoke
+`josh-filter` (from the `josh` package) locally to inspect how the workspace
+would look like:
 
   - Commit your changes. This is required, as `josh-filter` operates on your
     `HEAD`, not working directory state.
