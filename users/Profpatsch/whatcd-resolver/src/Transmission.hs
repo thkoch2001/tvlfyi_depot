@@ -205,9 +205,9 @@ doTransmissionRequest' req = inSpan' "Transmission Request" $ \span -> do
       transmissionConnectionConfig
       req
   case resp.result of
-    TransmissionResponseFailure err -> appThrowTree span (nestedError "Transmission RPC error" $ singleError $ newError err)
+    TransmissionResponseFailure err -> appThrow span (AppExceptionTree $ nestedError "Transmission RPC error" $ singleError $ newError err)
     TransmissionResponseSuccess -> case resp.arguments of
-      Nothing -> appThrowTree span "Transmission RPC error: No `arguments` field in response"
+      Nothing -> appThrow span "Transmission RPC error: No `arguments` field in response"
       Just out -> pure out
 
 -- | Contact the transmission RPC, and do the CSRF protection dance.
@@ -305,8 +305,8 @@ doTransmissionRequest span dat (req, parser) = do
             case Json.eitherDecodeStrict' @Json.Value (resp & Http.getResponseBody) of
               Left _err -> pure ()
               Right val -> logInfo [fmt|failing transmission response: {showPrettyJson val}|]
-            appThrowTree span err
-    _ -> liftIO $ unwrapIOError $ Left [fmt|Non-200 response: {showPretty resp}|]
+            appThrow span (AppExceptionTree err)
+    _ -> appThrow span $ AppExceptionPretty [[fmt|Non-200 response:|], pretty resp]
 
 class MonadTransmission m where
   getCurrentTransmissionSessionId :: m (Maybe ByteString)
