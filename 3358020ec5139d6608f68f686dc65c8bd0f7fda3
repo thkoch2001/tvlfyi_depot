@@ -22,6 +22,30 @@
       },
       "revId": "3358020ec5139d6608f68f686dc65c8bd0f7fda3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bce6235c_8ba27d02",
+        "filename": "tvix/castore/src/path/component.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-18T16:29:34Z",
+      "side": 1,
+      "message": "I now already pushed \"Linux allows 255 bytes of actual name, so we pick that.\", which is close enough.",
+      "parentUuid": "77597351_f0d8f8f2",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 36
+      },
+      "revId": "3358020ec5139d6608f68f686dc65c8bd0f7fda3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
