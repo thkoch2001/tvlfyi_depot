@@ -357,7 +357,7 @@ assertOneUpdated ::
   m ()
 assertOneUpdated span name x = case x.numberOfRowsAffected of
   1 -> pure ()
-  n -> appThrowTree span ([fmt|{name :: Text}: Expected to update exactly one row, but updated {n :: Natural} row(s)|])
+  n -> appThrow span ([fmt|{name :: Text}: Expected to update exactly one row, but updated {n :: Natural} row(s)|])
 
 data TorrentData transmissionInfo = TorrentData
   { groupId :: Int,
@@ -513,7 +513,7 @@ httpTorrent span req =
             | statusCode == 200,
               Nothing <- contentType ->
                 Left [fmt|Redacted returned a body with unspecified content type|]
-            | code <- statusCode -> Left [fmt|Redacted returned an non-200 error code, code {code}: {resp & showPretty}|]
+            | code <- statusCode -> Left $ AppExceptionPretty [[fmt|Redacted returned an non-200 error code, code {code}|], pretty resp]
       )
 
 redactedApiRequestJson ::

@@ -389,7 +389,7 @@ httpJson opts span parser req = do
             | statusCode == 200,
               Nothing <- contentType ->
                 Left [fmt|Server returned a body with unspecified content type|]
-            | code <- statusCode -> Left [fmt|Server returned an non-200 error code, code {code}: {resp & showPretty}|]
+            | code <- statusCode -> Left $ singleError [fmt|Server returned an non-200 error code, code {code}: {[pretty resp] & prettyErrsNoColor}|]
       )
     >>= assertM
       span
