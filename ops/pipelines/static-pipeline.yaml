@@ -88,10 +88,12 @@ steps:
     continue_on_failure: true
 
   # Exit with success or failure depending on whether any other steps
-  # failed.
+  # failed (but not retried).
   #
   # This information is checked by querying the Buildkite GraphQL API
-  # and fetching the count of failed steps.
+  # and fetching all failed steps, then filtering out the ones that were
+  # retried (retried jobs create new jobs, which would also show up in the
+  # query).
   #
   # This step must be :duck: (yes, really!) because the post-command
   # hook will inspect this name.
@@ -109,8 +111,8 @@ steps:
       readonly FAILED_JOBS=$(curl 'https://graphql.buildkite.com/v1' \
         --silent \
         -H "Authorization: Bearer $(cat ${BUILDKITE_TOKEN_PATH})" \
-        -d "{\"query\": \"query BuildStatusQuery { build(uuid: \\\"$BUILDKITE_BUILD_ID\\\") { jobs(passed: false) { count } } }\"}" | \
-        jq -r '.data.build.jobs.count')
+        -d "{\"query\": \"query BuildStatusQuery { build(uuid: \\\"$BUILDKITE_BUILD_ID\\\") { jobs(passed: false, first: 500 ) { edges { node { ... on JobTypeCommand { retried } } } } } }\"}" | \
+        jq -r '.data.build.jobs.edges | map(select(.node.retried == false)) | length')
 
       echo "$$FAILED_JOBS build jobs failed."
 
