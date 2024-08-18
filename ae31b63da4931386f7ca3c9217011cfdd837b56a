@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bb318dfa_611eeb56",
+        "filename": "tvix/castore/src/path/component.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-18T08:02:38Z",
+      "side": 1,
+      "message": "It\u0027s a bit of a similar question on whether to include the place where certain invalid characters were found, and/or passing back the unconverted Bytes. As the conversion takes self, the owner doesn\u0027t have the original string anymore to report back where the error happened.\n\nWe don\u0027t do any of this right now, if we start doing something like that I\u0027d rather do it consistently, but I\u0027m not too happy about the ergonomics right now.\n\nCan we leave this for a followup?",
+      "parentUuid": "7ae12209_2218d63c",
+      "revId": "ae31b63da4931386f7ca3c9217011cfdd837b56a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0adbb48_53198b6d",
         "filename": "tvix/castore/src/path/component.rs",
         "patchSetId": 5
@@ -31,6 +49,24 @@
       "writtenOn": "2024-08-18T07:29:50Z",
       "side": 1,
       "message": "interpolate the actual length",
+      "revId": "ae31b63da4931386f7ca3c9217011cfdd837b56a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bab6c3c0_aefb362a",
+        "filename": "tvix/castore/src/path/component.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-18T08:02:38Z",
+      "side": 1,
+      "message": "same as above",
+      "parentUuid": "d0adbb48_53198b6d",
       "revId": "ae31b63da4931386f7ca3c9217011cfdd837b56a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
