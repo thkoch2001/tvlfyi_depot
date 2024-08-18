@@ -16,6 +16,24 @@
       "message": "When something is being evaluated this breaks and closes out the program. We want it to print an interrupting message similar to how it is in nix repl and make it cancel the evaluation and get us back in a new line. This might require more code, maybe you can split this into its own CL including this hunk.",
       "revId": "fd05d7d08c99c32af761f8cbce7540bcedd5acfc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "81f88f1c_9b7b685a",
+        "filename": "tvix/cli/src/repl.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-18T18:58:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f5ce8e6_f8d6d041",
+      "revId": "fd05d7d08c99c32af761f8cbce7540bcedd5acfc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
