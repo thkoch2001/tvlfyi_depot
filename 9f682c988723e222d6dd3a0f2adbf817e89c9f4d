@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9295824f_24949c38",
+        "filename": "tvix/eval/src/io.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-18T20:59:49Z",
+      "side": 1,
+      "message": "`s/including checking if it exists/also not checking if it exists/`\ncould be read conflictingly.\n\nThis also doesn\u0027t match with what our implementation in glue does?\n\n```\n        let (store_path, _sub_path) \u003d StorePath::from_absolute_path_full(\u0026path.to_string_lossy())\n            .map_err(|e| {\n            io::Error::new(\n                io::ErrorKind::InvalidInput,\n                format!(\"Invalid store path: {e}\"),\n            )\n        })?;\n```\n\nThe way I read this, this will fail if fed something that\u0027s not a store path, and that clearly doesn\u0027t align with the docstring.\n\nCan we just abuse file_type for this all instead?",
+      "revId": "9f682c988723e222d6dd3a0f2adbf817e89c9f4d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
