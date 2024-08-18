@@ -53,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "33483c64_e825b0fd",
+        "filename": "tvix/eval/src/chunk.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-08-18T22:05:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3dc081cb_d1f68250",
+      "revId": "c690d7893cdc5d16e6e48d0c1c04463e0f8e4fe6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89168cd4_29c8ba42",
@@ -66,6 +84,30 @@
       "writtenOn": "2024-08-18T19:09:41Z",
       "side": 1,
       "message": "what is \"9\"? this feels like quite a magic number.\n\nIs this `std::mem::size_of::\u003cvu128\u003e()`?",
+      "range": {
+        "startLine": 57,
+        "startChar": 35,
+        "endLine": 57,
+        "endChar": 37
+      },
+      "revId": "c690d7893cdc5d16e6e48d0c1c04463e0f8e4fe6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "990b2596_291ca6ae",
+        "filename": "tvix/eval/src/chunk.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-08-18T22:05:14Z",
+      "side": 1,
+      "message": "Moved it out into a constant with docs. It\u0027s the maximum size of a u64 varint encoding (required for temporary arrays and offset calculations).",
+      "parentUuid": "89168cd4_29c8ba42",
       "range": {
         "startLine": 57,
         "startChar": 35,
@@ -99,6 +141,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "97fcbb2a_d2a71995",
+        "filename": "tvix/eval/src/chunk.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-08-18T22:05:14Z",
+      "side": 1,
+      "message": "Those are not equivalent: In the actual code slice there might be fewer than 9 bytes remaining (this is actually a common case, as we have a lot of e.g. `OpConstant(2);OpForce;OpReturn` at the end of a thunk, which is 4).",
+      "parentUuid": "81acc9e1_8eae00ec",
+      "range": {
+        "startLine": 64,
+        "startChar": 6,
+        "endLine": 66,
+        "endChar": 35
+      },
+      "revId": "c690d7893cdc5d16e6e48d0c1c04463e0f8e4fe6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2496daf7_ddb6e589",
@@ -112,6 +178,30 @@
       "writtenOn": "2024-08-18T19:26:30Z",
       "side": 1,
       "message": "kinda feel like it\u0027ll be worth factoring out \"push an op and its arg\" into a method somehow, though it seems hard to make type safe.",
+      "range": {
+        "startLine": 755,
+        "startChar": 16,
+        "endLine": 756,
+        "endChar": 54
+      },
+      "revId": "c690d7893cdc5d16e6e48d0c1c04463e0f8e4fe6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a5834468_2f4d1c35",
+        "filename": "tvix/eval/src/compiler/bindings.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 756,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-08-18T22:05:14Z",
+      "side": 1,
+      "message": "I wrote this code more than once, and in more than one language, and tried both versions. In Rust this ends up with a large number of ops actually not using the helper for various reasons, and I decided not to do it for now. Will have to think more, but if we find a good way would definitely like to refactor it.",
+      "parentUuid": "2496daf7_ddb6e589",
       "range": {
         "startLine": 755,
         "startChar": 16,
@@ -141,6 +231,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4dfa5414_b23ef10e",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-08-18T22:05:14Z",
+      "side": 1,
+      "message": "I actually pushed a different thing on my TODO-list instead: Measure whether not emitting dead code is even worth it. The compiler is not slow, and I think the difference is minuscule, in that case we could rip out this whole logic and just retain the warning.",
+      "parentUuid": "7a316694_7cdeccb1",
+      "revId": "c690d7893cdc5d16e6e48d0c1c04463e0f8e4fe6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f9fb3e55_eb3f4145",
         "filename": "tvix/eval/src/compiler/mod.rs",
         "patchSetId": 6
@@ -152,6 +260,24 @@
       "writtenOn": "2024-08-18T19:26:30Z",
       "side": 1,
       "message": "!!! this should be on both of the following lines! (or on a block)",
+      "revId": "c690d7893cdc5d16e6e48d0c1c04463e0f8e4fe6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "056dacf5_e937be5b",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 1312,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-08-18T22:05:14Z",
+      "side": 1,
+      "message": "Good catch! How interesting that this doesn\u0027t fall over in testing. Could this be dead code?\n\nAnyways, fixed.",
+      "parentUuid": "f9fb3e55_eb3f4145",
       "revId": "c690d7893cdc5d16e6e48d0c1c04463e0f8e4fe6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
