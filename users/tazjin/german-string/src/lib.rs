@@ -190,8 +190,28 @@ mod tests {
         );
     }
 
-    // Test [`Eq`] implementation.
     proptest! {
+        #[test]
+        fn test_roundtrip_vec(input: Vec<u8>) {
+            let gs = GermanString::new_transient(input.as_slice());
+            assert_eq!(input.len(), gs.len(), "length should match");
+
+            let out = gs.as_bytes().to_owned();
+            assert_eq!(input, out, "roundtrip should yield same bytes");
+        }
+
+        #[test]
+        fn test_roundtrip_string(input: String) {
+            let gs = GermanString::new_transient(input.as_bytes());
+            assert_eq!(input.len(), gs.len(), "length should match");
+
+            let out = String::from_utf8(gs.as_bytes().to_owned())
+              .expect("string should be valid after roundtrip");
+
+            assert_eq!(input, out, "roundtrip should yield same string");
+        }
+
+        // Test [`Eq`] implementation.
         #[test]
         fn test_reflexivity(x: GermanString) {
             prop_assert!(x == x);
