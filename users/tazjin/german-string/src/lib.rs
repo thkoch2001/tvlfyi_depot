@@ -112,8 +112,9 @@ impl PartialEq for GermanString {
             if self.len() <= 12 {
                 return self.0.small.data[..self.len()] == other.0.small.data[..other.len()];
             }
-            return self.0.large.prefix == other.0.large.prefix
-                && self.as_bytes() == other.as_bytes();
+            return self.0.large.data == other.0.large.data
+                || (self.0.large.prefix == other.0.large.prefix
+                    && self.as_bytes() == other.as_bytes());
         }
     }
 }
