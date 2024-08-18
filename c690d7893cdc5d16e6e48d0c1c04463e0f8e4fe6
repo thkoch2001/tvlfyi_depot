@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dc081cb_d1f68250",
+        "filename": "tvix/eval/src/chunk.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-18T19:09:41Z",
+      "side": 1,
+      "message": "can you document this field? why is this necessary?",
+      "revId": "c690d7893cdc5d16e6e48d0c1c04463e0f8e4fe6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89168cd4_29c8ba42",
+        "filename": "tvix/eval/src/chunk.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-18T19:09:41Z",
+      "side": 1,
+      "message": "what is \"9\"? this feels like quite a magic number.\n\nIs this `std::mem::size_of::\u003cvu128\u003e()`?",
+      "range": {
+        "startLine": 57,
+        "startChar": 35,
+        "endLine": 57,
+        "endChar": 37
+      },
+      "revId": "c690d7893cdc5d16e6e48d0c1c04463e0f8e4fe6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81acc9e1_8eae00ec",
+        "filename": "tvix/eval/src/chunk.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 66,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-18T19:09:41Z",
+      "side": 1,
+      "message": "```suggestion\n            vu128::decode_u64(\u0026self.code[idx..(idx + 9)].try_into().unwrap())\n```",
+      "range": {
+        "startLine": 64,
+        "startChar": 6,
+        "endLine": 66,
+        "endChar": 35
+      },
+      "revId": "c690d7893cdc5d16e6e48d0c1c04463e0f8e4fe6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
