@@ -33,6 +33,24 @@
       "message": "realise_store_path",
       "revId": "9f4019a7e586c1a2b1caf7e206370d06670065f3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2117964_c7c4875c",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1310,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-18T19:06:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dae9d9bf_8d00b120",
+      "revId": "9f4019a7e586c1a2b1caf7e206370d06670065f3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
