@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE QuasiQuotes #-}
 
 module WhatcdResolver where
@@ -41,7 +42,6 @@ import Network.URI qualified
 import Network.Wai (ResponseReceived)
 import Network.Wai qualified as Wai
 import Network.Wai.Handler.Warp qualified as Warp
-import Network.Wai.Parse qualified as Wai
 import OpenTelemetry.Attributes qualified as Otel
 import OpenTelemetry.Trace qualified as Otel hiding (getTracer, inSpan, inSpan')
 import OpenTelemetry.Trace.Monad qualified as Otel
@@ -91,14 +91,17 @@ htmlUi = do
     let catchAppException act =
           try act >>= \case
             Right a -> pure a
-            Left (AppException err) -> do
-              runInIO (logError err)
+            Left (AppExceptionTree err) -> do
+              runInIO (logError (prettyErrorTree err))
+              respondOrig (Wai.responseLBS Http.status500 [] "")
+            Left (AppExceptionPretty err) -> do
+              runInIO (logError (err & Pretty.prettyErrsNoColor & stringToText))
               respondOrig (Wai.responseLBS Http.status500 [] "")
 
     catchAppException $ do
       let mp span parser =
             Multipart.parseMultipartOrThrow
-              (appThrowTree span)
+              (appThrow span . AppExceptionTree)
               parser
               req
 
@@ -111,7 +114,7 @@ htmlUi = do
 
       let parseQueryArgsNewSpan spanName parser =
             Parse.runParse "Unable to find the right request query arguments" (lmap Wai.queryString parser) req
-              & assertMNewSpan spanName id
+              & assertMNewSpan spanName (first AppExceptionTree)
 
       let handlers :: Handlers (AppT IO)
           handlers respond =
@@ -160,7 +163,7 @@ htmlUi = do
                       file <-
                         getTorrentFileById dat
                           <&> annotate [fmt|No torrent file for torrentId "{dat.torrentId}"|]
-                          >>= orAppThrowTree span
+                          >>= orAppThrow span
 
                       running <-
                         lift @Transaction $
@@ -689,7 +692,7 @@ assertOneUpdated ::
   m ()
 assertOneUpdated span name x = case x.numberOfRowsAffected of
   1 -> pure ()
-  n -> appThrowTree span ([fmt|{name :: Text}: Expected to update exactly one row, but updated {n :: Natural} row(s)|])
+  n -> appThrow span ([fmt|{name :: Text}: Expected to update exactly one row, but updated {n :: Natural} row(s)|])
 
 migrate ::
   ( MonadPostgres m,
@@ -784,38 +787,6 @@ migrate = inSpan "Database Migration" $ do
   |]
     ()
 
-httpTorrent ::
-  ( MonadIO m,
-    MonadThrow m
-  ) =>
-  Otel.Span ->
-  Http.Request ->
-  m ByteString
-httpTorrent span req =
-  Http.httpBS req
-    >>= assertM
-      span
-      ( \resp -> do
-          let statusCode = resp & Http.responseStatus & (.statusCode)
-              contentType =
-                resp
-                  & Http.responseHeaders
-                  & List.lookup "content-type"
-                  <&> Wai.parseContentType
-                  <&> (\(ct, _mimeAttributes) -> ct)
-          if
-            | statusCode == 200,
-              Just "application/x-bittorrent" <- contentType ->
-                Right $ (resp & Http.responseBody)
-            | statusCode == 200,
-              Just otherType <- contentType ->
-                Left [fmt|Redacted returned a non-torrent body, with content-type "{otherType}"|]
-            | statusCode == 200,
-              Nothing <- contentType ->
-                Left [fmt|Redacted returned a body with unspecified content type|]
-            | code <- statusCode -> Left [fmt|Redacted returned an non-200 error code, code {code}: {resp & showPretty}|]
-      )
-
 runAppWith :: AppT IO a -> IO (Either TmpPg.StartError a)
 runAppWith appT = withTracer $ \tracer -> withDb $ \db -> do
   tool <- readTools (label @"toolsEnvVar" "WHATCD_RESOLVER_TOOLS") (readTool "pg_format")
@@ -848,6 +819,17 @@ runAppWith appT = withTracer $ \tracer -> withDb $ \db -> do
         logInfo [fmt|Connected to database at {db & TmpPg.toDataDirectory} on socket {db & TmpPg.toConnectionString}|]
         appT
   runReaderT newAppT.unAppT Context {..}
+    `catch` ( \case
+                AppExceptionPretty p -> throwM $ EscapedException (p & Pretty.prettyErrs)
+                AppExceptionTree t -> throwM $ EscapedException (t & prettyErrorTree & textToString)
+            )
+
+-- | Just a silly wrapper so that correctly format any 'AppException' that would escape the runAppWith scope.
+newtype EscapedException = EscapedException String
+  deriving anyclass (Exception)
+
+instance Show EscapedException where
+  show (EscapedException s) = s
 
 withTracer :: (Otel.Tracer -> IO c) -> IO c
 withTracer f = do

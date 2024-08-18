@@ -8,6 +8,7 @@ module Pretty
     printShowedStringPretty,
     -- constructors hidden
     prettyErrs,
+    prettyErrsNoColor,
     message,
     messageString,
     pretty,
@@ -19,6 +20,7 @@ where
 import Data.Aeson qualified as Json
 import Data.Aeson.Encode.Pretty qualified as Aeson.Pretty
 import Data.List qualified as List
+import Data.String (IsString (fromString))
 import Data.Text.Lazy.Builder qualified as Text.Builder
 import Language.Haskell.HsColour
   ( Output (TTYg),
@@ -62,7 +64,6 @@ showPrettyJson val =
     & toStrict
 
 -- | Display a list of 'Err's as a colored error message
--- and abort the test.
 prettyErrs :: [Err] -> String
 prettyErrs errs = res
   where
@@ -74,12 +75,24 @@ prettyErrs errs = res
     prettyShowString :: String -> String
     prettyShowString = hscolour' . nicify
 
+-- | Display a list of 'Err's as a plain-colored error message
+prettyErrsNoColor :: [Err] -> String
+prettyErrsNoColor errs = res
+  where
+    res = List.intercalate "\n" $ map one errs
+    one = \case
+      ErrMsg s -> s
+      ErrPrettyString s -> nicify s
+
 -- | Small DSL for pretty-printing errors
 data Err
   = -- | Message to display in the error
     ErrMsg String
   | -- | Pretty print a String that was produced by 'show'
     ErrPrettyString String
+
+instance IsString Err where
+  fromString s = ErrMsg s
 
 -- | Plain message to display, as 'Text'
 message :: Text -> Err
