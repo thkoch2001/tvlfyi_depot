@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c9dae539_9f03c764",
+        "filename": "tvix/castore/src/path/component.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-08-18T13:17:41Z",
+      "side": 1,
+      "message": "length is an integer, a `Copy` type, I feel like it\u0027s a completely different beast than owned complicated types such as strings.\n\nI would still prefer to have a length in `no_std` environment than nothing at all, is my reasoning, whereas I would prefer avoiding having a copy of the original buffer around in `no_std` environments.\n\nIt\u0027s your call, I feel like `Copy` types are sufficiently simple to warrant to keep that integer around.",
+      "parentUuid": "768cb1b1_ec8c52c5",
+      "revId": "ae31b63da4931386f7ca3c9217011cfdd837b56a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0adbb48_53198b6d",
         "filename": "tvix/castore/src/path/component.rs",
         "patchSetId": 5
