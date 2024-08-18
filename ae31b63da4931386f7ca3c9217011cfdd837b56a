@@ -72,6 +72,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8774bf08_11360b00",
+        "filename": "tvix/castore/src/path/component.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-18T13:37:11Z",
+      "side": 1,
+      "message": "`no_std` isn\u0027t really a concern here, `bytes::Bytes` (the inner type of the struct) is `no_std` as well. Making castore no_std compatible is an entirely orthogonal discussion, and once we\u0027re there and realize we want to add a length field and not pass back the bytes we tried to convert (whatever type they may be then), we can still do that.",
+      "parentUuid": "c9dae539_9f03c764",
+      "revId": "ae31b63da4931386f7ca3c9217011cfdd837b56a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d0adbb48_53198b6d",
