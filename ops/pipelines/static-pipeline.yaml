@@ -87,11 +87,14 @@ steps:
   - wait: null
     continue_on_failure: true
 
-  # Exit with success or failure depending on whether any other steps
-  # failed.
+  # Exit with success or failure depending on whether the build is in FAILING
+  # state or not.
   #
   # This information is checked by querying the Buildkite GraphQL API
-  # and fetching the count of failed steps.
+  # and checking the job status to be not FAILING.
+  #
+  # This previously did check the number of failed steps to be nonzero,
+  # but that doesn't work in case of retries.
   #
   # This step must be :duck: (yes, really!) because the post-command
   # hook will inspect this name.
@@ -106,15 +109,15 @@ steps:
     command: |
       set -ueo pipefail
 
-      readonly FAILED_JOBS=$(curl 'https://graphql.buildkite.com/v1' \
+      readonly BUILD_STATUS=$(curl 'https://graphql.buildkite.com/v1' \
         --silent \
         -H "Authorization: Bearer $(cat ${BUILDKITE_TOKEN_PATH})" \
-        -d "{\"query\": \"query BuildStatusQuery { build(uuid: \\\"$BUILDKITE_BUILD_ID\\\") { jobs(passed: false) { count } } }\"}" | \
-        jq -r '.data.build.jobs.count')
+        -d "{\"query\": \"query BuildStatusQuery { build(uuid: \\\"$BUILDKITE_BUILD_ID\\\") { state } }\"}" | \
+        jq -r '.data.build.state')
 
-      echo "$$FAILED_JOBS build jobs failed."
+      echo "Build status is $$BUILD_STATUS."
 
-      if (( $$FAILED_JOBS > 0 )); then
+      if (( $$BUILD_STATUS == "FAILING" )); then
         exit 1
       fi
 
