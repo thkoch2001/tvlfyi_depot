@@ -26,6 +26,10 @@ proc publishOk(turn: Turn; cap: Cap, v: Value) =
 proc publishError(turn: Turn; cap: Cap, v: Value) =
   publish(turn, cap, Error(message: v))
 
+proc unembedEntity(emb: EmbeddedRef; E: typedesc): Option[E] =
+  if emb of Cap and emb.Cap.target of E:
+    result = emb.Cap.target.E.some
+
 type
   StoreEntity {.final.} = ref object of Entity
     self: Cap
@@ -67,13 +71,13 @@ proc serve(entity: StoreEntity; turn: Turn; obs: Observe) =
         publish(turn, obs.observer.Cap, obs.pattern.capture(initRecord("version", %s)).get)
 
 method serve(entity: StoreEntity; turn: Turn; copy: CopyClosure) =
-  if not (copy.dest of StoreEntity):
-    publish(turn, copy.result.Cap,
-      Error(message: %"destination store is not colocated with source store"))
+  var dest = copy.dest.unembedEntity(StoreEntity)
+  if dest.isNone:
+    publishError(turn, copy.result.Cap, %"destination store is not colocated with source store")
   else:
     tryPublish(turn, copy.result.Cap):
-      entity.store.copyClosure(copy.dest.StoreEntity.store, copy.storePath)
-      publish(turn, copy.result.Cap, ResultOk())
+      entity.store.copyClosure(dest.get.store, copy.storePath)
+      publishOk(turn, copy.result.Cap, %true)
         # TODO: assert some stats or something.
 
 method publish(entity: StoreEntity; turn: Turn; a: AssertionRef; h: Handle) =
@@ -90,7 +94,8 @@ method publish(entity: StoreEntity; turn: Turn; a: AssertionRef; h: Handle) =
       copyClosure.result of Cap:
     entity.serve(turn, copyClosure)
   else:
-    echo "unhandled assertion ", a.value
+    when not defined(release):
+      echo "nix-store: unhandled assertion ", a.value
 
 type
   RepoEntity {.final.} = ref object of Entity
@@ -172,7 +177,7 @@ method publish(repo: RepoEntity; turn: Turn; a: AssertionRef; h: Handle) =
     serve(repo, turn, realise)
   else:
     when not defined(release):
-      echo "unhandled assertion ", a.value
+      echo "nix-repo: unhandled assertion ", a.value
 
 proc main() =
   initLibstore()

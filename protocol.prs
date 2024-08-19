@@ -40,9 +40,6 @@ CacheSpace = @cacheSpace { cache: #:any } / @absent { } .
 
 CheckStorePath = <check-path @path string @valid #:bool> .
 
-# Assertion. The store that this asserted to will copy the closure of @storePath to @destination. When the copy completes or fails a Result value is asserted to @result.
-CopyClosure = <copy-closure @dest #:any @storePath string @result #:Result>.
-
 # Represents a Nix derivation. The @value can be realised via @context.
 Derivation = <drv @value any @context any> .
 
@@ -50,6 +47,9 @@ Derivation = <drv @value any @context any> .
 Realise = <realise @value any @result #:Result> .
 
 Context = #:any .
+
+# Assertion. The store that this asserted to will copy the closure of @storePath to @destination. When the copy completes or fails a Result value is asserted to @result.
+CopyClosure = <copy-closure @dest #:any @storePath string @result #:Result>.
 
 AttrSet = {symbol: any ...:...} .
 

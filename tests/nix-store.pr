@@ -8,17 +8,30 @@ $trace
   ?- [ $log ! <log "nix-store" { "---": $any } > ]
 ]
 
-<require-service <service nix-store { uri: "auto" params: {} cache: $nix-cache }>>
+let ?default-detail = { uri: "auto" params: {} cache: $nix-cache }
+let ?test-detail = { label: "test-store" uri: "file:///tmp/nix-test-store" params: {} }
 
-? <service-object <service nix-store> <ok ?store>>
-$store
+<require-service <service nix-store $default-detail>>
+
+? <service-object <service nix-store $default-detail> <ok ?default-store>>
 [
-  ? ?any
+  $default-store ? ?any
   [ $log ! <log "store" { line: $any }> ]
 
-  let ?test-path = "/nix/store/c2nszmh6li1r2q5z0aiajlga1rdyqwha-alacritty-0.13.2"
-  <check-path
+  let ?test-path = "/nix/store/90lh6zcbhqbil42yhfkx29rlnflxbz9v-cowsay-3.7.0"
+  $default-store += <check-path
       $test-path
       <* $trace [ <rewrite ?result <path-check $test-path $result>> ]>
     >
+
+  <require-service <service nix-store $test-detail>>
+  ? <service-object <service nix-store $test-detail> <ok ?test-store>>
+  [
+    $default-store += <copy-closure
+        $test-store
+        $test-path
+        <* $trace [ <rewrite ?result <copy-closure$test-path $result>> ]>
+      >
+  ]
+
 ]
