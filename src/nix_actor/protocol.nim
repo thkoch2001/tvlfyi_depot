@@ -4,7 +4,7 @@ import
 
 type
   Error* {.preservesRecord: "error".} = object
-    `message`*: string
+    `message`*: Value
 
   RepoArgsKind* {.pure.} = enum
     `present`, `absent`
@@ -66,6 +66,20 @@ type
     `params`*: AttrSet
     `uri`*: string
 
+  ResultKind* {.pure.} = enum
+    `Error`, `ok`
+  ResultOk* {.preservesRecord: "ok".} = object
+    `value`*: Value
+
+  `Result`* {.preservesOr.} = object
+    case orKind*: ResultKind
+    of ResultKind.`Error`:
+        `error`*: Error
+
+    of ResultKind.`ok`:
+        `ok`*: ResultOk
+
+  
   CheckStorePath* {.preservesRecord: "check-path".} = object
     `path`*: string
     `valid`* {.preservesEmbedded.}: EmbeddedRef
@@ -77,6 +91,7 @@ proc `$`*(x: Error | RepoArgs | RepoResolveStep | AttrSet | RepoStore |
     RepoResolveDetail |
     Derivation |
     StoreResolveDetail |
+    Result |
     CheckStorePath |
     StoreResolveStep): string =
   `$`(toPreserves(x))
@@ -85,6 +100,7 @@ proc encode*(x: Error | RepoArgs | RepoResolveStep | AttrSet | RepoStore |
     RepoResolveDetail |
     Derivation |
     StoreResolveDetail |
+    Result |
     CheckStorePath |
     StoreResolveStep): seq[byte] =
   encode(toPreserves(x))

@@ -26,7 +26,7 @@ RepoArgs = @present { args: any } / @absent { } .
 RepoStore = @uri { store: string } / @cap { store: #:any } / @absent { } .
 
 # Common error type.
-Error = <error @message string>.
+Error = <error @message any>.
 
 # Represents a Nix derivation.
 # The @storePath can be realized as store object from @drvPath.
@@ -47,3 +47,6 @@ StoreResolveDetail = {
 CheckStorePath = <check-path @path string @valid #:bool> .
 
 AttrSet = {symbol: any ...:...} .
+
+# Value.
+Result = Error / <ok @value any>.

@@ -44,7 +44,7 @@ proc serve(entity: StoreEntity; turn: Turn; checkPath: CheckStorePath) =
     let v = entity.store.isValidPath(checkPath.path)
     publish(turn, checkPath.valid.Cap, initRecord("ok", %v))
   except CatchableError as err:
-    publish(turn, checkPath.valid.Cap, initRecord("error", %err.msg))
+    publish(turn, checkPath.valid.Cap, Error(message: %err.msg))
 
 proc serve(entity: StoreEntity; turn: Turn; obs: Observe) =
   let facet = turn.facet
