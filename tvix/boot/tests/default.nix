@@ -132,9 +132,7 @@ let
         exportReferencesGraph.closure = [ path ];
       });
 
-  systemFor = sys: (depot.ops.nixos.nixosFor sys).system;
-
-  testSystem = systemFor ({ modulesPath, pkgs, ... }: {
+  testSystem = (pkgs.nixos {
     # Set some options necessary to evaluate.
     boot.loader.systemd-boot.enable = true;
     # TODO: figure out how to disable this without causing eval to fail
@@ -154,7 +152,10 @@ let
 
     # Don't warn about stateVersion.
     system.stateVersion = "24.05";
-  });
+
+    # Speed-up evaluation and building.
+    documentation.enable = lib.mkForce false;
+  }).config.system.build.toplevel;
 
 in
 depot.nix.readTree.drvTargets
