@@ -2,16 +2,84 @@ use std::fmt::{self, Display};
 
 use data_encoding::BASE64;
 use serde::{Deserialize, Serialize};
+use smol_str::SmolStr;
 
 const SIGNATURE_LENGTH: usize = std::mem::size_of::<ed25519::SignatureBytes>();
 
 #[derive(Clone, Debug, Eq, PartialEq)]
-pub struct Signature<'a> {
+pub struct Signature {
+    name: SmolStr,
+    bytes: ed25519::SignatureBytes,
+}
+
+impl Signature {
+    pub fn new<S: AsRef<str>>(name: S, bytes: ed25519::SignatureBytes) -> Self {
+        Self {
+            name: name.as_ref().into(),
+            bytes,
+        }
+    }
+
+    pub fn parse(input: &str) -> Result<Self, Error> {
+        Ok(SignatureRef::parse(input)?.to_owned())
+    }
+
+    pub fn as_ref(&self) -> SignatureRef<'_> {
+        SignatureRef {
+            name: self.name.as_str(),
+            bytes: self.bytes,
+        }
+    }
+
+    pub fn name(&self) -> &str {
+        self.name.as_str()
+    }
+
+    pub fn bytes(&self) -> &ed25519::SignatureBytes {
+        &self.bytes
+    }
+
+    /// For a given fingerprint and ed25519 verifying key, ensure if the signature is valid.
+    pub fn verify(&self, fingerprint: &[u8], verifying_key: &ed25519_dalek::VerifyingKey) -> bool {
+        self.as_ref().verify(fingerprint, verifying_key)
+    }
+}
+impl<'de> Deserialize<'de> for Signature {
+    fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let str: &'de str = Deserialize::deserialize(deserializer)?;
+        Self::parse(str).map_err(|_| {
+            serde::de::Error::invalid_value(serde::de::Unexpected::Str(str), &"Signature")
+        })
+    }
+}
+
+impl<'a> Serialize for Signature {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        let string: String = self.to_string();
+
+        string.serialize(serializer)
+    }
+}
+
+impl Display for Signature {
+    fn fmt(&self, w: &mut fmt::Formatter) -> fmt::Result {
+        write!(w, "{}:{}", self.name, BASE64.encode(&self.bytes))
+    }
+}
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct SignatureRef<'a> {
     name: &'a str,
     bytes: ed25519::SignatureBytes,
 }
 
-impl<'a> Signature<'a> {
+impl<'a> SignatureRef<'a> {
     pub fn new(name: &'a str, bytes: ed25519::SignatureBytes) -> Self {
         Self { name, bytes }
     }
@@ -40,7 +108,14 @@ impl<'a> Signature<'a> {
             Err(_) => return Err(Error::DecodeError(input.to_string())),
         }
 
-        Ok(Signature { name, bytes })
+        Ok(Self { name, bytes })
+    }
+
+    fn to_owned(&self) -> Signature {
+        Signature {
+            name: self.name.into(),
+            bytes: self.bytes,
+        }
     }
 
     pub fn name(&self) -> &'a str {
@@ -59,7 +134,7 @@ impl<'a> Signature<'a> {
     }
 }
 
-impl<'de: 'a, 'a> Deserialize<'de> for Signature<'a> {
+impl<'de: 'a, 'a> Deserialize<'de> for SignatureRef<'a> {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
         D: serde::Deserializer<'de>,
@@ -71,7 +146,7 @@ impl<'de: 'a, 'a> Deserialize<'de> for Signature<'a> {
     }
 }
 
-impl<'a> Serialize for Signature<'a> {
+impl<'a> Serialize for SignatureRef<'a> {
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: serde::Serializer,
@@ -79,6 +154,12 @@ impl<'a> Serialize for Signature<'a> {
         let string: String = self.to_string();
 
         string.serialize(serializer)
+    }
+}
+
+impl Display for SignatureRef<'_> {
+    fn fmt(&self, w: &mut fmt::Formatter) -> fmt::Result {
+        write!(w, "{}:{}", self.name, BASE64.encode(&self.bytes))
     }
 }
 
@@ -94,12 +175,6 @@ pub enum Error {
     DecodeError(String),
 }
 
-impl Display for Signature<'_> {
-    fn fmt(&self, w: &mut fmt::Formatter) -> fmt::Result {
-        write!(w, "{}:{}", self.name, BASE64.encode(&self.bytes))
-    }
-}
-
 #[cfg(test)]
 mod test {
     use data_encoding::BASE64;
@@ -107,7 +182,7 @@ mod test {
     use hex_literal::hex;
     use lazy_static::lazy_static;
 
-    use super::Signature;
+    use super::SignatureRef;
     use rstest::rstest;
 
     const FINGERPRINT: &str = "1;/nix/store/syd87l2rxw8cbsxmxl853h0r6pdwhwjr-curl-7.82.0-bin;sha256:1b4sb93wp679q4zx9k1ignby1yna3z7c4c2ri3wphylbc2dwsys0;196040;/nix/store/0jqd0rlxzra1rs38rdxl43yh6rxchgc6-curl-7.82.0,/nix/store/6w8g7njm4mck5dmjxws0z1xnrxvl81xa-glibc-2.34-115,/nix/store/j5jxw3iy7bbz4a57fh9g2xm2gxmyal8h-zlib-1.2.12,/nix/store/yxvjs9drzsphm9pcf42a4byzj1kb9m7k-openssl-1.1.1n";
@@ -144,7 +219,7 @@ mod test {
         #[case] fp: &str,
         #[case] expect_valid: bool,
     ) {
-        let sig = Signature::parse(sig_str).expect("must parse");
+        let sig = SignatureRef::parse(sig_str).expect("must parse");
         assert_eq!(expect_valid, sig.verify(fp.as_bytes(), verifying_key));
     }
 
@@ -159,12 +234,12 @@ mod test {
         "u01BybwQhyI5H1bW1EIWXssMDhDDIvXOG5uh8Qzgdyjz6U1qg6DHhMAvXZOUStIj6X5t4/ufFgR8i3fjf0bMAw=="
     )]
     fn parse_fail(#[case] input: &'static str) {
-        Signature::parse(input).expect_err("must fail");
+        SignatureRef::parse(input).expect_err("must fail");
     }
 
     #[test]
     fn serialize_deserialize() {
-        let signature_actual = Signature {
+        let signature_actual = SignatureRef {
             name: "cache.nixos.org-1",
             bytes: hex!(
                 r#"4e c4 d3 6f 75 86 4d 92  a9 86 f6 1d 04 75 f0 a3
@@ -178,7 +253,7 @@ mod test {
         let serialized = serde_json::to_string(&signature_actual).expect("must serialize");
         assert_eq!(signature_str_json, &serialized);
 
-        let deserialized: Signature<'_> =
+        let deserialized: SignatureRef<'_> =
             serde_json::from_str(signature_str_json).expect("must deserialize");
         assert_eq!(&signature_actual, &deserialized);
     }
