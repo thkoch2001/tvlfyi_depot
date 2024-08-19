@@ -1,0 +1,31 @@
+#!/usr/bin/env -S syndicate-server --control --config
+
+let ?trace = dataspace
+$trace
+? ?any
+[
+  $log ! <log "nix-repo" { "+++": $any } >
+  ?- [ $log ! <log "nix-repo" { "---": $any } > ]
+]
+
+
+let ?detail = {
+    import: "<nixpkgs>"
+    lookupPath: [
+      "nixpkgs=/home/repo/nixpkgs/channel",
+    ]
+  }
+
+<run-service <service nix-repo $detail>>
+<require-service <service nix-repo $detail>>
+
+? <service-object <service nix-repo> <ok ?repo>>
+$repo
+[
+  ? { cowsay: { meta: { homepage: ?x } } } [
+    $log ! <log "nix-repo" {cowsay: $x }>
+  ]
+  ? { shapelib: { meta: { homepage: ?homepage } } } [
+    $log ! <log "nix-repo" { homepage: $homepage } >
+  ]
+]

@@ -1,0 +1,24 @@
+#!/usr/bin/env -S syndicate-server --config
+
+let ?trace = dataspace
+$trace
+? ?any
+[
+  $log ! <log "nix-store" { "+++": $any } >
+  ?- [ $log ! <log "nix-store" { "---": $any } > ]
+]
+
+# <require-service <service nix-store { uri: "auto" params: {} }>>
+
+? <service-object <service nix-store> <ok ?store>>
+$store
+[
+  ? ?any
+  [ $log ! <log "store" { line: $any }> ]
+
+  let ?test-path = "/nix/store/c2nszmh6li1r2q5z0aiajlga1rdyqwha-alacritty-0.13.2"
+  <check-path
+      $test-path
+      <* $trace [ <rewrite ?result <path-check $test-path $result>> ]>
+    >
+]
