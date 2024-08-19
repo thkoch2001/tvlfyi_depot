@@ -36,10 +36,9 @@ const _ASSERT_GSTRING_SIZE: () = assert!(
 );
 
 impl GermanString {
-    // Creates a new transient German String from the given bytes. Transient
-    // strings are destroyed when the object is destroyed. Persistent strings
-    // are not supported yet.
-    pub fn new_transient(bytes: &[u8]) -> GermanString {
+    /// Creates a new transient German String from the given slice, copying the
+    /// data in the process.
+    pub fn transient(bytes: &[u8]) -> GermanString {
         if bytes.len() > u32::MAX as usize {
             panic!("GermanString maximum length is {} bytes", u32::MAX);
         }
@@ -68,6 +67,35 @@ impl GermanString {
 
             large.prefix.copy_from_slice(&bytes[..4]);
 
+            GermanString(GSRepr { large })
+        }
+    }
+
+    /// Creates a new transient German String from the given owned bytes. Short
+    /// strings will be copied into the string representation, long strings will
+    /// be moved out of the given vector without additional allocations.
+    pub fn transient_from_owned(bytes: Vec<u8>) -> GermanString {
+        if bytes.len() > u32::MAX as usize {
+            panic!("GermanString maximum length is {} bytes", u32::MAX);
+        }
+
+        if bytes.len() <= 12 {
+            let mut s = GSSmall {
+                len: bytes.len() as u32,
+                data: [0u8; 12],
+            };
+
+            s.data[..bytes.len()].copy_from_slice(&bytes);
+            GermanString(GSRepr { small: s })
+        } else {
+            let mut md = std::mem::ManuallyDrop::new(bytes);
+            let mut large = GSLarge {
+                len: md.len() as u32,
+                prefix: [0u8; 4],
+                data: md.as_mut_ptr(),
+            };
+
+            large.prefix.copy_from_slice(&md[..4]);
             GermanString(GSRepr { large })
         }
     }
@@ -186,14 +214,14 @@ mod tests {
 
         fn arbitrary_with(args: Self::Parameters) -> Self::Strategy {
             any_with::<String>(args)
-                .prop_map(|s| GermanString::new_transient(s.as_bytes()))
+                .prop_map(|s| GermanString::transient(s.as_bytes()))
                 .boxed()
         }
     }
 
     #[test]
     fn test_empty_string() {
-        let empty = GermanString::new_transient(b"");
+        let empty = GermanString::transient(b"");
 
         assert_eq!(empty.len(), 0, "empty string should be empty");
         assert_eq!(empty.as_bytes(), b"", "empty string should contain nothing");
@@ -206,7 +234,7 @@ mod tests {
 
     #[test]
     fn test_short_string() {
-        let short = GermanString::new_transient(b"meow");
+        let short = GermanString::transient(b"meow");
 
         assert_eq!(short.len(), 4, "'meow' is four characters");
         assert_eq!(
@@ -224,7 +252,7 @@ mod tests {
     #[test]
     fn test_long_string() {
         let input: &str = "This code was written at https://signal.live";
-        let long = GermanString::new_transient(input.as_bytes());
+        let long = GermanString::transient(input.as_bytes());
 
         assert_eq!(long.len(), 44, "long string has correct length");
         assert_eq!(
@@ -243,7 +271,7 @@ mod tests {
     proptest! {
         #[test]
         fn test_roundtrip_vec(input: Vec<u8>) {
-            let gs = GermanString::new_transient(input.as_slice());
+            let gs = GermanString::transient_from_owned(input.clone());
             assert_eq!(input.len(), gs.len(), "length should match");
 
             let out = gs.as_bytes().to_owned();
@@ -252,7 +280,7 @@ mod tests {
 
         #[test]
         fn test_roundtrip_string(input: String) {
-            let gs = GermanString::new_transient(input.as_bytes());
+            let gs = GermanString::transient_from_owned(input.clone().into_bytes());
             assert_eq!(input.len(), gs.len(), "length should match");
 
             let out = String::from_utf8(gs.as_bytes().to_owned())
@@ -264,8 +292,8 @@ mod tests {
         // Test [`Eq`] implementation.
         #[test]
         fn test_eq(lhs: Vec<u8>, rhs: Vec<u8>) {
-            let lhs_gs = GermanString::new_transient(lhs.as_slice());
-            let rhs_gs = GermanString::new_transient(rhs.as_slice());
+            let lhs_gs = GermanString::transient(lhs.as_slice());
+            let rhs_gs = GermanString::transient(rhs.as_slice());
 
             assert_eq!(
                 (lhs == rhs),
