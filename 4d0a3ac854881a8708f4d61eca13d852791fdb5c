@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1ad160f9_c9f382ec",
+        "filename": "tvix/nix-compat/src/narinfo/signature.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-19T14:56:11Z",
+      "side": 1,
+      "message": "I might try another approach here, essentially generalizing on owned string containers. There\u0027s little reason this shouldn\u0027t work with both String and SmolStr.",
+      "revId": "4d0a3ac854881a8708f4d61eca13d852791fdb5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5f689ae1_49a7820c",
         "filename": "tvix/nix-compat/src/narinfo/signature.rs",
         "patchSetId": 2
@@ -48,6 +65,24 @@
       "writtenOn": "2024-08-19T14:41:30Z",
       "side": 1,
       "message": "`std::Borrow::ToOwned` no?",
+      "revId": "4d0a3ac854881a8708f4d61eca13d852791fdb5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "067ab5db_ed7130dd",
+        "filename": "tvix/nix-compat/src/narinfo/signature.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-19T14:56:11Z",
+      "side": 1,
+      "message": "won\u0027t work, for the same reasons as we implemented it like this in StorePathRef.",
+      "parentUuid": "79b28b7f_8a54abe9",
       "revId": "4d0a3ac854881a8708f4d61eca13d852791fdb5c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
