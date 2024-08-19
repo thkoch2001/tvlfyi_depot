@@ -10,11 +10,29 @@ struct GSSmall {
 }
 
 #[derive(Clone, Copy)]
+#[repr(transparent)]
+struct StorageClassPtr(usize);
+
+impl StorageClassPtr {
+    fn transient(ptr: *mut u8) -> Self {
+        debug_assert!(
+            (ptr as usize & 0b11) == 0,
+            "pointer must be at least 4-byte aligned"
+        );
+        Self(ptr as usize)
+    }
+
+    fn as_ptr(&self) -> *mut u8 {
+        (self.0 & !0b11) as *mut u8
+    }
+}
+
+#[derive(Clone, Copy)]
 #[repr(C)]
 struct GSLarge {
     len: u32,
     prefix: [u8; 4],
-    data: *mut u8,
+    data: StorageClassPtr,
 }
 
 const _ASSERT_VARIANTS_SIZE: () = assert!(
@@ -61,7 +79,7 @@ impl GermanString {
                         std::alloc::handle_alloc_error(layout);
                     }
                     std::ptr::copy_nonoverlapping(bytes.as_ptr(), ptr, bytes.len());
-                    ptr
+                    StorageClassPtr::transient(ptr)
                 },
             };
 
@@ -92,7 +110,7 @@ impl GermanString {
             let mut large = GSLarge {
                 len: md.len() as u32,
                 prefix: [0u8; 4],
-                data: md.as_mut_ptr(),
+                data: StorageClassPtr::transient(md.as_mut_ptr()),
             };
 
             large.prefix.copy_from_slice(&md[..4]);
@@ -108,7 +126,7 @@ impl GermanString {
 
     pub fn as_bytes(&self) -> &[u8] {
         if self.len() > 12 {
-            unsafe { std::slice::from_raw_parts(self.0.large.data, self.len()) }
+            unsafe { std::slice::from_raw_parts(self.0.large.data.as_ptr(), self.len()) }
         } else {
             unsafe { &self.0.small.data.as_ref()[..self.len()] }
         }
@@ -124,7 +142,7 @@ impl Drop for GermanString {
         if self.len() > 12 {
             let layout = Layout::array::<u8>(self.len()).unwrap();
             unsafe {
-                std::alloc::dealloc(self.0.large.data, layout);
+                std::alloc::dealloc(self.0.large.data.as_ptr(), layout);
             }
         }
     }
@@ -140,7 +158,7 @@ impl PartialEq for GermanString {
             if self.len() <= 12 {
                 return self.0.small.data[..self.len()] == other.0.small.data[..other.len()];
             }
-            return self.0.large.data == other.0.large.data
+            return self.0.large.data.as_ptr() == other.0.large.data.as_ptr()
                 || (self.0.large.prefix == other.0.large.prefix
                     && self.as_bytes() == other.as_bytes());
         }
