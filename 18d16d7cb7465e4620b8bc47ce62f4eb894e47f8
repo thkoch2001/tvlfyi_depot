@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "150faf98_ce229d14",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-08-19T10:53:28Z",
+      "side": 1,
+      "message": "I don\u0027t think this adds anything that `repr(u8)` doesn\u0027t already tell people?\n\nIn general, this brings us closer to what somebody might expect if they\u0027re familiar with other language implementations (i.e. what we were doing before was \"weird\", what we\u0027re doing now is more \"normal\").",
+      "parentUuid": "be570aaa_51f16588",
+      "revId": "18d16d7cb7465e4620b8bc47ce62f4eb894e47f8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "817c81a5_da7c11af",
         "filename": "tvix/eval/src/opcode.rs",
         "patchSetId": 9
@@ -31,6 +49,24 @@
       "writtenOn": "2024-08-19T10:38:32Z",
       "side": 1,
       "message": "Is there a reason this is renamed from `OpCode`? I\u0027d prefer `OpCode`, as it implies even stronger this is just encodes the operation, and no parameters for it.",
+      "revId": "18d16d7cb7465e4620b8bc47ce62f4eb894e47f8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a426fcd8_d061fb07",
+        "filename": "tvix/eval/src/opcode.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-08-19T10:53:28Z",
+      "side": 1,
+      "message": "Discussed on Telegram, marking as done. There are only Ops now.",
+      "parentUuid": "817c81a5_da7c11af",
       "revId": "18d16d7cb7465e4620b8bc47ce62f4eb894e47f8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
