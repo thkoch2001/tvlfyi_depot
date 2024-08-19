@@ -129,17 +129,12 @@ proc main() =
 
   runActor("main") do (turn: Turn):
     resolveEnvironment(turn) do (turn: Turn; relay: Cap):
+      let gk = spawnGatekeeper(turn, relay)
 
-      let resolveRepoPat = Resolve?:{ 0: RepoResolveStep.grabWithin, 1: grab() }
-      during(turn, relay, resolveRepoPat) do (detail: RepoResolveDetail; observer: Cap):
-        linkActor(turn, "nix-repo") do (turn: Turn):
-          let repo = newRepoEntity(turn, detail)
-          discard publish(turn, observer, ResolvedAccepted(responderSession: repo.self))
+      gk.serve do (turn: Turn; step: StoreResolveStep) -> Resolved:
+        newStoreEntity(turn, step.detail).self.resolveAccepted
 
-      let resolveStorePat = Resolve?:{ 0: StoreResolveStep.grabWithin, 1: grab() }
-      during(turn, relay, resolveStorePat) do (detail: StoreResolveDetail; observer: Cap):
-        linkActor(turn, "nix-store") do (turn: Turn):
-          let e = newStoreEntity(turn, detail)
-          discard publish(turn, observer, ResolvedAccepted(responderSession: e.self))
+      gk.serve do (turn: Turn; step: RepoResolveStep) -> Resolved:
+        newRepoEntity(turn, step.detail).self.resolveAccepted
 
 main()
