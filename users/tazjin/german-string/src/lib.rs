@@ -14,16 +14,32 @@ struct GSSmall {
 struct StorageClassPtr(usize);
 
 impl StorageClassPtr {
-    fn transient(ptr: *mut u8) -> Self {
+    fn transient(ptr: *const u8) -> Self {
         debug_assert!(
-            (ptr as usize & 0b11) == 0,
-            "pointer must be at least 4-byte aligned"
+            (ptr as usize & 0b1) == 0,
+            "pointer must be at least 2-byte aligned"
         );
         Self(ptr as usize)
     }
 
-    fn as_ptr(&self) -> *mut u8 {
-        (self.0 & !0b11) as *mut u8
+    fn persistent(ptr: *const u8) -> Self {
+        debug_assert!(
+            (ptr as usize & 0b1) == 0,
+            "pointer must be at least 2-byte aligned"
+        );
+        Self((ptr as usize) | 0b1)
+    }
+
+    fn as_ptr(&self) -> *const u8 {
+        (self.0 & !0b1) as *const u8
+    }
+
+    unsafe fn as_mut_ptr(&self) -> *mut u8 {
+        (self.0 & !0b1) as *mut u8
+    }
+
+    fn is_transient(&self) -> bool {
+        (self.0 & 0b1) == 0
     }
 }
 
@@ -118,6 +134,37 @@ impl GermanString {
         }
     }
 
+    /// Creates a persistent German String from a static data buffer.
+    pub fn persistent(bytes: &'static [u8]) -> GermanString {
+        if bytes.len() > u32::MAX as usize {
+            panic!("GermanString maximum length is {} bytes", u32::MAX);
+        }
+
+        if bytes.len() <= 12 {
+            let mut s = GSSmall {
+                len: bytes.len() as u32,
+                data: [0u8; 12],
+            };
+
+            s.data[..bytes.len()].copy_from_slice(&bytes);
+            GermanString(GSRepr { small: s })
+        } else {
+            let mut large = GSLarge {
+                len: bytes.len() as u32,
+                prefix: [0u8; 4],
+                data: StorageClassPtr::persistent(bytes.as_ptr()),
+            };
+
+            large.prefix.copy_from_slice(&bytes[..4]);
+            GermanString(GSRepr { large })
+        }
+    }
+
+    /// Creates a persistent German String from a static data buffer.
+    pub fn persistent_from_str(s: &'static str) -> GermanString {
+        GermanString::persistent(s.as_bytes())
+    }
+
     pub fn len(&self) -> usize {
         // SAFETY: The length field is located in the same location for both
         // variants, reading it from either is safe.
@@ -139,10 +186,10 @@ impl GermanString {
 
 impl Drop for GermanString {
     fn drop(&mut self) {
-        if self.len() > 12 {
-            let layout = Layout::array::<u8>(self.len()).unwrap();
-            unsafe {
-                std::alloc::dealloc(self.0.large.data.as_ptr(), layout);
+        unsafe {
+            if self.len() > 12 && self.0.large.data.is_transient() {
+                let layout = Layout::array::<u8>(self.len()).unwrap();
+                std::alloc::dealloc(self.0.large.data.as_mut_ptr(), layout);
             }
         }
     }
