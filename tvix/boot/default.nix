@@ -1,13 +1,16 @@
-{ depot, pkgs, ... }:
+{ lib, pkgs, ... }:
 
 rec {
   # A binary that sets up /nix/store from virtiofs, lists all store paths, and
   # powers off the machine.
-  tvix-init = depot.nix.buildGo.program {
+  tvix-init = pkgs.buildGoModule rec {
     name = "tvix-init";
-    srcs = [
-      ./tvix-init.go
-    ];
+    src = lib.fileset.toSource {
+      root = ./.;
+      fileset = ./tvix-init.go;
+    };
+    vendorHash = null;
+    postPatch = "go mod init ${name}";
   };
 
   # A kernel with virtiofs support baked in
