@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "922156ae_84b3ae59",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-08-19T20:10:12Z",
+      "side": 1,
+      "message": "PTAL again @flokli@flokli.de dear",
+      "revId": "a0b844ae7132d8480627d0951f5bfcc5cd21cc58",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a7962d60_669273a5",
@@ -14,6 +31,24 @@
       "writtenOn": "2024-08-19T20:03:13Z",
       "side": 1,
       "message": "This means you should fail if the passed path component is not utf8. Otherwise asking for `foo\u003cinvalid-bytes\u003e/bar` is gonna shortcut you to `foo/bar` silently, which is NOT what we want.\n\nEither make it an error or consider it to be not found.",
+      "revId": "a0b844ae7132d8480627d0951f5bfcc5cd21cc58",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ea02aed_3cdef342",
+        "filename": "tvix/nix-compat/src/nar/listing/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-08-19T20:10:12Z",
+      "side": 1,
+      "message": "correct, I made it an error.",
+      "parentUuid": "a7962d60_669273a5",
       "revId": "a0b844ae7132d8480627d0951f5bfcc5cd21cc58",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
