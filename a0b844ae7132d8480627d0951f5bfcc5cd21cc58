@@ -53,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bfd1ff1c_cac9de22",
+        "filename": "tvix/nix-compat/src/nar/listing/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-08-19T20:12:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8ea02aed_3cdef342",
+      "revId": "a0b844ae7132d8480627d0951f5bfcc5cd21cc58",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "efbe2f49_d39c177a",
@@ -66,6 +84,24 @@
       "writtenOn": "2024-08-19T20:05:32Z",
       "side": 1,
       "message": "could have a case asking for `nix-support` (the directory), to check that behaviour.",
+      "revId": "a0b844ae7132d8480627d0951f5bfcc5cd21cc58",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f23eb1b3_f97ee2c2",
+        "filename": "tvix/nix-compat/src/nar/listing/test.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-08-19T20:12:41Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "efbe2f49_d39c177a",
       "revId": "a0b844ae7132d8480627d0951f5bfcc5cd21cc58",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
