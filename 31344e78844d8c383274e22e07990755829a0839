@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8924764b_3d9337a2",
+        "filename": "tools/depotfmt.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-19T17:50:36Z",
+      "side": 1,
+      "message": "this then doesn\u0027t need depot here anymore, no?",
+      "revId": "31344e78844d8c383274e22e07990755829a0839",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
