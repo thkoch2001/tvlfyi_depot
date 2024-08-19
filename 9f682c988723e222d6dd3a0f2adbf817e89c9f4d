@@ -34,6 +34,24 @@
       "parentUuid": "9295824f_24949c38",
       "revId": "9f682c988723e222d6dd3a0f2adbf817e89c9f4d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a69ddef_d90d852b",
+        "filename": "tvix/eval/src/io.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-19T10:27:28Z",
+      "side": 1,
+      "message": "We didn\u0027t talk about abusing file_type or not.\n\nI\u0027d feel much more comfortable having cl/12188 use file_type to tickle that store path, rather than introducing a new operation for now.",
+      "parentUuid": "0c5d592a_ce5482c0",
+      "revId": "9f682c988723e222d6dd3a0f2adbf817e89c9f4d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
