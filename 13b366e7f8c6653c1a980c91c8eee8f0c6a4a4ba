@@ -16,6 +16,24 @@
       "message": "same-all bug in older nix versions...",
       "revId": "13b366e7f8c6653c1a980c91c8eee8f0c6a4a4ba",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f160aa04_9d1cd2a2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-19T13:56:58Z",
+      "side": 1,
+      "message": "Went with lib.sourceByRegex until our CI\u0027s nix version is updated.",
+      "parentUuid": "7c1d8d44_1f4b2c5e",
+      "revId": "13b366e7f8c6653c1a980c91c8eee8f0c6a4a4ba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
