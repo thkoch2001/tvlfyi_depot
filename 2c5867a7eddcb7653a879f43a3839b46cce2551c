@@ -140,6 +140,24 @@
       "parentUuid": "40c6b597_305b7e15",
       "revId": "2c5867a7eddcb7653a879f43a3839b46cce2551c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "195a2eb6_63a2d6cd",
+        "filename": "tvix/nix-compat/src/nar/listing/test.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-08-19T18:20:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20577505_5829d9aa",
+      "revId": "2c5867a7eddcb7653a879f43a3839b46cce2551c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
