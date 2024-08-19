@@ -1,16 +1,15 @@
-{ depot, pkgs, ... }:
+{ depot, lib, pkgs, ... }:
 let
-  protos = depot.nix.sparseTree {
-    name = "store-protos";
+  protos = lib.fileset.toSource {
     root = depot.path.origSrc;
-    paths = [
+    fileset = (lib.fileset.unions [
       # We need to include castore.proto (only), as it's referred.
       ../../castore/protos/castore.proto
       ./pathinfo.proto
       ./rpc_pathinfo.proto
       ../../../buf.yaml
       ../../../buf.gen.yaml
-    ];
+    ]);
   };
 in
 depot.nix.readTree.drvTargets {
