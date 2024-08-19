@@ -1,17 +1,20 @@
-{ depot, pkgs, ... }:
+<<<<<<< Updated upstream
+{ depot, lib, pkgs, ... }:
+=======
+{ depot, pkgs, lib, ... }:
+>>>>>>> Stashed changes
 let
-  protos = depot.nix.sparseTree {
-    name = "store-protos";
-    root = depot.path.origSrc;
-    paths = [
-      # We need to include castore.proto (only), as it's referred.
-      ../../castore/protos/castore.proto
-      ./pathinfo.proto
-      ./rpc_pathinfo.proto
-      ../../../buf.yaml
-      ../../../buf.gen.yaml
-    ];
-  };
+  protos = lib.sourceByRegex depot.path.origSrc [
+    "buf.yaml"
+    "buf.gen.yaml"
+    # We need to include castore.proto (only), as it's referred.
+<<<<<<< Updated upstream
+    "tvix/.*/(castore|pathinfo|rpc_pathinfo)\.proto"
+=======
+    "^tvix(/castore(/protos(/castore\.proto)?)?)?$"
+    "^tvix(/store(/protos(/.*\.proto)?)?)?$"
+>>>>>>> Stashed changes
+  ];
 in
 depot.nix.readTree.drvTargets {
   inherit protos;
