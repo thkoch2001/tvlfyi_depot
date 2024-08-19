@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8e0537d9_09fea201",
+        "filename": "tvix/nix-compat/src/nar/listing/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-08-19T08:54:51Z",
+      "side": 1,
+      "message": "We should probably also mark that enum with `#[non_exhaustive]`, so that we can add future versions without hard compat breaks.",
+      "parentUuid": "7ae5a086_944a3d6e",
+      "revId": "2c5867a7eddcb7653a879f43a3839b46cce2551c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "40c6b597_305b7e15",
         "filename": "tvix/nix-compat/src/nar/listing/test.rs",
         "patchSetId": 1
