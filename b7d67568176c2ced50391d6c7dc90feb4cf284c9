@@ -1,0 +1,197 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b8ff11db_8eb1d3ea",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-19T19:29:35Z",
+      "side": 1,
+      "message": "I\u0027d add a `.` afterwards and start a new sentence.",
+      "revId": "b7d67568176c2ced50391d6c7dc90feb4cf284c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bdbf6242_4af9af78",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-19T19:29:35Z",
+      "side": 1,
+      "message": "you allow `.` in the code below. Maybe just say `relative paths with no \"..\" components`?",
+      "revId": "b7d67568176c2ced50391d6c7dc90feb4cf284c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a4e361e1_ae6fd49a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-19T19:29:35Z",
+      "side": 1,
+      "message": "s/extended/added/",
+      "revId": "b7d67568176c2ced50391d6c7dc90feb4cf284c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "afacf6e9_af1dfaac",
+        "filename": "tvix/nix-compat/src/nar/listing/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-19T19:29:35Z",
+      "side": 1,
+      "message": "I\u0027d probably just say\n\n```suggestion\n    #[error(\"unsupported path component encountered\")]\n```\n\nand make the rest a docstring on the error.",
+      "revId": "b7d67568176c2ced50391d6c7dc90feb4cf284c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "410c3928_2ce474d9",
+        "filename": "tvix/nix-compat/src/nar/listing/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-19T19:29:35Z",
+      "side": 1,
+      "message": "This is a Vec\u003cu8\u003e, see comment below.",
+      "revId": "b7d67568176c2ced50391d6c7dc90feb4cf284c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d04cf6ab_86bf0624",
+        "filename": "tvix/nix-compat/src/nar/listing/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-19T19:29:35Z",
+      "side": 1,
+      "message": "Symlink targets can be non-strings.\n\nI didn\u0027t verify symlink targets to appear in the wild, but I\u0027ve definitely seen filenames in JIS encoding. So let\u0027s make this a Vec\u003cu8\u003e, and ensure at least our deserialization correctly ingests them?",
+      "revId": "b7d67568176c2ced50391d6c7dc90feb4cf284c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2412395_c53c3bee",
+        "filename": "tvix/nix-compat/src/nar/listing/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 50,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-19T19:29:35Z",
+      "side": 1,
+      "message": "```suggestion\n        // while rejecting invalid components, e.g. `..` or `/`\n```\n\nAdd a docstring to `locate` stating that only relative paths, and no `..` in the components are allowed.",
+      "revId": "b7d67568176c2ced50391d6c7dc90feb4cf284c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4077a6df_7c86b871",
+        "filename": "tvix/nix-compat/src/nar/listing/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-19T19:29:35Z",
+      "side": 1,
+      "message": "stray debug leftover",
+      "revId": "b7d67568176c2ced50391d6c7dc90feb4cf284c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1af98b78_69654f43",
+        "filename": "tvix/nix-compat/src/nar/listing/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-19T19:29:35Z",
+      "side": 1,
+      "message": "```suggestion\n                Component::RootDir | Component::Prefix(_) | Component::ParentDir \u003d\u003e return Err(ListingError::UnsupportedPathComponent),\n```",
+      "range": {
+        "startLine": 57,
+        "startChar": 16,
+        "endLine": 59,
+        "endChar": 91
+      },
+      "revId": "b7d67568176c2ced50391d6c7dc90feb4cf284c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26e9c885_5b613693",
+        "filename": "tvix/nix-compat/src/nar/listing/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-19T19:29:35Z",
+      "side": 1,
+      "message": "The lossy doesn\u0027t seem correct - path components can be invalid UTF8.\n\nThis will look different once you change the hashmap key.",
+      "revId": "b7d67568176c2ced50391d6c7dc90feb4cf284c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4a55e7d8_2cc9e9b5",
+        "filename": "tvix/nix-compat/src/nar/listing/test.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-19T19:29:35Z",
+      "side": 1,
+      "message": "```suggestion\n    // gated on windows as C:\\\\ is parsed as `Component::Normal(_)` on linux\n    #[cfg(target_os \u003d \"windows\")]\n```",
+      "revId": "b7d67568176c2ced50391d6c7dc90feb4cf284c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
