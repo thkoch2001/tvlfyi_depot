@@ -1,16 +1,10 @@
-{ depot, pkgs, ... }:
+{ depot, lib, pkgs, ... }:
 let
-  protos = depot.nix.sparseTree {
-    name = "castore-protos";
-    root = depot.path.origSrc;
-    paths = [
-      ./castore.proto
-      ./rpc_blobstore.proto
-      ./rpc_directory.proto
-      ../../../buf.yaml
-      ../../../buf.gen.yaml
-    ];
-  };
+  protos = lib.sourceByRegex depot.path.origSrc [
+    "buf.yaml"
+    "buf.gen.yaml"
+    "tvix/.*/(castore|rpc_blobstore|rpc_directory)\.proto"
+  ];
 in
 depot.nix.readTree.drvTargets {
   inherit protos;
