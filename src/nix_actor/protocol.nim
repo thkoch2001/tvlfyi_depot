@@ -84,6 +84,11 @@ type
     `path`*: string
     `valid`* {.preservesEmbedded.}: EmbeddedRef
 
+  CopyClosure* {.preservesRecord: "copy-closure".} = object
+    `dest`* {.preservesEmbedded.}: EmbeddedRef
+    `storePath`*: string
+    `result`* {.preservesEmbedded.}: EmbeddedRef
+
   StoreResolveStep* {.preservesRecord: "nix-store".} = object
     `detail`*: StoreResolveDetail
 
@@ -93,6 +98,7 @@ proc `$`*(x: Error | RepoArgs | RepoResolveStep | AttrSet | RepoStore |
     StoreResolveDetail |
     Result |
     CheckStorePath |
+    CopyClosure |
     StoreResolveStep): string =
   `$`(toPreserves(x))
 
@@ -102,5 +108,6 @@ proc encode*(x: Error | RepoArgs | RepoResolveStep | AttrSet | RepoStore |
     StoreResolveDetail |
     Result |
     CheckStorePath |
+    CopyClosure |
     StoreResolveStep): seq[byte] =
   encode(toPreserves(x))

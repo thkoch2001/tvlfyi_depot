@@ -70,6 +70,15 @@ proc isValidPath*(store: Store; path: string): bool =
     defer: store_path_free(sp)
     result = nix.store_is_valid_path(store, sp)
 
+proc copyClosure*(src, dst: Store; path: string) =
+  assert path != ""
+  mitNix:
+    let sp = nix.store_parse_path(src, path)
+    if sp.isNil:
+      raise newException(CatchableError, "store_parse_path failed")
+    defer: store_path_free(sp)
+    nix.store_copy_closure(src, dst, sp)
+
 proc newState*(store: Store; lookupPath: openarray[string]): EvalState =
   mitNix:
     var path = allocCStringArray(lookupPath)

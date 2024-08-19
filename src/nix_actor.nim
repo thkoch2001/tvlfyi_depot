@@ -57,15 +57,31 @@ proc serve(entity: StoreEntity; turn: Turn; obs: Observe) =
       facet.run do (turn: Turn):
         publish(turn, obs.observer.Cap, obs.pattern.capture(initRecord("version", %s)).get)
 
+method serve(entity: StoreEntity; turn: Turn; copy: CopyClosure) =
+  if not (copy.dest of StoreEntity):
+    publish(turn, copy.result.Cap,
+      Error(message: %"destination store is not colocated with source store"))
+  else:
+    try:
+      entity.store.copyClosure(copy.dest.StoreEntity.store, copy.storePath)
+      publish(turn, copy.result.Cap, ResultOk())
+        # TODO: assert some stats or something.
+    except CatchableError as err:
+      publish(turn, copy.result.Cap, Error(message: %err.msg))
+
 method publish(entity: StoreEntity; turn: Turn; a: AssertionRef; h: Handle) =
   var
     # orc doesn't handle this as a union object
     observe: Observe
     checkPath: CheckStorePath
+    copyClosure: CopyClosure
   if checkPath.fromPreserves(a.value):
     entity.serve(turn, checkPath)
   elif observe.fromPreserves(a.value):
     entity.serve(turn, observe)
+  elif copyClosure.fromPreserves(a.value) and
+      copyClosure.result of Cap:
+    entity.serve(turn, copyClosure)
   else:
     echo "unhandled assertion ", a.value
 
