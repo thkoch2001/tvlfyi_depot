@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0f946b5_3486feed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-08-19T19:45:12Z",
+      "side": 1,
+      "message": "This is blocked on figuring out what the fuck Nix/Hydra does with invalid UTF-8 names.",
+      "revId": "c11ab905c6f1e9b271feef9ff2c86b05a26e65c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
