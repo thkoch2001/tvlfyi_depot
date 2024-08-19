@@ -289,6 +289,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "594e2693_53c2aa63",
+        "filename": "tvix/eval/src/compiler/mod.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 280,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-08-19T08:42:12Z",
+      "side": 1,
+      "message": "The reason these code paths exist is because we\u0027re traversing code that is known to be dead (to emit additional warnings in there). We can probably skip doing that completely - I\u0027ll do that in a separate CL.",
+      "parentUuid": "31c892b5_2bef16c2",
+      "revId": "c690d7893cdc5d16e6e48d0c1c04463e0f8e4fe6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f9fb3e55_eb3f4145",
