@@ -363,6 +363,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d14778a8_47465278",
+        "filename": "tvix/nix-compat/src/nar/listing/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-08-19T19:59:16Z",
+      "side": 1,
+      "message": "We concluded this is impossible for the time being, Lix may track this as a bug later on.",
+      "parentUuid": "3bb20eb2_0fe282fe",
+      "revId": "b7d67568176c2ced50391d6c7dc90feb4cf284c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4a55e7d8_2cc9e9b5",
