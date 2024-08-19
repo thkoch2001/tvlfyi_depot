@@ -17,12 +17,13 @@ RepoResolveDetail = {
   #  ]
   lookupPath: [string ...]
 
-  # Store URI selector, use "auto" unless you know exactly what you need.
-  store: string
-} & @args RepoArgs .
+} & @args RepoArgs & @store RepoStore .
 
 # Arguments to call the imported expression with if it is a function.
-RepoArgs = @present { args: any } / @absent {} .
+RepoArgs = @present { args: any } / @absent { } .
+
+# Store uri or capability.
+RepoStore = @uri { store: string } / @cap { store: #:any } / @absent { } .
 
 # Common error type.
 Error = <error @message string>.

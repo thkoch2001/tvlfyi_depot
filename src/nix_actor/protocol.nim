@@ -26,15 +26,37 @@ type
     `detail`*: RepoResolveDetail
 
   AttrSet* = Table[Symbol, Value]
+  RepoStoreKind* {.pure.} = enum
+    `uri`, `cap`, `absent`
+  RepoStoreUri* {.preservesDictionary.} = object
+    `store`*: string
+
+  RepoStoreCap* {.preservesDictionary.} = object
+    `store`* {.preservesEmbedded.}: EmbeddedRef
+
+  RepoStoreAbsent* {.preservesDictionary.} = object
+  
+  `RepoStore`* {.preservesOr.} = object
+    case orKind*: RepoStoreKind
+    of RepoStoreKind.`uri`:
+        `uri`*: RepoStoreUri
+
+    of RepoStoreKind.`cap`:
+        `cap`* {.preservesEmbedded.}: RepoStoreCap
+
+    of RepoStoreKind.`absent`:
+        `absent`*: RepoStoreAbsent
+
+  
   RepoResolveDetailArgs* = Option[Value]
   RepoResolveDetailImport* = string
   RepoResolveDetailLookupPath* = seq[string]
-  RepoResolveDetailStore* = string
+  RepoResolveDetailStore* = Option[Value]
   `RepoResolveDetail`* {.preservesDictionary.} = object
     `args`*: Option[Value]
     `import`*: string
     `lookupPath`*: seq[string]
-    `store`*: string
+    `store`*: Option[Value]
 
   Derivation* {.preservesRecord: "drv".} = object
     `drvPath`*: string
@@ -51,14 +73,16 @@ type
   StoreResolveStep* {.preservesRecord: "nix-store".} = object
     `detail`*: StoreResolveDetail
 
-proc `$`*(x: Error | RepoArgs | RepoResolveStep | AttrSet | RepoResolveDetail |
+proc `$`*(x: Error | RepoArgs | RepoResolveStep | AttrSet | RepoStore |
+    RepoResolveDetail |
     Derivation |
     StoreResolveDetail |
     CheckStorePath |
     StoreResolveStep): string =
   `$`(toPreserves(x))
 
-proc encode*(x: Error | RepoArgs | RepoResolveStep | AttrSet | RepoResolveDetail |
+proc encode*(x: Error | RepoArgs | RepoResolveStep | AttrSet | RepoStore |
+    RepoResolveDetail |
     Derivation |
     StoreResolveDetail |
     CheckStorePath |
