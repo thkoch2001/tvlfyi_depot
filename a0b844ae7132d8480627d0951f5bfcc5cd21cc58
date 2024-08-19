@@ -16,6 +16,23 @@
       "message": "This means you should fail if the passed path component is not utf8. Otherwise asking for `foo\u003cinvalid-bytes\u003e/bar` is gonna shortcut you to `foo/bar` silently, which is NOT what we want.\n\nEither make it an error or consider it to be not found.",
       "revId": "a0b844ae7132d8480627d0951f5bfcc5cd21cc58",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "efbe2f49_d39c177a",
+        "filename": "tvix/nix-compat/src/nar/listing/test.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-19T20:05:32Z",
+      "side": 1,
+      "message": "could have a case asking for `nix-support` (the directory), to check that behaviour.",
+      "revId": "a0b844ae7132d8480627d0951f5bfcc5cd21cc58",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
