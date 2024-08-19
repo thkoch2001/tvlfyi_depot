@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4dc13663_b4b893f6",
+        "filename": "web/tvixbolt/default.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-19T19:36:15Z",
+      "side": 1,
+      "message": "why this?",
+      "revId": "a60a08762944a3253ac2f0de7c5338c30bd16502",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
