@@ -283,6 +283,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bb572635_9c8cadd5",
+        "filename": "tvix/nix-compat/src/nar/listing/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-19T20:03:13Z",
+      "side": 1,
+      "message": "Not done",
+      "parentUuid": "dfba2eff_d76083c8",
+      "revId": "b7d67568176c2ced50391d6c7dc90feb4cf284c9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "1af98b78_69654f43",
         "filename": "tvix/nix-compat/src/nar/listing/mod.rs",
         "patchSetId": 1
