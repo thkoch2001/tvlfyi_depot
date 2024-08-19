@@ -16,6 +16,24 @@
       "message": "I opted to use `\u0026S` here and not `\u0026str` for now. It makes it slightly more annoying for the `SignatureRef` case, as that\u0027s a \u0026\u0026str and need another `*` when comparing, but it preserves whatever type the user chose, so maybe a good thing, and it\u0027s not that these additional `*` are gonna hurt us ;-)",
       "revId": "574295f5229100305c104200976d51e769ce5841",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc95bb75_860cd388",
+        "filename": "tvix/nix-compat/src/narinfo/signature.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-08-19T19:32:47Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "723d1555_bd24ea96",
+      "revId": "574295f5229100305c104200976d51e769ce5841",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
