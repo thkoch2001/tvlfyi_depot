@@ -1,6 +1,6 @@
 # Builds treefmt for depot, with a hardcoded configuration that
 # includes the right paths to formatters.
-{ depot, pkgs, ... }:
+{ pkgs, ... }:
 
 let
   # terraform fmt can't handle multiple paths at once, but treefmt
@@ -11,7 +11,7 @@ let
 
   config = pkgs.writeText "depot-treefmt-config" ''
     [formatter.go]
-    command = "${depot.nix.buildGo.go}/bin/gofmt"
+    command = "${pkgs.go}/bin/gofmt"
     options = [ "-w" ]
     includes = ["*.go"]
 
