@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a744064_4f2e8cdb",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-08-19T20:51:07Z",
+      "side": 1,
+      "message": "The source code looks kinda good to me, but I\u0027d appreciate if I could see a rendering of this for the review.",
+      "revId": "12f27ea320fcc85df8b6c284bfbc9ffe827bd9c2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
