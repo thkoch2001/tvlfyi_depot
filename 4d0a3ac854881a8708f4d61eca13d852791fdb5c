@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0cb9425_af2cc812",
+        "filename": "tvix/nix-compat/src/narinfo/signature.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-19T19:14:33Z",
+      "side": 1,
+      "message": "Went with a `S: Deref\u003cTarget \u003d str\u003e` as type parameter for `Signature`, which works for both `SmolStr` and `String`, and `\u0026str` too! So no need for separate struct and a lot of redundant code!\n\nThis avoids pulling in `smol_str` as a regular dependency for nix-compat.\n\nI added a test, too.",
+      "parentUuid": "1ad160f9_c9f382ec",
+      "revId": "4d0a3ac854881a8708f4d61eca13d852791fdb5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f689ae1_49a7820c",
@@ -48,6 +66,24 @@
       "writtenOn": "2024-08-19T14:41:30Z",
       "side": 1,
       "message": "shouldn\u0027t you forward display to the reference version?",
+      "revId": "4d0a3ac854881a8708f4d61eca13d852791fdb5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "abe6df78_6e9f0ef3",
+        "filename": "tvix/nix-compat/src/narinfo/signature.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-19T19:14:33Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5f689ae1_49a7820c",
       "revId": "4d0a3ac854881a8708f4d61eca13d852791fdb5c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -83,6 +119,24 @@
       "side": 1,
       "message": "won\u0027t work, for the same reasons as we implemented it like this in StorePathRef.",
       "parentUuid": "79b28b7f_8a54abe9",
+      "revId": "4d0a3ac854881a8708f4d61eca13d852791fdb5c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bce8366_b260e469",
+        "filename": "tvix/nix-compat/src/narinfo/signature.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-19T19:14:33Z",
+      "side": 1,
+      "message": "Resolved",
+      "parentUuid": "067ab5db_ed7130dd",
       "revId": "4d0a3ac854881a8708f4d61eca13d852791fdb5c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
