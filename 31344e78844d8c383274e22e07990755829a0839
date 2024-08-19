@@ -16,6 +16,24 @@
       "message": "this then doesn\u0027t need depot here anymore, no?",
       "revId": "31344e78844d8c383274e22e07990755829a0839",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73a591df_49ae60ee",
+        "filename": "tools/depotfmt.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-19T20:24:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8924764b_3d9337a2",
+      "revId": "31344e78844d8c383274e22e07990755829a0839",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
