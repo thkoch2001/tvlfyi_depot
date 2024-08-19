@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7c1d8d44_1f4b2c5e",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-19T12:16:46Z",
+      "side": 1,
+      "message": "same-all bug in older nix versions...",
+      "revId": "13b366e7f8c6653c1a980c91c8eee8f0c6a4a4ba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
