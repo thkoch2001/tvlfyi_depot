@@ -21,10 +21,5 @@
     percentageAction = 3;
   };
 
-  services.libinput = {
-    touchpad = {
-      naturalScrolling = true;
-      disableWhileTyping = true;
-    };
-  };
+  services.libinput.touchpad.naturalScrolling = true;
 }
