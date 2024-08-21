@@ -1,0 +1,45 @@
+// SPDX-License-Identifier: MIT
+// Copyright © 2022 The Tvix Authors
+syntax = "proto3";
+
+package tvix.castore.v1;
+
+option go_package = "code.tvl.fyi/tvix/castore-go;castorev1";
+
+service ChunkService {
+  // Stat can be used to check for the existence of a chunk.
+  rpc Stat(StatChunkRequest) returns (StatChunkResponse);
+
+  // Read allows reading (all) data of a chunk by the BLAKE3 digest of
+  // its contents.
+  rpc Read(ReadChunkRequest) returns (stream ChunkData);
+
+  // Put uploads a Chunk, by reading a stream of bytes.
+  //
+  // The way the data is chunked up in individual ChunkData messages sent in
+  // the stream has no effect on how the chunk is stored on the server.
+  // The uploaded chunk is constituted from all the individual ChunkData
+  // messages that were received.
+  rpc Put(stream ChunkData) returns (PutChunkResponse);
+}
+
+message ChunkData {
+  bytes data = 1;
+}
+
+message StatChunkRequest {
+  // The blake3 digest of the chunk requested.
+  bytes digest = 1;
+}
+
+message StatChunkResponse {}
+
+message ReadChunkRequest {
+  // The blake3 digest of the chunk requested.
+  bytes digest = 1;
+}
+
+message PutChunkResponse {
+  // The blake3 digest of the data that was sent.
+  bytes digest = 1;
+}

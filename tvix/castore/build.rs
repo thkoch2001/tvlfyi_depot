@@ -22,6 +22,7 @@ fn main() -> Result<()> {
             &[
                 "tvix/castore/protos/castore.proto",
                 "tvix/castore/protos/rpc_blobstore.proto",
+                "tvix/castore/protos/rpc_chunkstore.proto",
                 "tvix/castore/protos/rpc_directory.proto",
             ],
             // If we are in running `cargo build` manually, using `../..` works fine,
