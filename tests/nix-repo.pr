@@ -8,15 +8,14 @@ $trace
   ?- [ $log ! <log "nix-repo" { "---": $any } > ]
 ]
 
-
 let ?detail = {
+    # store: $store
+    cache: $nix-cache
     import: "<nixpkgs>"
     lookupPath: [
-      "nixpkgs=/home/repo/nixpkgs/channel",
+      "nixpkgs=/home/repo/nixpkgs/channel"
     ]
   }
-
-<run-service <service nix-repo $detail>>
 <require-service <service nix-repo $detail>>
 
 ? <service-object <service nix-repo> <ok ?repo>>

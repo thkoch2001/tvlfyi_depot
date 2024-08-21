@@ -17,7 +17,7 @@ RepoResolveDetail = {
   #  ]
   lookupPath: [string ...]
 
-} & @args RepoArgs & @store RepoStore .
+} & @args RepoArgs & @store RepoStore & @cacheSpace CacheSpace .
 
 # Arguments to call the imported expression with if it is a function.
 RepoArgs = @present { args: any } / @absent { } .
@@ -42,7 +42,10 @@ StoreResolveStep = <nix-store @detail StoreResolveDetail> .
 StoreResolveDetail = {
   params: AttrSet
   uri: string
-} .
+} & @cacheSpace CacheSpace .
+
+# A cooperative caching dataspace shared with other Nix stores.
+CacheSpace = @cacheSpace { cache: #:any } / @absent { } .
 
 CheckStorePath = <check-path @path string @valid #:bool> .
 

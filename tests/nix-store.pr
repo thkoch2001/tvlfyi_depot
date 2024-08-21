@@ -8,7 +8,7 @@ $trace
   ?- [ $log ! <log "nix-store" { "---": $any } > ]
 ]
 
-# <require-service <service nix-store { uri: "auto" params: {} }>>
+<require-service <service nix-store { uri: "auto" params: {} cache: $nix-cache }>>
 
 ? <service-object <service nix-store> <ok ?store>>
 $store

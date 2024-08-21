@@ -11,10 +11,13 @@ $nix-actor
 <require-service <relay-listener <unix "/tmp/nix-actor.socket"> $gatekeeper>>
 <bind <ref { oid: nix-actor key: #x"" }> $nix-actor #f>
 
+let ?nix-cache = dataspace
+
 @"Load test behavior."
-<require-service <config-watcher "./tests" $.>>
+<require-service <config-watcher "./tests" { config: $config log: $log nix-cache: $nix-cache }>>
 
 @"Service instantiation."
+<nix-provide-service nix-repo>
 <nix-provide-service nix-store>
 
 ? <nix-provide-service ?label>
@@ -30,13 +33,4 @@ $nix-actor
     $log ! <log "nix-actor" { line: "require-service request" label: $label }>
     $nix-actor <resolve <$label $detail> $result>
   ]
-]
-
-? <run-service <service nix-repo ?detail>>
-[
-    let ?result = <* $config [ <or [
-        <rewrite <accepted ?body> <service-object <service nix-repo $detail>    <ok $body>>>
-        <rewrite <rejected ?body> <service-object <service nix-repo $detail> <error $body>>>
-      ]> ]>
-  $nix-actor <resolve <nix-repo $detail> $result>
 ]

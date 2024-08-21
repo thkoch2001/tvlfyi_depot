@@ -54,6 +54,7 @@ type
   RepoResolveDetailStore* = Option[Value]
   `RepoResolveDetail`* {.preservesDictionary.} = object
     `args`*: Option[Value]
+    `cache`*: Option[EmbeddedRef]
     `import`*: string
     `lookupPath`*: seq[string]
     `store`*: Option[Value]
@@ -62,7 +63,10 @@ type
     `drvPath`*: string
     `storePath`*: string
 
-  StoreResolveDetail* {.preservesDictionary.} = object
+  StoreResolveDetailCache* = Option[EmbeddedRef]
+  StoreResolveDetailUri* = string
+  `StoreResolveDetail`* {.preservesDictionary.} = object
+    `cache`*: Option[EmbeddedRef]
     `params`*: AttrSet
     `uri`*: string
 
@@ -89,6 +93,22 @@ type
     `storePath`*: string
     `result`* {.preservesEmbedded.}: EmbeddedRef
 
+  CacheSpaceKind* {.pure.} = enum
+    `cacheSpace`, `absent`
+  CacheSpaceCacheSpace* {.preservesDictionary.} = object
+    `cache`* {.preservesEmbedded.}: EmbeddedRef
+
+  CacheSpaceAbsent* {.preservesDictionary.} = object
+  
+  `CacheSpace`* {.preservesOr.} = object
+    case orKind*: CacheSpaceKind
+    of CacheSpaceKind.`cacheSpace`:
+        `cachespace`* {.preservesEmbedded.}: CacheSpaceCacheSpace
+
+    of CacheSpaceKind.`absent`:
+        `absent`*: CacheSpaceAbsent
+
+  
   StoreResolveStep* {.preservesRecord: "nix-store".} = object
     `detail`*: StoreResolveDetail
 
@@ -99,6 +119,7 @@ proc `$`*(x: Error | RepoArgs | RepoResolveStep | AttrSet | RepoStore |
     Result |
     CheckStorePath |
     CopyClosure |
+    CacheSpace |
     StoreResolveStep): string =
   `$`(toPreserves(x))
 
@@ -109,5 +130,6 @@ proc encode*(x: Error | RepoArgs | RepoResolveStep | AttrSet | RepoStore |
     Result |
     CheckStorePath |
     CopyClosure |
+    CacheSpace |
     StoreResolveStep): seq[byte] =
   encode(toPreserves(x))
