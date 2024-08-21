@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "12957e21_d2cadb25",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-21T14:46:26Z",
+      "side": 1,
+      "message": "I\u0027m a bit surprised we need separate protos for this.\n\nI\u0027d assumed the existing BlobService can be reused for this - we only need the split on the trait level, not on the gRPC one, and the GRPCBlobServiceWrapper could take handles to both BlobService and Chunkservice to provide the surface.\n\nBut let\u0027s see how the rest of the chain looks like.",
+      "revId": "a6b1b670f98e1acd65b099551891b4ad6c570754",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
