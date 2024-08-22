@@ -122,11 +122,11 @@ impl GermanString {
             s.data[..bytes.len()].copy_from_slice(&bytes);
             GermanString(GSRepr { small: s })
         } else {
-            let mut md = std::mem::ManuallyDrop::new(bytes);
+            let md = std::mem::ManuallyDrop::new(bytes);
             let mut large = GSLarge {
                 len: md.len() as u32,
                 prefix: [0u8; 4],
-                data: StorageClassPtr::transient(md.as_mut_ptr()),
+                data: StorageClassPtr::transient(md.as_ptr()),
             };
 
             large.prefix.copy_from_slice(&md[..4]);
@@ -156,6 +156,33 @@ impl GermanString {
             };
 
             large.prefix.copy_from_slice(&bytes[..4]);
+            GermanString(GSRepr { large })
+        }
+    }
+
+    /// Creates a persistent German String by leaking the provided data.
+    pub fn persistent_leak(bytes: Vec<u8>) -> GermanString {
+        if bytes.len() > u32::MAX as usize {
+            panic!("GermanString maximum length is {} bytes", u32::MAX);
+        }
+
+        if bytes.len() <= 12 {
+            let mut s = GSSmall {
+                len: bytes.len() as u32,
+                data: [0u8; 12],
+            };
+
+            s.data[..bytes.len()].copy_from_slice(&bytes);
+            GermanString(GSRepr { small: s })
+        } else {
+            let md = std::mem::ManuallyDrop::new(bytes);
+            let mut large = GSLarge {
+                len: md.len() as u32,
+                prefix: [0u8; 4],
+                data: StorageClassPtr::persistent(md.as_ptr()),
+            };
+
+            large.prefix.copy_from_slice(&md[..4]);
             GermanString(GSRepr { large })
         }
     }
