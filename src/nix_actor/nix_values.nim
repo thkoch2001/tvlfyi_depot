@@ -4,11 +4,15 @@
 import
   std/options,
   pkg/preserves,
-  ./[nix_api, nix_api_util, nix_api_value, utils]
+  pkg/syndicate/actors,
+  ./[nix_api, nix_api_util, nix_api_value, protocol, utils]
 
 type
   Value = preserves.Value
   NixValue* = nix_api.Value
+  NixValueRef* {.final.} = ref object of Entity
+    value*: NixValue
+
   StringThunkRef = ref StringThunkObj
   StringThunkObj = object of EmbeddedObj
     data: Option[string]
@@ -21,14 +25,31 @@ proc thunkString(start: cstring; n: cuint; state: pointer) {.cdecl.} =
     copyMem(buf[0].addr, start, buf.len)
   thunk.data = buf.move.some
 
-proc unthunk*(v: Value): Value =
+proc unthunk(v: Value): Value =
   let thunk = v.unembed(StringThunkRef)
-  assert thunk.isSome
-  assert thunk.get.data.isSome
-  thunk.get.data.get.toPreserves
+  result =
+    if thunk.isSome and thunk.get.data.isSome:
+      thunk.get.data.get.toPreserves
+    else: v
 
-proc unthunkAll*(v: Value): Value =
+proc unthunkAll(v: Value): Value =
   v.mapEmbeds(unthunk)
+
+proc exportNix*(facet: Facet; v: Value): Value =
+  proc op(v: Value): Value =
+    result =
+      if v.kind != pkEmbedded: v
+      else:
+        if v.embeddedRef of StringThunkRef:
+          var thunk = v.embeddedRef.StringThunkRef
+          if thunk.data.isSome:
+            thunk.data.get.toPreserves
+          else: v
+        elif v.embeddedRef of NixValueRef:
+          facet.newCap(v.embeddedRef.NixValueRef).embed
+        else:
+          v
+  v.mapEmbeds(op)
 
 proc callThru(state: EvalState; nv: NixValue): NixValue =
   result = nv
@@ -76,7 +97,11 @@ proc toPreserves*(state: EvalState; value: NixValue; nix: NixContext): Value {.g
         str = state.apply(str, value)
       result = state.toPreserves(str, nix)
     elif nix.has_attr_byname(value, state, "outPath"):
-      result = state.toPreserves(nix.get_attr_byname(value, state, "outPath"), nix)
+      var outPath = nix.get_attr_byname(value, state, "outPath")
+      result = Derivation(
+          value: state.toPreserves(outPath, nix),
+          context: NixValueRef(value: value).embed,
+        ).toPreserves
     else:
       let n = nix.getAttrsSize(value)
       result = initDictionary(int n)
@@ -123,11 +148,13 @@ proc translate*(nix: NixContext; state: EvalState; pr: preserves.Value): NixValu
       if pr.isRecord("null", 0):
         nix.init_null(result)
       elif pr.isRecord("drv", 2):
-        let b = nix.make_bindings_builder(state, 2)
-        defer: bindings_builder_free(b)
-        nix.bindings_builder_insert(b, "drvPath", nix.translate(state, pr.fields[0]))
-        nix.bindings_builder_insert(b, "outPath", nix.translate(state, pr.fields[1]))
-        nix.make_attrs(result, b)
+        var drv: Derivation
+        if not drv.fromPreserves(pr):
+          raise newException(ValueError, "invalid derivation: " & $pr)
+        var nixValRef = drv.context.unembed(NixValueRef)
+        if not nixValRef.isSome:
+          raise newException(ValueError, "invalid Nix context: " & $drv.context)
+        result = nixValRef.get.value
       else:
         raise newException(ValueError, "cannot convert Preserves record to Nix: " & $pr)
     of pkSequence, pkSet:
@@ -186,3 +213,13 @@ proc step*(state: EvalState; nv: NixValue; path: openarray[preserves.Value]): Op
         raiseAssert("cannot step " & $kind)
         return
   result = state.toPreserves(nv).some
+
+proc realise*(nix: NixContext; state: EvalState; val: NixValue): Value =
+  result = "".toPreserves
+  var rs = nix.string_realise(state, val, false)
+  result.string = newString(realised_string_get_buffer_size(rs))
+  copyMem(result.string[0].addr, realised_string_get_buffer_start(rs), result.string.len)
+  realised_string_free(rs)
+
+proc realise*(state: EvalState; val: NixValue): Value =
+  mitNix: result = nix.realise(state, val)

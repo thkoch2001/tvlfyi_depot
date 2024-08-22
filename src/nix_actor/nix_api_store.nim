@@ -2,6 +2,8 @@
 
 import ./nix_api_types
 
+{.passL: "-L/home/repo/nix/src/libstore-c".}
+
 {.pragma: nix_api_store, header: "nix_api_store.h", importc: "nix_$1".}
 
 proc libstore_init*(context: NixContext): nix_err {.nix_api_store, discardable.}

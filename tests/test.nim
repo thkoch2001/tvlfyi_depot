@@ -5,6 +5,7 @@ import
   std/[unittest],
   pkg/balls,
   pkg/preserves,
+  pkg/syndicate,
   ../src/nix_actor/[nix_api, nix_values, protocol]
 
 suite "libexpr":
@@ -15,12 +16,14 @@ suite "libexpr":
     state = newState(store, [])
 
   proc checkConversion(s: string) =
-    var nixVal = state.evalFromString(s, "")
-    state.force(nixVal)
-    nixVal.close()
-    var pr = state.toPreserves(nixVal)
-    pr = pr.unthunkAll
-    echo pr
+    runActor("checkConversion") do (turn: Turn):
+      var nixVal = state.evalFromString(s, "")
+      state.force(nixVal)
+      nixVal.close()
+      var pr = state.toPreserves(nixVal)
+      checkpoint pr
+      var wirePr = turn.facet.exportNix(pr)
+      checkpoint wirePr
 
   test "lists":
     let samples = [

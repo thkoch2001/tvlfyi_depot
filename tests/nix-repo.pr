@@ -21,8 +21,9 @@ let ?detail = {
 ? <service-object <service nix-repo> <ok ?repo>>
 $repo
 [
-  ? { cowsay: { meta: { homepage: ?x } } } [
-    $log ! <log "nix-repo" {cowsay: $x }>
+  ? { cowsay: ?pkg } [
+    $log ! <log "nix-repo" {cowsay: $pkg }>
+    <realise $pkg <* $trace [ <rewrite ?x <realise-cowsay $x>> ]>>
   ]
   ? { shapelib: { meta: { homepage: ?homepage } } } [
     $log ! <log "nix-repo" { homepage: $homepage } >

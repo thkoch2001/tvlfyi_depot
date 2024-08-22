@@ -28,15 +28,6 @@ RepoStore = @uri { store: string } / @cap { store: #:any } / @absent { } .
 # Common error type.
 Error = <error @message any>.
 
-# Represents a Nix derivation.
-# The @storePath can be realized as store object from @drvPath.
-#
-# If an attrset value resulting from evaluation has a "drvPath" attribute
-# then a drv record is returned in place of the attrset. Returning the
-# attrset is not feasible because otherwise lazy values would explode into
-# complete dependency trees.
-Derivation = <drv @drvPath string @storePath string> .
-
 # Gatekeeper step to access a Nix store.
 StoreResolveStep = <nix-store @detail StoreResolveDetail> .
 StoreResolveDetail = {
@@ -51,6 +42,14 @@ CheckStorePath = <check-path @path string @valid #:bool> .
 
 # Assertion. The store that this asserted to will copy the closure of @storePath to @destination. When the copy completes or fails a Result value is asserted to @result.
 CopyClosure = <copy-closure @dest #:any @storePath string @result #:Result>.
+
+# Represents a Nix derivation. The @value can be realised via @context.
+Derivation = <drv @value any @context any> .
+
+# Assertion.
+Realise = <realise @value any @result #:Result> .
+
+Context = #:any .
 
 AttrSet = {symbol: any ...:...} .
 

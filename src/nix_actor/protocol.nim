@@ -26,6 +26,10 @@ type
     `detail`*: RepoResolveDetail
 
   AttrSet* = Table[Symbol, Value]
+  Realise* {.preservesRecord: "realise".} = object
+    `value`*: Value
+    `result`* {.preservesEmbedded.}: EmbeddedRef
+
   RepoStoreKind* {.pure.} = enum
     `uri`, `cap`, `absent`
   RepoStoreUri* {.preservesDictionary.} = object
@@ -49,6 +53,7 @@ type
 
   
   RepoResolveDetailArgs* = Option[Value]
+  RepoResolveDetailCache* = Option[EmbeddedRef]
   RepoResolveDetailImport* = string
   RepoResolveDetailLookupPath* = seq[string]
   RepoResolveDetailStore* = Option[Value]
@@ -60,8 +65,8 @@ type
     `store`*: Option[Value]
 
   Derivation* {.preservesRecord: "drv".} = object
-    `drvPath`*: string
-    `storePath`*: string
+    `value`*: Value
+    `context`*: Value
 
   StoreResolveDetailCache* = Option[EmbeddedRef]
   StoreResolveDetailUri* = string
@@ -84,6 +89,7 @@ type
         `ok`*: ResultOk
 
   
+  Context* = EmbeddedRef
   CheckStorePath* {.preservesRecord: "check-path".} = object
     `path`*: string
     `valid`* {.preservesEmbedded.}: EmbeddedRef
@@ -112,22 +118,25 @@ type
   StoreResolveStep* {.preservesRecord: "nix-store".} = object
     `detail`*: StoreResolveDetail
 
-proc `$`*(x: Error | RepoArgs | RepoResolveStep | AttrSet | RepoStore |
+proc `$`*(x: Error | RepoArgs | RepoResolveStep | AttrSet | Realise | RepoStore |
     RepoResolveDetail |
     Derivation |
     StoreResolveDetail |
     Result |
+    Context |
     CheckStorePath |
     CopyClosure |
     CacheSpace |
     StoreResolveStep): string =
   `$`(toPreserves(x))
 
-proc encode*(x: Error | RepoArgs | RepoResolveStep | AttrSet | RepoStore |
+proc encode*(x: Error | RepoArgs | RepoResolveStep | AttrSet | Realise |
+    RepoStore |
     RepoResolveDetail |
     Derivation |
     StoreResolveDetail |
     Result |
+    Context |
     CheckStorePath |
     CopyClosure |
     CacheSpace |
