@@ -26,7 +26,7 @@ fn bench_aterm_parser(c: &mut Criterion) {
         let drv_bytes = &std::fs::read(drv_path).unwrap();
 
         c.bench_function(drv, |b| {
-            b.iter(|| Derivation::from_aterm_bytes(black_box(drv_bytes)))
+            b.iter(|| Derivation::from_aterm_bytes(black_box(drv_bytes)));
         });
     }
 }

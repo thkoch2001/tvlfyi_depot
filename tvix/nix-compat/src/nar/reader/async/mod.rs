@@ -36,10 +36,10 @@ pub enum Node<'a, 'r: 'a> {
 }
 
 impl<'a, 'r: 'a> Node<'a, 'r> {
-    /// Start reading a [Node], matching the next [wire::Node].
+    /// Start reading a [Node], matching the next [`wire::Node`].
     ///
-    /// Reading the terminating [wire::TOK_PAR] is done immediately for [Node::Symlink],
-    /// but is otherwise left to [DirReader] or [BytesReader].
+    /// Reading the terminating [`wire::TOK_PAR`] is done immediately for [`Node::Symlink`],
+    /// but is otherwise left to [`DirReader`] or [`BytesReader`].
     async fn new(reader: &'a mut Reader<'r>) -> io::Result<Self> {
         Ok(match read::tag(reader).await? {
             nar::wire::Node::Sym => {
@@ -64,7 +64,7 @@ impl<'a, 'r: 'a> Node<'a, 'r> {
     }
 }
 
-/// File contents, readable through the [AsyncRead] trait.
+/// File contents, readable through the [`AsyncRead`] trait.
 ///
 /// It comes with some caveats:
 ///  * You must always read the entire file, unless you intend to abandon the entire archive reader.
@@ -76,10 +76,12 @@ pub struct FileReader<'a, 'r> {
 }
 
 impl<'a, 'r> FileReader<'a, 'r> {
+    #[must_use]
     pub fn is_empty(&self) -> bool {
         self.len() == 0
     }
 
+    #[must_use]
     pub fn len(&self) -> u64 {
         self.inner.len()
     }
@@ -101,12 +103,12 @@ impl<'a, 'r> AsyncBufRead for FileReader<'a, 'r> {
     }
 
     fn consume(self: Pin<&mut Self>, amt: usize) {
-        Pin::new(&mut self.get_mut().inner).consume(amt)
+        Pin::new(&mut self.get_mut().inner).consume(amt);
     }
 }
 
 /// A directory iterator, yielding a sequence of [Node]s.
-/// It must be fully consumed before reading further from the [DirReader] that produced it, if any.
+/// It must be fully consumed before reading further from the [`DirReader`] that produced it, if any.
 pub struct DirReader<'a, 'r> {
     reader: &'a mut Reader<'r>,
     /// Previous directory entry name.
@@ -143,6 +145,7 @@ impl<'a, 'r> DirReader<'a, 'r> {
             read::token(self.reader, &nar::wire::TOK_PAR).await?;
         }
 
+        #[allow(clippy::equatable_if_let)]
         if let nar::wire::Entry::None = read::tag(self.reader).await? {
             return Ok(None);
         }

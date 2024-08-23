@@ -43,7 +43,7 @@ pub enum Error {
     MissingStoreDir,
 }
 
-/// Represents a path in the Nix store (a direct child of [STORE_DIR]).
+/// Represents a path in the Nix store (a direct child of [`STORE_DIR`]).
 ///
 /// It consists of a digest (20 bytes), and a name, which is a string.
 /// The name may only contain ASCII alphanumeric, or one of the following
@@ -52,7 +52,7 @@ pub enum Error {
 /// Derivation paths can also be represented as store paths, their names just
 /// end with the `.drv` prefix.
 ///
-/// A [StorePath] does not encode any additional subpath "inside" the store
+/// A [`StorePath`] does not encode any additional subpath "inside" the store
 /// path.
 #[derive(Clone, Debug, PartialEq, Eq, Hash)]
 pub struct StorePath<S>
@@ -62,8 +62,8 @@ where
     digest: [u8; DIGEST_SIZE],
     name: S,
 }
-/// Like [StorePath], but without a heap allocation for the name.
-/// Used by [StorePath] for parsing.
+/// Like [`StorePath`], but without a heap allocation for the name.
+/// Used by [`StorePath`] for parsing.
 pub type StorePathRef<'a> = StorePath<&'a str>;
 
 impl<S> StorePath<S>
@@ -92,8 +92,8 @@ where
         }
     }
 
-    /// Construct a [StorePath] by passing the `$digest-$name` string
-    /// that comes after [STORE_DIR_WITH_SLASH].
+    /// Construct a [`StorePath`] by passing the `$digest-$name` string
+    /// that comes after [`STORE_DIR_WITH_SLASH`].
     pub fn from_bytes<'a>(s: &'a [u8]) -> Result<Self, Error>
     where
         S: From<&'a str>,
@@ -104,7 +104,7 @@ where
         // - 1 dash
         // - 1 character for the name
         if s.len() < ENCODED_DIGEST_SIZE + 2 {
-            Err(Error::InvalidLength)?
+            Err(Error::InvalidLength)?;
         }
 
         let digest = nixbase32::decode_fixed(&s[..ENCODED_DIGEST_SIZE])?;
@@ -113,13 +113,13 @@ where
             return Err(Error::MissingDash);
         }
 
-        Ok(StorePath {
+        Ok(Self {
             digest,
             name: validate_name(&s[ENCODED_DIGEST_SIZE + 1..])?.into(),
         })
     }
 
-    /// Construct a [StorePathRef] from a name and digest.
+    /// Construct a [`StorePathRef`] from a name and digest.
     /// The name is validated, and the digest checked for size.
     pub fn from_name_and_digest<'a>(name: &'a str, digest: &[u8]) -> Result<Self, Error>
     where
@@ -129,7 +129,7 @@ where
         Self::from_name_and_digest_fixed(name, digest_fixed)
     }
 
-    /// Construct a [StorePathRef] from a name and digest of correct length.
+    /// Construct a [`StorePathRef`] from a name and digest of correct length.
     /// The name is validated.
     pub fn from_name_and_digest_fixed<'a>(
         name: &'a str,
@@ -144,9 +144,9 @@ where
         })
     }
 
-    /// Construct a [StorePathRef] from an absolute store path string.
-    /// This is equivalent to calling [StorePathRef::from_bytes], but stripping
-    /// the [STORE_DIR_WITH_SLASH] prefix before.
+    /// Construct a [`StorePathRef`] from an absolute store path string.
+    /// This is equivalent to calling [`StorePathRef::from_bytes`], but stripping
+    /// the [`STORE_DIR_WITH_SLASH`] prefix before.
     pub fn from_absolute_path<'a>(s: &'a [u8]) -> Result<Self, Error>
     where
         S: From<&'a str>,
@@ -157,7 +157,7 @@ where
         }
     }
 
-    /// Decompose a string into a [StorePath] and a [PathBuf] containing the
+    /// Decompose a string into a [`StorePath`] and a [`PathBuf`] containing the
     /// rest of the path, or an error.
     #[cfg(target_family = "unix")]
     pub fn from_absolute_path_full<'a>(s: &'a str) -> Result<(Self, &'a Path), Error>
@@ -174,7 +174,7 @@ where
                 // The first component of the rest must be parse-able as a [StorePath]
                 if let Some(first_component) = it.next() {
                     // convert first component to StorePath
-                    let store_path = StorePath::from_bytes(first_component.as_os_str().as_bytes())?;
+                    let store_path = Self::from_bytes(first_component.as_os_str().as_bytes())?;
 
                     // collect rest
                     let rest_buf = it.as_path();
@@ -189,12 +189,12 @@ where
 
     /// Returns an absolute store path string.
     /// That is just the string representation, prefixed with the store prefix
-    /// ([STORE_DIR_WITH_SLASH]),
+    /// ([`STORE_DIR_WITH_SLASH`]),
     pub fn to_absolute_path(&self) -> String
     where
         S: Display,
     {
-        format!("{}{}", STORE_DIR_WITH_SLASH, self)
+        format!("{STORE_DIR_WITH_SLASH}{self}")
     }
 }
 
@@ -221,10 +221,10 @@ where
 impl<'a, 'b: 'a> FromStr for StorePath<String> {
     type Err = Error;
 
-    /// Construct a [StorePath] by passing the `$digest-$name` string
-    /// that comes after [STORE_DIR_WITH_SLASH].
+    /// Construct a [`StorePath`] by passing the `$digest-$name` string
+    /// that comes after [`STORE_DIR_WITH_SLASH`].
     fn from_str(s: &str) -> Result<Self, Self::Err> {
-        StorePath::<String>::from_bytes(s.as_bytes())
+        Self::from_bytes(s.as_bytes())
     }
 }
 
@@ -244,7 +244,7 @@ where
                 &"store path prefix",
             )
         })?;
-        StorePath::from_bytes(stripped.as_bytes()).map_err(|_| {
+        Self::from_bytes(stripped.as_bytes()).map_err(|_| {
             serde::de::Error::invalid_value(serde::de::Unexpected::Str(string), &"StorePath")
         })
     }
@@ -263,7 +263,7 @@ where
     }
 }
 
-/// NAME_CHARS contains `true` for bytes that are valid in store path names.
+/// `NAME_CHARS` contains `true` for bytes that are valid in store path names.
 static NAME_CHARS: [bool; 256] = {
     let mut tbl = [false; 256];
     let mut c = 0;
@@ -281,7 +281,7 @@ static NAME_CHARS: [bool; 256] = {
     tbl
 };
 
-/// Checks a given &[u8] to match the restrictions for [StorePath::name], and
+/// Checks a given &[u8] to match the restrictions for [`StorePath::name`], and
 /// returns the name as string if successful.
 pub(crate) fn validate_name(s: &(impl AsRef<[u8]> + ?Sized)) -> Result<&str, Error> {
     let s = s.as_ref();
@@ -315,7 +315,7 @@ where
     S: fmt::Display + std::cmp::Eq,
 {
     /// The string representation of a store path starts with a digest (20
-    /// bytes), [crate::nixbase32]-encoded, followed by a `-`,
+    /// bytes), [`crate::nixbase32`]-encoded, followed by a `-`,
     /// and ends with the name.
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}-{}", nixbase32::encode(&self.digest), self.name)
@@ -335,8 +335,8 @@ mod tests {
     use serde::Deserialize;
 
     #[derive(Deserialize)]
-    /// An example struct, holding a StorePathRef.
-    /// Used to test deserializing StorePathRef.
+    /// An example struct, holding a `StorePathRef`.
+    /// Used to test deserializing `StorePathRef`.
     struct Container<'a> {
         #[serde(borrow)]
         store_path: StorePathRef<'a>,
@@ -354,7 +354,7 @@ mod tests {
         assert_eq!("net-tools-1.60_p20170221182432", *nixpath.name());
         assert_eq!(nixpath.digest, expected_digest);
 
-        assert_eq!(example_nix_path_str, nixpath.to_string())
+        assert_eq!(example_nix_path_str, nixpath.to_string());
     }
 
     #[test]

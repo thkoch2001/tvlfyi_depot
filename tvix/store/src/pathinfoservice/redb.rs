@@ -15,9 +15,9 @@ use tvix_castore::{
 
 const PATHINFO_TABLE: TableDefinition<[u8; 20], Vec<u8>> = TableDefinition::new("pathinfo");
 
-/// PathInfoService implementation using redb under the hood.
+/// `PathInfoService` implementation using redb under the hood.
 /// redb stores all of its data in a single file with a K/V pointing from a path's output hash to
-/// its corresponding protobuf-encoded PathInfo.
+/// its corresponding protobuf-encoded `PathInfo`.
 pub struct RedbPathInfoService {
     // We wrap db in an Arc to be able to move it into spawn_blocking,
     // as discussed in https://github.com/cberner/redb/issues/789
@@ -56,7 +56,7 @@ impl RedbPathInfoService {
 }
 
 /// Ensures all tables are present.
-/// Opens a write transaction and calls open_table on PATHINFO_TABLE, which will
+/// Opens a write transaction and calls `open_table` on `PATHINFO_TABLE`, which will
 /// create it if not present.
 fn create_schema(db: &redb::Database) -> Result<(), redb::Error> {
     let txn = db.begin_write()?;
@@ -159,7 +159,7 @@ impl PathInfoService for RedbPathInfoService {
 pub struct RedbPathInfoServiceConfig {
     is_temporary: bool,
     #[serde(default)]
-    /// required when is_temporary = false
+    /// required when `is_temporary` = false
     path: Option<PathBuf>,
 }
 
@@ -172,12 +172,12 @@ impl TryFrom<url::Url> for RedbPathInfoServiceConfig {
         }
 
         Ok(if url.path().is_empty() {
-            RedbPathInfoServiceConfig {
+            Self {
                 is_temporary: true,
                 path: None,
             }
         } else {
-            RedbPathInfoServiceConfig {
+            Self {
                 is_temporary: false,
                 path: Some(url.path().into()),
             }
@@ -194,22 +194,22 @@ impl ServiceBuilder for RedbPathInfoServiceConfig {
         _context: &CompositionContext,
     ) -> Result<Arc<dyn PathInfoService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
         match self {
-            RedbPathInfoServiceConfig {
+            Self {
                 is_temporary: true,
                 path: None,
             } => Ok(Arc::new(RedbPathInfoService::new_temporary()?)),
-            RedbPathInfoServiceConfig {
+            Self {
                 is_temporary: true,
                 path: Some(_),
             } => Err(
                 Error::StorageError("Temporary RedbPathInfoService can not have path".into())
                     .into(),
             ),
-            RedbPathInfoServiceConfig {
+            Self {
                 is_temporary: false,
                 path: None,
             } => Err(Error::StorageError("RedbPathInfoService is missing path".into()).into()),
-            RedbPathInfoServiceConfig {
+            Self {
                 is_temporary: false,
                 path: Some(path),
             } => Ok(Arc::new(RedbPathInfoService::new(path.to_owned()).await?)),

@@ -38,6 +38,7 @@ pub struct KnownPaths {
 
 impl KnownPaths {
     /// Fetch the opaque "hash derivation modulo" for a given derivation path.
+    #[must_use]
     pub fn get_hash_derivation_modulo(&self, drv_path: &StorePath<String>) -> Option<&[u8; 32]> {
         self.derivations
             .get(drv_path)
@@ -45,6 +46,7 @@ impl KnownPaths {
     }
 
     /// Return a reference to the Derivation for a given drv path.
+    #[must_use]
     pub fn get_drv_by_drvpath(&self, drv_path: &StorePath<String>) -> Option<&Derivation> {
         self.derivations
             .get(drv_path)
@@ -54,6 +56,7 @@ impl KnownPaths {
     /// Return the drv path of the derivation producing the passed output path.
     /// Note there can be multiple Derivations producing the same output path in
     /// flight; this function will only return one of them.
+    #[must_use]
     pub fn get_drv_path_for_output_path(
         &self,
         output_path: &StorePath<String>,
@@ -78,7 +81,7 @@ impl KnownPaths {
         // compute the hash derivation modulo
         let hash_derivation_modulo = drv.hash_derivation_modulo(|drv_path| {
             self.get_hash_derivation_modulo(&drv_path.to_owned())
-                .unwrap_or_else(|| panic!("{} not found", drv_path))
+                .unwrap_or_else(|| panic!("{drv_path} not found"))
                 .to_owned()
         });
 
@@ -127,6 +130,7 @@ impl KnownPaths {
 
     /// Return the name and fetch producing the passed output path.
     /// Note there can also be (multiple) Derivations producing the same output path.
+    #[must_use]
     pub fn get_fetch_for_output_path(
         &self,
         output_path: &StorePath<String>,

@@ -18,8 +18,10 @@ impl ToSpan for Span {
 
 impl ToSpan for rnix::TextRange {
     fn span_for(&self, file: &File) -> Span {
-        file.span
-            .subspan(u32::from(self.start()) as u64, u32::from(self.end()) as u64)
+        file.span.subspan(
+            u64::from(u32::from(self.start())),
+            u64::from(u32::from(self.end())),
+        )
     }
 }
 

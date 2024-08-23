@@ -6,6 +6,7 @@
 use rnix::ast::{self, AstToken, HasEntry};
 use serde::{ser::SerializeMap, Serialize, Serializer};
 
+#[must_use]
 pub fn pretty_print_expr(expr: &ast::Expr) -> String {
     serde_json::ser::to_string_pretty(&SerializeAST(expr))
         .expect("serializing AST should always succeed")

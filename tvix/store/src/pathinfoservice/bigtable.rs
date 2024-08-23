@@ -20,7 +20,7 @@ use tvix_castore::Error;
 /// https://cloud.google.com/bigtable/docs/schema-design#cells
 const CELL_SIZE_LIMIT: u64 = 10 * 1024 * 1024;
 
-/// Provides a [PathInfoService] implementation using
+/// Provides a [`PathInfoService`] implementation using
 /// [Bigtable](https://cloud.google.com/bigtable/docs/)
 /// as an underlying K/V store.
 ///
@@ -29,10 +29,10 @@ const CELL_SIZE_LIMIT: u64 = 10 * 1024 * 1024;
 /// The row key is the digest of the store path, in hexlower.
 /// Inside the row, we currently have a single column/cell, again using the
 /// hexlower store path digest.
-/// Its value is the PathInfo message, serialized in canonical protobuf.
+/// Its value is the `PathInfo` message, serialized in canonical protobuf.
 /// We currently only populate this column.
 ///
-/// Listing is ranging over all rows, and calculate_nar is returning a
+/// Listing is ranging over all rows, and `calculate_nar` is returning a
 /// "unimplemented" error.
 #[derive(Clone)]
 pub struct BigtablePathInfoService {
@@ -192,7 +192,7 @@ impl PathInfoService for BigtablePathInfoService {
         let mut response = client
             .read_rows(request)
             .await
-            .map_err(|e| Error::StorageError(format!("unable to read rows: {}", e)))?;
+            .map_err(|e| Error::StorageError(format!("unable to read rows: {e}")))?;
 
         if response.len() != 1 {
             if response.len() > 1 {
@@ -233,11 +233,11 @@ impl PathInfoService for BigtablePathInfoService {
 
         // Try to parse the value into a PathInfo message
         let path_info = proto::PathInfo::decode(Bytes::from(cell.value))
-            .map_err(|e| Error::StorageError(format!("unable to decode pathinfo proto: {}", e)))?;
+            .map_err(|e| Error::StorageError(format!("unable to decode pathinfo proto: {e}")))?;
 
         let store_path = path_info
             .validate()
-            .map_err(|e| Error::StorageError(format!("invalid PathInfo: {}", e)))?;
+            .map_err(|e| Error::StorageError(format!("invalid PathInfo: {e}")))?;
 
         if store_path.digest() != &digest {
             return Err(Error::StorageError("PathInfo has unexpected digest".into()));
@@ -250,7 +250,7 @@ impl PathInfoService for BigtablePathInfoService {
     async fn put(&self, path_info: PathInfo) -> Result<PathInfo, Error> {
         let store_path = path_info
             .validate()
-            .map_err(|e| Error::InvalidRequest(format!("pathinfo failed validation: {}", e)))?;
+            .map_err(|e| Error::InvalidRequest(format!("pathinfo failed validation: {e}")))?;
 
         let mut client = self.client.clone();
         let path_info_key = derive_pathinfo_key(store_path.digest());
@@ -290,10 +290,10 @@ impl PathInfoService for BigtablePathInfoService {
                 ],
             })
             .await
-            .map_err(|e| Error::StorageError(format!("unable to mutate rows: {}", e)))?;
+            .map_err(|e| Error::StorageError(format!("unable to mutate rows: {e}")))?;
 
         if resp.predicate_matched {
-            trace!("already existed")
+            trace!("already existed");
         }
 
         Ok(path_info)
@@ -318,7 +318,7 @@ impl PathInfoService for BigtablePathInfoService {
             let response = client
                 .read_rows(request)
                 .await
-                .map_err(|e| Error::StorageError(format!("unable to read rows: {}", e)))?;
+                .map_err(|e| Error::StorageError(format!("unable to read rows: {e}")))?;
 
             for (row_key, mut cells) in response {
                 let cell = cells
@@ -341,13 +341,13 @@ impl PathInfoService for BigtablePathInfoService {
 
                 // Try to parse the value into a PathInfo message.
                 let path_info = proto::PathInfo::decode(Bytes::from(cell.value))
-                    .map_err(|e| Error::StorageError(format!("unable to decode pathinfo proto: {}", e)))?;
+                    .map_err(|e| Error::StorageError(format!("unable to decode pathinfo proto: {e}")))?;
 
                 // Validate the containing PathInfo, ensure its StorePath digest
                 // matches row key.
                 let store_path = path_info
                     .validate()
-                    .map_err(|e| Error::StorageError(format!("invalid PathInfo: {}", e)))?;
+                    .map_err(|e| Error::StorageError(format!("invalid PathInfo: {e}")))?;
 
                 let exp_path_info_key = derive_pathinfo_key(store_path.digest());
 
@@ -368,7 +368,7 @@ impl PathInfoService for BigtablePathInfoService {
 /// This currently conflates both connect parameters and data model/client
 /// behaviour parameters.
 #[serde_as]
-#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
 pub struct BigtableParameters {
     project_id: String,
     instance_name: String,
@@ -389,6 +389,7 @@ pub struct BigtableParameters {
 
 impl BigtableParameters {
     #[cfg(test)]
+    #[must_use]
     pub fn default_for_tests() -> Self {
         Self {
             project_id: "project-1".into(),
@@ -442,8 +443,8 @@ impl TryFrom<url::Url> for BigtableParameters {
         url.query_pairs_mut()
             .append_pair("instance_name", &instance_name);
 
-        let params: BigtableParameters = serde_qs::from_str(url.query().unwrap_or_default())
-            .map_err(|e| Error::InvalidRequest(format!("failed to parse parameters: {}", e)))?;
+        let params: Self = serde_qs::from_str(url.query().unwrap_or_default())
+            .map_err(|e| Error::InvalidRequest(format!("failed to parse parameters: {e}")))?;
 
         Ok(params)
     }

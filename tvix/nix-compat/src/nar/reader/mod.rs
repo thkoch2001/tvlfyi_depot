@@ -68,10 +68,10 @@ pub enum Node<'a, 'r> {
 }
 
 impl<'a, 'r> Node<'a, 'r> {
-    /// Start reading a [Node], matching the next [wire::Node].
+    /// Start reading a [Node], matching the next [`wire::Node`].
     ///
-    /// Reading the terminating [wire::TOK_PAR] is done immediately for [Node::Symlink],
-    /// but is otherwise left to [DirReader] or [FileReader].
+    /// Reading the terminating [`wire::TOK_PAR`] is done immediately for [`Node::Symlink`],
+    /// but is otherwise left to [`DirReader`] or [`FileReader`].
     fn new(mut reader: ArchiveReader<'a, 'r>) -> io::Result<Self> {
         Ok(match read::tag(reader.inner)? {
             wire::Node::Sym => {
@@ -117,8 +117,8 @@ pub struct FileReader<'a, 'r> {
 }
 
 impl<'a, 'r> FileReader<'a, 'r> {
-    /// Instantiate a new reader, starting after [wire::TOK_REG] or [wire::TOK_EXE].
-    /// We handle the terminating [wire::TOK_PAR] on semantic EOF.
+    /// Instantiate a new reader, starting after [`wire::TOK_REG`] or [`wire::TOK_EXE`].
+    /// We handle the terminating [`wire::TOK_PAR`] on semantic EOF.
     fn new(mut reader: ArchiveReader<'a, 'r>, len: u64) -> io::Result<Self> {
         // For zero-length files, we have to read the terminating TOK_PAR
         // immediately, since FileReader::read may never be called; we've
@@ -135,19 +135,21 @@ impl<'a, 'r> FileReader<'a, 'r> {
         })
     }
 
+    #[must_use]
     pub fn is_empty(&self) -> bool {
         self.len == 0
     }
 
+    #[must_use]
     pub fn len(&self) -> u64 {
         self.len
     }
 }
 
 impl FileReader<'_, '_> {
-    /// Equivalent to [BufRead::fill_buf]
+    /// Equivalent to [`BufRead::fill_buf`]
     ///
-    /// We can't directly implement [BufRead], because [FileReader::consume] needs
+    /// We can't directly implement [`BufRead`], because [`FileReader::consume`] needs
     /// to perform fallible I/O.
     pub fn fill_buf(&mut self) -> io::Result<&[u8]> {
         if self.is_empty() {
@@ -170,7 +172,7 @@ impl FileReader<'_, '_> {
         Ok(buf)
     }
 
-    /// Analogous to [BufRead::consume], differing only in that it needs
+    /// Analogous to [`BufRead::consume`], differing only in that it needs
     /// to perform I/O in order to read padding and terminators.
     pub fn consume(&mut self, n: usize) -> io::Result<()> {
         if n == 0 {
@@ -234,7 +236,7 @@ impl Read for FileReader<'_, '_> {
 }
 
 impl FileReader<'_, '_> {
-    /// We've reached semantic EOF, consume and verify the padding and terminating TOK_PAR.
+    /// We've reached semantic EOF, consume and verify the padding and terminating `TOK_PAR`.
     /// Files are padded to 64 bits (8 bytes), just like any other byte string in the wire format.
     fn finish(&mut self) -> io::Result<()> {
         let pad = (self.pad & 7) as usize;
@@ -259,7 +261,7 @@ impl FileReader<'_, '_> {
 }
 
 /// A directory iterator, yielding a sequence of [Node]s.
-/// It must be fully consumed before reading further from the [DirReader] that produced it, if any.
+/// It must be fully consumed before reading further from the [`DirReader`] that produced it, if any.
 pub struct DirReader<'a, 'r> {
     reader: ArchiveReader<'a, 'r>,
     /// Previous directory entry name.
@@ -300,6 +302,7 @@ impl<'a, 'r> DirReader<'a, 'r> {
         }
 
         // Determine if there are more entries to follow
+        #[allow(clippy::equatable_if_let)]
         if let wire::Entry::None = try_or_poison!(self.reader, read::tag(self.reader.inner)) {
             // We've reached the end of this directory.
             self.reader.status.ready_parent();

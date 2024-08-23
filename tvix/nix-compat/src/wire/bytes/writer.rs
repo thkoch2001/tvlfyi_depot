@@ -46,10 +46,10 @@ pin_project! {
 /// The number tracks the number of bytes written inside the specific field.
 /// There shall be no ambiguous states, at the end of a stage we immediately
 /// move to the beginning of the next one:
-/// - Size(LEN_SIZE) must be expressed as Payload(0)
-/// - Payload(self.payload_len) must be expressed as Padding(0)
+/// - `Size(LEN_SIZE`) must be expressed as Payload(0)
+/// - `Payload(self.payload_len`) must be expressed as Padding(0)
 ///
-/// Padding(padding_len) means we're at the end of the bytes wire packet.
+/// `Padding(padding_len`) means we're at the end of the bytes wire packet.
 #[derive(Clone, Debug, PartialEq, Eq)]
 enum BytesPacketPosition {
     Size(usize),
@@ -61,7 +61,7 @@ impl<W> BytesWriter<W>
 where
     W: AsyncWrite,
 {
-    /// Constructs a new BytesWriter, using the underlying passed writer.
+    /// Constructs a new `BytesWriter`, using the underlying passed writer.
     pub fn new(w: W, payload_len: u64) -> Self {
         Self {
             inner: w,
@@ -126,9 +126,9 @@ where
                     ensure_nonzero_bytes_written(bytes_written)?;
                     let new_pos = pos + (bytes_written as u64);
                     if new_pos == *this.payload_len {
-                        *this.state = BytesPacketPosition::Padding(0)
+                        *this.state = BytesPacketPosition::Padding(0);
                     } else {
-                        *this.state = BytesPacketPosition::Payload(new_pos)
+                        *this.state = BytesPacketPosition::Payload(new_pos);
                     }
 
                     return Poll::Ready(Ok(bytes_written));
@@ -246,7 +246,7 @@ mod tests {
         pub static ref LARGE_PAYLOAD: Vec<u8> = (0..255).collect::<Vec<u8>>().repeat(4 * 1024);
     }
 
-    /// Helper function, calling the (simpler) write_bytes with the payload.
+    /// Helper function, calling the (simpler) `write_bytes` with the payload.
     /// We use this to create data we want to see on the wire.
     async fn produce_exp_bytes(payload: &[u8]) -> Vec<u8> {
         let mut exp = vec![];

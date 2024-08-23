@@ -91,7 +91,7 @@ fn redact_url(url: &Url) -> Url {
 impl std::fmt::Debug for Fetch {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Fetch::URL { url, exp_hash } => {
+            Self::URL { url, exp_hash } => {
                 let url = redact_url(url);
                 if let Some(exp_hash) = exp_hash {
                     write!(f, "URL [url: {}, exp_hash: Some({})]", &url, exp_hash)
@@ -99,7 +99,7 @@ impl std::fmt::Debug for Fetch {
                     write!(f, "URL [url: {}, exp_hash: None]", &url)
                 }
             }
-            Fetch::Tarball {
+            Self::Tarball {
                 url,
                 exp_nar_sha256,
             } => {
@@ -112,18 +112,18 @@ impl std::fmt::Debug for Fetch {
                         NixHash::Sha256(*exp_nar_sha256)
                     )
                 } else {
-                    write!(f, "Tarball [url: {}, exp_hash: None]", url)
+                    write!(f, "Tarball [url: {url}, exp_hash: None]")
                 }
             }
-            Fetch::NAR { url, hash } => {
+            Self::NAR { url, hash } => {
                 let url = redact_url(url);
                 write!(f, "NAR [url: {}, hash: {}]", &url, hash)
             }
-            Fetch::Executable { url, hash } => {
+            Self::Executable { url, hash } => {
                 let url = redact_url(url);
                 write!(f, "Executable [url: {}, hash: {}]", &url, hash)
             }
-            Fetch::Git() => todo!(),
+            Self::Git() => todo!(),
         }
     }
 }
@@ -137,25 +137,23 @@ impl Fetch {
         name: &'a str,
     ) -> Result<Option<StorePathRef<'a>>, BuildStorePathError> {
         let ca_hash = match self {
-            Fetch::URL {
+            Self::URL {
                 exp_hash: Some(exp_hash),
                 ..
             } => CAHash::Flat(exp_hash.clone()),
 
-            Fetch::Tarball {
+            Self::Tarball {
                 exp_nar_sha256: Some(exp_nar_sha256),
                 ..
             } => CAHash::Nar(NixHash::Sha256(*exp_nar_sha256)),
 
-            Fetch::NAR { hash, .. } | Fetch::Executable { hash, .. } => {
-                CAHash::Nar(hash.to_owned())
-            }
+            Self::NAR { hash, .. } | Self::Executable { hash, .. } => CAHash::Nar(hash.to_owned()),
 
-            Fetch::Git() => todo!(),
+            Self::Git() => todo!(),
 
             // everything else
-            Fetch::URL { exp_hash: None, .. }
-            | Fetch::Tarball {
+            Self::URL { exp_hash: None, .. }
+            | Self::Tarball {
                 exp_nar_sha256: None,
                 ..
             } => return Ok(None),
@@ -207,7 +205,7 @@ impl<BS, DS, PS, NS> Fetcher<BS, DS, PS, NS> {
 
         match url.scheme() {
             "file" => {
-                let f = tokio::fs::File::open(url.to_file_path().map_err(|_| {
+                let f = tokio::fs::File::open(url.to_file_path().map_err(|()| {
                     // "Returns Err if the host is neither empty nor "localhost"
                     // (except on Windows, where file: URLs may have a non-local host)"
                     FetcherError::Io(std::io::Error::new(
@@ -281,7 +279,7 @@ where
     /// Ingest the data from a specified [Fetch].
     /// On success, return the root node, a content digest and length.
     /// Returns an error if there was a failure during fetching, or the contents
-    /// didn't match the previously communicated hash contained inside the FetchArgs.
+    /// didn't match the previously communicated hash contained inside the `FetchArgs`.
     pub async fn ingest(&self, fetch: Fetch) -> Result<(Node, CAHash, u64), FetcherError> {
         match fetch {
             Fetch::URL { url, exp_hash } => {
@@ -296,8 +294,7 @@ where
                 // communicated expected hash algo (or sha256 if none provided).
                 let (actual_hash, blob_size) = match exp_hash
                     .as_ref()
-                    .map(NixHash::algo)
-                    .unwrap_or_else(|| HashAlgo::Sha256)
+                    .map_or_else(|| HashAlgo::Sha256, NixHash::algo)
                 {
                     HashAlgo::Sha256 => hash::<Sha256>(&mut r, &mut blob_writer).await.map(
                         |(digest, bytes_written)| (NixHash::Sha256(digest.into()), bytes_written),
@@ -539,10 +536,10 @@ where
     }
 
     /// Ingests the data from a specified [Fetch], persists the returned node
-    /// in the PathInfoService, and returns the calculated StorePath, as well as
+    /// in the `PathInfoService`, and returns the calculated `StorePath`, as well as
     /// the root node pointing to the contents.
     /// The root node can be used to descend into the data without doing the
-    /// lookup to the PathInfoService again.
+    /// lookup to the `PathInfoService` again.
     pub async fn ingest_and_persist<'a>(
         &self,
         name: &'a str,
@@ -708,7 +705,7 @@ mod tests {
             assert_eq!(
                 "7adgvk5zdfq4pwrhsm3n9lzypb12gw0g-source",
                 &fetch.store_path("source").unwrap().unwrap().to_string(),
-            )
+            );
         }
     }
 

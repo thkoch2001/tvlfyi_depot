@@ -7,7 +7,7 @@ use std::sync::Arc;
 use tvix_castore::Error;
 use url::Url;
 
-/// Constructs a new instance of a [PathInfoService] from an URI.
+/// Constructs a new instance of a [`PathInfoService`] from an URI.
 ///
 /// The following URIs are supported:
 /// - `memory:`
@@ -23,7 +23,7 @@ use url::Url;
 ///   Uses redb, using a path on the disk for persistency. Can be only opened
 ///   from one process at the same time.
 /// - `nix+https://cache.nixos.org?trusted-public-keys=cache.nixos.org-1:6NCHdD59X431o0gWypbMrAURkbJ16ZPMQFGspcDShjY=`
-///   Exposes the Nix binary cache as a PathInfoService, ingesting NARs into the
+///   Exposes the Nix binary cache as a `PathInfoService`, ingesting NARs into the
 ///   {Blob,Directory}Service. You almost certainly want to use this with some cache.
 ///   The `trusted-public-keys` URL parameter can be provided, which will then
 ///   enable signature verification.
@@ -32,7 +32,7 @@ use url::Url;
 /// - `grpc+http://host:port`, `grpc+https://host:port`
 ///    Connects to a (remote) tvix-store gRPC service.
 ///
-/// As the [PathInfoService] needs to talk to [BlobService] and [DirectoryService],
+/// As the [`PathInfoService`] needs to talk to [`BlobService`] and [`DirectoryService`],
 /// these also need to be passed in.
 pub async fn from_addr(
     uri: &str,
@@ -40,7 +40,7 @@ pub async fn from_addr(
 ) -> Result<Arc<dyn PathInfoService>, Box<dyn std::error::Error + Send + Sync>> {
     #[allow(unused_mut)]
     let mut url =
-        Url::parse(uri).map_err(|e| Error::StorageError(format!("unable to parse url: {}", e)))?;
+        Url::parse(uri).map_err(|e| Error::StorageError(format!("unable to parse url: {e}")))?;
 
     let path_info_service_config = with_registry(&REG, || {
         <DeserializeWithRegistry<Box<dyn ServiceBuilder<Output = dyn PathInfoService>>>>::try_from(

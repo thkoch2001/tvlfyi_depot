@@ -3,13 +3,13 @@ use crate::store_path;
 
 impl Derivation {
     /// validate ensures a Derivation struct is properly populated,
-    /// and returns a [DerivationError] if not.
+    /// and returns a [`DerivationError`] if not.
     ///
     /// if `validate_output_paths` is set to false, the output paths are
     /// excluded from validation.
     ///
     /// This is helpful to validate struct population before invoking
-    /// [Derivation::calculate_output_paths].
+    /// [`Derivation::calculate_output_paths`].
     pub fn validate(&self, validate_output_paths: bool) -> Result<(), DerivationError> {
         // Ensure the number of outputs is > 1
         if self.outputs.is_empty() {
@@ -65,7 +65,7 @@ impl Derivation {
                 ));
             }
 
-            for output_name in output_names.iter() {
+            for output_name in output_names {
                 // empty output names are invalid.
                 //
                 // `drv` is an invalid output name too, as this would cause

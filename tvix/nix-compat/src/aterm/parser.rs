@@ -19,11 +19,11 @@ fn parse_escaped_bytes(i: &[u8]) -> IResult<&[u8], BString> {
         is_not("\"\\"),
         '\\',
         alt((
-            value("\\".as_bytes(), nomchar('\\')),
-            value("\n".as_bytes(), nomchar('n')),
-            value("\t".as_bytes(), nomchar('t')),
-            value("\r".as_bytes(), nomchar('r')),
-            value("\"".as_bytes(), nomchar('\"')),
+            value(b"\\".as_slice(), nomchar('\\')),
+            value(b"\n".as_slice(), nomchar('n')),
+            value(b"\t".as_slice(), nomchar('t')),
+            value(b"\r".as_slice(), nomchar('r')),
+            value(b"\"".as_slice(), nomchar('\"')),
         )),
     )(i)
     .map(|(i, v)| (i, BString::new(v)))
@@ -31,7 +31,7 @@ fn parse_escaped_bytes(i: &[u8]) -> IResult<&[u8], BString> {
 
 /// Parse a field in double quotes, undo any escaping, and return the unquoted
 /// and decoded `Vec<u8>`.
-pub(crate) fn parse_bytes_field(i: &[u8]) -> IResult<&[u8], BString> {
+pub fn parse_bytes_field(i: &[u8]) -> IResult<&[u8], BString> {
     // inside double quotes…
     delimited(
         nomchar('\"'),
@@ -49,7 +49,7 @@ pub(crate) fn parse_bytes_field(i: &[u8]) -> IResult<&[u8], BString> {
 /// Parse a field in double quotes, undo any escaping, and return the unquoted
 /// and decoded [String], if it's valid UTF-8.
 /// Or fail parsing if the bytes are no valid UTF-8.
-pub(crate) fn parse_string_field(i: &[u8]) -> IResult<&[u8], String> {
+pub fn parse_string_field(i: &[u8]) -> IResult<&[u8], String> {
     // inside double quotes…
     delimited(
         nomchar('\"'),
@@ -60,14 +60,14 @@ pub(crate) fn parse_string_field(i: &[u8]) -> IResult<&[u8], String> {
                 String::from_utf8(escaped_bytes.into()).ok()
             }),
             // or an empty string.
-            map(tag(b""), |_| "".to_string()),
+            map(tag(b""), |_| String::new()),
         )),
         nomchar('\"'),
     )(i)
 }
 
 /// Parse a list of string fields (enclosed in brackets)
-pub(crate) fn parse_string_list(i: &[u8]) -> IResult<&[u8], Vec<String>> {
+pub fn parse_string_list(i: &[u8]) -> IResult<&[u8], Vec<String>> {
     // inside brackets
     delimited(
         nomchar('['),

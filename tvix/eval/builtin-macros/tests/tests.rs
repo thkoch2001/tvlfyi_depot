@@ -34,9 +34,9 @@ fn builtins() {
         Value::Builtin(identity) => assert_eq!(
             identity.documentation(),
             Some(
-                r#" Test docstring.
+                r" Test docstring.
 
- It has multiple lines!"#
+ It has multiple lines!"
             )
         ),
 

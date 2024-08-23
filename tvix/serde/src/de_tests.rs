@@ -32,7 +32,7 @@ fn deserialize_string() {
 #[test]
 fn deserialize_empty_list() {
     let result: Vec<usize> = from_str("[ ]").expect("should deserialize");
-    assert!(result.is_empty())
+    assert!(result.is_empty());
 }
 
 #[test]

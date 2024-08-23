@@ -23,6 +23,6 @@ mod tests {
     #[case::doublequote(b"\"", b"\\\"")]
     #[case::colon(b":", b":")]
     fn escape(#[case] input: &[u8], #[case] expected: &[u8]) {
-        assert_eq!(expected, escape_bytes(input))
+        assert_eq!(expected, escape_bytes(input));
     }
 }

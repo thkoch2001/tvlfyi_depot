@@ -62,7 +62,7 @@ fn main() {
     let io_handle = init_io_handle(&tokio_runtime, &args);
 
     if let Some(file) = &args.script {
-        run_file(io_handle, file.clone(), &args)
+        run_file(io_handle, file.clone(), &args);
     } else if let Some(expr) = &args.expr {
         if !interpret(
             io_handle,
@@ -82,7 +82,7 @@ fn main() {
         }
     } else {
         let mut repl = Repl::new(io_handle, &args);
-        repl.run()
+        repl.run();
     }
 }
 

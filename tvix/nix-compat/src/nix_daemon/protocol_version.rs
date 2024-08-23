@@ -1,20 +1,23 @@
 /// Protocol versions are represented as a u16.
 /// The upper 8 bits are the major version, the lower bits the minor.
-/// This is not aware of any endianness, use [crate::wire::read_u64] to get an
-/// u64 first, and the try_from() impl from here if you're receiving over the
+/// This is not aware of any endianness, use [`crate::wire::read_u64`] to get an
+/// u64 first, and the `try_from()` impl from here if you're receiving over the
 /// Nix Worker protocol.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct ProtocolVersion(u16);
 
 impl ProtocolVersion {
+    #[must_use]
     pub const fn from_parts(major: u8, minor: u8) -> Self {
         Self(((major as u16) << 8) | minor as u16)
     }
 
+    #[must_use]
     pub fn major(&self) -> u8 {
         ((self.0 & 0xff00) >> 8) as u8
     }
 
+    #[must_use]
     pub fn minor(&self) -> u8 {
         (self.0 & 0x00ff) as u8
     }
@@ -65,7 +68,7 @@ impl From<ProtocolVersion> for u16 {
 
 impl From<ProtocolVersion> for u64 {
     fn from(value: ProtocolVersion) -> Self {
-        value.0 as u64
+        Self::from(value.0)
     }
 }
 
@@ -105,7 +108,7 @@ mod tests {
     /// This contains data in higher bits, which should fail.
     #[test]
     fn from_u64_fail() {
-        ProtocolVersion::try_from(0xaa0125_u64).expect_err("must fail");
+        ProtocolVersion::try_from(0x00aa_0125_u64).expect_err("must fail");
     }
 
     #[test]

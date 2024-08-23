@@ -21,7 +21,7 @@ pub type SignatureRef<'a> = Signature<&'a str>;
 /// It consists of a name (an identifier for a public key), and an ed25519
 /// signature (64 bytes).
 /// It is generic over the string type that's used for the name, and there's
-/// [SignatureRef] as a type alias for one containing &str.
+/// [`SignatureRef`] as a type alias for one containing &str.
 impl<S> Signature<S>
 where
     S: Deref<Target = str>,
@@ -33,7 +33,7 @@ where
 
     /// Parses a [Signature] from a string containing the name, a colon, and 64
     /// base64-encoded bytes (plus padding).
-    /// These strings are commonly seen in the `Signature:` field of a NARInfo
+    /// These strings are commonly seen in the `Signature:` field of a `NARInfo`
     /// file.
     pub fn parse<'a>(input: &'a str) -> Result<Self, Error>
     where
@@ -85,10 +85,10 @@ where
         verifying_key.verify_strict(fingerprint, &signature).is_ok()
     }
 
-    /// Constructs a [SignatureRef] from this signature.
+    /// Constructs a [`SignatureRef`] from this signature.
     pub fn as_ref(&self) -> SignatureRef<'_> {
         SignatureRef {
-            name: self.name.deref(),
+            name: &*self.name,
             bytes: self.bytes,
         }
     }
@@ -212,10 +212,10 @@ mod test {
         let signature_actual = Signature {
             name: "cache.nixos.org-1",
             bytes: hex!(
-                r#"4e c4 d3 6f 75 86 4d 92  a9 86 f6 1d 04 75 f0 a3
+                r"4e c4 d3 6f 75 86 4d 92  a9 86 f6 1d 04 75 f0 a3
                    ac 1e 54 82 e6 4f 2b 54  8c b0 7e bd c5 fc f5 f3
                    a3 8d 18 9c 08 79 8a 03  84 42 3c c5 4b 92 3e 93
-                   30 9e 06 31 7d c7 3d 55  91 74 3d 61 91 e2 99 05"#
+                   30 9e 06 31 7d c7 3d 55  91 74 3d 61 91 e2 99 05"
             ),
         };
         let signature_str_json = "\"cache.nixos.org-1:TsTTb3WGTZKphvYdBHXwo6weVILmTytUjLB+vcX89fOjjRicCHmKA4RCPMVLkj6TMJ4GMX3HPVWRdD1hkeKZBQ==\"";

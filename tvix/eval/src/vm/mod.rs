@@ -174,7 +174,7 @@ impl CallFrame {
         arg
     }
 
-    /// Construct an error result from the given ErrorKind and the source span
+    /// Construct an error result from the given `ErrorKind` and the source span
     /// of the current instruction.
     pub fn error<T, IO>(&self, vm: &VM<IO>, kind: ErrorKind) -> Result<T, Error> {
         Err(kind).with_span(self, vm)
@@ -194,7 +194,7 @@ impl CallFrame {
 /// When a frame has been fully executed, it is removed from the VM's frame
 /// stack and expected to leave a result [`Value`] on the top of the stack.
 enum Frame {
-    /// CallFrame represents the execution of Tvix bytecode within a thunk,
+    /// `CallFrame` represents the execution of Tvix bytecode within a thunk,
     /// function or closure.
     CallFrame {
         /// The call frame itself, separated out into another type to pass it
@@ -228,7 +228,7 @@ enum Frame {
 impl Frame {
     pub fn span(&self) -> Span {
         match self {
-            Frame::CallFrame { span, .. } | Frame::Generator { span, .. } => *span,
+            Self::CallFrame { span, .. } | Self::Generator { span, .. } => *span,
         }
     }
 }
@@ -378,7 +378,7 @@ where
 
     /// Push a call frame onto the frame stack.
     fn push_call_frame(&mut self, span: Span, call_frame: CallFrame) {
-        self.frames.push(Frame::CallFrame { span, call_frame })
+        self.frames.push(Frame::CallFrame { span, call_frame });
     }
 
     /// Run the VM's primary (outer) execution loop, continuing execution based
@@ -417,11 +417,11 @@ where
                     match self.run_generator(name, span, frame_id, state, generator, None) {
                         Ok(true) => {
                             self.observer
-                                .observe_exit_generator(frame_id, name, &self.stack)
+                                .observe_exit_generator(frame_id, name, &self.stack);
                         }
                         Ok(false) => {
                             self.observer
-                                .observe_suspend_generator(frame_id, name, &self.stack)
+                                .observe_suspend_generator(frame_id, name, &self.stack);
                         }
 
                         Err(err) => return Err(err),
@@ -734,7 +734,7 @@ where
                     self(rhs, lhs) => {
                         let rhs = rhs.to_attrs().with_span(&frame, self)?;
                         let lhs = lhs.to_attrs().with_span(&frame, self)?;
-                        self.stack.push(Value::attrs(lhs.update(*rhs)))
+                        self.stack.push(Value::attrs(lhs.update(*rhs)));
                     }
                 },
 
@@ -781,7 +781,7 @@ where
                         let rhs = rhs.to_list().with_span(&frame, self)?.into_inner();
                         let mut lhs = lhs.to_list().with_span(&frame, self)?.into_inner();
                         lhs.extend(rhs.into_iter());
-                        self.stack.push(Value::List(lhs.into()))
+                        self.stack.push(Value::List(lhs.into()));
                     }
                 },
 
@@ -797,8 +797,7 @@ where
                     let with_stack_len = self.with_stack.len();
                     let closed_with_stack_len = self
                         .last_call_frame()
-                        .map(|frame| frame.upvalues.with_stack_len())
-                        .unwrap_or(0);
+                        .map_or(0, |frame| frame.upvalues.with_stack_len());
 
                     self.enqueue_generator("resolve_with", op_span, |co| {
                         resolve_with(
@@ -1021,7 +1020,7 @@ where
         self.warnings.push(warning);
     }
 
-    /// Emit a warning with the given WarningKind and the source span
+    /// Emit a warning with the given `WarningKind` and the source span
     /// of the current instruction.
     pub fn emit_warning(&mut self, kind: WarningKind) {
         self.push_warning(EvalWarning {
@@ -1050,7 +1049,7 @@ where
             let mut nix_string = val.to_contextful_str().with_span(frame, self)?;
             out.push_str(nix_string.as_bstr());
             if let Some(nix_string_ctx) = nix_string.take_context() {
-                context.extend(nix_string_ctx.into_iter())
+                context.extend(nix_string_ctx.into_iter());
             }
         }
 
@@ -1062,7 +1061,7 @@ where
     /// Apply an argument from the stack to a builtin, and attempt to call it.
     ///
     /// All calls are tail-calls in Tvix, as every function application is a
-    /// separate thunk and OpCall is thus the last result in the thunk.
+    /// separate thunk and `OpCall` is thus the last result in the thunk.
     ///
     /// Due to this, once control flow exits this function, the generator will
     /// automatically be run by the VM.
@@ -1239,10 +1238,7 @@ async fn resolve_with(
     async fn fetch_forced_with(co: &GenCo, idx: usize) -> Value {
         match co.yield_(VMRequest::WithValue(idx)).await {
             VMResponse::Value(value) => value,
-            msg => panic!(
-                "Tvix bug: VM responded with incorrect generator message: {}",
-                msg
-            ),
+            msg => panic!("Tvix bug: VM responded with incorrect generator message: {msg}"),
         }
     }
 
@@ -1250,10 +1246,7 @@ async fn resolve_with(
     async fn fetch_captured_with(co: &GenCo, idx: usize) -> Value {
         match co.yield_(VMRequest::CapturedWithValue(idx)).await {
             VMResponse::Value(value) => value,
-            msg => panic!(
-                "Tvix bug: VM responded with incorrect generator message: {}",
-                msg
-            ),
+            msg => panic!("Tvix bug: VM responded with incorrect generator message: {msg}"),
         }
     }
 
@@ -1333,7 +1326,7 @@ async fn add_values(co: GenCo, a: Value, b: Value) -> Result<Value, ErrorKind> {
         .await
         .map(|s2| Value::String(s1.concat(&s2)))
         .into(),
-        (a @ Value::Integer(_), b) | (a @ Value::Float(_), b) => arithmetic_op!(&a, &b, +)?,
+        (a @ (Value::Integer(_) | Value::Float(_)), b) => arithmetic_op!(&a, &b, +)?,
         (a, b) => {
             let r1 = generators::request_string_coerce(
                 &co,

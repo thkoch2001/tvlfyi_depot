@@ -31,10 +31,12 @@ pub struct ReferencePattern<P> {
 }
 
 impl<P> ReferencePattern<P> {
+    #[must_use]
     pub fn candidates(&self) -> &[P] {
         &self.inner.candidates
     }
 
+    #[must_use]
     pub fn longest_candidate(&self) -> usize {
         self.inner.longest_candidate
     }
@@ -43,6 +45,7 @@ impl<P> ReferencePattern<P> {
 impl<P: AsRef<[u8]>> ReferencePattern<P> {
     /// Construct a new `ReferencePattern` that knows how to scan for the given
     /// candidates.
+    #[must_use]
     pub fn new(candidates: Vec<P>) -> Self {
         let searcher = if candidates.is_empty() {
             None
@@ -51,11 +54,11 @@ impl<P: AsRef<[u8]>> ReferencePattern<P> {
         };
         let longest_candidate = candidates.iter().fold(0, |v, c| v.max(c.as_ref().len()));
 
-        ReferencePattern {
+        Self {
             inner: Arc::new(ReferencePatternInner {
-                searcher,
                 candidates,
                 longest_candidate,
+                searcher,
             }),
         }
     }
@@ -83,7 +86,7 @@ impl<P: AsRef<[u8]>> ReferenceScanner<P> {
     pub fn new<IP: Into<ReferencePattern<P>>>(pattern: IP) -> Self {
         let pattern = pattern.into();
         let matches = vec![false; pattern.candidates().len()];
-        ReferenceScanner { pattern, matches }
+        Self { pattern, matches }
     }
 
     /// Scan the given buffer for all non-overlapping matches and collect them
@@ -100,10 +103,12 @@ impl<P: AsRef<[u8]>> ReferenceScanner<P> {
         }
     }
 
+    #[must_use]
     pub fn pattern(&self) -> &ReferencePattern<P> {
         &self.pattern
     }
 
+    #[must_use]
     pub fn matches(&self) -> &[bool] {
         &self.matches
     }
@@ -122,6 +127,7 @@ impl<P: AsRef<[u8]>> ReferenceScanner<P> {
 
 impl<P: Clone + Ord + AsRef<[u8]>> ReferenceScanner<P> {
     /// Finalise the reference scanner and return the resulting matches.
+    #[must_use]
     pub fn finalise(self) -> BTreeSet<P> {
         self.candidate_matches().cloned().collect()
     }
@@ -142,18 +148,14 @@ impl<P, R> ReferenceReader<P, R>
 where
     P: AsRef<[u8]>,
 {
-    pub fn new(pattern: ReferencePattern<P>, reader: R) -> ReferenceReader<P, R> {
+    pub fn new(pattern: ReferencePattern<P>, reader: R) -> Self {
         Self::with_capacity(DEFAULT_BUF_SIZE, pattern, reader)
     }
 
-    pub fn with_capacity(
-        capacity: usize,
-        pattern: ReferencePattern<P>,
-        reader: R,
-    ) -> ReferenceReader<P, R> {
+    pub fn with_capacity(capacity: usize, pattern: ReferencePattern<P>, reader: R) -> Self {
         // If capacity is not at least as long as longest_candidate we can't do a scan
         let capacity = capacity.max(pattern.longest_candidate());
-        ReferenceReader {
+        Self {
             scanner: ReferenceScanner::new(pattern),
             buffer: Vec::with_capacity(capacity),
             consumed: 0,
@@ -293,7 +295,7 @@ mod tests {
         let result = scanner.finalise();
         assert_eq!(result.len(), 3);
 
-        for c in candidates[..3].iter() {
+        for c in &candidates[..3] {
             assert!(result.contains(c));
         }
     }
@@ -327,7 +329,7 @@ mod tests {
         let result = reader.finalise();
         assert_eq!(result.len(), 3);
 
-        for c in candidates[..3].iter() {
+        for c in &candidates[..3] {
             assert!(result.contains(c));
         }
     }

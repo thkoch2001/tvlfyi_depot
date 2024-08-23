@@ -116,13 +116,13 @@ enum Commands {
         threads: usize,
 
         #[arg(long, env, default_value_t = false)]
-        /// Whether to configure the mountpoint with allow_other.
+        /// Whether to configure the mountpoint with `allow_other`.
         /// Requires /etc/fuse.conf to contain the `user_allow_other`
-        /// option, configured via `programs.fuse.userAllowOther` on NixOS.
+        /// option, configured via `programs.fuse.userAllowOther` on `NixOS`.
         allow_other: bool,
 
         /// Whether to list elements at the root of the mount point.
-        /// This is useful if your PathInfoService doesn't provide an
+        /// This is useful if your `PathInfoService` doesn't provide an
         /// (exhaustive) listing.
         #[clap(long, short, action)]
         list_root: bool,
@@ -156,7 +156,7 @@ enum Commands {
 #[cfg(feature = "fuse")]
 fn default_threads() -> usize {
     std::thread::available_parallelism()
-        .map(|threads| threads.into())
+        .map(std::convert::Into::into)
         .unwrap_or(4)
 }
 
@@ -363,7 +363,7 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error + Send + Sync
                         nar_sha256: elem.nar_sha256.to_vec().into(),
                         signatures: vec![],
                         reference_names: Vec::from_iter(
-                            elem.references.iter().map(|e| e.to_string()),
+                            elem.references.iter().map(std::string::ToString::to_string),
                         ),
                         deriver: None,
                         ca: None,
@@ -414,7 +414,7 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error + Send + Sync
             // Wait for the server to finish, which can either happen through it
             // being unmounted externally, or receiving a signal invoking the
             // handler above.
-            tokio::task::spawn_blocking(move || fuse_daemon.wait()).await?
+            tokio::task::spawn_blocking(move || fuse_daemon.wait()).await?;
         }
         #[cfg(feature = "virtiofs")]
         Commands::VirtioFs {

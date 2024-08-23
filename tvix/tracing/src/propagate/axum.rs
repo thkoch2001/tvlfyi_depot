@@ -30,19 +30,19 @@ struct HeaderExtractor<'a>(&'a axum::http::HeaderMap);
 
 #[cfg(feature = "otlp")]
 impl<'a> Extractor for HeaderExtractor<'a> {
-    /// Get a value for a key from the HeaderMap.  If the value is not valid ASCII, returns None.
+    /// Get a value for a key from the `HeaderMap`.  If the value is not valid ASCII, returns None.
     fn get(&self, key: &str) -> Option<&str> {
         self.0.get(key).and_then(|v| {
             let s = v.to_str();
             if let Err(ref error) = s {
-                tracing::warn!(%error, ?v, "cannot convert header value to ASCII")
+                tracing::warn!(%error, ?v, "cannot convert header value to ASCII");
             };
             s.ok()
         })
     }
 
-    /// Collect all the keys from the HeaderMap.
+    /// Collect all the keys from the `HeaderMap`.
     fn keys(&self) -> Vec<&str> {
-        self.0.keys().map(|k| k.as_str()).collect()
+        self.0.keys().map(axum::http::HeaderMap::as_str).collect()
     }
 }

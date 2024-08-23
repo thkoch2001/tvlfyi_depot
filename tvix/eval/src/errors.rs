@@ -15,18 +15,18 @@ use crate::spans::ToSpan;
 use crate::value::{CoercionKind, NixString};
 use crate::{SourceCode, Value};
 
-/// "CatchableErrorKind" errors -- those which can be detected by
+/// "`CatchableErrorKind`" errors -- those which can be detected by
 /// `builtins.tryEval`.
 ///
 /// Note: this type is deliberately *not* incorporated as a variant
-/// of ErrorKind, because then Result<Value,ErrorKind> would have
+/// of `ErrorKind`, because then Result<Value,ErrorKind> would have
 /// redundant representations for catchable errors, which would make
 /// it too easy to handle errors incorrectly:
 ///
-///   - Ok(Value::Catchable(cek))
-///   - Err(ErrorKind::ThisVariantDoesNotExist(cek))
+///   - `Ok(Value::Catchable(cek`))
+///   - `Err(ErrorKind::ThisVariantDoesNotExist(cek`))
 ///
-/// Because CatchableErrorKind is not a variant of ErrorKind, you
+/// Because `CatchableErrorKind` is not a variant of `ErrorKind`, you
 /// will often see functions which return a type like:
 ///
 ///   Result<Result<T,CatchableErrorKind>,ErrorKind>
@@ -47,13 +47,13 @@ pub enum CatchableErrorKind {
 impl Display for CatchableErrorKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            CatchableErrorKind::Throw(s) => write!(f, "error thrown: {}", s),
-            CatchableErrorKind::AssertionFailed => write!(f, "assertion failed"),
-            CatchableErrorKind::UnimplementedFeature(s) => {
-                write!(f, "feature {} is not implemented yet", s)
+            Self::Throw(s) => write!(f, "error thrown: {s}"),
+            Self::AssertionFailed => write!(f, "assertion failed"),
+            Self::UnimplementedFeature(s) => {
+                write!(f, "feature {s} is not implemented yet")
             }
-            CatchableErrorKind::NixPathResolution(s) => {
-                write!(f, "Nix path entry could not be resolved: {}", s)
+            Self::NixPathResolution(s) => {
+                write!(f, "Nix path entry could not be resolved: {s}")
             }
         }
     }
@@ -285,7 +285,7 @@ impl From<bstr::FromUtf8Error> for ErrorKind {
 
 impl From<io::Error> for ErrorKind {
     fn from(e: io::Error) -> Self {
-        ErrorKind::IO {
+        Self::IO {
             path: None,
             error: Rc::new(e),
         }
@@ -314,6 +314,7 @@ pub struct Error {
 }
 
 impl Error {
+    #[must_use]
     pub fn new(mut kind: ErrorKind, span: Span, source: SourceCode) -> Self {
         let mut contexts = vec![];
         while let ErrorKind::WithContext {
@@ -325,7 +326,7 @@ impl Error {
             contexts.push(context);
         }
 
-        Error {
+        Self {
             kind,
             span,
             contexts,
@@ -337,84 +338,80 @@ impl Error {
 impl Display for ErrorKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match &self {
-            ErrorKind::Abort(msg) => write!(f, "evaluation aborted: {}", msg),
+            Self::Abort(msg) => write!(f, "evaluation aborted: {msg}"),
 
-            ErrorKind::DivisionByZero => write!(f, "division by zero"),
+            Self::DivisionByZero => write!(f, "division by zero"),
 
-            ErrorKind::DuplicateAttrsKey { key } => {
-                write!(f, "attribute key '{}' already defined", key)
+            Self::DuplicateAttrsKey { key } => {
+                write!(f, "attribute key '{key}' already defined")
             }
 
-            ErrorKind::InvalidAttributeName(val) => write!(
+            Self::InvalidAttributeName(val) => write!(
                 f,
                 "found attribute name '{}' of type '{}', but attribute names must be strings",
                 val,
                 val.type_of()
             ),
 
-            ErrorKind::AttributeNotFound { name } => write!(
+            Self::AttributeNotFound { name } => write!(
                 f,
-                "attribute with name '{}' could not be found in the set",
-                name
+                "attribute with name '{name}' could not be found in the set"
             ),
 
-            ErrorKind::IndexOutOfBounds { index } => {
-                write!(f, "list index '{}' is out of bounds", index)
+            Self::IndexOutOfBounds { index } => {
+                write!(f, "list index '{index}' is out of bounds")
             }
 
-            ErrorKind::TailEmptyList => write!(f, "'tail' called on an empty list"),
+            Self::TailEmptyList => write!(f, "'tail' called on an empty list"),
 
-            ErrorKind::TypeError { expected, actual } => write!(
+            Self::TypeError { expected, actual } => write!(
                 f,
-                "expected value of type '{}', but found a '{}'",
-                expected, actual
+                "expected value of type '{expected}', but found a '{actual}'"
             ),
 
-            ErrorKind::Incomparable { lhs, rhs } => {
-                write!(f, "can not compare a {} with a {}", lhs, rhs)
+            Self::Incomparable { lhs, rhs } => {
+                write!(f, "can not compare a {lhs} with a {rhs}")
             }
 
-            ErrorKind::RelativePathResolution(err) => {
-                write!(f, "could not resolve path: {}", err)
+            Self::RelativePathResolution(err) => {
+                write!(f, "could not resolve path: {err}")
             }
 
-            ErrorKind::DynamicKeyInScope(scope) => {
-                write!(f, "dynamically evaluated keys are not allowed in {}", scope)
+            Self::DynamicKeyInScope(scope) => {
+                write!(f, "dynamically evaluated keys are not allowed in {scope}")
             }
 
-            ErrorKind::UnknownStaticVariable => write!(f, "variable not found"),
+            Self::UnknownStaticVariable => write!(f, "variable not found"),
 
-            ErrorKind::UnknownDynamicVariable(name) => write!(
+            Self::UnknownDynamicVariable(name) => write!(
                 f,
-                r#"variable '{}' could not be found
+                r#"variable '{name}' could not be found
 
 Note that this occured within a `with`-expression. The problem may be related
-to a missing value in the attribute set(s) included via `with`."#,
-                name
+to a missing value in the attribute set(s) included via `with`."#
             ),
 
-            ErrorKind::VariableAlreadyDefined(_) => write!(f, "variable has already been defined"),
+            Self::VariableAlreadyDefined(_) => write!(f, "variable has already been defined"),
 
-            ErrorKind::NotCallable(other_type) => {
+            Self::NotCallable(other_type) => {
                 write!(
                     f,
-                    "only functions and builtins can be called, but this is a '{}'",
-                    other_type
+                    "only functions and builtins can be called, but this is a '{other_type}'"
                 )
             }
 
-            ErrorKind::InfiniteRecursion { .. } => write!(f, "infinite recursion encountered"),
+            Self::InfiniteRecursion { .. } => write!(f, "infinite recursion encountered"),
 
             // Errors themselves ignored here & handled in Self::spans instead
-            ErrorKind::ParseErrors(_) => write!(f, "failed to parse Nix code:"),
+            Self::ParseErrors(_) => write!(f, "failed to parse Nix code:"),
 
-            ErrorKind::NativeError { gen_type, .. } => {
-                write!(f, "while evaluating this as native code ({})", gen_type)
+            Self::NativeError { gen_type, .. } => {
+                write!(f, "while evaluating this as native code ({gen_type})")
             }
 
-            ErrorKind::BytecodeError(_) => write!(f, "while evaluating this Nix code"),
+            Self::BytecodeError(_) => write!(f, "while evaluating this Nix code"),
 
-            ErrorKind::NotCoercibleToString { kind, from } => {
+            Self::NotCoercibleToString { kind, from } => {
                 let kindly = if kind.strong { "strongly" } else { "weakly" };
 
                 let hint = if *from == "set" {
@@ -426,7 +423,7 @@ to a missing value in the attribute set(s) included via `with`."#,
                 write!(f, "cannot ({kindly}) coerce {from} to a string{hint}")
             }
 
-            ErrorKind::NotAnAbsolutePath(given) => {
+            Self::NotAnAbsolutePath(given) => {
                 write!(
                     f,
                     "string '{}' does not represent an absolute path",
@@ -434,19 +431,18 @@ to a missing value in the attribute set(s) included via `with`."#,
                 )
             }
 
-            ErrorKind::ParseIntError(err) => {
-                write!(f, "invalid integer: {}", err)
+            Self::ParseIntError(err) => {
+                write!(f, "invalid integer: {err}")
             }
 
-            ErrorKind::UnmergeableInherit { name } => {
+            Self::UnmergeableInherit { name } => {
                 write!(
                     f,
-                    "cannot merge a nested attribute set into the inherited entry '{}'",
-                    name
+                    "cannot merge a nested attribute set into the inherited entry '{name}'"
                 )
             }
 
-            ErrorKind::UnmergeableValue => {
+            Self::UnmergeableValue => {
                 write!(
                     f,
                     "nested attribute sets or keys can only be merged with literal attribute sets"
@@ -454,7 +450,7 @@ to a missing value in the attribute set(s) included via `with`."#,
             }
 
             // Errors themselves ignored here & handled in Self::spans instead
-            ErrorKind::ImportParseError { path, .. } => {
+            Self::ImportParseError { path, .. } => {
                 write!(
                     f,
                     "parse errors occured while importing '{}'",
@@ -462,7 +458,7 @@ to a missing value in the attribute set(s) included via `with`."#,
                 )
             }
 
-            ErrorKind::ImportCompilerError { path, .. } => {
+            Self::ImportCompilerError { path, .. } => {
                 writeln!(
                     f,
                     "compiler errors occured while importing '{}'",
@@ -470,7 +466,7 @@ to a missing value in the attribute set(s) included via `with`."#,
                 )
             }
 
-            ErrorKind::IO { path, error } => {
+            Self::IO { path, error } => {
                 write!(f, "I/O error: ")?;
                 if let Some(path) = path {
                     write!(f, "{}: ", path.display())?;
@@ -478,62 +474,62 @@ to a missing value in the attribute set(s) included via `with`."#,
                 write!(f, "{error}")
             }
 
-            ErrorKind::JsonError(msg) => {
+            Self::JsonError(msg) => {
                 write!(f, "Error converting JSON to a Nix value or back: {msg}")
             }
 
-            ErrorKind::NotSerialisableToJson(_type) => {
-                write!(f, "a {} cannot be converted to JSON", _type)
+            Self::NotSerialisableToJson(_type) => {
+                write!(f, "a {_type} cannot be converted to JSON")
             }
 
-            ErrorKind::FromTomlError(msg) => {
+            Self::FromTomlError(msg) => {
                 write!(f, "Error converting TOML to a Nix value: {msg}")
             }
 
-            ErrorKind::UnexpectedArgumentBuiltin(arg) => {
+            Self::UnexpectedArgumentBuiltin(arg) => {
                 write!(f, "Unexpected agrument `{arg}` passed to builtin",)
             }
 
-            ErrorKind::UnexpectedArgumentFormals { arg, .. } => {
+            Self::UnexpectedArgumentFormals { arg, .. } => {
                 write!(f, "Unexpected argument `{arg}` supplied to function",)
             }
 
-            ErrorKind::Utf8 => {
+            Self::Utf8 => {
                 write!(f, "Invalid UTF-8 in string")
             }
 
-            ErrorKind::TvixError(inner_error) => {
+            Self::TvixError(inner_error) => {
                 write!(f, "{inner_error}")
             }
 
-            ErrorKind::TvixBug { msg, metadata } => {
-                write!(f, "Tvix bug: {}", msg)?;
+            Self::TvixBug { msg, metadata } => {
+                write!(f, "Tvix bug: {msg}")?;
 
                 if let Some(metadata) = metadata {
-                    write!(f, "; metadata: {:?}", metadata)?;
+                    write!(f, "; metadata: {metadata:?}")?;
                 }
 
                 Ok(())
             }
 
-            ErrorKind::NotImplemented(feature) => {
-                write!(f, "feature not yet implemented in Tvix: {}", feature)
+            Self::NotImplemented(feature) => {
+                write!(f, "feature not yet implemented in Tvix: {feature}")
             }
 
-            ErrorKind::WithContext { .. } => {
+            Self::WithContext { .. } => {
                 panic!("internal ErrorKind::WithContext variant leaked")
             }
 
-            ErrorKind::UnexpectedContext => {
+            Self::UnexpectedContext => {
                 write!(f, "unexpected context string")
             }
 
-            ErrorKind::CatchableError(inner) => {
-                write!(f, "{}", inner)
+            Self::CatchableError(inner) => {
+                write!(f, "{inner}")
             }
 
-            ErrorKind::UnknownHashType(hash_type) => {
-                write!(f, "unknown hash type '{}'", hash_type)
+            Self::UnknownHashType(hash_type) => {
+                write!(f, "unknown hash type '{hash_type}'")
             }
         }
     }
@@ -727,10 +723,7 @@ fn spans_for_parse_errors(file: &File, errors: &[rnix::parser::ParseError]) -> V
 
                 rnix::parser::ParseError::DuplicatedArgs(range, name) => (
                     range.span_for(file),
-                    format!(
-                        "the function argument pattern '{}' was bound more than once",
-                        name
-                    ),
+                    format!("the function argument pattern '{name}' was bound more than once"),
                 ),
 
                 rnix::parser::ParseError::RecursionLimitExceeded => (
@@ -766,6 +759,7 @@ fn spans_for_parse_errors(file: &File, errors: &[rnix::parser::ParseError]) -> V
 }
 
 impl Error {
+    #[must_use]
     pub fn fancy_format_str(&self) -> String {
         let mut out = vec![];
         Emitter::vec(&mut out, Some(&*self.source.codemap())).emit(&self.diagnostics());
@@ -934,7 +928,7 @@ impl Error {
                         label: Some("this lazily-evaluated code".into()),
                         span: *content_span,
                         style: SpanStyle::Secondary,
-                    })
+                    });
                 }
 
                 if let Some(suspended_at) = suspended_at {
@@ -942,7 +936,7 @@ impl Error {
                         label: Some("which was instantiated here".into()),
                         span: *suspended_at,
                         style: SpanStyle::Secondary,
-                    })
+                    });
                 }
 
                 spans.push(SpanLabel {
@@ -972,7 +966,7 @@ impl Error {
 
         for ctx in &self.contexts {
             spans.push(SpanLabel {
-                label: Some(format!("while {}", ctx)),
+                label: Some(format!("while {ctx}")),
                 span: self.span,
                 style: SpanStyle::Secondary,
             });
@@ -997,7 +991,7 @@ impl Error {
         match &self.kind {
             ErrorKind::ImportCompilerError { errors, .. } => {
                 let mut out = vec![self.diagnostic()];
-                out.extend(errors.iter().map(|e| e.diagnostic()));
+                out.extend(errors.iter().map(Self::diagnostic));
                 out
             }
 
@@ -1080,7 +1074,7 @@ pub trait AddContext {
 
 impl AddContext for ErrorKind {
     fn context<S: Into<String>>(self, ctx: S) -> Self {
-        ErrorKind::WithContext {
+        Self::WithContext {
             context: ctx.into(),
             underlying: Box::new(self),
         }

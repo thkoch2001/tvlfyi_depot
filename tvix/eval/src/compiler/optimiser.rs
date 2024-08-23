@@ -1,7 +1,7 @@
 //! Helper functions for extending the compiler with more linter-like
 //! functionality while compiling (i.e. smarter warnings).
 
-use super::*;
+use super::{ast, Compiler, LocalIdx, WarningKind};
 
 use ast::Expr;
 

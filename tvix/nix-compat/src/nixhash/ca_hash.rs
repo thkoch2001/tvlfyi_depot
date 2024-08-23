@@ -9,11 +9,11 @@ use std::borrow::Cow;
 use super::algos::SUPPORTED_ALGOS;
 use super::decode_digest;
 
-/// A Nix CAHash describes a content-addressed hash of a path.
+/// A Nix `CAHash` describes a content-addressed hash of a path.
 ///
 /// The way Nix prints it as a string is a bit confusing, but there's essentially
 /// three modes, `Flat`, `Nar` and `Text`.
-/// `Flat` and `Nar` support all 4 algos that [NixHash] supports
+/// `Flat` and `Nar` support all 4 algos that [`NixHash`] supports
 /// (sha1, md5, sha256, sha512), `Text` only supports sha256.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum CAHash {
@@ -31,24 +31,27 @@ pub enum HashMode {
 }
 
 impl CAHash {
+    #[must_use]
     pub fn hash(&self) -> Cow<NixHash> {
         match *self {
-            CAHash::Flat(ref digest) => Cow::Borrowed(digest),
-            CAHash::Nar(ref digest) => Cow::Borrowed(digest),
-            CAHash::Text(digest) => Cow::Owned(NixHash::Sha256(digest)),
+            Self::Flat(ref digest) => Cow::Borrowed(digest),
+            Self::Nar(ref digest) => Cow::Borrowed(digest),
+            Self::Text(digest) => Cow::Owned(NixHash::Sha256(digest)),
         }
     }
 
+    #[must_use]
     pub fn mode(&self) -> HashMode {
         match self {
-            CAHash::Flat(_) => HashMode::Flat,
-            CAHash::Nar(_) => HashMode::Nar,
-            CAHash::Text(_) => HashMode::Text,
+            Self::Flat(_) => HashMode::Flat,
+            Self::Nar(_) => HashMode::Nar,
+            Self::Text(_) => HashMode::Text,
         }
     }
 
     /// Returns a colon-separated string consisting of mode, recursiveness and
     /// hash algo. Used as a prefix in various string representations.
+    #[must_use]
     pub fn algo_str(&self) -> &'static str {
         match self.mode() {
             HashMode::Flat => match self.hash().as_ref() {
@@ -67,12 +70,12 @@ impl CAHash {
         }
     }
 
-    /// Constructs a [CAHash] from the textual representation,
+    /// Constructs a [`CAHash`] from the textual representation,
     /// which is one of the three:
     /// - `text:sha256:$nixbase32sha256digest`
     /// - `fixed:r:$algo:$nixbase32digest`
     /// - `fixed:$algo:$nixbase32digest`
-    /// which is the format that's used in the NARInfo for example.
+    /// which is the format that's used in the `NARInfo` for example.
     pub fn from_nix_hex_str(s: &str) -> Option<Self> {
         let (tag, s) = s.split_once(':')?;
 
@@ -80,7 +83,7 @@ impl CAHash {
             "text" => {
                 let digest = s.strip_prefix("sha256:")?;
                 let digest = nixbase32::decode_fixed(digest).ok()?;
-                Some(CAHash::Text(digest))
+                Some(Self::Text(digest))
             }
             "fixed" => {
                 if let Some(s) = s.strip_prefix("r:") {
@@ -93,8 +96,9 @@ impl CAHash {
         }
     }
 
-    /// Formats a [CAHash] in the Nix default hash format, which is the format
-    /// that's used in NARInfos for example.
+    /// Formats a [`CAHash`] in the Nix default hash format, which is the format
+    /// that's used in `NARInfos` for example.
+    #[must_use]
     pub fn to_nix_nixbase32_string(&self) -> String {
         format!(
             "{}:{}",
@@ -103,20 +107,20 @@ impl CAHash {
         )
     }
 
-    /// This takes a serde_json::Map and turns it into this structure. This is necessary to do such
+    /// This takes a `serde_json::Map` and turns it into this structure. This is necessary to do such
     /// shenigans because we have external consumers, like the Derivation parser, who would like to
-    /// know whether we have a invalid or a missing NixHashWithMode structure in another structure,
+    /// know whether we have a invalid or a missing `NixHashWithMode` structure in another structure,
     /// e.g. Output.
     /// This means we have this combinatorial situation:
-    /// - no hash, no hashAlgo: no [CAHash] so we return Ok(None).
-    /// - present hash, missing hashAlgo: invalid, we will return missing_field
+    /// - no hash, no hashAlgo: no [`CAHash`] so we return Ok(None).
+    /// - present hash, missing hashAlgo: invalid, we will return `missing_field`
     /// - missing hash, present hashAlgo: same
     /// - present hash, present hashAlgo: either we return ourselves or a type/value validation
     /// error.
     /// This function is for internal consumption regarding those needs until we have a better
     /// solution. Now this is said, let's explain how this works.
     ///
-    /// We want to map the serde data model into a [CAHash].
+    /// We want to map the serde data model into a [`CAHash`].
     ///
     /// The serde data model has a `hash` field (containing a digest in nixbase32),
     /// and a `hashAlgo` field, containing the stringified hash algo.
@@ -172,25 +176,25 @@ impl CAHash {
 }
 
 impl Serialize for CAHash {
-    /// map a CAHash into the serde data model.
+    /// map a `CAHash` into the serde data model.
     fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
     where
         S: Serializer,
     {
         let mut map = serializer.serialize_map(Some(2))?;
         match self {
-            CAHash::Flat(h) => {
+            Self::Flat(h) => {
                 map.serialize_entry("hash", &nixbase32::encode(h.digest_as_bytes()))?;
                 map.serialize_entry("hashAlgo", &h.algo())?;
             }
-            CAHash::Nar(h) => {
+            Self::Nar(h) => {
                 map.serialize_entry("hash", &nixbase32::encode(h.digest_as_bytes()))?;
                 map.serialize_entry("hashAlgo", &format!("r:{}", &h.algo()))?;
             }
             // It is not legal for derivations to use this (which is where
             // we're currently exercising [Serialize] mostly,
             // but it's still good to be able to serialize other CA hashes too.
-            CAHash::Text(h) => {
+            Self::Text(h) => {
                 map.serialize_entry("hash", &nixbase32::encode(h.as_ref()))?;
                 map.serialize_entry("hashAlgo", "text")?;
             }

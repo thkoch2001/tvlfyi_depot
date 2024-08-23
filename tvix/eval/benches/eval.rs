@@ -15,7 +15,7 @@ fn eval_literals(c: &mut Criterion) {
     c.bench_function("int", |b| {
         b.iter(|| {
             interpret(black_box("42"));
-        })
+        });
     });
 }
 
@@ -23,7 +23,7 @@ fn eval_merge_attrs(c: &mut Criterion) {
     c.bench_function("merge small attrs", |b| {
         b.iter(|| {
             interpret(black_box("{ a = 1; b = 2; } // { c = 3; }"));
-        })
+        });
     });
 
     c.bench_function("merge large attrs with small attrs", |b| {
@@ -34,7 +34,7 @@ fn eval_merge_attrs(c: &mut Criterion) {
         let expr = format!("{large_attrs} // {{ c = 3; }}");
         b.iter(move || {
             interpret(black_box(&expr));
-        })
+        });
     });
 }
 

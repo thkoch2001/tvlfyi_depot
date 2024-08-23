@@ -123,9 +123,9 @@ impl ByName {
     /// Add an additional index for this name.
     fn add_idx(&mut self, new: LocalIdx) {
         match self {
-            ByName::Shadowed(indices) => indices.push(new),
-            ByName::Single(idx) => {
-                *self = ByName::Shadowed(vec![*idx, new]);
+            Self::Shadowed(indices) => indices.push(new),
+            Self::Single(idx) => {
+                *self = Self::Shadowed(vec![*idx, new]);
             }
         }
     }
@@ -134,10 +134,10 @@ impl ByName {
     /// single. Returns `true` if an entry was removed.
     fn remove_idx(&mut self) -> bool {
         match self {
-            ByName::Single(_) => false,
-            ByName::Shadowed(indices) => match indices[..] {
+            Self::Single(_) => false,
+            Self::Shadowed(indices) => match indices[..] {
                 [fst, _snd] => {
-                    *self = ByName::Single(fst);
+                    *self = Self::Single(fst);
                     true
                 }
                 _ => {
@@ -151,8 +151,8 @@ impl ByName {
     /// Return the most recent index.
     pub fn index(&self) -> LocalIdx {
         match self {
-            ByName::Single(idx) => *idx,
-            ByName::Shadowed(vec) => *vec.last().unwrap(),
+            Self::Single(idx) => *idx,
+            Self::Shadowed(vec) => *vec.last().unwrap(),
         }
     }
 }
