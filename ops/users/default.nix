@@ -264,4 +264,9 @@
     email = "tvix@sinavir.fr";
     password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$5GXvoN/enVljV97yE/Zasg$OrgY9/ge2LoxNm9OOqxh/kKLxoAvU54MbQa9WWiT0jY";
   }
+  {
+    username = "emery";
+    email = "emery@dmz.rs";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$b2k5UpTJafqM7yjHfVRjBg$zFGy/ZeI9Hb71TUfJwFp7qDKyUl8tdyFDUK1uNBYfUI";
+  }
 ]
