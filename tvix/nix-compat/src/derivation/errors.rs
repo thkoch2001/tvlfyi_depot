@@ -1,11 +1,11 @@
-//! Contains [DerivationError], exported as [crate::derivation::DerivationError]
+//! Contains [`DerivationError`], exported as [`crate::derivation::DerivationError`]
 use crate::store_path;
 use thiserror::Error;
 
 use super::CAHash;
 
 /// Errors that can occur during the validation of Derivation structs.
-#[derive(Debug, Error, PartialEq)]
+#[derive(Debug, Error, PartialEq, Eq)]
 pub enum DerivationError {
     // outputs
     #[error("no outputs defined")]
@@ -49,7 +49,7 @@ pub enum DerivationError {
 
 /// Errors that can occur during the validation of a specific
 // [crate::derivation::Output] of a [crate::derivation::Derviation].
-#[derive(Debug, Error, PartialEq)]
+#[derive(Debug, Error, PartialEq, Eq)]
 pub enum OutputError {
     #[error("Invalid output path {0}: {1}")]
     InvalidOutputPath(String, store_path::Error),

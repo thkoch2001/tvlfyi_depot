@@ -8,7 +8,7 @@
 //! Nix code and interacting with the language's data structures.
 //!
 //! Nix has several language features that make use of impurities (such as
-//! reading from the NIX_PATH environment variable, or interacting with files).
+//! reading from the `NIX_PATH` environment variable, or interacting with files).
 //! These features are optional and the API of this crate exposes functionality
 //! for controlling how they work.
 
@@ -306,6 +306,7 @@ impl<'co, 'ro, 'env, IO> EvaluationBuilder<'co, 'ro, 'env, IO> {
 impl<'co, 'ro, 'env> EvaluationBuilder<'co, 'ro, 'env, Box<dyn EvalIO>> {
     /// Initialize an `Evaluation`, without the import statement available, and
     /// all IO operations stubbed out.
+    #[must_use]
     pub fn new_pure() -> Self {
         Self::new(Box::new(DummyIO) as Box<dyn EvalIO>).with_enable_import(false)
     }
@@ -316,6 +317,7 @@ impl<'co, 'ro, 'env> EvaluationBuilder<'co, 'ro, 'env, Box<dyn EvalIO>> {
     ///
     /// If no I/O implementation is supplied, [`StdIO`] is used by
     /// default.
+    #[must_use]
     pub fn enable_impure(mut self, io: Option<Box<dyn EvalIO>>) -> Self {
         self.io_handle = io.unwrap_or_else(|| Box::new(StdIO) as Box<dyn EvalIO>);
         self.enable_import = true;
@@ -333,6 +335,7 @@ impl<'co, 'ro, 'env> EvaluationBuilder<'co, 'ro, 'env, Box<dyn EvalIO>> {
 
     #[cfg(feature = "impure")]
     /// Initialise an `Evaluation`, with all impure features turned on by default.
+    #[must_use]
     pub fn new_impure() -> Self {
         Self::new_pure().enable_impure(None)
     }
@@ -422,10 +425,12 @@ impl<'co, 'ro, 'env, IO> Evaluation<'co, 'ro, 'env, IO> {
 
 impl<'co, 'ro, 'env> Evaluation<'co, 'ro, 'env, Box<dyn EvalIO>> {
     #[cfg(feature = "impure")]
+    #[must_use]
     pub fn builder_impure() -> EvaluationBuilder<'co, 'ro, 'env, Box<dyn EvalIO>> {
         EvaluationBuilder::new_impure()
     }
 
+    #[must_use]
     pub fn builder_pure() -> EvaluationBuilder<'co, 'ro, 'env, Box<dyn EvalIO>> {
         EvaluationBuilder::new_pure()
     }
@@ -450,8 +455,7 @@ where
 
         let location_str = location
             .as_ref()
-            .map(|p| p.to_string_lossy().to_string())
-            .unwrap_or_else(|| "[code]".into());
+            .map_or_else(|| "[code]".into(), |p| p.to_string_lossy().to_string());
 
         let file = source.add_file(location_str, code.as_ref().to_string());
 
@@ -485,8 +489,7 @@ where
 
         let location_str = location
             .as_ref()
-            .map(|p| p.to_string_lossy().to_string())
-            .unwrap_or_else(|| "[code]".into());
+            .map_or_else(|| "[code]".into(), |p| p.to_string_lossy().to_string());
 
         let file = source.add_file(location_str, code.as_ref().to_string());
 

@@ -90,7 +90,12 @@ mod pure_builtins {
 
     use crate::{value::PointerEquality, AddContext, NixContext, NixContextElement};
 
-    use super::*;
+    use super::{
+        arithmetic_op, bgc_insert_key, cmp, coerce_value_to_path, generators, hash_nix_string,
+        to_xml, tvix_eval, BTreeMap, ByteVec, CatchableErrorKind, CoercionKind, ErrorKind, Gen,
+        GenCo, NixAttrs, NixList, NixString, Ordering, PathBuf, Regex, Thunk, Value, VecDeque,
+        VersionPart, VersionPartsIter,
+    };
 
     macro_rules! try_value {
         ($value:expr) => {{
@@ -119,7 +124,7 @@ mod pure_builtins {
 
     #[builtin("all")]
     async fn builtin_all(co: GenCo, pred: Value, list: Value) -> Result<Value, ErrorKind> {
-        for value in list.to_list()?.into_iter() {
+        for value in list.to_list()? {
             let pred_result = generators::request_call_with(&co, pred.clone(), [value]).await;
             let pred_result = try_value!(generators::request_force(&co, pred_result).await);
 
@@ -133,7 +138,7 @@ mod pure_builtins {
 
     #[builtin("any")]
     async fn builtin_any(co: GenCo, pred: Value, list: Value) -> Result<Value, ErrorKind> {
-        for value in list.to_list()?.into_iter() {
+        for value in list.to_list()? {
             let pred_result = generators::request_call_with(&co, pred.clone(), [value]).await;
             let pred_result = try_value!(generators::request_force(&co, pred_result).await);
 
@@ -212,7 +217,7 @@ mod pure_builtins {
         let list = list.to_list()?;
         let mut output = vec![];
 
-        for item in list.into_iter() {
+        for item in list {
             let set = generators::request_force(&co, item).await.to_attrs()?;
 
             if let Some(value) = set.select(&key) {
@@ -276,7 +281,7 @@ mod pure_builtins {
 
         let mut context = NixContext::new();
         if let Some(sep_context) = separator.take_context() {
-            context.extend(sep_context.into_iter())
+            context.extend(sep_context.into_iter());
         }
         let list = list.to_list()?;
         let mut res = BString::default();
@@ -333,17 +338,14 @@ mod pure_builtins {
             )
             .await?
             .to_contextful_str()?;
-        let result = str
-            .rfind_char('/')
-            .map(|last_slash| {
-                let x = &str[..last_slash];
-                if x.is_empty() {
-                    B("/")
-                } else {
-                    x
-                }
-            })
-            .unwrap_or(b".");
+        let result = str.rfind_char('/').map_or(b".".as_slice(), |last_slash| {
+            let x = &str[..last_slash];
+            if x.is_empty() {
+                B("/")
+            } else {
+                x
+            }
+        });
         if is_path {
             Ok(Value::Path(Box::new(PathBuf::from(
                 OsString::assert_from_raw_vec(result.to_owned()),
@@ -443,7 +445,7 @@ mod pure_builtins {
     async fn builtin_from_json(co: GenCo, json: Value) -> Result<Value, ErrorKind> {
         let json_str = json.to_str()?;
 
-        serde_json::from_slice(&json_str).map_err(|err| err.into())
+        serde_json::from_slice(&json_str).map_err(std::convert::Into::into)
     }
 
     #[builtin("toJSON")]
@@ -461,7 +463,7 @@ mod pure_builtins {
     async fn builtin_from_toml(co: GenCo, toml: Value) -> Result<Value, ErrorKind> {
         let toml_str = toml.to_str()?;
 
-        toml::from_str(toml_str.to_str()?).map_err(|err| err.into())
+        toml::from_str(toml_str.to_str()?).map_err(std::convert::Into::into)
     }
 
     #[builtin("genericClosure")]
@@ -493,7 +495,7 @@ mod pure_builtins {
                 return Ok(Value::Catchable(Box::new(cek)));
             }
 
-            if let Ok(false) = value_missing {
+            if matches!(value_missing, Ok(false)) {
                 continue;
             }
 
@@ -521,7 +523,7 @@ mod pure_builtins {
         let len = length.as_int()?;
         let mut out = Vec::with_capacity(
             len.try_into()
-                .map_err(|_| ErrorKind::Abort(format!("can not create list of size {}", len)))?,
+                .map_err(|_| ErrorKind::Abort(format!("can not create list of size {len}")))?,
         );
 
         // the best span we can get…
@@ -611,7 +613,7 @@ mod pure_builtins {
 
         let groups = s
             .iter_context()
-            .flat_map(|context| context.iter())
+            .flat_map(NixContext::iter)
             // Do not think `group_by` works here.
             // `group_by` works on consecutive elements of the iterator.
             // Due to how `HashSet` works (ordering is not guaranteed),
@@ -634,17 +636,17 @@ mod pure_builtins {
                 for ctx_element in group {
                     match ctx_element {
                         NixContextElement::Plain(spath) => {
-                            debug_assert!(spath == key, "Unexpected group containing mixed keys, expected: {:?}, encountered {:?}", key, spath);
+                            debug_assert!(spath == key, "Unexpected group containing mixed keys, expected: {key:?}, encountered {spath:?}");
                             is_path = true;
                         }
 
                         NixContextElement::Single { name, derivation } => {
-                            debug_assert!(derivation == key, "Unexpected group containing mixed keys, expected: {:?}, encountered {:?}", key, derivation);
+                            debug_assert!(derivation == key, "Unexpected group containing mixed keys, expected: {key:?}, encountered {derivation:?}");
                             outputs.push(name.clone().into());
                         }
 
                         NixContextElement::Derivation(drv_path) => {
-                            debug_assert!(drv_path == key, "Unexpected group containing mixed keys, expected: {:?}, encountered {:?}", key, drv_path);
+                            debug_assert!(drv_path == key, "Unexpected group containing mixed keys, expected: {key:?}, encountered {drv_path:?}");
                             all_outputs = true;
                         }
                     }
@@ -666,7 +668,7 @@ mod pure_builtins {
                     outputs.sort();
                     vec_attrs.push(("outputs", Value::List(outputs
                                 .into_iter()
-                                .map(|s| s.into())
+                                .map(std::convert::Into::into)
                                 .collect::<Vec<Value>>()
                                 .into()
                     )));
@@ -739,7 +741,7 @@ mod pure_builtins {
                 let some_outputs = some_outputs.to_list()?;
                 // TODO: check if `context_key` is a derivation path.
                 // This may require realization.
-                for output in some_outputs.into_iter() {
+                for output in some_outputs {
                     let output = output.to_str()?;
                     ctx_elements.insert(NixContextElement::Single {
                         derivation: context_key.to_string(),
@@ -750,7 +752,7 @@ mod pure_builtins {
         }
 
         if let Some(origin_ctx) = origin.context_mut() {
-            origin_ctx.extend(ctx_elements)
+            origin_ctx.extend(ctx_elements);
             // TODO: didn't we forget cases where origin had no context?
         }
 
@@ -984,7 +986,7 @@ mod pure_builtins {
 
         for val in list {
             let result = Value::Thunk(Thunk::new_suspended_call(f.clone(), val, span));
-            out.push(result)
+            out.push(result);
         }
 
         Ok(Value::List(out.into()))
@@ -1041,7 +1043,7 @@ mod pure_builtins {
                         // can be observed in make-initrd.nix when it comes
                         // to compressors which are matched over their full command
                         // and then a compressor name will be extracted from that.
-                        grp.map(|g| Value::from(g.as_str())).unwrap_or(Value::Null)
+                        grp.map_or(Value::Null, |g| Value::from(g.as_str()))
                     })
                     .collect::<Vec<Value>>()
                     .into(),
@@ -1077,8 +1079,7 @@ mod pure_builtins {
         );
         let version = dash_and_version
             .split_first()
-            .map(|x| core::str::from_utf8(x.1))
-            .unwrap_or(Ok(""))?;
+            .map_or(Ok(""), |x| core::str::from_utf8(x.1))?;
         Ok(Value::attrs(NixAttrs::from_iter(
             [("name", core::str::from_utf8(name)?), ("version", version)].into_iter(),
         )))
@@ -1198,7 +1199,7 @@ mod pure_builtins {
             }
 
             // If we don't match any `from`, we simply add a character
-            res.push_str(&string[i..i + 1]);
+            res.push_str(&string[i..=i]);
             i += 1;
 
             // Since we didn't apply anything transformation,
@@ -1268,12 +1269,11 @@ mod pure_builtins {
             let v: Vec<Value> = (1..num_captures)
                 .map(|i| capture_locations.get(i))
                 .map(|o| {
-                    o.map(|(start, end)| {
+                    o.map_or(Value::Null, |(start, end)| {
                         // Here, a surprising thing happens: we silently discard the original
                         // context. This is as intended, Nix does the same.
                         Value::from(&text[start..end])
                     })
-                    .unwrap_or(Value::Null)
                 })
                 .collect();
             ret.push(Value::List(NixList::from(v)));
@@ -1590,6 +1590,7 @@ async fn bgc_insert_key(
 
 /// The set of standard pure builtins in Nix, mostly concerned with
 /// data structure manipulation (string, attrs, list, etc. functions).
+#[must_use]
 pub fn pure_builtins() -> Vec<(&'static str, Value)> {
     let mut result = pure_builtins::builtins();
 
@@ -1624,7 +1625,10 @@ pub fn pure_builtins() -> Vec<(&'static str, Value)> {
 mod placeholder_builtins {
     use crate::NixContext;
 
-    use super::*;
+    use super::{
+        generators, tvix_eval, ByteVec, CoercionKind, ErrorKind, Gen, GenCo, NixAttrs, NixString,
+        Value, WarningKind,
+    };
 
     #[builtin("unsafeDiscardStringContext")]
     async fn builtin_unsafe_discard_string_context(
@@ -1676,9 +1680,9 @@ mod placeholder_builtins {
             let mut context = NixContext::new();
             context.extend(c.into_iter().map(|elem| match elem {
                 crate::NixContextElement::Derivation(drv_path) => {
-                    crate::NixContextElement::Plain(drv_path.to_string())
+                    crate::NixContextElement::Plain(drv_path)
                 }
-                elem => elem.clone(),
+                elem => elem,
             }));
 
             return Ok(Value::String(NixString::new_context_from(context, v)));
@@ -1718,6 +1722,7 @@ mod placeholder_builtins {
     }
 }
 
+#[must_use]
 pub fn placeholders() -> Vec<(&'static str, Value)> {
     placeholder_builtins::builtins()
 }

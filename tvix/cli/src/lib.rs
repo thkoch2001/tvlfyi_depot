@@ -132,7 +132,7 @@ pub fn evaluate(
         let mut runtime_observer = TracingObserver::new(std::io::stderr());
         if args.trace_runtime {
             if args.trace_runtime_timing {
-                runtime_observer.enable_timing()
+                runtime_observer.enable_timing();
             }
             eval_builder.set_runtime_observer(Some(&mut runtime_observer));
         }
@@ -185,7 +185,7 @@ pub fn evaluate(
             .for_each(|(drv_path, drv)| {
                 std::fs::write(dumpdir.join(drv_path.to_string()), drv.to_aterm_bytes())
                     .expect("failed to write drv to dumpdir");
-            })
+            });
     }
 
     Ok(EvalResult {
@@ -201,6 +201,7 @@ pub struct InterpretResult {
 }
 
 impl InterpretResult {
+    #[must_use]
     pub fn empty_success(globals: Option<Rc<GlobalsMap>>) -> Self {
         Self {
             output: String::new(),
@@ -209,15 +210,18 @@ impl InterpretResult {
         }
     }
 
+    #[must_use]
     pub fn finalize(self) -> bool {
         print!("{}", self.output);
         self.success
     }
 
+    #[must_use]
     pub fn output(&self) -> &str {
         &self.output
     }
 
+    #[must_use]
     pub fn success(&self) -> bool {
         self.success
     }

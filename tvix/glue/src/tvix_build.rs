@@ -1,5 +1,5 @@
 //! This module contains glue code translating from
-//! [nix_compat::derivation::Derivation] to [tvix_build::proto::BuildRequest].
+//! [`nix_compat::derivation::Derivation`] to [`tvix_build::proto::BuildRequest`].
 
 use std::collections::BTreeMap;
 
@@ -29,7 +29,7 @@ const NIX_ENVIRONMENT_VARS: [(&str, &str); 12] = [
     ("TMPDIR", "/build"),
 ];
 
-/// Takes a [Derivation] and turns it into a [BuildRequest].
+/// Takes a [Derivation] and turns it into a [`BuildRequest`].
 /// It assumes the Derivation has been validated.
 /// It needs two lookup functions:
 /// - one translating input sources to a castore node
@@ -67,7 +67,7 @@ pub(crate) fn derivation_to_build_request(
     environment_vars.extend(
         NIX_ENVIRONMENT_VARS
             .iter()
-            .map(|(k, v)| (k.to_string(), Bytes::from_static(v.as_bytes()))),
+            .map(|(k, v)| ((*k).to_string(), Bytes::from_static(v.as_bytes()))),
     );
 
     // extend / overwrite with the keys set in the derivation environment itself.
@@ -181,7 +181,7 @@ fn handle_pass_as_file(
 /// The filepath is `/build/.attrs-${nixbase32(sha256(key))`.
 fn calculate_pass_as_file_env(k: &str) -> (String, String) {
     (
-        format!("{}Path", k),
+        format!("{k}Path"),
         format!(
             "/build/.attr-{}",
             nixbase32::encode(&Sha256::new_with_prefix(k).finalize())
@@ -250,11 +250,11 @@ mod test {
         ];
 
         expected_environment_vars.extend(NIX_ENVIRONMENT_VARS.iter().map(|(k, v)| EnvVar {
-            key: k.to_string(),
+            key: (*k).to_string(),
             value: Bytes::from_static(v.as_bytes()),
         }));
 
-        expected_environment_vars.sort_unstable_by_key(|e| e.key.to_owned());
+        expected_environment_vars.sort_unstable_by_key(|e| e.key.clone());
 
         assert_eq!(
             BuildRequest {
@@ -267,7 +267,7 @@ mod test {
                 )],
                 inputs_dir: "nix/store".into(),
                 constraints: Some(BuildConstraints {
-                    system: derivation.system.clone(),
+                    system: derivation.system,
                     min_memory: 0,
                     network_access: false,
                     available_ro_paths: vec![],
@@ -322,11 +322,11 @@ mod test {
         ];
 
         expected_environment_vars.extend(NIX_ENVIRONMENT_VARS.iter().map(|(k, v)| EnvVar {
-            key: k.to_string(),
+            key: (*k).to_string(),
             value: Bytes::from_static(v.as_bytes()),
         }));
 
-        expected_environment_vars.sort_unstable_by_key(|e| e.key.to_owned());
+        expected_environment_vars.sort_unstable_by_key(|e| e.key.clone());
 
         assert_eq!(
             BuildRequest {
@@ -336,7 +336,7 @@ mod test {
                 inputs: vec![],
                 inputs_dir: "nix/store".into(),
                 constraints: Some(BuildConstraints {
-                    system: derivation.system.clone(),
+                    system: derivation.system,
                     min_memory: 0,
                     network_access: true,
                     available_ro_paths: vec![],
@@ -395,11 +395,11 @@ mod test {
         ];
 
         expected_environment_vars.extend(NIX_ENVIRONMENT_VARS.iter().map(|(k, v)| EnvVar {
-            key: k.to_string(),
+            key: (*k).to_string(),
             value: Bytes::from_static(v.as_bytes()),
         }));
 
-        expected_environment_vars.sort_unstable_by_key(|e| e.key.to_owned());
+        expected_environment_vars.sort_unstable_by_key(|e| e.key.clone());
 
         assert_eq!(
             BuildRequest {
@@ -409,7 +409,7 @@ mod test {
                 inputs: vec![],
                 inputs_dir: "nix/store".into(),
                 constraints: Some(BuildConstraints {
-                    system: derivation.system.clone(),
+                    system: derivation.system,
                     min_memory: 0,
                     network_access: false,
                     available_ro_paths: vec![],

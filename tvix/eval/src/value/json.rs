@@ -25,31 +25,31 @@ impl Value {
         let mut context = NixContext::new();
 
         let value = match self_forced {
-            Value::Null => Json::Null,
-            Value::Bool(b) => Json::Bool(b),
-            Value::Integer(i) => Json::Number(Number::from(i)),
-            Value::Float(f) => to_value(f)?,
-            Value::String(s) => {
+            Self::Null => Json::Null,
+            Self::Bool(b) => Json::Bool(b),
+            Self::Integer(i) => Json::Number(Number::from(i)),
+            Self::Float(f) => to_value(f)?,
+            Self::String(s) => {
                 context.mimic(&s);
 
                 Json::String(s.to_str()?.to_owned())
             }
 
-            Value::Path(p) => {
+            Self::Path(p) => {
                 let imported = generators::request_path_import(co, *p).await;
                 let path = imported.to_string_lossy().to_string();
                 context = context.append(crate::NixContextElement::Plain(path.clone()));
                 Json::String(path)
             }
 
-            Value::List(l) => {
+            Self::List(l) => {
                 let mut out = vec![];
 
-                for val in l.into_iter() {
+                for val in l {
                     match generators::request_to_json(co, val).await {
                         Ok((v, ctx)) => {
                             context.extend(ctx.into_iter());
-                            out.push(v)
+                            out.push(v);
                         }
                         Err(cek) => return Ok(Err(cek)),
                     }
@@ -58,13 +58,13 @@ impl Value {
                 Json::Array(out)
             }
 
-            Value::Attrs(attrs) => {
+            Self::Attrs(attrs) => {
                 // Attribute sets with a callable `__toString` attribute
                 // serialise to the string-coerced version of the result of
                 // calling that.
                 if attrs.select("__toString").is_some() {
                     let span = generators::request_span(co).await;
-                    match Value::Attrs(attrs)
+                    match Self::Attrs(attrs)
                         .coerce_to_string_(
                             co,
                             CoercionKind {
@@ -75,8 +75,8 @@ impl Value {
                         )
                         .await?
                     {
-                        Value::Catchable(cek) => return Ok(Err(*cek)),
-                        Value::String(s) => {
+                        Self::Catchable(cek) => return Ok(Err(*cek)),
+                        Self::String(s) => {
                             // We need a fresh context here because `__toString` will discard
                             // everything.
                             let mut fresh = NixContext::new();
@@ -112,17 +112,17 @@ impl Value {
                 Json::Object(out)
             }
 
-            Value::Catchable(c) => return Ok(Err(*c)),
+            Self::Catchable(c) => return Ok(Err(*c)),
 
-            val @ Value::Closure(_)
-            | val @ Value::Thunk(_)
-            | val @ Value::Builtin(_)
-            | val @ Value::AttrNotFound
-            | val @ Value::Blueprint(_)
-            | val @ Value::DeferredUpvalue(_)
-            | val @ Value::UnresolvedPath(_)
-            | val @ Value::Json(..)
-            | val @ Value::FinaliseRequest(_) => {
+            val @ (Self::Closure(_)
+            | Self::Thunk(_)
+            | Self::Builtin(_)
+            | Self::AttrNotFound
+            | Self::Blueprint(_)
+            | Self::DeferredUpvalue(_)
+            | Self::UnresolvedPath(_)
+            | Self::Json(..)
+            | Self::FinaliseRequest(_)) => {
                 return Err(ErrorKind::NotSerialisableToJson(val.type_of()))
             }
         };
@@ -132,13 +132,10 @@ impl Value {
 
     /// Generator version of the above, which wraps responses in
     /// [`Value::Json`].
-    pub(crate) async fn into_contextful_json_generator(
-        self,
-        co: GenCo,
-    ) -> Result<Value, ErrorKind> {
+    pub(crate) async fn into_contextful_json_generator(self, co: GenCo) -> Result<Self, ErrorKind> {
         match self.into_contextful_json(&co).await? {
-            Err(cek) => Ok(Value::from(cek)),
-            Ok((json, ctx)) => Ok(Value::Json(Box::new((json, ctx)))),
+            Err(cek) => Ok(Self::from(cek)),
+            Ok((json, ctx)) => Ok(Self::Json(Box::new((json, ctx)))),
         }
     }
 

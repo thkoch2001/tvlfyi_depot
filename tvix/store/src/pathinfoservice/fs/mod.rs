@@ -8,10 +8,10 @@ use tvix_castore::{Error, Node, PathComponent};
 
 use super::PathInfoService;
 
-/// Helper to construct a [TvixStoreFs] from a [BlobService], [DirectoryService]
-/// and [PathInfoService].
+/// Helper to construct a [`TvixStoreFs`] from a [`BlobService`], [`DirectoryService`]
+/// and [`PathInfoService`].
 /// This avoids users to have to interact with the wrapper struct directly, as
-/// it leaks into the type signature of TvixStoreFS.
+/// it leaks into the type signature of `TvixStoreFS`.
 pub fn make_fs<BS, DS, PS>(
     blob_service: BS,
     directory_service: DS,

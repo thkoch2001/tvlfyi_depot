@@ -49,7 +49,7 @@ impl Debug for SuspendedNative {
 /// Internal representation of the different states of a thunk.
 ///
 /// Upvalues must be finalised before leaving the initial state
-/// (Suspended or RecursiveClosure).  The [`value()`] function may
+/// (Suspended or `RecursiveClosure`).  The [`value()`] function may
 /// not be called until the thunk is in the final state (Evaluated).
 #[derive(Debug)]
 enum ThunkRepr {
@@ -87,20 +87,20 @@ enum ThunkRepr {
 impl ThunkRepr {
     fn debug_repr(&self) -> String {
         match self {
-            ThunkRepr::Evaluated(v) => format!("thunk(val|{})", v),
-            ThunkRepr::Blackhole { .. } => "thunk(blackhole)".to_string(),
-            ThunkRepr::Native(_) => "thunk(native)".to_string(),
-            ThunkRepr::Suspended { lambda, .. } => format!("thunk({:p})", *lambda),
+            Self::Evaluated(v) => format!("thunk(val|{v})"),
+            Self::Blackhole { .. } => "thunk(blackhole)".to_string(),
+            Self::Native(_) => "thunk(native)".to_string(),
+            Self::Suspended { lambda, .. } => format!("thunk({:p})", *lambda),
         }
     }
 
-    /// Return the Value within a fully-evaluated ThunkRepr; panics
+    /// Return the Value within a fully-evaluated `ThunkRepr`; panics
     /// if the thunk is not fully-evaluated.
     fn expect(self) -> Value {
         match self {
-            ThunkRepr::Evaluated(value) => value,
-            ThunkRepr::Blackhole { .. } => panic!("Thunk::expect() called on a black-holed thunk"),
-            ThunkRepr::Suspended { .. } | ThunkRepr::Native(_) => {
+            Self::Evaluated(value) => value,
+            Self::Blackhole { .. } => panic!("Thunk::expect() called on a black-holed thunk"),
+            Self::Suspended { .. } | Self::Native(_) => {
                 panic!("Thunk::expect() called on a suspended thunk")
             }
         }
@@ -108,9 +108,9 @@ impl ThunkRepr {
 
     fn expect_ref(&self) -> &Value {
         match self {
-            ThunkRepr::Evaluated(value) => value,
-            ThunkRepr::Blackhole { .. } => panic!("Thunk::expect() called on a black-holed thunk"),
-            ThunkRepr::Suspended { .. } | ThunkRepr::Native(_) => {
+            Self::Evaluated(value) => value,
+            Self::Blackhole { .. } => panic!("Thunk::expect() called on a black-holed thunk"),
+            Self::Suspended { .. } | Self::Native(_) => {
                 panic!("Thunk::expect() called on a suspended thunk")
             }
         }
@@ -118,8 +118,8 @@ impl ThunkRepr {
 
     pub fn is_forced(&self) -> bool {
         match self {
-            ThunkRepr::Evaluated(Value::Thunk(_)) => false,
-            ThunkRepr::Evaluated(_) => true,
+            Self::Evaluated(Value::Thunk(_)) => false,
+            Self::Evaluated(_) => true,
             _ => false,
         }
     }
@@ -134,7 +134,7 @@ pub struct Thunk(Rc<RefCell<ThunkRepr>>);
 
 impl Thunk {
     pub fn new_closure(lambda: Rc<Lambda>) -> Self {
-        Thunk(Rc::new(RefCell::new(ThunkRepr::Evaluated(Value::Closure(
+        Self(Rc::new(RefCell::new(ThunkRepr::Evaluated(Value::Closure(
             Rc::new(Closure {
                 upvalues: Rc::new(Upvalues::with_capacity(lambda.upvalue_count)),
                 lambda: lambda.clone(),
@@ -143,7 +143,7 @@ impl Thunk {
     }
 
     pub fn new_suspended(lambda: Rc<Lambda>, span: Span) -> Self {
-        Thunk(Rc::new(RefCell::new(ThunkRepr::Suspended {
+        Self(Rc::new(RefCell::new(ThunkRepr::Suspended {
             upvalues: Rc::new(Upvalues::with_capacity(lambda.upvalue_count)),
             lambda: lambda.clone(),
             span,
@@ -151,7 +151,7 @@ impl Thunk {
     }
 
     pub fn new_suspended_native(native: Box<dyn Fn() -> Result<Value, ErrorKind>>) -> Self {
-        Thunk(Rc::new(RefCell::new(ThunkRepr::Native(SuspendedNative(
+        Self(Rc::new(RefCell::new(ThunkRepr::Native(SuspendedNative(
             native,
         )))))
     }
@@ -180,7 +180,7 @@ impl Thunk {
         // Inform the VM that the chunk has ended
         lambda.chunk.push_op(Op::Return, span);
 
-        Thunk(Rc::new(RefCell::new(ThunkRepr::Suspended {
+        Self(Rc::new(RefCell::new(ThunkRepr::Suspended {
             upvalues: Rc::new(Upvalues::with_capacity(0)),
             lambda: Rc::new(lambda),
             span,
@@ -203,10 +203,10 @@ impl Thunk {
         }
     }
 
-    pub async fn force(myself: Thunk, co: GenCo, span: Span) -> Result<Value, ErrorKind> {
+    pub async fn force(myself: Self, co: GenCo, span: Span) -> Result<Value, ErrorKind> {
         Self::force_(myself, &co, span).await
     }
-    pub async fn force_(mut myself: Thunk, co: &GenCo, span: Span) -> Result<Value, ErrorKind> {
+    pub async fn force_(mut myself: Self, co: &GenCo, span: Span) -> Result<Value, ErrorKind> {
         // This vector of "thunks which point to the thunk-being-forced", to
         // be updated along with it, is necessary in order to write this
         // function in iterative (and later, mutual-tail-call) form.
@@ -217,7 +217,7 @@ impl Thunk {
             // value. The VM will continue running the code that landed us here.
             if myself.is_forced() {
                 let val = myself.unwrap_or_clone();
-                for other_thunk in also_update.into_iter() {
+                for other_thunk in also_update {
                     other_thunk.replace(ThunkRepr::Evaluated(val.clone()));
                 }
                 return Ok(val);
@@ -276,7 +276,7 @@ impl Thunk {
                             continue;
                         }
                         Err(rc) => {
-                            let inner_thunk = Thunk(rc);
+                            let inner_thunk = Self(rc);
                             if inner_thunk.is_forced() {
                                 // tail call to force the inner thunk; note that
                                 // this means the outer thunk remains unforced
@@ -409,7 +409,7 @@ impl TotalDisplay for Thunk {
 /// A wrapper type for tracking which thunks have already been seen
 /// in a context. This is necessary for printing and deeply forcing
 /// cyclic non-diverging data structures like `rec { f = [ f ]; }`.
-/// This is separate from the ThunkRepr::Blackhole mechanism, which
+/// This is separate from the `ThunkRepr::Blackhole` mechanism, which
 /// detects diverging data structures like `(rec { f = f; }).f`.
 ///
 /// The inner `HashSet` is not available on the outside, as it would be

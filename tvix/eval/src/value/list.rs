@@ -32,18 +32,22 @@ impl From<Vec<Value>> for NixList {
 }
 
 impl NixList {
+    #[must_use]
     pub fn len(&self) -> usize {
         self.0.len()
     }
 
+    #[must_use]
     pub fn get(&self, i: usize) -> Option<&Value> {
         self.0.get(i)
     }
 
+    #[must_use]
     pub fn is_empty(&self) -> bool {
         self.0.is_empty()
     }
 
+    #[must_use]
     pub fn construct(count: usize, stack_slice: Vec<Value>) -> Self {
         debug_assert!(
             count == stack_slice.len(),
@@ -52,17 +56,19 @@ impl NixList {
             stack_slice.len(),
         );
 
-        NixList(Rc::new(stack_slice))
+        Self(Rc::new(stack_slice))
     }
 
     pub fn iter(&self) -> std::slice::Iter<Value> {
         self.0.iter()
     }
 
+    #[must_use]
     pub fn ptr_eq(&self, other: &Self) -> bool {
         Rc::ptr_eq(&self.0, &other.0)
     }
 
+    #[must_use]
     pub fn into_inner(self) -> Vec<Value> {
         Rc::try_unwrap(self.0).unwrap_or_else(|rc| (*rc).clone())
     }

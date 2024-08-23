@@ -46,7 +46,7 @@ impl Ord for VersionPart<'_> {
     }
 }
 
-/// Type used to hold information about a VersionPart during creation
+/// Type used to hold information about a `VersionPart` during creation
 enum InternalPart {
     Number { range: RangeInclusive<usize> },
     Word { range: RangeInclusive<usize> },
@@ -106,6 +106,7 @@ impl<'a> Iterator for VersionPartsIter<'a> {
         }
 
         let (start, end, char) = char.unwrap();
+        #[allow(clippy::range_minus_one)]
         match char {
             // Divider encountered
             '.' | '-' => {

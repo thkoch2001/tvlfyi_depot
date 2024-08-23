@@ -8,7 +8,7 @@ use tvix_store::proto::PathInfo;
 
 use crate::AppState;
 
-/// The size limit for NARInfo uploads nar-bridge receives
+/// The size limit for `NARInfo` uploads nar-bridge receives
 const NARINFO_LIMIT: usize = 2 * 1024 * 1024;
 
 #[instrument(skip(path_info_service))]

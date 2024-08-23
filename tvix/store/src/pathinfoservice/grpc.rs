@@ -14,7 +14,7 @@ use tvix_castore::composition::{CompositionContext, ServiceBuilder};
 use tvix_castore::Error;
 use tvix_castore::Node;
 
-/// Connects to a (remote) tvix-store PathInfoService over gRPC.
+/// Connects to a (remote) tvix-store `PathInfoService` over gRPC.
 #[derive(Clone)]
 pub struct GRPCPathInfoService<T> {
     /// The internal reference to a gRPC client.
@@ -23,7 +23,7 @@ pub struct GRPCPathInfoService<T> {
 }
 
 impl<T> GRPCPathInfoService<T> {
-    /// construct a [GRPCPathInfoService] from a [proto::path_info_service_client::PathInfoServiceClient].
+    /// construct a [`GRPCPathInfoService`] from a [`proto::path_info_service_client::PathInfoServiceClient`].
     /// panics if called outside the context of a tokio runtime.
     pub fn from_client(
         grpc_client: proto::path_info_service_client::PathInfoServiceClient<T>,
@@ -58,7 +58,7 @@ where
 
                 path_info
                     .validate()
-                    .map_err(|e| Error::StorageError(format!("invalid pathinfo: {}", e)))?;
+                    .map_err(|e| Error::StorageError(format!("invalid pathinfo: {e}")))?;
 
                 Ok(Some(path_info))
             }
@@ -96,8 +96,7 @@ where
                             // validate the pathinfo
                             if let Err(e) = pathinfo.validate() {
                                 Err(Error::StorageError(format!(
-                                    "pathinfo {:?} failed validation: {}",
-                                    pathinfo, e
+                                    "pathinfo {pathinfo:?} failed validation: {e}"
                                 )))?;
                             }
                             yield pathinfo
@@ -163,7 +162,7 @@ impl TryFrom<url::Url> for GRPCPathInfoServiceConfig {
         // - In the case of unix sockets, there must be a path, but may not be a host.
         // - In the case of non-unix sockets, there must be a host, but no path.
         // Constructing the channel is handled by tvix_castore::channel::from_url.
-        Ok(GRPCPathInfoServiceConfig {
+        Ok(Self {
             url: url.to_string(),
         })
     }

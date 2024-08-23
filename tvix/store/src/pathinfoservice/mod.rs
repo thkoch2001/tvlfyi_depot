@@ -82,7 +82,7 @@ where
     }
 }
 
-/// Registers the builtin PathInfoService implementations with the registry
+/// Registers the builtin `PathInfoService` implementations with the registry
 pub(crate) fn register_pathinfo_services(reg: &mut Registry) {
     reg.register::<Box<dyn ServiceBuilder<Output = dyn PathInfoService>>, CachePathInfoServiceConfig>("cache");
     reg.register::<Box<dyn ServiceBuilder<Output = dyn PathInfoService>>, GRPCPathInfoServiceConfig>("grpc");

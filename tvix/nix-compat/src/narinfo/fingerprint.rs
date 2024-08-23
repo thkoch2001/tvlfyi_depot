@@ -1,8 +1,8 @@
 use crate::{nixbase32, store_path::StorePathRef};
 
-/// Computes the fingerprint string for certain fields in a [super::NarInfo].
+/// Computes the fingerprint string for certain fields in a [`super::NarInfo`].
 /// This fingerprint is signed by an ed25519 key, and in the case of a Nix HTTP
-/// Binary cache, included in the NARInfo files served from there.
+/// Binary cache, included in the `NARInfo` files served from there.
 pub fn fingerprint<'a, R: Iterator<Item = &'a StorePathRef<'a>>>(
     store_path: &StorePathRef,
     nar_sha256: &[u8; 32],
@@ -16,7 +16,7 @@ pub fn fingerprint<'a, R: Iterator<Item = &'a StorePathRef<'a>>>(
         nar_size,
         // references are absolute paths, joined with `,`.
         references
-            .map(|r| r.to_absolute_path())
+            .map(super::super::store_path::StorePath::to_absolute_path)
             .collect::<Vec<String>>()
             .join(",")
     )
@@ -26,7 +26,7 @@ pub fn fingerprint<'a, R: Iterator<Item = &'a StorePathRef<'a>>>(
 mod tests {
     use crate::narinfo::NarInfo;
 
-    const NARINFO_STR: &str = r#"StorePath: /nix/store/syd87l2rxw8cbsxmxl853h0r6pdwhwjr-curl-7.82.0-bin
+    const NARINFO_STR: &str = r"StorePath: /nix/store/syd87l2rxw8cbsxmxl853h0r6pdwhwjr-curl-7.82.0-bin
 URL: nar/05ra3y72i3qjri7xskf9qj8kb29r6naqy1sqpbs3azi3xcigmj56.nar.xz
 Compression: xz
 FileHash: sha256:05ra3y72i3qjri7xskf9qj8kb29r6naqy1sqpbs3azi3xcigmj56
@@ -37,7 +37,7 @@ References: 0jqd0rlxzra1rs38rdxl43yh6rxchgc6-curl-7.82.0 6w8g7njm4mck5dmjxws0z1x
 Deriver: 5rwxzi7pal3qhpsyfc16gzkh939q1np6-curl-7.82.0.drv
 Sig: cache.nixos.org-1:TsTTb3WGTZKphvYdBHXwo6weVILmTytUjLB+vcX89fOjjRicCHmKA4RCPMVLkj6TMJ4GMX3HPVWRdD1hkeKZBQ==
 Sig: test1:519iiVLx/c4Rdt5DNt6Y2Jm6hcWE9+XY69ygiWSZCNGVcmOcyL64uVAJ3cV8vaTusIZdbTnYo9Y7vDNeTmmMBQ==
-"#;
+";
 
     #[test]
     fn fingerprint() {

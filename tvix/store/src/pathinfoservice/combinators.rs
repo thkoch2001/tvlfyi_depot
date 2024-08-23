@@ -111,7 +111,7 @@ mod test {
     const PATH_INFO_DIGEST: [u8; 20] = [0; 20];
 
     /// Helper function setting up an instance of a "far" and "near"
-    /// PathInfoService.
+    /// `PathInfoService`.
     async fn create_pathinfoservice() -> super::Cache<LruPathInfoService, MemoryPathInfoService> {
         // Create an instance of a "far" PathInfoService.
         let far = MemoryPathInfoService::default();

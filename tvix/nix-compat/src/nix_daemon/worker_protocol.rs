@@ -11,9 +11,9 @@ use crate::wire;
 
 use super::ProtocolVersion;
 
-static WORKER_MAGIC_1: u64 = 0x6e697863; // "nixc"
-static WORKER_MAGIC_2: u64 = 0x6478696f; // "dxio"
-pub static STDERR_LAST: u64 = 0x616c7473; // "alts"
+static WORKER_MAGIC_1: u64 = 0x6e69_7863; // "nixc"
+static WORKER_MAGIC_2: u64 = 0x6478_696f; // "dxio"
+pub static STDERR_LAST: u64 = 0x616c_7473; // "alts"
 
 /// | Nix version     | Protocol |
 /// |-----------------|----------|
@@ -47,14 +47,14 @@ pub static MAX_SETTING_SIZE: usize = 1024;
 /// Worker Operation
 ///
 /// These operations are encoded as unsigned 64 bits before being sent
-/// to the wire. See the [read_op] and
-/// [write_op] operations to serialize/deserialize the
+/// to the wire. See the [`read_op`] and
+/// [`write_op`] operations to serialize/deserialize the
 /// operation on the wire.
 ///
 /// Note: for now, we're using the Nix 2.20 operation description. The
 /// operations marked as obsolete are obsolete for Nix 2.20, not
 /// necessarily for Nix 2.3. We'll revisit this later on.
-#[derive(Debug, PartialEq, Primitive)]
+#[derive(Debug, PartialEq, Eq, Primitive)]
 pub enum Operation {
     IsValidPath = 1,
     HasSubstitutes = 3,
@@ -105,7 +105,7 @@ pub enum Operation {
 /// Log verbosity. In the Nix wire protocol, the client requests a
 /// verbosity level to the daemon, which in turns does not produce any
 /// log below this verbosity.
-#[derive(Debug, PartialEq, Primitive)]
+#[derive(Debug, PartialEq, Eq, Primitive)]
 pub enum Verbosity {
     LvlError = 0,
     LvlWarn = 1,
@@ -119,7 +119,7 @@ pub enum Verbosity {
 
 /// Settings requested by the client. These settings are applied to a
 /// connection to between the daemon and a client.
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct ClientSettings {
     pub keep_failed: bool,
     pub keep_going: bool,
@@ -144,7 +144,7 @@ pub struct ClientSettings {
 /// Note: this function **only** reads the settings. It does not
 /// manage the log state with the daemon. You'll have to do that on
 /// your own. A minimal log implementation will consist in sending
-/// back [STDERR_LAST] to the client after reading the client
+/// back [`STDERR_LAST`] to the client after reading the client
 /// settings.
 ///
 /// FUTUREWORK: write serialization.
@@ -159,7 +159,7 @@ pub async fn read_client_settings<R: AsyncReadExt + Unpin>(
     let verbosity = Verbosity::from_u64(verbosity_uint).ok_or_else(|| {
         Error::new(
             ErrorKind::InvalidData,
-            format!("Can't convert integer {} to verbosity", verbosity_uint),
+            format!("Can't convert integer {verbosity_uint} to verbosity"),
         )
     })?;
     let max_build_jobs = r.read_u64_le().await?;
@@ -203,7 +203,7 @@ pub async fn read_client_settings<R: AsyncReadExt + Unpin>(
 /// # Arguments
 ///
 /// * conn: connection with the Nix client.
-/// * nix_version: semantic version of the Nix daemon. "2.18.2" for
+/// * `nix_version`: semantic version of the Nix daemon. "2.18.2" for
 ///   instance.
 /// * trusted: trust level of the Nix client.
 ///
@@ -222,7 +222,7 @@ where
     if worker_magic_1 != WORKER_MAGIC_1 {
         Err(std::io::Error::new(
             ErrorKind::InvalidData,
-            format!("Incorrect worker magic number received: {}", worker_magic_1),
+            format!("Incorrect worker magic number received: {worker_magic_1}"),
         ))
     } else {
         conn.write_u64_le(WORKER_MAGIC_2).await?;
@@ -236,7 +236,7 @@ where
         if client_version < ProtocolVersion::from_parts(1, 10) {
             return Err(Error::new(
                 ErrorKind::Unsupported,
-                format!("The nix client version {} is too old", client_version),
+                format!("The nix client version {client_version} is too old"),
             ));
         }
         if client_version.minor() >= 14 {
@@ -269,7 +269,7 @@ pub async fn read_op<R: AsyncReadExt + Unpin>(r: &mut R) -> std::io::Result<Oper
     let op_number = r.read_u64_le().await?;
     Operation::from_u64(op_number).ok_or(Error::new(
         ErrorKind::InvalidData,
-        format!("Invalid OP number {}", op_number),
+        format!("Invalid OP number {op_number}"),
     ))
 }
 
@@ -277,12 +277,12 @@ pub async fn read_op<R: AsyncReadExt + Unpin>(r: &mut R) -> std::io::Result<Oper
 pub async fn write_op<W: AsyncWriteExt + Unpin>(w: &mut W, op: &Operation) -> std::io::Result<()> {
     let op = Operation::to_u64(op).ok_or(Error::new(
         ErrorKind::Other,
-        format!("Can't convert the OP {:?} to u64", op),
+        format!("Can't convert the OP {op:?} to u64"),
     ))?;
     w.write_u64(op).await
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum Trust {
     Trusted,
     NotTrusted,
@@ -334,7 +334,7 @@ mod tests {
             .await
             .unwrap();
 
-        assert_eq!(client_version, PROTOCOL_VERSION)
+        assert_eq!(client_version, PROTOCOL_VERSION);
     }
 
     #[tokio::test]

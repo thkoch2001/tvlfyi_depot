@@ -49,13 +49,13 @@
 //! # Restrictions
 //!
 //! NOTE: These restrictions are not (and cannot be) enforced by this module,
-//! but must be enforced by its consumers, [super::reader] and [super::writer].
+//! but must be enforced by its consumers, [`super::reader`] and [`super::writer`].
 //!
 //! Directory entry names cannot have the reserved names `.` and `..`, nor contain
 //! forward slashes. They must appear in strictly ascending lexicographic order
-//! within a directory, and can be at most [MAX_NAME_LEN] bytes in length.
+//! within a directory, and can be at most [`MAX_NAME_LEN`] bytes in length.
 //!
-//! Symlink targets can be at most [MAX_TARGET_LEN] bytes in length.
+//! Symlink targets can be at most [`MAX_TARGET_LEN`] bytes in length.
 //!
 //! Neither is permitted to be empty, or contain null bytes.
 
@@ -95,7 +95,7 @@ const TOK_PAD_PAR: [u8; 24] = *b"\0\0\0\0\0\0\0\0\x01\0\0\0\0\0\0\0)\0\0\0\0\0\0
 
 #[cfg(feature = "async")]
 #[derive(Debug)]
-pub(crate) enum PadPar {}
+pub enum PadPar {}
 
 #[cfg(all(feature = "async", feature = "wire"))]
 impl crate::wire::reader::Tag for PadPar {

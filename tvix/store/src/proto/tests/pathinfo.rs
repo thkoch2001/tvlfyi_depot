@@ -133,19 +133,19 @@ fn validate_symlink(
     assert_eq!(exp_result, p.validate());
 }
 
-/// Ensure parsing a correct PathInfo without narinfo populated succeeds.
+/// Ensure parsing a correct `PathInfo` without narinfo populated succeeds.
 #[test]
 fn validate_references_without_narinfo_ok() {
     assert!(PATH_INFO_WITHOUT_NARINFO.validate().is_ok());
 }
 
-/// Ensure parsing a correct PathInfo with narinfo populated succeeds.
+/// Ensure parsing a correct `PathInfo` with narinfo populated succeeds.
 #[test]
 fn validate_references_with_narinfo_ok() {
     assert!(PATH_INFO_WITH_NARINFO.validate().is_ok());
 }
 
-/// Create a PathInfo with a wrong digest length in narinfo.nar_sha256, and
+/// Create a `PathInfo` with a wrong digest length in `narinfo.nar_sha256`, and
 /// ensure validation fails.
 #[test]
 fn validate_wrong_nar_sha256() {
@@ -154,11 +154,11 @@ fn validate_wrong_nar_sha256() {
 
     match path_info.validate().expect_err("must_fail") {
         ValidatePathInfoError::InvalidNarSha256DigestLen(2) => {}
-        e => panic!("unexpected error: {:?}", e),
+        e => panic!("unexpected error: {e:?}"),
     };
 }
 
-/// Create a PathInfo with a wrong count of narinfo.reference_names,
+/// Create a `PathInfo` with a wrong count of `narinfo.reference_names`,
 /// and ensure validation fails.
 #[test]
 fn validate_inconsistent_num_refs_fail() {
@@ -167,11 +167,11 @@ fn validate_inconsistent_num_refs_fail() {
 
     match path_info.validate().expect_err("must_fail") {
         ValidatePathInfoError::InconsistentNumberOfReferences(1, 0) => {}
-        e => panic!("unexpected error: {:?}", e),
+        e => panic!("unexpected error: {e:?}"),
     };
 }
 
-/// Create a PathInfo with a wrong digest length in references.
+/// Create a `PathInfo` with a wrong digest length in references.
 #[test]
 fn validate_invalid_reference_digest_len() {
     let mut path_info = PATH_INFO_WITHOUT_NARINFO.clone();
@@ -182,11 +182,11 @@ fn validate_invalid_reference_digest_len() {
             1, // position
             2, // unexpected digest len
         ) => {}
-        e => panic!("unexpected error: {:?}", e),
+        e => panic!("unexpected error: {e:?}"),
     };
 }
 
-/// Create a PathInfo with a narinfo.reference_name[1] that is no valid store path.
+/// Create a `PathInfo` with a `narinfo.reference_name`[1] that is no valid store path.
 #[test]
 fn validate_invalid_narinfo_reference_name() {
     let mut path_info = PATH_INFO_WITH_NARINFO.clone();
@@ -202,11 +202,11 @@ fn validate_invalid_narinfo_reference_name() {
                 reference_name
             );
         }
-        e => panic!("unexpected error: {:?}", e),
+        e => panic!("unexpected error: {e:?}"),
     }
 }
 
-/// Create a PathInfo with a narinfo.reference_name[0] that doesn't match references[0].
+/// Create a `PathInfo` with a `narinfo.reference_name`[0] that doesn't match references[0].
 #[test]
 fn validate_inconsistent_narinfo_reference_name_digest() {
     let mut path_info = PATH_INFO_WITH_NARINFO.clone();
@@ -219,7 +219,7 @@ fn validate_inconsistent_narinfo_reference_name_digest() {
             assert_eq!(path_info.references[0][..], e_expected[..]);
             assert_eq!(DUMMY_PATH_DIGEST, e_actual);
         }
-        e => panic!("unexpected error: {:?}", e),
+        e => panic!("unexpected error: {e:?}"),
     }
 }
 
@@ -250,7 +250,7 @@ fn validate_symlink_target_null_byte_invalid() {
     .expect_err("must fail validation");
 }
 
-/// Create a PathInfo with a correct deriver field and ensure it succeeds.
+/// Create a `PathInfo` with a correct deriver field and ensure it succeeds.
 #[test]
 fn validate_valid_deriver() {
     let mut path_info = PATH_INFO_WITH_NARINFO.clone();
@@ -265,7 +265,7 @@ fn validate_valid_deriver() {
     path_info.validate().expect("must validate");
 }
 
-/// Create a PathInfo with a broken deriver field and ensure it fails.
+/// Create a `PathInfo` with a broken deriver field and ensure it fails.
 #[test]
 fn validate_invalid_deriver() {
     let mut path_info = PATH_INFO_WITH_NARINFO.clone();
@@ -279,14 +279,14 @@ fn validate_invalid_deriver() {
 
     match path_info.validate().expect_err("must fail validation") {
         ValidatePathInfoError::InvalidDeriverField(_) => {}
-        e => panic!("unexpected error: {:?}", e),
+        e => panic!("unexpected error: {e:?}"),
     }
 }
 
 #[test]
 fn from_nixcompat_narinfo() {
     let narinfo_parsed = nix_compat::narinfo::NarInfo::parse(
-        r#"StorePath: /nix/store/s66mzxpvicwk07gjbjfw9izjfa797vsw-hello-2.12.1
+        r"StorePath: /nix/store/s66mzxpvicwk07gjbjfw9izjfa797vsw-hello-2.12.1
 URL: nar/1nhgq6wcggx0plpy4991h3ginj6hipsdslv4fd4zml1n707j26yq.nar.xz
 Compression: xz
 FileHash: sha256:1nhgq6wcggx0plpy4991h3ginj6hipsdslv4fd4zml1n707j26yq
@@ -295,7 +295,7 @@ NarHash: sha256:0yzhigwjl6bws649vcs2asa4lbs8hg93hyix187gc7s7a74w5h80
 NarSize: 226488
 References: 3n58xw4373jp0ljirf06d8077j15pc4j-glibc-2.37-8 s66mzxpvicwk07gjbjfw9izjfa797vsw-hello-2.12.1
 Deriver: ib3sh3pcz10wsmavxvkdbayhqivbghlq-hello-2.12.1.drv
-Sig: cache.nixos.org-1:8ijECciSFzWHwwGVOIVYdp2fOIOJAfmzGHPQVwpktfTQJF6kMPPDre7UtFw3o+VqenC5P8RikKOAAfN7CvPEAg=="#).expect("must parse");
+Sig: cache.nixos.org-1:8ijECciSFzWHwwGVOIVYdp2fOIOJAfmzGHPQVwpktfTQJF6kMPPDre7UtFw3o+VqenC5P8RikKOAAfN7CvPEAg==").expect("must parse");
 
     assert_eq!(
         PathInfo {
@@ -306,7 +306,7 @@ Sig: cache.nixos.org-1:8ijECciSFzWHwwGVOIVYdp2fOIOJAfmzGHPQVwpktfTQJF6kMPPDre7Ut
             ],
             narinfo: Some(
                 NarInfo {
-                    nar_size: 226488,
+                    nar_size: 226_488,
                     nar_sha256: Bytes::copy_from_slice(
                         &nixbase32::decode_fixed::<32>("0yzhigwjl6bws649vcs2asa4lbs8hg93hyix187gc7s7a74w5h80".as_bytes())
                             .unwrap()
@@ -334,7 +334,7 @@ Sig: cache.nixos.org-1:8ijECciSFzWHwwGVOIVYdp2fOIOJAfmzGHPQVwpktfTQJF6kMPPDre7Ut
 #[test]
 fn from_nixcompat_narinfo_fod() {
     let narinfo_parsed = nix_compat::narinfo::NarInfo::parse(
-        r#"StorePath: /nix/store/pa10z4ngm0g83kx9mssrqzz30s84vq7k-hello-2.12.1.tar.gz
+        r"StorePath: /nix/store/pa10z4ngm0g83kx9mssrqzz30s84vq7k-hello-2.12.1.tar.gz
 URL: nar/1zjrhzhaizsrlsvdkqfl073vivmxcqnzkff4s50i0cdf541ary1r.nar.xz
 Compression: xz
 FileHash: sha256:1zjrhzhaizsrlsvdkqfl073vivmxcqnzkff4s50i0cdf541ary1r
@@ -344,7 +344,7 @@ NarSize: 1033416
 References: 
 Deriver: dyivpmlaq2km6c11i0s6bi6mbsx0ylqf-hello-2.12.1.tar.gz.drv
 Sig: cache.nixos.org-1:ywnIG629nQZQhEr6/HLDrLT/mUEp5J1LC6NmWSlJRWL/nM7oGItJQUYWGLvYGhSQvHrhIuvMpjNmBNh/WWqCDg==
-CA: fixed:sha256:086vqwk2wl8zfs47sq2xpjc9k066ilmb8z6dn0q6ymwjzlm196cd"#
+CA: fixed:sha256:086vqwk2wl8zfs47sq2xpjc9k066ilmb8z6dn0q6ymwjzlm196cd"
     ).expect("must parse");
 
     assert_eq!(
@@ -353,7 +353,7 @@ CA: fixed:sha256:086vqwk2wl8zfs47sq2xpjc9k066ilmb8z6dn0q6ymwjzlm196cd"#
             references: vec![],
             narinfo: Some(
                 NarInfo {
-                    nar_size: 1033416,
+                    nar_size: 1_033_416,
                     nar_sha256: Bytes::copy_from_slice(
                         &nixbase32::decode_fixed::<32>(
                             "1lvqpbk2k1sb39z8jfxixf7p7v8sj4z6mmpa44nnmff3w1y6h8lh"
@@ -390,11 +390,11 @@ CA: fixed:sha256:086vqwk2wl8zfs47sq2xpjc9k066ilmb8z6dn0q6ymwjzlm196cd"#
     );
 }
 
-/// Exercise .as_narinfo() on a PathInfo and ensure important fields are preserved..
+/// Exercise .`as_narinfo()` on a `PathInfo` and ensure important fields are preserved..
 #[test]
 fn as_narinfo() {
     let narinfo_parsed = nix_compat::narinfo::NarInfo::parse(
-        r#"StorePath: /nix/store/pa10z4ngm0g83kx9mssrqzz30s84vq7k-hello-2.12.1.tar.gz
+        r"StorePath: /nix/store/pa10z4ngm0g83kx9mssrqzz30s84vq7k-hello-2.12.1.tar.gz
 URL: nar/1zjrhzhaizsrlsvdkqfl073vivmxcqnzkff4s50i0cdf541ary1r.nar.xz
 Compression: xz
 FileHash: sha256:1zjrhzhaizsrlsvdkqfl073vivmxcqnzkff4s50i0cdf541ary1r
@@ -404,7 +404,7 @@ NarSize: 1033416
 References: 
 Deriver: dyivpmlaq2km6c11i0s6bi6mbsx0ylqf-hello-2.12.1.tar.gz.drv
 Sig: cache.nixos.org-1:ywnIG629nQZQhEr6/HLDrLT/mUEp5J1LC6NmWSlJRWL/nM7oGItJQUYWGLvYGhSQvHrhIuvMpjNmBNh/WWqCDg==
-CA: fixed:sha256:086vqwk2wl8zfs47sq2xpjc9k066ilmb8z6dn0q6ymwjzlm196cd"#
+CA: fixed:sha256:086vqwk2wl8zfs47sq2xpjc9k066ilmb8z6dn0q6ymwjzlm196cd"
     ).expect("must parse");
 
     let path_info: PathInfo = (&narinfo_parsed).into();
@@ -418,7 +418,7 @@ CA: fixed:sha256:086vqwk2wl8zfs47sq2xpjc9k066ilmb8z6dn0q6ymwjzlm196cd"#
     narinfo_returned.url = "some.nar";
 
     assert_eq!(
-        r#"StorePath: /nix/store/pa10z4ngm0g83kx9mssrqzz30s84vq7k-hello-2.12.1.tar.gz
+        r"StorePath: /nix/store/pa10z4ngm0g83kx9mssrqzz30s84vq7k-hello-2.12.1.tar.gz
 URL: some.nar
 Compression: none
 NarHash: sha256:1lvqpbk2k1sb39z8jfxixf7p7v8sj4z6mmpa44nnmff3w1y6h8lh
@@ -427,7 +427,7 @@ References:
 Deriver: dyivpmlaq2km6c11i0s6bi6mbsx0ylqf-hello-2.12.1.tar.gz.drv
 Sig: cache.nixos.org-1:ywnIG629nQZQhEr6/HLDrLT/mUEp5J1LC6NmWSlJRWL/nM7oGItJQUYWGLvYGhSQvHrhIuvMpjNmBNh/WWqCDg==
 CA: fixed:sha256:086vqwk2wl8zfs47sq2xpjc9k066ilmb8z6dn0q6ymwjzlm196cd
-"#,
+",
         narinfo_returned.to_string(),
     );
 }

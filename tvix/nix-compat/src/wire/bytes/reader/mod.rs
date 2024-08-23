@@ -12,15 +12,15 @@ use trailer::{read_trailer, ReadTrailer, Trailer};
 
 #[doc(hidden)]
 pub use self::trailer::Pad;
-pub(crate) use self::trailer::Tag;
+pub use self::trailer::Tag;
 mod trailer;
 
 /// Reads a "bytes wire packet" from the underlying reader.
-/// The format is the same as in [crate::wire::bytes::read_bytes],
-/// however this structure provides a [AsyncRead] interface,
+/// The format is the same as in [`crate::wire::bytes::read_bytes`],
+/// however this structure provides a [`AsyncRead`] interface,
 /// allowing to not having to pass around the entire payload in memory.
 ///
-/// It is constructed by reading a size with [BytesReader::new],
+/// It is constructed by reading a size with [`BytesReader::new`],
 /// and yields payload data until the end of the packet is reached.
 ///
 /// It will not return the final bytes before all padding has been successfully
@@ -66,9 +66,9 @@ impl<R> BytesReader<R>
 where
     R: AsyncRead + Unpin,
 {
-    /// Constructs a new BytesReader, using the underlying passed reader.
+    /// Constructs a new `BytesReader`, using the underlying passed reader.
     pub async fn new<S: RangeBounds<u64>>(reader: R, allowed_size: S) -> io::Result<Self> {
-        BytesReader::new_internal(reader, allowed_size).await
+        Self::new_internal(reader, allowed_size).await
     }
 }
 
@@ -77,7 +77,7 @@ impl<R, T: Tag> BytesReader<R, T>
 where
     R: AsyncRead + Unpin,
 {
-    /// Constructs a new BytesReader, using the underlying passed reader.
+    /// Constructs a new `BytesReader`, using the underlying passed reader.
     pub(crate) async fn new_internal<S: RangeBounds<u64>>(
         mut reader: R,
         allowed_size: S,
@@ -116,8 +116,8 @@ where
             State::Body {
                 consumed, user_len, ..
             } => user_len.get() - consumed,
-            State::ReadTrailer(ref fut) => fut.len() as u64,
-            State::ReleaseTrailer { consumed, ref data } => data.len() as u64 - consumed as u64,
+            State::ReadTrailer(ref fut) => u64::from(fut.len()),
+            State::ReleaseTrailer { consumed, ref data } => data.len() as u64 - u64::from(consumed),
         }
     }
 }
@@ -320,7 +320,7 @@ mod tests {
         pub static ref LARGE_PAYLOAD: Vec<u8> = (0..255).collect::<Vec<u8>>().repeat(4 * 1024);
     }
 
-    /// Helper function, calling the (simpler) write_bytes with the payload.
+    /// Helper function, calling the (simpler) `write_bytes` with the payload.
     /// We use this to create data we want to read from the wire.
     async fn produce_packet_bytes(payload: &[u8]) -> Vec<u8> {
         let mut exp = vec![];

@@ -11,7 +11,7 @@ use std::ops::Index;
 
 use crate::{opcode::UpvalueIdx, Value};
 
-/// Structure for carrying upvalues of an UpvalueCarrier.  The
+/// Structure for carrying upvalues of an `UpvalueCarrier`.  The
 /// implementation of this struct encapsulates the logic for
 /// capturing and accessing upvalues.
 ///
@@ -39,7 +39,7 @@ pub struct Upvalues {
 
 impl Upvalues {
     pub fn with_capacity(count: usize) -> Self {
-        Upvalues {
+        Self {
             static_upvalues: Vec::with_capacity(count),
             with_stack: None,
         }
@@ -69,7 +69,7 @@ impl Upvalues {
     /// Resolve deferred upvalues from the provided stack slice,
     /// mutating them in the internal upvalue slots.
     pub fn resolve_deferred_upvalues(&mut self, stack: &[Value]) {
-        for upvalue in self.static_upvalues.iter_mut() {
+        for upvalue in &mut self.static_upvalues {
             if let Value::DeferredUpvalue(update_from_idx) = upvalue {
                 *upvalue = stack[update_from_idx.0].clone();
             }

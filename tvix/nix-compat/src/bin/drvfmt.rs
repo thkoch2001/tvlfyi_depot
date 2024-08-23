@@ -8,11 +8,11 @@ use mimalloc::MiMalloc;
 #[global_allocator]
 static GLOBAL: MiMalloc = MiMalloc;
 
-/// construct a serde_json::Value from a Derivation.
+/// construct a `serde_json::Value` from a Derivation.
 /// Some environment values can be non-valid UTF-8 strings.
 /// `serde_json` prints them out really unreadable.
 /// This is a tool to print A-Terms in a more readable fashion, so we brutally
-/// use the [std::string::ToString] implementation of [bstr::BString] to get
+/// use the [`std::string::ToString`] implementation of [`bstr::BString`] to get
 /// a UTF-8 string (replacing invalid characters with the Unicode replacement
 /// codepoint).
 fn build_serde_json_value(drv: Derivation) -> serde_json::Value {
@@ -42,6 +42,6 @@ fn main() {
                     .expect("unable to serialize")
             );
         }
-        Err(e) => eprintln!("unable to parse derivation: {:#?}", e),
+        Err(e) => eprintln!("unable to parse derivation: {e:#?}"),
     }
 }

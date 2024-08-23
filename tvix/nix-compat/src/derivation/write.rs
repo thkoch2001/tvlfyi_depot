@@ -25,12 +25,12 @@ pub const BRACKET_CLOSE: char = ']';
 pub const COMMA: char = ',';
 pub const QUOTE: char = '"';
 
-/// Something that can be written as ATerm.
+/// Something that can be written as `ATerm`.
 ///
 /// Note that we mostly use explicit `write_*` calls
 /// instead since the serialization of the items depends on
 /// the context a lot.
-pub(crate) trait AtermWriteable {
+pub trait AtermWriteable {
     fn aterm_write(&self, writer: &mut impl Write) -> std::io::Result<()>;
 }
 
@@ -62,7 +62,7 @@ impl AtermWriteable for [u8; 32] {
 }
 
 // Writes a character to the writer.
-pub(crate) fn write_char(writer: &mut impl Write, c: char) -> io::Result<()> {
+pub fn write_char(writer: &mut impl Write, c: char) -> io::Result<()> {
     let mut buf = [0; 4];
     let b = c.encode_utf8(&mut buf).as_bytes();
     writer.write_all(b)
@@ -72,11 +72,7 @@ pub(crate) fn write_char(writer: &mut impl Write, c: char) -> io::Result<()> {
 // The `escape` argument controls whether escaping will be skipped.
 // This is the case if `s` is known to only contain characters that need no
 // escaping.
-pub(crate) fn write_field<S: AsRef<[u8]>>(
-    writer: &mut impl Write,
-    s: S,
-    escape: bool,
-) -> io::Result<()> {
+pub fn write_field<S: AsRef<[u8]>>(writer: &mut impl Write, s: S, escape: bool) -> io::Result<()> {
     write_char(writer, QUOTE)?;
 
     if !escape {
@@ -105,7 +101,7 @@ fn write_array_elements<S: AsRef<[u8]>>(
     Ok(())
 }
 
-pub(crate) fn write_outputs(
+pub fn write_outputs(
     writer: &mut impl Write,
     outputs: &BTreeMap<String, Output>,
 ) -> Result<(), io::Error> {
@@ -125,7 +121,7 @@ pub(crate) fn write_outputs(
                 format!("{}{}", ca_kind_prefix(ca_hash), ca_hash.hash().algo()),
                 data_encoding::HEXLOWER.encode(ca_hash.hash().digest_as_bytes()),
             ),
-            None => ("".to_string(), "".to_string()),
+            None => (String::new(), String::new()),
         };
 
         elements.push(&mode_and_algo);
@@ -140,7 +136,7 @@ pub(crate) fn write_outputs(
     Ok(())
 }
 
-pub(crate) fn write_input_derivations(
+pub fn write_input_derivations(
     writer: &mut impl Write,
     input_derivations: &BTreeMap<impl AtermWriteable, BTreeSet<String>>,
 ) -> Result<(), io::Error> {
@@ -173,7 +169,7 @@ pub(crate) fn write_input_derivations(
     Ok(())
 }
 
-pub(crate) fn write_input_sources(
+pub fn write_input_sources(
     writer: &mut impl Write,
     input_sources: &BTreeSet<StorePath<String>>,
 ) -> Result<(), io::Error> {
@@ -190,20 +186,17 @@ pub(crate) fn write_input_sources(
     Ok(())
 }
 
-pub(crate) fn write_system(writer: &mut impl Write, platform: &str) -> Result<(), Error> {
+pub fn write_system(writer: &mut impl Write, platform: &str) -> Result<(), Error> {
     write_field(writer, platform, true)?;
     Ok(())
 }
 
-pub(crate) fn write_builder(writer: &mut impl Write, builder: &str) -> Result<(), Error> {
+pub fn write_builder(writer: &mut impl Write, builder: &str) -> Result<(), Error> {
     write_field(writer, builder, true)?;
     Ok(())
 }
 
-pub(crate) fn write_arguments(
-    writer: &mut impl Write,
-    arguments: &[String],
-) -> Result<(), io::Error> {
+pub fn write_arguments(writer: &mut impl Write, arguments: &[String]) -> Result<(), io::Error> {
     write_char(writer, BRACKET_OPEN)?;
     write_array_elements(
         writer,
@@ -217,10 +210,7 @@ pub(crate) fn write_arguments(
     Ok(())
 }
 
-pub(crate) fn write_environment<E, K, V>(
-    writer: &mut impl Write,
-    environment: E,
-) -> Result<(), io::Error>
+pub fn write_environment<E, K, V>(writer: &mut impl Write, environment: E) -> Result<(), io::Error>
 where
     E: IntoIterator<Item = (K, V)>,
     K: AsRef<[u8]>,

@@ -1,5 +1,5 @@
-//! This contains test scenarios that a given [PathInfoService] needs to pass.
-//! We use [rstest] and [rstest_reuse] to provide all services we want to test
+//! This contains test scenarios that a given [`PathInfoService`] needs to pass.
+//! We use [rstest] and [`rstest_reuse`] to provide all services we want to test
 //! against, and then apply this template to all test functions.
 
 use futures::TryStreamExt;

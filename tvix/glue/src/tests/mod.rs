@@ -68,13 +68,12 @@ fn eval_test(code_path: PathBuf, expect_success: bool) {
         Some(Value::Catchable(_)) => true,
         _ => !result.errors.is_empty(),
     };
-    if expect_success && failed {
-        panic!(
-            "{}: evaluation of eval-okay test should succeed, but failed with {:?}",
-            code_path.display(),
-            result.errors,
-        );
-    }
+    assert!(
+        !(expect_success && failed),
+        "{}: evaluation of eval-okay test should succeed, but failed with {:?}",
+        code_path.display(),
+        result.errors,
+    );
 
     if !expect_success && failed {
         return;
@@ -120,14 +119,14 @@ fn eval_test(code_path: PathBuf, expect_success: bool) {
 // are guaranteed to be valid Nix code.
 #[rstest]
 fn eval_okay(#[files("src/tests/tvix_tests/eval-okay-*.nix")] code_path: PathBuf) {
-    eval_test(code_path, true)
+    eval_test(code_path, true);
 }
 
 // eval-okay-* tests from the original Nix test suite.
 #[cfg(feature = "nix_tests")]
 #[rstest]
 fn nix_eval_okay(#[files("src/tests/nix_tests/eval-okay-*.nix")] code_path: PathBuf) {
-    eval_test(code_path, true)
+    eval_test(code_path, true);
 }
 
 // eval-okay-* tests from the original Nix test suite which do not yet pass for tvix
@@ -156,5 +155,5 @@ fn nix_eval_okay(#[files("src/tests/nix_tests/eval-okay-*.nix")] code_path: Path
 // (assertion, parse error, etc) is not currently checked.
 #[rstest]
 fn eval_fail(#[files("src/tests/tvix_tests/eval-fail-*.nix")] code_path: PathBuf) {
-    eval_test(code_path, false)
+    eval_test(code_path, false);
 }

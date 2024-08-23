@@ -19,13 +19,13 @@ mod impure_builtins {
     use std::ffi::OsStr;
     use std::os::unix::ffi::OsStrExt;
 
-    use super::*;
+    use super::{env, generators, tvix_eval, ErrorKind, Gen, GenCo, NixAttrs, NixString, Value};
     use crate::builtins::{coerce_value_to_path, hash::hash_nix_string};
 
     #[builtin("getEnv")]
     async fn builtin_get_env(co: GenCo, var: Value) -> Result<Value, ErrorKind> {
         Ok(env::var(OsStr::from_bytes(&var.to_str()?))
-            .unwrap_or_else(|_| "".into())
+            .unwrap_or_else(|_| String::new())
             .into())
     }
 
@@ -97,6 +97,7 @@ mod impure_builtins {
 
 /// Return all impure builtins, that is all builtins which may perform I/O
 /// outside of the VM and so cannot be used in all contexts (e.g. WASM).
+#[must_use]
 pub fn impure_builtins() -> Vec<(&'static str, Value)> {
     let mut result = impure_builtins::builtins();
 

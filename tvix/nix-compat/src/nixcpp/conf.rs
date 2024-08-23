@@ -24,7 +24,7 @@ pub struct NixConfig<'a> {
 
 impl<'a> NixConfig<'a> {
     /// Parses configuration from a file like `/etc/nix/nix.conf`, returning
-    /// a [NixConfig] with all values contained in there.
+    /// a [`NixConfig`] with all values contained in there.
     /// It does not support parsing multiple config files, merging semantics,
     /// and also does not understand `include` and `!include` statements.
     pub fn parse(input: &'a str) -> Result<Self, Error> {
@@ -73,7 +73,7 @@ impl<'a> NixConfig<'a> {
                     "sandbox-fallback" => this.sandbox_fallback = Some(val.parse().ok()?),
                     "substituters" => this.substituters = Some(val.split_whitespace().collect()),
                     "system-features" => {
-                        this.system_features = Some(val.split_whitespace().collect())
+                        this.system_features = Some(val.split_whitespace().collect());
                     }
                     "trusted-public-keys" => {
                         this.trusted_public_keys = Some(
@@ -81,23 +81,23 @@ impl<'a> NixConfig<'a> {
                                 .map(crate::narinfo::VerifyingKey::parse)
                                 .collect::<Result<Vec<crate::narinfo::VerifyingKey>, _>>()
                                 .ok()?,
-                        )
+                        );
                     }
                     "trusted-substituters" => {
-                        this.trusted_substituters = Some(val.split_whitespace().collect())
+                        this.trusted_substituters = Some(val.split_whitespace().collect());
                     }
                     "trusted-users" => this.trusted_users = Some(val.split_whitespace().collect()),
                     "extra-platforms" => {
-                        this.extra_platforms = Some(val.split_whitespace().collect())
+                        this.extra_platforms = Some(val.split_whitespace().collect());
                     }
                     "extra-sandbox-paths" => {
-                        this.extra_sandbox_paths = Some(val.split_whitespace().collect())
+                        this.extra_sandbox_paths = Some(val.split_whitespace().collect());
                     }
                     "experimental-features" => {
-                        this.experimental_features = Some(val.split_whitespace().collect())
+                        this.experimental_features = Some(val.split_whitespace().collect());
                     }
                     "builders-use-substitutes" => {
-                        this.builders_use_substitutes = Some(val.parse().ok()?)
+                        this.builders_use_substitutes = Some(val.parse().ok()?);
                     }
                     _ => return None,
                 }
@@ -105,7 +105,7 @@ impl<'a> NixConfig<'a> {
             }
 
             parse_val(&mut out, tag, val)
-                .ok_or_else(|| Error::InvalidValue(tag.to_string(), val.to_string()))?
+                .ok_or_else(|| Error::InvalidValue(tag.to_string(), val.to_string()))?;
         }
 
         Ok(out)
@@ -133,9 +133,9 @@ pub enum SandboxSetting {
 impl Display for SandboxSetting {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            SandboxSetting::True => write!(f, "true"),
-            SandboxSetting::False => write!(f, "false"),
-            SandboxSetting::Relaxed => write!(f, "relaxed"),
+            Self::True => write!(f, "true"),
+            Self::False => write!(f, "false"),
+            Self::Relaxed => write!(f, "relaxed"),
         }
     }
 }

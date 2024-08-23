@@ -39,21 +39,20 @@ pub enum Error {
 impl Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Error::Unserializable { value_type } => write!(
+            Self::Unserializable { value_type } => write!(
                 f,
-                "can not deserialise a Nix '{}' into a Rust type",
-                value_type
+                "can not deserialise a Nix '{value_type}' into a Rust type"
             ),
 
-            Error::Unsupported { wanted } => {
-                write!(f, "can not deserialize a '{}' from a Nix value", wanted)
+            Self::Unsupported { wanted } => {
+                write!(f, "can not deserialize a '{wanted}' from a Nix value")
             }
 
-            Error::UnexpectedType { expected, got } => {
-                write!(f, "expected type {}, but got Nix type {}", expected, got)
+            Self::UnexpectedType { expected, got } => {
+                write!(f, "expected type {expected}, but got Nix type {got}")
             }
 
-            Error::NixErrors { errors } => {
+            Self::NixErrors { errors } => {
                 writeln!(
                     f,
                     "{} occured during Nix evaluation: ",
@@ -67,15 +66,15 @@ impl Display for Error {
                 Ok(())
             }
 
-            Error::Deserialization(err) => write!(f, "deserialisation error occured: {}", err),
+            Self::Deserialization(err) => write!(f, "deserialisation error occured: {err}"),
 
-            Error::IntegerConversion { got, need } => {
-                write!(f, "i64({}) does not fit in a {}", got, need)
+            Self::IntegerConversion { got, need } => {
+                write!(f, "i64({got}) does not fit in a {need}")
             }
 
-            Error::AmbiguousEnum => write!(f, "could not determine enum variant: ambiguous keys"),
+            Self::AmbiguousEnum => write!(f, "could not determine enum variant: ambiguous keys"),
 
-            Error::UnitEnumContent => write!(f, "provided content for unit enum variant"),
+            Self::UnitEnumContent => write!(f, "provided content for unit enum variant"),
         }
     }
 }

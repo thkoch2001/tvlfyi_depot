@@ -22,7 +22,7 @@ impl BuildService for GRPCBuildService {
         client
             .do_build(request)
             .await
-            .map(|resp| resp.into_inner())
+            .map(tonic::Response::into_inner)
             .map_err(std::io::Error::other)
     }
 }

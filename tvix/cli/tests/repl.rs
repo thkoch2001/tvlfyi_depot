@@ -25,36 +25,36 @@ macro_rules! test_repl {
 }
 
 test_repl!(simple_expr_eval() {
-    "1" => expect![[r#"
+    "1" => expect![[r"
         => 1 :: int
-    "#]];
+    "]];
 });
 
 test_repl!(multiline_input() {
     "{ x = 1; " => expect![[""]];
-    "y = 2; }" => expect![[r#"
+    "y = 2; }" => expect![[r"
         => { x = 1; y = 2; } :: set
-    "#]];
+    "]];
 });
 
 test_repl!(bind_literal() {
     "x = 1" => expect![[""]];
-    "x" => expect![[r#"
+    "x" => expect![[r"
         => 1 :: int
-    "#]];
+    "]];
 });
 
 test_repl!(bind_lazy() {
     "x = { z = 1; }" => expect![[""]];
-    "x" => expect![[r#"
+    "x" => expect![[r"
         => { z = 1; } :: set
-    "#]];
-    "x.z" => expect![[r#"
+    "]];
+    "x.z" => expect![[r"
         => 1 :: int
-    "#]];
-    "x.z" => expect![[r#"
+    "]];
+    "x.z" => expect![[r"
         => 1 :: int
-    "#]];
+    "]];
 });
 
 test_repl!(bind_lazy_errors() {
@@ -64,35 +64,35 @@ test_repl!(bind_lazy_errors() {
 
 test_repl!(bind_referencing_import() {
     "six = import ./tests/six.nix {}" => expect![[""]];
-    "six.six" => expect![[r#"
+    "six.six" => expect![[r"
         => 6 :: int
-    "#]];
+    "]];
     "imported = import ./tests/import.nix"  => expect![[""]];
-    "(imported {}).six" => expect![[r#"
+    "(imported {}).six" => expect![[r"
         => 6 :: int
-    "#]];
+    "]];
 });
 
 test_repl!(deep_print() {
-    "builtins.map (x: x + 1) [ 1 2 3 ]" => expect![[r#"
+    "builtins.map (x: x + 1) [ 1 2 3 ]" => expect![[r"
         => [ <CODE> <CODE> <CODE> ] :: list
-    "#]];
-    ":p builtins.map (x: x + 1) [ 1 2 3 ]" => expect![[r#"
+    "]];
+    ":p builtins.map (x: x + 1) [ 1 2 3 ]" => expect![[r"
         => [ 2 3 4 ] :: list
-    "#]];
+    "]];
 });
 
 test_repl!(explain() {
-    ":d { x = 1; y = [ 2 3 4 ]; }" => expect![[r#"
+    ":d { x = 1; y = [ 2 3 4 ]; }" => expect![[r"
         => a 2-item attribute set
-    "#]];
+    "]];
 });
 
 test_repl!(reference_nix_path() {
-    "<nixpkgs>" => expect![[r#"
+    "<nixpkgs>" => expect![[r"
         => /tmp :: path
-    "#]];
-    "<nixpkgs>" => expect![[r#"
+    "]];
+    "<nixpkgs>" => expect![[r"
         => /tmp :: path
-    "#]];
+    "]];
 });

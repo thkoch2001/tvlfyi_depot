@@ -46,7 +46,7 @@ async fn import_impl(
 
     let parsed = rnix::ast::Root::parse(&contents);
     let errors = parsed.errors();
-    let file = source.add_file(path.to_string_lossy().to_string(), contents.to_owned());
+    let file = source.add_file(path.to_string_lossy().to_string(), contents.clone());
 
     if !errors.is_empty() {
         return Err(ErrorKind::ImportParseError {
@@ -99,7 +99,7 @@ async fn import_impl(
 }
 
 /// Constructs the `import` builtin. This builtin is special in that
-/// it needs to capture the [crate::SourceCode] structure to correctly
+/// it needs to capture the [`crate::SourceCode`] structure to correctly
 /// track source code locations while invoking a compiler.
 // TODO: need to be able to pass through a CompilationObserver, too.
 // TODO: can the `SourceCode` come from the compiler?

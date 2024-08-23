@@ -38,13 +38,13 @@ pub enum FileType {
 impl std::fmt::Display for FileType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         let type_as_str = match &self {
-            FileType::Directory => "directory",
-            FileType::Regular => "regular",
-            FileType::Symlink => "symlink",
-            FileType::Unknown => "unknown",
+            Self::Directory => "directory",
+            Self::Regular => "regular",
+            Self::Symlink => "symlink",
+            Self::Unknown => "unknown",
         };
 
-        write!(f, "{}", type_as_str)
+        write!(f, "{type_as_str}")
     }
 }
 
@@ -67,7 +67,7 @@ pub trait EvalIO {
     /// Open the file at the specified path to a `io::Read`.
     fn open(&self, path: &Path) -> io::Result<Box<dyn io::Read>>;
 
-    /// Return the [FileType] of the given path, or an error if it doesn't
+    /// Return the [`FileType`] of the given path, or an error if it doesn't
     /// exist.
     fn file_type(&self, path: &Path) -> io::Result<FileType>;
 
@@ -150,7 +150,7 @@ impl EvalIO for StdIO {
                 FileType::Unknown
             };
 
-            result.push((entry.file_name().into_vec().into(), val))
+            result.push((entry.file_name().into_vec().into(), val));
         }
 
         Ok(result)

@@ -46,7 +46,7 @@ fn validate(
 
     derivation
         .validate(true)
-        .expect("derivation failed to validate")
+        .expect("derivation failed to validate");
 }
 
 #[rstest]
@@ -124,7 +124,7 @@ fn from_aterm_bytes_duplicate_map_key() {
     }
 }
 
-/// Read in a derivation in ATerm, but add some garbage at the end.
+/// Read in a derivation in `ATerm`, but add some garbage at the end.
 /// Ensure the parser detects and fails in this case.
 #[test]
 fn from_aterm_bytes_trailer() {
@@ -151,7 +151,7 @@ fn from_aterm_bytes_trailer() {
 )]
 #[case::unicode("unicode", "52a9id8hx688hvlnz4d1n25ml1jdykz0-unicode.drv")]
 fn derivation_path(#[case] name: &str, #[case] expected_path: &str) {
-    let json_bytes = fs::read(format!("{}/ok/{}.json", RESOURCES_PATHS, expected_path))
+    let json_bytes = fs::read(format!("{RESOURCES_PATHS}/ok/{expected_path}.json"))
         .expect("unable to read JSON");
     let derivation: Derivation =
         serde_json::from_slice(&json_bytes).expect("JSON was not well-formatted");
@@ -194,7 +194,7 @@ fn derivation_without_output_paths(derivation: &Derivation) -> Derivation {
 fn hash_derivation_modulo_fixed(#[case] drv_path: &str, #[case] expected_digest: [u8; 32]) {
     // read in the fixture
     let json_bytes =
-        fs::read(format!("{}/ok/{}.json", RESOURCES_PATHS, drv_path)).expect("unable to read JSON");
+        fs::read(format!("{RESOURCES_PATHS}/ok/{drv_path}.json")).expect("unable to read JSON");
     let drv: Derivation = serde_json::from_slice(&json_bytes).expect("must deserialize");
 
     let actual = drv.hash_derivation_modulo(|_| panic!("must not be called"));
@@ -220,7 +220,7 @@ fn hash_derivation_modulo_fixed(#[case] drv_path: &str, #[case] expected_digest:
 fn output_paths(#[case] name: &str, #[case] drv_path_str: &str) {
     // read in the derivation
     let expected_derivation = Derivation::from_aterm_bytes(
-        &fs::read(format!("{}/ok/{}", RESOURCES_PATHS, drv_path_str)).expect("unable to read .drv"),
+        &fs::read(format!("{RESOURCES_PATHS}/ok/{drv_path_str}")).expect("unable to read .drv"),
     )
     .expect("must succeed");
 
@@ -409,9 +409,10 @@ fn output_path_construction() {
     let foo_calc_result = foo_drv.calculate_output_paths(
         "foo",
         &foo_drv.hash_derivation_modulo(|drv_path| {
-            if drv_path.to_string() != "0hm2f1psjpcwg8fijsmr4wwxrx59s092-bar.drv" {
-                panic!("lookup called with unexpected drv_path: {}", drv_path);
-            }
+            assert!(
+                !(drv_path.to_string() != "0hm2f1psjpcwg8fijsmr4wwxrx59s092-bar.drv"),
+                "lookup called with unexpected drv_path: {drv_path}"
+            );
             bar_drv_hash_derivation_modulo
         }),
     );
