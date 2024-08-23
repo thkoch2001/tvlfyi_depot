@@ -35,65 +35,13 @@ depot.web.tvl.template {
     <kbd>cl</kbd>), atward will redirect to the appropriate `tvl.fyi`
     domain.
 
-    ### Configuration
-
-    Some behaviour of atward can be configured by adding query
-    parameters to the search string:
-
-    * <kbd>cs=true</kbd> - use Sourcegraph instead of cgit to view code
-
-
-    In some browsers (like Firefox) users can not edit query
-    parameters for search engines. As an alternative configuration can
-    be supplied via cookies with the same names as the configuration
-    parameters.
-
-    The form below can set this configuration:
-    <form class="cheddar-callout cheddar-todo">
-      <input type="checkbox"
-             id="cs-setting"
-             name="cs-setting"
-             onchange="saveSetting(this, 'cs');">
-      <label for="cs-setting">Use Sourcegraph instead of cgit</label>
-    </form>
-
-    <noscript>
-      <p class="cheddar-callout cheddar-warning">
-        The form above only works with Javascript enabled. Only a few
-        lines of Javascript are used, and they are licensed under a
-        free-software license (MIT).
-      </p>
-    </noscript>
-
     ### Source code
 
     atward's source code lives at
     [//web/atward](https://at.tvl.fyi/?q=%2F%2Fweb%2Fatward).
   '';
+
   extraHead = ''
-    <script>
-      /* Initialise the state of all settings. */
-      function loadSettings() {
-          loadSetting(document.getElementById('cs-setting'), 'cs');
-      }
-
-      /* Initialise the state of a setting from a cookie. */
-      function loadSetting(checkbox, name) {
-          if (document.cookie.split(';').some(function(cookie) {
-              return cookie.indexOf(`''${name}=true`) >= 0;
-          })) {
-              checkbox.checked = true;
-          }
-      }
-
-      /* Persist the state of a checkbox in a cookie */
-      function saveSetting(checkbox, name) {
-          console.log(`setting atward parameter '''''${name}' to ''${checkbox.checked.toString()}`);
-          document.cookie = `''${name}=''${checkbox.checked.toString()};`;
-      }
-
-      document.addEventListener('DOMContentLoaded', loadSettings);
-    </script>
     <link rel="search" type="application/opensearchdescription+xml" title="TVL Search" href="https://at.tvl.fyi/opensearch.xml">
   '';
 }
