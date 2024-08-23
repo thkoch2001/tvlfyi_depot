@@ -5,7 +5,6 @@
 //! browsers and attempts to send users to useful locations based on
 //! their search query (falling back to another search engine).
 use regex::Regex;
-use rouille::input::cookies;
 use rouille::{Request, Response};
 
 #[cfg(test)]
@@ -31,43 +30,14 @@ struct Handler {
 struct Query {
     /// Query string itself.
     query: String,
-
-    /// Should Sourcegraph be used instead of cgit?
-    cs: bool,
-}
-
-/// Helper function for setting a parameter based on a query
-/// parameter.
-fn query_setting(req: &Request, config: &mut bool, param: &str) {
-    match req.get_param(param) {
-        Some(s) if s == "true" => *config = true,
-        Some(s) if s == "false" => *config = false,
-        _ => {}
-    }
 }
 
 impl Query {
     fn from_request(req: &Request) -> Option<Query> {
-        // First extract the actual search query ...
-        let mut query = match req.get_param("q") {
-            Some(query) => Query { query, cs: false },
+        match req.get_param("q") {
+            Some(query) => Some(Query { query }),
             None => return None,
-        };
-
-        // ... then apply settings to it. Settings in query parameters
-        // take precedence over cookies.
-        for cookie in cookies(req) {
-            match cookie {
-                ("cs", "true") => {
-                    query.cs = true;
-                }
-                _ => {}
-            }
         }
-
-        query_setting(req, &mut query.cs, "cs");
-
-        Some(query)
     }
 }
 
@@ -76,7 +46,6 @@ impl From<&str> for Query {
     fn from(query: &str) -> Query {
         Query {
             query: query.to_string(),
-            cs: false,
         }
     }
 }
@@ -90,10 +59,6 @@ fn cgit_url(path: &str) -> String {
     }
 }
 
-/// Create a URL to a path in Sourcegraph.
-fn sourcegraph_path_url(path: &str) -> String {
-    format!("https://cs.tvl.fyi/depot/-/tree/{}", path)
-}
 /// Definition of all supported query handlers in atward.
 fn handlers() -> Vec<Handler> {
     vec![
@@ -126,16 +91,11 @@ fn handlers() -> Vec<Handler> {
         // TODO(tazjin): Add support for specifying lines in a query parameter
         Handler {
             pattern: Regex::new("^//(?P<path>[a-zA-Z].*)?$").unwrap(),
-            target: |query, captures| {
+            target: |_, captures| {
                 // Pass an empty string if the path is missing, to
                 // redirect to the depot root.
                 let path = captures.name("path").map(|m| m.as_str()).unwrap_or("");
-
-                if query.cs {
-                    Some(sourcegraph_path_url(path))
-                } else {
-                    Some(cgit_url(path))
-                }
+                Some(cgit_url(path))
             },
         },
     ]
