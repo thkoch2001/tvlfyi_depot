@@ -2,19 +2,12 @@
 
 let
   inherit (pkgs)
+    rustPlatform
     rust-bin
     fetchFromGitea
     pkg-config
     openssl
     ;
-
-  toolchain = rust-bin.selectLatestNightlyWith (builtins.getAttr "default");
-
-  rustPlatform = pkgs.makeRustPlatform {
-    cargo = toolchain;
-    rustc = toolchain;
-  };
-
 in
 
 rustPlatform.buildRustPackage rec {
@@ -30,6 +23,8 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-SIpdFXTk6MC/drjCLaaa49BbGsvCMNbPGCfTxAlCo9c=";
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ];
+
+  RUSTC_BOOTSTRAP = 1;
 
   meta = {
     description = "Syndicate broker server";
