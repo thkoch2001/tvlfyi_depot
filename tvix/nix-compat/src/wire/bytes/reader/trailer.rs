@@ -11,7 +11,7 @@ use tokio::io::{self, AsyncRead, ReadBuf};
 
 /// Trailer represents up to 8 bytes of data read as part of the trailer block(s)
 #[derive(Debug)]
-pub(crate) struct Trailer {
+pub struct Trailer {
     data_len: u8,
     buf: [u8; 8],
 }
@@ -25,18 +25,18 @@ impl Deref for Trailer {
 }
 
 /// Tag defines a "trailer tag": specific, fixed bytes that must follow wire data.
-pub(crate) trait Tag {
+pub trait Tag {
     /// The expected suffix
     ///
     /// The first 8 bytes may be ignored, and it must be an 8-byte aligned size.
     const PATTERN: &'static [u8];
 
-    /// Suitably sized buffer for reading [Self::PATTERN]
+    /// Suitably sized buffer for reading [`Self::PATTERN`]
     ///
     /// HACK: This is a workaround for const generics limitations.
     type Buf: AsRef<[u8]> + AsMut<[u8]> + Debug + Unpin;
 
-    /// Make an instance of [Self::Buf]
+    /// Make an instance of [`Self::Buf`]
     fn make_buf() -> Self::Buf;
 }
 
@@ -54,7 +54,7 @@ impl Tag for Pad {
 }
 
 #[derive(Debug)]
-pub(crate) struct ReadTrailer<R, T: Tag> {
+pub struct ReadTrailer<R, T: Tag> {
     reader: R,
     data_len: u8,
     filled: u8,
@@ -62,8 +62,8 @@ pub(crate) struct ReadTrailer<R, T: Tag> {
     _phantom: PhantomData<fn(T) -> T>,
 }
 
-/// read_trailer returns a [Future] that reads a trailer with a given [Tag] from `reader`
-pub(crate) fn read_trailer<R: AsyncRead + Unpin, T: Tag>(
+/// `read_trailer` returns a [Future] that reads a trailer with a given [Tag] from `reader`
+pub fn read_trailer<R: AsyncRead + Unpin, T: Tag>(
     reader: R,
     data_len: u8,
 ) -> ReadTrailer<R, T> {

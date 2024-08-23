@@ -19,7 +19,7 @@ pub struct LruPathInfoService {
 }
 
 impl LruPathInfoService {
-    pub fn with_capacity(capacity: NonZeroUsize) -> Self {
+    #[must_use] pub fn with_capacity(capacity: NonZeroUsize) -> Self {
         Self {
             lru: Arc::new(RwLock::new(LruCache::new(capacity))),
         }
@@ -38,7 +38,7 @@ impl PathInfoService for LruPathInfoService {
         // call validate
         let store_path = path_info
             .validate()
-            .map_err(|e| Error::InvalidRequest(format!("invalid PathInfo: {}", e)))?;
+            .map_err(|e| Error::InvalidRequest(format!("invalid PathInfo: {e}")))?;
 
         self.lru
             .write()
@@ -110,13 +110,13 @@ mod test {
             if let castorepb::Node { node: Some(node) } = root_node {
                 match node {
                     castorepb::node::Node::Directory(n) => {
-                        n.name = "11111111111111111111111111111111-dummy2".into()
+                        n.name = "11111111111111111111111111111111-dummy2".into();
                     }
                     castorepb::node::Node::File(n) => {
-                        n.name = "11111111111111111111111111111111-dummy2".into()
+                        n.name = "11111111111111111111111111111111-dummy2".into();
                     }
                     castorepb::node::Node::Symlink(n) => {
-                        n.name = "11111111111111111111111111111111-dummy2".into()
+                        n.name = "11111111111111111111111111111111-dummy2".into();
                     }
                 }
             } else {

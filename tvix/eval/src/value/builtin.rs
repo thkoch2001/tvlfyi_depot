@@ -61,7 +61,7 @@ pub struct Builtin(Box<BuiltinRepr>);
 
 impl From<BuiltinRepr> for Builtin {
     fn from(value: BuiltinRepr) -> Self {
-        Builtin(Box::new(value))
+        Self(Box::new(value))
     }
 }
 
@@ -82,11 +82,11 @@ impl Builtin {
         .into()
     }
 
-    pub fn name(&self) -> &'static str {
+    #[must_use] pub fn name(&self) -> &'static str {
         self.0.name
     }
 
-    pub fn documentation(&self) -> Option<&'static str> {
+    #[must_use] pub fn documentation(&self) -> Option<&'static str> {
         self.0.documentation
     }
 
@@ -104,7 +104,7 @@ impl Builtin {
 
     /// Attempt to call a builtin, which will produce a generator if it is fully
     /// applied or return the builtin if it is partially applied.
-    pub fn call(self) -> BuiltinResult {
+    #[must_use] pub fn call(self) -> BuiltinResult {
         if self.0.partials.len() == self.0.arg_count {
             BuiltinResult::Called(self.0.name, (self.0.func)(self.0.partials))
         } else {

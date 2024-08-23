@@ -73,9 +73,9 @@ impl NixSearchPathEntry {
         IO: AsRef<dyn EvalIO>,
     {
         let path = match self {
-            NixSearchPathEntry::Path(parent) => canonicalise(parent.join(lookup_path))?,
+            Self::Path(parent) => canonicalise(parent.join(lookup_path))?,
 
-            NixSearchPathEntry::Prefix { prefix, path } => {
+            Self::Prefix { prefix, path } => {
                 if let Ok(child_path) = lookup_path.strip_prefix(prefix) {
                     canonicalise(path.join(child_path))?
                 } else {
@@ -154,9 +154,9 @@ impl FromStr for NixSearchPath {
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let entries = s
             .split(':')
-            .map(|s| s.parse())
+            .map(str::parse)
             .collect::<Result<Vec<_>, _>>()?;
-        Ok(NixSearchPath { entries })
+        Ok(Self { entries })
     }
 }
 
@@ -212,7 +212,7 @@ mod tests {
             let io = Box::new(StdIO {}) as Box<dyn EvalIO>;
             let res = nix_search_path.resolve(&io, "src").unwrap();
             assert_eq!(
-                res.unwrap().to_path_buf(),
+                res.unwrap(),
                 current_dir().unwrap().join("src").clean()
             );
         }
@@ -233,7 +233,7 @@ mod tests {
             let nix_search_path = NixSearchPath::from_str("./.:/").unwrap();
             let io = Box::new(StdIO {}) as Box<dyn EvalIO>;
             let res = nix_search_path.resolve(&io, "etc").unwrap();
-            assert_eq!(res.unwrap().to_path_buf(), Path::new("/etc"));
+            assert_eq!(res.unwrap(), Path::new("/etc"));
         }
 
         #[test]
@@ -242,7 +242,7 @@ mod tests {
             let io = Box::new(StdIO {}) as Box<dyn EvalIO>;
             let res = nix_search_path.resolve(&io, "tvix/src").unwrap();
             assert_eq!(
-                res.unwrap().to_path_buf(),
+                res.unwrap(),
                 current_dir().unwrap().join("src").clean()
             );
         }
@@ -252,7 +252,7 @@ mod tests {
             let nix_search_path = NixSearchPath::from_str("/:tvix=.").unwrap();
             let io = Box::new(StdIO {}) as Box<dyn EvalIO>;
             let res = nix_search_path.resolve(&io, "tvix").unwrap();
-            assert_eq!(res.unwrap().to_path_buf(), current_dir().unwrap().clean());
+            assert_eq!(res.unwrap(), current_dir().unwrap().clean());
         }
     }
 }

@@ -1,4 +1,4 @@
-//! Helpers for reading [crate::nar::wire] format.
+//! Helpers for reading [`crate::nar::wire`] format.
 
 use std::io::{
     self,
@@ -49,7 +49,7 @@ pub fn bytes_buf<'a, const N: usize>(
 
 /// Consume a byte string of up to `max_len` bytes from the reader.
 pub fn bytes(reader: &mut Reader, max_len: usize) -> io::Result<Vec<u8>> {
-    assert!(max_len <= isize::MAX as usize);
+    assert!(isize::try_from(max_len).is_ok());
 
     // read the length, and reject excessively large values
     let len = self::u64(reader)?;

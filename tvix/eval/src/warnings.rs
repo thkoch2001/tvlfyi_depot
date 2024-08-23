@@ -35,7 +35,7 @@ impl EvalWarning {
     /// Render a fancy, human-readable output of this warning and
     /// return it as a String. Note that this version of the output
     /// does not include any colours or font styles.
-    pub fn fancy_format_str(&self, source: &SourceCode) -> String {
+    #[must_use] pub fn fancy_format_str(&self, source: &SourceCode) -> String {
         let mut out = vec![];
         Emitter::vec(&mut out, Some(&*source.codemap())).emit(&[self.diagnostic(source)]);
         String::from_utf8_lossy(&out).to_string()
@@ -81,7 +81,7 @@ impl EvalWarning {
             }
 
             WarningKind::ShadowedGlobal(name) => {
-                format!("declared variable '{}' shadows a built-in global!", name)
+                format!("declared variable '{name}' shadows a built-in global!")
             }
 
             WarningKind::DeprecatedLegacyLet => {
@@ -89,11 +89,11 @@ impl EvalWarning {
             }
 
             WarningKind::InvalidNixPath(ref err) => {
-                format!("invalid NIX_PATH resulted in a parse error: {}", err)
+                format!("invalid NIX_PATH resulted in a parse error: {err}")
             }
 
             WarningKind::UselessBoolOperation(msg) => {
-                format!("useless operation on boolean: {}", msg)
+                format!("useless operation on boolean: {msg}")
             }
 
             WarningKind::DeadCode => "this code will never be executed".to_string(),
@@ -103,13 +103,12 @@ impl EvalWarning {
             WarningKind::EmptyLet => "this `let`-expression contains no bindings".to_string(),
 
             WarningKind::ShadowedOutput(ref out) => format!(
-                "this derivation's environment shadows the output name {}",
-                out
+                "this derivation's environment shadows the output name {out}"
             ),
             WarningKind::SRIHashWrongPadding => "SRI hash has wrong padding".to_string(),
 
             WarningKind::NotImplemented(what) => {
-                format!("feature not yet implemented in tvix: {}", what)
+                format!("feature not yet implemented in tvix: {what}")
             }
         }
     }

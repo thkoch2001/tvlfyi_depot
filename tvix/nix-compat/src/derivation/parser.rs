@@ -26,7 +26,7 @@ pub enum Error<I> {
     Validation(super::DerivationError),
 }
 
-pub(crate) fn parse(i: &[u8]) -> Result<Derivation, Error<&[u8]>> {
+pub fn parse(i: &[u8]) -> Result<Derivation, Error<&[u8]>> {
     match all_consuming(parse_derivation)(i) {
         Ok((rest, derivation)) => {
             // this shouldn't happen, as all_consuming shouldn't return.
@@ -43,7 +43,7 @@ pub(crate) fn parse(i: &[u8]) -> Result<Derivation, Error<&[u8]>> {
 }
 
 /// Consume a string containing the algo, and optionally a `r:`
-/// prefix, and a digest (bytes), return a [CAHash::Nar] or [CAHash::Flat].
+/// prefix, and a digest (bytes), return a [`CAHash::Nar`] or [`CAHash::Flat`].
 fn from_algo_and_mode_and_digest<B: AsRef<[u8]>>(
     algo_and_mode: &str,
     digest: B,
@@ -60,7 +60,7 @@ fn from_algo_and_mode_and_digest<B: AsRef<[u8]>>(
     })
 }
 
-/// Parse one output in ATerm. This is 4 string fields inside parans:
+/// Parse one output in `ATerm`. This is 4 string fields inside parans:
 /// output name, output path, algo (and mode), digest.
 /// Returns the output name and [Output] struct.
 fn parse_output(i: &[u8]) -> NomResult<&[u8], (String, Output)> {
@@ -117,10 +117,10 @@ fn parse_output(i: &[u8]) -> NomResult<&[u8], (String, Output)> {
     )(i)
 }
 
-/// Parse multiple outputs in ATerm. This is a list of things acccepted by
-/// parse_output, and takes care of turning the (String, Output) returned from
-/// it to a BTreeMap.
-/// We don't use parse_kv here, as it's dealing with 2-tuples, and these are
+/// Parse multiple outputs in `ATerm`. This is a list of things acccepted by
+/// `parse_output`, and takes care of turning the (String, Output) returned from
+/// it to a `BTreeMap`.
+/// We don't use `parse_kv` here, as it's dealing with 2-tuples, and these are
 /// 4-tuples.
 fn parse_outputs(i: &[u8]) -> NomResult<&[u8], BTreeMap<String, Output>> {
     let res = delimited(
@@ -132,11 +132,11 @@ fn parse_outputs(i: &[u8]) -> NomResult<&[u8], BTreeMap<String, Output>> {
     match res {
         Ok((rst, outputs_lst)) => {
             let mut outputs = BTreeMap::default();
-            for (output_name, output) in outputs_lst.into_iter() {
+            for (output_name, output) in outputs_lst {
                 if outputs.contains_key(&output_name) {
                     return Err(nom::Err::Failure(NomError {
                         input: i,
-                        code: ErrorKind::DuplicateMapKey(output_name.to_string()),
+                        code: ErrorKind::DuplicateMapKey(output_name),
                     }));
                 }
                 outputs.insert(output_name, output);
@@ -158,13 +158,13 @@ fn parse_input_derivations(
 
     for (input_derivation, output_names) in input_derivations_list {
         let mut new_output_names = BTreeSet::new();
-        for output_name in output_names.into_iter() {
+        for output_name in output_names {
             if new_output_names.contains(&output_name) {
                 return Err(nom::Err::Failure(NomError {
                     input: i,
                     code: ErrorKind::DuplicateInputDerivationOutputName(
-                        input_derivation.to_string(),
-                        output_name.to_string(),
+                        input_derivation,
+                        output_name,
                     ),
                 }));
             }
@@ -183,7 +183,7 @@ fn parse_input_sources(i: &[u8]) -> NomResult<&[u8], BTreeSet<StorePath<String>>
     let (i, input_sources_lst) = aterm::parse_string_list(i).map_err(into_nomerror)?;
 
     let mut input_sources: BTreeSet<_> = BTreeSet::new();
-    for input_source in input_sources_lst.into_iter() {
+    for input_source in input_sources_lst {
         let input_source = string_to_store_path(i, input_source.as_str())?;
         if input_sources.contains(&input_source) {
             return Err(nom::Err::Failure(NomError {
@@ -274,12 +274,12 @@ pub fn parse_derivation(i: &[u8]) -> NomResult<&[u8], Derivation> {
     )(i)
 }
 
-/// Parse a list of key/value pairs into a BTreeMap.
+/// Parse a list of key/value pairs into a `BTreeMap`.
 /// The parser for the values can be passed in.
-/// In terms of ATerm, this is just a 2-tuple,
+/// In terms of `ATerm`, this is just a 2-tuple,
 /// but we have the additional restriction that the first element needs to be
 /// unique across all tuples.
-pub(crate) fn parse_kv<'a, V, VF>(
+pub fn parse_kv<'a, V, VF>(
     vf: VF,
 ) -> impl FnMut(&'a [u8]) -> NomResult<&'a [u8], BTreeMap<String, V>> + 'static
 where
@@ -307,7 +307,7 @@ where
             match res {
                 Ok((rest, pairs)) => {
                     let mut kvs: BTreeMap<String, V> = BTreeMap::new();
-                    for (k, v) in pairs.into_iter() {
+                    for (k, v) in pairs {
                         // collect the 2-tuple to a BTreeMap,
                         // and fail if the key was already seen before.
                         match kvs.entry(k) {

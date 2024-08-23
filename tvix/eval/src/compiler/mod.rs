@@ -56,7 +56,7 @@ struct LambdaCtx {
 
 impl LambdaCtx {
     fn new() -> Self {
-        LambdaCtx {
+        Self {
             lambda: Lambda::default(),
             scope: Default::default(),
             captures_with_stack: false,
@@ -64,7 +64,7 @@ impl LambdaCtx {
     }
 
     fn inherit(&self) -> Self {
-        LambdaCtx {
+        Self {
             lambda: Lambda::default(),
             scope: self.scope.inherit(),
             captures_with_stack: false,
@@ -101,14 +101,14 @@ enum TrackedFormal {
 impl TrackedFormal {
     fn pattern_entry(&self) -> &ast::PatEntry {
         match self {
-            TrackedFormal::NoDefault { pattern_entry, .. } => pattern_entry,
-            TrackedFormal::WithDefault { pattern_entry, .. } => pattern_entry,
+            Self::NoDefault { pattern_entry, .. } => pattern_entry,
+            Self::WithDefault { pattern_entry, .. } => pattern_entry,
         }
     }
     fn local_idx(&self) -> LocalIdx {
         match self {
-            TrackedFormal::NoDefault { local_idx, .. } => *local_idx,
-            TrackedFormal::WithDefault { local_idx, .. } => *local_idx,
+            Self::NoDefault { local_idx, .. } => *local_idx,
+            Self::WithDefault { local_idx, .. } => *local_idx,
         }
     }
 }
@@ -196,8 +196,7 @@ impl<'source, 'observer> Compiler<'source, 'observer> {
                 let current_dir = std::env::current_dir().map_err(|e| {
                     Error::new(
                         ErrorKind::RelativePathResolution(format!(
-                            "could not determine current directory: {}",
-                            e
+                            "could not determine current directory: {e}"
                         )),
                         file.span,
                         source.clone(),
@@ -326,41 +325,41 @@ impl Compiler<'_, '_> {
             ast::Expr::UnaryOp(op) => self.thunk(slot, op, move |c, s| c.compile_unary_op(s, op)),
 
             ast::Expr::BinOp(binop) => {
-                self.thunk(slot, binop, move |c, s| c.compile_binop(s, binop))
+                self.thunk(slot, binop, move |c, s| c.compile_binop(s, binop));
             }
 
             ast::Expr::HasAttr(has_attr) => {
-                self.thunk(slot, has_attr, move |c, s| c.compile_has_attr(s, has_attr))
+                self.thunk(slot, has_attr, move |c, s| c.compile_has_attr(s, has_attr));
             }
 
             ast::Expr::List(list) => self.thunk(slot, list, move |c, s| c.compile_list(s, list)),
 
             ast::Expr::AttrSet(attrs) => {
-                self.thunk(slot, attrs, move |c, s| c.compile_attr_set(s, attrs))
+                self.thunk(slot, attrs, move |c, s| c.compile_attr_set(s, attrs));
             }
 
             ast::Expr::Select(select) => {
-                self.thunk(slot, select, move |c, s| c.compile_select(s, select))
+                self.thunk(slot, select, move |c, s| c.compile_select(s, select));
             }
 
             ast::Expr::Assert(assert) => {
-                self.thunk(slot, assert, move |c, s| c.compile_assert(s, assert))
+                self.thunk(slot, assert, move |c, s| c.compile_assert(s, assert));
             }
             ast::Expr::IfElse(if_else) => {
-                self.thunk(slot, if_else, move |c, s| c.compile_if_else(s, if_else))
+                self.thunk(slot, if_else, move |c, s| c.compile_if_else(s, if_else));
             }
 
             ast::Expr::LetIn(let_in) => {
-                self.thunk(slot, let_in, move |c, s| c.compile_let_in(s, let_in))
+                self.thunk(slot, let_in, move |c, s| c.compile_let_in(s, let_in));
             }
 
             ast::Expr::Ident(ident) => self.compile_ident(slot, ident),
             ast::Expr::With(with) => self.thunk(slot, with, |c, s| c.compile_with(s, with)),
             ast::Expr::Lambda(lambda) => self.thunk(slot, lambda, move |c, s| {
-                c.compile_lambda_or_thunk(false, s, lambda, |c, s| c.compile_lambda(s, lambda))
+                c.compile_lambda_or_thunk(false, s, lambda, |c, s| c.compile_lambda(s, lambda));
             }),
             ast::Expr::Apply(apply) => {
-                self.thunk(slot, apply, move |c, s| c.compile_apply(s, apply))
+                self.thunk(slot, apply, move |c, s| c.compile_apply(s, apply));
             }
 
             // Parenthesized expressions are simply unwrapped, leaving
@@ -368,7 +367,7 @@ impl Compiler<'_, '_> {
             ast::Expr::Paren(paren) => self.compile(slot, paren.expr().unwrap()),
 
             ast::Expr::LegacyLet(legacy_let) => self.thunk(slot, legacy_let, move |c, s| {
-                c.compile_legacy_let(s, legacy_let)
+                c.compile_legacy_let(s, legacy_let);
             }),
 
             ast::Expr::Root(_) => unreachable!("there cannot be more than one root"),
@@ -731,7 +730,7 @@ impl Compiler<'_, '_> {
         self.push_op(Op::HasAttr, node);
     }
 
-    /// When compiling select or select_or expressions, an optimisation is
+    /// When compiling select or `select_or` expressions, an optimisation is
     /// possible of compiling the set emitted a constant attribute set by
     /// immediately replacing it with the actual value.
     ///
@@ -1074,7 +1073,7 @@ impl Compiler<'_, '_> {
         // For each of the bindings, push the set on the stack and
         // attempt to select from it.
         let stack_idx = self.scope().stack_index(set_idx);
-        for tracked_formal in entries.iter() {
+        for tracked_formal in &entries {
             self.push_op(Op::GetLocal, pattern);
             self.push_uvarint(stack_idx.0 as u64);
             self.emit_literal_ident(&tracked_formal.pattern_entry().ident().unwrap());
@@ -1138,7 +1137,7 @@ impl Compiler<'_, '_> {
             }
         }
 
-        for tracked_formal in entries.iter() {
+        for tracked_formal in &entries {
             if self.scope()[tracked_formal.local_idx()].needs_finaliser {
                 let stack_idx = self.scope().stack_index(tracked_formal.local_idx());
                 match tracked_formal {
@@ -1213,7 +1212,7 @@ impl Compiler<'_, '_> {
         self.compile_lambda_or_thunk(true, outer_slot, node, |comp, idx| {
             content(comp, idx);
             None
-        })
+        });
     }
 
     /// Compile an expression into a runtime closure or thunk
@@ -1447,7 +1446,7 @@ impl Compiler<'_, '_> {
     fn has_dynamic_ancestor(&mut self) -> bool {
         let mut ancestor_has_with = false;
 
-        for ctx in self.contexts.iter_mut() {
+        for ctx in &mut self.contexts {
             if ancestor_has_with {
                 // If the ancestor has an active with stack, mark this
                 // lambda context as needing to capture it.
@@ -1467,13 +1466,13 @@ impl Compiler<'_, '_> {
 
     fn emit_warning<N: ToSpan>(&mut self, node: &N, kind: WarningKind) {
         let span = self.span_for(node);
-        self.warnings.push(EvalWarning { kind, span })
+        self.warnings.push(EvalWarning { kind, span });
     }
 
     fn emit_error<N: ToSpan>(&mut self, node: &N, kind: ErrorKind) {
         let span = self.span_for(node);
         self.errors
-            .push(Error::new(kind, span, self.source.clone()))
+            .push(Error::new(kind, span, self.source.clone()));
     }
 }
 
@@ -1527,15 +1526,15 @@ fn compile_src_builtin(
     let parsed = rnix::ast::Root::parse(code);
 
     if !parsed.errors().is_empty() {
-        let mut out = format!("BUG: code for source-builtin '{}' had parser errors", name);
+        let mut out = format!("BUG: code for source-builtin '{name}' had parser errors");
         for error in parsed.errors() {
-            writeln!(out, "{}", error).unwrap();
+            writeln!(out, "{error}").unwrap();
         }
 
         panic!("{}", out);
     }
 
-    let file = source.add_file(format!("<src-builtins/{}.nix>", name), code.to_string());
+    let file = source.add_file(format!("<src-builtins/{name}.nix>"), code.to_string());
     let weak = weak.clone();
 
     Value::Thunk(Thunk::new_suspended_native(Box::new(move || {
@@ -1555,7 +1554,7 @@ fn compile_src_builtin(
 
         if !result.errors.is_empty() {
             return Err(ErrorKind::ImportCompilerError {
-                path: format!("src-builtins/{}.nix", name).into(),
+                path: format!("src-builtins/{name}.nix").into(),
                 errors: result.errors,
             });
         }
@@ -1572,7 +1571,7 @@ fn compile_src_builtin(
 /// available globally *iff* they are set.
 ///
 /// Optionally adds the `import` feature if desired by the caller.
-pub fn prepare_globals(
+#[must_use] pub fn prepare_globals(
     builtins: Vec<(&'static str, Value)>,
     src_builtins: Vec<(&'static str, &'static str)>,
     source: SourceCode,

@@ -26,13 +26,13 @@ pub struct ExportedPathInfo<'a> {
     pub path: StorePathRef<'a>,
 
     /// The list of other Store Paths this Store Path refers to.
-    /// StorePathRef does Ord by the nixbase32-encoded string repr, so this is correct.
+    /// `StorePathRef` does Ord by the nixbase32-encoded string repr, so this is correct.
     pub references: BTreeSet<StorePathRef<'a>>,
     // more recent versions of Nix also have a `valid: true` field here, Nix 2.3 doesn't,
     // and nothing seems to use it.
 }
 
-/// ExportedPathInfo are ordered by their `path` field.
+/// `ExportedPathInfo` are ordered by their `path` field.
 impl Ord for ExportedPathInfo<'_> {
     fn cmp(&self, other: &Self) -> std::cmp::Ordering {
         self.path.cmp(&other.path)
@@ -101,11 +101,11 @@ mod tests {
         // Also compare one specific item to be populated as expected.
         assert_eq!(
             &ExportedPathInfo {
-                closure_size: 1828984,
+                closure_size: 1_828_984,
                 nar_sha256: hex!(
                     "8a46c4eee4911eb842b1b2f144a9376be45a43d1da6b7af8cffa43a942177587"
                 ),
-                nar_size: 1828984,
+                nar_size: 1_828_984,
                 path: StorePathRef::from_bytes(
                     b"7n0mbqydcipkpbxm24fab066lxk68aqk-libunistring-1.1"
                 )

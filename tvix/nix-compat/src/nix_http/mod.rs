@@ -80,7 +80,7 @@ mod test {
                 ".xz"
             ),
             parse_nar_str("14cx20k6z4hq508kqi2lm79qfld5f9mf7kiafpqsjs3zlmycza0k.nar.xz").unwrap()
-        )
+        );
     }
 
     #[test]
@@ -88,7 +88,7 @@ mod test {
         assert!(parse_nar_str("14cx20k6z4hq508kqi2lm79qfld5f9mf7kiafpqsjs3zlmycza0").is_none());
         assert!(
             parse_nar_str("14cx20k6z4hq508kqi2lm79qfld5f9mf7kiafpqsjs3zlmycza0🦊.nar").is_none()
-        )
+        );
     }
     #[test]
     fn parse_narinfo_str_success() {

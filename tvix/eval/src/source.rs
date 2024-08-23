@@ -20,7 +20,7 @@ pub struct SourceCode(Rc<RefCell<CodeMap>>);
 
 impl SourceCode {
     /// Access a read-only reference to the codemap.
-    pub fn codemap(&self) -> Ref<CodeMap> {
+    #[must_use] pub fn codemap(&self) -> Ref<CodeMap> {
         self.0.borrow()
     }
 
@@ -31,20 +31,20 @@ impl SourceCode {
 
     /// Add a file to the codemap. The returned Arc is managed by the
     /// codemap internally and can be used like a normal reference.
-    pub fn add_file(&self, name: String, code: String) -> Arc<codemap::File> {
+    #[must_use] pub fn add_file(&self, name: String, code: String) -> Arc<codemap::File> {
         self.codemap_mut().add_file(name, code)
     }
 
     /// Retrieve the line number of the given span. If it spans
     /// multiple lines, the first line will be returned.
-    pub fn get_line(&self, span: Span) -> usize {
+    #[must_use] pub fn get_line(&self, span: Span) -> usize {
         // lines are 0-indexed in the codemap, but users probably want
         // real line numbers
         self.codemap().look_up_span(span).begin.line + 1
     }
 
     /// Returns the literal source slice of the given span.
-    pub fn source_slice(&self, span: Span) -> Ref<str> {
+    #[must_use] pub fn source_slice(&self, span: Span) -> Ref<str> {
         Ref::map(self.codemap(), |c| {
             c.find_file(span.low()).source_slice(span)
         })
@@ -52,13 +52,13 @@ impl SourceCode {
 
     /// Returns the reference to the file structure that a given span
     /// is in.
-    pub fn get_file(&self, span: Span) -> Arc<codemap::File> {
+    #[must_use] pub fn get_file(&self, span: Span) -> Arc<codemap::File> {
         self.codemap().look_up_span(span).file
     }
 }
 
 impl Default for SourceCode {
-    /// Create a new SourceCode instance.
+    /// Create a new `SourceCode` instance.
     fn default() -> Self {
         Self(Rc::new(RefCell::new(CodeMap::new())))
     }

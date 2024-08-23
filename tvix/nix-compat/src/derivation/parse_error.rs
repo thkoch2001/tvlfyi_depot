@@ -1,5 +1,5 @@
 //! This contains error and result types that can happen while parsing
-//! Derivations from ATerm.
+//! Derivations from `ATerm`.
 use nom::IResult;
 
 use crate::{
@@ -9,7 +9,7 @@ use crate::{
 
 pub type NomResult<I, O> = IResult<I, O, NomError<I>>;
 
-#[derive(Debug, thiserror::Error, PartialEq)]
+#[derive(Debug, thiserror::Error, PartialEq, Eq)]
 pub enum ErrorKind {
     /// duplicate key in map
     #[error("duplicate map key: {0}")]
@@ -33,7 +33,7 @@ pub enum ErrorKind {
 }
 
 /// Our own error type to pass along parser-related errors.
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub struct NomError<I> {
     /// position of the error in the input data
     pub input: I,
@@ -65,7 +65,7 @@ impl<I> nom::error::ParseError<I> for NomError<I> {
     }
 }
 
-/// This wraps a [nom::error::Error] into our error.
+/// This wraps a [`nom::error::Error`] into our error.
 impl<I> From<nom::error::Error<I>> for NomError<I> {
     fn from(value: nom::error::Error<I>) -> Self {
         Self {
@@ -78,7 +78,7 @@ impl<I> From<nom::error::Error<I>> for NomError<I> {
 /// This essentially implements
 /// `From<nom::Err<nom::error::Error<I>>>` for `nom::Err<NomError<I>>`,
 /// which we can't because `nom::Err<_>` is a foreign type.
-pub(crate) fn into_nomerror<I>(e: nom::Err<nom::error::Error<I>>) -> nom::Err<NomError<I>> {
+pub fn into_nomerror<I>(e: nom::Err<nom::error::Error<I>>) -> nom::Err<NomError<I>> {
     match e {
         nom::Err::Incomplete(n) => nom::Err::Incomplete(n),
         nom::Err::Error(e) => nom::Err::Error(e.into()),

@@ -7,7 +7,7 @@ use thiserror;
 
 /// Errors that can occur when creating a content-addressed store path.
 ///
-/// This wraps the main [crate::store_path::Error]..
+/// This wraps the main [`crate::store_path::Error`]..
 #[derive(Debug, PartialEq, Eq, thiserror::Error)]
 pub enum BuildStorePathError {
     #[error("Invalid Store Path: {0}")]
@@ -19,9 +19,9 @@ pub enum BuildStorePathError {
     InvalidReference(),
 }
 
-/// compress_hash takes an arbitrarily long sequence of bytes (usually
+/// `compress_hash` takes an arbitrarily long sequence of bytes (usually
 /// a hash digest), and returns a sequence of bytes of length
-/// OUTPUT_SIZE.
+/// `OUTPUT_SIZE`.
 ///
 /// It's calculated by rotating through the bytes in the output buffer
 /// (zero- initialized), and XOR'ing with each byte of the passed
@@ -29,7 +29,7 @@ pub enum BuildStorePathError {
 /// value in the output buffer.
 ///
 /// This mimics equivalent functionality in C++ Nix.
-pub fn compress_hash<const OUTPUT_SIZE: usize>(input: &[u8]) -> [u8; OUTPUT_SIZE] {
+#[must_use] pub fn compress_hash<const OUTPUT_SIZE: usize>(input: &[u8]) -> [u8; OUTPUT_SIZE] {
     let mut output = [0; OUTPUT_SIZE];
 
     for (ii, ch) in input.iter().enumerate() {
@@ -39,10 +39,10 @@ pub fn compress_hash<const OUTPUT_SIZE: usize>(input: &[u8]) -> [u8; OUTPUT_SIZE
     output
 }
 
-/// This builds a store path, by calculating the text_hash_string of either a
+/// This builds a store path, by calculating the `text_hash_string` of either a
 /// derivation or a literal text file that may contain references.
 /// If you don't want to have to pass the entire contents, you might want to use
-/// [build_ca_path] instead.
+/// [`build_ca_path`] instead.
 pub fn build_text_path<'a, S, SP, I, C>(
     name: &'a str,
     content: C,
@@ -60,7 +60,7 @@ where
     build_ca_path(name, &CAHash::Text(content_digest), references, false)
 }
 
-/// This builds a store path from a [CAHash] and a list of references.
+/// This builds a store path from a [`CAHash`] and a list of references.
 pub fn build_ca_path<'a, S, SP, I>(
     name: &'a str,
     ca_hash: &CAHash,
@@ -77,7 +77,7 @@ where
         return Err(BuildStorePathError::InvalidReference());
     }
 
-    /// Helper function, used for the non-sha256 [CAHash::Nar] and all [CAHash::Flat].
+    /// Helper function, used for the non-sha256 [`CAHash::Nar`] and all [`CAHash::Flat`].
     fn fixed_out_digest(prefix: &str, hash: &NixHash) -> [u8; 32] {
         Sha256::new_with_prefix(format!("{}:{}:", prefix, hash.to_nix_hex_string()))
             .finalize()
@@ -119,7 +119,7 @@ where
         .map_err(BuildStorePathError::InvalidStorePath)
 }
 
-/// For given NAR sha256 digest and name, return the new [StorePathRef] this
+/// For given NAR sha256 digest and name, return the new [`StorePathRef`] this
 /// would have, or an error, in case the name is invalid.
 pub fn build_nar_based_store_path<'a>(
     nar_sha256_digest: &[u8; 32],
@@ -147,14 +147,14 @@ pub fn build_output_path<'a>(
 }
 
 /// This builds a store path from fingerprint parts.
-/// Usually, that function is used from [build_text_path] and
+/// Usually, that function is used from [`build_text_path`] and
 /// passed a "text hash string" (starting with "text:" as fingerprint),
 /// but other fingerprints starting with "output:" are also used in Derivation
 /// output path calculation.
 ///
 /// The fingerprint is hashed with sha256, and its digest is compressed to 20
 /// bytes.
-/// Inside a StorePath, that digest is printed nixbase32-encoded
+/// Inside a `StorePath`, that digest is printed nixbase32-encoded
 /// (32 characters).
 fn build_store_path_from_fingerprint_parts<'a, S>(
     ty: &str,
@@ -182,7 +182,7 @@ where
 ///
 ///  - text
 ///  - references, individually joined by `:`
-///  - the nix_hash_string representation of the sha256 digest of some contents
+///  - the `nix_hash_string` representation of the sha256 digest of some contents
 ///  - the value of `storeDir`
 ///  - the name
 fn make_references_string<S: AsRef<str>, I: IntoIterator<Item = S>>(
@@ -210,8 +210,8 @@ fn make_references_string<S: AsRef<str>, I: IntoIterator<Item = S>>(
 ///
 /// The actual placeholder is basically just a SHA256 hash encoded in
 /// cppnix format.
-pub fn hash_placeholder(name: &str) -> String {
-    let digest = Sha256::new_with_prefix(format!("nix-output:{}", name)).finalize();
+#[must_use] pub fn hash_placeholder(name: &str) -> String {
+    let digest = Sha256::new_with_prefix(format!("nix-output:{name}")).finalize();
 
     format!("/{}", nixbase32::encode(&digest))
 }

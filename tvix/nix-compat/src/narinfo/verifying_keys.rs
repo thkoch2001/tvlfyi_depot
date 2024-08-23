@@ -18,7 +18,7 @@ pub struct VerifyingKey {
 }
 
 impl VerifyingKey {
-    pub fn new(name: String, verifying_key: ed25519_dalek::VerifyingKey) -> Self {
+    #[must_use] pub fn new(name: String, verifying_key: ed25519_dalek::VerifyingKey) -> Self {
         Self {
             name,
             verifying_key,
@@ -60,7 +60,7 @@ impl VerifyingKey {
         })
     }
 
-    pub fn name(&self) -> &str {
+    #[must_use] pub fn name(&self) -> &str {
         &self.name
     }
 
@@ -68,8 +68,8 @@ impl VerifyingKey {
     /// by the key material referred to by [Self],
     /// which means the name in the signature has to match,
     /// and the signature bytes themselves need to be a valid signature made by
-    /// the signing key identified by [Self::verifying key].
-    pub fn verify(&self, fingerprint: &str, signature: &SignatureRef<'_>) -> bool {
+    /// the signing key identified by [`Self::verifying` key].
+    #[must_use] pub fn verify(&self, fingerprint: &str, signature: &SignatureRef<'_>) -> bool {
         if self.name() != *signature.name() {
             return false;
         }

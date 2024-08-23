@@ -60,7 +60,7 @@ async fn single_file_missing_blob(
         crate::nar::RenderError::NARWriterError(e) => {
             assert_eq!(io::ErrorKind::NotFound, e.kind());
         }
-        _ => panic!("unexpected error: {:?}", e),
+        _ => panic!("unexpected error: {e:?}"),
     }
 }
 
@@ -103,7 +103,7 @@ async fn single_file_wrong_blob_size(
         crate::nar::RenderError::NARWriterError(e) => {
             assert_eq!(io::ErrorKind::UnexpectedEof, e.kind());
         }
-        _ => panic!("unexpected error: {:?}", e),
+        _ => panic!("unexpected error: {e:?}"),
     }
 
     // Test with a root FileNode of a too small size
@@ -124,7 +124,7 @@ async fn single_file_wrong_blob_size(
         crate::nar::RenderError::NARWriterError(e) => {
             assert_eq!(io::ErrorKind::InvalidInput, e.kind());
         }
-        _ => panic!("unexpected error: {:?}", e),
+        _ => panic!("unexpected error: {e:?}"),
     }
 }
 

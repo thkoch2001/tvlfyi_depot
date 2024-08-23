@@ -42,12 +42,12 @@ impl<'de> Deserialize<'de> for Output {
 }
 
 impl Output {
-    pub fn is_fixed(&self) -> bool {
+    #[must_use] pub fn is_fixed(&self) -> bool {
         self.ca_hash.is_some()
     }
 
     /// The output path as a string -- use `""` to indicate an unset output path.
-    pub fn path_str(&self) -> Cow<str> {
+    #[must_use] pub fn path_str(&self) -> Cow<str> {
         match &self.path {
             None => Cow::Borrowed(""),
             Some(path) => Cow::Owned(path.to_absolute_path()),

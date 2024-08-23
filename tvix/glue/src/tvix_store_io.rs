@@ -1,4 +1,4 @@
-//! This module provides an implementation of EvalIO talking to tvix-store.
+//! This module provides an implementation of `EvalIO` talking to tvix-store.
 use bytes::Bytes;
 use futures::{StreamExt, TryStreamExt};
 use nix_compat::nixhash::NixHash;
@@ -29,10 +29,10 @@ use crate::fetchers::Fetcher;
 use crate::known_paths::KnownPaths;
 use crate::tvix_build::derivation_to_build_request;
 
-/// Implements [EvalIO], asking given [PathInfoService], [DirectoryService]
-/// and [BlobService].
+/// Implements [`EvalIO`], asking given [`PathInfoService`], [`DirectoryService`]
+/// and [`BlobService`].
 ///
-/// In case the given path does not exist in these stores, we ask StdIO.
+/// In case the given path does not exist in these stores, we ask `StdIO`.
 /// This is to both cover cases of syntactically valid store paths, that exist
 /// on the filesystem (still managed by Nix), as well as being able to read
 /// files outside store paths.
@@ -207,7 +207,7 @@ impl TvixStoreIO {
                                         known_paths
                                             .get_drv_by_drvpath(input_drv_path)
                                             .unwrap_or_else(|| {
-                                                panic!("{} not found", input_drv_path)
+                                                panic!("{input_drv_path} not found")
                                             })
                                             .to_owned()
                                     };
@@ -395,7 +395,7 @@ impl TvixStoreIO {
                 |_| {
                     std::io::Error::new(
                         std::io::ErrorKind::InvalidData,
-                        format!("invalid name: {}", name),
+                        format!("invalid name: {name}"),
                     )
                 },
             )?;
@@ -475,7 +475,7 @@ impl EvalIO for TvixStoreIO {
                         // This would normally be a io::ErrorKind::IsADirectory (still unstable)
                         Err(io::Error::new(
                             io::ErrorKind::Unsupported,
-                            format!("tried to open directory at {:?}", path),
+                            format!("tried to open directory at {path:?}"),
                         ))
                     }
                     Node::File { digest, .. } => {
@@ -560,7 +560,7 @@ impl EvalIO for TvixStoreIO {
                                     Node::Directory { .. } => (name.into(), FileType::Directory),
                                     Node::File { .. } => (name.clone().into(), FileType::Regular),
                                     Node::Symlink { .. } => (name.into(), FileType::Symlink),
-                                })
+                                });
                             }
                             Ok(children)
                         } else {
@@ -683,7 +683,7 @@ mod tests {
         let value = result.value.expect("must be some");
         match value {
             tvix_eval::Value::String(s) => Some(s.to_str_lossy().into_owned()),
-            _ => panic!("unexpected value type: {:?}", value),
+            _ => panic!("unexpected value type: {value:?}"),
         }
     }
 
@@ -750,7 +750,7 @@ mod tests {
             tvix_eval::Value::String(s) => {
                 assert_eq!(*s, "/deep/thought");
             }
-            _ => panic!("unexpected value type: {:?}", value),
+            _ => panic!("unexpected value type: {value:?}"),
         }
     }
 }

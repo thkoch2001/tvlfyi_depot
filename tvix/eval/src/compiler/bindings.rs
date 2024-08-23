@@ -11,7 +11,7 @@ use rowan::ast::AstChildren;
 
 use crate::spans::{EntireFile, OrEntireFile};
 
-use super::*;
+use super::{Compiler, ErrorKind, FxHashMap, LocalIdx, LocalPosition, NixAttrs, Op, SmolStr, Span, ToSpan, Upvalue, UpvalueIdx, UpvalueKind, Value, WarningKind, ast, expr_static_attr_str};
 
 type PeekableAttrs = Peekable<AstChildren<ast::Attr>>;
 
@@ -30,7 +30,7 @@ enum BindingsKind {
 
 impl BindingsKind {
     fn is_attrs(&self) -> bool {
-        matches!(self, BindingsKind::Attrs | BindingsKind::RecAttrs)
+        matches!(self, Self::Attrs | Self::RecAttrs)
     }
 }
 
@@ -59,7 +59,7 @@ impl ToSpan for AttributeSet {
 
 impl AttributeSet {
     fn from_ast(c: &Compiler, node: &ast::AttrSet) -> Self {
-        AttributeSet {
+        Self {
             span: c.span_for(node),
 
             // Kind of the attrs depends on the first time it is
@@ -114,16 +114,16 @@ impl Binding {
         value: ast::Expr,
     ) {
         match self {
-            Binding::InheritFrom { name, ref span, .. } => {
-                c.emit_error(span, ErrorKind::UnmergeableInherit { name: name.clone() })
+            Self::InheritFrom { name, ref span, .. } => {
+                c.emit_error(span, ErrorKind::UnmergeableInherit { name: name.clone() });
             }
 
             // If the value is not yet a nested binding, flip the representation
             // and recurse.
-            Binding::Plain { expr } => match expr {
+            Self::Plain { expr } => match expr {
                 ast::Expr::AttrSet(existing) => {
                     let nested = AttributeSet::from_ast(c, existing);
-                    *self = Binding::Set(nested);
+                    *self = Self::Set(nested);
                     self.merge(c, span, remaining_path, value);
                 }
 
@@ -133,11 +133,11 @@ impl Binding {
             // If the value is nested further, it is simply inserted into the
             // bindings with its full path and resolved recursively further
             // down.
-            Binding::Set(existing) if remaining_path.peek().is_some() => {
-                existing.entries.push((span, remaining_path, value))
+            Self::Set(existing) if remaining_path.peek().is_some() => {
+                existing.entries.push((span, remaining_path, value));
             }
 
-            Binding::Set(existing) => {
+            Self::Set(existing) => {
                 if let ast::Expr::AttrSet(new) = value {
                     existing.inherits.extend(ast::HasEntry::inherits(&new));
                     existing
@@ -203,7 +203,7 @@ struct TrackedBindings {
 
 impl TrackedBindings {
     fn new() -> Self {
-        TrackedBindings { bindings: vec![] }
+        Self { bindings: vec![] }
     }
 
     /// Attempt to merge an entry into an existing matching binding, assuming
@@ -572,7 +572,7 @@ impl Compiler<'_, '_> {
     fn bind_values(&mut self, bindings: TrackedBindings) {
         let mut value_indices: Vec<LocalIdx> = vec![];
 
-        for binding in bindings.bindings.into_iter() {
+        for binding in bindings.bindings {
             value_indices.push(binding.value_slot);
 
             match binding.key_slot {
@@ -606,7 +606,7 @@ impl Compiler<'_, '_> {
 
                         c.emit_constant(name.as_str().into(), &span);
                         c.push_op(Op::AttrsSelect, &span);
-                    })
+                    });
                 }
 
                 // Binding is "just" a plain expression that needs to be
@@ -633,7 +633,7 @@ impl Compiler<'_, '_> {
                 let stack_idx = self.scope().stack_index(idx);
                 let span = self.scope()[idx].span;
                 self.push_op(Op::Finalise, &OrEntireFile(span));
-                self.push_uvarint(stack_idx.0 as u64)
+                self.push_uvarint(stack_idx.0 as u64);
             }
         }
     }

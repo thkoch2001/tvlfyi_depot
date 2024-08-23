@@ -9,7 +9,7 @@ const U64_VARINT_SIZE: usize = 9;
 /// Represents a source location from which one or more operations
 /// were compiled.
 ///
-/// The span itself is an index into a [codemap::CodeMap], and the
+/// The span itself is an index into a [`codemap::CodeMap`], and the
 /// structure tracks the number of operations that were yielded from
 /// the same span.
 ///
@@ -19,7 +19,7 @@ const U64_VARINT_SIZE: usize = 9;
 /// interesting errors.
 #[derive(Clone, Debug, PartialEq)]
 struct SourceSpan {
-    /// Span into the [codemap::CodeMap].
+    /// Span into the [`codemap::CodeMap`].
     span: codemap::Span,
 
     /// Index of the first operation covered by this span.
@@ -74,20 +74,18 @@ impl Chunk {
     }
 
     pub fn push_u16(&mut self, data: u16) {
-        self.code.extend_from_slice(&data.to_le_bytes())
+        self.code.extend_from_slice(&data.to_le_bytes());
     }
 
     /// Patches the argument to the jump operand of the jump at the given index
     /// to point to the *next* instruction that will be emitted.
     pub fn patch_jump(&mut self, idx: usize) {
         let offset = (self.code.len() - idx - /* arg idx = */ 1 - /* jump arg size = */ 2) as u16;
-        self.code[idx + 1..idx + 3].copy_from_slice(&offset.to_le_bytes())
+        self.code[idx + 1..idx + 3].copy_from_slice(&offset.to_le_bytes());
     }
 
     pub fn read_u16(&self, idx: usize) -> u16 {
-        if idx + 2 > self.code.len() {
-            panic!("Tvix bug: invalid bytecode (expected u16 operand not found)")
-        }
+        assert!(idx + 2 <= self.code.len(), "Tvix bug: invalid bytecode (expected u16 operand not found)");
 
         let byte_array: &[u8; 2] = &self.code[idx..idx + 2]
             .try_into()
@@ -133,7 +131,7 @@ impl Chunk {
         }
     }
 
-    /// Retrieve the [codemap::Span] from which the instruction at
+    /// Retrieve the [`codemap::Span`] from which the instruction at
     /// `offset` was compiled.
     pub fn get_span(&self, offset: CodeIdx) -> codemap::Span {
         let position = self
@@ -172,40 +170,40 @@ impl Chunk {
         if idx.0 > 0 && source.get_line(self.get_span(idx - 1)) == line {
             write!(writer, "   |\t")?;
         } else {
-            write!(writer, "{:4}\t", line)?;
+            write!(writer, "{line:4}\t")?;
         }
 
         let _fmt_constant = |idx: ConstantIdx| match &self.constants[idx.0] {
             Value::Thunk(t) => t.debug_repr(),
             Value::Closure(c) => format!("closure({:p})", c.lambda),
-            Value::Blueprint(b) => format!("blueprint({:p})", b),
-            val => format!("{}", val),
+            Value::Blueprint(b) => format!("blueprint({b:p})"),
+            val => format!("{val}"),
         };
 
         let op: Op = self.code[idx.0].into();
 
         match op.arg_type() {
             OpArg::None => {
-                writeln!(writer, "Op{:?}", op)?;
+                writeln!(writer, "Op{op:?}")?;
                 Ok(1)
             }
 
             OpArg::Fixed => {
                 let arg = self.read_u16(idx.0 + 1);
-                writeln!(writer, "Op{:?}({})", op, arg)?;
+                writeln!(writer, "Op{op:?}({arg})")?;
                 Ok(3)
             }
 
             OpArg::Uvarint => {
                 let (arg, size) = self.read_uvarint(idx.0 + 1);
-                writeln!(writer, "Op{:?}({})", op, arg)?;
+                writeln!(writer, "Op{op:?}({arg})")?;
                 Ok(1 + size)
             }
 
             _ => match op {
                 Op::CoerceToString => {
                     let kind: CoercionKind = self.code[idx.0 + 1].into();
-                    writeln!(writer, "Op{:?}({:?})", op, kind)?;
+                    writeln!(writer, "Op{op:?}({kind:?})")?;
                     Ok(2)
                 }
 
@@ -221,11 +219,11 @@ impl Chunk {
                     let captures_with = packed_count & 0b1 == 1;
                     let count = packed_count >> 1;
 
-                    write!(writer, "Op{:?}(BP @ {}, ", op, bp_idx)?;
+                    write!(writer, "Op{op:?}(BP @ {bp_idx}, ")?;
                     if captures_with {
                         write!(writer, "captures with, ")?;
                     }
-                    writeln!(writer, "{} upvalues)", count)?;
+                    writeln!(writer, "{count} upvalues)")?;
 
                     for _ in 0..count {
                         let (_, size) = self.read_uvarint(cidx);
@@ -234,7 +232,7 @@ impl Chunk {
 
                     Ok(cidx - idx.0)
                 }
-                _ => panic!("Tvix bug: don't know how to format argument for Op{:?}", op),
+                _ => panic!("Tvix bug: don't know how to format argument for Op{op:?}"),
             },
         }
     }

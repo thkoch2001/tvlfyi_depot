@@ -14,7 +14,7 @@ use crate::{
     tests::fixtures::{blob_service, directory_service},
 };
 
-/// Constructs and returns a gRPC PathInfoService.
+/// Constructs and returns a gRPC `PathInfoService`.
 /// We also return memory-based {Blob,Directory}Service,
 /// as the consumer of this function accepts a 3-tuple.
 pub async fn make_grpc_path_info_service_client() -> (

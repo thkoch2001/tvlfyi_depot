@@ -15,7 +15,7 @@ use tvix_store::nar::ingest_nar_and_hash;
 use crate::AppState;
 
 #[derive(Debug, Deserialize)]
-pub(crate) struct GetNARParams {
+pub struct GetNARParams {
     #[serde(rename = "narsize")]
     nar_size: u64,
 }

@@ -26,7 +26,7 @@ pub const FILE_DESCRIPTOR_SET: &[u8] = tonic::include_file_descriptor_set!("tvix
 #[cfg(test)]
 mod tests;
 
-/// Errors that can occur during the validation of PathInfo messages.
+/// Errors that can occur during the validation of `PathInfo` messages.
 #[derive(Debug, Error, PartialEq)]
 pub enum ValidatePathInfoError {
     /// Invalid length of a reference
@@ -41,20 +41,20 @@ pub enum ValidatePathInfoError {
     #[error("Invalid root node: {:?}", .0.to_string())]
     InvalidRootNode(DirectoryError),
 
-    /// Invalid node name encountered. Root nodes in PathInfos have more strict name requirements
+    /// Invalid node name encountered. Root nodes in `PathInfos` have more strict name requirements
     #[error("Failed to parse {} as StorePath: {1}", .0.to_str_lossy())]
     InvalidNodeName(Vec<u8>, store_path::Error),
 
-    /// The digest in narinfo.nar_sha256 has an invalid len.
+    /// The digest in `narinfo.nar_sha256` has an invalid len.
     #[error("Invalid narinfo.nar_sha256 length: expected {}, got {}", 32, .0)]
     InvalidNarSha256DigestLen(usize),
 
-    /// The number of references in the narinfo.reference_names field does not match
+    /// The number of references in the `narinfo.reference_names` field does not match
     /// the number of references in the .references field.
     #[error("Inconsistent Number of References: {0} (references) vs {1} (narinfo)")]
     InconsistentNumberOfReferences(usize, usize),
 
-    /// A string in narinfo.reference_names does not parse to a [store_path::StorePath].
+    /// A string in `narinfo.reference_names` does not parse to a [`store_path::StorePath`].
     #[error("Invalid reference_name at position {0}: {1}")]
     InvalidNarinfoReferenceName(usize, String),
 
@@ -74,7 +74,7 @@ pub enum ValidatePathInfoError {
 
 /// Parses a root node name.
 ///
-/// On success, this returns the parsed [store_path::StorePathRef].
+/// On success, this returns the parsed [`store_path::StorePathRef`].
 /// On error, it returns an error generated from the supplied constructor.
 fn parse_node_name_root<E>(
     name: &[u8],
@@ -84,9 +84,9 @@ fn parse_node_name_root<E>(
 }
 
 impl PathInfo {
-    /// validate performs some checks on the PathInfo struct,
-    /// Returning either a [store_path::StorePath] of the root node, or a
-    /// [ValidatePathInfoError].
+    /// validate performs some checks on the `PathInfo` struct,
+    /// Returning either a [`store_path::StorePath`] of the root node, or a
+    /// [`ValidatePathInfoError`].
     pub fn validate(&self) -> Result<store_path::StorePath<String>, ValidatePathInfoError> {
         // ensure the references have the right number of bytes.
         for (i, reference) in self.references.iter().enumerate() {
@@ -180,8 +180,8 @@ impl PathInfo {
     }
 
     /// With self and its store path name, this reconstructs a
-    /// [nix_compat::narinfo::NarInfo<'_>].
-    /// It can be used to validate Signatures, or get back a (sparse) NarInfo
+    /// [`nix_compat::narinfo::NarInfo`<'_>].
+    /// It can be used to validate Signatures, or get back a (sparse) `NarInfo`
     /// struct to prepare writing it out.
     ///
     /// It assumes self to be validated first, and will only return None if the
@@ -191,7 +191,7 @@ impl PathInfo {
     /// `references`), the rest points to data owned elsewhere.
     ///
     /// Keep in mind this is not able to reconstruct all data present in the
-    /// NarInfo<'_>, as some of it is not stored at all:
+    /// `NarInfo`<'_>, as some of it is not stored at all:
     /// - the `system`, `file_hash` and `file_size` fields are set to `None`.
     /// - the URL is set to an empty string.
     /// - Compression is set to "none"
@@ -249,8 +249,8 @@ impl PathInfo {
     }
 }
 
-/// Errors that can occur when converting from a [nar_info::Ca] to a (stricter)
-/// [nix_compat::nixhash::CAHash].
+/// Errors that can occur when converting from a [`nar_info::Ca`] to a (stricter)
+/// [`nix_compat::nixhash::CAHash`].
 #[derive(Debug, Error, PartialEq)]
 pub enum ConvertCAError {
     /// Invalid length of a reference
@@ -319,22 +319,22 @@ impl TryFrom<&nar_info::Ca> for nix_compat::nixhash::CAHash {
 impl From<&nix_compat::nixhash::CAHash> for nar_info::ca::Hash {
     fn from(value: &nix_compat::nixhash::CAHash) -> Self {
         match value {
-            CAHash::Flat(NixHash::Md5(_)) => nar_info::ca::Hash::FlatMd5,
-            CAHash::Flat(NixHash::Sha1(_)) => nar_info::ca::Hash::FlatSha1,
-            CAHash::Flat(NixHash::Sha256(_)) => nar_info::ca::Hash::FlatSha256,
-            CAHash::Flat(NixHash::Sha512(_)) => nar_info::ca::Hash::FlatSha512,
-            CAHash::Nar(NixHash::Md5(_)) => nar_info::ca::Hash::NarMd5,
-            CAHash::Nar(NixHash::Sha1(_)) => nar_info::ca::Hash::NarSha1,
-            CAHash::Nar(NixHash::Sha256(_)) => nar_info::ca::Hash::NarSha256,
-            CAHash::Nar(NixHash::Sha512(_)) => nar_info::ca::Hash::NarSha512,
-            CAHash::Text(_) => nar_info::ca::Hash::TextSha256,
+            CAHash::Flat(NixHash::Md5(_)) => Self::FlatMd5,
+            CAHash::Flat(NixHash::Sha1(_)) => Self::FlatSha1,
+            CAHash::Flat(NixHash::Sha256(_)) => Self::FlatSha256,
+            CAHash::Flat(NixHash::Sha512(_)) => Self::FlatSha512,
+            CAHash::Nar(NixHash::Md5(_)) => Self::NarMd5,
+            CAHash::Nar(NixHash::Sha1(_)) => Self::NarSha1,
+            CAHash::Nar(NixHash::Sha256(_)) => Self::NarSha256,
+            CAHash::Nar(NixHash::Sha512(_)) => Self::NarSha512,
+            CAHash::Text(_) => Self::TextSha256,
         }
     }
 }
 
 impl From<&nix_compat::nixhash::CAHash> for nar_info::Ca {
     fn from(value: &nix_compat::nixhash::CAHash) -> Self {
-        nar_info::Ca {
+        Self {
             r#type: Into::<nar_info::ca::Hash>::into(value) as i32,
             digest: value.hash().digest_as_bytes().to_vec().into(),
         }
@@ -342,34 +342,34 @@ impl From<&nix_compat::nixhash::CAHash> for nar_info::Ca {
 }
 
 impl From<&nix_compat::narinfo::NarInfo<'_>> for NarInfo {
-    /// Converts from a NarInfo (returned from the NARInfo parser) to the proto-
-    /// level NarInfo struct.
+    /// Converts from a `NarInfo` (returned from the `NARInfo` parser) to the proto-
+    /// level `NarInfo` struct.
     fn from(value: &nix_compat::narinfo::NarInfo<'_>) -> Self {
         let signatures = value
             .signatures
             .iter()
             .map(|sig| nar_info::Signature {
-                name: sig.name().to_string(),
+                name: (*sig.name()).to_string(),
                 data: Bytes::copy_from_slice(sig.bytes()),
             })
             .collect();
 
-        NarInfo {
+        Self {
             nar_size: value.nar_size,
             nar_sha256: Bytes::copy_from_slice(&value.nar_hash),
             signatures,
-            reference_names: value.references.iter().map(|r| r.to_string()).collect(),
+            reference_names: value.references.iter().map(std::string::ToString::to_string).collect(),
             deriver: value.deriver.as_ref().map(|sp| StorePath {
                 name: (*sp.name()).to_owned(),
                 digest: Bytes::copy_from_slice(sp.digest()),
             }),
-            ca: value.ca.as_ref().map(|ca| ca.into()),
+            ca: value.ca.as_ref().map(std::convert::Into::into),
         }
     }
 }
 
 impl From<&nix_compat::narinfo::NarInfo<'_>> for PathInfo {
-    /// Converts from a NarInfo (returned from the NARInfo parser) to a PathInfo
+    /// Converts from a `NarInfo` (returned from the `NARInfo` parser) to a `PathInfo`
     /// struct with the node set to None.
     fn from(value: &nix_compat::narinfo::NarInfo<'_>) -> Self {
         Self {

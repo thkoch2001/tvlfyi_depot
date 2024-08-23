@@ -62,7 +62,7 @@ pub(crate) fn fetchurl_derivation_to_fetch(drv: &Derivation) -> Result<(String, 
 }
 
 #[derive(Debug, thiserror::Error)]
-pub(crate) enum Error {
+pub enum Error {
     #[error("Invalid builder")]
     BuilderInvalid,
     #[error("invalid arguments")]

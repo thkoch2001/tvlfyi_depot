@@ -58,20 +58,20 @@ pub struct TracingHandle {
 }
 
 impl TracingHandle {
-    /// Returns a writer for [std::io::Stdout] that ensures its output will not be clobbered by
+    /// Returns a writer for [`std::io::Stdout`] that ensures its output will not be clobbered by
     /// active progress bars.
     ///
     /// Instead of `println!(...)` prefer `writeln!(handle.get_stdout_writer(), ...)`
-    pub fn get_stdout_writer(&self) -> IndicatifWriter<writer::Stdout> {
+    #[must_use] pub fn get_stdout_writer(&self) -> IndicatifWriter<writer::Stdout> {
         // clone is fine here because its only a wrapper over an `Arc`
         self.stdout_writer.clone()
     }
 
-    /// Returns a writer for [std::io::Stderr] that ensures its output will not be clobbered by
+    /// Returns a writer for [`std::io::Stderr`] that ensures its output will not be clobbered by
     /// active progress bars.
     ///
     /// Instead of `println!(...)` prefer `writeln!(handle.get_stderr_writer(), ...)`.
-    pub fn get_stderr_writer(&self) -> IndicatifWriter<writer::Stderr> {
+    #[must_use] pub fn get_stderr_writer(&self) -> IndicatifWriter<writer::Stderr> {
         // clone is fine here because its only a wrapper over an `Arc`
         self.stderr_writer.clone()
     }
@@ -79,7 +79,7 @@ impl TracingHandle {
     /// This will flush possible attached tracing providers, e.g. otlp exported, if enabled.
     /// If there is none enabled this will result in a noop.
     ///
-    /// It will not wait until the flush is complete, but you can pass in an oneshot::Sender which
+    /// It will not wait until the flush is complete, but you can pass in an `oneshot::Sender` which
     /// will receive a message once the flush is completed.
     pub async fn flush(&self, msg: Option<oneshot::Sender<()>>) -> Result<(), Error> {
         if let Some(tx) = &self.tx {
@@ -97,7 +97,7 @@ impl TracingHandle {
     /// If no tracing providers like otlp are attached then this will be a noop.
     ///
     /// This should only be called on a regular shutdown.
-    /// If you correctly need to shutdown tracing on ctrl_c use [force_shutdown](#method.force_shutdown)
+    /// If you correctly need to shutdown tracing on `ctrl_c` use [`force_shutdown`](#method.force_shutdown)
     /// otherwise you will get otlp errors.
     pub async fn shutdown(&self) -> Result<(), Error> {
         let (tx, rx) = tokio::sync::oneshot::channel();
@@ -110,7 +110,7 @@ impl TracingHandle {
     /// After this it will do some other necessary cleanup.
     /// If no tracing providers like otlp are attached then this will be a noop.
     ///
-    /// This should only be used if the tool received an ctrl_c otherwise you will get otlp errors.
+    /// This should only be used if the tool received an `ctrl_c` otherwise you will get otlp errors.
     /// If you need to shutdown tracing on a regular exit, you should use the [shutdown](#method.shutdown)
     /// method.
     pub async fn force_shutdown(&self) -> Result<(), Error> {
@@ -149,7 +149,7 @@ pub struct TracingBuilder {
 
 impl Default for TracingBuilder {
     fn default() -> Self {
-        TracingBuilder {
+        Self {
             level: Level::INFO,
             progess_bar: false,
 
@@ -160,32 +160,32 @@ impl Default for TracingBuilder {
 }
 
 impl TracingBuilder {
-    /// Set the log level for all layers: stderr und otlp if configured. RUST_LOG still has a
+    /// Set the log level for all layers: stderr und otlp if configured. `RUST_LOG` still has a
     /// higher priority over this value.
-    pub fn level(mut self, level: Level) -> TracingBuilder {
+    #[must_use] pub fn level(mut self, level: Level) -> Self {
         self.level = level;
         self
     }
 
     #[cfg(feature = "otlp")]
-    /// Enable otlp by setting a custom service_name
-    pub fn enable_otlp(mut self, service_name: &'static str) -> TracingBuilder {
+    /// Enable otlp by setting a custom `service_name`
+    #[must_use] pub fn enable_otlp(mut self, service_name: &'static str) -> Self {
         self.service_name = Some(service_name);
         self
     }
 
     /// Enable progress bar layer, default is disabled
-    pub fn enable_progressbar(mut self) -> TracingBuilder {
+    #[must_use] pub fn enable_progressbar(mut self) -> Self {
         self.progess_bar = true;
         self
     }
 
     /// This will setup tracing based on the configuration passed in.
-    /// It will setup a stderr writer output layer and a EnvFilter based on the provided log
-    /// level (RUST_LOG still has a higher priority over the configured value).
-    /// The EnvFilter will be applied to all configured layers, also otlp.
+    /// It will setup a stderr writer output layer and a `EnvFilter` based on the provided log
+    /// level (`RUST_LOG` still has a higher priority over the configured value).
+    /// The `EnvFilter` will be applied to all configured layers, also otlp.
     ///
-    /// It will also configure otlp if the feature is enabled and a service_name was provided. It
+    /// It will also configure otlp if the feature is enabled and a `service_name` was provided. It
     /// will then correctly setup a channel which is later used for flushing the provider.
     pub fn build(self) -> Result<TracingHandle, Error> {
         // Set up the tracing subscriber.

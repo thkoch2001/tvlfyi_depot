@@ -5,7 +5,7 @@ use std::{
 };
 use tokio::io::{self, AsyncReadExt, AsyncWriteExt, ReadBuf};
 
-pub(crate) mod reader;
+pub mod reader;
 pub use reader::BytesReader;
 mod writer;
 pub use writer::BytesWriter;
@@ -16,7 +16,7 @@ const EMPTY_BYTES: &[u8; 8] = &[0u8; 8];
 /// The length of the size field, in bytes is always 8.
 const LEN_SIZE: usize = 8;
 
-/// Read a "bytes wire packet" from the AsyncRead.
+/// Read a "bytes wire packet" from the `AsyncRead`.
 /// Rejects reading more than `allowed_size` bytes of payload.
 ///
 /// The packet is made up of three parts:
@@ -32,7 +32,7 @@ const LEN_SIZE: usize = 8;
 /// becomes unusable.
 ///
 /// This buffers the entire payload into memory,
-/// a streaming version is available at [crate::wire::bytes::BytesReader].
+/// a streaming version is available at [`crate::wire::bytes::BytesReader`].
 pub async fn read_bytes<R>(r: &mut R, allowed_size: RangeInclusive<usize>) -> io::Result<Vec<u8>>
 where
     R: AsyncReadExt + Unpin + ?Sized,
@@ -52,7 +52,7 @@ where
 
     // calculate the total length, including padding.
     // byte packets are padded to 8 byte blocks each.
-    let padded_len = padding_len(len as u64) as u64 + (len as u64);
+    let padded_len = u64::from(padding_len(len as u64)) + (len as u64);
     let mut limited_reader = r.take(padded_len);
 
     let mut buf = Vec::new();
@@ -79,7 +79,7 @@ where
     Ok(buf)
 }
 
-pub(crate) async fn read_bytes_buf<'a, const N: usize, R>(
+pub async fn read_bytes_buf<'a, const N: usize, R>(
     reader: &mut R,
     buf: &'a mut [MaybeUninit<u8>; N],
     allowed_size: RangeInclusive<usize>,
@@ -116,7 +116,7 @@ where
         // SAFETY: `read_buf` is filled up to `buf_len`, and we verify that it is
         // still pointing at the same underlying buffer.
         unsafe {
-            assert_eq!(read_buf.filled().as_ptr(), buf.as_ptr() as *const u8);
+            assert_eq!(read_buf.filled().as_ptr(), buf.as_ptr().cast::<u8>());
             assume_init_bytes(&buf[..buf_len])
         }
     };
@@ -133,11 +133,11 @@ where
 
 /// SAFETY: The bytes have to actually be initialized.
 unsafe fn assume_init_bytes(slice: &[MaybeUninit<u8>]) -> &[u8] {
-    &*(slice as *const [MaybeUninit<u8>] as *const [u8])
+    &*(std::ptr::from_ref::<[MaybeUninit<u8>]>(slice) as *const [u8])
 }
 
-/// Read a "bytes wire packet" of from the AsyncRead and tries to parse as string.
-/// Internally uses [read_bytes].
+/// Read a "bytes wire packet" of from the `AsyncRead` and tries to parse as string.
+/// Internally uses [`read_bytes`].
 /// Rejects reading more than `allowed_size` bytes of payload.
 pub async fn read_string<R>(r: &mut R, allowed_size: RangeInclusive<usize>) -> io::Result<String>
 where
@@ -147,14 +147,14 @@ where
     String::from_utf8(bytes).map_err(|e| Error::new(ErrorKind::InvalidData, e))
 }
 
-/// Writes a "bytes wire packet" to a (hopefully buffered) [AsyncWriteExt].
+/// Writes a "bytes wire packet" to a (hopefully buffered) [`AsyncWriteExt`].
 ///
-/// Accepts anything implementing AsRef<[u8]> as payload.
+/// Accepts anything implementing `AsRef`<[u8]> as payload.
 ///
-/// See [read_bytes] for a description of the format.
+/// See [`read_bytes`] for a description of the format.
 ///
 /// Note: if performance matters to you, make sure your
-/// [AsyncWriteExt] handle is buffered. This function is quite
+/// [`AsyncWriteExt`] handle is buffered. This function is quite
 /// write-intesive.
 pub async fn write_bytes<W: AsyncWriteExt + Unpin, B: AsRef<[u8]>>(
     w: &mut W,
@@ -196,11 +196,11 @@ mod tests {
     async fn test_read_8_bytes() {
         let mut mock = Builder::new()
             .read(&8u64.to_le_bytes())
-            .read(&12345678u64.to_le_bytes())
+            .read(&12_345_678_u64.to_le_bytes())
             .build();
 
         assert_eq!(
-            &12345678u64.to_le_bytes(),
+            &12_345_678_u64.to_le_bytes(),
             read_bytes(&mut mock, 0..=MAX_LEN).await.unwrap().as_slice()
         );
     }
@@ -249,7 +249,7 @@ mod tests {
             .write(&len.to_le_bytes())
             .write(&input)
             .build();
-        assert_ok!(write_bytes(&mut mock, &input).await)
+        assert_ok!(write_bytes(&mut mock, &input).await);
     }
     #[tokio::test]
     async fn test_write_bytes_with_padding() {
@@ -259,7 +259,7 @@ mod tests {
             .write(&len.to_le_bytes())
             .write(&hex!("322e332e31370000"))
             .build();
-        assert_ok!(write_bytes(&mut mock, &input).await)
+        assert_ok!(write_bytes(&mut mock, &input).await);
     }
 
     #[tokio::test]
@@ -270,7 +270,7 @@ mod tests {
             .write(&len.to_le_bytes())
             .write(&hex!("48656c6c6f2c20576f726c6421000000"))
             .build();
-        assert_ok!(write_bytes(&mut mock, &input).await)
+        assert_ok!(write_bytes(&mut mock, &input).await);
     }
 
     #[test]

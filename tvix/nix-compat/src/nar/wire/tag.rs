@@ -14,7 +14,7 @@ pub trait Tag: Sized {
     /// HACK: This is a workaround for const generics limitations.
     type Buf: AsMut<[u8]> + Send;
 
-    /// Make an instance of [Self::Buf]
+    /// Make an instance of [`Self::Buf`]
     fn make_buf() -> Self::Buf;
 
     /// Convert a discriminant into the corresponding variant

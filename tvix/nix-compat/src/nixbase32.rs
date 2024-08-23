@@ -14,7 +14,7 @@ use data_encoding::{DecodeError, DecodeKind};
 const ALPHABET: &[u8; 32] = b"0123456789abcdfghijklmnpqrsvwxyz";
 
 /// Returns encoded input
-pub fn encode(input: &[u8]) -> String {
+#[must_use] pub fn encode(input: &[u8]) -> String {
     let output_len = encode_len(input.len());
     let mut output = String::with_capacity(output_len);
 
@@ -27,9 +27,9 @@ pub fn encode(input: &[u8]) -> String {
         // we can only read byte-aligned units
         // read 16 bits then shift and mask to 5
         let c = {
-            let mut word = input[i] as u16;
+            let mut word = u16::from(input[i]);
             if let Some(&msb) = input.get(i + 1) {
-                word |= (msb as u16) << 8;
+                word |= u16::from(msb) << 8;
             }
             (word >> j) & 0x1f
         };
@@ -99,7 +99,7 @@ fn decode_inner(input: &[u8], output: &mut [u8]) -> Result<(), DecodeError> {
         let j = b % 8;
 
         let digit = BASE32_ORD[c as usize];
-        let value = (digit as u16) << j;
+        let value = u16::from(digit) << j;
         output[i] |= value as u8 | carry;
         carry = (value >> 8) as u8;
 
@@ -135,12 +135,12 @@ fn find_invalid(input: &[u8]) -> usize {
 }
 
 /// Returns the decoded length of an input of length len.
-pub const fn decode_len(len: usize) -> usize {
+#[must_use] pub const fn decode_len(len: usize) -> usize {
     (len * 5) / 8
 }
 
 /// Returns the encoded length of an input of length len
-pub const fn encode_len(len: usize) -> usize {
+#[must_use] pub const fn encode_len(len: usize) -> usize {
     (len * 8 + 4) / 5
 }
 

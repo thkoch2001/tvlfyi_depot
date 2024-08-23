@@ -15,7 +15,7 @@ tonic::include_proto!("tvix.build.v1");
 /// [`tonic_reflection`](https://docs.rs/tonic-reflection).
 pub const FILE_DESCRIPTOR_SET: &[u8] = tonic::include_file_descriptor_set!("tvix.build.v1");
 
-/// Errors that occur during the validation of [BuildRequest] messages.
+/// Errors that occur during the validation of [`BuildRequest`] messages.
 #[derive(Debug, thiserror::Error)]
 pub enum ValidateBuildRequestError {
     #[error("invalid input node at position {0}: {1}")]
@@ -136,7 +136,7 @@ impl BuildRequest {
             if name.as_ref() <= last_name.as_ref() {
                 return Err(ValidateBuildRequestError::InputNodesNotSorted);
             } else {
-                last_name = name.into()
+                last_name = name.into();
             }
         }
 
@@ -148,10 +148,10 @@ impl BuildRequest {
         // validate scratch paths
         for (i, p) in self.scratch_paths.iter().enumerate() {
             if !is_clean_relative_path(p) {
-                Err(ValidateBuildRequestError::InvalidScratchPath(i))?
+                Err(ValidateBuildRequestError::InvalidScratchPath(i))?;
             }
         }
-        if !is_sorted(self.scratch_paths.iter().map(|e| e.as_bytes())) {
+        if !is_sorted(self.scratch_paths.iter().map(std::string::String::as_bytes)) {
             Err(ValidateBuildRequestError::ScratchPathsNotSorted)?;
         }
 
@@ -163,17 +163,17 @@ impl BuildRequest {
         // validate outputs
         for (i, p) in self.outputs.iter().enumerate() {
             if !is_clean_relative_path(p) {
-                Err(ValidateBuildRequestError::InvalidOutputPath(i))?
+                Err(ValidateBuildRequestError::InvalidOutputPath(i))?;
             }
         }
-        if !is_sorted(self.outputs.iter().map(|e| e.as_bytes())) {
+        if !is_sorted(self.outputs.iter().map(std::string::String::as_bytes)) {
             Err(ValidateBuildRequestError::OutputsNotSorted)?;
         }
 
         // validate environment_vars.
         for (i, e) in self.environment_vars.iter().enumerate() {
             if e.key.is_empty() || e.key.contains('=') {
-                Err(ValidateBuildRequestError::InvalidEnvVar(i))?
+                Err(ValidateBuildRequestError::InvalidEnvVar(i))?;
             }
         }
         if !is_sorted(self.environment_vars.iter().map(|e| e.key.as_bytes())) {
@@ -190,7 +190,7 @@ impl BuildRequest {
         // validate additional_files
         for (i, additional_file) in self.additional_files.iter().enumerate() {
             if !is_clean_relative_path(&additional_file.path) {
-                Err(ValidateBuildRequestError::InvalidAdditionalFilePath(i))?
+                Err(ValidateBuildRequestError::InvalidAdditionalFilePath(i))?;
             }
         }
         if !is_sorted(self.additional_files.iter().map(|e| e.path.as_bytes())) {
@@ -202,7 +202,7 @@ impl BuildRequest {
 }
 
 /// Errors that occur during the validation of
-/// [build_request::BuildConstraints] messages.
+/// [`build_request::BuildConstraints`] messages.
 #[derive(Debug, thiserror::Error)]
 pub enum ValidateBuildConstraintsError {
     #[error("invalid system")]
@@ -224,10 +224,10 @@ impl build_request::BuildConstraints {
         // validate available_ro_paths
         for (i, p) in self.available_ro_paths.iter().enumerate() {
             if !is_clean_absolute_path(p) {
-                Err(ValidateBuildConstraintsError::InvalidAvailableRoPaths(i))?
+                Err(ValidateBuildConstraintsError::InvalidAvailableRoPaths(i))?;
             }
         }
-        if !is_sorted(self.available_ro_paths.iter().map(|e| e.as_bytes())) {
+        if !is_sorted(self.available_ro_paths.iter().map(std::string::String::as_bytes)) {
             Err(ValidateBuildConstraintsError::AvailableRoPathsNotSorted)?;
         }
 

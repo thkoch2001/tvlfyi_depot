@@ -51,23 +51,23 @@ pub(super) enum AttrsRep {
 impl AttrsRep {
     fn select(&self, key: &BStr) -> Option<&Value> {
         match self {
-            AttrsRep::Empty => None,
+            Self::Empty => None,
 
-            AttrsRep::KV { name, value } => match &**key {
+            Self::KV { name, value } => match &**key {
                 b"name" => Some(name),
                 b"value" => Some(value),
                 _ => None,
             },
 
-            AttrsRep::Map(map) => map.get(key),
+            Self::Map(map) => map.get(key),
         }
     }
 
     fn contains(&self, key: &BStr) -> bool {
         match self {
-            AttrsRep::Empty => false,
-            AttrsRep::KV { .. } => key == "name" || key == "value",
-            AttrsRep::Map(map) => map.contains_key(key),
+            Self::Empty => false,
+            Self::KV { .. } => key == "name" || key == "value",
+            Self::Map(map) => map.contains_key(key),
         }
     }
 }
@@ -78,7 +78,7 @@ pub struct NixAttrs(pub(super) Rc<AttrsRep>);
 
 impl From<AttrsRep> for NixAttrs {
     fn from(rep: AttrsRep) -> Self {
-        NixAttrs(Rc::new(rep))
+        Self(Rc::new(rep))
     }
 }
 
@@ -87,7 +87,7 @@ where
     NixString: From<K>,
     Value: From<V>,
 {
-    fn from_iter<T>(iter: T) -> NixAttrs
+    fn from_iter<T>(iter: T) -> Self
     where
         T: IntoIterator<Item = (K, V)>,
     {
@@ -168,7 +168,7 @@ impl<'de> Deserialize<'de> for NixAttrs {
 }
 
 impl NixAttrs {
-    pub fn empty() -> Self {
+    #[must_use] pub fn empty() -> Self {
         AttrsRep::Empty.into()
     }
 
@@ -176,13 +176,13 @@ impl NixAttrs {
     /// sense for some attribute set representations, i.e. returning
     /// `false` does not mean that the two attribute sets do not have
     /// equal *content*.
-    pub fn ptr_eq(&self, other: &Self) -> bool {
+    #[must_use] pub fn ptr_eq(&self, other: &Self) -> bool {
         Rc::ptr_eq(&self.0, &other.0)
     }
 
     /// Return an attribute set containing the merge of the two
     /// provided sets. Keys from the `other` set have precedence.
-    pub fn update(self, other: Self) -> Self {
+    #[must_use] pub fn update(self, other: Self) -> Self {
         // Short-circuit on some optimal cases:
         match (self.0.as_ref(), other.0.as_ref()) {
             (AttrsRep::Empty, AttrsRep::Empty) => return self,
@@ -193,9 +193,8 @@ impl NixAttrs {
             // Explicitly handle all branches instead of falling
             // through, to ensure that we get at least some compiler
             // errors if variants are modified.
-            (AttrsRep::Map(_), AttrsRep::Map(_))
-            | (AttrsRep::Map(_), AttrsRep::KV { .. })
-            | (AttrsRep::KV { .. }, AttrsRep::Map(_)) => {}
+            (AttrsRep::Map(_) | AttrsRep::KV { .. }, AttrsRep::Map(_)) |
+(AttrsRep::Map(_), AttrsRep::KV { .. }) => {}
         };
 
         // Slightly more advanced, but still optimised updates
@@ -238,7 +237,7 @@ impl NixAttrs {
     }
 
     /// Return the number of key-value entries in an attrset.
-    pub fn len(&self) -> usize {
+    #[must_use] pub fn len(&self) -> usize {
         match self.0.as_ref() {
             AttrsRep::Map(map) => map.len(),
             AttrsRep::Empty => 0,
@@ -246,7 +245,7 @@ impl NixAttrs {
         }
     }
 
-    pub fn is_empty(&self) -> bool {
+    #[must_use] pub fn is_empty(&self) -> bool {
         match self.0.as_ref() {
             AttrsRep::Map(map) => map.is_empty(),
             AttrsRep::Empty => true,
@@ -283,7 +282,7 @@ impl NixAttrs {
 
     /// Construct an iterator over all the key-value pairs in the attribute set.
     #[allow(clippy::needless_lifetimes)]
-    pub fn iter<'a>(&'a self) -> Iter<KeyValue<'a>> {
+    #[must_use] pub fn iter<'a>(&'a self) -> Iter<KeyValue<'a>> {
         Iter(match &self.0.as_ref() {
             AttrsRep::Map(map) => KeyValue::Map(map.iter()),
             AttrsRep::Empty => KeyValue::Empty,
@@ -299,20 +298,20 @@ impl NixAttrs {
         })
     }
 
-    /// Same as iter(), but marks call sites which rely on the
+    /// Same as `iter()`, but marks call sites which rely on the
     /// iteration being lexicographic.
-    pub fn iter_sorted(&self) -> Iter<KeyValue<'_>> {
+    #[must_use] pub fn iter_sorted(&self) -> Iter<KeyValue<'_>> {
         self.iter()
     }
 
-    /// Same as [IntoIterator::into_iter], but marks call sites which rely on the
+    /// Same as [`IntoIterator::into_iter`], but marks call sites which rely on the
     /// iteration being lexicographic.
-    pub fn into_iter_sorted(self) -> OwnedAttrsIterator {
+    #[must_use] pub fn into_iter_sorted(self) -> OwnedAttrsIterator {
         self.into_iter()
     }
 
     /// Construct an iterator over all the keys of the attribute set
-    pub fn keys(&self) -> Keys {
+    #[must_use] pub fn keys(&self) -> Keys {
         Keys(match self.0.as_ref() {
             AttrsRep::Empty => KeysInner::Empty,
             AttrsRep::KV { .. } => KeysInner::KV(IterKV::default()),

@@ -1,9 +1,9 @@
-//! This module implements a wrapper around tvix-eval's [EvalIO] type,
+//! This module implements a wrapper around tvix-eval's [`EvalIO`] type,
 //! adding functionality which is required by tvix-cli:
 //!
 //! 1. Handling the C++ Nix `__corepkgs__`-hack for nixpkgs bootstrapping.
 //!
-//! All uses of [EvalIO] in tvix-cli must make use of this wrapper,
+//! All uses of [`EvalIO`] in tvix-cli must make use of this wrapper,
 //! otherwise nixpkgs bootstrapping will not work.
 
 use std::io::{self, Cursor};

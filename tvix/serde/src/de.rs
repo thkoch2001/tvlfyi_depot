@@ -261,7 +261,7 @@ impl<'de> de::Deserializer<'de> for NixDeserializer {
     where
         V: de::Visitor<'de>,
     {
-        if let Value::Null = self.value {
+        if matches!(self.value, Value::Null) {
             visitor.visit_none()
         } else {
             visitor.visit_some(self)
@@ -272,7 +272,7 @@ impl<'de> de::Deserializer<'de> for NixDeserializer {
     where
         V: de::Visitor<'de>,
     {
-        if let Value::Null = self.value {
+        if matches!(self.value, Value::Null) {
             return visitor.visit_unit();
         }
 
@@ -306,7 +306,7 @@ impl<'de> de::Deserializer<'de> for NixDeserializer {
         V: de::Visitor<'de>,
     {
         if let Value::List(list) = self.value {
-            let mut seq = SeqDeserializer::new(list.into_iter().map(NixDeserializer::new));
+            let mut seq = SeqDeserializer::new(list.into_iter().map(Self::new));
             let result = visitor.visit_seq(&mut seq)?;
             seq.end()?;
             return Ok(result);
@@ -343,8 +343,8 @@ impl<'de> de::Deserializer<'de> for NixDeserializer {
         if let Value::Attrs(attrs) = self.value {
             let mut map = MapDeserializer::new(attrs.into_iter().map(|(k, v)| {
                 (
-                    NixDeserializer::new(Value::from(k)),
-                    NixDeserializer::new(v),
+                    Self::new(Value::from(k)),
+                    Self::new(v),
                 )
             }));
             let result = visitor.visit_map(&mut map)?;

@@ -42,7 +42,7 @@ async fn filtered_ingest(
     while let Some(entry) = it.next() {
         // Entry could be a NotFound, if the root path specified does not exist.
         let entry = entry.map_err(|err| ErrorKind::IO {
-            path: err.path().map(|p| p.to_path_buf()),
+            path: err.path().map(std::path::Path::to_path_buf),
             error: std::io::Error::from(err).into(),
         })?;
 
@@ -108,7 +108,7 @@ mod import_builtins {
     use std::os::unix::ffi::OsStrExt;
     use std::rc::Rc;
 
-    use super::*;
+    use super::{EvalIO, ImportError, Node, filtered_ingest, generators};
 
     use crate::tvix_store_io::TvixStoreIO;
     use nix_compat::nixhash::{CAHash, NixHash};
@@ -149,7 +149,7 @@ mod import_builtins {
         let filter = args.select("filter");
         let recursive_ingestion = args
             .select("recursive")
-            .map(|r| r.as_bool())
+            .map(tvix_eval::Value::as_bool)
             .transpose()?
             .unwrap_or(true); // Yes, yes, Nix, by default, puts `recursive = true;`.
         let expected_sha256 = args
@@ -268,7 +268,7 @@ mod import_builtins {
                 // FUTUREWORK: Nix follows a symlink if it's at the root,
                 // except if it's not resolve-able (NixOS/nix#7761).i
                 return Err(tvix_eval::ErrorKind::IO {
-                    path: Some(path.to_path_buf()),
+                    path: Some(path.clone()),
                     error: Rc::new(std::io::Error::new(
                         std::io::ErrorKind::Unsupported,
                         "builtins.path pointing to a symlink is ill-defined.",
@@ -277,7 +277,7 @@ mod import_builtins {
             }
             FileType::Unknown => {
                 return Err(tvix_eval::ErrorKind::IO {
-                    path: Some(path.to_path_buf()),
+                    path: Some(path.clone()),
                     error: Rc::new(std::io::Error::new(
                         std::io::ErrorKind::Unsupported,
                         "unsupported file type",
@@ -306,7 +306,7 @@ mod import_builtins {
             .tokio_handle
             .block_on(async { state.path_info_service.as_ref().put(path_info).await })
             .map_err(|e| tvix_eval::ErrorKind::IO {
-                path: Some(path.to_path_buf()),
+                path: Some(path.clone()),
                 error: Rc::new(e.into()),
             })?;
 

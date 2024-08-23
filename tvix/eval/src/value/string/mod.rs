@@ -102,10 +102,10 @@ impl NixStringInner {
             // layout of the len both have non-zero size
             let ptr = alloc(layout);
 
-            if let Some(this) = NonNull::new(ptr as *mut _) {
+            if let Some(this) = NonNull::new(ptr.cast::<c_void>()) {
                 // SAFETY: We've allocated with a layout that causes the len_offset to be in-bounds
                 // and writeable, and if the allocation succeeded it won't wrap
-                ((this.as_ptr() as *mut u8).add(len_offset) as *mut usize).write(len);
+                this.as_ptr().cast::<u8>().add(len_offset).cast::<usize>().write(len);
                 debug_assert_eq!(Self::len(this), len);
                 this
             } else {
@@ -123,7 +123,7 @@ impl NixStringInner {
     unsafe fn dealloc(this: NonNull<c_void>) {
         let (layout, _, _) = Self::layout_of(this);
         // SAFETY: okay because of the safety guarantees of this method
-        dealloc(this.as_ptr() as *mut u8, layout)
+        dealloc(this.as_ptr().cast::<u8>(), layout);
     }
 
     /// Return the length of the Nix string at the given pointer
@@ -148,7 +148,7 @@ impl NixStringInner {
     /// [`Self::alloc`]
     unsafe fn context_ptr(this: NonNull<c_void>) -> *mut Option<Box<NixContext>> {
         // SAFETY: The context is the first field in the layout of the allocation
-        this.as_ptr() as *mut Option<Box<NixContext>>
+        this.as_ptr().cast::<Option<Box<NixContext>>>()
     }
 
     /// Construct a shared reference to the context value within the given Nix string pointer
@@ -188,7 +188,7 @@ impl NixStringInner {
     unsafe fn data_ptr(this: NonNull<c_void>) -> *mut u8 {
         let (_, _, data_offset) = Self::layout_of(this);
         // SAFETY: data is the third field in the layout of the allocation
-        this.as_ptr().add(data_offset) as *mut u8
+        this.as_ptr().add(data_offset).cast::<u8>()
     }
 
     /// Construct a shared reference to the data slice within the given Nix string pointer
@@ -236,7 +236,7 @@ impl NixStringInner {
     unsafe fn clone(this: NonNull<c_void>) -> NonNull<c_void> {
         let (layout, _, _) = Self::layout_of(this);
         let ptr = alloc(layout);
-        if let Some(new) = NonNull::new(ptr as *mut _) {
+        if let Some(new) = NonNull::new(ptr.cast()) {
             ptr::copy_nonoverlapping(this.as_ptr(), new.as_ptr(), layout.size());
             Self::context_ptr(new).write(Self::context_ref(this).clone());
             new
@@ -457,10 +457,10 @@ impl From<String> for NixString {
 
 impl<T> From<(T, Option<Box<NixContext>>)> for NixString
 where
-    NixString: From<T>,
+    Self: From<T>,
 {
     fn from((s, ctx): (T, Option<Box<NixContext>>)) -> Self {
-        Self::new(NixString::from(s).as_ref(), ctx)
+        Self::new(Self::from(s).as_ref(), ctx)
     }
 }
 
@@ -504,7 +504,7 @@ impl Borrow<BStr> for NixString {
 
 impl Hash for NixString {
     fn hash<H: std::hash::Hasher>(&self, state: &mut H) {
-        self.as_bstr().hash(state)
+        self.as_bstr().hash(state);
     }
 }
 
@@ -551,7 +551,7 @@ impl Deref for NixString {
 
 #[cfg(feature = "arbitrary")]
 mod arbitrary {
-    use super::*;
+    use super::NixString;
     use proptest::prelude::{any_with, Arbitrary};
     use proptest::strategy::{BoxedStrategy, Strategy};
 
@@ -608,9 +608,9 @@ impl NixString {
         }
     }
 
-    pub fn new_inherit_context_from<T>(other: &NixString, new_contents: T) -> Self
+    pub fn new_inherit_context_from<T>(other: &Self, new_contents: T) -> Self
     where
-        NixString: From<T>,
+        Self: From<T>,
     {
         Self::new(
             Self::from(new_contents).as_ref(),
@@ -620,7 +620,7 @@ impl NixString {
 
     pub fn new_context_from<T>(context: NixContext, contents: T) -> Self
     where
-        NixString: From<T>,
+        Self: From<T>,
     {
         Self::new(
             Self::from(contents).as_ref(),
@@ -632,17 +632,17 @@ impl NixString {
         )
     }
 
-    pub fn as_bstr(&self) -> &BStr {
+    #[must_use] pub fn as_bstr(&self) -> &BStr {
         BStr::new(self.as_bytes())
     }
 
-    pub fn as_bytes(&self) -> &[u8] {
+    #[must_use] pub fn as_bytes(&self) -> &[u8] {
         // SAFETY: There's no way to construct an uninitialized NixString (see the SAFETY comment in
         // `new`)
         unsafe { NixStringInner::data_slice(self.0) }
     }
 
-    pub fn into_bstring(self) -> BString {
+    #[must_use] pub fn into_bstring(self) -> BString {
         self.as_bstr().to_owned()
     }
 
@@ -652,7 +652,7 @@ impl NixString {
     /// This is used when printing out strings used as e.g. attribute
     /// set keys, as those are only escaped in the presence of special
     /// characters.
-    pub fn ident_str(&self) -> Cow<str> {
+    #[must_use] pub fn ident_str(&self) -> Cow<str> {
         let escaped = match self.to_str_lossy() {
             Cow::Borrowed(s) => nix_escape_string(s),
             Cow::Owned(s) => nix_escape_string(&s).into_owned().into(),
@@ -664,17 +664,17 @@ impl NixString {
                 if is_valid_nix_identifier(&escaped) && !is_keyword(&escaped) {
                     escaped
                 } else {
-                    Cow::Owned(format!("\"{}\"", escaped))
+                    Cow::Owned(format!("\"{escaped}\""))
                 }
             }
 
             // An owned string has escapes, and needs the outer quotes
             // for display.
-            Cow::Owned(s) => Cow::Owned(format!("\"{}\"", s)),
+            Cow::Owned(s) => Cow::Owned(format!("\"{s}\"")),
         }
     }
 
-    pub fn concat(&self, other: &Self) -> Self {
+    #[must_use] pub fn concat(&self, other: &Self) -> Self {
         let mut s = self.to_vec();
         s.extend(&(***other));
 
@@ -722,7 +722,7 @@ impl NixString {
     }
 
     /// Iterates over all context elements.
-    /// See [iter_plain], [iter_derivation], [iter_single_outputs].
+    /// See [`iter_plain`], [`iter_derivation`], [`iter_single_outputs`].
     pub fn iter_context(&self) -> impl Iterator<Item = &NixContext> {
         self.context().into_iter()
     }
@@ -731,7 +731,7 @@ impl NixString {
     /// in the store without more information, i.e. `toFile` or coerced imported paths.
     /// It yields paths to the store.
     pub fn iter_ctx_plain(&self) -> impl Iterator<Item = &str> {
-        self.iter_context().flat_map(|context| context.iter_plain())
+        self.iter_context().flat_map(context::NixContext::iter_plain)
     }
 
     /// Iterates over "full derivations" context elements, e.g. something
@@ -740,7 +740,7 @@ impl NixString {
     pub fn iter_ctx_derivation(&self) -> impl Iterator<Item = &str> {
         return self
             .iter_context()
-            .flat_map(|context| context.iter_derivation());
+            .flat_map(context::NixContext::iter_derivation);
     }
 
     /// Iterates over "single" context elements, e.g. single derived paths,
@@ -750,11 +750,11 @@ impl NixString {
     pub fn iter_ctx_single_outputs(&self) -> impl Iterator<Item = (&str, &str)> {
         return self
             .iter_context()
-            .flat_map(|context| context.iter_single_outputs());
+            .flat_map(context::NixContext::iter_single_outputs);
     }
 
     /// Returns whether this Nix string possess a context or not.
-    pub fn has_context(&self) -> bool {
+    #[must_use] pub fn has_context(&self) -> bool {
         self.context().is_some()
     }
 
@@ -770,7 +770,7 @@ impl NixString {
         let _ = self.take_context();
     }
 
-    pub fn chars(&self) -> Chars<'_> {
+    #[must_use] pub fn chars(&self) -> Chars<'_> {
         self.as_bstr().chars()
     }
 }
@@ -870,7 +870,7 @@ mod tests {
 
     #[proptest]
     fn clone_strings(s: NixString) {
-        drop(s.clone())
+        drop(s);
     }
 
     eq_laws!(NixString);

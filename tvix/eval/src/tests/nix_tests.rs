@@ -58,13 +58,11 @@ fn eval_test(code_path: PathBuf, expect_success: bool) {
         Some(Value::Catchable(_)) => true,
         _ => !result.errors.is_empty(),
     };
-    if expect_success && failed {
-        panic!(
+    assert!(!(expect_success && failed), 
             "{}: evaluation of eval-okay test should succeed, but failed with {:?}",
             code_path.display(),
             result.errors,
         );
-    }
 
     if !expect_success && failed {
         return;
@@ -147,7 +145,7 @@ fn identity(#[files("src/tests/tvix_tests/identity-*.nix")] code_path: PathBuf) 
         result_str,
         code.trim(),
         "result value representation (left) must match expectation (right)"
-    )
+    );
 }
 
 // eval-okay-* tests contain a snippet of Nix code, and an expectation
@@ -158,14 +156,14 @@ fn identity(#[files("src/tests/tvix_tests/identity-*.nix")] code_path: PathBuf) 
 #[cfg(feature = "impure")]
 #[rstest]
 fn eval_okay(#[files("src/tests/tvix_tests/eval-okay-*.nix")] code_path: PathBuf) {
-    eval_test(code_path, true)
+    eval_test(code_path, true);
 }
 
 // eval-okay-* tests from the original Nix test suite.
 #[cfg(feature = "impure")]
 #[rstest]
 fn nix_eval_okay(#[files("src/tests/nix_tests/eval-okay-*.nix")] code_path: PathBuf) {
-    eval_test(code_path, true)
+    eval_test(code_path, true);
 }
 
 // eval-okay-* tests from the original Nix test suite which do not yet pass for tvix
@@ -182,7 +180,7 @@ fn nix_eval_okay(#[files("src/tests/nix_tests/eval-okay-*.nix")] code_path: Path
 fn nix_eval_okay_currently_failing(
     #[files("src/tests/nix_tests/notyetpassing/eval-okay-*.nix")] code_path: PathBuf,
 ) {
-    eval_test(code_path, false)
+    eval_test(code_path, false);
 }
 
 #[cfg(feature = "impure")]
@@ -190,7 +188,7 @@ fn nix_eval_okay_currently_failing(
 fn eval_okay_currently_failing(
     #[files("src/tests/tvix_tests/notyetpassing/eval-okay-*.nix")] code_path: PathBuf,
 ) {
-    eval_test(code_path, false)
+    eval_test(code_path, false);
 }
 
 // eval-fail-* tests contain a snippet of Nix code, which is
@@ -199,12 +197,12 @@ fn eval_okay_currently_failing(
 #[cfg(feature = "impure")]
 #[rstest]
 fn eval_fail(#[files("src/tests/tvix_tests/eval-fail-*.nix")] code_path: PathBuf) {
-    eval_test(code_path, false)
+    eval_test(code_path, false);
 }
 
 // eval-fail-* tests from the original Nix test suite.
 #[cfg(feature = "impure")]
 #[rstest]
 fn nix_eval_fail(#[files("src/tests/nix_tests/eval-fail-*.nix")] code_path: PathBuf) {
-    eval_test(code_path, false)
+    eval_test(code_path, false);
 }

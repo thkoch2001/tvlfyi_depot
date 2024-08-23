@@ -15,8 +15,8 @@ use tvix_castore::{
     Node, PathBuf,
 };
 
-/// Ingests the contents from a [AsyncRead] providing NAR into the tvix store,
-/// interacting with a [BlobService] and [DirectoryService].
+/// Ingests the contents from a [`AsyncRead`] providing NAR into the tvix store,
+/// interacting with a [`BlobService`] and [`DirectoryService`].
 /// Returns the castore root node, as well as the sha256 and size of the NAR
 /// contents ingested.
 pub async fn ingest_nar_and_hash<R, BS, DS>(
@@ -49,8 +49,8 @@ where
     Ok((root_node, nar_hash.finalize().into(), nar_size))
 }
 
-/// Ingests the contents from a [AsyncRead] providing NAR into the tvix store,
-/// interacting with a [BlobService] and [DirectoryService].
+/// Ingests the contents from a [`AsyncRead`] providing NAR into the tvix store,
+/// interacting with a [`BlobService`] and [`DirectoryService`].
 /// It returns the castore root node or an error.
 pub async fn ingest_nar<R, BS, DS>(
     blob_service: BS,
@@ -95,7 +95,7 @@ where
 
     let consume = ingest_entries(directory_service, rx);
 
-    let (_, node) = try_join!(produce, consume)?;
+    let ((), node) = try_join!(produce, consume)?;
 
     Ok(node)
 }

@@ -15,12 +15,12 @@ pub enum HashAlgo {
 
 impl HashAlgo {
     // return the number of bytes in the digest of the given hash algo.
-    pub fn digest_length(&self) -> usize {
+    #[must_use] pub fn digest_length(&self) -> usize {
         match self {
-            HashAlgo::Sha1 => 20,
-            HashAlgo::Sha256 => 32,
-            HashAlgo::Sha512 => 64,
-            HashAlgo::Md5 => 16,
+            Self::Sha1 => 20,
+            Self::Sha256 => 32,
+            Self::Sha512 => 64,
+            Self::Md5 => 16,
         }
     }
 }
@@ -28,10 +28,10 @@ impl HashAlgo {
 impl Display for HashAlgo {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match &self {
-            HashAlgo::Md5 => write!(f, "md5"),
-            HashAlgo::Sha1 => write!(f, "sha1"),
-            HashAlgo::Sha256 => write!(f, "sha256"),
-            HashAlgo::Sha512 => write!(f, "sha512"),
+            Self::Md5 => write!(f, "md5"),
+            Self::Sha1 => write!(f, "sha1"),
+            Self::Sha256 => write!(f, "sha256"),
+            Self::Sha512 => write!(f, "sha512"),
         }
     }
 }
@@ -51,7 +51,7 @@ impl<'de> Deserialize<'de> for HashAlgo {
         D: serde::Deserializer<'de>,
     {
         let s: &str = Deserialize::deserialize(deserializer)?;
-        HashAlgo::try_from(s).map_err(serde::de::Error::custom)
+        Self::try_from(s).map_err(serde::de::Error::custom)
     }
 }
 

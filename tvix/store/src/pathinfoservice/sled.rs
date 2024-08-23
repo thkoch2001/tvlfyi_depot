@@ -11,9 +11,9 @@ use tracing::{instrument, warn};
 use tvix_castore::composition::{CompositionContext, ServiceBuilder};
 use tvix_castore::Error;
 
-/// SledPathInfoService stores PathInfo in a [sled](https://github.com/spacejam/sled).
+/// `SledPathInfoService` stores `PathInfo` in a [sled](https://github.com/spacejam/sled).
 ///
-/// The PathInfo messages are stored as encoded protos, and keyed by their output hash,
+/// The `PathInfo` messages are stored as encoded protos, and keyed by their output hash,
 /// as that's currently the only request type available.
 pub struct SledPathInfoService {
     db: sled::Db,
@@ -54,14 +54,14 @@ impl PathInfoService for SledPathInfoService {
         .await?
         .map_err(|e| {
             warn!("failed to retrieve PathInfo: {}", e);
-            Error::StorageError(format!("failed to retrieve PathInfo: {}", e))
+            Error::StorageError(format!("failed to retrieve PathInfo: {e}"))
         })?;
         match resp {
             None => Ok(None),
             Some(data) => {
                 let path_info = PathInfo::decode(&*data).map_err(|e| {
                     warn!("failed to decode stored PathInfo: {}", e);
-                    Error::StorageError(format!("failed to decode stored PathInfo: {}", e))
+                    Error::StorageError(format!("failed to decode stored PathInfo: {e}"))
                 })?;
                 Ok(Some(path_info))
             }
@@ -73,7 +73,7 @@ impl PathInfoService for SledPathInfoService {
         // Call validate on the received PathInfo message.
         let store_path = path_info
             .validate()
-            .map_err(|e| Error::InvalidRequest(format!("failed to validate PathInfo: {}", e)))?;
+            .map_err(|e| Error::InvalidRequest(format!("failed to validate PathInfo: {e}")))?;
 
         // In case the PathInfo is valid, we were able to parse a StorePath.
         // Store it in the database, keyed by its digest.
@@ -87,9 +87,9 @@ impl PathInfoService for SledPathInfoService {
         .await?
         .map_err(|e| {
             warn!("failed to insert PathInfo: {}", e);
-            Error::StorageError(format! {
-                "failed to insert PathInfo: {}", e
-            })
+            Error::StorageError(format!(
+                "failed to insert PathInfo: {e}"
+            ))
         })?;
 
         Ok(path_info)
@@ -109,12 +109,12 @@ impl PathInfoService for SledPathInfoService {
                 it = new_it;
                 let data = elem.map_err(|e| {
                     warn!("failed to retrieve PathInfo: {}", e);
-                    Error::StorageError(format!("failed to retrieve PathInfo: {}", e))
+                    Error::StorageError(format!("failed to retrieve PathInfo: {e}"))
                 })?;
 
                 let path_info = PathInfo::decode(&*data).map_err(|e| {
                     warn!("failed to decode stored PathInfo: {}", e);
-                    Error::StorageError(format!("failed to decode stored PathInfo: {}", e))
+                    Error::StorageError(format!("failed to decode stored PathInfo: {e}"))
                 })?;
 
                 yield path_info
@@ -128,7 +128,7 @@ impl PathInfoService for SledPathInfoService {
 pub struct SledPathInfoServiceConfig {
     is_temporary: bool,
     #[serde(default)]
-    /// required when is_temporary = false
+    /// required when `is_temporary` = false
     path: Option<String>,
 }
 
@@ -144,12 +144,12 @@ impl TryFrom<url::Url> for SledPathInfoServiceConfig {
         // TODO: expose compression and other parameters as URL parameters?
 
         Ok(if url.path().is_empty() {
-            SledPathInfoServiceConfig {
+            Self {
                 is_temporary: true,
                 path: None,
             }
         } else {
-            SledPathInfoServiceConfig {
+            Self {
                 is_temporary: false,
                 path: Some(url.path().to_string()),
             }
@@ -166,22 +166,22 @@ impl ServiceBuilder for SledPathInfoServiceConfig {
         _context: &CompositionContext,
     ) -> Result<Arc<dyn PathInfoService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
         match self {
-            SledPathInfoServiceConfig {
+            Self {
                 is_temporary: true,
                 path: None,
             } => Ok(Arc::new(SledPathInfoService::new_temporary()?)),
-            SledPathInfoServiceConfig {
+            Self {
                 is_temporary: true,
                 path: Some(_),
             } => Err(
                 Error::StorageError("Temporary SledPathInfoService can not have path".into())
                     .into(),
             ),
-            SledPathInfoServiceConfig {
+            Self {
                 is_temporary: false,
                 path: None,
             } => Err(Error::StorageError("SledPathInfoService is missing path".into()).into()),
-            SledPathInfoServiceConfig {
+            Self {
                 is_temporary: false,
                 path: Some(path),
             } => Ok(Arc::new(SledPathInfoService::new(path)?)),
