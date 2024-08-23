@@ -15,10 +15,9 @@ partially see this as [an experiment][] in tooling for monorepos.
 
 ## Services
 
-* Source code is available primarily through Sourcegraph on
-  [cs.tvl.fyi](https://cs.tvl.fyi), where it is searchable and even semantically
-  indexed. A lower-tech view of the repository is also available via cgit-pink
-  on [code.tvl.fyi](https://code.tvl.fyi).
+* Source code can be viewed primarily via `cgit-pink` on
+  [code.tvl.fyi](https://code.tvl.fyi), with code search being available through
+  Livegrep on [grep.tvl.fyi](https://grep.tvl.fyi).
 
   The repository can be cloned using `git` from `https://cl.tvl.fyi/depot`.
 
