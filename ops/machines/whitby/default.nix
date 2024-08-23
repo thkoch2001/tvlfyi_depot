@@ -11,6 +11,7 @@ in
   imports = [
     (mod "atward.nix")
     (mod "cgit.nix")
+    (mod "cheddar.nix")
     (mod "clbot.nix")
     (mod "gerrit-autosubmit.nix")
     (mod "irccat.nix")
@@ -304,6 +305,9 @@ in
     enable = true;
     agentCount = 32;
   };
+
+  # Run Markdown/code renderer
+  services.depot.cheddar.enable = true;
 
   # Start a local SMTP relay to Gmail (used by gerrit)
   services.depot.smtprelay = {
