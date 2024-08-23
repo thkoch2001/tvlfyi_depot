@@ -14,7 +14,7 @@ pub use algos::HashAlgo;
 pub use ca_hash::CAHash;
 pub use ca_hash::HashMode as CAHashMode;
 
-/// NixHash represents hashes known by Nix.
+/// `NixHash` represents hashes known by Nix.
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub enum NixHash {
     Md5([u8; 16]),
@@ -25,17 +25,17 @@ pub enum NixHash {
 
 /// Same order as sorting the corresponding nixbase32 strings.
 ///
-/// This order is used in the ATerm serialization of a derivation
+/// This order is used in the `ATerm` serialization of a derivation
 /// and thus affects the calculated output hash.
 impl Ord for NixHash {
-    fn cmp(&self, other: &NixHash) -> Ordering {
+    fn cmp(&self, other: &Self) -> Ordering {
         self.digest_as_bytes().cmp(other.digest_as_bytes())
     }
 }
 
 // See Ord for reason to implement this manually.
 impl PartialOrd for NixHash {
-    fn partial_cmp(&self, other: &NixHash) -> Option<Ordering> {
+    fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
         Some(self.cmp(other))
     }
 }
@@ -55,28 +55,30 @@ impl Display for NixHash {
 pub type NixHashResult<V> = std::result::Result<V, Error>;
 
 impl NixHash {
-    /// returns the algo as [HashAlgo].
+    /// returns the algo as [`HashAlgo`].
+    #[must_use]
     pub fn algo(&self) -> HashAlgo {
         match self {
-            NixHash::Md5(_) => HashAlgo::Md5,
-            NixHash::Sha1(_) => HashAlgo::Sha1,
-            NixHash::Sha256(_) => HashAlgo::Sha256,
-            NixHash::Sha512(_) => HashAlgo::Sha512,
+            Self::Md5(_) => HashAlgo::Md5,
+            Self::Sha1(_) => HashAlgo::Sha1,
+            Self::Sha256(_) => HashAlgo::Sha256,
+            Self::Sha512(_) => HashAlgo::Sha512,
         }
     }
 
     /// returns the digest as variable-length byte slice.
+    #[must_use]
     pub fn digest_as_bytes(&self) -> &[u8] {
         match self {
-            NixHash::Md5(digest) => digest,
-            NixHash::Sha1(digest) => digest,
-            NixHash::Sha256(digest) => digest,
-            NixHash::Sha512(digest) => digest.as_ref(),
+            Self::Md5(digest) => digest,
+            Self::Sha1(digest) => digest,
+            Self::Sha256(digest) => digest,
+            Self::Sha512(digest) => digest.as_ref(),
         }
     }
 
-    /// Constructs a [NixHash] from the Nix default hash format,
-    /// the inverse of [Self::to_nix_hex_string].
+    /// Constructs a [`NixHash`] from the Nix default hash format,
+    /// the inverse of [`Self::to_nix_hex_string`].
     pub fn from_nix_hex_str(s: &str) -> Option<Self> {
         let (tag, digest) = s.split_once(':')?;
 
@@ -92,13 +94,14 @@ impl NixHash {
         .ok()
     }
 
-    /// Formats a [NixHash] in the Nix default hash format,
+    /// Formats a [`NixHash`] in the Nix default hash format,
     /// which is the algo, followed by a colon, then the lower hex encoded digest.
+    #[must_use]
     pub fn to_nix_hex_string(&self) -> String {
         format!("{}:{}", self.algo(), self.to_plain_hex_string())
     }
 
-    /// Formats a [NixHash] in the format that's used inside CAHash,
+    /// Formats a [`NixHash`] in the format that's used inside `CAHash`,
     /// which is the algo, followed by a colon, then the nixbase32-encoded digest.
     pub(crate) fn to_nix_nixbase32_string(&self) -> String {
         format!(
@@ -109,6 +112,7 @@ impl NixHash {
     }
 
     /// Returns the digest as a hex string -- without any algorithm prefix.
+    #[must_use]
     pub fn to_plain_hex_string(&self) -> String {
         HEXLOWER.encode(self.digest_as_bytes())
     }
@@ -117,7 +121,7 @@ impl NixHash {
 impl TryFrom<(HashAlgo, &[u8])> for NixHash {
     type Error = Error;
 
-    /// Constructs a new [NixHash] by specifying [HashAlgo] and digest.
+    /// Constructs a new [`NixHash`] by specifying [`HashAlgo`] and digest.
     /// It can fail if the passed digest length doesn't match what's expected for
     /// the passed algo.
     fn try_from(value: (HashAlgo, &[u8])) -> NixHashResult<Self> {
@@ -149,7 +153,7 @@ impl Serialize for NixHash {
     }
 }
 
-/// Constructs a new [NixHash] by specifying [HashAlgo] and digest.
+/// Constructs a new [`NixHash`] by specifying [`HashAlgo`] and digest.
 /// It can fail if the passed digest length doesn't match what's expected for
 /// the passed algo.
 pub fn from_algo_and_digest(algo: HashAlgo, digest: &[u8]) -> NixHashResult<NixHash> {
@@ -165,7 +169,7 @@ pub fn from_algo_and_digest(algo: HashAlgo, digest: &[u8]) -> NixHashResult<NixH
     })
 }
 
-/// Errors related to NixHash construction.
+/// Errors related to `NixHash` construction.
 #[derive(Debug, Eq, PartialEq, thiserror::Error)]
 pub enum Error {
     #[error("invalid hash algo: {0}")]
@@ -188,7 +192,7 @@ pub enum Error {
 
 /// Nix allows specifying hashes in various encodings, and magically just
 /// derives the encoding.
-/// This function parses strings to a NixHash.
+/// This function parses strings to a `NixHash`.
 ///
 /// Hashes can be:
 /// - Nix hash strings
@@ -198,7 +202,7 @@ pub enum Error {
 /// Encoding for Nix hash strings or bare digests can be:
 /// - base16 (lowerhex),
 /// - nixbase32,
-/// - base64 (StdEncoding)
+/// - base64 (`StdEncoding`)
 /// - sri string
 ///
 /// The encoding is derived from the length of the string and the hash type.
@@ -254,7 +258,7 @@ pub fn from_str(s: &str, algo_str: Option<&str>) -> NixHashResult<NixHash> {
     }
 }
 
-/// Parses a Nix hash string ($algo:$digest) to a NixHash.
+/// Parses a Nix hash string ($algo:$digest) to a `NixHash`.
 pub fn from_nix_str(s: &str) -> NixHashResult<NixHash> {
     if let Some(rest) = s.strip_prefix("sha1:") {
         decode_digest(rest.as_bytes(), HashAlgo::Sha1)
@@ -269,7 +273,7 @@ pub fn from_nix_str(s: &str) -> NixHashResult<NixHash> {
     }
 }
 
-/// Parses a Nix SRI string to a NixHash.
+/// Parses a Nix SRI string to a `NixHash`.
 /// Contrary to the SRI spec, Nix doesn't have an understanding of passing
 /// multiple hashes (with different algos) in SRI hashes.
 /// It instead simply cuts everything off after the expected length for the
@@ -373,10 +377,10 @@ mod tests {
 
     // TODO
     fn make_nixhash(algo: &HashAlgo, digest_encoded: String) -> String {
-        format!("{}:{}", algo, digest_encoded)
+        format!("{algo}:{digest_encoded}")
     }
     fn make_sri_string(algo: &HashAlgo, digest_encoded: String) -> String {
-        format!("{}-{}", algo, digest_encoded)
+        format!("{algo}-{digest_encoded}")
     }
 
     /// Test parsing a hash string in various formats, and also when/how the out-of-band algo is needed.
@@ -477,7 +481,7 @@ mod tests {
         }
     }
 
-    /// Test parsing an SRI hash via the [nixhash::from_sri_str] method.
+    /// Test parsing an SRI hash via the [`nixhash::from_sri_str`] method.
     #[test]
     fn from_sri_str() {
         let nix_hash = nixhash::from_sri_str("sha256-pc6cFV7Qk5dhRkbJcX/HzZSxAj17drYY1Ank/v1unTk=")
@@ -487,7 +491,7 @@ mod tests {
         assert_eq!(
             &hex!("a5ce9c155ed09397614646c9717fc7cd94b1023d7b76b618d409e4fefd6e9d39"),
             nix_hash.digest_as_bytes()
-        )
+        );
     }
 
     /// Test parsing sha512 SRI hash with various paddings, Nix accepts all of them.
@@ -504,7 +508,7 @@ mod tests {
         assert_eq!(
             &hex!("ee0f754c1bd8a18428ad14eaa3ead80ff8b96275af5012e7a8384f1f10490da056eec9ae3cc791a7a13a24e16e54df5bccdd109c7d53a14534bbd7360a300b11"),
             nix_hash.digest_as_bytes()
-        )
+        );
     }
 
     /// Ensure we detect truncated base64 digests, where the digest size

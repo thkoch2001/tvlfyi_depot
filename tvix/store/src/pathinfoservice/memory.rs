@@ -32,8 +32,7 @@ impl PathInfoService for MemoryPathInfoService {
         // Call validate on the received PathInfo message.
         match path_info.validate() {
             Err(e) => Err(Error::InvalidRequest(format!(
-                "failed to validate PathInfo: {}",
-                e
+                "failed to validate PathInfo: {e}"
             ))),
 
             // In case the PathInfo is valid, and we were able to extract a NixPath, store it in the database.
@@ -72,7 +71,7 @@ impl TryFrom<url::Url> for MemoryPathInfoServiceConfig {
         if url.has_host() || !url.path().is_empty() {
             return Err(Error::StorageError("invalid url".to_string()).into());
         }
-        Ok(MemoryPathInfoServiceConfig {})
+        Ok(Self {})
     }
 }
 

@@ -187,9 +187,7 @@ pub fn builtins(args: TokenStream, item: TokenStream) -> TokenStream {
                 if let FnArg::Typed(PatType { pat, .. }) = &f.sig.inputs[0] {
                     if let Pat::Ident(PatIdent { ident, .. }) = pat.as_ref() {
                         if *ident == "state" {
-                            if state_type.is_none() {
-                                panic!("builtin captures a `state` argument, but no state type was defined");
-                            }
+                            assert!(state_type.is_some(), "builtin captures a `state` argument, but no state type was defined");
 
                             captures_state = true;
                         }
@@ -234,7 +232,7 @@ pub fn builtins(args: TokenStream, item: TokenStream) -> TokenStream {
                                 });
                                 match pat.as_ref() {
                                     Pat::Ident(PatIdent { ident, .. }) => {
-                                        (ident.clone(), ty.clone())
+                                        (ident.clone(), ty)
                                     }
                                     _ => panic!("ignored value parameters must be named, e.g. `_x` and not just `_`"),
                                 }
@@ -247,13 +245,7 @@ pub fn builtins(args: TokenStream, item: TokenStream) -> TokenStream {
                             }));
                         }
 
-                        Ok(BuiltinArgument {
-                            strict,
-                            catch,
-                            span,
-                            name,
-                            ty,
-                        })
+                        Ok(BuiltinArgument { name, ty, strict, catch, span })
                     })
                     .collect::<Result<Vec<BuiltinArgument>, _>>();
 
@@ -304,7 +296,7 @@ pub fn builtins(args: TokenStream, item: TokenStream) -> TokenStream {
                               .expect("Tvix bug: builtin called with incorrect number of arguments");
 
                             #block
-                        }})
+                        }});
                     }
                 }
 

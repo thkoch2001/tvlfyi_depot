@@ -5,7 +5,7 @@ fn symlink() {
     let mut buf = vec![];
     let node = nar::writer::open(&mut buf).unwrap();
 
-    node.symlink("/nix/store/somewhereelse".as_bytes()).unwrap();
+    node.symlink(b"/nix/store/somewhereelse").unwrap();
 
     assert_eq!(include_bytes!("../tests/symlink.nar"), buf.as_slice());
 }
@@ -16,9 +16,7 @@ async fn symlink_async() {
     let mut buf = vec![];
 
     let node = nar::writer::r#async::open(&mut buf).await.unwrap();
-    node.symlink("/nix/store/somewhereelse".as_bytes())
-        .await
-        .unwrap();
+    node.symlink(b"/nix/store/somewhereelse").await.unwrap();
 
     assert_eq!(include_bytes!("../tests/symlink.nar"), buf.as_slice());
 }
@@ -67,19 +65,19 @@ fn complicated() {
 
     let mut dir_node = node.directory().unwrap();
 
-    let e = dir_node.entry(".keep".as_bytes()).unwrap();
+    let e = dir_node.entry(b".keep").unwrap();
     e.file(false, 0, &mut std::io::Cursor::new([]))
         .expect("read .keep must succeed");
 
-    let e = dir_node.entry("aa".as_bytes()).unwrap();
-    e.symlink("/nix/store/somewhereelse".as_bytes())
+    let e = dir_node.entry(b"aa").unwrap();
+    e.symlink(b"/nix/store/somewhereelse")
         .expect("symlink must succeed");
 
-    let e = dir_node.entry("keep".as_bytes()).unwrap();
+    let e = dir_node.entry(b"keep").unwrap();
     let mut subdir_node = e.directory().expect("directory must succeed");
 
     let e_sub = subdir_node
-        .entry(".keep".as_bytes())
+        .entry(b".keep")
         .expect("subdir entry must succeed");
     e_sub.file(false, 0, &mut std::io::Cursor::new([])).unwrap();
 
@@ -101,21 +99,21 @@ async fn complicated_async() {
 
     let mut dir_node = node.directory().await.unwrap();
 
-    let e = dir_node.entry(".keep".as_bytes()).await.unwrap();
+    let e = dir_node.entry(b".keep").await.unwrap();
     e.file(false, 0, &mut Cursor::new([]))
         .await
         .expect("read .keep must succeed");
 
-    let e = dir_node.entry("aa".as_bytes()).await.unwrap();
-    e.symlink("/nix/store/somewhereelse".as_bytes())
+    let e = dir_node.entry(b"aa").await.unwrap();
+    e.symlink(b"/nix/store/somewhereelse")
         .await
         .expect("symlink must succeed");
 
-    let e = dir_node.entry("keep".as_bytes()).await.unwrap();
+    let e = dir_node.entry(b"keep").await.unwrap();
     let mut subdir_node = e.directory().await.expect("directory must succeed");
 
     let e_sub = subdir_node
-        .entry(".keep".as_bytes())
+        .entry(b".keep")
         .await
         .expect("subdir entry must succeed");
     e_sub.file(false, 0, &mut Cursor::new([])).await.unwrap();

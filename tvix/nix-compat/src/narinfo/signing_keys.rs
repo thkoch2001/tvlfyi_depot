@@ -23,7 +23,7 @@ where
         Self { name, signing_key }
     }
 
-    /// Signs a fingerprint using the internal signing key, returns the [SignatureRef]
+    /// Signs a fingerprint using the internal signing key, returns the [`SignatureRef`]
     pub(crate) fn sign<'a>(&'a self, fp: &[u8]) -> SignatureRef<'a> {
         SignatureRef::new(&self.name, self.signing_key.sign(fp).to_bytes())
     }
@@ -33,7 +33,7 @@ where
     }
 }
 
-/// Parses a SigningKey / VerifyingKey from a byte slice in the format that Nix uses.
+/// Parses a `SigningKey` / `VerifyingKey` from a byte slice in the format that Nix uses.
 pub fn parse_keypair(
     input: &str,
 ) -> Result<(SigningKey<ed25519_dalek::SigningKey>, VerifyingKey), Error> {

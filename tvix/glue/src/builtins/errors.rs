@@ -27,7 +27,7 @@ pub enum DerivationError {
 
 impl From<DerivationError> for tvix_eval::ErrorKind {
     fn from(err: DerivationError) -> Self {
-        tvix_eval::ErrorKind::TvixError(Rc::new(err))
+        Self::TvixError(Rc::new(err))
     }
 }
 
@@ -75,6 +75,6 @@ pub enum ImportError {
 
 impl From<ImportError> for tvix_eval::ErrorKind {
     fn from(err: ImportError) -> Self {
-        tvix_eval::ErrorKind::TvixError(Rc::new(err))
+        Self::TvixError(Rc::new(err))
     }
 }

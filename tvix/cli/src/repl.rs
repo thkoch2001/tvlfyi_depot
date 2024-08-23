@@ -15,7 +15,7 @@ use crate::{
 fn state_dir() -> Option<PathBuf> {
     let mut path = dirs::data_dir();
     if let Some(p) = path.as_mut() {
-        p.push("tvix")
+        p.push("tvix");
     }
     path
 }
@@ -74,11 +74,13 @@ pub struct CommandResult {
 }
 
 impl CommandResult {
+    #[must_use]
     pub fn finalize(self) -> bool {
         print!("{}", self.output);
         self.continue_
     }
 
+    #[must_use]
     pub fn output(&self) -> &str {
         &self.output
     }
@@ -143,10 +145,10 @@ impl<'a> Repl<'a> {
                         break;
                     }
                 }
-                Err(ReadlineError::Interrupted) | Err(ReadlineError::Eof) => break,
+                Err(ReadlineError::Interrupted | ReadlineError::Eof) => break,
 
                 Err(err) => {
-                    eprintln!("error: {}", err);
+                    eprintln!("error: {err}");
                     break;
                 }
             }

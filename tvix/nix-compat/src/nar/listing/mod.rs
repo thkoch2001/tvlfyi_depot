@@ -59,7 +59,7 @@ impl ListingEntry {
     ///
     /// If the path is invalid, a listing error [`ListingError`] will be returned.
     /// If the entry cannot be found, `None` will be returned.
-    pub fn locate<P: AsRef<Path>>(&self, path: P) -> Result<Option<&ListingEntry>, ListingError> {
+    pub fn locate<P: AsRef<Path>>(&self, path: P) -> Result<Option<&Self>, ListingError> {
         // We perform a simple DFS on the components of the path
         // while rejecting dangerous components, e.g. `..` or `/`
         // Files and symlinks are *leaves*, i.e. we return them
@@ -110,7 +110,7 @@ impl<'de, const V: u8> Deserialize<'de> for ListingVersion<V> {
     {
         let value = u8::deserialize(deserializer)?;
         if value == V {
-            Ok(ListingVersion::<V>)
+            Ok(Self)
         } else {
             Err(serde::de::Error::custom(ListingVersionError(value)))
         }

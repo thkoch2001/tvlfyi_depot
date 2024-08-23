@@ -21,7 +21,7 @@ impl From<CAHash> for nar_info::Ca {
     fn from(value: CAHash) -> Self {
         let hash_type: nar_info::ca::Hash = (&value).into();
         let digest: bytes::Bytes = value.hash().to_string().into();
-        nar_info::Ca {
+        Self {
             r#type: hash_type.into(),
             digest,
         }
@@ -36,7 +36,7 @@ pub fn log_node(name: &[u8], node: &Node, path: &Path) {
                 name = %name.as_bstr(),
                 digest = %digest,
                 "import successful",
-            )
+            );
         }
         Node::File { digest, .. } => {
             debug!(
@@ -44,7 +44,7 @@ pub fn log_node(name: &[u8], node: &Node, path: &Path) {
                 name = %name.as_bstr(),
                 digest = %digest,
                 "import successful"
-            )
+            );
         }
         Node::Symlink { target } => {
             debug!(
@@ -52,7 +52,7 @@ pub fn log_node(name: &[u8], node: &Node, path: &Path) {
                 name = %name.as_bstr(),
                 target = ?target,
                 "import successful"
-            )
+            );
         }
     }
 }
@@ -99,7 +99,7 @@ pub fn derive_nar_ca_path_info(
             signatures: vec![],
             reference_names: vec![],
             deriver: None,
-            ca: ca.map(|ca_hash| ca_hash.into()),
+            ca: ca.map(std::convert::Into::into),
         }),
     }
 }
@@ -136,7 +136,7 @@ where
     let output_path = store_path::build_nar_based_store_path(&nar_sha256, name).map_err(|_| {
         std::io::Error::new(
             std::io::ErrorKind::InvalidData,
-            format!("invalid name: {}", name),
+            format!("invalid name: {name}"),
         )
     })?;
 

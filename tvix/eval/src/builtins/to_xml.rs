@@ -10,7 +10,7 @@ use crate::{ErrorKind, NixContext, NixContextElement, Value};
 
 /// Recursively serialise a value to XML. The value *must* have been
 /// deep-forced before being passed to this function.
-/// On success, returns the NixContext.
+/// On success, returns the `NixContext`.
 pub fn value_to_xml<W: Write>(mut writer: W, value: &Value) -> Result<NixContext, ErrorKind> {
     // Write a literal document declaration, using C++-Nix-style
     // single quotes.
@@ -57,7 +57,7 @@ fn value_variant_to_xml<W: Write>(w: &mut XmlEmitter<W>, value: &Value) -> Resul
         Value::List(list) => {
             w.write_open_tag("list", &[])?;
 
-            for elem in list.into_iter() {
+            for elem in list {
                 value_variant_to_xml(w, elem)?;
             }
 
@@ -90,7 +90,7 @@ fn value_variant_to_xml<W: Write>(w: &mut XmlEmitter<W>, value: &Value) -> Resul
                     }
 
                     w.write_open_tag("attrspat", &attrs)?;
-                    for arg in formals.arguments.iter() {
+                    for arg in &formals.arguments {
                         w.write_self_closing_tag("attr", &[("name", &arg.0.to_str_lossy())])?;
                     }
 
@@ -148,7 +148,7 @@ struct XmlEmitter<W> {
 
 impl<W: Write> XmlEmitter<W> {
     pub fn new(writer: W) -> Self {
-        XmlEmitter {
+        Self {
             cur_indent: 0,
             writer,
             context: Default::default(),
@@ -259,10 +259,10 @@ impl<W: Write> XmlEmitter<W> {
     where
         T: IntoIterator<Item = NixContextElement>,
     {
-        self.context.extend(iter)
+        self.context.extend(iter);
     }
 
-    /// Consumes [Self] and returns the [NixContext] collected.
+    /// Consumes [Self] and returns the [`NixContext`] collected.
     fn into_context(self) -> NixContext {
         self.context
     }
@@ -288,10 +288,10 @@ mod tests {
 
         assert_eq!(
             std::str::from_utf8(&buf).unwrap(),
-            r##"<hello hi="it’s me" no="&lt;escape&gt;">
+            r#"<hello hi="it’s me" no="&lt;escape&gt;">
   <self-closing tag="yay" />
 </hello>
-"##
+"#
         );
     }
 
@@ -299,15 +299,15 @@ mod tests {
     fn xml_escape() {
         match XmlEmitter::<Writer<Vec<u8>>>::escape_attr_value("ab<>c&de") {
             Cow::Owned(s) => assert_eq!(s, "ab&lt;&gt;c&amp;de".to_string(), "escape stuff"),
-            Cow::Borrowed(s) => panic!("s should be owned {}", s),
+            Cow::Borrowed(s) => panic!("s should be owned {s}"),
         }
         match XmlEmitter::<Writer<Vec<u8>>>::escape_attr_value("") {
             Cow::Borrowed(s) => assert_eq!(s, "", "empty escape is borrowed"),
-            Cow::Owned(s) => panic!("s should be borrowed {}", s),
+            Cow::Owned(s) => panic!("s should be borrowed {s}"),
         }
         match XmlEmitter::<Writer<Vec<u8>>>::escape_attr_value("hi!ŷbla") {
             Cow::Borrowed(s) => assert_eq!(s, "hi!ŷbla", "no escape is borrowed"),
-            Cow::Owned(s) => panic!("s should be borrowed {}", s),
+            Cow::Owned(s) => panic!("s should be borrowed {s}"),
         }
         match XmlEmitter::<Writer<Vec<u8>>>::escape_attr_value("hi!<ŷ>bla") {
             Cow::Owned(s) => assert_eq!(
@@ -315,7 +315,7 @@ mod tests {
                 "hi!&lt;ŷ&gt;bla".to_string(),
                 "multi-byte chars are correctly used"
             ),
-            Cow::Borrowed(s) => panic!("s should be owned {}", s),
+            Cow::Borrowed(s) => panic!("s should be owned {s}"),
         }
     }
 }

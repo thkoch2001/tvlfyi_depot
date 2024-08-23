@@ -17,20 +17,20 @@ use tvix_castore::{
 };
 use url::Url;
 
-/// NixHTTPPathInfoService acts as a bridge in between the Nix HTTP Binary cache
+/// `NixHTTPPathInfoService` acts as a bridge in between the Nix HTTP Binary cache
 /// protocol provided by Nix binary caches such as cache.nixos.org, and the Tvix
 /// Store Model.
-/// It implements the [PathInfoService] trait in an interesting way:
-/// Every [PathInfoService::get] fetches the .narinfo and referred NAR file,
-/// inserting components into a [BlobService] and [DirectoryService], then
-/// returning a [PathInfo] struct with the root.
+/// It implements the [`PathInfoService`] trait in an interesting way:
+/// Every [`PathInfoService::get`] fetches the .narinfo and referred NAR file,
+/// inserting components into a [`BlobService`] and [`DirectoryService`], then
+/// returning a [`PathInfo`] struct with the root.
 ///
 /// Due to this being quite a costly operation, clients are expected to layer
 /// this service with store composition, so they're only ingested once.
 ///
-/// The client is expected to be (indirectly) using the same [BlobService] and
-/// [DirectoryService], so able to fetch referred Directories and Blobs.
-/// [PathInfoService::put] is not implemented and returns an error if called.
+/// The client is expected to be (indirectly) using the same [`BlobService`] and
+/// [`DirectoryService`], so able to fetch referred Directories and Blobs.
+/// [`PathInfoService::put`] is not implemented and returns an error if called.
 /// TODO: what about reading from nix-cache-info?
 pub struct NixHTTPPathInfoService<BS, DS> {
     base_url: url::Url,
@@ -39,7 +39,7 @@ pub struct NixHTTPPathInfoService<BS, DS> {
     blob_service: BS,
     directory_service: DS,
 
-    /// An optional list of [narinfo::PubKey].
+    /// An optional list of [`narinfo::PubKey`].
     /// If set, the .narinfo files received need to have correct signature by at least one of these.
     public_keys: Option<Vec<narinfo::VerifyingKey>>,
 }
@@ -58,7 +58,7 @@ impl<BS, DS> NixHTTPPathInfoService<BS, DS> {
         }
     }
 
-    /// Configures [Self] to validate NARInfo fingerprints with the public keys passed.
+    /// Configures [Self] to validate `NARInfo` fingerprints with the public keys passed.
     pub fn set_public_keys(&mut self, public_keys: Vec<narinfo::VerifyingKey>) {
         self.public_keys = Some(public_keys);
     }
@@ -259,7 +259,7 @@ pub struct NixHTTPPathInfoServiceConfig {
     blob_service: String,
     directory_service: String,
     #[serde(default)]
-    /// An optional list of [narinfo::PubKey].
+    /// An optional list of [`narinfo::PubKey`].
     /// If set, the .narinfo files received need to have correct signature by at least one of these.
     public_keys: Option<Vec<String>>,
 }
@@ -277,7 +277,7 @@ impl TryFrom<Url> for NixHTTPPathInfoServiceConfig {
                 .get_or_insert(Default::default())
                 .extend(v.split_ascii_whitespace().map(ToString::to_string));
         }
-        Ok(NixHTTPPathInfoServiceConfig {
+        Ok(Self {
             // Stringify the URL and remove the nix+ prefix.
             // We can't use `url.set_scheme(rest)`, as it disallows
             // setting something http(s) that previously wasn't.

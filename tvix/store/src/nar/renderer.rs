@@ -40,7 +40,7 @@ where
             self.directory_service.clone(),
         )
         .await
-        .map_err(|e| tvix_castore::Error::StorageError(format!("failed rendering nar: {}", e)))
+        .map_err(|e| tvix_castore::Error::StorageError(format!("failed rendering nar: {e}")))
     }
 }
 
@@ -77,9 +77,9 @@ where
 }
 
 /// Accepts a [Node] pointing to the root of a (store) path,
-/// and uses the passed blob_service and directory_service to perform the
+/// and uses the passed `blob_service` and `directory_service` to perform the
 /// necessary lookups as it traverses the structure.
-/// The contents in NAR serialization are writen to the passed [AsyncWrite].
+/// The contents in NAR serialization are writen to the passed [`AsyncWrite`].
 pub async fn write_nar<W, BS, DS>(
     mut w: W,
     root_node: &Node,

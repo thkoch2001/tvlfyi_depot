@@ -1,9 +1,9 @@
-//! This program demonstrates how to use tvix_serde to deserialise
+//! This program demonstrates how to use `tvix_serde` to deserialise
 //! program configuration (or other data) from Nix code.
 //!
 //! This makes it possible to use Nix as an embedded config language.
 //! For greater control over evaluation, and for features like adding
-//! additional builtins, depending directly on tvix_eval would be
+//! additional builtins, depending directly on `tvix_eval` would be
 //! required.
 use serde::Deserialize;
 use std::collections::HashMap;
@@ -31,5 +31,5 @@ fn main() {
     // Now you can use tvix_serde to deserialise the struct:
     let foods: Data = tvix_serde::from_str(code).expect("deserialisation should succeed");
 
-    println!("These are the foods:\n{:#?}", foods);
+    println!("These are the foods:\n{foods:#?}");
 }

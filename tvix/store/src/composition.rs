@@ -13,7 +13,7 @@ lazy_static! {
     };
 }
 
-/// Register the builtin services of tvix_castore and tvix_store with the given
+/// Register the builtin services of `tvix_castore` and `tvix_store` with the given
 /// registry. This is useful for creating your own registry with the builtin
 /// types _and_ extra third party types.
 pub fn add_default_services(reg: &mut Registry) {

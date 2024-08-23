@@ -53,23 +53,25 @@ impl<const N: usize> From<[NixContextElement; N]> for NixContext {
 
 impl NixContext {
     /// Creates an empty context that can be populated
-    /// and passed to form a contextful [NixString], albeit
-    /// if the context is concretly empty, the resulting [NixString]
+    /// and passed to form a contextful [`NixString`], albeit
+    /// if the context is concretly empty, the resulting [`NixString`]
     /// will be contextless.
+    #[must_use]
     pub fn new() -> Self {
         Self::default()
     }
 
     /// For internal consumers, we let people observe
-    /// if the [NixContext] is actually empty or not
+    /// if the [`NixContext`] is actually empty or not
     /// to decide whether they want to skip the allocation
-    /// of a full blown [HashSet].
+    /// of a full blown [`HashSet`].
     pub(crate) fn is_empty(&self) -> bool {
         self.0.is_empty()
     }
 
-    /// Consumes a new [NixContextElement] and add it if not already
+    /// Consumes a new [`NixContextElement`] and add it if not already
     /// present in this context.
+    #[must_use]
     pub fn append(mut self, other: NixContextElement) -> Self {
         self.0.insert(other);
         self
@@ -80,10 +82,10 @@ impl NixContext {
     where
         T: IntoIterator<Item = NixContextElement>,
     {
-        self.0.extend(iter)
+        self.0.extend(iter);
     }
 
-    /// Copies from another [NixString] its context strings
+    /// Copies from another [`NixString`] its context strings
     /// in this context.
     pub fn mimic(&mut self, other: &NixString) {
         if let Some(context) = other.context() {
@@ -138,6 +140,7 @@ impl NixContext {
 
     /// Produces a list of owned references to this current context,
     /// no matter its type.
+    #[must_use]
     pub fn to_owned_references(self) -> Vec<String> {
         self.0
             .into_iter()

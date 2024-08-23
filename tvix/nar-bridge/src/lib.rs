@@ -13,9 +13,9 @@ use tvix_store::pathinfoservice::PathInfoService;
 mod nar;
 mod narinfo;
 
-/// The capacity of the lookup table from NarHash to [Node].
+/// The capacity of the lookup table from `NarHash` to [Node].
 /// Should be bigger than the number of concurrent NAR upload.
-/// Cannot be [NonZeroUsize] here due to rust-analyzer going bananas.
+/// Cannot be [`NonZeroUsize`] here due to rust-analyzer going bananas.
 /// SAFETY: 1000 != 0
 const ROOT_NODES_CACHE_CAPACITY: usize = 1000;
 
@@ -25,8 +25,8 @@ pub struct AppState {
     directory_service: Arc<dyn DirectoryService>,
     path_info_service: Arc<dyn PathInfoService>,
 
-    /// Lookup table from NarHash to [Node], necessary to populate the root_node
-    /// field of the PathInfo when processing the narinfo upload.
+    /// Lookup table from `NarHash` to [Node], necessary to populate the `root_node`
+    /// field of the `PathInfo` when processing the narinfo upload.
     root_nodes: Arc<RwLock<LruCache<[u8; 32], Node>>>,
 }
 
@@ -72,8 +72,5 @@ async fn four_o_four() -> Result<(), StatusCode> {
 }
 
 async fn nix_cache_info(priority: u64) -> String {
-    format!(
-        "StoreDir: /nix/store\nWantMassQuery: 1\nPriority: {}\n",
-        priority
-    )
+    format!("StoreDir: /nix/store\nWantMassQuery: 1\nPriority: {priority}\n")
 }

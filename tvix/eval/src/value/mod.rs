@@ -28,7 +28,7 @@ use crate::vm::generators::{self, GenCo};
 use crate::AddContext;
 pub use attrs::NixAttrs;
 pub use builtin::{Builtin, BuiltinResult};
-pub(crate) use function::Formals;
+pub use function::Formals;
 pub use function::{Closure, Lambda};
 pub use list::NixList;
 pub use path::canon_path;
@@ -89,20 +89,20 @@ pub enum Value {
 
 impl From<CatchableErrorKind> for Value {
     #[inline]
-    fn from(c: CatchableErrorKind) -> Value {
-        Value::Catchable(Box::new(c))
+    fn from(c: CatchableErrorKind) -> Self {
+        Self::Catchable(Box::new(c))
     }
 }
 
 impl<V> From<Result<V, CatchableErrorKind>> for Value
 where
-    Value: From<V>,
+    Self: From<V>,
 {
     #[inline]
-    fn from(v: Result<V, CatchableErrorKind>) -> Value {
+    fn from(v: Result<V, CatchableErrorKind>) -> Self {
         match v {
             Ok(v) => v.into(),
-            Err(e) => Value::Catchable(Box::new(e)),
+            Err(e) => Self::Catchable(Box::new(e)),
         }
     }
 }
@@ -156,6 +156,7 @@ macro_rules! gen_cast_mut {
 /// Generate an `is_*` type-checking method.
 macro_rules! gen_is {
     ( $name:ident, $variant:pat ) => {
+        #[must_use]
         pub fn $name(&self) -> bool {
             match self {
                 $variant => true,
@@ -187,14 +188,14 @@ pub struct CoercionKind {
 }
 
 impl From<CoercionKind> for u8 {
-    fn from(k: CoercionKind) -> u8 {
-        k.strong as u8 | (k.import_paths as u8) << 1
+    fn from(k: CoercionKind) -> Self {
+        Self::from(k.strong) | Self::from(k.import_paths) << 1
     }
 }
 
 impl From<u8> for CoercionKind {
     fn from(byte: u8) -> Self {
-        CoercionKind {
+        Self {
             strong: byte & 0x01 != 0,
             import_paths: byte & 0x02 != 0,
         }
@@ -213,6 +214,7 @@ where
 /// Constructors
 impl Value {
     /// Construct a [`Value::Attrs`] from a [`NixAttrs`].
+    #[must_use]
     pub fn attrs(attrs: NixAttrs) -> Self {
         Self::Attrs(Box::new(attrs))
     }
@@ -238,7 +240,7 @@ impl Value {
     /// their contents, too.
     ///
     /// This is a generator function.
-    pub(super) async fn deep_force(self, co: GenCo, span: Span) -> Result<Value, ErrorKind> {
+    pub(super) async fn deep_force(self, co: GenCo, span: Span) -> Result<Self, ErrorKind> {
         if let Some(v) = Self::deep_force_(self.clone(), co, span).await? {
             Ok(v)
         } else {
@@ -247,7 +249,7 @@ impl Value {
     }
 
     /// Returns Some(v) or None to indicate the returned value is myself
-    async fn deep_force_(myself: Value, co: GenCo, span: Span) -> Result<Option<Value>, ErrorKind> {
+    async fn deep_force_(myself: Self, co: GenCo, span: Span) -> Result<Option<Self>, ErrorKind> {
         // This is a stack of values which still remain to be forced.
         let mut vals = vec![myself];
 
@@ -262,7 +264,7 @@ impl Value {
 
             // Get rid of any top-level thunks, and bail out of self-recursive
             // thunks.
-            let value = if let Value::Thunk(t) = &v {
+            let value = if let Self::Thunk(t) = &v {
                 if !thunk_set.insert(t) {
                     continue;
                 }
@@ -273,39 +275,39 @@ impl Value {
 
             match value {
                 // Short-circuit on already evaluated values, or fail on internal values.
-                Value::Null
-                | Value::Bool(_)
-                | Value::Integer(_)
-                | Value::Float(_)
-                | Value::String(_)
-                | Value::Path(_)
-                | Value::Closure(_)
-                | Value::Builtin(_) => continue,
+                Self::Null
+                | Self::Bool(_)
+                | Self::Integer(_)
+                | Self::Float(_)
+                | Self::String(_)
+                | Self::Path(_)
+                | Self::Closure(_)
+                | Self::Builtin(_) => continue,
 
-                Value::List(list) => {
+                Self::List(list) => {
                     for val in list.into_iter().rev() {
                         vals.push(val);
                     }
                     continue;
                 }
 
-                Value::Attrs(attrs) => {
+                Self::Attrs(attrs) => {
                     for (_, val) in attrs.into_iter().rev() {
                         vals.push(val);
                     }
                     continue;
                 }
 
-                Value::Thunk(_) => panic!("Tvix bug: force_value() returned a thunk"),
+                Self::Thunk(_) => panic!("Tvix bug: force_value() returned a thunk"),
 
-                Value::Catchable(_) => return Ok(Some(value)),
+                Self::Catchable(_) => return Ok(Some(value)),
 
-                Value::AttrNotFound
-                | Value::Blueprint(_)
-                | Value::DeferredUpvalue(_)
-                | Value::UnresolvedPath(_)
-                | Value::Json(..)
-                | Value::FinaliseRequest(_) => panic!(
+                Self::AttrNotFound
+                | Self::Blueprint(_)
+                | Self::DeferredUpvalue(_)
+                | Self::UnresolvedPath(_)
+                | Self::Json(..)
+                | Self::FinaliseRequest(_) => panic!(
                     "Tvix bug: internal value left on stack: {}",
                     value.type_of()
                 ),
@@ -318,7 +320,7 @@ impl Value {
         co: GenCo,
         kind: CoercionKind,
         span: Span,
-    ) -> Result<Value, ErrorKind> {
+    ) -> Result<Self, ErrorKind> {
         self.coerce_to_string_(&co, kind, span).await
     }
 
@@ -329,7 +331,7 @@ impl Value {
         co: &GenCo,
         kind: CoercionKind,
         span: Span,
-    ) -> Result<Value, ErrorKind> {
+    ) -> Result<Self, ErrorKind> {
         let mut result = BString::default();
         let mut vals = vec![self];
         // Track if we are coercing the first value of a list to correctly emit
@@ -343,11 +345,11 @@ impl Value {
             let value = if let Some(v) = vals.pop() {
                 v.force(co, span).await?
             } else {
-                return Ok(Value::String(NixString::new_context_from(context, result)));
+                return Ok(Self::String(NixString::new_context_from(context, result)));
             };
             let coerced: Result<BString, _> = match (value, kind) {
                 // coercions that are always done
-                (Value::String(mut s), _) => {
+                (Self::String(mut s), _) => {
                     if let Some(ctx) = s.take_context() {
                         context.extend(ctx.into_iter());
                     }
@@ -360,7 +362,7 @@ impl Value {
                 // sequences without NUL bytes, whereas Tvix only allows valid
                 // Unicode. See also b/189.
                 (
-                    Value::Path(p),
+                    Self::Path(p),
                     CoercionKind {
                         import_paths: true, ..
                     },
@@ -374,7 +376,7 @@ impl Value {
                     Ok(imported.into_os_string().into_encoded_bytes().into())
                 }
                 (
-                    Value::Path(p),
+                    Self::Path(p),
                     CoercionKind {
                         import_paths: false,
                         ..
@@ -385,13 +387,13 @@ impl Value {
                 // `__toString` attribute which holds a function that receives the
                 // set itself or an `outPath` attribute which should be a string.
                 // `__toString` is preferred.
-                (Value::Attrs(attrs), kind) => {
+                (Self::Attrs(attrs), kind) => {
                     if let Some(to_string) = attrs.select("__toString") {
                         let callable = to_string.clone().force(co, span).await?;
 
                         // Leave the attribute set on the stack as an argument
                         // to the function call.
-                        generators::request_stack_push(co, Value::Attrs(attrs.clone())).await;
+                        generators::request_stack_push(co, Self::Attrs(attrs.clone())).await;
 
                         // Call the callable ...
                         let result = generators::request_call(co, callable).await;
@@ -410,19 +412,20 @@ impl Value {
                 }
 
                 // strong coercions
-                (Value::Null, CoercionKind { strong: true, .. })
-                | (Value::Bool(false), CoercionKind { strong: true, .. }) => Ok("".into()),
-                (Value::Bool(true), CoercionKind { strong: true, .. }) => Ok("1".into()),
+                (Self::Null | Self::Bool(false), CoercionKind { strong: true, .. }) => {
+                    Ok("".into())
+                }
+                (Self::Bool(true), CoercionKind { strong: true, .. }) => Ok("1".into()),
 
-                (Value::Integer(i), CoercionKind { strong: true, .. }) => Ok(format!("{i}").into()),
-                (Value::Float(f), CoercionKind { strong: true, .. }) => {
+                (Self::Integer(i), CoercionKind { strong: true, .. }) => Ok(format!("{i}").into()),
+                (Self::Float(f), CoercionKind { strong: true, .. }) => {
                     // contrary to normal Display, coercing a float to a string will
                     // result in unconditional 6 decimal places
-                    Ok(format!("{:.6}", f).into())
+                    Ok(format!("{f:.6}").into())
                 }
 
                 // Lists are coerced by coercing their elements and interspersing spaces
-                (Value::List(list), CoercionKind { strong: true, .. }) => {
+                (Self::List(list), CoercionKind { strong: true, .. }) => {
                     for elem in list.into_iter().rev() {
                         vals.push(elem);
                     }
@@ -435,27 +438,33 @@ impl Value {
                     continue;
                 }
 
-                (Value::Thunk(_), _) => panic!("Tvix bug: force returned unforced thunk"),
+                (Self::Thunk(_), _) => panic!("Tvix bug: force returned unforced thunk"),
 
-                val @ (Value::Closure(_), _)
-                | val @ (Value::Builtin(_), _)
-                | val @ (Value::Null, _)
-                | val @ (Value::Bool(_), _)
-                | val @ (Value::Integer(_), _)
-                | val @ (Value::Float(_), _)
-                | val @ (Value::List(_), _) => Err(ErrorKind::NotCoercibleToString {
+                val @ (
+                    Self::Closure(_)
+                    | Self::Builtin(_)
+                    | Self::Null
+                    | Self::Bool(_)
+                    | Self::Integer(_)
+                    | Self::Float(_)
+                    | Self::List(_),
+                    _,
+                ) => Err(ErrorKind::NotCoercibleToString {
                     from: val.0.type_of(),
                     kind,
                 }),
 
-                (c @ Value::Catchable(_), _) => return Ok(c),
+                (c @ Self::Catchable(_), _) => return Ok(c),
 
-                (Value::AttrNotFound, _)
-                | (Value::Blueprint(_), _)
-                | (Value::DeferredUpvalue(_), _)
-                | (Value::UnresolvedPath(_), _)
-                | (Value::Json(..), _)
-                | (Value::FinaliseRequest(_), _) => {
+                (
+                    Self::AttrNotFound
+                    | Self::Blueprint(_)
+                    | Self::DeferredUpvalue(_)
+                    | Self::UnresolvedPath(_)
+                    | Self::Json(..)
+                    | Self::FinaliseRequest(_),
+                    _,
+                ) => {
                     panic!("tvix bug: .coerce_to_string() called on internal value")
                 }
             };
@@ -474,11 +483,11 @@ impl Value {
 
     pub(crate) async fn nix_eq_owned_genco(
         self,
-        other: Value,
+        other: Self,
         co: GenCo,
         ptr_eq: PointerEquality,
         span: Span,
-    ) -> Result<Value, ErrorKind> {
+    ) -> Result<Self, ErrorKind> {
         self.nix_eq(other, &co, ptr_eq, span).await
     }
 
@@ -494,11 +503,11 @@ impl Value {
     /// `//tvix/docs/value-pointer-equality.md`
     pub(crate) async fn nix_eq(
         self,
-        other: Value,
+        other: Self,
         co: &GenCo,
         ptr_eq: PointerEquality,
         span: Span,
-    ) -> Result<Value, ErrorKind> {
+    ) -> Result<Self, ErrorKind> {
         // this is a stack of ((v1,v2),peq) triples to be compared;
         // after each triple is popped off of the stack, v1 is
         // compared to v2 using peq-mode PointerEquality
@@ -509,14 +518,14 @@ impl Value {
                 abp
             } else {
                 // stack is empty, so comparison has succeeded
-                return Ok(Value::Bool(true));
+                return Ok(Self::Bool(true));
             };
             let a = match a {
-                Value::Thunk(thunk) => {
+                Self::Thunk(thunk) => {
                     // If both values are thunks, and thunk comparisons are allowed by
                     // pointer, do that and move on.
                     if ptr_eq == PointerEquality::AllowAll {
-                        if let Value::Thunk(t1) = &b {
+                        if let Self::Thunk(t1) = &b {
                             if t1.ptr_eq(&thunk) {
                                 continue;
                             }
@@ -531,32 +540,32 @@ impl Value {
 
             let b = b.force(co, span).await?;
 
-            debug_assert!(!matches!(a, Value::Thunk(_)));
-            debug_assert!(!matches!(b, Value::Thunk(_)));
+            debug_assert!(!matches!(a, Self::Thunk(_)));
+            debug_assert!(!matches!(b, Self::Thunk(_)));
 
             let result = match (a, b) {
                 // Trivial comparisons
-                (c @ Value::Catchable(_), _) => return Ok(c),
-                (_, c @ Value::Catchable(_)) => return Ok(c),
-                (Value::Null, Value::Null) => true,
-                (Value::Bool(b1), Value::Bool(b2)) => b1 == b2,
-                (Value::String(s1), Value::String(s2)) => s1 == s2,
-                (Value::Path(p1), Value::Path(p2)) => p1 == p2,
+                (c @ Self::Catchable(_), _) => return Ok(c),
+                (_, c @ Self::Catchable(_)) => return Ok(c),
+                (Self::Null, Self::Null) => true,
+                (Self::Bool(b1), Self::Bool(b2)) => b1 == b2,
+                (Self::String(s1), Self::String(s2)) => s1 == s2,
+                (Self::Path(p1), Self::Path(p2)) => p1 == p2,
 
                 // Numerical comparisons (they work between float & int)
-                (Value::Integer(i1), Value::Integer(i2)) => i1 == i2,
-                (Value::Integer(i), Value::Float(f)) => i as f64 == f,
-                (Value::Float(f1), Value::Float(f2)) => f1 == f2,
-                (Value::Float(f), Value::Integer(i)) => i as f64 == f,
+                (Self::Integer(i1), Self::Integer(i2)) => i1 == i2,
+                (Self::Integer(i), Self::Float(f)) => i as f64 == f,
+                (Self::Float(f1), Self::Float(f2)) => f1 == f2,
+                (Self::Float(f), Self::Integer(i)) => i as f64 == f,
 
                 // List comparisons
-                (Value::List(l1), Value::List(l2)) => {
+                (Self::List(l1), Self::List(l2)) => {
                     if ptr_eq >= PointerEquality::AllowNested && l1.ptr_eq(&l2) {
                         continue;
                     }
 
                     if l1.len() != l2.len() {
-                        return Ok(Value::Bool(false));
+                        return Ok(Self::Bool(false));
                     }
 
                     vals.extend(l1.into_iter().rev().zip(l2.into_iter().rev()).zip(
@@ -565,10 +574,10 @@ impl Value {
                     continue;
                 }
 
-                (_, Value::List(_)) | (Value::List(_), _) => return Ok(Value::Bool(false)),
+                (_, Self::List(_)) | (Self::List(_), _) => return Ok(Self::Bool(false)),
 
                 // Attribute set comparisons
-                (Value::Attrs(a1), Value::Attrs(a2)) => {
+                (Self::Attrs(a1), Self::Attrs(a2)) => {
                     if ptr_eq >= PointerEquality::AllowNested && a1.ptr_eq(&a2) {
                         continue;
                     }
@@ -617,7 +626,7 @@ impl Value {
                                     let result =
                                         out1.to_contextful_str()? == out2.to_contextful_str()?;
                                     if !result {
-                                        return Ok(Value::Bool(false));
+                                        return Ok(Self::Bool(false));
                                     } else {
                                         continue;
                                     }
@@ -628,7 +637,7 @@ impl Value {
                     };
 
                     if a1.len() != a2.len() {
-                        return Ok(Value::Bool(false));
+                        return Ok(Self::Bool(false));
                     }
 
                     // note that it is important to be careful here with the
@@ -649,57 +658,58 @@ impl Value {
                     continue;
                 }
 
-                (Value::Attrs(_), _) | (_, Value::Attrs(_)) => return Ok(Value::Bool(false)),
+                (Self::Attrs(_), _) | (_, Self::Attrs(_)) => return Ok(Self::Bool(false)),
 
-                (Value::Closure(c1), Value::Closure(c2))
+                (Self::Closure(c1), Self::Closure(c2))
                     if ptr_eq >= PointerEquality::AllowNested =>
                 {
                     if Rc::ptr_eq(&c1, &c2) {
                         continue;
                     } else {
-                        return Ok(Value::Bool(false));
+                        return Ok(Self::Bool(false));
                     }
                 }
 
                 // Everything else is either incomparable (e.g. internal types) or
                 // false.
-                _ => return Ok(Value::Bool(false)),
+                _ => return Ok(Self::Bool(false)),
             };
             if !result {
-                return Ok(Value::Bool(false));
+                return Ok(Self::Bool(false));
             }
         }
     }
 
+    #[must_use]
     pub fn type_of(&self) -> &'static str {
         match self {
-            Value::Null => "null",
-            Value::Bool(_) => "bool",
-            Value::Integer(_) => "int",
-            Value::Float(_) => "float",
-            Value::String(_) => "string",
-            Value::Path(_) => "path",
-            Value::Attrs(_) => "set",
-            Value::List(_) => "list",
-            Value::Closure(_) | Value::Builtin(_) => "lambda",
+            Self::Null => "null",
+            Self::Bool(_) => "bool",
+            Self::Integer(_) => "int",
+            Self::Float(_) => "float",
+            Self::String(_) => "string",
+            Self::Path(_) => "path",
+            Self::Attrs(_) => "set",
+            Self::List(_) => "list",
+            Self::Closure(_) | Self::Builtin(_) => "lambda",
 
             // Internal types. Note: These are only elaborated here
             // because it makes debugging easier. If a user ever sees
             // any of these strings, it's a bug.
-            Value::Thunk(_) => "internal[thunk]",
-            Value::AttrNotFound => "internal[attr_not_found]",
-            Value::Blueprint(_) => "internal[blueprint]",
-            Value::DeferredUpvalue(_) => "internal[deferred_upvalue]",
-            Value::UnresolvedPath(_) => "internal[unresolved_path]",
-            Value::Json(..) => "internal[json]",
-            Value::FinaliseRequest(_) => "internal[finaliser_sentinel]",
-            Value::Catchable(_) => "internal[catchable]",
+            Self::Thunk(_) => "internal[thunk]",
+            Self::AttrNotFound => "internal[attr_not_found]",
+            Self::Blueprint(_) => "internal[blueprint]",
+            Self::DeferredUpvalue(_) => "internal[deferred_upvalue]",
+            Self::UnresolvedPath(_) => "internal[unresolved_path]",
+            Self::Json(..) => "internal[json]",
+            Self::FinaliseRequest(_) => "internal[finaliser_sentinel]",
+            Self::Catchable(_) => "internal[catchable]",
         }
     }
 
-    gen_cast!(as_bool, bool, "bool", Value::Bool(b), *b);
-    gen_cast!(as_int, i64, "int", Value::Integer(x), *x);
-    gen_cast!(as_float, f64, "float", Value::Float(x), *x);
+    gen_cast!(as_bool, bool, "bool", Self::Bool(b), *b);
+    gen_cast!(as_int, i64, "int", Self::Integer(x), *x);
+    gen_cast!(as_float, f64, "float", Self::Float(x), *x);
 
     /// Cast the current value into a **context-less** string.
     /// If you wanted to cast it into a potentially contextful string,
@@ -708,8 +718,8 @@ impl Value {
     /// everytime you want a string.
     pub fn to_str(&self) -> Result<NixString, ErrorKind> {
         match self {
-            Value::String(s) if !s.has_context() => Ok((*s).clone()),
-            Value::Thunk(thunk) => Self::to_str(&thunk.value()),
+            Self::String(s) if !s.has_context() => Ok((*s).clone()),
+            Self::Thunk(thunk) => Self::to_str(&thunk.value()),
             other => Err(type_error("contextless strings", other)),
         }
     }
@@ -718,31 +728,32 @@ impl Value {
         to_contextful_str,
         NixString,
         "contextful string",
-        Value::String(s),
+        Self::String(s),
         (*s).clone()
     );
-    gen_cast!(to_path, Box<PathBuf>, "path", Value::Path(p), p.clone());
-    gen_cast!(to_attrs, Box<NixAttrs>, "set", Value::Attrs(a), a.clone());
-    gen_cast!(to_list, NixList, "list", Value::List(l), l.clone());
+    gen_cast!(to_path, Box<PathBuf>, "path", Self::Path(p), p.clone());
+    gen_cast!(to_attrs, Box<NixAttrs>, "set", Self::Attrs(a), a.clone());
+    gen_cast!(to_list, NixList, "list", Self::List(l), l.clone());
     gen_cast!(
         as_closure,
         Rc<Closure>,
         "lambda",
-        Value::Closure(c),
+        Self::Closure(c),
         c.clone()
     );
 
     gen_cast_mut!(as_list_mut, NixList, "list", List);
 
-    gen_is!(is_path, Value::Path(_));
-    gen_is!(is_number, Value::Integer(_) | Value::Float(_));
-    gen_is!(is_bool, Value::Bool(_));
-    gen_is!(is_attrs, Value::Attrs(_));
-    gen_is!(is_catchable, Value::Catchable(_));
+    gen_is!(is_path, Self::Path(_));
+    gen_is!(is_number, Self::Integer(_) | Self::Float(_));
+    gen_is!(is_bool, Self::Bool(_));
+    gen_is!(is_attrs, Self::Attrs(_));
+    gen_is!(is_catchable, Self::Catchable(_));
 
     /// Returns `true` if the value is a [`Thunk`].
     ///
     /// [`Thunk`]: Value::Thunk
+    #[must_use]
     pub fn is_thunk(&self) -> bool {
         matches!(self, Self::Thunk(..))
     }
@@ -790,13 +801,13 @@ impl Value {
                 b = b.force(&co, span).await?;
             }
             let result = match (a, b) {
-                (Value::Catchable(c), _) => return Ok(Err(*c)),
-                (_, Value::Catchable(c)) => return Ok(Err(*c)),
+                (Self::Catchable(c), _) => return Ok(Err(*c)),
+                (_, Self::Catchable(c)) => return Ok(Err(*c)),
                 // same types
-                (Value::Integer(i1), Value::Integer(i2)) => i1.cmp(&i2),
-                (Value::Float(f1), Value::Float(f2)) => f1.total_cmp(&f2),
-                (Value::String(s1), Value::String(s2)) => s1.cmp(&s2),
-                (Value::List(l1), Value::List(l2)) => {
+                (Self::Integer(i1), Self::Integer(i2)) => i1.cmp(&i2),
+                (Self::Float(f1), Self::Float(f2)) => f1.total_cmp(&f2),
+                (Self::String(s1), Self::String(s2)) => s1.cmp(&s2),
+                (Self::List(l1), Self::List(l2)) => {
                     let max = l1.len().max(l2.len());
                     for j in 0..max {
                         let i = max - 1 - j;
@@ -812,8 +823,8 @@ impl Value {
                 }
 
                 // different types
-                (Value::Integer(i1), Value::Float(f2)) => (i1 as f64).total_cmp(&f2),
-                (Value::Float(f1), Value::Integer(i2)) => f1.total_cmp(&(i2 as f64)),
+                (Self::Integer(i1), Self::Float(f2)) => (i1 as f64).total_cmp(&f2),
+                (Self::Float(f1), Self::Integer(i2)) => f1.total_cmp(&(i2 as f64)),
 
                 // unsupported types
                 (lhs, rhs) => {
@@ -830,8 +841,8 @@ impl Value {
     }
 
     // TODO(amjoseph): de-asyncify this (when called directly by the VM)
-    pub async fn force(self, co: &GenCo, span: Span) -> Result<Value, ErrorKind> {
-        if let Value::Thunk(thunk) = self {
+    pub async fn force(self, co: &GenCo, span: Span) -> Result<Self, ErrorKind> {
+        if let Self::Thunk(thunk) = self {
             // TODO(amjoseph): use #[tailcall::mutual]
             return Thunk::force_(thunk, co, span).await;
         }
@@ -839,8 +850,8 @@ impl Value {
     }
 
     // need two flavors, because async
-    pub async fn force_owned_genco(self, co: GenCo, span: Span) -> Result<Value, ErrorKind> {
-        if let Value::Thunk(thunk) = self {
+    pub async fn force_owned_genco(self, co: GenCo, span: Span) -> Result<Self, ErrorKind> {
+        if let Self::Thunk(thunk) = self {
             // TODO(amjoseph): use #[tailcall::mutual]
             return Thunk::force_(thunk, &co, span).await;
         }
@@ -849,27 +860,28 @@ impl Value {
 
     /// Explain a value in a human-readable way, e.g. by presenting
     /// the docstrings of functions if present.
+    #[must_use]
     pub fn explain(&self) -> String {
         match self {
-            Value::Null => "the 'null' value".into(),
-            Value::Bool(b) => format!("the boolean value '{}'", b),
-            Value::Integer(i) => format!("the integer '{}'", i),
-            Value::Float(f) => format!("the float '{}'", f),
-            Value::String(s) if s.has_context() => format!("the contextful string '{}'", s),
-            Value::String(s) => format!("the contextless string '{}'", s),
-            Value::Path(p) => format!("the path '{}'", p.to_string_lossy()),
-            Value::Attrs(attrs) => format!("a {}-item attribute set", attrs.len()),
-            Value::List(list) => format!("a {}-item list", list.len()),
+            Self::Null => "the 'null' value".into(),
+            Self::Bool(b) => format!("the boolean value '{b}'"),
+            Self::Integer(i) => format!("the integer '{i}'"),
+            Self::Float(f) => format!("the float '{f}'"),
+            Self::String(s) if s.has_context() => format!("the contextful string '{s}'"),
+            Self::String(s) => format!("the contextless string '{s}'"),
+            Self::Path(p) => format!("the path '{}'", p.to_string_lossy()),
+            Self::Attrs(attrs) => format!("a {}-item attribute set", attrs.len()),
+            Self::List(list) => format!("a {}-item list", list.len()),
 
-            Value::Closure(f) => {
+            Self::Closure(f) => {
                 if let Some(name) = &f.lambda.name {
-                    format!("the user-defined Nix function '{}'", name)
+                    format!("the user-defined Nix function '{name}'")
                 } else {
                     "a user-defined Nix function".to_string()
                 }
             }
 
-            Value::Builtin(b) => {
+            Self::Builtin(b) => {
                 let mut out = format!("the builtin function '{}'", b.name());
                 if let Some(docs) = b.documentation() {
                     out.push_str("\n\n");
@@ -879,16 +891,16 @@ impl Value {
             }
 
             // TODO: handle suspended thunks with a different explanation instead of panicking
-            Value::Thunk(t) => t.value().explain(),
+            Self::Thunk(t) => t.value().explain(),
 
-            Value::Catchable(_) => "a catchable failure".into(),
+            Self::Catchable(_) => "a catchable failure".into(),
 
-            Value::AttrNotFound
-            | Value::Blueprint(_)
-            | Value::DeferredUpvalue(_)
-            | Value::UnresolvedPath(_)
-            | Value::Json(..)
-            | Value::FinaliseRequest(_) => "an internal Tvix evaluator value".into(),
+            Self::AttrNotFound
+            | Self::Blueprint(_)
+            | Self::DeferredUpvalue(_)
+            | Self::UnresolvedPath(_)
+            | Self::Json(..)
+            | Self::FinaliseRequest(_) => "an internal Tvix evaluator value".into(),
         }
     }
 }
@@ -941,7 +953,7 @@ fn total_fmt_float<F: std::fmt::Write>(num: f64, mut f: F) -> std::fmt::Result {
 
         // if we modified the scientific notation, flip the reference
         if !new_s.is_empty() {
-            s = &mut new_s
+            s = &mut new_s;
         }
     } else if s.contains(&b'.') {
         // else, if this is not scientific notation, and there's a
@@ -958,7 +970,7 @@ fn total_fmt_float<F: std::fmt::Write>(num: f64, mut f: F) -> std::fmt::Result {
                     // we managed to strip something, construct new_s
                     if frac_no_trailing_zeroes.is_empty() {
                         // if frac_no_trailing_zeroes is empty, the fractional part was all zeroes, so we can drop the decimal point as well
-                        new_s.extend_from_slice(&s[0..=i - 1]);
+                        new_s.extend_from_slice(&s[0..i]);
                     } else {
                         // else, assemble the rest of the string
                         new_s.extend_from_slice(&s[0..=i]);
@@ -979,42 +991,42 @@ fn total_fmt_float<F: std::fmt::Write>(num: f64, mut f: F) -> std::fmt::Result {
 impl TotalDisplay for Value {
     fn total_fmt(&self, f: &mut std::fmt::Formatter<'_>, set: &mut ThunkSet) -> std::fmt::Result {
         match self {
-            Value::Null => f.write_str("null"),
-            Value::Bool(true) => f.write_str("true"),
-            Value::Bool(false) => f.write_str("false"),
-            Value::Integer(num) => write!(f, "{}", num),
-            Value::String(s) => s.fmt(f),
-            Value::Path(p) => p.display().fmt(f),
-            Value::Attrs(attrs) => attrs.total_fmt(f, set),
-            Value::List(list) => list.total_fmt(f, set),
+            Self::Null => f.write_str("null"),
+            Self::Bool(true) => f.write_str("true"),
+            Self::Bool(false) => f.write_str("false"),
+            Self::Integer(num) => write!(f, "{num}"),
+            Self::String(s) => s.fmt(f),
+            Self::Path(p) => p.display().fmt(f),
+            Self::Attrs(attrs) => attrs.total_fmt(f, set),
+            Self::List(list) => list.total_fmt(f, set),
             // TODO: fancy REPL display with position
-            Value::Closure(_) => f.write_str("<LAMBDA>"),
-            Value::Builtin(builtin) => builtin.fmt(f),
+            Self::Closure(_) => f.write_str("<LAMBDA>"),
+            Self::Builtin(builtin) => builtin.fmt(f),
 
             // Nix prints floats with a maximum precision of 5 digits
             // only. Except when it decides to use scientific notation
             // (with a + after the `e`, and zero-padded to 0 digits)
-            Value::Float(num) => total_fmt_float(*num, f),
+            Self::Float(num) => total_fmt_float(*num, f),
 
             // internal types
-            Value::AttrNotFound => f.write_str("internal[not found]"),
-            Value::Blueprint(_) => f.write_str("internal[blueprint]"),
-            Value::DeferredUpvalue(_) => f.write_str("internal[deferred_upvalue]"),
-            Value::UnresolvedPath(_) => f.write_str("internal[unresolved_path]"),
-            Value::Json(..) => f.write_str("internal[json]"),
-            Value::FinaliseRequest(_) => f.write_str("internal[finaliser_sentinel]"),
+            Self::AttrNotFound => f.write_str("internal[not found]"),
+            Self::Blueprint(_) => f.write_str("internal[blueprint]"),
+            Self::DeferredUpvalue(_) => f.write_str("internal[deferred_upvalue]"),
+            Self::UnresolvedPath(_) => f.write_str("internal[unresolved_path]"),
+            Self::Json(..) => f.write_str("internal[json]"),
+            Self::FinaliseRequest(_) => f.write_str("internal[finaliser_sentinel]"),
 
             // Delegate thunk display to the type, as it must handle
             // the case of already evaluated or cyclic thunks.
-            Value::Thunk(t) => t.total_fmt(f, set),
-            Value::Catchable(_) => panic!("total_fmt() called on a CatchableErrorKind"),
+            Self::Thunk(t) => t.total_fmt(f, set),
+            Self::Catchable(_) => panic!("total_fmt() called on a CatchableErrorKind"),
         }
     }
 }
 
 impl From<bool> for Value {
     fn from(b: bool) -> Self {
-        Value::Bool(b)
+        Self::Bool(b)
     }
 }
 
@@ -1068,7 +1080,7 @@ mod tests {
                 (6.626e-34, "6.626e-34"),
                 (9_224_617.445_991_227, "9.22462e+06"),
             ];
-            for (n, expected) in ff.iter() {
+            for (n, expected) in &ff {
                 let mut buf = String::new();
                 let res = total_fmt_float(*n, &mut buf);
                 assert!(res.is_ok());

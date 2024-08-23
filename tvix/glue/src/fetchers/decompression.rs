@@ -79,12 +79,8 @@ where
 {
     fn switch_to(&mut self, algorithm: Algorithm) {
         let (buffer, inner) = match self {
-            DecompressedReaderInner::Unknown { buffer, inner } => {
-                (mem::take(buffer), inner.take().unwrap())
-            }
-            DecompressedReaderInner::Gzip(_)
-            | DecompressedReaderInner::Bzip2(_)
-            | DecompressedReaderInner::Xz(_) => unreachable!(),
+            Self::Unknown { buffer, inner } => (mem::take(buffer), inner.take().unwrap()),
+            Self::Gzip(_) | Self::Bzip2(_) | Self::Xz(_) => unreachable!(),
         };
         let inner = BufReader::new(WithPreexistingBuffer { buffer, inner });
 

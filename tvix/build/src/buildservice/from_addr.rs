@@ -2,14 +2,14 @@ use super::{grpc::GRPCBuildService, BuildService, DummyBuildService};
 use tvix_castore::{blobservice::BlobService, directoryservice::DirectoryService};
 use url::Url;
 
-/// Constructs a new instance of a [BuildService] from an URI.
+/// Constructs a new instance of a [`BuildService`] from an URI.
 ///
 /// The following schemes are supported by the following services:
-/// - `dummy://` ([DummyBuildService])
-/// - `grpc+*://` ([GRPCBuildService])
+/// - `dummy://` ([`DummyBuildService`])
+/// - `grpc+*://` ([`GRPCBuildService`])
 ///
-/// As some of these [BuildService] need to talk to a [BlobService] and
-/// [DirectoryService], these also need to be passed in.
+/// As some of these [`BuildService`] need to talk to a [`BlobService`] and
+/// [`DirectoryService`], these also need to be passed in.
 pub async fn from_addr<BS, DS>(
     uri: &str,
     _blob_service: BS,
@@ -19,8 +19,8 @@ where
     BS: AsRef<dyn BlobService> + Send + Sync + Clone + 'static,
     DS: AsRef<dyn DirectoryService> + Send + Sync + Clone + 'static,
 {
-    let url = Url::parse(uri)
-        .map_err(|e| std::io::Error::other(format!("unable to parse url: {}", e)))?;
+    let url =
+        Url::parse(uri).map_err(|e| std::io::Error::other(format!("unable to parse url: {e}")))?;
 
     Ok(match url.scheme() {
         // dummy doesn't care about parameters.

@@ -89,10 +89,12 @@ async fn extract_fetch_args(
 
 #[allow(unused_variables)] // for the `state` arg, for now
 #[builtins(state = "Rc<TvixStoreIO>")]
-pub(crate) mod fetcher_builtins {
+pub mod fetcher_builtins {
     use nix_compat::nixhash::NixHash;
 
-    use super::*;
+    use super::{
+        extract_fetch_args, url_basename, ErrorKind, Fetch, Gen, GenCo, Rc, TvixStoreIO, Value,
+    };
 
     /// Consumes a fetch.
     /// If there is enough info to calculate the store path without fetching,

@@ -54,7 +54,7 @@ impl Arbitrary for NixList {
 
     fn arbitrary_with(args: Self::Parameters) -> Self::Strategy {
         vec(<Value as Arbitrary>::arbitrary_with(args), 0..100)
-            .prop_map(NixList::from)
+            .prop_map(Self::from)
             .boxed()
     }
 }
@@ -84,7 +84,7 @@ impl Arbitrary for Value {
 }
 
 fn leaf_value() -> impl Strategy<Value = Value> {
-    use Value::*;
+    use Value::{Bool, Float, Integer, Null, Path, String};
 
     prop_oneof![
         Just(Null),

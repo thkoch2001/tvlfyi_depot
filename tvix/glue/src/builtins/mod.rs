@@ -12,7 +12,7 @@ mod utils;
 
 pub use errors::{DerivationError, FetcherError, ImportError};
 
-/// Adds derivation-related builtins to the passed [tvix_eval::Evaluation].
+/// Adds derivation-related builtins to the passed [`tvix_eval::Evaluation`].
 ///
 /// These are `derivation` and `derivationStrict`.
 ///
@@ -28,7 +28,7 @@ pub fn add_derivation_builtins<'co, 'ro, 'env, IO>(
         .add_src_builtin("derivation", include_str!("derivation.nix"))
 }
 
-/// Adds fetcher builtins to the passed [tvix_eval::Evaluation]:
+/// Adds fetcher builtins to the passed [`tvix_eval::Evaluation`]:
 ///
 /// * `fetchurl`
 /// * `fetchTarball`
@@ -40,7 +40,7 @@ pub fn add_fetcher_builtins<'co, 'ro, 'env, IO>(
     eval_builder.add_builtins(fetchers::fetcher_builtins::builtins(Rc::clone(&io)))
 }
 
-/// Adds import-related builtins to the passed [tvix_eval::Evaluation].
+/// Adds import-related builtins to the passed [`tvix_eval::Evaluation`].
 ///
 /// These are `filterSource` and `path`
 ///
@@ -112,7 +112,7 @@ mod tests {
             tvix_eval::Value::String(s) => {
                 assert_eq!(*s, "/nix/store/xpcvxsx5sw4rbq666blz6sxqlmsqphmr-foo",);
             }
-            _ => panic!("unexpected value type: {:?}", value),
+            _ => panic!("unexpected value type: {value:?}"),
         }
     }
 
@@ -199,7 +199,7 @@ mod tests {
             tvix_eval::Value::String(s) => {
                 assert_eq!(*s, expected_path);
             }
-            _ => panic!("unexpected value type: {:?}", value),
+            _ => panic!("unexpected value type: {value:?}"),
         }
     }
 
@@ -231,7 +231,7 @@ mod tests {
             tvix_eval::Value::Bool(v) => {
                 assert!(v);
             }
-            _ => panic!("unexpected value type: {:?}", value),
+            _ => panic!("unexpected value type: {value:?}"),
         }
     }
 
@@ -249,7 +249,7 @@ mod tests {
             tvix_eval::Value::Bool(v) => {
                 assert!(v);
             }
-            _ => panic!("unexpected value type: {:?}", value),
+            _ => panic!("unexpected value type: {value:?}"),
         }
     }
 
@@ -271,7 +271,7 @@ mod tests {
             tvix_eval::Value::Bool(v) => {
                 assert!(v);
             }
-            _ => panic!("unexpected value type: {:?}", value),
+            _ => panic!("unexpected value type: {value:?}"),
         }
     }
 
@@ -292,7 +292,7 @@ mod tests {
             tvix_eval::Value::Bool(v) => {
                 assert!(v);
             }
-            _ => panic!("unexpected value type: {:?}", value),
+            _ => panic!("unexpected value type: {value:?}"),
         }
     }
 
@@ -325,7 +325,7 @@ mod tests {
                 assert_eq!(*s, expected_drvpath);
             }
 
-            _ => panic!("unexpected value type: {:?}", value),
+            _ => panic!("unexpected value type: {value:?}"),
         };
     }
 
@@ -357,7 +357,7 @@ mod tests {
             tvix_eval::Value::String(s) => {
                 assert_eq!(*s, expected_path);
             }
-            _ => panic!("unexpected value type: {:?}", value),
+            _ => panic!("unexpected value type: {value:?}"),
         }
 
         assert!(
@@ -372,11 +372,11 @@ mod tests {
     #[rstest]
     #[cfg(target_family = "unix")]
     #[case::complicated_filter_nothing(
-        r#"(builtins.filterSource (p: t: true) @fixtures)"#,
+        r"(builtins.filterSource (p: t: true) @fixtures)",
         "/nix/store/bqh6kd0x3vps2rzagzpl7qmbbgnx19cp-import_fixtures"
     )]
     #[case::complicated_filter_everything(
-        r#"(builtins.filterSource (p: t: false) @fixtures)"#,
+        r"(builtins.filterSource (p: t: false) @fixtures)",
         "/nix/store/giq6czz24lpjg97xxcxk6rg950lcpib1-import_fixtures"
     )]
     #[case::simple_dir_with_one_file_filter_dirs(
@@ -392,11 +392,11 @@ mod tests {
         "/nix/store/8vbqaxapywkvv1hacdja3pi075r14d43-a_dir"
     )]
     #[case::simple_dir_with_one_file_filter_nothing(
-        r#"(builtins.filterSource (p: t: true) @fixtures/a_dir)"#,
+        r"(builtins.filterSource (p: t: true) @fixtures/a_dir)",
         "/nix/store/8vbqaxapywkvv1hacdja3pi075r14d43-a_dir"
     )]
     #[case::simple_dir_with_one_file_filter_everything(
-        r#"(builtins.filterSource (p: t: false) @fixtures/a_dir)"#,
+        r"(builtins.filterSource (p: t: false) @fixtures/a_dir)",
         "/nix/store/zphlqc93s2iq4xm393l06hzf8hp85r4z-a_dir"
     )]
     #[case::simple_dir_with_one_dir_filter_dirs(
@@ -412,11 +412,11 @@ mod tests {
         "/nix/store/8rjx64mm7173xp60rahv7cl3ixfkv3rf-b_dir"
     )]
     #[case::simple_dir_with_one_dir_filter_nothing(
-        r#"builtins.filterSource (p: t: true) @fixtures/b_dir"#,
+        r"builtins.filterSource (p: t: true) @fixtures/b_dir",
         "/nix/store/8rjx64mm7173xp60rahv7cl3ixfkv3rf-b_dir"
     )]
     #[case::simple_dir_with_one_dir_filter_everything(
-        r#"builtins.filterSource (p: t: false) @fixtures/b_dir"#,
+        r"builtins.filterSource (p: t: false) @fixtures/b_dir",
         "/nix/store/xzsfzdgrxg93icaamjm8zq1jq6xvf2fz-b_dir"
     )]
     #[case::simple_dir_with_one_symlink_to_file_filter_dirs(
@@ -432,11 +432,11 @@ mod tests {
         "/nix/store/y5g1fz04vzjvf422q92qmv532axj5q26-c_dir"
     )]
     #[case::simple_dir_with_one_symlink_to_file_filter_nothing(
-        r#"builtins.filterSource (p: t: true) @fixtures/c_dir"#,
+        r"builtins.filterSource (p: t: true) @fixtures/c_dir",
         "/nix/store/riigfmmzzrq65zqiffcjk5sbqr9c9h09-c_dir"
     )]
     #[case::simple_dir_with_one_symlink_to_file_filter_everything(
-        r#"builtins.filterSource (p: t: false) @fixtures/c_dir"#,
+        r"builtins.filterSource (p: t: false) @fixtures/c_dir",
         "/nix/store/y5g1fz04vzjvf422q92qmv532axj5q26-c_dir"
     )]
     #[case::simple_dir_with_dangling_symlink_filter_dirs(
@@ -452,11 +452,11 @@ mod tests {
         "/nix/store/7l371xax8kknhpska4wrmyll1mzlhzvl-d_dir"
     )]
     #[case::simple_dir_with_dangling_symlink_filter_nothing(
-        r#"builtins.filterSource (p: t: true) @fixtures/d_dir"#,
+        r"builtins.filterSource (p: t: true) @fixtures/d_dir",
         "/nix/store/f2d1aixwiqy4lbzrd040ala2s4m2z199-d_dir"
     )]
     #[case::simple_dir_with_dangling_symlink_filter_everything(
-        r#"builtins.filterSource (p: t: false) @fixtures/d_dir"#,
+        r"builtins.filterSource (p: t: false) @fixtures/d_dir",
         "/nix/store/7l371xax8kknhpska4wrmyll1mzlhzvl-d_dir"
     )]
     #[case::simple_symlinked_dir_with_one_file_filter_dirs(
@@ -472,11 +472,11 @@ mod tests {
         "/nix/store/apmdprm8fwl2zrjpbyfcd99zrnhvf47q-symlink_to_a_dir"
     )]
     #[case::simple_symlinked_dir_with_one_file_filter_nothing(
-        r#"builtins.filterSource (p: t: true) @fixtures/symlink_to_a_dir"#,
+        r"builtins.filterSource (p: t: true) @fixtures/symlink_to_a_dir",
         "/nix/store/apmdprm8fwl2zrjpbyfcd99zrnhvf47q-symlink_to_a_dir"
     )]
     #[case::simple_symlinked_dir_with_one_file_filter_everything(
-        r#"builtins.filterSource (p: t: false) @fixtures/symlink_to_a_dir"#,
+        r"builtins.filterSource (p: t: false) @fixtures/symlink_to_a_dir",
         "/nix/store/apmdprm8fwl2zrjpbyfcd99zrnhvf47q-symlink_to_a_dir"
     )]
     fn builtins_filter_source_succeed(#[case] code: &str, #[case] expected_outpath: &str) {
@@ -531,7 +531,7 @@ mod tests {
             tvix_eval::Value::String(s) => {
                 assert_eq!(expected_outpath, s.as_bstr());
             }
-            _ => panic!("unexpected value type: {:?}", value),
+            _ => panic!("unexpected value type: {value:?}"),
         }
 
         assert!(eval_result.errors.is_empty(), "errors should be empty");
@@ -576,7 +576,7 @@ mod tests {
                         s.as_bstr()
                     );
                 }
-                v => panic!("unexpected value type: {:?}", v),
+                v => panic!("unexpected value type: {v:?}"),
             }
         } else {
             assert!(value.is_none(), "unexpected success on illegal store paths");
@@ -623,7 +623,7 @@ mod tests {
                         s.as_bstr()
                     );
                 }
-                v => panic!("unexpected value type: {:?}", v),
+                v => panic!("unexpected value type: {v:?}"),
             }
         } else {
             assert!(value.is_none(), "unexpected success on illegal store paths");
@@ -711,7 +711,7 @@ mod tests {
             tvix_eval::Value::String(s) => {
                 assert_eq!(expected_outpath, s.as_bstr());
             }
-            _ => panic!("unexpected value type: {:?}", value),
+            _ => panic!("unexpected value type: {value:?}"),
         }
 
         assert!(eval_result.errors.is_empty(), "errors should be empty");

@@ -8,7 +8,7 @@
 //!    * references
 //! 2. authenticity information
 //!    * zero or more signatures over that description
-//!    * an optional [CAHash] for content-addressed paths (fixed outputs, sources, and derivations)
+//!    * an optional [`CAHash`] for content-addressed paths (fixed outputs, sources, and derivations)
 //! 3. derivation metadata
 //!    * deriver (the derivation that produced this path)
 //!    * system (the system value of that derivation)
@@ -41,7 +41,7 @@ pub use verifying_keys::{Error as VerifyingKeyError, VerifyingKey};
 pub struct NarInfo<'a> {
     pub flags: Flags,
     // core (authenticated, but unverified here)
-    /// Store path described by this [NarInfo]
+    /// Store path described by this [`NarInfo`]
     pub store_path: StorePathRef<'a>,
     /// SHA-256 digest of the NAR file
     pub nar_hash: [u8; 32],
@@ -55,7 +55,7 @@ pub struct NarInfo<'a> {
     /// Content address (for content-defined paths)
     pub ca: Option<CAHash>,
     // derivation metadata
-    /// Nix system triple of [NarInfo::deriver]
+    /// Nix system triple of [`NarInfo::deriver`]
     pub system: Option<&'a str>,
     /// Store path of the derivation that produced this. The last .drv suffix is stripped.
     pub deriver: Option<StorePathRef<'a>>,
@@ -289,8 +289,9 @@ impl<'a> NarInfo<'a> {
         })
     }
 
-    /// Computes the fingerprint string for certain fields in this [NarInfo].
+    /// Computes the fingerprint string for certain fields in this [`NarInfo`].
     /// This fingerprint is signed in [self.signatures].
+    #[must_use]
     pub fn fingerprint(&self) -> String {
         fingerprint(
             &self.store_path,
@@ -455,7 +456,7 @@ mod test {
     #[test]
     fn references_out_of_order() {
         let parsed = NarInfo::parse(
-            r#"StorePath: /nix/store/xi429w4ddvb1r77978hm7jfb2jsn559r-gcc-3.4.6
+            r"StorePath: /nix/store/xi429w4ddvb1r77978hm7jfb2jsn559r-gcc-3.4.6
 URL: nar/1hr09cgkyw1hcsfkv5qp5jlpmf2mqrkrqs3xj5zklq9c1h9544ff.nar.bz2
 Compression: bzip2
 FileHash: sha256:1hr09cgkyw1hcsfkv5qp5jlpmf2mqrkrqs3xj5zklq9c1h9544ff
@@ -465,7 +466,7 @@ NarSize: 21264
 References: a8922c0h87iilxzzvwn2hmv8x210aqb9-glibc-2.7 7w2acjgalb0cm7b3bg8yswza4l7iil9y-binutils-2.18 mm631h09mj964hm9q04l5fd8vw12j1mm-bash-3.2-p39 nx2zs2qd6snfcpzw4a0jnh26z9m0yihz-gcc-3.4.6 xi429w4ddvb1r77978hm7jfb2jsn559r-gcc-3.4.6
 Deriver: 2dzpn70c1hawczwhg9aavqk18zp9zsva-gcc-3.4.6.drv
 Sig: cache.nixos.org-1:o1DTsjCz0PofLJ216P2RBuSulI8BAb6zHxWE4N+tzlcELk5Uk/GO2SCxWTRN5wJutLZZ+cHTMdWqOHF88KGQDg==
-"#).expect("should parse");
+").expect("should parse");
 
         assert!(parsed.flags.contains(Flags::REFERENCES_OUT_OF_ORDER));
         assert_eq!(
@@ -487,7 +488,7 @@ Sig: cache.nixos.org-1:o1DTsjCz0PofLJ216P2RBuSulI8BAb6zHxWE4N+tzlcELk5Uk/GO2SCxW
     #[test]
     fn ca_nar_hash_sha1() {
         let parsed = NarInfo::parse(
-            r#"StorePath: /nix/store/k20pahypzvr49fy82cw5sx72hdfg3qcr-texlive-hyphenex-37354
+            r"StorePath: /nix/store/k20pahypzvr49fy82cw5sx72hdfg3qcr-texlive-hyphenex-37354
 URL: nar/0i5biw0g01514llhfswxy6xfav8lxxdq1xg6ik7hgsqbpw0f06yi.nar.xz
 Compression: xz
 FileHash: sha256:0i5biw0g01514llhfswxy6xfav8lxxdq1xg6ik7hgsqbpw0f06yi
@@ -497,7 +498,7 @@ NarSize: 22552
 References: 
 Sig: cache.nixos.org-1:u01BybwQhyI5H1bW1EIWXssMDhDDIvXOG5uh8Qzgdyjz6U1qg6DHhMAvXZOUStIj6X5t4/ufFgR8i3fjf0bMAw==
 CA: fixed:r:sha1:1ak1ymbmsfx7z8kh09jzkr3a4dvkrfjw
-"#).expect("should parse");
+").expect("should parse");
 
         assert_eq!(
             parsed.ca,
@@ -511,7 +512,7 @@ CA: fixed:r:sha1:1ak1ymbmsfx7z8kh09jzkr3a4dvkrfjw
     fn compression_default() {
         // This doesn't exist as such in cache.nixos.org.
         // We explicitly removed the compression field for the sake of this test.
-        let parsed = NarInfo::parse(r#"StorePath: /nix/store/a1jjalr4csx9hcga7fnm122aqabrjnch-digikam-2.6.0
+        let parsed = NarInfo::parse(r"StorePath: /nix/store/a1jjalr4csx9hcga7fnm122aqabrjnch-digikam-2.6.0
 URL: nar/1fzimfnvq2k8b40n4g54abmncpx2ddckh6qlb77pgq6xiysyil69.nar.bz2
 FileHash: sha256:1fzimfnvq2k8b40n4g54abmncpx2ddckh6qlb77pgq6xiysyil69
 FileSize: 43503778
@@ -521,7 +522,7 @@ References: 0izkyk7bq2ag9393nvnhgm87p75cq09w-liblqr-1-0.4.1 1cslpgyb7vb30inj3210
 Deriver: la77dr44phk5m5jnl4dvk01cwpykyw9s-digikam-2.6.0.drv
 System: i686-linux
 Sig: cache.nixos.org-1:92fl0i5q7EyegCj5Yf4L0bENkWuVAtgveiRcTEEUH0P6HvCE1xFcPbz/0Pf6Np+K1LPzHK+s5RHOmVoxRsvsDg==
-"#).expect("should parse");
+").expect("should parse");
 
         assert!(parsed.flags.contains(Flags::COMPRESSION_DEFAULT));
         assert_eq!(parsed.compression, Some("bzip2"));
@@ -529,7 +530,7 @@ Sig: cache.nixos.org-1:92fl0i5q7EyegCj5Yf4L0bENkWuVAtgveiRcTEEUH0P6HvCE1xFcPbz/0
 
     #[test]
     fn nar_hash_hex() {
-        let parsed = NarInfo::parse(r#"StorePath: /nix/store/0vpqfxbkx0ffrnhbws6g9qwhmliksz7f-perl-HTTP-Cookies-6.01
+        let parsed = NarInfo::parse(r"StorePath: /nix/store/0vpqfxbkx0ffrnhbws6g9qwhmliksz7f-perl-HTTP-Cookies-6.01
 URL: nar/1rv1m9inydm1r4krw8hmwg1hs86d0nxddd1pbhihx7l7fycjvfk3.nar.xz
 Compression: xz
 FileHash: sha256:1rv1m9inydm1r4krw8hmwg1hs86d0nxddd1pbhihx7l7fycjvfk3
@@ -539,7 +540,7 @@ NarSize: 45840
 References: 0vpqfxbkx0ffrnhbws6g9qwhmliksz7f-perl-HTTP-Cookies-6.01 9vrhbib2lxd9pjlg6fnl5b82gblidrcr-perl-HTTP-Message-6.06 wy20zslqxzxxfpzzk0rajh41d7a6mlnf-perl-HTTP-Date-6.02
 Deriver: fb4ihlq3psnsjq95mvvs49rwpplpc8zj-perl-HTTP-Cookies-6.01.drv
 Sig: cache.nixos.org-1:HhaiY36Uk3XV1JGe9d9xHnzAapqJXprU1YZZzSzxE97jCuO5RR7vlG2kF7MSC5thwRyxAtdghdSz3AqFi+QSCw==
-"#).expect("should parse");
+").expect("should parse");
 
         assert!(parsed.flags.contains(Flags::NAR_HASH_HEX));
         assert_eq!(
@@ -548,13 +549,13 @@ Sig: cache.nixos.org-1:HhaiY36Uk3XV1JGe9d9xHnzAapqJXprU1YZZzSzxE97jCuO5RR7vlG2kF
         );
     }
 
-    /// Adds a signature to a NARInfo, using key material parsed from DUMMY_KEYPAIR.
+    /// Adds a signature to a `NARInfo`, using key material parsed from `DUMMY_KEYPAIR`.
     /// It then ensures signature verification with the parsed
-    /// DUMMY_VERIFYING_KEY succeeds.
+    /// `DUMMY_VERIFYING_KEY` succeeds.
     #[test]
     fn sign() {
         let mut narinfo = NarInfo::parse(
-            r#"StorePath: /nix/store/0vpqfxbkx0ffrnhbws6g9qwhmliksz7f-perl-HTTP-Cookies-6.01
+            r"StorePath: /nix/store/0vpqfxbkx0ffrnhbws6g9qwhmliksz7f-perl-HTTP-Cookies-6.01
 URL: nar/0i5biw0g01514llhfswxy6xfav8lxxdq1xg6ik7hgsqbpw0f06yi.nar.xz
 Compression: xz
 FileHash: sha256:0i5biw0g01514llhfswxy6xfav8lxxdq1xg6ik7hgsqbpw0f06yi
@@ -563,7 +564,7 @@ NarHash: sha256:0h1bm4sj1cnfkxgyhvgi8df1qavnnv94sd0v09wcrm971602shfg
 NarSize: 22552
 References: 
 CA: fixed:r:sha1:1ak1ymbmsfx7z8kh09jzkr3a4dvkrfjw
-"#,
+",
         )
         .expect("should parse");
 

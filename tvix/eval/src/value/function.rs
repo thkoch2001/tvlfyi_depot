@@ -8,8 +8,8 @@ use crate::{chunk::Chunk, upvalues::Upvalues};
 
 use super::NixString;
 
-#[derive(Clone, Debug, PartialEq)]
-pub(crate) struct Formals {
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Formals {
     /// Map from argument name, to whether that argument is required
     pub(crate) arguments: BTreeMap<NixString, bool>,
 
@@ -39,8 +39,8 @@ impl Formals {
 }
 
 /// The opcodes for a thunk or closure, plus the number of
-/// non-executable opcodes which are allowed after an OpThunkClosure or
-/// OpThunkSuspended referencing it.  At runtime `Lambda` is usually wrapped
+/// non-executable opcodes which are allowed after an `OpThunkClosure` or
+/// `OpThunkSuspended` referencing it.  At runtime `Lambda` is usually wrapped
 /// in `Rc` to avoid copying the `Chunk` it holds (which can be
 /// quite large).
 ///
@@ -95,7 +95,7 @@ impl Closure {
     }
 
     pub fn new_with_upvalues(upvalues: Rc<Upvalues>, lambda: Rc<Lambda>) -> Self {
-        Closure { upvalues, lambda }
+        Self { lambda, upvalues }
     }
 
     pub fn chunk(&self) -> &Chunk {

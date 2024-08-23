@@ -15,7 +15,7 @@ pub struct CodeIdx(pub usize);
 
 impl AddAssign<usize> for CodeIdx {
     fn add_assign(&mut self, rhs: usize) {
-        *self = CodeIdx(self.0 + rhs)
+        *self = Self(self.0 + rhs);
     }
 }
 
@@ -23,20 +23,20 @@ impl Sub<usize> for CodeIdx {
     type Output = Self;
 
     fn sub(self, rhs: usize) -> Self::Output {
-        CodeIdx(self.0 - rhs)
+        Self(self.0 - rhs)
     }
 }
 
 /// Index of a value in the runtime stack.  This is an offset
-/// *relative to* the VM value stack_base of the CallFrame
-/// containing the opcode which contains this StackIdx.
+/// *relative to* the VM value `stack_base` of the `CallFrame`
+/// containing the opcode which contains this `StackIdx`.
 #[repr(transparent)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq, PartialOrd)]
 pub struct StackIdx(pub usize);
 
 /// Index of an upvalue within a closure's bound-variable upvalue
 /// list.  This is an absolute index into the Upvalues of the
-/// CallFrame containing the opcode which contains this UpvalueIdx.
+/// `CallFrame` containing the opcode which contains this `UpvalueIdx`.
 #[repr(transparent)]
 #[derive(Clone, Copy, Debug, PartialEq, Eq)]
 pub struct UpvalueIdx(pub usize);
@@ -128,7 +128,7 @@ pub enum Op {
     /// Pop one stack item and jump forward in the bytecode
     /// specified by the number of instructions in its usize
     /// operand, *if* the value at the top of the stack is a
-    /// Value::Catchable.
+    /// `Value::Catchable`.
     JumpIfCatchable,
 
     /// Jump forward in the bytecode specified by the number of
@@ -243,7 +243,7 @@ pub enum Op {
     Force,
 
     /// Finalise initialisation of the upvalues of the value in the given stack
-    /// index (which must be a Value::Thunk) after the scope is fully bound.
+    /// index (which must be a `Value::Thunk`) after the scope is fully bound.
     Finalise,
 
     /// Final instruction emitted in a chunk. Does not have an
@@ -284,24 +284,24 @@ pub enum OpArg {
 impl Op {
     pub fn arg_type(&self) -> OpArg {
         match self {
-            Op::Constant
-            | Op::Attrs
-            | Op::PushWith
-            | Op::List
-            | Op::Interpolate
-            | Op::GetLocal
-            | Op::CloseScope
-            | Op::GetUpvalue
-            | Op::Finalise => OpArg::Uvarint,
+            Self::Constant
+            | Self::Attrs
+            | Self::PushWith
+            | Self::List
+            | Self::Interpolate
+            | Self::GetLocal
+            | Self::CloseScope
+            | Self::GetUpvalue
+            | Self::Finalise => OpArg::Uvarint,
 
-            Op::Jump
-            | Op::JumpIfTrue
-            | Op::JumpIfFalse
-            | Op::JumpIfCatchable
-            | Op::JumpIfNotFound
-            | Op::JumpIfNoFinaliseRequest => OpArg::Fixed,
+            Self::Jump
+            | Self::JumpIfTrue
+            | Self::JumpIfFalse
+            | Self::JumpIfCatchable
+            | Self::JumpIfNotFound
+            | Self::JumpIfNoFinaliseRequest => OpArg::Fixed,
 
-            Op::CoerceToString | Op::Closure | Op::ThunkClosure | Op::ThunkSuspended => {
+            Self::CoerceToString | Self::Closure | Self::ThunkClosure | Self::ThunkSuspended => {
                 OpArg::Custom
             }
             _ => OpArg::None,
@@ -315,15 +315,15 @@ pub struct Position(pub u64);
 
 impl Position {
     pub fn stack_index(idx: StackIdx) -> Self {
-        Position((idx.0 as u64) << 2)
+        Self((idx.0 as u64) << 2)
     }
 
     pub fn deferred_local(idx: StackIdx) -> Self {
-        Position(((idx.0 as u64) << 2) | 1)
+        Self(((idx.0 as u64) << 2) | 1)
     }
 
     pub fn upvalue_index(idx: UpvalueIdx) -> Self {
-        Position(((idx.0 as u64) << 2) | 2)
+        Self(((idx.0 as u64) << 2) | 2)
     }
 
     pub fn runtime_stack_index(&self) -> Option<StackIdx> {

@@ -104,8 +104,8 @@ pub struct ServiceUrlsMemory {
 }
 
 impl From<ServiceUrlsGrpc> for ServiceUrls {
-    fn from(urls: ServiceUrlsGrpc) -> ServiceUrls {
-        ServiceUrls {
+    fn from(urls: ServiceUrlsGrpc) -> Self {
+        Self {
             blob_service_addr: urls.blob_service_addr,
             directory_service_addr: urls.directory_service_addr,
             path_info_service_addr: urls.path_info_service_addr,
@@ -116,8 +116,8 @@ impl From<ServiceUrlsGrpc> for ServiceUrls {
 }
 
 impl From<ServiceUrlsMemory> for ServiceUrls {
-    fn from(urls: ServiceUrlsMemory) -> ServiceUrls {
-        ServiceUrls {
+    fn from(urls: ServiceUrlsMemory) -> Self {
+        Self {
             blob_service_addr: urls.blob_service_addr,
             directory_service_addr: urls.directory_service_addr,
             path_info_service_addr: urls.path_info_service_addr,
@@ -218,7 +218,7 @@ pub async fn construct_services_from_configs(
     ))
 }
 
-/// The inverse of [tokio_util::io::SyncIoBridge].
+/// The inverse of [`tokio_util::io::SyncIoBridge`].
 /// Don't use this with anything that actually does blocking I/O.
 pub struct AsyncIoBridge<T>(pub T);
 

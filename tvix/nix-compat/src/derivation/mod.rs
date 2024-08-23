@@ -49,20 +49,23 @@ pub struct Derivation {
 }
 
 impl Derivation {
-    /// write the Derivation to the given [std::io::Write], in ATerm format.
+    /// write the Derivation to the given [`std::io::Write`], in `ATerm` format.
     ///
     /// The only errors returns are these when writing to the passed writer.
     pub fn serialize(&self, writer: &mut impl std::io::Write) -> Result<(), io::Error> {
         self.serialize_with_replacements(writer, &self.input_derivations)
     }
 
-    /// Like `serialize` but allow replacing the input_derivations for hash calculations.
+    /// Like `serialize` but allow replacing the `input_derivations` for hash calculations.
     fn serialize_with_replacements(
         &self,
         writer: &mut impl std::io::Write,
         input_derivations: &BTreeMap<impl AtermWriteable, BTreeSet<String>>,
     ) -> Result<(), io::Error> {
-        use write::*;
+        use write::{
+            write_arguments, write_builder, write_char, write_environment, write_input_derivations,
+            write_input_sources, write_outputs, write_system, COMMA, PAREN_CLOSE,
+        };
 
         writer.write_all(write::DERIVATION_PREFIX.as_bytes())?;
         write_char(writer, write::PAREN_OPEN)?;
@@ -92,13 +95,14 @@ impl Derivation {
         Ok(())
     }
 
-    /// return the ATerm serialization.
+    /// return the `ATerm` serialization.
+    #[must_use]
     pub fn to_aterm_bytes(&self) -> Vec<u8> {
         self.to_aterm_bytes_with_replacements(&self.input_derivations)
     }
 
-    /// Like `to_aterm_bytes`, but accept a different BTreeMap for input_derivations.
-    /// This is used to render the ATerm representation of a Derivation "modulo
+    /// Like `to_aterm_bytes`, but accept a different `BTreeMap` for `input_derivations`.
+    /// This is used to render the `ATerm` representation of a Derivation "modulo
     /// fixed-output derivations".
     fn to_aterm_bytes_with_replacements(
         &self,
@@ -115,24 +119,24 @@ impl Derivation {
         buffer
     }
 
-    /// Parse an Derivation in ATerm serialization, and validate it passes our
+    /// Parse an Derivation in `ATerm` serialization, and validate it passes our
     /// set of validations.
-    pub fn from_aterm_bytes(b: &[u8]) -> Result<Derivation, parser::Error<&[u8]>> {
+    pub fn from_aterm_bytes(b: &[u8]) -> Result<Self, parser::Error<&[u8]>> {
         parser::parse(b)
     }
 
     /// Returns the drv path of a [Derivation] struct.
     ///
-    /// The drv path is calculated by invoking [build_text_path], using
-    /// the `name` with a `.drv` suffix as name, all [Derivation::input_sources] and
-    /// keys of [Derivation::input_derivations] as references, and the ATerm string of
+    /// The drv path is calculated by invoking [`build_text_path`], using
+    /// the `name` with a `.drv` suffix as name, all [`Derivation::input_sources`] and
+    /// keys of [`Derivation::input_derivations`] as references, and the `ATerm` string of
     /// the [Derivation] as content.
     pub fn calculate_derivation_path(
         &self,
         name: &str,
     ) -> Result<StorePath<String>, DerivationError> {
         // append .drv to the name
-        let name = &format!("{}.drv", name);
+        let name = &format!("{name}.drv");
 
         // collect the list of paths from input_sources and input_derivations
         // into a (sorted, guaranteed by BTreeSet) list of references
@@ -149,9 +153,9 @@ impl Derivation {
 
     /// Returns the FOD digest, if the derivation is fixed-output, or None if
     /// it's not.
-    /// TODO: this is kinda the string from [build_ca_path] with a
-    /// [CAHash::Flat], what's fed to `build_store_path_from_fingerprint_parts`
-    /// (except the out_output.path being an empty string)
+    /// TODO: this is kinda the string from [`build_ca_path`] with a
+    /// [`CAHash::Flat`], what's fed to `build_store_path_from_fingerprint_parts`
+    /// (except the `out_output.path` being an empty string)
     pub fn fod_digest(&self) -> Option<[u8; 32]> {
         if self.outputs.len() != 1 {
             return None;
@@ -170,8 +174,7 @@ impl Derivation {
                     .as_ref()
                     .map(StorePath::to_absolute_path)
                     .as_ref()
-                    .map(|s| s as &str)
-                    .unwrap_or(""),
+                    .map_or("", |s| s as &str),
             ))
             .finalize()
             .into(),
@@ -182,7 +185,7 @@ impl Derivation {
     ///
     /// This is called `hashDerivationModulo` in nixcpp.
     ///
-    /// It returns the sha256 digest of the derivation ATerm representation,
+    /// It returns the sha256 digest of the derivation `ATerm` representation,
     /// except that:
     ///  -  any input derivation paths have beed replaced "by the result of a
     ///     recursive call to this function" and that
@@ -191,8 +194,8 @@ impl Derivation {
     ///    the A-Term.
     ///
     /// It's up to the caller of this function to provide a (infallible) lookup
-    /// function to query [hash_derivation_modulo] of direct input derivations,
-    /// by their [StorePathRef].
+    /// function to query [`hash_derivation_modulo`] of direct input derivations,
+    /// by their [`StorePathRef`].
     /// It will only be called in case the derivation is not a fixed-output
     /// derivation.
     pub fn hash_derivation_modulo<F>(&self, fn_lookup_hash_derivation_modulo: F) -> [u8; 32]
@@ -229,13 +232,13 @@ impl Derivation {
     /// and self.environment[$outputName] needs to be an empty string.
     ///
     /// Output path calculation requires knowledge of the
-    /// [hash_derivation_modulo], which (in case of non-fixed-output
-    /// derivations) also requires knowledge of the [hash_derivation_modulo] of
+    /// [`hash_derivation_modulo`], which (in case of non-fixed-output
+    /// derivations) also requires knowledge of the [`hash_derivation_modulo`] of
     /// input derivations (recursively).
     ///
     /// To avoid recursing and doing unnecessary calculation, we simply
     /// ask the caller of this function to provide the result of the
-    /// [hash_derivation_modulo] call of the current [Derivation],
+    /// [`hash_derivation_modulo`] call of the current [Derivation],
     /// and leave it up to them to calculate it when needed.
     ///
     /// On completion, `self.environment[$outputName]` and
@@ -247,7 +250,7 @@ impl Derivation {
         hash_derivation_modulo: &[u8; 32],
     ) -> Result<(), DerivationError> {
         // The fingerprint and hash differs per output
-        for (output_name, output) in self.outputs.iter_mut() {
+        for (output_name, output) in &mut self.outputs {
             // Assert that outputs are not yet populated, to avoid using this function wrongly.
             // We don't also go over self.environment, but it's a sufficient
             // footgun prevention mechanism.
@@ -294,14 +297,14 @@ fn output_path_name(derivation_name: &str, output_name: &str) -> String {
     output_path_name
 }
 
-/// For a [CAHash], return the "prefix" used for NAR purposes.
-/// For [CAHash::Flat], this is an empty string, for [CAHash::Nar], it's "r:".
-/// Panics for other [CAHash] kinds, as they're not valid in a derivation
+/// For a [`CAHash`], return the "prefix" used for NAR purposes.
+/// For [`CAHash::Flat`], this is an empty string, for [`CAHash::Nar`], it's "r:".
+/// Panics for other [`CAHash`] kinds, as they're not valid in a derivation
 /// context.
 fn ca_kind_prefix(ca_hash: &CAHash) -> &'static str {
     match ca_hash {
         CAHash::Flat(_) => "",
         CAHash::Nar(_) => "r:",
-        _ => panic!("invalid ca hash in derivation context: {:?}", ca_hash),
+        _ => panic!("invalid ca hash in derivation context: {ca_hash:?}"),
     }
 }

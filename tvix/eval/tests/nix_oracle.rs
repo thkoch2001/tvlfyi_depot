@@ -41,13 +41,12 @@ fn nix_eval(expr: &str, strictness: Strictness) -> String {
         )
         .output()
         .unwrap();
-    if !output.status.success() {
-        panic!(
-            "nix eval {expr} failed!\n    stdout: {}\n    stderr: {}",
-            String::from_utf8_lossy(&output.stdout),
-            String::from_utf8_lossy(&output.stderr)
-        )
-    }
+    assert!(
+        output.status.success(),
+        "nix eval {expr} failed!\n    stdout: {}\n    stderr: {}",
+        String::from_utf8_lossy(&output.stdout),
+        String::from_utf8_lossy(&output.stderr)
+    );
 
     String::from_utf8(output.stdout).unwrap()
 }
@@ -132,7 +131,7 @@ compare_lazy_eval_tests! {
     unthunked_path_in_list("[ ./nix_oracle.rs ]");
     unthunked_string_literal_in_list("[ \":thonking:\" ]");
     thunked_unary_ops_in_list("[ (!true) (-1) ]");
-    thunked_bin_ops_in_list(r#"
+    thunked_bin_ops_in_list(r"
       let
         # Necessary to fool the optimiser for && and ||
         true' = true;
@@ -155,7 +154,7 @@ compare_lazy_eval_tests! {
         ([ ] ++ [ ])
         (42 != null)
       ]
-    "#);
+    ");
     thunked_has_attrs_in_list("[ ({ } ? foo) ]");
     thunked_list_in_list("[ [ 1 2 3 ] ]");
     thunked_attr_set_in_list("[ { foo = null; } ]");
