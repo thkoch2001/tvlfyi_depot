@@ -36,8 +36,18 @@ in
 
     buildPhase = "cargo clippy --tests --all-features --benches --examples | tee $out";
   };
+  crate2nix-check =
+    let
+      crate2nix-check = depot.tvix.utils.mkCrate2nixCheck ./Cargo.nix;
+    in
+    crate2nix-check.command.overrideAttrs {
+      meta.ci.extraSteps = {
+        inherit crate2nix-check;
+      };
+    };
   meta.ci.targets = [
     "tvix-daemon"
     "shell"
+    "crate2nix-check"
   ];
 }
