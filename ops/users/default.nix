@@ -269,4 +269,9 @@
     email = "emery@dmz.rs";
     password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$b2k5UpTJafqM7yjHfVRjBg$zFGy/ZeI9Hb71TUfJwFp7qDKyUl8tdyFDUK1uNBYfUI";
   }
+  {
+    username = "aziz";
+    email = "abd.aziz89@gmail.com";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$xTvdtTF+gavMfF8556CiiQ$IshnauhlEr80skpv5s6ueJLkQxlynzBt6oCp3cQrNCY";
+  }
 ]
