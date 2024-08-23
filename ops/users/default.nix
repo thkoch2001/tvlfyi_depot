@@ -274,4 +274,9 @@
     email = "abd.aziz89@gmail.com";
     password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$xTvdtTF+gavMfF8556CiiQ$IshnauhlEr80skpv5s6ueJLkQxlynzBt6oCp3cQrNCY";
   }
+  {
+    username = "nikiv";
+    email = "nikita@nikiv.dev";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$79mMAD2XYa5dg7D9ueWMpw$Edf5WODrFpkNDyWaMdLKcgcErFLx4khmPIk8wzmYGUE";
+  }
 ]
