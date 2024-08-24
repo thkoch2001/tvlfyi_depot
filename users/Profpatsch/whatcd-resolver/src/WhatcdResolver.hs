@@ -566,10 +566,9 @@ getBestTorrentsData artistFilter = inSpan' "get torrents table data" $ \span -> 
       ( bestStale
           & mapMaybe
             ( \td -> case td.torrentStatus of
-                InTransmission h -> Just h
+                InTransmission h -> Just (getLabel @"torrentHash" h, td)
                 _ -> Nothing
             )
-          <&> (\t -> (getLabel @"torrentHash" t, t.transmissionInfo))
           & Map.fromList
       )
   pure $
