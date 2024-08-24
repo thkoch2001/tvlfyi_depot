@@ -16,6 +16,24 @@
       "message": "Some of these are also failing with newer nix versions.",
       "revId": "71ad811aff5ddc81c873470229298c29d226677c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a1a9d64_a3b296aa",
+        "filename": "tvix/eval/tests/nix_oracle.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-24T14:30:06Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93ee2f91_806ec4d4",
+      "revId": "71ad811aff5ddc81c873470229298c29d226677c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
