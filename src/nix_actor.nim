@@ -30,6 +30,10 @@ proc unembedEntity(emb: EmbeddedRef; E: typedesc): Option[E] =
   if emb of Cap and emb.Cap.target of E:
     result = emb.Cap.target.E.some
 
+proc unembedEntity(v: Value; E: typedesc): Option[E] =
+  if v.isEmbeddedRef:
+    result = v.embeddedRef.unembedEntity(E)
+
 type
   StoreEntity {.final.} = ref object of Entity
     self: Cap
@@ -70,7 +74,7 @@ proc serve(entity: StoreEntity; turn: Turn; obs: Observe) =
       facet.run do (turn: Turn):
         publish(turn, obs.observer.Cap, obs.pattern.capture(initRecord("version", %s)).get)
 
-method serve(entity: StoreEntity; turn: Turn; copy: CopyClosure) =
+proc serve(entity: StoreEntity; turn: Turn; copy: CopyClosure) =
   var dest = copy.dest.unembedEntity(StoreEntity)
   if dest.isNone:
     publishError(turn, copy.result.Cap, %"destination store is not colocated with source store")
@@ -110,7 +114,7 @@ proc newRepoEntity(turn: Turn; detail: RepoResolveDetail): RepoEntity =
     if not entity.state.isNil:
       entity.state.close()
   if detail.store.isSome:
-    var other = detail.store.get.unembed(StoreEntity)
+    var other = detail.store.get.unembedEntity(StoreEntity)
     if other.isSome:
       entity.store = other.get
     elif detail.store.get.isString:
