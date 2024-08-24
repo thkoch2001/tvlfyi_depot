@@ -2,6 +2,9 @@
 
 import ./nix_api_types
 
+{.passC: staticExec"$PKG_CONFIG --cflags nix-expr-c".}
+{.passL: staticExec"$PKG_CONFIG --libs nix-expr-c".}
+
 {.pragma: nix_api_expr, header: "nix_api_expr.h", importc: "nix_$1".}
 
 proc libexpr_init*(context: NixContext): nix_err {.nix_api_expr.}

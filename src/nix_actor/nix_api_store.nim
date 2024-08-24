@@ -2,7 +2,8 @@
 
 import ./nix_api_types
 
-{.passL: "-L/home/repo/nix/src/libstore-c".}
+{.passC: staticExec"$PKG_CONFIG --cflags nix-store-c".}
+{.passL: staticExec"$PKG_CONFIG --libs nix-store-c".}
 
 {.pragma: nix_api_store, header: "nix_api_store.h", importc: "nix_$1".}
 

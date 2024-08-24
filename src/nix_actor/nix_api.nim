@@ -11,9 +11,6 @@ import
 export NixContext, Store, EvalState, Value, ValueType,
   gc_decref, isNil
 
-{.passC: staticExec"$PKG_CONFIG --cflags nix-expr-c".}
-{.passL: staticExec"$PKG_CONFIG --libs nix-expr-c".}
-
 type
   StringCallback = proc (s: string) {.closure.}
   StringCallbackState = object
