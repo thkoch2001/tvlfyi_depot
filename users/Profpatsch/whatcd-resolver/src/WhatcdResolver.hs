@@ -630,6 +630,7 @@ mkBestTorrentsTable fresh = do
                   </td>
                   <td>{Html.toHtml @Natural b.torrentGroupJson.groupYear}</td>
                   <td>{Html.toHtml @Int b.seedingWeight}</td>
+                  <td>{Html.toHtml @Text b.torrentFormat}</td>
                   <td><details hx-trigger="toggle once" hx-post="snips/redacted/torrentDataJson" hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentId)]}></details></td>
                   </tr>
                 |]
@@ -644,8 +645,8 @@ mkBestTorrentsTable fresh = do
               <th>Name</th>
               <th>Year</th>
               <th>Weight</th>
+              <th>Format</th>
               <th>Torrent</th>
-              <th>Torrent Group</th>
             </tr>
           </thead>
           <tbody>
