@@ -71,7 +71,7 @@ in
     cpu.intel.updateMicrocode = true;
     bluetooth.enable = true;
     enableRedistributableFirmware = true;
-    opengl.enable = true;
+    graphics.enable = true;
   };
 
   services.xserver.libinput.touchpad.clickMethod = "clickfinger";

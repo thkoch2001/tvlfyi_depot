@@ -93,9 +93,9 @@ lib.fix (self: {
     enableRedistributableFirmware = true;
     bluetooth.enable = true;
 
-    opengl = {
+    graphics = {
       enable = true;
-      driSupport32Bit = true;
+      enablet32Bit = true;
 
       extraPackages = with pkgs; [
         vaapiVdpau
