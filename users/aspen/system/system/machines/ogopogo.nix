@@ -77,7 +77,7 @@
     videoDrivers = [ "nvidia" ];
     dpi = 100;
   };
-  hardware.opengl.enable = true;
+  hardware.graphics.enable = true;
   services.picom = {
     enable = true;
     vSync = true;
