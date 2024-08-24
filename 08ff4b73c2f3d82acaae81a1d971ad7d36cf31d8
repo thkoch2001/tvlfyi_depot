@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89b25ab5_42ed431e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-08-24T23:46:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7f501d6_2bfc130b",
+      "revId": "08ff4b73c2f3d82acaae81a1d971ad7d36cf31d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9922a93_4952592d",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-07-23T13:40:48Z",
       "side": 1,
       "message": "TODO",
+      "revId": "08ff4b73c2f3d82acaae81a1d971ad7d36cf31d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3053ba0_f1079ec8",
+        "filename": "tvix/nix-compat-derive/src/de.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-08-24T23:46:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b9922a93_4952592d",
       "revId": "08ff4b73c2f3d82acaae81a1d971ad7d36cf31d8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6b6138b1_7039953c",
+        "filename": "tvix/nix-compat-derive/src/internal/attrs.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-08-24T23:46:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "727fd881_046836a3",
+      "revId": "08ff4b73c2f3d82acaae81a1d971ad7d36cf31d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5c9bcfb5_cee88f34",
@@ -65,6 +119,24 @@
       "writtenOn": "2024-07-23T13:40:48Z",
       "side": 1,
       "message": "Can we get a listing of these somewhere in the docs?",
+      "revId": "08ff4b73c2f3d82acaae81a1d971ad7d36cf31d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b165d6e4_195d71e2",
+        "filename": "tvix/nix-compat-derive/src/internal/attrs.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-08-24T23:46:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c9bcfb5_cee88f34",
       "revId": "08ff4b73c2f3d82acaae81a1d971ad7d36cf31d8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -86,6 +158,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f622012c_67fcdcf3",
+        "filename": "tvix/nix-compat-derive/src/internal/attrs.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-08-24T23:46:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7946726c_d40e4520",
+      "revId": "08ff4b73c2f3d82acaae81a1d971ad7d36cf31d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "688c4473_52284c05",
@@ -99,6 +189,24 @@
       "writtenOn": "2024-07-23T13:40:48Z",
       "side": 1,
       "message": "👀",
+      "revId": "08ff4b73c2f3d82acaae81a1d971ad7d36cf31d8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "da4e9cf7_59f50fe1",
+        "filename": "tvix/nix-compat-derive/src/lib.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-08-24T23:46:45Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "688c4473_52284c05",
       "revId": "08ff4b73c2f3d82acaae81a1d971ad7d36cf31d8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
