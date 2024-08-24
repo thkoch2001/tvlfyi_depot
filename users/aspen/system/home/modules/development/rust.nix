@@ -10,15 +10,15 @@ with lib;
 
   home.packages = with pkgs; [
     rustup
+
+    cargo-bloat
     cargo-edit
     cargo-expand
+    cargo-hakari
+    cargo-nextest
     cargo-udeps
-    cargo-bloat
     sccache
     evcxr
-
-    depot.users.aspen.pkgs.cargo-hakari
-    depot.users.aspen.pkgs.cargo-nextest
 
     # benchmarking+profiling
     cargo-criterion
