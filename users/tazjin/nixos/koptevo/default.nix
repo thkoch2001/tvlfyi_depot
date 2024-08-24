@@ -129,6 +129,17 @@ in
     '';
   };
 
+  services.nginx.virtualHosts."cache.volgasprint.org" = {
+    addSSL = true;
+    enableACME = true;
+
+    extraConfig = ''
+      location / {
+        return 200 "ok";
+      }
+    '';
+  };
+
   # I don't use the podcast nor playlist feature,
   # but I *have to* supply podcasts to gonic ...
   systemd.tmpfiles.rules = [
