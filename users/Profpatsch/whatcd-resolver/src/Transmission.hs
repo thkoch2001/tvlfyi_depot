@@ -61,7 +61,7 @@ getAndUpdateTransmissionTorrentsStatus ::
     HasField "torrentId" info Int
   ) =>
   Map (Label "torrentHash" Text) info ->
-  (Transaction m (Map (Label "torrentHash" Text) (Label "percentDone" Percentage)))
+  (Transaction m (Label "knownTorrentsStale" Bool, (Map (Label "torrentHash" Text) (Label "percentDone" Percentage))))
 getAndUpdateTransmissionTorrentsStatus knownTorrents = inSpan' "getAndUpdateTransmissionTorrentsStatus" $ \span -> do
   let fields = ["hashString", "percentDone"]
   actualTorrents <-
@@ -82,7 +82,7 @@ getAndUpdateTransmissionTorrentsStatus knownTorrents = inSpan' "getAndUpdateTran
   if
     | Map.null toDelete -> do
         addEventSimple span "We know about all transmission hashes."
-        pure actualTorrents
+        pure (label @"knownTorrentsStale" False, actualTorrents)
     | otherwise -> inSpan' "Delete outdated transmission hashes" $ \span' -> do
         addAttribute
           span'
@@ -108,7 +108,7 @@ getAndUpdateTransmissionTorrentsStatus knownTorrents = inSpan' "getAndUpdateTran
           WHERE transmission_torrent_hash = ANY (?::text[])
         |]
             $ Only (toDelete & Map.keys <&> (.torrentHash) & PGArray :: PGArray Text)
-        pure actualTorrents
+        pure (label @"knownTorrentsStale" True, actualTorrents)
 
 getTransmissionTorrentsTable ::
   (MonadTransmission m, MonadThrow m, MonadLogger m, MonadOtel m) => m Html
