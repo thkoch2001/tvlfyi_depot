@@ -413,7 +413,11 @@ getBestTorrents opts = do
           -- filter by artist id
           AND
           (?::bool OR (to_jsonb(?::int) <@ (jsonb_path_query_array(full_json_result, '$.artists[*].id'))))
-        ORDER BY torrent_group, seeding_weight DESC
+        ORDER BY
+          torrent_group,
+          -- prefer torrents which we already downloaded
+          torrent_file,
+          seeding_weight DESC
       )
       SELECT
         tg.group_id,
