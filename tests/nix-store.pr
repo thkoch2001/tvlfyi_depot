@@ -9,9 +9,9 @@ $trace
 ]
 
 let ?default-detail = { uri: "auto" params: {} cache: $nix-cache }
-let ?test-detail = { label: "test-store" uri: "file:///tmp/nix-test-store" params: {} }
+let ?test-detail = { label: "test" uri: "file:///tmp/nix-test-store" params: {} }
 
-<require-service <service nix-store $default-detail>>
+# <require-service <service nix-store $default-detail>>
 
 ? <service-object <service nix-store $default-detail> <ok ?default-store>>
 [
@@ -27,10 +27,10 @@ let ?test-detail = { label: "test-store" uri: "file:///tmp/nix-test-store" param
   <require-service <service nix-store $test-detail>>
   ? <service-object <service nix-store $test-detail> <ok ?test-store>>
   [
-    $default-store += <copy-closure
+    $default-store += <-copy-closure
         $test-store
         $test-path
-        <* $trace [ <rewrite ?result <copy-closure$test-path $result>> ]>
+        <* $notifier [ <rewrite ?result <notify $test-path { body: $result }>> ]>
       >
   ]
 

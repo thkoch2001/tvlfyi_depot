@@ -1,30 +1,28 @@
 #!/usr/bin/env -S syndicate-server --control --config
 
-let ?trace = dataspace
-$trace
-? ?any
+? <service-object <service nix-store { uri: "auto" }> <ok ?store>>
 [
-  $log ! <log "nix-repo" { "+++": $any } >
-  ?- [ $log ! <log "nix-repo" { "---": $any } > ]
+  let ?detail = {
+      store: $store
+      cache: $nix-cache
+      import: "<nixpkgs>"
+      lookupPath: [
+        "nixpkgs=/home/repo/nixpkgs/channel"
+      ]
+    }
+  <-require-service <service nix-repo $detail>>
 ]
 
-let ?detail = {
-    # store: $store
-    cache: $nix-cache
-    import: "<nixpkgs>"
-    lookupPath: [
-      "nixpkgs=/home/repo/nixpkgs/channel"
-    ]
-  }
-<require-service <service nix-repo $detail>>
-
 ? <service-object <service nix-repo> <ok ?repo>>
-$repo
 [
-  ? { cowsay: ?pkg } [
-    $log ! <log "nix-repo" {cowsay: $pkg }>
-    <realise $pkg <* $trace [ <rewrite ?x <realise-cowsay $x>> ]>>
+  $repo
+  ? { plan9port: ?pkg } [
+    $notifier <notify "nix-repo" { body: $pkg }>
+
+    $log ! <log "nix-repo" {pkg: $pkg }>
+    <realise  $pkg <* $notifier [ <rewrite ?x <notify "nix-repo" { body: $x }>> ]>>
   ]
+  $repo
   ? { shapelib: { meta: { homepage: ?homepage } } } [
     $log ! <log "nix-repo" { homepage: $homepage } >
   ]

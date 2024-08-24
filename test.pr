@@ -1,20 +1,48 @@
 #!/usr/bin/env -S syndicate-server --control --config
 
 let ?nix-actor = dataspace
-$nix-actor
-? ?any
-[
-  $log ! <log "nix-actor" { "+++": $any } >
-  ?- [ $log ! <log "nix-actor" { "---": $any } > ]
-]
+
+# $nix-actor
+# ? ?any
+# [
+#   $log ! <log "nix-actor" { "+++": $any } >
+#   ?- [ $log ! <log "nix-actor" { "---": $any } > ]
+# ]
 
 <require-service <relay-listener <unix "/tmp/nix-actor.socket"> $gatekeeper>>
 <bind <ref { oid: nix-actor key: #x"" }> $nix-actor #f>
 
 let ?nix-cache = dataspace
 
-@"Load test behavior."
-<require-service <config-watcher "./tests" { config: $config log: $log nix-cache: $nix-cache }>>
+let ?parent-route = <route
+    [ <tcp "::1" 2048> ]
+    <ref {oid: migrant, sig: #[eEwGnA6QbsH2kwkfDAoxpQ]}>>
+
+let ?resolve-parent = <resolve-path $parent-route>
+
+<q $resolve-parent>
+$log ! <log "test" { line: <q $resolve-parent> }>
+
+? <a $resolve-parent <error ?err>> [
+  $control ! <exit 2>
+]
+
+? <a $resolve-parent <ok <resolved-path _ _ ?parent>>>
+[
+  $parent += <require-service <service notifier {}>>
+  $parent
+  ? <service-object <service notifier {}> <ok ?notifier>>
+  [
+    @"Load test behavior."
+    $config += <require-service <config-watcher "./tests" {
+        config: $config
+        control: $control
+        log: $log
+        nix-cache: $nix-cache
+        notifier: $notifier
+      }>>
+  ]
+]
 
 @"Service instantiation."
 <nix-provide-service nix-repo>
