@@ -49,18 +49,20 @@ scientificPercentage =
               | otherwise -> Right $ Percentage $ ceiling (f * 100)
         )
 
--- | Fetch the current status from transmission, and remove the tranmission hash from our database
--- iff it does not exist in transmission anymore
+-- | Fetch the current status from transmission,
+--  and remove the transmission hash and torrent file from our database iff it does not exist in transmission anymore
 getAndUpdateTransmissionTorrentsStatus ::
   ( MonadTransmission m,
     MonadThrow m,
     MonadLogger m,
     MonadPostgres m,
-    MonadOtel m
+    MonadOtel m,
+    HasField "groupId" info Int,
+    HasField "torrentId" info Int
   ) =>
-  Map (Label "torrentHash" Text) () ->
+  Map (Label "torrentHash" Text) info ->
   (Transaction m (Map (Label "torrentHash" Text) (Label "percentDone" Percentage)))
-getAndUpdateTransmissionTorrentsStatus knownTorrents = do
+getAndUpdateTransmissionTorrentsStatus knownTorrents = inSpan' "getAndUpdateTransmissionTorrentsStatus" $ \span -> do
   let fields = ["hashString", "percentDone"]
   actualTorrents <-
     lift @Transaction $
@@ -77,14 +79,36 @@ getAndUpdateTransmissionTorrentsStatus knownTorrents = do
         )
         <&> Map.fromList
   let toDelete = Map.difference knownTorrents actualTorrents
-  execute
-    [fmt|
-    UPDATE redacted.torrents_json
-    SET transmission_torrent_hash = NULL
-    WHERE transmission_torrent_hash = ANY (?::text[])
-  |]
-    $ Only (toDelete & Map.keys <&> (.torrentHash) & PGArray :: PGArray Text)
-  pure actualTorrents
+  if
+    | Map.null toDelete -> do
+        addEventSimple span "We know about all transmission hashes."
+        pure actualTorrents
+    | otherwise -> inSpan' "Delete outdated transmission hashes" $ \span' -> do
+        addAttribute
+          span'
+          "db.delete-transmission-hashes"
+          ( toDelete
+              & Map.toList
+              & Enc.list
+                ( \(k, v) ->
+                    Enc.object
+                      [ ("torrentHash", Enc.text k.torrentHash),
+                        ("groupId", Enc.int v.groupId),
+                        ("torrentId", Enc.int v.torrentId)
+                      ]
+                )
+              & jsonAttribute
+          )
+        _ <-
+          execute
+            [fmt|
+          UPDATE redacted.torrents_json
+          SET transmission_torrent_hash = NULL,
+              torrent_file = NULL
+          WHERE transmission_torrent_hash = ANY (?::text[])
+        |]
+            $ Only (toDelete & Map.keys <&> (.torrentHash) & PGArray :: PGArray Text)
+        pure actualTorrents
 
 getTransmissionTorrentsTable ::
   (MonadTransmission m, MonadThrow m, MonadLogger m, MonadOtel m) => m Html
