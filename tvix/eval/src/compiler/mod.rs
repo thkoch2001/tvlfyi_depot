@@ -167,11 +167,6 @@ pub struct Compiler<'source, 'observer> {
     /// Carry an observer for the compilation process, which is called
     /// whenever a chunk is emitted.
     observer: &'observer mut dyn CompilerObserver,
-
-    /// Carry a count of nested scopes which have requested the
-    /// compiler not to emit anything. This used for compiling dead
-    /// code branches to catch errors & warnings in them.
-    dead_scope: usize,
 }
 
 impl Compiler<'_, '_> {
@@ -230,7 +225,6 @@ impl<'source, 'observer> Compiler<'source, 'observer> {
             contexts: vec![LambdaCtx::new()],
             warnings: vec![],
             errors: vec![],
-            dead_scope: 0,
         };
 
         if let Some(env) = env {
@@ -268,45 +262,25 @@ impl Compiler<'_, '_> {
     /// Push a single instruction to the current bytecode chunk and
     /// track the source span from which it was compiled.
     fn push_op<T: ToSpan>(&mut self, data: Op, node: &T) -> CodeIdx {
-        if self.dead_scope > 0 {
-            return CodeIdx(0);
-        }
-
         let span = self.span_for(node);
         CodeIdx(self.chunk().push_op(data, span))
     }
 
     fn push_u8(&mut self, data: u8) {
-        if self.dead_scope > 0 {
-            return;
-        }
-
         self.chunk().code.push(data);
     }
 
     fn push_uvarint(&mut self, data: u64) {
-        if self.dead_scope > 0 {
-            return;
-        }
-
         self.chunk().push_uvarint(data);
     }
 
     fn push_u16(&mut self, data: u16) {
-        if self.dead_scope > 0 {
-            return;
-        }
-
         self.chunk().push_u16(data);
     }
 
     /// Emit a single constant to the current bytecode chunk and track
     /// the source span from which it was compiled.
     pub(super) fn emit_constant<T: ToSpan>(&mut self, value: Value, node: &T) {
-        if self.dead_scope > 0 {
-            return;
-        }
-
         let idx = self.chunk().push_constant(value);
         self.push_op(Op::Constant, node);
         self.push_uvarint(idx.0 as u64);
@@ -316,7 +290,7 @@ impl Compiler<'_, '_> {
 // Actual code-emitting AST traversal methods.
 impl Compiler<'_, '_> {
     fn compile(&mut self, slot: LocalIdx, expr: ast::Expr) {
-        let expr = optimiser::optimise_expr(self, slot, expr);
+        let expr = optimiser::optimise_expr(self, expr);
 
         match &expr {
             ast::Expr::Literal(literal) => self.compile_literal(literal),
@@ -374,18 +348,6 @@ impl Compiler<'_, '_> {
             ast::Expr::Root(_) => unreachable!("there cannot be more than one root"),
             ast::Expr::Error(_) => unreachable!("compile is only called on validated trees"),
         }
-    }
-
-    /// Compiles an expression, but does not emit any code for it as
-    /// it is considered dead. This will still catch errors and
-    /// warnings in that expression.
-    ///
-    /// A warning about the that code being dead is assumed to already be
-    /// emitted by the caller of this.
-    fn compile_dead_code(&mut self, slot: LocalIdx, node: ast::Expr) {
-        self.dead_scope += 1;
-        self.compile(slot, node);
-        self.dead_scope -= 1;
     }
 
     fn compile_literal(&mut self, node: &ast::Literal) {

@@ -6,9 +6,9 @@ use super::*;
 use ast::Expr;
 
 /// Optimise the given expression where possible.
-pub(super) fn optimise_expr(c: &mut Compiler, slot: LocalIdx, expr: ast::Expr) -> ast::Expr {
+pub(super) fn optimise_expr(c: &mut Compiler, expr: ast::Expr) -> ast::Expr {
     match expr {
-        Expr::BinOp(_) => optimise_bin_op(c, slot, expr),
+        Expr::BinOp(_) => optimise_bin_op(c, expr),
         _ => expr,
     }
 }
@@ -33,7 +33,7 @@ fn is_lit_bool(expr: ast::Expr) -> LitBool {
 }
 
 /// Detect useless binary operations (i.e. useless bool comparisons).
-fn optimise_bin_op(c: &mut Compiler, slot: LocalIdx, expr: ast::Expr) -> ast::Expr {
+fn optimise_bin_op(c: &mut Compiler, expr: ast::Expr) -> ast::Expr {
     use ast::BinOpKind;
 
     // bail out of this check if the user has overridden either `true`
@@ -76,13 +76,11 @@ fn optimise_bin_op(c: &mut Compiler, slot: LocalIdx, expr: ast::Expr) -> ast::Ex
 
             // useless `||` expression (one arm is `true`), return
             // `true` directly (and warn about dead code on the right)
-            (BinOpKind::Or, LitBool::True(t), LitBool::Expr(other)) => {
+            (BinOpKind::Or, LitBool::True(t), LitBool::Expr(_)) => {
                 c.emit_warning(
                     op,
                     WarningKind::UselessBoolOperation("this expression is always true"),
                 );
-
-                c.compile_dead_code(slot, other);
 
                 return t;
             }
@@ -97,13 +95,11 @@ fn optimise_bin_op(c: &mut Compiler, slot: LocalIdx, expr: ast::Expr) -> ast::Ex
             }
 
             // useless `&&` expression (one arm is `false), same as above
-            (BinOpKind::And, LitBool::False(f), LitBool::Expr(other)) => {
+            (BinOpKind::And, LitBool::False(f), LitBool::Expr(_)) => {
                 c.emit_warning(
                     op,
                     WarningKind::UselessBoolOperation("this expression is always false"),
                 );
-
-                c.compile_dead_code(slot, other);
 
                 return f;
             }
