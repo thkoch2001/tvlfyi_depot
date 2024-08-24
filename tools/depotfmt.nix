@@ -21,6 +21,7 @@ let
     options = ["--edition", "2021"]
     includes = [ "*.rs" ]
     excludes = [
+      "users/emery/*",
       "users/tazjin/*",
     ]
   '';
