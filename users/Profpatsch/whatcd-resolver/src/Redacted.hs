@@ -365,7 +365,8 @@ data TorrentData transmissionInfo = TorrentData
     seedingWeight :: Int,
     artists :: [T2 "artistId" Int "artistName" Text],
     torrentGroupJson :: TorrentGroupJson,
-    torrentStatus :: TorrentStatus transmissionInfo
+    torrentStatus :: TorrentStatus transmissionInfo,
+    torrentFormat :: Text
   }
 
 data TorrentGroupJson = TorrentGroupJson
@@ -427,7 +428,8 @@ getBestTorrents opts = do
         tg.full_json_result->>'groupName' AS group_name,
         tg.full_json_result->>'groupYear' AS group_year,
         t.torrent_file IS NOT NULL AS has_torrent_file,
-        t.transmission_torrent_hash
+        t.transmission_torrent_hash,
+        t.full_json_result->>'encoding' AS torrent_format
       FROM filtered_torrents f
       JOIN redacted.torrents t ON t.id = f.id
       JOIN redacted.torrent_groups tg ON tg.id = t.torrent_group
@@ -456,8 +458,8 @@ getBestTorrents opts = do
           groupYear <- Dec.textParse Field.decimalNatural
           pure $ TorrentGroupJson {..}
         hasTorrentFile <- Dec.fromField @Bool
-        transmissionTorrentHash <-
-          Dec.fromField @(Maybe Text)
+        transmissionTorrentHash <- Dec.fromField @(Maybe Text)
+        torrentFormat <- Dec.text
         pure $
           TorrentData
             { torrentStatus =
@@ -467,6 +469,13 @@ getBestTorrents opts = do
                   | Just hash <- transmissionTorrentHash ->
                       InTransmission $
                         T2 (label @"torrentHash" hash) (label @"transmissionInfo" ()),
+              torrentFormat = case torrentFormat of
+                "Lossless" -> "flac"
+                "V0 (VBR)" -> "V0"
+                "V2 (VBR)" -> "V2"
+                "320" -> "320"
+                "256" -> "256"
+                o -> o,
               ..
             }
     )
