@@ -560,8 +560,9 @@ getBestTorrentsData ::
   Transaction m [TorrentData (Label "percentDone" Percentage)]
 getBestTorrentsData artistFilter = inSpan' "get torrents table data" $ \span -> do
   artistFilter & doIfJust (\a -> addAttribute span "artist-filter.redacted-id" (a.artistRedactedId & showToText & Otel.toAttribute))
-  bestStale :: [TorrentData ()] <- getBestTorrents GetBestTorrentsFilter {onlyArtist = artistFilter, onlyDownloaded = False}
-  actual <-
+  let getBest = getBestTorrents GetBestTorrentsFilter {onlyArtist = artistFilter, onlyDownloaded = False}
+  bestStale :: [TorrentData ()] <- getBest
+  (statusInfo, transmissionStatus) <-
     getAndUpdateTransmissionTorrentsStatus
       ( bestStale
           & mapMaybe
@@ -571,13 +572,24 @@ getBestTorrentsData artistFilter = inSpan' "get torrents table data" $ \span -> 
             )
           & Map.fromList
       )
+  bestBest <-
+    -- Instead of serving a stale table when a torrent gets deleted, fetch
+    -- the whole view again. This is a little wasteful, but torrents
+    -- shouldn’t get deleted very often, so it’s fine.
+    -- Re-evaluate invariant if this happens too often.
+    if statusInfo.knownTorrentsStale
+      then inSpan' "Fetch torrents table data again" $
+        \span' -> do
+          addEventSimple span' "The transmission torrent list was out of date, refetching torrent list."
+          getBest
+      else pure bestStale
   pure $
-    bestStale
+    bestBest
       --  we have to update the status of every torrent that’s not in tranmission anymore
       -- TODO I feel like it’s easier (& more correct?) to just do the database request again …
       <&> ( \td -> case td.torrentStatus of
               InTransmission info ->
-                case actual & Map.lookup (getLabel @"torrentHash" info) of
+                case transmissionStatus & Map.lookup (getLabel @"torrentHash" info) of
                   -- TODO this is also pretty dumb, cause it assumes that we have the torrent file if it was in transmission before,
                   -- which is an internal factum that is established in getBestTorrents (and might change later)
                   Nothing -> td {torrentStatus = NotInTransmissionYet}
