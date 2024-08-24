@@ -51,6 +51,12 @@ Context = #:any .
 # Assertion. The store that this asserted to will copy the closure of @storePath to @destination. When the copy completes or fails a Result value is asserted to @result.
 CopyClosure = <copy-closure @dest #:any @storePath string @result #:Result>.
 
+# Assertion.
+# Eval at a nix-repo. @expr must be a function that takes two parameters,
+# the first is the nix-repo value, the second is @args.
+# The result is asserted to @result
+Eval = <eval @expr string @args any @result #:Result> .
+
 AttrSet = {symbol: any ...:...} .
 
 # Value.

@@ -6,6 +6,11 @@ type
   Error* {.preservesRecord: "error".} = object
     `message`*: Value
 
+  Eval* {.preservesRecord: "eval".} = object
+    `expr`*: string
+    `args`*: Value
+    `result`* {.preservesEmbedded.}: EmbeddedRef
+
   RepoArgsKind* {.pure.} = enum
     `present`, `absent`
   RepoArgsPresent* {.preservesDictionary.} = object
@@ -118,7 +123,8 @@ type
   StoreResolveStep* {.preservesRecord: "nix-store".} = object
     `detail`*: StoreResolveDetail
 
-proc `$`*(x: Error | RepoArgs | RepoResolveStep | AttrSet | Realise | RepoStore |
+proc `$`*(x: Error | Eval | RepoArgs | RepoResolveStep | AttrSet | Realise |
+    RepoStore |
     RepoResolveDetail |
     Derivation |
     StoreResolveDetail |
@@ -130,7 +136,7 @@ proc `$`*(x: Error | RepoArgs | RepoResolveStep | AttrSet | Realise | RepoStore 
     StoreResolveStep): string =
   `$`(toPreserves(x))
 
-proc encode*(x: Error | RepoArgs | RepoResolveStep | AttrSet | Realise |
+proc encode*(x: Error | Eval | RepoArgs | RepoResolveStep | AttrSet | Realise |
     RepoStore |
     RepoResolveDetail |
     Derivation |

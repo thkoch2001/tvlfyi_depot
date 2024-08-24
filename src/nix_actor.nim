@@ -126,7 +126,7 @@ proc newRepoEntity(turn: Turn; detail: RepoResolveDetail): RepoEntity =
     var storeDetail = StoreResolveDetail(cache: detail.cache, uri: "auto")
     entity.store = newStoreEntity(turn, storeDetail)
   entity.state = newState(entity.store.store, detail.lookupPath)
-  entity.root = entity.state.evalFromString("import " & detail.`import`, "")
+  entity.root = entity.state.evalFromString("import " & detail.`import`)
   if detail.args.isSome:
     var na = detail.args.get.toNix(entity.state)
     entity.root = entity.state.apply(entity.root, na)
@@ -168,6 +168,15 @@ proc serve(repo: RepoEntity; turn: Turn; r: Realise) =
           publishOk(turn, r.result.Cap, v)
             # TODO: this is awkward.
 
+proc serve(repo: RepoEntity; turn: Turn; eval: Eval) =
+  tryPublish(turn, eval.result.Cap):
+    var
+      expr = repo.state.evalFromString(eval.expr)
+      args = eval.args.toNix(repo.state)
+      val = repo.state.call(expr, repo.root, args)
+      res = repo.state.toPreserves(val)
+    publishOk(turn, eval.result.Cap, res)
+
 method publish(repo: RepoEntity; turn: Turn; a: AssertionRef; h: Handle) =
   ## Respond to observations with dataspace semantics, minus retraction
   ## of assertions in response to the retraction of observations.
@@ -175,10 +184,13 @@ method publish(repo: RepoEntity; turn: Turn; a: AssertionRef; h: Handle) =
   var
     obs: Observe
     realise: Realise
+    eval: Eval
   if obs.fromPreserves(a.value) and obs.observer of Cap:
     serve(repo, turn, obs)
   elif realise.fromPreserves(a.value) and realise.result of Cap:
     serve(repo, turn, realise)
+  elif eval.fromPreserves(a.value) and eval.result of Cap:
+    serve(repo, turn, eval)
   else:
     when not defined(release):
       echo "nix-repo: unhandled assertion ", a.value
@@ -196,5 +208,6 @@ proc main() =
 
       gk.serve do (turn: Turn; step: RepoResolveStep) -> Resolved:
         newRepoEntity(turn, step.detail).self.resolveAccepted
+          # TODO: support for stepping through attrs?
 
 main()

@@ -38,7 +38,7 @@ proc unthunkAll(v: Value): Value =
 proc exportNix*(facet: Facet; v: Value): Value =
   proc op(v: Value): Value =
     result =
-      if v.kind != pkEmbedded: v
+      if not v.isEmbeddedRef: v
       else:
         if v.embeddedRef of StringThunkRef:
           var thunk = v.embeddedRef.StringThunkRef

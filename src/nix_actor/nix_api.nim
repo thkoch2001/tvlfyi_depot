@@ -92,7 +92,7 @@ proc close*(value: Value) =
 proc evalFromString*(nix: NixContext; state: EvalState; expr, path: string; result: Value)  =
   discard nix.expr_eval_from_string(state, expr, path, result)
 
-proc evalFromString*(state: EvalState; expr, path: string): Value =
+proc evalFromString*(state: EvalState; expr: string; path = ""): Value =
   mitNix:
     try:
       result = nix.alloc_value(state)
@@ -116,3 +116,9 @@ proc apply(nix: NixContext; state: EvalState; fn, arg: Value): Value =
 proc apply*(state: EvalState; fn, arg: Value): Value =
   mitNix:
     result = nix.apply(state, fn, arg)
+
+proc call*(state: EvalState; fn: Value; args: varargs[Value]): Value =
+  mitNix:
+    result = nix.alloc_value(state)
+    var array = cast[ptr UncheckedArray[Value]](args)
+    discard nix.value_call_multi(state, fn, args.len.csize_t, array, result)
