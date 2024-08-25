@@ -16,6 +16,24 @@
       "message": "This leaks a detail into eval which it should *not* know about. From eval\u0027s perspective, paths being realised or not should not matter (as eval can also be used in contexts not related to package building), so realising something is an implicit operation (when accessing files).",
       "revId": "bd4a63c128a198e0f1e817f8f67ac0bc76972301",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a923d47_d21df56a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-25T21:44:13Z",
+      "side": 1,
+      "message": "I\u0027ll gladly +2 your cl to implement the :b command from the repl some other way. I don\u0027t have time to figure out what you want right now",
+      "parentUuid": "d7196f62_b7ddf578",
+      "revId": "bd4a63c128a198e0f1e817f8f67ac0bc76972301",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
