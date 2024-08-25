@@ -20,6 +20,11 @@ in
     };
   };
 
+  depot.auto-deploy = {
+    enable = true;
+    interval = "hourly";
+  };
+
   fileSystems = {
     "/" = {
       device = "/dev/disk/by-label/NIXOS_SD";
@@ -38,7 +43,7 @@ in
       allowedTCPPorts = [ 80 443 8098 ];
     };
 
-    hostName = "cache";
+    hostName = "volgacache";
     domain = "volgasprint.org";
 
     wireless = {
