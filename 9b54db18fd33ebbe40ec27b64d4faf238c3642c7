@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aee624e5_4e4d39ee",
+        "filename": "docs/importing-projects.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-08-25T08:49:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9b40ba2_46ef50ad",
+      "revId": "9b54db18fd33ebbe40ec27b64d4faf238c3642c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0012266b_f5b31c25",
@@ -48,6 +66,24 @@
       "writtenOn": "2024-08-24T16:15:16Z",
       "side": 1,
       "message": "```suggestion\n7. Push the merge commit for review as usual.\n```",
+      "revId": "9b54db18fd33ebbe40ec27b64d4faf238c3642c7",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "15d63da6_e56a53fc",
+        "filename": "docs/importing-projects.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-08-25T08:49:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0012266b_f5b31c25",
       "revId": "9b54db18fd33ebbe40ec27b64d4faf238c3642c7",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
