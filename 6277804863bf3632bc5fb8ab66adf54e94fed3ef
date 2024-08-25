@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cca3234b_cdeea834",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-25T13:09:25Z",
+      "side": 1,
+      "message": "needs to be squashed into the previous CL, CI needs to be green in each individual CL.",
+      "revId": "6277804863bf3632bc5fb8ab66adf54e94fed3ef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
