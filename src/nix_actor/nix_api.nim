@@ -118,3 +118,9 @@ proc call*(state: EvalState; fn: Value; args: varargs[Value]): Value =
     result = nix.alloc_value(state)
     var array = cast[ptr UncheckedArray[Value]](args)
     checkError nix.value_call_multi(state, fn, args.len.csize_t, array, result)
+
+proc incref*(v: Value) =
+  mitNix: checkError nix.gc_incref(cast[pointer](v))
+
+proc decref*(v: Value) =
+  mitNix: checkError nix.gc_decref(cast[pointer](v))

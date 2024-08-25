@@ -1,43 +1,32 @@
 version 1 .
 embeddedType EntityRef.Cap .
 
-# Gatekeeper step to access a Nix repository.
-RepoResolveStep = <nix-repo @detail RepoResolveDetail> .
-RepoResolveDetail = {
-
-  # Path to a repository to import.
-  # This string is evaluated so it can include "<…>" paths.
-  import: string
-
-  # List of strings corresponding to entries in NIX_PATH.
-  # For example:
-  #  [ "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
-  #    "nixos-config=/etc/nixos/configuration.nix"
-  #    "/nix/var/nix/profiles/per-user/root/channels"
-  #  ]
-  lookupPath: [string ...]
-
-} & @args RepoArgs & @store RepoStore & @cacheSpace CacheSpace .
-
-# Arguments to call the imported expression with if it is a function.
-RepoArgs = @present { args: any } / @absent { } .
-
-# Store uri or capability.
-RepoStore = @uri { store: string } / @cap { store: #:any } / @absent { } .
-
-# Common error type.
-Error = <error @message any>.
-
 # Gatekeeper step to access a Nix store.
-StoreResolveStep = <nix-store @detail StoreResolveDetail> .
-StoreResolveDetail = {
-  params: AttrSet
-  uri: string
-} & @cacheSpace CacheSpace .
+NixResolveStep = <nix @detail NixResolveDetail> .
+
+NixResolveDetail = { }
+& @lookupPath  LookupPath
+& @storeUri    StoreUri
+& @storeParams StoreParams
+& @cacheSpace  CacheSpace
+.
+
+# List of strings corresponding to entries in NIX_PATH.
+# For example:
+#  [ "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
+#    "nixos-config=/etc/nixos/configuration.nix"
+#    "/nix/var/nix/profiles/per-user/root/channels"
+#  ]
+LookupPath = @lookupPath { lookupPath: [string ...] } / @absent { } .
+
+StoreUri = @storeUri { storeUri: string } / @absent { } .
+
+StoreParams = @storeParams { storeParams: AttrSet } / @absent { } .
 
 # A cooperative caching dataspace shared with other Nix stores.
 CacheSpace = @cacheSpace { cache: #:any } / @absent { } .
 
+# Assertion.
 CheckStorePath = <check-path @path string @valid #:bool> .
 
 # Represents a Nix derivation. The @value can be realised via @context.
@@ -45,8 +34,6 @@ Derivation = <drv @value any @context any> .
 
 # Assertion.
 Realise = <realise @value any @result #:Result> .
-
-Context = #:any .
 
 # Assertion. The store that this asserted to will copy the closure of @storePath to @destination. When the copy completes or fails a Result value is asserted to @result.
 CopyClosure = <copy-closure @dest #:any @storePath string @result #:Result>.
@@ -61,3 +48,6 @@ AttrSet = {symbol: any ...:...} .
 
 # Value.
 Result = Error / <ok @value any>.
+
+# Common error type.
+Error = <error @message any>.

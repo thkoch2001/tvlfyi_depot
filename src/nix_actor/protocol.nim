@@ -3,82 +3,38 @@ import
   preserves, std/tables, std/options
 
 type
-  Error* {.preservesRecord: "error".} = object
-    `message`*: Value
-
   Eval* {.preservesRecord: "eval".} = object
     `expr`*: string
     `args`*: Value
     `result`* {.preservesEmbedded.}: EmbeddedRef
 
-  RepoArgsKind* {.pure.} = enum
-    `present`, `absent`
-  RepoArgsPresent* {.preservesDictionary.} = object
-    `args`*: Value
-
-  RepoArgsAbsent* {.preservesDictionary.} = object
-  
-  `RepoArgs`* {.preservesOr.} = object
-    case orKind*: RepoArgsKind
-    of RepoArgsKind.`present`:
-        `present`*: RepoArgsPresent
-
-    of RepoArgsKind.`absent`:
-        `absent`*: RepoArgsAbsent
-
-  
-  RepoResolveStep* {.preservesRecord: "nix-repo".} = object
-    `detail`*: RepoResolveDetail
+  Error* {.preservesRecord: "error".} = object
+    `message`*: Value
 
   AttrSet* = Table[Symbol, Value]
+  LookupPathKind* {.pure.} = enum
+    `lookupPath`, `absent`
+  LookupPathLookupPath* {.preservesDictionary.} = object
+    `lookupPath`*: seq[string]
+
+  LookupPathAbsent* {.preservesDictionary.} = object
+  
+  `LookupPath`* {.preservesOr.} = object
+    case orKind*: LookupPathKind
+    of LookupPathKind.`lookupPath`:
+        `lookuppath`*: LookupPathLookupPath
+
+    of LookupPathKind.`absent`:
+        `absent`*: LookupPathAbsent
+
+  
   Realise* {.preservesRecord: "realise".} = object
     `value`*: Value
     `result`* {.preservesEmbedded.}: EmbeddedRef
 
-  RepoStoreKind* {.pure.} = enum
-    `uri`, `cap`, `absent`
-  RepoStoreUri* {.preservesDictionary.} = object
-    `store`*: string
-
-  RepoStoreCap* {.preservesDictionary.} = object
-    `store`* {.preservesEmbedded.}: EmbeddedRef
-
-  RepoStoreAbsent* {.preservesDictionary.} = object
-  
-  `RepoStore`* {.preservesOr.} = object
-    case orKind*: RepoStoreKind
-    of RepoStoreKind.`uri`:
-        `uri`*: RepoStoreUri
-
-    of RepoStoreKind.`cap`:
-        `cap`* {.preservesEmbedded.}: RepoStoreCap
-
-    of RepoStoreKind.`absent`:
-        `absent`*: RepoStoreAbsent
-
-  
-  RepoResolveDetailArgs* = Option[Value]
-  RepoResolveDetailCache* = Option[EmbeddedRef]
-  RepoResolveDetailImport* = string
-  RepoResolveDetailLookupPath* = seq[string]
-  RepoResolveDetailStore* = Option[Value]
-  `RepoResolveDetail`* {.preservesDictionary.} = object
-    `args`*: Option[Value]
-    `cache`*: Option[EmbeddedRef]
-    `import`*: string
-    `lookupPath`*: seq[string]
-    `store`*: Option[Value]
-
   Derivation* {.preservesRecord: "drv".} = object
     `value`*: Value
     `context`*: Value
-
-  StoreResolveDetailCache* = Option[EmbeddedRef]
-  StoreResolveDetailUri* = string
-  `StoreResolveDetail`* {.preservesDictionary.} = object
-    `cache`*: Option[EmbeddedRef]
-    `params`*: AttrSet
-    `uri`*: string
 
   ResultKind* {.pure.} = enum
     `Error`, `ok`
@@ -94,10 +50,53 @@ type
         `ok`*: ResultOk
 
   
-  Context* = EmbeddedRef
+  StoreParamsKind* {.pure.} = enum
+    `storeParams`, `absent`
+  StoreParamsStoreParams* {.preservesDictionary.} = object
+    `storeParams`*: AttrSet
+
+  StoreParamsAbsent* {.preservesDictionary.} = object
+  
+  `StoreParams`* {.preservesOr.} = object
+    case orKind*: StoreParamsKind
+    of StoreParamsKind.`storeParams`:
+        `storeparams`*: StoreParamsStoreParams
+
+    of StoreParamsKind.`absent`:
+        `absent`*: StoreParamsAbsent
+
+  
+  NixResolveStep* {.preservesRecord: "nix".} = object
+    `detail`*: NixResolveDetail
+
   CheckStorePath* {.preservesRecord: "check-path".} = object
     `path`*: string
     `valid`* {.preservesEmbedded.}: EmbeddedRef
+
+  StoreUriKind* {.pure.} = enum
+    `storeUri`, `absent`
+  StoreUriStoreUri* {.preservesDictionary.} = object
+    `storeUri`*: string
+
+  StoreUriAbsent* {.preservesDictionary.} = object
+  
+  `StoreUri`* {.preservesOr.} = object
+    case orKind*: StoreUriKind
+    of StoreUriKind.`storeUri`:
+        `storeuri`*: StoreUriStoreUri
+
+    of StoreUriKind.`absent`:
+        `absent`*: StoreUriAbsent
+
+  
+  NixResolveDetailCache* = Option[EmbeddedRef]
+  NixResolveDetailLookupPath* = Option[seq[string]]
+  NixResolveDetailStoreUri* = Option[string]
+  `NixResolveDetail`* {.preservesDictionary.} = object
+    `cache`*: Option[EmbeddedRef]
+    `lookupPath`*: Option[seq[string]]
+    `storeParams`*: Option[AttrSet]
+    `storeUri`*: Option[string]
 
   CopyClosure* {.preservesRecord: "copy-closure".} = object
     `dest`* {.preservesEmbedded.}: EmbeddedRef
@@ -120,31 +119,23 @@ type
         `absent`*: CacheSpaceAbsent
 
   
-  StoreResolveStep* {.preservesRecord: "nix-store".} = object
-    `detail`*: StoreResolveDetail
-
-proc `$`*(x: Error | Eval | RepoArgs | RepoResolveStep | AttrSet | Realise |
-    RepoStore |
-    RepoResolveDetail |
-    Derivation |
-    StoreResolveDetail |
-    Result |
-    Context |
+proc `$`*(x: Eval | Error | AttrSet | LookupPath | Realise | Derivation | Result |
+    StoreParams |
+    NixResolveStep |
     CheckStorePath |
+    StoreUri |
+    NixResolveDetail |
     CopyClosure |
-    CacheSpace |
-    StoreResolveStep): string =
+    CacheSpace): string =
   `$`(toPreserves(x))
 
-proc encode*(x: Error | Eval | RepoArgs | RepoResolveStep | AttrSet | Realise |
-    RepoStore |
-    RepoResolveDetail |
-    Derivation |
-    StoreResolveDetail |
+proc encode*(x: Eval | Error | AttrSet | LookupPath | Realise | Derivation |
     Result |
-    Context |
+    StoreParams |
+    NixResolveStep |
     CheckStorePath |
+    StoreUri |
+    NixResolveDetail |
     CopyClosure |
-    CacheSpace |
-    StoreResolveStep): seq[byte] =
+    CacheSpace): seq[byte] =
   encode(toPreserves(x))

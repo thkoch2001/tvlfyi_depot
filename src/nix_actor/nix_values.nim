@@ -32,7 +32,7 @@ proc unthunk(v: Value): Value =
       thunk.get.data.get.toPreserves
     else: v
 
-proc unthunkAll(v: Value): Value =
+proc unthunkAll*(v: Value): Value =
   v.mapEmbeds(unthunk)
 
 proc exportNix*(facet: Facet; v: Value): Value =
@@ -210,8 +210,8 @@ proc step*(state: EvalState; nv: NixValue; path: openarray[preserves.Value]): Op
         inc i
       else:
         raiseAssert("cannot step " & $kind)
-        return
-  result = state.toPreserves(nv).some
+    result = nv.toPreserves(state, nix).some
+  assert path.len > 0 or result.isSome
 
 proc realise*(nix: NixContext; state: EvalState; val: NixValue): Value =
   result = "".toPreserves
@@ -228,11 +228,34 @@ proc initNull*(state: EvalState): NixValue =
     result = nix.alloc_value(state)
     checkError nix.init_null(result)
 
-proc isFunc*(value: NixValue): bool =
-  mitNix: result = nix.get_type(value) == NIX_TYPE_FUNCTION
+proc typeName*(val: NixValue): string =
+  mitNix:
+    result = $nix.get_type(val)
+    # result = $nix.get_typename(val)
+
+proc isThunk*(value: NixValue): bool =
+  mitNix: result = nix.get_type(value) == NIX_TYPE_THUNK
+
+proc isLiteral*(value: NixValue): bool =
+  mitNix:
+    let kind = nix.get_type(value)
+    result =
+      case kind
+      of NIX_TYPE_INT,
+          NIX_TYPE_FLOAT,
+          NIX_TYPE_BOOL,
+          NIX_TYPE_STRING,
+          NIX_TYPE_PATH,
+          NIX_TYPE_NULL,
+          NIX_TYPE_ATTRS,
+          NIX_TYPE_LIST:
+        true
+      of NIX_TYPE_THUNK, NIX_TYPE_FUNCTION,
+          NIX_TYPE_EXTERNAL:
+        false
 
 proc isNull*(value: NixValue): bool =
   mitNix: result = nix.get_type(value) == NIX_TYPE_NULL
 
-proc isThunk*(value: NixValue): bool =
-  mitNix: result = nix.get_type(value) == NIX_TYPE_THUNK
+proc isFunc*(value: NixValue): bool =
+  mitNix: result = nix.get_type(value) == NIX_TYPE_FUNCTION

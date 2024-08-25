@@ -47,6 +47,7 @@ $log ! <log "test" { line: <q $resolve-parent> }>
 @"Service instantiation."
 <nix-provide-service nix-repo>
 <nix-provide-service nix-store>
+<nix-provide-service nix>
 
 ? <nix-provide-service ?label>
 [
