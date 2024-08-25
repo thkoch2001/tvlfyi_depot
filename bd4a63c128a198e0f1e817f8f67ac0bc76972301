@@ -34,6 +34,24 @@
       "parentUuid": "d7196f62_b7ddf578",
       "revId": "bd4a63c128a198e0f1e817f8f67ac0bc76972301",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "807e0d08_c60ea1b4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-25T22:49:56Z",
+      "side": 1,
+      "message": "i took a crack at implementing this via a concrete method on TvixStoreIO, and the simplest possible implementation doesn\u0027t work because derivations are sets, not paths, and the only bit that knows how to coerce sets to paths is eval: https://cl.tvl.fyi/c/depot/+/12349\n\nwould love if you could let me know how you want to implement this",
+      "parentUuid": "7a923d47_d21df56a",
+      "revId": "bd4a63c128a198e0f1e817f8f67ac0bc76972301",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
