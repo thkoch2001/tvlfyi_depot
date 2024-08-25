@@ -295,6 +295,26 @@ impl Debug for GermanString {
     }
 }
 
+impl Clone for GermanString {
+    fn clone(&self) -> Self {
+        unsafe {
+            if self.len() <= 12 {
+                return GermanString(GSRepr {
+                    small: self.0.small.clone(),
+                });
+            }
+
+            if self.0.large.data.is_transient() {
+                return GermanString::transient(self.as_bytes());
+            }
+
+            return GermanString(GSRepr {
+                large: self.0.large.clone(),
+            });
+        }
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
