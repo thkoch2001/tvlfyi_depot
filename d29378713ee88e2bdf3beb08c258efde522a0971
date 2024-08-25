@@ -22,6 +22,30 @@
       },
       "revId": "d29378713ee88e2bdf3beb08c258efde522a0971",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "11d8edde_f6be842c",
+        "filename": "tvix/nix-compat/src/wire/bytes/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-08-25T12:55:29Z",
+      "side": 1,
+      "message": "No everything in wire directory (and this file) is feature flagged on wire feature.\nwire feature is for async stuff and async feature is for async nar reader. I guess features could be better named.",
+      "parentUuid": "6ea0061d_2408505b",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 2
+      },
+      "revId": "d29378713ee88e2bdf3beb08c258efde522a0971",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
