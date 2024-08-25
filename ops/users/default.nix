@@ -22,6 +22,11 @@
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$5NEYPJ19nDITK5sGr4bzhQ$Xzpzth6y4w+HGvioHiYgzqFiwMDx0B7HAh+PVbkRuuk";
   }
   {
+    username = "azahi";
+    email = "azat@bahawi.net";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$BVRzgfs8YIorOTq62B00CQ$5UXHyG/Ivn5TqB7UNgfjYJMxTjun3NDvAStWFom4oas";
+  }
+  {
     username = "chickadee";
     email = "matthewktromp@gmail.com";
     password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$HoZjVdJ90JmTEJf1MMLuDg$5Pa8kpJdFVsIxgoOTDsH0gv6CLumSIkMqYEn5UVfjwU";
