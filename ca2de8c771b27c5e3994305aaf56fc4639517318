@@ -51,6 +51,24 @@
       "message": "same here, neovim was used here to rapidly tweak the machine\u0027s config.\nIt\u0027s always good to have a good editor available  but not mandatory!",
       "revId": "ca2de8c771b27c5e3994305aaf56fc4639517318",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5187520a_e0c9bab5",
+        "filename": "ops/machines/volgasprint-cache/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-08-25T09:18:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f104f7cb_11468d98",
+      "revId": "ca2de8c771b27c5e3994305aaf56fc4639517318",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
