@@ -26,6 +26,7 @@ pub(crate) enum ReplCommand<'a> {
     Assign(Assignment<'a>),
     Explain(&'a str),
     Print(&'a str),
+    Build(&'a str),
     Quit,
     Help,
 }
@@ -242,6 +243,27 @@ impl<'a> Repl<'a> {
                 self.globals.clone(),
                 Some(self.source_map.clone()),
             ),
+            ReplCommand::Build(input) => {
+                match evaluate(
+                    Rc::clone(&self.io_handle),
+                    &value.to_string(),
+                    None,
+                    self.args,
+                    AllowIncomplete::Allow,
+                    Some(&self.env),
+                    self.globals.clone(),
+                    Some(self.source_map.clone()),
+                ) {
+                    Err(incomplete) => Err(incomplete),
+                    Ok(result) => {
+                        if let Some(value) = result.value {
+                            /* HERE: */
+                            self.io_handle.???(value)
+                        }
+                    }
+                }
+
+            }
         };
 
         match res {
