@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e96a6ec5_ec556be6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-25T12:07:39Z",
+      "side": 1,
+      "message": "cl/12334 isn\u0027t merged yet, let\u0027s draft this CL until landed.",
+      "revId": "94f0db77bdef07909de8125ea8c7ea99da3a10a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
