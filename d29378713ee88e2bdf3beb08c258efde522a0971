@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6ea0061d_2408505b",
+        "filename": "tvix/nix-compat/src/wire/bytes/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-08-25T12:49:33Z",
+      "side": 1,
+      "message": "And this stuff is used even if async is disabled? Is that intentional?\n\nI\u0027d like to never accidentally depend on tokio if it can be avoided.",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 2
+      },
+      "revId": "d29378713ee88e2bdf3beb08c258efde522a0971",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
