@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f2c3a2be_76511406",
+        "filename": "ops/machines/volgasprint-cache/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-08-25T09:18:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2d828500_935d70a9",
+      "revId": "ca2de8c771b27c5e3994305aaf56fc4639517318",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f104f7cb_11468d98",
