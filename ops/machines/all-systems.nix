@@ -3,6 +3,8 @@
 (with depot.ops.machines; [
   sanduny
   whitby
+  nixery-01
+  volgasprint-cache
 ]) ++
 
 (with depot.users.tazjin.nixos; [
