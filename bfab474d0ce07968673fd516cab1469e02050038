@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc18f01b_d104681d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-25T11:56:27Z",
+      "side": 1,
+      "message": "How is this required?\n\n`cheddar` runs either as a CLI tool, to be used as a `source-filter` (that\u0027s how `web/cgit-tvl/defaullt.nix` configures it), or as a standalone daemon, speaking the sourcegraph protocol.\n\nDid cgit also start speaking the sourcegraph protocol, or how is this needed?",
+      "revId": "bfab474d0ce07968673fd516cab1469e02050038",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
