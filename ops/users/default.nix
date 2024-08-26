@@ -294,4 +294,9 @@
     email = "nikita@nikiv.dev";
     password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$79mMAD2XYa5dg7D9ueWMpw$Edf5WODrFpkNDyWaMdLKcgcErFLx4khmPIk8wzmYGUE";
   }
+  {
+    username = "ein-shved";
+    email = "mestofel13@gmail.com";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$D4wzfJoyFye48QNdrC66VA$aBJ/ZaL+rTgXoQa/nFdpHap3G/Oju8WlHaWTii95X8E";
+  }
 ]
