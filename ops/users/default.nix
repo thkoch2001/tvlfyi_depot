@@ -169,6 +169,11 @@
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$wOPEl9D3kSke//oLtbvqrg$j0npwwXgaXQ/emefKUwL59tH8hdmtzbgH2rQzWSmE2Y";
   }
   {
+    username = "yl3dy";
+    email = "aleksandr.kiselyov@gmail•com";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$vPvOa0/7RzDLuD/icQuIzQ$IVMSI7hh/frihuL11sNRj6Jz8TTn1wZZHjZZGszz3pI";
+  }
+  {
     username = "implr";
     email = "implr@hackerspace.pl";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$SHRFps5sVgyUXYdmqGPw9g$tEx9DwKK1RjWlw52GLwOZ/iHep+QJboaZE83f1pXSwQ";
