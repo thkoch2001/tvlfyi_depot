@@ -52,6 +52,24 @@
       "parentUuid": "7a923d47_d21df56a",
       "revId": "bd4a63c128a198e0f1e817f8f67ac0bc76972301",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1b4c6894_f9e56c69",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-08-26T08:05:38Z",
+      "side": 1,
+      "message": "\u003e would love if you could let me know how you want to implement this\n\nI haven\u0027t tried to do it, so how am I going to tell you exactly how it should work? There\u0027s constraints for how it should *not* be implemented, and we have to figure out which things are in the way of that.\n\nI believe that \"coercing\" the derivations to paths is just accessing the `outPath` attribute (like we do in Tvix tests).",
+      "parentUuid": "807e0d08_c60ea1b4",
+      "revId": "bd4a63c128a198e0f1e817f8f67ac0bc76972301",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
