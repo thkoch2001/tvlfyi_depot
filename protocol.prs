@@ -39,9 +39,10 @@ Realise = <realise @value any @result #:Result> .
 CopyClosure = <copy-closure @dest #:any @storePath string @result #:Result>.
 
 # Assertion.
-# Eval at a nix-repo. @expr must be a function that takes two parameters,
-# the first is the nix-repo value, the second is @args.
-# The result is asserted to @result
+# Eval at a nix capability.
+# @expr must be a function that takes two parameters,
+# the first is @args and the second is the value of
+# the previous evaluation. The result is asserted to @result
 Eval = <eval @expr string @args any @result #:Result> .
 
 AttrSet = {symbol: any ...:...} .
