@@ -18,6 +18,8 @@ type Value = preserves.Value
 template tryPublish(turn: Turn, cap: Cap; body: untyped) =
   try: body
   except CatchableError as err:
+    when not defined(release):
+      stderr.writeLine err.msg
     publish(turn, cap, Error(message: %err.msg))
 
 proc publishOk(turn: Turn; cap: Cap, v: Value) =
