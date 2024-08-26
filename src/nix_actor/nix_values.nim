@@ -213,15 +213,14 @@ proc step*(state: EvalState; nv: NixValue; path: openarray[preserves.Value]): Op
     result = nv.toPreserves(state, nix).some
   assert path.len > 0 or result.isSome
 
-proc realise*(nix: NixContext; state: EvalState; val: NixValue): Value =
-  result = "".toPreserves
+proc realiseString*(nix: NixContext; state: EvalState; val: NixValue): string =
   var rs = nix.string_realise(state, val, false)
-  result.string = newString(realised_string_get_buffer_size(rs))
-  copyMem(result.string[0].addr, realised_string_get_buffer_start(rs), result.string.len)
+  result = newString(realised_string_get_buffer_size(rs))
+  copyMem(result[0].addr, realised_string_get_buffer_start(rs), result.len)
   realised_string_free(rs)
 
-proc realise*(state: EvalState; val: NixValue): Value =
-  mitNix: result = nix.realise(state, val)
+proc realiseString*(state: EvalState; val: NixValue): string =
+  mitNix: result = nix.realiseString(state, val)
 
 proc initNull*(state: EvalState): NixValue =
   mitNix:

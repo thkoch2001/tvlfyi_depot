@@ -28,10 +28,6 @@ type
         `absent`*: LookupPathAbsent
 
   
-  Realise* {.preservesRecord: "realise".} = object
-    `value`*: Value
-    `result`* {.preservesEmbedded.}: EmbeddedRef
-
   Derivation* {.preservesRecord: "drv".} = object
     `value`*: Value
     `context`*: Value
@@ -68,6 +64,9 @@ type
   
   NixResolveStep* {.preservesRecord: "nix".} = object
     `detail`*: NixResolveDetail
+
+  RealiseString* {.preservesRecord: "realise-string".} = object
+    `result`* {.preservesEmbedded.}: EmbeddedRef
 
   CheckStorePath* {.preservesRecord: "check-path".} = object
     `path`*: string
@@ -119,9 +118,10 @@ type
         `absent`*: CacheSpaceAbsent
 
   
-proc `$`*(x: Eval | Error | AttrSet | LookupPath | Realise | Derivation | Result |
+proc `$`*(x: Eval | Error | AttrSet | LookupPath | Derivation | Result |
     StoreParams |
     NixResolveStep |
+    RealiseString |
     CheckStorePath |
     StoreUri |
     NixResolveDetail |
@@ -129,10 +129,10 @@ proc `$`*(x: Eval | Error | AttrSet | LookupPath | Realise | Derivation | Result
     CacheSpace): string =
   `$`(toPreserves(x))
 
-proc encode*(x: Eval | Error | AttrSet | LookupPath | Realise | Derivation |
-    Result |
+proc encode*(x: Eval | Error | AttrSet | LookupPath | Derivation | Result |
     StoreParams |
     NixResolveStep |
+    RealiseString |
     CheckStorePath |
     StoreUri |
     NixResolveDetail |

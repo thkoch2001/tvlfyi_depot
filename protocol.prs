@@ -32,18 +32,22 @@ CheckStorePath = <check-path @path string @valid #:bool> .
 # Represents a Nix derivation. The @value can be realised via @context.
 Derivation = <drv @value any @context any> .
 
-# Assertion.
-Realise = <realise @value any @result #:Result> .
-
 # Assertion. The store that this asserted to will copy the closure of @storePath to @destination. When the copy completes or fails a Result value is asserted to @result.
 CopyClosure = <copy-closure @dest #:any @storePath string @result #:Result>.
 
 # Assertion.
-# Eval at a nix capability.
+# Eval at a Nix value capability.
 # @expr must be a function that takes two parameters,
 # the first is @args and the second is the value of
-# the previous evaluation. The result is asserted to @result
+# the previous evaluation.
+# A new Nix value capability is return via @result.
+# This capability can be observed using the Dataspace
+# protocol but store paths may not be locally available.
 Eval = <eval @expr string @args any @result #:Result> .
+
+# Assertion.
+# Realise a Nix value capability returned from <eval …> to a string.
+RealiseString = <realise-string @result #:Result> .
 
 AttrSet = {symbol: any ...:...} .
 
