@@ -82,10 +82,12 @@ proc newNixEntity(turn: Turn; detail: NixResolveDetail): NixEntity =
 proc newChild(parent: NixEntity; turn: Turn; val: NixValue): NixEntity =
   ## Create a child entity for a given root value.
   let entity = NixEntity(state: parent.state, root: val)
-  entity.state.eval.force(entity.root)
-  entity.self = newCap(turn, entity)
-  turn.onStop do (turn: Turn):
-    decref(entity.root)
+  turn.inFacet do (turn: Turn):
+    entity.state.eval.force(entity.root)
+    entity.facet = turn.facet
+    entity.self = newCap(turn, entity)
+    turn.onStop do (turn: Turn):
+      decref(entity.root)
   entity
 
 proc serve(entity: NixEntity; turn: Turn; checkPath: CheckStorePath) =
