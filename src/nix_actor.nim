@@ -144,8 +144,8 @@ proc serve(entity: NixEntity; turn: Turn; r: RealiseString) =
 proc serve(entity: NixEntity; turn: Turn; e: Eval) =
   tryPublish(turn, e.result.Cap):
     var expr = entity.state.eval.evalFromString(e.expr)
-    expr = entity.state.eval.apply(expr, e.args.toNix(entity.state.eval))
     expr = entity.state.eval.apply(expr, entity.root)
+    expr = entity.state.eval.apply(expr, e.args.toNix(entity.state.eval))
     publishOk(turn, e.result.Cap, entity.newChild(turn, expr).self.toPreserves)
 
 method publish(entity: NixEntity; turn: Turn; a: AssertionRef; h: Handle) =

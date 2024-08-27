@@ -71,7 +71,7 @@ suite "basic":
           assert not v.isRecord("null")
           check v == %"Hello Volga"
         publish(turn, nix, Eval(
-            expr: "y: x: x + y",
+            expr: "x: y: x + y",
             args: %"Sprint!",
             result: stepC
           ))
@@ -85,7 +85,7 @@ suite "basic":
           assert not v.isRecord("null")
           check v == %"Hello"
         publish(turn, nix, Eval(
-            expr: "y: x: x + y",
+            expr: "x: y: x + y",
             args: %" Volga",
             result: stepB
           ))
@@ -97,7 +97,7 @@ suite "basic":
         onPublish(turn, nix, grab()) do (v: Value):
           checkpoint $v
         publish(turn, nix, Eval(
-            expr: "y: x: y",
+            expr: "x: y: y",
             args: %"Hello",
             result: stepA,
           ))
@@ -146,7 +146,7 @@ suite "nixpkgs":
       block:
         ## stepB
         publish(turn, nix, Eval(
-            expr: "_: pkg: pkg.meta.homepage",
+            expr: "pkg: _: pkg.meta.homepage",
             args: %false,
             result: stepC
           ))
@@ -156,7 +156,7 @@ suite "nixpkgs":
       block:
         ## stepA
         publish(turn, nix, Eval(
-            expr: "builtins.getAttr",
+            expr: "pkgs: name: builtins.getAttr name pkgs",
             args: %"plan9port",
             result: stepB
           ))
@@ -168,7 +168,7 @@ suite "nixpkgs":
         onPublish(turn, nix, grab()) do (v: Value):
           checkpoint $v
         publish(turn, nix, Eval(
-            expr: "args: _: import <nixpkgs> args",
+            expr: "_: args: import <nixpkgs> args",
             args: initDictionary(),
             result: stepA,
           ))
