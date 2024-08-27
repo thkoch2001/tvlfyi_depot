@@ -170,7 +170,7 @@
   }
   {
     username = "yl3dy";
-    email = "aleksandr.kiselyov@gmail•com";
+    email = "aleksandr.kiselyov@gmail.com";
     password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$vPvOa0/7RzDLuD/icQuIzQ$IVMSI7hh/frihuL11sNRj6Jz8TTn1wZZHjZZGszz3pI";
   }
   {
