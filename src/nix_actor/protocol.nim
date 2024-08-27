@@ -28,10 +28,6 @@ type
         `absent`*: LookupPathAbsent
 
   
-  Derivation* {.preservesRecord: "drv".} = object
-    `value`*: Value
-    `context`*: Value
-
   ResultKind* {.pure.} = enum
     `Error`, `ok`
   ResultOk* {.preservesRecord: "ok".} = object
@@ -68,10 +64,6 @@ type
   RealiseString* {.preservesRecord: "realise-string".} = object
     `result`* {.preservesEmbedded.}: EmbeddedRef
 
-  CheckStorePath* {.preservesRecord: "check-path".} = object
-    `path`*: string
-    `valid`* {.preservesEmbedded.}: EmbeddedRef
-
   StoreUriKind* {.pure.} = enum
     `storeUri`, `absent`
   StoreUriStoreUri* {.preservesDictionary.} = object
@@ -88,54 +80,23 @@ type
         `absent`*: StoreUriAbsent
 
   
-  NixResolveDetailCache* = Option[EmbeddedRef]
   NixResolveDetailLookupPath* = Option[seq[string]]
   NixResolveDetailStoreUri* = Option[string]
   `NixResolveDetail`* {.preservesDictionary.} = object
-    `cache`*: Option[EmbeddedRef]
     `lookupPath`*: Option[seq[string]]
     `storeParams`*: Option[AttrSet]
     `storeUri`*: Option[string]
 
-  CopyClosure* {.preservesRecord: "copy-closure".} = object
-    `dest`* {.preservesEmbedded.}: EmbeddedRef
-    `storePath`*: string
-    `result`* {.preservesEmbedded.}: EmbeddedRef
-
-  CacheSpaceKind* {.pure.} = enum
-    `cacheSpace`, `absent`
-  CacheSpaceCacheSpace* {.preservesDictionary.} = object
-    `cache`* {.preservesEmbedded.}: EmbeddedRef
-
-  CacheSpaceAbsent* {.preservesDictionary.} = object
-  
-  `CacheSpace`* {.preservesOr.} = object
-    case orKind*: CacheSpaceKind
-    of CacheSpaceKind.`cacheSpace`:
-        `cachespace`* {.preservesEmbedded.}: CacheSpaceCacheSpace
-
-    of CacheSpaceKind.`absent`:
-        `absent`*: CacheSpaceAbsent
-
-  
-proc `$`*(x: Eval | Error | AttrSet | LookupPath | Derivation | Result |
-    StoreParams |
+proc `$`*(x: Eval | Error | AttrSet | LookupPath | Result | StoreParams |
     NixResolveStep |
     RealiseString |
-    CheckStorePath |
     StoreUri |
-    NixResolveDetail |
-    CopyClosure |
-    CacheSpace): string =
+    NixResolveDetail): string =
   `$`(toPreserves(x))
 
-proc encode*(x: Eval | Error | AttrSet | LookupPath | Derivation | Result |
-    StoreParams |
+proc encode*(x: Eval | Error | AttrSet | LookupPath | Result | StoreParams |
     NixResolveStep |
     RealiseString |
-    CheckStorePath |
     StoreUri |
-    NixResolveDetail |
-    CopyClosure |
-    CacheSpace): seq[byte] =
+    NixResolveDetail): seq[byte] =
   encode(toPreserves(x))

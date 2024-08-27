@@ -10,11 +10,9 @@ import
 type
   Value = preserves.Value
   NixValue* = nix_api.Value
-  NixValueRef* {.final.} = ref object of Entity
-    value*: NixValue
 
   StringThunkRef = ref StringThunkObj
-  StringThunkObj = object of EmbeddedObj
+  StringThunkObj {.final.} = object of EmbeddedObj
     data: Option[string]
 
 proc thunkString(start: cstring; n: cuint; state: pointer) {.cdecl.} =
@@ -34,22 +32,6 @@ proc unthunk(v: Value): Value =
 
 proc unthunkAll*(v: Value): Value =
   v.mapEmbeds(unthunk)
-
-proc exportNix*(facet: Facet; v: Value): Value =
-  proc op(v: Value): Value =
-    result =
-      if not v.isEmbeddedRef: v
-      else:
-        if v.embeddedRef of StringThunkRef:
-          var thunk = v.embeddedRef.StringThunkRef
-          if thunk.data.isSome:
-            thunk.data.get.toPreserves
-          else: v
-        elif v.embeddedRef of NixValueRef:
-          facet.newCap(v.embeddedRef.NixValueRef).embed
-        else:
-          v
-  v.mapEmbeds(op)
 
 proc callThru(nix: NixContext; state: EvalState; nv: NixValue): NixValue =
   result = nv
@@ -97,10 +79,7 @@ proc toPreserves*(value: NixValue; state: EvalState; nix: NixContext): Value {.g
       result = str.toPreserves(state, nix)
     elif nix.has_attr_byname(value, state, "outPath"):
       var outPath = nix.get_attr_byname(value, state, "outPath")
-      result = Derivation(
-          value: outPath.toPreserves(state, nix),
-          context: NixValueRef(value: value).embed,
-        ).toPreserves
+      result = outPath.toPreserves(state, nix)
     else:
       let n = nix.getAttrsSize(value)
       result = initDictionary(int n)
@@ -146,14 +125,6 @@ proc translate*(nix: NixContext; state: EvalState; pr: preserves.Value): NixValu
     of pkRecord:
       if pr.isRecord("null", 0):
         checkError nix.init_null(result)
-      elif pr.isRecord("drv", 2):
-        var drv: Derivation
-        if not drv.fromPreserves(pr):
-          raise newException(ValueError, "invalid derivation: " & $pr)
-        var nixValRef = drv.context.unembed(NixValueRef)
-        if not nixValRef.isSome:
-          raise newException(ValueError, "invalid Nix context: " & $drv.context)
-        result = nixValRef.get.value
       else:
         raise newException(ValueError, "cannot convert Preserves record to Nix: " & $pr)
     of pkSequence:

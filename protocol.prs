@@ -2,6 +2,7 @@ version 1 .
 embeddedType EntityRef.Cap .
 
 # Gatekeeper step to access a Nix store.
+# The resulting capability is a Nix evaluation state with an initial value of <null>.
 NixResolveStep = <nix @detail NixResolveDetail> .
 
 NixResolveDetail = { }
@@ -23,26 +24,18 @@ StoreUri = @storeUri { storeUri: string } / @absent { } .
 StoreParams = @storeParams { storeParams: AttrSet } / @absent { } .
 
 # Assertion.
-CheckStorePath = <check-path @path string @valid #:bool> .
-
-# Represents a Nix derivation. The @value can be realised via @context.
-Derivation = <drv @value any @context any> .
-
-# Assertion. The store that this asserted to will copy the closure of @storePath to @destination. When the copy completes or fails a Result value is asserted to @result.
-CopyClosure = <copy-closure @dest #:any @storePath string @result #:Result>.
-
-# Assertion.
-# Eval at a Nix value capability.
+# Advance a Nix evaluation state.
 # @expr must be a function that takes two parameters,
-# the first is @args and the second is the value of
-# the previous evaluation.
-# A new Nix value capability is return via @result.
+# the first is the current evaluation value and the second
+# is @args. A new Nix value capability is return via @result.
 # This capability can be observed using the Dataspace
 # protocol but store paths may not be locally available.
 Eval = <eval @expr string @args any @result #:Result> .
 
 # Assertion.
-# Realise a Nix value capability returned from <eval …> to a string.
+# Realise a Nix evaluation state to a string.
+# This makes the closure of store paths referred to by the
+# string present in the evaluation store.
 RealiseString = <realise-string @result #:Result> .
 
 AttrSet = {symbol: any ...:...} .

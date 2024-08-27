@@ -28,7 +28,7 @@ suite "libexpr":
       nixVal.close()
       var pr = nixVal.toPreserves(state)
       checkpoint $pr
-      var wirePr = turn.facet.exportNix(pr)
+      var wirePr = pr.unthunkAll
       checkpoint $wirePr
 
   test "lists":

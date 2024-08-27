@@ -71,6 +71,7 @@ type
     root: NixValue
 
 proc newNixEntity(turn: Turn; detail: NixResolveDetail): NixEntity =
+  ## Create an initial evaluation state.
   let entity = NixEntity(state: initState(detail))
   entity.root = entity.state.eval.initNull()
   turn.onStop do (turn: Turn):
@@ -89,35 +90,9 @@ proc newChild(parent: NixEntity; turn: Turn; val: NixValue): NixEntity =
       decref(entity.root)
   entity
 
-proc serve(entity: NixEntity; turn: Turn; checkPath: CheckStorePath) =
-  tryPublish(turn, checkPath.valid.Cap):
-    let v = entity.state.store.isValidPath(checkPath.path)
-    publish(turn, checkPath.valid.Cap, initRecord("ok", %v))
-
-proc serve(entity: NixEntity; turn: Turn; copy: CopyClosure) =
-  var dest = copy.dest.unembedEntity(NixEntity)
-  if dest.isNone:
-    publishError(turn, copy.result.Cap, %"destination store is not colocated with source store")
-  else:
-    tryPublish(turn, copy.result.Cap):
-      entity.state.store.copyClosure(dest.get.state.store, copy.storePath)
-      publishOk(turn, copy.result.Cap, %true)
-        # TODO: assert some stats or something.
-
 proc serve(entity: NixEntity; turn: Turn; obs: Observe) =
+  ## Dataspace emulation.
   let facet = turn.facet
-  #[
-  # TODO: move to a store entity
-  if obs.pattern.matches(initRecord("uri", %"")):
-    entity.state.store.getUri do (s: string):
-      facet.run do (turn: Turn):
-        publish(turn, obs.observer.Cap, obs.pattern.capture(initRecord("uri", %s)).get)
-  elif obs.pattern.matches(initRecord("version", %"")):
-    entity.state.store.getVersion do (s: string):
-      facet.run do (turn: Turn):
-        publish(turn, obs.observer.Cap, obs.pattern.capture(initRecord("version", %s)).get)
-  else:
-  ]#
   var
     analysis = analyse(obs.pattern)
     captures = newSeq[Value](analysis.capturePaths.len)
@@ -131,15 +106,15 @@ proc serve(entity: NixEntity; turn: Turn; obs: Observe) =
     for i, path in analysis.capturePaths:
       var v = entity.state.eval.step(entity.root, path)
       if v.isSome:
-        captures[i] = turn.facet.exportNix(v.get)
+        captures[i] = v.get.unthunkAll
       else:
         captures[i] = initRecord("null")
   publish(turn, Cap obs.observer, captures)
 
 proc serve(entity: NixEntity; turn: Turn; r: RealiseString) =
   tryPublish(turn, r.result.Cap):
-    publishOk(turn, r.result.Cap,
-        %entity.state.eval.realiseString(entity.root))
+    var str = entity.state.eval.realiseString(entity.root)
+    publishOk(turn, r.result.Cap, %str)
 
 proc serve(entity: NixEntity; turn: Turn; e: Eval) =
   tryPublish(turn, e.result.Cap):
@@ -152,19 +127,11 @@ method publish(entity: NixEntity; turn: Turn; a: AssertionRef; h: Handle) =
   var
     # TODO: this would be a union object
     # but orc doesn't support it yet.
-    checkPath: CheckStorePath
-    copyClosure: CopyClosure
     eval: Eval
     observe: Observe
     realise: RealiseString
-
-  if checkPath.fromPreserves(a.value):
-    entity.serve(turn, checkPath)
-  elif observe.fromPreserves(a.value):
+  if observe.fromPreserves(a.value):
     entity.serve(turn, observe)
-  elif copyClosure.fromPreserves(a.value) and
-      copyClosure.result of Cap:
-    entity.serve(turn, copyClosure)
   elif observe.fromPreserves(a.value) and observe.observer of Cap:
     serve(entity, turn, observe)
   elif realise.fromPreserves(a.value) and realise.result of Cap:
