@@ -1,0 +1,1 @@
+Some gpg-signed text
