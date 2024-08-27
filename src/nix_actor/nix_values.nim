@@ -188,8 +188,10 @@ proc step*(state: EvalState; nv: NixValue; path: openarray[preserves.Value]): Op
 
 proc realiseString*(nix: NixContext; state: EvalState; val: NixValue): string =
   var rs = nix.string_realise(state, val, false)
+  if rs.isNil: raise newException(nix)
   result = newString(realised_string_get_buffer_size(rs))
-  copyMem(result[0].addr, realised_string_get_buffer_start(rs), result.len)
+  if result.len > 0:
+    copyMem(result[0].addr, realised_string_get_buffer_start(rs), result.len)
   realised_string_free(rs)
 
 proc realiseString*(state: EvalState; val: NixValue): string =

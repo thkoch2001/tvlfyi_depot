@@ -10,6 +10,9 @@ type
   ListBuilder* {.header: "nix_api_value.h", importc.} = distinct pointer
   RealisedString* {.header: "nix_api_value.h", importc: "nix_realised_string".} = distinct pointer
 
+proc isNil*(p: BindingsBuilder|ExternalValue|ListBuilder|RealisedString): bool =
+  cast[pointer](p).isNil
+
 proc alloc_value*(context: NixContext; state: EvalState): Value {.nix_api_value.}
 
 proc get_type*(context: NixContext; value: Value): ValueType {.nix_api_value.}

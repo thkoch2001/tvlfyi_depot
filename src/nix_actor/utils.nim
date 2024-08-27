@@ -5,7 +5,7 @@ import
   ./nix_api_types,
   ./nix_api_util
 
-proc newException(ctx: NixContext): ref NixException =
+proc newException*(ctx: NixContext): ref NixException =
   new result
   var
     n: cuint
