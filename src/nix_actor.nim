@@ -129,7 +129,6 @@ proc serve(entity: NixEntity; turn: Turn; obs: Observe) =
         break stepping
     for i, path in analysis.capturePaths:
       var v = entity.state.eval.step(entity.root, path)
-      assert v.isSome
       if v.isSome:
         captures[i] = turn.facet.exportNix(v.get)
       else:

@@ -156,16 +156,18 @@ proc translate*(nix: NixContext; state: EvalState; pr: preserves.Value): NixValu
         result = nixValRef.get.value
       else:
         raise newException(ValueError, "cannot convert Preserves record to Nix: " & $pr)
-    of pkSequence, pkSet:
+    of pkSequence:
       let b = nix.make_list_builder(state, pr.len.csize_t)
       defer: list_builder_free(b)
-      for i, e in pr:
-        checkError nix.list_builder_insert(b, i.register.cuint, nix.translate(state, e))
+      for i, e in pr.sequence:
+        checkError nix.list_builder_insert(b, i.cuint, nix.translate(state, e))
       checkError nix.make_list(b, result)
+    of pkSet:
+      raise newException(ValueError, "cannot convert Preserves sets to Nix")
     of pkDictionary:
       let b = nix.make_bindings_builder(state, pr.dict.len.csize_t)
       defer: bindings_builder_free(b)
-      for (name, value) in pr.dict:
+      for (name, value) in pr.pairs:
         if name.isSymbol:
           checkError nix.bindings_builder_insert(b, name.symbol.string, nix.translate(state, value))
         else:
