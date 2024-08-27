@@ -96,21 +96,14 @@ let
       install -Dt $out/bin ${output}
     ''
   );
-in
 
-callerArg: sbomArg:
-
-let
   applySbom =
+    sbom:
     {
       passthru ? { },
       ...
     }@prevAttrs:
     let
-      sbom = lib.attrsets.recursiveUpdate (
-        if builtins.isAttrs sbomArg then sbomArg else builtins.fromJSON (builtins.readFile sbomArg)
-      ) passthru.sbom or { };
-
       properties = # SBOM metadata.component.properties as an attrset.
         lib.attrsets.recursiveUpdate (builtins.listToAttrs sbom.metadata.component.properties)
           passthru.properties or { };
@@ -177,20 +170,26 @@ let
       prevAttrs:
       { name, ... }@component:
       if (builtins.hasAttr name nimOverrides) then
-        prevAttrs // (nimOverrides.${name} component prevAttrs)
+        let
+          result = nimOverrides.${name} component prevAttrs;
+        in
+        prevAttrs // (if builtins.isAttrs result then result else result { })
       else
         prevAttrs
     ) prevAttrs prevAttrs.passthru.sbom.components;
 
-  composition =
-    finalAttrs:
+  compose =
+    callerArg: sbom: finalAttrs:
     let
       callerAttrs = if builtins.isAttrs callerArg then callerArg else callerArg finalAttrs;
-      sbomAttrs = callerAttrs // (applySbom callerAttrs);
+      sbomAttrs = callerAttrs // (applySbom sbom callerAttrs);
       overrideAttrs = sbomAttrs // (applyOverrides sbomAttrs);
     in
     overrideAttrs;
 in
-stdenv.mkDerivation composition
-
-# TODO: Add an overrideSbom function into the result..
+callerArg: sbomArg:
+let
+  sbom = if builtins.isAttrs sbomArg then sbomArg else builtins.fromJSON (builtins.readFile sbomArg);
+  overrideSbom = f: stdenv.mkDerivation (compose callerArg (sbom // (f sbom)));
+in
+(stdenv.mkDerivation (compose callerArg sbom)) // { inherit overrideSbom; }
