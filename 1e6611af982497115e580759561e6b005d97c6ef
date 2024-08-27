@@ -16,6 +16,24 @@
       "message": "Should be `--replace-fail`.",
       "revId": "1e6611af982497115e580759561e6b005d97c6ef",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bed23396_8187b6d6",
+        "filename": "users/azahi/pkgs/bruh/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1000132
+      },
+      "writtenOn": "2024-08-27T12:17:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e421581f_8e9029e7",
+      "revId": "1e6611af982497115e580759561e6b005d97c6ef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
