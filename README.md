@@ -4,18 +4,27 @@ An actor for interacting with the [Nix](https://nixos.org/) daemon via the [Synd
 
 See [protocol.prs](./protocol.prs) for the Syndicate protocol [schema](https://preserves.dev/preserves-schema.html).
 
-For an example configuration see [test.pr](./test.pr).
+## Evaluation state as entity capabililties
 
-## Expressions as dataspaces
+The actor exposes on its initial capability a gatekeeper that resolves requests in the form `<nix { lookupPath: [ … ], store: … } >`.
 
-The actor exposes on its initial capability a gatekeeper that resolves requests in the form `<nix-repo { import: …, lookupPath: [ … ], store: … } >`. The resolved entity responds to observations as if it were a dataspace by asserting back lazily evaluated values from the imported expression.
+The resolved entity is an evaluation state that responds to the assertions `<eval @expr string @args any @result #:Result>` as well as observation of literal values via the dataspace protocol.
+The evaluation state is initialized with the value `nil` and is advanced with Nix functions in the form of `prev: args: body` with a type of `Any -> Any -> Any`.
 
-### Caveats
-- Functions are not observable, unless the function can be satisfied with the empty attrset `{}` as an argument.
-- An observation that stops at an attrset with an `outPath` yields the `outPath` and not the attrset. This prevents abritrary recursion into derivation dependencies.
+To evaluate the `hello` package from Nixpkgs one could use an assertion like `<eval "_: pkgName: builtins.getAttr pkgName (import <nixpkgs> {})" "hello" #:…>` which would assert back a new assertion state at `hello`.
+
+The evaluation state represents a lazy Nix expression and must be "realised" to become a physical store path.
+Asserting `<realise-string @result #:Result>` to an evaluation state will return a string with its realized closure at the evaluation store.
+
+With the exception of observations the result value of `<ok @value any>` or `<error @message any>` is used for response assertions.
+
+Dataspace observations work over evaluation state.
+In the example case of an evaluation state positioned at the `hello` package the observation of `{ hello: { meta: { license: { shortName: ? } } } }` would capture the value "gpl3Plus".
+If an attrset contains an `outPath` attribute then the value of `outPath` is captured in place of the attrset.
+This is to avoid traversing deeply nested and recursive Nix values.
 
 ### TODO
-Realise store-paths from expressions using local and remote buils.
+Realise store-paths from expressions using local and remote builds.
 
 ## Worker protocol
 

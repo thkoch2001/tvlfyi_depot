@@ -8,7 +8,6 @@ NixResolveDetail = { }
 & @lookupPath  LookupPath
 & @storeUri    StoreUri
 & @storeParams StoreParams
-& @cacheSpace  CacheSpace
 .
 
 # List of strings corresponding to entries in NIX_PATH.
@@ -22,9 +21,6 @@ LookupPath = @lookupPath { lookupPath: [string ...] } / @absent { } .
 StoreUri = @storeUri { storeUri: string } / @absent { } .
 
 StoreParams = @storeParams { storeParams: AttrSet } / @absent { } .
-
-# A cooperative caching dataspace shared with other Nix stores.
-CacheSpace = @cacheSpace { cache: #:any } / @absent { } .
 
 # Assertion.
 CheckStorePath = <check-path @path string @valid #:bool> .
