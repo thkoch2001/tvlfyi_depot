@@ -2,10 +2,15 @@ version 1 .
 embeddedType EntityRef.Cap .
 
 # Gatekeeper step to access a Nix store.
-# The resulting capability is a Nix evaluation state with an initial value of <null>.
-NixResolveStep = <nix @detail NixResolveDetail> .
+StoreResolveStep = <nix-store @detail StoreResolveDetail> .
+StoreResolveDetail = { storeUri: string }
+& @storeParams StoreParams
+.
 
-NixResolveDetail = { }
+# Gatekeeper step to access a Nix evaluator.
+# The resulting capability is a Nix evaluation state with an initial value of <null>.
+EvalResolveStep = <nix @detail EvalResolveDetail> .
+EvalResolveDetail = { }
 & @lookupPath  LookupPath
 & @storeUri    StoreUri
 & @storeParams StoreParams
@@ -37,6 +42,15 @@ Eval = <eval @expr string @args any @result #:Result> .
 # This makes the closure of store paths referred to by the
 # string present in the evaluation store.
 RealiseString = <realise-string @result #:Result> .
+
+# Assertion.
+# Check at a Nix store if a store path is present and valid.
+CheckStorePath = <check-path @path string @valid #:bool> .
+
+# Assertion.
+# Replicate a store path closure between stores.
+# A Result value is asserted to @result.
+Replicate = <replicate @target #:any @storePath string @result #:Result> .
 
 AttrSet = {symbol: any ...:...} .
 

@@ -19,12 +19,16 @@ Asserting `<realise-string @result #:Result>` to an evaluation state will return
 With the exception of observations the result value of `<ok @value any>` or `<error @message any>` is used for response assertions.
 
 Dataspace observations work over evaluation state.
-In the example case of an evaluation state positioned at the `hello` package the observation of `{ hello: { meta: { license: { shortName: ? } } } }` would capture the value "gpl3Plus".
+In the example case of an evaluation state positioned at the `hello` package the observation of `{ hello: { meta: { license: { shortName: ? } } } }` would capture the value `"gpl3Plus"`.
 If an attrset contains an `outPath` attribute then the value of `outPath` is captured in place of the attrset.
 This is to avoid traversing deeply nested and recursive Nix values.
 
-### TODO
-Realise store-paths from expressions using local and remote builds.
+## Store replication
+
+Nix stores can be opened using the gatekeeper step `<nix-store { storeUri: "…" }>`.
+The store entity responds to `<check-path @store-path string @result #:any>` with true or false.
+
+To replicate paths between two stores, assert `<replicate @target #:any @storePath string @result #:Result>` to a store entity or a evaluation entity, with `target` set to a store entity or a evaluation entity.
 
 ## Worker protocol
 

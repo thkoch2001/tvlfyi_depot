@@ -45,10 +45,10 @@
       "type": "library",
       "bom-ref": "pkg:nim/syndicate",
       "name": "syndicate",
-      "version": "trunk",
+      "version": "20240827",
       "externalReferences": [
         {
-          "url": "https://git.syndicate-lang.org/ehmry/syndicate-nim/archive/a2c723914b200e44e64ea67f4bf3a57b5d7e8a04.tar.gz",
+          "url": "https://git.syndicate-lang.org/ehmry/syndicate-nim/archive/1a445733561b64de448a9138cf30517df020f9d4.tar.gz",
           "type": "source-distribution"
         },
         {
@@ -63,23 +63,23 @@
         },
         {
           "name": "nix:fod:path",
-          "value": "/nix/store/vd1v0mdi7ww2rgy1s4s1hy3ll633lh4c-source"
+          "value": "/nix/store/mwxdy3sj4jfpaqmvj83rdhij405af1s9-source"
         },
         {
           "name": "nix:fod:rev",
-          "value": "a2c723914b200e44e64ea67f4bf3a57b5d7e8a04"
+          "value": "1a445733561b64de448a9138cf30517df020f9d4"
         },
         {
           "name": "nix:fod:sha256",
-          "value": "04f6rpz22xi308pg80lplsnpgg1l3lxwrj86krj4mng91kv8gs3c"
+          "value": "0ghm99jd5nzkrm35ml3w9l95ygd0l8wmpf7d2585j2rg53mfvhn7"
         },
         {
           "name": "nix:fod:url",
-          "value": "https://git.syndicate-lang.org/ehmry/syndicate-nim/archive/a2c723914b200e44e64ea67f4bf3a57b5d7e8a04.tar.gz"
+          "value": "https://git.syndicate-lang.org/ehmry/syndicate-nim/archive/1a445733561b64de448a9138cf30517df020f9d4.tar.gz"
         },
         {
           "name": "nix:fod:ref",
-          "value": "trunk"
+          "value": "20240827"
         },
         {
           "name": "nix:fod:srcDir",
@@ -129,10 +129,10 @@
       "type": "library",
       "bom-ref": "pkg:nim/preserves",
       "name": "preserves",
-      "version": "trunk",
+      "version": "20240823",
       "externalReferences": [
         {
-          "url": "https://git.syndicate-lang.org/ehmry/preserves-nim/archive/e22b354c11c6b9a87e3cde0e8958daa1414fb05b.tar.gz",
+          "url": "https://git.syndicate-lang.org/ehmry/preserves-nim/archive/4fe1952aafad9d852771549669077c0f3577267f.tar.gz",
           "type": "source-distribution"
         },
         {
@@ -147,23 +147,23 @@
         },
         {
           "name": "nix:fod:path",
-          "value": "/nix/store/lim0cw9vzy8pr31y3mvsxnc5xlbf6rnz-source"
+          "value": "/nix/store/b4cdj9x4y92a9i65j4mqcy89hpkhsjv0-source"
         },
         {
           "name": "nix:fod:rev",
-          "value": "e22b354c11c6b9a87e3cde0e8958daa1414fb05b"
+          "value": "4fe1952aafad9d852771549669077c0f3577267f"
         },
         {
           "name": "nix:fod:sha256",
-          "value": "1bskicgm7bx7sk0fig58h98xznzlnc0wqfbskhh0b5jsyzjrqi60"
+          "value": "00vs3m7kvz7lxmcz0zj3szqa82gdd3fc8i4qklhwr61cjiinb69w"
         },
         {
           "name": "nix:fod:url",
-          "value": "https://git.syndicate-lang.org/ehmry/preserves-nim/archive/e22b354c11c6b9a87e3cde0e8958daa1414fb05b.tar.gz"
+          "value": "https://git.syndicate-lang.org/ehmry/preserves-nim/archive/4fe1952aafad9d852771549669077c0f3577267f.tar.gz"
         },
         {
           "name": "nix:fod:ref",
-          "value": "trunk"
+          "value": "20240823"
         },
         {
           "name": "nix:fod:srcDir",

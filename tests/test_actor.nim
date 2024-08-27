@@ -178,7 +178,7 @@ suite "nixpkgs":
 
     publish(turn, ds, Resolve(
         step: parsePreserves"""
-            <nix { lookupPath: [ "nixpkgs=/home/repo/nixpkgs" ] }>
+            <nix { lookupPath: [ "nixpkgs=/home/repo/nixpkgs/channel" ] }>
           """,
         observer: ds,
       ))

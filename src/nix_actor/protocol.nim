@@ -3,6 +3,13 @@ import
   preserves, std/tables, std/options
 
 type
+  EvalResolveDetailLookupPath* = Option[seq[string]]
+  EvalResolveDetailStoreUri* = Option[string]
+  `EvalResolveDetail`* {.preservesDictionary.} = object
+    `lookupPath`*: Option[seq[string]]
+    `storeParams`*: Option[AttrSet]
+    `storeUri`*: Option[string]
+
   Eval* {.preservesRecord: "eval".} = object
     `expr`*: string
     `args`*: Value
@@ -28,20 +35,11 @@ type
         `absent`*: LookupPathAbsent
 
   
-  ResultKind* {.pure.} = enum
-    `Error`, `ok`
-  ResultOk* {.preservesRecord: "ok".} = object
-    `value`*: Value
+  StoreResolveDetailStoreUri* = string
+  `StoreResolveDetail`* {.preservesDictionary.} = object
+    `storeParams`*: Option[AttrSet]
+    `storeUri`*: string
 
-  `Result`* {.preservesOr.} = object
-    case orKind*: ResultKind
-    of ResultKind.`Error`:
-        `error`*: Error
-
-    of ResultKind.`ok`:
-        `ok`*: ResultOk
-
-  
   StoreParamsKind* {.pure.} = enum
     `storeParams`, `absent`
   StoreParamsStoreParams* {.preservesDictionary.} = object
@@ -58,11 +56,26 @@ type
         `absent`*: StoreParamsAbsent
 
   
-  NixResolveStep* {.preservesRecord: "nix".} = object
-    `detail`*: NixResolveDetail
+  ResultKind* {.pure.} = enum
+    `Error`, `ok`
+  ResultOk* {.preservesRecord: "ok".} = object
+    `value`*: Value
 
+  `Result`* {.preservesOr.} = object
+    case orKind*: ResultKind
+    of ResultKind.`Error`:
+        `error`*: Error
+
+    of ResultKind.`ok`:
+        `ok`*: ResultOk
+
+  
   RealiseString* {.preservesRecord: "realise-string".} = object
     `result`* {.preservesEmbedded.}: EmbeddedRef
+
+  CheckStorePath* {.preservesRecord: "check-path".} = object
+    `path`*: string
+    `valid`* {.preservesEmbedded.}: EmbeddedRef
 
   StoreUriKind* {.pure.} = enum
     `storeUri`, `absent`
@@ -80,23 +93,37 @@ type
         `absent`*: StoreUriAbsent
 
   
-  NixResolveDetailLookupPath* = Option[seq[string]]
-  NixResolveDetailStoreUri* = Option[string]
-  `NixResolveDetail`* {.preservesDictionary.} = object
-    `lookupPath`*: Option[seq[string]]
-    `storeParams`*: Option[AttrSet]
-    `storeUri`*: Option[string]
+  Replicate* {.preservesRecord: "replicate".} = object
+    `target`* {.preservesEmbedded.}: EmbeddedRef
+    `storePath`*: string
+    `result`* {.preservesEmbedded.}: EmbeddedRef
 
-proc `$`*(x: Eval | Error | AttrSet | LookupPath | Result | StoreParams |
-    NixResolveStep |
+  StoreResolveStep* {.preservesRecord: "nix-store".} = object
+    `detail`*: StoreResolveDetail
+
+  EvalResolveStep* {.preservesRecord: "nix".} = object
+    `detail`*: EvalResolveDetail
+
+proc `$`*(x: EvalResolveDetail | Eval | Error | AttrSet | LookupPath |
+    StoreResolveDetail |
+    StoreParams |
+    Result |
     RealiseString |
+    CheckStorePath |
     StoreUri |
-    NixResolveDetail): string =
+    Replicate |
+    StoreResolveStep |
+    EvalResolveStep): string =
   `$`(toPreserves(x))
 
-proc encode*(x: Eval | Error | AttrSet | LookupPath | Result | StoreParams |
-    NixResolveStep |
+proc encode*(x: EvalResolveDetail | Eval | Error | AttrSet | LookupPath |
+    StoreResolveDetail |
+    StoreParams |
+    Result |
     RealiseString |
+    CheckStorePath |
     StoreUri |
-    NixResolveDetail): seq[byte] =
+    Replicate |
+    StoreResolveStep |
+    EvalResolveStep): seq[byte] =
   encode(toPreserves(x))
