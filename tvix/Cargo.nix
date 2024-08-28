@@ -360,47 +360,6 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" ];
       };
-      "anstream" = rec {
-        crateName = "anstream";
-        version = "0.6.11";
-        edition = "2021";
-        sha256 = "19dndamalavhjwp4i74k8hdijcixb7gsfa6ycwyc1r8xn6y1wbkf";
-        dependencies = [
-          {
-            name = "anstyle";
-            packageId = "anstyle";
-          }
-          {
-            name = "anstyle-parse";
-            packageId = "anstyle-parse";
-          }
-          {
-            name = "anstyle-query";
-            packageId = "anstyle-query";
-            optional = true;
-          }
-          {
-            name = "anstyle-wincon";
-            packageId = "anstyle-wincon";
-            optional = true;
-            target = { target, features }: (target."windows" or false);
-          }
-          {
-            name = "colorchoice";
-            packageId = "colorchoice";
-          }
-          {
-            name = "utf8parse";
-            packageId = "utf8parse";
-          }
-        ];
-        features = {
-          "auto" = [ "dep:anstyle-query" ];
-          "default" = [ "auto" "wincon" ];
-          "wincon" = [ "dep:anstyle-wincon" ];
-        };
-        resolvedDefaultFeatures = [ "auto" "default" "wincon" ];
-      };
       "anstyle" = rec {
         crateName = "anstyle";
         version = "1.0.8";
@@ -410,62 +369,6 @@ rec {
           "default" = [ "std" ];
         };
         resolvedDefaultFeatures = [ "default" "std" ];
-      };
-      "anstyle-parse" = rec {
-        crateName = "anstyle-parse";
-        version = "0.2.3";
-        edition = "2021";
-        sha256 = "134jhzrz89labrdwxxnjxqjdg06qvaflj1wkfnmyapwyldfwcnn7";
-        libName = "anstyle_parse";
-        dependencies = [
-          {
-            name = "utf8parse";
-            packageId = "utf8parse";
-            optional = true;
-          }
-        ];
-        features = {
-          "core" = [ "dep:arrayvec" ];
-          "default" = [ "utf8" ];
-          "utf8" = [ "dep:utf8parse" ];
-        };
-        resolvedDefaultFeatures = [ "default" "utf8" ];
-      };
-      "anstyle-query" = rec {
-        crateName = "anstyle-query";
-        version = "1.0.2";
-        edition = "2021";
-        sha256 = "0j3na4b1nma39g4x7cwvj009awxckjf3z2vkwhldgka44hqj72g2";
-        libName = "anstyle_query";
-        dependencies = [
-          {
-            name = "windows-sys";
-            packageId = "windows-sys 0.52.0";
-            target = { target, features }: (target."windows" or false);
-            features = [ "Win32_System_Console" "Win32_Foundation" ];
-          }
-        ];
-
-      };
-      "anstyle-wincon" = rec {
-        crateName = "anstyle-wincon";
-        version = "3.0.2";
-        edition = "2021";
-        sha256 = "19v0fv400bmp4niqpzxnhg83vz12mmqv7l2l8vi80qcdxj0lpm8w";
-        libName = "anstyle_wincon";
-        dependencies = [
-          {
-            name = "anstyle";
-            packageId = "anstyle";
-          }
-          {
-            name = "windows-sys";
-            packageId = "windows-sys 0.52.0";
-            target = { target, features }: (target."windows" or false);
-            features = [ "Win32_System_Console" "Win32_Foundation" ];
-          }
-        ];
-
       };
       "anyhow" = rec {
         crateName = "anyhow";
@@ -2083,7 +1986,7 @@ rec {
           "usage" = [ "clap_builder/usage" ];
           "wrap_help" = [ "clap_builder/wrap_help" ];
         };
-        resolvedDefaultFeatures = [ "color" "default" "derive" "env" "error-context" "help" "std" "suggestions" "usage" ];
+        resolvedDefaultFeatures = [ "derive" "env" "std" ];
       };
       "clap_builder" = rec {
         crateName = "clap_builder";
@@ -2092,22 +1995,12 @@ rec {
         sha256 = "1dmas5z20yqmlmfhykr38pn1hkcnr4jzxjw4cs2f6lkn2wmyqsi1";
         dependencies = [
           {
-            name = "anstream";
-            packageId = "anstream";
-            optional = true;
-          }
-          {
             name = "anstyle";
             packageId = "anstyle";
           }
           {
             name = "clap_lex";
             packageId = "clap_lex";
-          }
-          {
-            name = "strsim";
-            packageId = "strsim 0.11.1";
-            optional = true;
           }
         ];
         features = {
@@ -2122,7 +2015,7 @@ rec {
           "unstable-v5" = [ "deprecated" ];
           "wrap_help" = [ "help" "dep:terminal_size" ];
         };
-        resolvedDefaultFeatures = [ "color" "env" "error-context" "help" "std" "suggestions" "usage" ];
+        resolvedDefaultFeatures = [ "env" "std" ];
       };
       "clap_derive" = rec {
         crateName = "clap_derive";
@@ -2224,13 +2117,6 @@ rec {
             packageId = "termcolor";
           }
         ];
-
-      };
-      "colorchoice" = rec {
-        crateName = "colorchoice";
-        version = "1.0.0";
-        edition = "2021";
-        sha256 = "1ix7w85kwvyybwi2jdkl3yva2r2bvdcc3ka2grjfzfgrapqimgxc";
 
       };
       "concurrent-queue" = rec {
@@ -2837,7 +2723,7 @@ rec {
           }
           {
             name = "strsim";
-            packageId = "strsim 0.10.0";
+            packageId = "strsim";
             optional = true;
           }
           {
@@ -6606,6 +6492,7 @@ rec {
           {
             name = "clap";
             packageId = "clap";
+            usesDefaultFeatures = false;
             features = [ "derive" "env" ];
           }
           {
@@ -6615,6 +6502,7 @@ rec {
           {
             name = "futures";
             packageId = "futures";
+            usesDefaultFeatures = false;
           }
           {
             name = "itertools";
@@ -12056,24 +11944,13 @@ rec {
           "serde" = [ "dep:serde" ];
         };
       };
-      "strsim 0.10.0" = rec {
+      "strsim" = rec {
         crateName = "strsim";
         version = "0.10.0";
         edition = "2015";
         sha256 = "08s69r4rcrahwnickvi0kq49z524ci50capybln83mg6b473qivk";
         authors = [
           "Danny Guo <danny@dannyguo.com>"
-        ];
-
-      };
-      "strsim 0.11.1" = rec {
-        crateName = "strsim";
-        version = "0.11.1";
-        edition = "2015";
-        sha256 = "0kzvqlw8hxqb7y598w1s0hxlnmi84sg5vsipp3yg5na5d1rvba3x";
-        authors = [
-          "Danny Guo <danny@dannyguo.com>"
-          "maxbachmann <oss@maxbachmann.de>"
         ];
 
       };
@@ -14639,6 +14516,7 @@ rec {
           {
             name = "clap";
             packageId = "clap";
+            usesDefaultFeatures = false;
             features = [ "derive" "env" ];
           }
           {
@@ -14777,6 +14655,7 @@ rec {
           {
             name = "futures";
             packageId = "futures";
+            usesDefaultFeatures = false;
           }
           {
             name = "hyper-util";
@@ -15009,6 +14888,7 @@ rec {
           {
             name = "clap";
             packageId = "clap";
+            usesDefaultFeatures = false;
             features = [ "derive" "env" ];
           }
           {
@@ -15333,6 +15213,7 @@ rec {
           {
             name = "futures";
             packageId = "futures";
+            usesDefaultFeatures = false;
           }
           {
             name = "magic";
@@ -15549,6 +15430,7 @@ rec {
           {
             name = "clap";
             packageId = "clap";
+            usesDefaultFeatures = false;
             features = [ "derive" "env" ];
           }
           {
@@ -15562,6 +15444,7 @@ rec {
           {
             name = "futures";
             packageId = "futures";
+            usesDefaultFeatures = false;
           }
           {
             name = "hyper-util";
