@@ -16,6 +16,23 @@
       "message": "Tnx!",
       "revId": "f1ff89d1229e0c668c3513e4c513ea7216ded23a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aacddcf7_8af87ed9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-28T17:31:13Z",
+      "side": 1,
+      "message": "It\u0027d be nice to see some documentation / walkthrough added to tvix/docs.",
+      "revId": "f1ff89d1229e0c668c3513e4c513ea7216ded23a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
