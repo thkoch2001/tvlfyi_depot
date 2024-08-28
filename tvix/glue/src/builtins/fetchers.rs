@@ -10,7 +10,7 @@ use std::rc::Rc;
 use tvix_eval::builtin_macros::builtins;
 use tvix_eval::generators::Gen;
 use tvix_eval::generators::GenCo;
-use tvix_eval::{CatchableErrorKind, ErrorKind, Value};
+use tvix_eval::{CatchableErrorKind, ErrorKind, NixAttrs, Value};
 use url::Url;
 
 // Used as a return type for extract_fetch_args, which is sharing some
@@ -87,6 +87,90 @@ async fn extract_fetch_args(
     Ok(Ok(NixFetchArgs { url, name, sha256 }))
 }
 
+enum NixFetchTreeType {
+    File {
+        url: Url,
+    },
+    Tarball {
+        url: Url,
+    },
+    Git {
+        url: Url,
+        reference: Option<String>,
+        revision: Option<String>,
+        shallow: bool,
+        submodules: bool,
+        all_references: bool,
+        // TODO(Shvedov): Support more
+    },
+    // TODO(Shvedov): Support other types
+}
+
+struct NixFetchTreeArgs {
+    fetch_type: NixFetchTreeType,
+    nar_hash: Option<[u8; 32]>,
+}
+
+async fn extract_fetch_tree_args(
+    co: &GenCo,
+    args: Value,
+) -> Result<Result<NixFetchTreeArgs, CatchableErrorKind>, ErrorKind> {
+    let attrs = args.to_attrs().map_err(|_| ErrorKind::TypeError {
+        expected: "attribute set",
+        actual: args.type_of(),
+    })?;
+
+    // TODO(Shvedov): Get rid of copy-pastes with extract_fetch
+
+    let url_str = match select_string(&co, &attrs, "url").await? {
+        Ok(s) => s.ok_or_else(|| ErrorKind::AttributeNotFound { name: "url".into() })?,
+        Err(cek) => return Ok(Err(cek)),
+    };
+    let type_str = match select_string(co, &attrs, "type").await? {
+        Ok(s) => s.ok_or_else(|| ErrorKind::AttributeNotFound {
+            name: "type".into(),
+        })?,
+        Err(cek) => return Ok(Err(cek)),
+    };
+    let nar_hash_str = match select_string(co, &attrs, "narHash").await? {
+        Ok(s) => s,
+        Err(cek) => return Ok(Err(cek)),
+    };
+
+    // parse the sha256 string into a digest.
+    let nar_hash = match nar_hash_str {
+        Some(sha256_str) => {
+            let nixhash = nixhash::from_str(&sha256_str, Some("sha256"))
+                // TODO: DerivationError::InvalidOutputHash should be moved to ErrorKind::InvalidHash and used here instead
+                .map_err(|e| ErrorKind::TvixError(Rc::new(e)))?;
+
+            Some(nixhash.digest_as_bytes().try_into().expect("is sha256"))
+        }
+        None => None,
+    };
+
+    let url = Url::parse(&url_str).map_err(|e| ErrorKind::TvixError(Rc::new(e)))?;
+    let fetch_type = match type_str.as_str() {
+        "file" => Ok(NixFetchTreeType::File { url }),
+        "tarball" => Ok(NixFetchTreeType::Tarball { url }),
+        "git" => Ok(NixFetchTreeType::Git {
+            url,
+            // TODO(Shvedov): Parse others
+            reference: None,
+            revision: None,
+            shallow: true,
+            submodules: false,
+            all_references: false,
+        }),
+        _ => Err(ErrorKind::InvalidAttributeName(type_str.into())),
+    }?;
+
+    Ok(Ok(NixFetchTreeArgs {
+        fetch_type,
+        nar_hash,
+    }))
+}
+
 #[allow(unused_variables)] // for the `state` arg, for now
 #[builtins(state = "Rc<TvixStoreIO>")]
 pub(crate) mod fetcher_builtins {
@@ -98,8 +182,12 @@ pub(crate) mod fetcher_builtins {
     /// If there is enough info to calculate the store path without fetching,
     /// queue the fetch to be fetched lazily, and return the store path.
     /// If there's not enough info to calculate it, do the fetch now, and then
-    /// return the store path.
-    fn fetch_lazy(state: Rc<TvixStoreIO>, name: String, fetch: Fetch) -> Result<Value, ErrorKind> {
+    /// return the store path as String.
+    fn fetch_lazy_str(
+        state: Rc<TvixStoreIO>,
+        name: String,
+        fetch: Fetch,
+    ) -> Result<String, ErrorKind> {
         match fetch
             .store_path(&name)
             .map_err(|e| ErrorKind::TvixError(Rc::new(e)))?
@@ -118,7 +206,7 @@ pub(crate) mod fetcher_builtins {
                 );
 
                 // Emit the calculated Store Path.
-                Ok(Value::Path(Box::new(store_path.to_absolute_path().into())))
+                Ok(store_path.to_absolute_path())
             }
             None => {
                 // If we don't have enough info, do the fetch now.
@@ -127,9 +215,15 @@ pub(crate) mod fetcher_builtins {
                     .block_on(async { state.fetcher.ingest_and_persist(&name, fetch).await })
                     .map_err(|e| ErrorKind::TvixError(Rc::new(e)))?;
 
-                Ok(Value::Path(Box::new(store_path.to_absolute_path().into())))
+                Ok(store_path.to_absolute_path())
             }
         }
+    }
+
+    /// Same as fetch_lazy, but returns Value::Path
+    fn fetch_lazy(state: Rc<TvixStoreIO>, name: String, fetch: Fetch) -> Result<Value, ErrorKind> {
+        let path_str = fetch_lazy_str(state, name, fetch)?;
+        Ok(Value::Path(Box::new(path_str.into())))
     }
 
     #[builtin("fetchurl")]
@@ -192,5 +286,60 @@ pub(crate) mod fetcher_builtins {
         args: Value,
     ) -> Result<Value, ErrorKind> {
         Err(ErrorKind::NotImplemented("fetchGit"))
+    }
+
+    #[builtin("fetchTree")]
+    async fn builtin_fetch_tree(
+        state: Rc<TvixStoreIO>,
+        co: GenCo,
+        args: Value,
+    ) -> Result<Value, ErrorKind> {
+        let args = match extract_fetch_tree_args(&co, args).await? {
+            Ok(args) => args,
+            Err(cek) => return Ok(Value::from(cek)),
+        };
+
+        let path = fetch_lazy_str(
+            state,
+            "source".into(),
+            match args.fetch_type {
+                NixFetchTreeType::File { url } => Fetch::URL {
+                    url,
+                    exp_hash: args.nar_hash.map(NixHash::Sha256),
+                },
+                NixFetchTreeType::Tarball { url } => Fetch::Tarball {
+                    url,
+                    exp_nar_sha256: args.nar_hash,
+                },
+                NixFetchTreeType::Git {
+                    url,
+                    revision,
+                    reference,
+                    shallow,
+                    submodules,
+                    all_references,
+                } => Fetch::Git {
+                    url,
+                    revision,
+                    reference,
+                    shallow,
+                    submodules,
+                    all_references,
+
+                    exp_hash: args.nar_hash.map(NixHash::Sha256),
+                },
+            },
+        )?;
+
+        // TODO(Shvedov): Use thunk here to gather things lazyly:
+        // Value::suspended_native_thunk(Box::new(move || { .. }))
+        // The problem for me here was to get the StorState inside closure.
+        Ok(Value::attrs(NixAttrs::from_iter([
+            ("outPath", Value::String(path.into())),
+            // TODO(Shvedov): Implement filling all other and this values correctly
+            ("lastModified", 0.into()),
+            ("lastModifiedDate", Value::String("197001010000".into())),
+            ("narHash", Value::String("sha256-TODO".into())),
+        ])))
     }
 }
