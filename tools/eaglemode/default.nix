@@ -9,6 +9,13 @@ let
   mkDesc = d: lib.concatMapStringsSep "\n"
     (x: "# Descr =${x}")
     (builtins.filter (s: s != "") (lib.splitString "\n" d));
+
+  configWrapper = pkgs.runCommand "eaglemode-config-wrapper" { } ''
+    cp ${./wrapper.go} wrapper.go
+    export HOME=$PWD
+    ${pkgs.go}/bin/go build wrapper.go
+    install -Dm755 wrapper $out/bin/wrapper
+  '';
 in
 rec {
   # mkCommand creates an Eagle Mode command for the file browser.
@@ -71,4 +78,12 @@ rec {
         lib.concatMapStringsSep "\n" (s: "cp -rT ${s} $out/\nchmod -R u+rw $out/\n") ([ "${eaglemode}/etc"] ++ extraPaths)
       }
     '';
+
+  # withConfig creates an Eagle Mode wrapper that runs it with the given
+  # configuration.
+  withConfig = { eaglemode ? pkgs.eaglemode, config }: pkgs.writeShellScriptBin "eaglemode" ''
+    set -ue
+    ${configWrapper}/bin/wrapper --em-config "${config}"
+    exec ${eaglemode}/bin/eaglemode "$@"
+  '';
 }
