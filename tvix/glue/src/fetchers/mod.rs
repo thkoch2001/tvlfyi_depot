@@ -71,7 +71,15 @@ pub enum Fetch {
     },
 
     /// TODO
-    Git(),
+    Git {
+        url: Url,
+        revision: Option<String>,
+        reference: Option<String>,
+        exp_hash: Option<NixHash>,
+        submodules: bool,
+        shallow: bool,
+        all_references: bool,
+    },
 }
 
 // Drops potentially sensitive username and password from a URL.
@@ -123,7 +131,10 @@ impl std::fmt::Debug for Fetch {
                 let url = redact_url(url);
                 write!(f, "Executable [url: {}, hash: {}]", &url, hash)
             }
-            Fetch::Git() => todo!(),
+            Fetch::Git { url, .. } => {
+                let url = redact_url(url);
+                write!(f, "Git [url: {}]", &url)
+            }
         }
     }
 }
@@ -151,14 +162,18 @@ impl Fetch {
                 CAHash::Nar(hash.to_owned())
             }
 
-            Fetch::Git() => todo!(),
+            Fetch::Git {
+                exp_hash: Some(exp_hash),
+                ..
+            } => CAHash::Flat(exp_hash.clone()),
 
             // everything else
             Fetch::URL { exp_hash: None, .. }
             | Fetch::Tarball {
                 exp_nar_sha256: None,
                 ..
-            } => return Ok(None),
+            }
+            | Fetch::Git { exp_hash: None, .. } => return Ok(None),
         };
 
         // calculate the store path of this fetch
@@ -534,7 +549,7 @@ where
 
                 Ok((root_node, CAHash::Nar(actual_hash), file_size))
             }
-            Fetch::Git() => todo!(),
+            Fetch::Git { .. } => todo!(),
         }
     }
 
