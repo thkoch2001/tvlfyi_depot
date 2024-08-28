@@ -22,7 +22,7 @@ rec {
   #
   # Commands are basically little Perl scripts with a command standard library
   # available. They receive the user's selected target from Eagle Mode.
-  mkCommand =
+  mkCommand = lib.makeOverridable (
     {
       # Name of the command.
       name
@@ -60,7 +60,8 @@ rec {
         else (if builtins.isPath code
              then builtins.readFile code
              else throw "code must be a string (literal code) or path to file")}
-    '');
+    '')
+  );
 
   # etcDir creates a directory layout suitable for use in the EM_USER_CONFIG_DIR
   # environment variable.
