@@ -68,6 +68,52 @@ rec {
     ${pkgs.imagemagick}/bin/convert ${path} $out
   '';
 
+  buildPlugin = lib.makeOverridable (
+    { name
+    , src
+    , version
+    , eaglemode ? pkgs.eaglemode
+    , target ? name
+    , extraNativeBuildInputs ? [ ]
+    , extraBuildInputs ? [ ]
+    }:
+    pkgs.stdenv.mkDerivation {
+      pname = "eaglemode-plugin-${name}";
+      inherit src version;
+      # inherit (eaglemode.drvAttrs) dontPatchELF;
+
+      nativeBuildInputs = eaglemode.drvAttrs.nativeBuildInputs ++ extraNativeBuildInputs;
+      buildInputs = eaglemode.drvAttrs.buildInputs ++ extraBuildInputs ++ [ eaglemode ];
+
+      buildPhase = ''
+        runHook preBuild
+
+        # merge eaglemode & plugin folders
+        cp -r ${pkgs.srcOnly eaglemode} merged-src && chmod -R u+rw merged-src
+        cp -r $src/* merged-src && chmod -R u+rw merged-src
+        cd merged-src
+
+        export NIX_LDFLAGS="$NIX_LDFLAGS -lXxf86vm -lXext -lXinerama"
+        perl make.pl build projects=${target} continue=no
+
+        runHook postBuild
+      '';
+
+      installPhase = ''
+        runHook preInstall
+
+        mkdir -p $out/lib
+        cp -r lib/lib${target}.so $out/lib
+
+        if [ -d "$src/etc" ]; then
+          cp -r $src/etc/* $out
+        fi
+
+        runHook postInstall
+      '';
+    }
+  );
+
   # etcDir creates a directory layout suitable for use in the EM_USER_CONFIG_DIR
   # environment variable.
   #
@@ -89,8 +135,13 @@ rec {
   # withConfig creates an Eagle Mode wrapper that runs it with the given
   # configuration.
   withConfig = { eaglemode ? pkgs.eaglemode, config }: pkgs.writeShellScriptBin "eaglemode" ''
-    set -ue
     ${configWrapper}/bin/wrapper --em-config "${config}"
+
+    if [ -d "${config}/lib" ]; then
+      export LD_LIBRARY_PATH="${config}/lib:$LD_LIBRARY_PATH"
+      exec ${eaglemode}/bin/eaglemode "$@"
+    fi
+
     exec ${eaglemode}/bin/eaglemode "$@"
   '';
 }
