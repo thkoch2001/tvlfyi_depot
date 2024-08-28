@@ -23,6 +23,7 @@ depot.nix.readTree.drvTargets rec {
 
   deps = (depot.nix.lazy-deps {
     deploy-archeology-ec2.attr = "users.flokli.nixos.deploy-archeology-ec2";
+    aws.attr = "third_party.nixpkgs.awscli";
   });
 
   shell = pkgs.mkShell {
