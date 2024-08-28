@@ -16,6 +16,24 @@
       "message": "hurgh, so a new nixpkgs instance?",
       "revId": "00d9a18ca6650a9853113823cd2d8c5b0d47f202",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eec4bcbd_f00b26f2",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-28T13:22:43Z",
+      "side": 1,
+      "message": "I\u0027d much prefer if we could just vendor in the updated expression until that\u0027s merged into Nixpkgs.",
+      "parentUuid": "6a87bc69_389d3081",
+      "revId": "00d9a18ca6650a9853113823cd2d8c5b0d47f202",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
