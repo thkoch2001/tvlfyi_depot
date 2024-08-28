@@ -1,8 +1,13 @@
 { depot, pkgs, ... }:
 
-depot.tools.eaglemode.mkCommand {
+let
+  em = depot.tools.eaglemode;
+  icon = em.mkTGA "emacs" "${pkgs.emacs}/share/icons/hicolor/128x128/apps/emacs.png";
+in
+em.mkCommand {
   name = "Emacsclient";
   hotkey = "Ctrl+E";
+  icon = "${icon}";
 
   description = ''
     Open target in Emacsclient.

@@ -63,6 +63,11 @@ rec {
     '')
   );
 
+  # mkTGA converts the given image to a TGA image.
+  mkTGA = name: path: pkgs.runCommand "${name}.tga" { } ''
+    ${pkgs.imagemagick}/bin/convert ${path} $out
+  '';
+
   # etcDir creates a directory layout suitable for use in the EM_USER_CONFIG_DIR
   # environment variable.
   #
