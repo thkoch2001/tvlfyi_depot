@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6a87bc69_389d3081",
+        "filename": "third_party/overlays/tvl.nix",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-28T13:21:03Z",
+      "side": 1,
+      "message": "hurgh, so a new nixpkgs instance?",
+      "revId": "00d9a18ca6650a9853113823cd2d8c5b0d47f202",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
