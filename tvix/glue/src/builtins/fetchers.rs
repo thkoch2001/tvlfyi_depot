@@ -87,6 +87,87 @@ async fn extract_fetch_args(
     Ok(Ok(NixFetchArgs { url, name, sha256 }))
 }
 
+enum NixFetchTreeType {
+    File {
+        url: Url,
+    },
+    Tarball {
+        url: Url,
+    },
+    Git {
+        url: Url,
+        reference: Option<String>,
+        revision: Option<String>,
+        shallow: bool,
+        submodules: bool,
+        all_references: bool,
+        // TODO(Shvedov): Support more
+    },
+
+    // TODO(Shvedov): Support other types
+}
+
+struct NixFetchTreeArgs {
+    fetch_type: NixFetchTreeType,
+    nar_hash: Option<[u8; 32]>,
+}
+
+
+async fn extract_fetch_tree_args(
+    co: &GenCo,
+    args: Value,
+) -> Result<Result<NixFetchTreeArgs, CatchableErrorKind>, ErrorKind> {
+    let attrs = args.to_attrs().map_err(|_| ErrorKind::TypeError {
+        expected: "attribute set",
+        actual: args.type_of(),
+    })?;
+
+    // TODO(Shvedov): Get rid of copy-pastes with extract_fetch
+
+    let url_str = match select_string(&co, &attrs, "url").await? {
+        Ok(s) => s.ok_or_else(|| ErrorKind::AttributeNotFound { name: "url".into() })?,
+        Err(cek) => return Ok(Err(cek)),
+    };
+    let type_str = match select_string(co, &attrs, "type").await? {
+        Ok(s) => s.ok_or_else(|| ErrorKind::AttributeNotFound { name: "type".into() })?,
+        Err(cek) => return Ok(Err(cek)),
+    };
+    let nar_hash_str = match select_string(co, &attrs, "narHash").await? {
+        Ok(s) => s,
+        Err(cek) => return Ok(Err(cek)),
+    };
+
+    // parse the sha256 string into a digest.
+    let nar_hash = match nar_hash_str {
+        Some(sha256_str) => {
+            let nixhash = nixhash::from_str(&sha256_str, Some("sha256"))
+                // TODO: DerivationError::InvalidOutputHash should be moved to ErrorKind::InvalidHash and used here instead
+                .map_err(|e| ErrorKind::TvixError(Rc::new(e)))?;
+
+            Some(nixhash.digest_as_bytes().try_into().expect("is sha256"))
+        }
+        None => None,
+    };
+
+    let url = Url::parse(&url_str).map_err(|e| ErrorKind::TvixError(Rc::new(e)))?;
+    let fetch_type = match type_str.as_str() {
+        "file" => Ok(NixFetchTreeType::File { url }),
+        "tarball" => Ok(NixFetchTreeType::Tarball { url }),
+        "git" => Ok(NixFetchTreeType::Git {
+            url,
+            // TODO(Shvedov): Parse others
+            reference: None,
+            revision: None,
+            shallow: true,
+            submodules: false,
+            all_references: false,
+        }),
+        _ => Err(ErrorKind::InvalidAttributeName(type_str.into()))
+    }?;
+
+    Ok(Ok(NixFetchTreeArgs { fetch_type, nar_hash }))
+}
+
 #[allow(unused_variables)] // for the `state` arg, for now
 #[builtins(state = "Rc<TvixStoreIO>")]
 pub(crate) mod fetcher_builtins {
@@ -192,5 +273,54 @@ pub(crate) mod fetcher_builtins {
         args: Value,
     ) -> Result<Value, ErrorKind> {
         Err(ErrorKind::NotImplemented("fetchGit"))
+    }
+
+    #[builtin("fetchTree")]
+    async fn builtin_fetch_tree(
+        state: Rc<TvixStoreIO>,
+        co: GenCo,
+        args: Value,
+    ) -> Result<Value, ErrorKind> {
+        let args = match extract_fetch_tree_args(&co, args).await? {
+            Ok(args) => args,
+            Err(cek) => return Ok(Value::from(cek)),
+        };
+
+        println!("Parced fetchTree args!");
+
+        let res = fetch_lazy(
+            state,
+            "source".into(),
+            match args.fetch_type {
+                NixFetchTreeType::File { url } => Fetch::URL {
+                    url,
+                    exp_hash: args.nar_hash.map(NixHash::Sha256),
+                },
+                NixFetchTreeType::Tarball { url } => Fetch::Tarball {
+                    url,
+                    exp_nar_sha256: args.nar_hash,
+                },
+                NixFetchTreeType::Git {
+                    url,
+                    revision,
+                    reference,
+                    shallow,
+                    submodules,
+                    all_references
+                } => Fetch::Git {
+                    url,
+                    revision,
+                    reference,
+                    shallow,
+                    submodules,
+                    all_references,
+
+                    exp_hash: args.nar_hash.map(NixHash::Sha256),
+                },
+            }
+        );
+
+        println!("Fetched lazy: {:?}", res);
+        res
     }
 }
