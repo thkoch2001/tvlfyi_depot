@@ -54,4 +54,21 @@ rec {
              then builtins.readFile code
              else throw "code must be a string (literal code) or path to file")}
     '');
+
+  # etcDir creates a directory layout suitable for use in the EM_USER_CONFIG_DIR
+  # environment variable.
+  #
+  # Note that Eagle Mode requires the value of that variable to be mutable at
+  # runtime (it is the same place where it persists all of its user-controlled
+  # state), so the results of this function can not be used directly.
+  etcDir =
+    { eaglemode ? pkgs.eaglemode
+    , extraPaths ? [ ]
+    }: pkgs.runCommand "eaglemode-config" { } ''
+      mkdir $out
+
+      ${
+        lib.concatMapStringsSep "\n" (s: "cp -rT ${s} $out/\nchmod -R u+rw $out/\n") ([ "${eaglemode}/etc"] ++ extraPaths)
+      }
+    '';
 }
