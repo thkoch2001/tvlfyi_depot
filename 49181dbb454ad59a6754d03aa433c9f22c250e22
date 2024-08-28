@@ -16,6 +16,24 @@
       "message": "Not sure about this yet, need to investigate which hashes are affected by the new compatibility bugs. If this actually does break NixOS system hashes across the \u003d2.3/\u003e2.3 boundary then this is kind of workflow breaking.",
       "revId": "49181dbb454ad59a6754d03aa433c9f22c250e22",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b97de97_2c21ad78",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-28T16:03:05Z",
+      "side": 1,
+      "message": "Any results of the investigation so far? ;-)",
+      "parentUuid": "4f0639b4_213ce384",
+      "revId": "49181dbb454ad59a6754d03aa433c9f22c250e22",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
