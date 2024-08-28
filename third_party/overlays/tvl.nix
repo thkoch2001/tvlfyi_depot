@@ -3,6 +3,19 @@
 { lib, depot, localSystem, ... }:
 
 self: super:
+let
+  useNixpkgs = nixpkgs: import nixpkgs { inherit localSystem; };
+  fromNixpkgsRev =
+    rev: hash:
+    useNixpkgs (
+      super.fetchFromGitHub {
+        owner = "NixOS";
+        repo = "nixpkgs";
+        inherit rev hash;
+      }
+    );
+  fromNixpkgsPR = pr: fromNixpkgsRev "refs/pull/${toString pr}/head";
+in
 depot.nix.readTree.drvTargets {
   nix_2_3 = (super.nix_2_3.override {
     # flaky tests, long painful build, see https://github.com/NixOS/nixpkgs/pull/266443
