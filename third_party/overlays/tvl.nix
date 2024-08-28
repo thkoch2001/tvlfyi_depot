@@ -172,4 +172,6 @@ depot.nix.readTree.drvTargets {
             hash = "sha256-ucTzO2qdN4QkowMVvC3+4pjEVjbwMsB0xFk+bvQxwtQ=";
           };
         }) else super.fuse;
+
+  inherit (fromNixpkgsPR 337714 "sha256-/5nWOZwwL4BPwj9DNaSIUAHQvjwCH179BQ/jEQkC/ns=") eaglemode;
 }
