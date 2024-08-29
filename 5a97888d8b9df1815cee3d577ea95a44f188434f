@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35755496_8800b0b1",
+        "filename": "tvix/Cargo.toml",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-29T14:39:40Z",
+      "side": 1,
+      "message": "Can you link to our upstream PR?",
+      "revId": "5a97888d8b9df1815cee3d577ea95a44f188434f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7844eb72_8b4523b3",
+        "filename": "tvix/Cargo.toml",
+        "patchSetId": 5
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-08-29T14:39:40Z",
+      "side": 1,
+      "message": "same here",
+      "revId": "5a97888d8b9df1815cee3d577ea95a44f188434f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
