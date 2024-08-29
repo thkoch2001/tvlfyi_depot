@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7fc7e60f_c3f64a9e",
+        "filename": "tvix/Cargo.toml",
+        "patchSetId": 5
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-29T15:14:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35755496_8800b0b1",
+      "revId": "5a97888d8b9df1815cee3d577ea95a44f188434f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7844eb72_8b4523b3",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-08-29T14:39:40Z",
       "side": 1,
       "message": "same here",
+      "revId": "5a97888d8b9df1815cee3d577ea95a44f188434f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5d4cceb9_0dfc28f8",
+        "filename": "tvix/Cargo.toml",
+        "patchSetId": 5
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-08-29T15:14:14Z",
+      "side": 1,
+      "message": "At no point did we have a comment for that, not sure what to link",
+      "parentUuid": "7844eb72_8b4523b3",
       "revId": "5a97888d8b9df1815cee3d577ea95a44f188434f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
