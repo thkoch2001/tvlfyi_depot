@@ -110,6 +110,24 @@
       "message": "Not ready yet. I suppose we should to spread this among all logical subprojects which downloads via JOSH.",
       "revId": "2f0c4c79f31ce0059953e927031819444cb2eee0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "82ee61d0_a5c11ed3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000134
+      },
+      "writtenOn": "2024-08-29T15:59:07Z",
+      "side": 1,
+      "message": "@tazjin@tvl.su said this is ok for now.",
+      "parentUuid": "06cedeb1_184ef60e",
+      "revId": "2f0c4c79f31ce0059953e927031819444cb2eee0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
