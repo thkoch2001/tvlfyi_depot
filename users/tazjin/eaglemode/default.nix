@@ -1,11 +1,13 @@
 # Derivation for my fully configured Eagle Mode.
 { depot, ... }:
 
-let
-  config = depot.tools.eaglemode.etcDir {
-    extraPaths = [ depot.tools.eaglemode.commands.emacsclient ];
+with depot.tools.eaglemode;
+
+withConfig {
+  config = etcDir {
+    extraPaths = [
+      commands.emacsclient
+      plugins.example
+    ];
   };
-in
-depot.tools.eaglemode.withConfig {
-  inherit config;
 }
