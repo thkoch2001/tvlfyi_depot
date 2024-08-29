@@ -22,6 +22,30 @@
       },
       "revId": "dbd736a5be910fcb49de946ad0f780f2c87e3ff0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c8dd4f7_a0e4b99f",
+        "filename": "tools/eaglemode/default.nix",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-08-29T07:12:26Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a1c8ab2_b73407f2",
+      "range": {
+        "startLine": 66,
+        "startChar": 0,
+        "endLine": 68,
+        "endChar": 2
+      },
+      "revId": "dbd736a5be910fcb49de946ad0f780f2c87e3ff0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
