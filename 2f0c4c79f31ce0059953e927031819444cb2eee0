@@ -24,6 +24,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7d428cdf_61129b3d",
+        "filename": ".gitreview",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000134
+      },
+      "writtenOn": "2024-08-29T15:55:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6a403ef7_38d7c869",
+      "range": {
+        "startLine": 2,
+        "startChar": 5,
+        "endLine": 2,
+        "endChar": 9
+      },
+      "revId": "2f0c4c79f31ce0059953e927031819444cb2eee0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a32582bf_1310fb4d",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-08-28T16:19:09Z",
       "side": 1,
       "message": "chore: ...",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 9
+      },
+      "revId": "2f0c4c79f31ce0059953e927031819444cb2eee0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e8da30d6_112bab45",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000134
+      },
+      "writtenOn": "2024-08-29T15:55:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a32582bf_1310fb4d",
       "range": {
         "startLine": 7,
         "startChar": 0,
