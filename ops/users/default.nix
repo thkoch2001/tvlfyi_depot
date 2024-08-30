@@ -42,6 +42,11 @@
     password = "{ARGON2}$argon2id$v=19$m=65536,t=4,p=1$TxjbMGenhEmkyYLrg5uGhbr60THB86YeRZg5bPdiTJo$k9gbRlAPjmxwdUwzbavvsAVkckgQZ0jS2oTtvZBPysk";
   }
   {
+    username = "domenkozar";
+    email = "domen@cachix.org";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$c9WgMrTqPJZenOr5+wlnnQ$XOpRZRTkduzP2+NJBxkg2jhffurg7PDla4/RoAyclwI";
+  }
+  {
     username = "edef";
     email = "edef@edef.eu";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$OORx4ERbkgvTmuYCJA8cIw$i5qaBzHkRVw7Tl+wZsTFTDqJwF0vuZqhW3VpknMYMc0";
