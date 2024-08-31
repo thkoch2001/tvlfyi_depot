@@ -83,6 +83,7 @@
     vSync = true;
   };
   hardware.graphics.enable32Bit = true;
+  hardware.nvidia.open = true;
 
   services.postgresql = {
     enable = true;
