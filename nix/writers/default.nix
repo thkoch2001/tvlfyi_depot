@@ -23,7 +23,6 @@ let
     { name
     , dependencies ? [ ]
     , doCheck ? true
-    ,
     }: src:
     (if doCheck then testRustSimple else pkgs.lib.id)
       (pkgs.buildRustCrate ({
