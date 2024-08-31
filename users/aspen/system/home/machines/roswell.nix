@@ -34,7 +34,7 @@ in
     openssl
 
     # Nix things
-    nixfmt
+    nixfmt-classic
     nix-prefetch-github
     nixpkgs-review
     cachix
