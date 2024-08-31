@@ -13,16 +13,15 @@
     blueman.enable = true;
     libinput.enable = true;
 
-    xserver = {
-      enable = true;
-      xkb.layout = "us";
-      xkb.options = "caps:super";
+    # wayland doesn't work otherwise ...?!
+    xserver.enable = true;
+  };
 
-      displayManager.sessionPackages = [ pkgs.niri ];
-      displayManager.gdm = {
-        enable = true;
-        wayland = true;
-      };
+  services.displayManager = {
+    sessionPackages = [ pkgs.niri ];
+    gdm = {
+      enable = true;
+      wayland = true;
     };
   };
 

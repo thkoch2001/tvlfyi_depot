@@ -83,6 +83,7 @@
     vSync = true;
   };
   hardware.graphics.enable32Bit = true;
+  hardware.nvidia.open = true;
 
   services.postgresql = {
     enable = true;
@@ -90,8 +91,8 @@
     authentication = "host all all 0.0.0.0/0 md5";
     dataDir = "/data/postgresql";
     package = pkgs.postgresql_15;
-    port = 5431;
     settings = {
+      port = 5431;
       wal_level = "logical";
     };
   };
