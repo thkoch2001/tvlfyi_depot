@@ -37,7 +37,6 @@
     # support tooling
     qt5.qtwayland
     sfwbar
-    swaybg
     swayidle
     wdisplays
     wezterm
