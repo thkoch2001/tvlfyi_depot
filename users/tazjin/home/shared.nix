@@ -38,12 +38,6 @@ in
     '';
   };
 
-  services.screen-locker = {
-    enable = true;
-    inactiveInterval = 10; # minutes
-    lockCmd = "${depot.users.tazjin.screenLock}/bin/tazjin-screen-lock";
-  };
-
   home.packages = [ telega-launcher ];
 
   xdg.desktopEntries.telega-launcher = {
@@ -65,13 +59,18 @@ in
     };
   };
 
-  services.picom = {
+  programs.wpaperd = {
     enable = true;
-    vSync = true;
-    backend = "glx";
-  };
+    settings = {
+      default = {
+        duration = "1d";
+        mode = "center";
+        sorting = "random";
+      };
 
-  services.syncthing.enable = true;
+      any.path = ../wallpapers;
+    };
+  };
 
   # Enable the dunst notification daemon, but force the
   # configuration file separately instead of going via the strange
