@@ -14,17 +14,15 @@
     libinput.enable = true;
 
     xserver = {
-      enable = true;
-      xkb.layout = "us";
-      xkb.options = "caps:super";
-
-      displayManager.sessionPackages = [ pkgs.niri ];
+      enable = true; # wayland doesn't work otherwise ...?!
       displayManager.gdm = {
         enable = true;
         wayland = true;
       };
     };
   };
+
+  services.displayManager.sessionPackages = [ pkgs.niri ];
 
   programs.xwayland.enable = true;
 
