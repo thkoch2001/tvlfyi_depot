@@ -74,7 +74,10 @@
 
   # Nvidia
   services.xserver = {
-    videoDrivers = [ "nvidia" ];
+    # TODO(aspen): this fails with an error about the `hardware.nvidia.open`
+    # option, which Nix thinks doesn't exist, despite it existing.
+    # videoDrivers = [ "nvidia" ];
+
     dpi = 100;
   };
   hardware.graphics.enable = true;
