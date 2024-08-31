@@ -321,6 +321,7 @@ depot.nix.readTree.drvTargets rec{
       pkg-config
     ];
     env.LIBGIT2_NO_VENDOR = "1";
+    meta.broken = true; # TODO(profpatsch): fix git version mismatch
   };
 
   matches = buildRustCrate {
