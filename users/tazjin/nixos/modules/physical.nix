@@ -20,11 +20,12 @@ in
     environment.systemPackages =
       # programs from the depot
       (with depot; [
-        users.tazjin.screenLock
-        users.tazjin.chase-geese
         config.tazjin.emacs
         third_party.agenix.cli
         tools.when
+        users.tazjin.chase-geese
+        users.tazjin.eaglemode
+        users.tazjin.screenLock
       ]) ++
 
       # programs from nixpkgs
