@@ -10,7 +10,6 @@
       pulse.enable = true;
     };
 
-    redshift.enable = true;
     blueman.enable = true;
     libinput.enable = true;
 
@@ -19,33 +18,38 @@
       xkb.layout = "us";
       xkb.options = "caps:super";
 
-      displayManager = {
-        # Give EXWM permission to control the session.
-        sessionCommands = "${pkgs.xorg.xhost}/bin/xhost +SI:localuser:$USER";
-        lightdm.enable = true;
-        # lightdm.greeters.gtk.clock-format = "%H:%M"; # TODO(tazjin): TZ?
+      displayManager.sessionPackages = [ pkgs.niri ];
+      displayManager.gdm = {
+        enable = true;
+        wayland = true;
       };
-
-      windowManager.session = lib.singleton {
-        name = "exwm";
-        start = "${config.tazjin.emacs}/bin/tazjins-emacs --internal-border=0 --border-width=0";
-      };
-      desktopManager.xfce.enable = true;
     };
   };
 
-  # Set variables to enable EXWM-XIM and other Emacs features.
-  environment.sessionVariables = {
-    XMODIFIERS = "@im=exwm-xim";
-    GTK_IM_MODULE = "xim";
-    QT_IM_MODULE = "xim";
-    CLUTTER_IM_MODULE = "xim";
-    EDITOR = "emacsclient";
-    _JAVA_AWT_WM_NONREPARENTING = "1";
-  };
+  programs.xwayland.enable = true;
+
+  environment.systemPackages = with pkgs; [
+    # core packages
+    niri
+    xwayland-satellite
+    swaylock
+
+    # support tooling
+    qt5.qtwayland
+    sfwbar
+    swaybg
+    swayidle
+    wdisplays
+    wezterm
+    wl-mirror
+    xfce.xfce4-appfinder
+  ];
 
   # Do not restart the display manager automatically
   systemd.services.display-manager.restartIfChanged = lib.mkForce false;
+
+  # swaylock needs an empty PAM configuration, otherwise it locks the user out
+  security.pam.services.swaylock = { };
 
   # If something needs more than 10s to stop it should probably be
   # killed.
