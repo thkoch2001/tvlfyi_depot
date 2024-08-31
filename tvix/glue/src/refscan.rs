@@ -230,7 +230,7 @@ where
                 break;
             }
         }
-        this.scanner.scan(&this.buffer);
+        this.scanner.scan(this.buffer);
         Poll::Ready(Ok(&this.buffer[*this.consumed..]))
     }
 
