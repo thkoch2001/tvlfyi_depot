@@ -70,6 +70,24 @@
       "parentUuid": "807e0d08_c60ea1b4",
       "revId": "bd4a63c128a198e0f1e817f8f67ac0bc76972301",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11c6110e_85840d3d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000010
+      },
+      "writtenOn": "2024-08-31T12:59:46Z",
+      "side": 1,
+      "message": "That doesn\u0027t work because the `outPath` attribute might be a thunk. We can\u0027t force the thunk once the evaluation is done (because forcing the thunk has to be able to do anything an evaluation can do, including performing IO, importing and compiling nix files, etc). We also can\u0027t just turn on strict mode, since the derivation itself has many irrelevant, extremely deep attributes (and I think it might even be self-recursive...).",
+      "parentUuid": "1b4c6894_f9e56c69",
+      "revId": "bd4a63c128a198e0f1e817f8f67ac0bc76972301",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
