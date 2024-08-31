@@ -64,6 +64,7 @@ in
   tvl.cache.enable = true;
 
   networking.hostName = "khamovnik";
+  networking.networkmanager.enable = true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
