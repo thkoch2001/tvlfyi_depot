@@ -238,8 +238,7 @@
 
 ;; Load all other Emacs configuration. These configurations are
 ;; added to `load-path' by Nix.
-(mapc 'require '(desktop
-                 mail-setup
+(mapc 'require '(mail-setup
                  look-and-feel
                  functions
                  settings
