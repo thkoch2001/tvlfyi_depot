@@ -22,6 +22,13 @@ resource "keycloak_ldap_user_federation" "tvl_ldap" {
     "inetOrgPerson",
     "organizationalPerson",
   ]
+
+  lifecycle {
+    # Without this, terraform wants to recreate the resource.
+    ignore_changes = [
+      delete_default_mappers
+    ]
+  }
 }
 
 # keycloak_oidc_identity_provider.github will be destroyed
