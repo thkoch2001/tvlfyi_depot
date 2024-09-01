@@ -72,6 +72,14 @@ in
     };
   };
 
+  services.swayidle = let cmd = "${pkgs.swaylock}/bin/swaylock -fFkl -c 008080"; in {
+    enable = true;
+    events = [
+      { event = "before-sleep"; command = cmd; }
+      { event = "lock"; command = cmd; }
+    ];
+  };
+
   # Enable the dunst notification daemon, but force the
   # configuration file separately instead of going via the strange
   # Nix->dunstrc encoding route.
