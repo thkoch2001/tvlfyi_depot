@@ -35,11 +35,11 @@
     swaylock
 
     # support tooling
+    alacritty
     qt5.qtwayland
     sfwbar
     swayidle
     wdisplays
-    wezterm
     wl-mirror
     xfce.xfce4-appfinder
   ];
