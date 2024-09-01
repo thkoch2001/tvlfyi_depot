@@ -39,6 +39,7 @@
     qt5.qtwayland
     sfwbar
     swayidle
+    waybar
     wdisplays
     wl-mirror
     xfce.xfce4-appfinder
