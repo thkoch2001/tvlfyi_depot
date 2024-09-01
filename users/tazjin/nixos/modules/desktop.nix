@@ -50,6 +50,10 @@
   # swaylock needs an empty PAM configuration, otherwise it locks the user out
   security.pam.services.swaylock = { };
 
+  # enable theming support for Qt that is compatible with Chicago95 theme
+  qt.enable = true;
+  qt.platformTheme = "qt5ct";
+
   # If something needs more than 10s to stop it should probably be
   # killed.
   systemd.extraConfig = ''
