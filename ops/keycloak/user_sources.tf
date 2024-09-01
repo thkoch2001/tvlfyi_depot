@@ -36,7 +36,7 @@ resource "keycloak_ldap_user_federation" "tvl_ldap" {
 resource "keycloak_oidc_identity_provider" "github" {
   alias                 = "github"
   provider_id           = "github"
-  client_id             = "6d7f8bb2e82bb6739556"
+  client_id             = "Iv23liXfGNIr7InMg5Uo"
   client_secret         = var.github_client_secret
   realm                 = keycloak_realm.tvl.id
   backchannel_supported = false
