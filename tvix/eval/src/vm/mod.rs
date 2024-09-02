@@ -1440,3 +1440,21 @@ where
 
     vm.run_lambda(root_span, lambda, strict)
 }
+
+pub fn force_thunk<IO>(
+    nix_search_path: NixSearchPath,
+    io_handle: IO,
+    observer: &mut dyn RuntimeObserver,
+    source: SourceCode,
+    globals: Rc<GlobalsMap>,
+    thunk: Thunk,
+    span: Span,
+) -> EvalResult<RuntimeResult>
+where
+    IO: AsRef<dyn EvalIO> + 'static,
+{
+    let mut vm = VM::new(nix_search_path, io_handle, observer, source, globals, span);
+
+    vm.enqueue_generator("thunk_force", span, |g| Thunk::force(thunk, g, span));
+    vm.execute()
+}
