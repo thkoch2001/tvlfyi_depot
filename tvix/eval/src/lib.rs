@@ -42,6 +42,7 @@ use std::path::PathBuf;
 use std::rc::Rc;
 use std::str::FromStr;
 use std::sync::Arc;
+use vm::shallow_force;
 
 use crate::observer::{CompilerObserver, RuntimeObserver};
 use crate::value::Lambda;
@@ -550,6 +551,60 @@ where
                         file.span,
                         source,
                     ));
+                    return result;
+                }
+
+                result.value = Some(runtime_result.value);
+                result.span = Some(runtime_result.span);
+            }
+            Err(err) => {
+                result.errors.push(err);
+            }
+        }
+
+        result
+    }
+
+    pub fn shallow_force(mut self, value: Value, span: Span) -> EvaluationResult {
+        let mut result = EvaluationResult::default();
+        let source = self.source_map();
+
+        let mut noop_observer = observer::NoOpObserver::default();
+
+        let nix_path = self
+            .nix_path
+            .as_ref()
+            .and_then(|s| match nix_search_path::NixSearchPath::from_str(s) {
+                Ok(path) => Some(path),
+                Err(err) => {
+                    result.warnings.push(EvalWarning {
+                        kind: WarningKind::InvalidNixPath(err.to_string()),
+                        span,
+                    });
+                    None
+                }
+            })
+            .unwrap_or_default();
+
+        let runtime_observer = self.runtime_observer.take().unwrap_or(&mut noop_observer);
+
+        let vm_result = shallow_force(
+            nix_path,
+            self.io_handle,
+            runtime_observer,
+            source.clone(),
+            self.globals,
+            value,
+            span,
+        );
+
+        match vm_result {
+            Ok(mut runtime_result) => {
+                result.warnings.append(&mut runtime_result.warnings);
+                if let Value::Catchable(inner) = runtime_result.value {
+                    result
+                        .errors
+                        .push(Error::new(ErrorKind::CatchableError(*inner), span, source));
                     return result;
                 }
 

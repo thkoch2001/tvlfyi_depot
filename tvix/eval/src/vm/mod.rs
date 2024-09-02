@@ -39,7 +39,7 @@ use crate::{
     NixString, SourceCode,
 };
 
-use generators::{call_functor, Generator, GeneratorState};
+use generators::{call_functor, request_force, Generator, GeneratorState};
 
 use self::generators::{VMRequest, VMResponse};
 
@@ -1425,5 +1425,25 @@ where
         },
     });
 
+    vm.execute()
+}
+
+pub fn shallow_force<IO>(
+    nix_search_path: NixSearchPath,
+    io_handle: IO,
+    observer: &mut dyn RuntimeObserver,
+    source: SourceCode,
+    globals: Rc<GlobalsMap>,
+    value: Value,
+    span: Span,
+) -> EvalResult<RuntimeResult>
+where
+    IO: AsRef<dyn EvalIO> + 'static,
+{
+    let mut vm = VM::new(nix_search_path, io_handle, observer, source, globals, span);
+
+    vm.enqueue_generator("shallow_force", span, |g| async move {
+        Ok(request_force(&g, value).await)
+    });
     vm.execute()
 }
