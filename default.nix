@@ -1,9 +1,10 @@
 {
   pkgs ? import <nixpkgs> { },
+  lib ? pkgs.lib,
+  ...
 }:
 
 let
-  inherit (pkgs) lib;
   buildNimSbom = pkgs.callPackage ./build-nim-sbom.nix { };
   nix' = pkgs.nixVersions.latest.overrideAttrs (_: {
     version = "2024-08-23";
