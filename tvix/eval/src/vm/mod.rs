@@ -439,6 +439,7 @@ where
         Ok(RuntimeResult {
             value,
             warnings: self.warnings,
+            span: self.reasonable_span,
         })
     }
 
@@ -1368,6 +1369,7 @@ async fn add_values(co: GenCo, a: Value, b: Value) -> Result<Value, ErrorKind> {
 pub struct RuntimeResult {
     pub value: Value,
     pub warnings: Vec<EvalWarning>,
+    pub span: Span,
 }
 
 // TODO(amjoseph): de-asyncify this

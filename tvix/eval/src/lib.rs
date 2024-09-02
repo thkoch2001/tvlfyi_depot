@@ -36,6 +36,7 @@ mod test_utils;
 #[cfg(test)]
 mod tests;
 
+use codemap::Span;
 use rustc_hash::FxHashMap;
 use std::path::PathBuf;
 use std::rc::Rc;
@@ -395,6 +396,9 @@ pub struct EvaluationResult {
 
     /// AST node that was parsed from the code (on success only).
     pub expr: Option<rnix::ast::Expr>,
+
+    /// Span associated to the evaluated value
+    pub span: Option<Span>,
 }
 
 impl<'co, 'ro, 'env, IO> Evaluation<'co, 'ro, 'env, IO> {
@@ -550,6 +554,7 @@ where
                 }
 
                 result.value = Some(runtime_result.value);
+                result.span = Some(runtime_result.span);
             }
             Err(err) => {
                 result.errors.push(err);
