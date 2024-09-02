@@ -234,7 +234,7 @@ impl Frame {
 }
 
 #[derive(Default)]
-struct ImportCache(FxHashMap<PathBuf, Value>);
+pub(crate) struct ImportCache(FxHashMap<PathBuf, Value>);
 
 /// The `ImportCache` holds the `Value` resulting from `import`ing a certain
 /// file, so that the same file doesn't need to be re-evaluated multiple times.
@@ -269,7 +269,7 @@ impl ImportCache {
     }
 }
 
-struct VM<'o, IO> {
+pub(crate) struct VM<'o, IO> {
     /// VM's frame stack, representing the execution contexts the VM is working
     /// through. Elements are usually pushed when functions are called, or
     /// thunks are being forced.
