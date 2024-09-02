@@ -72,7 +72,8 @@
 (use-package rainbow-mode)
 (use-package s)
 (use-package string-edit-at-point)
-(use-package term-switcher)
+(use-package term-switcher
+  :bind (:map global-map ("<f5>" . #'ts/switch-to-terminal)))
 
 (use-package undo-tree
   :config (global-undo-tree-mode)
@@ -166,7 +167,7 @@
   (setq common-lisp-hyperspec-root "file:///home/tazjin/docs/lisp/"))
 
 (use-package telega
-  :bind (:map global-map ("s-c" . (lambda (p) (interactive "P")
+  :bind (:map global-map ("C-x c" . (lambda (p) (interactive "P")
                                     (if p (call-interactively #'telega-chat-with)
                                       (telega))))
          :map telega-chat-button-map ("a" . ignore))
