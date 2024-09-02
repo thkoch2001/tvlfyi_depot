@@ -19,9 +19,9 @@ pub use errors::{DerivationError, FetcherError, ImportError};
 /// As they need to interact with `known_paths`, we also need to pass in
 /// `known_paths`.
 pub fn add_derivation_builtins<'co, 'ro, 'env, IO>(
-    eval_builder: tvix_eval::EvaluationBuilder<'co, 'ro, 'env, IO>,
+    eval_builder: tvix_eval::EvaluatorBuilder<'co, 'ro, 'env, IO>,
     io: Rc<TvixStoreIO>,
-) -> tvix_eval::EvaluationBuilder<'co, 'ro, 'env, IO> {
+) -> tvix_eval::EvaluatorBuilder<'co, 'ro, 'env, IO> {
     eval_builder
         .add_builtins(derivation::derivation_builtins::builtins(Rc::clone(&io)))
         // Add the actual `builtins.derivation` from compiled Nix code
@@ -34,9 +34,9 @@ pub fn add_derivation_builtins<'co, 'ro, 'env, IO>(
 /// * `fetchTarball`
 /// * `fetchGit`
 pub fn add_fetcher_builtins<'co, 'ro, 'env, IO>(
-    eval_builder: tvix_eval::EvaluationBuilder<'co, 'ro, 'env, IO>,
+    eval_builder: tvix_eval::EvaluatorBuilder<'co, 'ro, 'env, IO>,
     io: Rc<TvixStoreIO>,
-) -> tvix_eval::EvaluationBuilder<'co, 'ro, 'env, IO> {
+) -> tvix_eval::EvaluatorBuilder<'co, 'ro, 'env, IO> {
     eval_builder.add_builtins(fetchers::fetcher_builtins::builtins(Rc::clone(&io)))
 }
 
@@ -46,9 +46,9 @@ pub fn add_fetcher_builtins<'co, 'ro, 'env, IO>(
 ///
 /// As they need to interact with the store implementation, we pass [`TvixStoreIO`].
 pub fn add_import_builtins<'co, 'ro, 'env, IO>(
-    eval_builder: tvix_eval::EvaluationBuilder<'co, 'ro, 'env, IO>,
+    eval_builder: tvix_eval::EvaluatorBuilder<'co, 'ro, 'env, IO>,
     io: Rc<TvixStoreIO>,
-) -> tvix_eval::EvaluationBuilder<'co, 'ro, 'env, IO> {
+) -> tvix_eval::EvaluatorBuilder<'co, 'ro, 'env, IO> {
     // TODO(raitobezarius): evaluate expressing filterSource as Nix code using path (b/372)
     eval_builder.add_builtins(import::import_builtins(io))
 }
@@ -65,13 +65,13 @@ mod tests {
     use rstest::rstest;
     use tempfile::TempDir;
     use tvix_build::buildservice::DummyBuildService;
-    use tvix_eval::{EvalIO, EvaluationResult};
+    use tvix_eval::{EvalIO, EvaluatorResult};
     use tvix_store::utils::{construct_services, ServiceUrlsMemory};
 
     /// evaluates a given nix expression and returns the result.
     /// Takes care of setting up the evaluator so it knows about the
     // `derivation` builtin.
-    fn eval(str: &str) -> EvaluationResult {
+    fn eval(str: &str) -> EvaluatorResult {
         // We assemble a complete store in memory.
         let runtime = tokio::runtime::Runtime::new().expect("Failed to build a Tokio runtime");
         let (blob_service, directory_service, path_info_service, nar_calculation_service) = runtime
@@ -89,7 +89,7 @@ mod tests {
             runtime.handle().clone(),
         ));
 
-        let mut eval_builder = tvix_eval::Evaluation::builder(io.clone() as Rc<dyn EvalIO>);
+        let mut eval_builder = tvix_eval::Evaluator::builder(io.clone() as Rc<dyn EvalIO>);
         eval_builder = add_derivation_builtins(eval_builder, Rc::clone(&io));
         eval_builder = add_fetcher_builtins(eval_builder, Rc::clone(&io));
         eval_builder = add_import_builtins(eval_builder, io);

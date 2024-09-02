@@ -48,7 +48,7 @@ fn eval_test(code_path: PathBuf, expect_success: bool) {
 
     let code = std::fs::read_to_string(&code_path).expect("should be able to read test code");
 
-    let eval = crate::Evaluation::builder_impure()
+    let eval = crate::Evaluator::builder_impure()
         .strict()
         .add_builtins(mock_builtins::builtins())
         .build();
@@ -129,7 +129,7 @@ fn identity(#[files("src/tests/tvix_tests/identity-*.nix")] code_path: PathBuf) 
 
     let code = std::fs::read_to_string(code_path).expect("should be able to read test code");
 
-    let eval = crate::Evaluation::builder(Box::new(crate::StdIO) as Box<dyn EvalIO>)
+    let eval = crate::Evaluator::builder(Box::new(crate::StdIO) as Box<dyn EvalIO>)
         .disable_import()
         .strict()
         .build();

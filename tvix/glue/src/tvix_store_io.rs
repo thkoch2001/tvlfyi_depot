@@ -627,7 +627,7 @@ mod tests {
     use clap::Parser;
     use tempfile::TempDir;
     use tvix_build::buildservice::DummyBuildService;
-    use tvix_eval::{EvalIO, EvaluationResult};
+    use tvix_eval::{EvalIO, EvaluatorResult};
     use tvix_store::utils::{construct_services, ServiceUrlsMemory};
 
     use super::TvixStoreIO;
@@ -636,7 +636,7 @@ mod tests {
     /// evaluates a given nix expression and returns the result.
     /// Takes care of setting up the evaluator so it knows about the
     // `derivation` builtin.
-    fn eval(str: &str) -> EvaluationResult {
+    fn eval(str: &str) -> EvaluatorResult {
         let tokio_runtime = tokio::runtime::Runtime::new().unwrap();
         let (blob_service, directory_service, path_info_service, nar_calculation_service) =
             tokio_runtime
@@ -656,7 +656,7 @@ mod tests {
         ));
 
         let mut eval_builder =
-            tvix_eval::Evaluation::builder(io.clone() as Rc<dyn EvalIO>).enable_import();
+            tvix_eval::Evaluator::builder(io.clone() as Rc<dyn EvalIO>).enable_import();
         eval_builder = add_derivation_builtins(eval_builder, Rc::clone(&io));
         eval_builder = add_fetcher_builtins(eval_builder, Rc::clone(&io));
         eval_builder = add_import_builtins(eval_builder, io);

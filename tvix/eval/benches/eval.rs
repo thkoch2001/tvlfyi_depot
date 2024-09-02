@@ -6,7 +6,7 @@ use mimalloc::MiMalloc;
 static GLOBAL: MiMalloc = MiMalloc;
 
 fn interpret(code: &str) {
-    tvix_eval::Evaluation::builder_pure()
+    tvix_eval::Evaluator::builder_pure()
         .build()
         .evaluate(code, None);
 }
