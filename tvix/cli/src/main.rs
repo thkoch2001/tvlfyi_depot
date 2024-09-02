@@ -14,7 +14,7 @@ static GLOBAL: MiMalloc = MiMalloc;
 /// Interpret the given code snippet, but only run the Tvix compiler
 /// on it and return errors and warnings.
 fn lint(code: &str, path: Option<PathBuf>, args: &Args) -> bool {
-    let mut eval_builder = tvix_eval::Evaluation::builder_impure().with_strict(args.strict);
+    let mut eval_builder = tvix_eval::Evaluator::builder_impure().with_strict(args.strict);
 
     let source_map = eval_builder.source_map().clone();
 

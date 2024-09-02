@@ -15,9 +15,9 @@ mod tests;
 /// which has special handling in [tvix_io::TvixIO].
 /// This is used in nixpkgs to import `fetchurl.nix` from `<nix>`.
 pub fn configure_nix_path<'co, 'ro, 'env, IO>(
-    eval_builder: tvix_eval::EvaluationBuilder<'co, 'ro, 'env, IO>,
+    eval_builder: tvix_eval::EvaluatorBuilder<'co, 'ro, 'env, IO>,
     nix_search_path: &Option<String>,
-) -> tvix_eval::EvaluationBuilder<'co, 'ro, 'env, IO> {
+) -> tvix_eval::EvaluatorBuilder<'co, 'ro, 'env, IO> {
     eval_builder.nix_path(
         nix_search_path
             .as_ref()
