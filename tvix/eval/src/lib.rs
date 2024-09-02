@@ -73,17 +73,17 @@ enum BuilderGlobals {
     Globals(Rc<GlobalsMap>),
 }
 
-/// Builder for building an [`Evaluation`].
+/// Builder for building an [`Evaluator`].
 ///
-/// Construct an [`EvaluationBuilder`] by calling one of:
+/// Construct an [`EvaluatorBuilder`] by calling one of:
 ///
-/// - [`Evaluation::builder`] / [`EvaluationBuilder::new`]
-/// - [`Evaluation::builder_impure`] [`EvaluationBuilder::new_impure`]
-/// - [`Evaluation::builder_pure`] [`EvaluationBuilder::new_pure`]
+/// - [`Evaluator::builder`] / [`EvaluatorBuilder::new`]
+/// - [`Evaluator::builder_impure`] [`EvaluatorBuilder::new_impure`]
+/// - [`Evaluator::builder_pure`] [`EvaluatorBuilder::new_pure`]
 ///
-/// Then configure the fields by calling the various methods on [`EvaluationBuilder`], and finally
-/// call [`build`](Self::build) to construct an [`Evaluation`]
-pub struct EvaluationBuilder<'co, 'ro, 'env, IO> {
+/// Then configure the fields by calling the various methods on [`EvaluatorBuilder`], and finally
+/// call [`build`](Self::build) to construct an [`Evaluator`]
+pub struct EvaluatorBuilder<'co, 'ro, 'env, IO> {
     source_map: Option<SourceCode>,
     globals: BuilderGlobals,
     env: Option<&'env FxHashMap<SmolStr, Value>>,
@@ -95,18 +95,18 @@ pub struct EvaluationBuilder<'co, 'ro, 'env, IO> {
     runtime_observer: Option<&'ro mut dyn RuntimeObserver>,
 }
 
-impl<'co, 'ro, 'env, IO> EvaluationBuilder<'co, 'ro, 'env, IO>
+impl<'co, 'ro, 'env, IO> EvaluatorBuilder<'co, 'ro, 'env, IO>
 where
     IO: AsRef<dyn EvalIO> + 'static,
 {
-    /// Build an [`Evaluation`] based on the configuration in this builder.
+    /// Build an [`Evaluator`] based on the configuration in this builder.
     ///
     /// This:
     ///
     /// - Adds a `"storeDir"` builtin containing the store directory of the configured IO handle
     /// - Sets up globals based on the configured builtins
-    /// - Copies all other configured fields to the [`Evaluation`]
-    pub fn build(self) -> Evaluation<'co, 'ro, 'env, IO> {
+    /// - Copies all other configured fields to the [`Evaluator`]
+    pub fn build(self) -> Evaluator<'co, 'ro, 'env, IO> {
         let source_map = self.source_map.unwrap_or_default();
 
         let globals = match self.globals {
@@ -129,7 +129,7 @@ where
             }
         };
 
-        Evaluation {
+        Evaluator {
             source_map,
             globals,
             env: self.env,
@@ -144,7 +144,7 @@ where
 
 // NOTE(aspen): The methods here are intentionally incomplete; feel free to add new ones (ideally
 // with similar naming conventions to the ones already present) but don't expose fields publically!
-impl<'co, 'ro, 'env, IO> EvaluationBuilder<'co, 'ro, 'env, IO> {
+impl<'co, 'ro, 'env, IO> EvaluatorBuilder<'co, 'ro, 'env, IO> {
     pub fn new(io_handle: IO) -> Self {
         let mut builtins = builtins::pure_builtins();
         builtins.extend(builtins::placeholders()); // these are temporary
@@ -165,8 +165,8 @@ impl<'co, 'ro, 'env, IO> EvaluationBuilder<'co, 'ro, 'env, IO> {
         }
     }
 
-    pub fn io_handle<IO2>(self, io_handle: IO2) -> EvaluationBuilder<'co, 'ro, 'env, IO2> {
-        EvaluationBuilder {
+    pub fn io_handle<IO2>(self, io_handle: IO2) -> EvaluatorBuilder<'co, 'ro, 'env, IO2> {
+        EvaluatorBuilder {
             io_handle,
             source_map: self.source_map,
             globals: self.globals,
@@ -198,7 +198,7 @@ impl<'co, 'ro, 'env, IO> EvaluationBuilder<'co, 'ro, 'env, IO> {
         match &mut self.globals {
             BuilderGlobals::Builtins(builtins) => builtins,
             BuilderGlobals::Globals(_) => {
-                panic!("Cannot modify builtins on an EvaluationBuilder with globals configured")
+                panic!("Cannot modify builtins on an EvaluatorBuilder with globals configured")
             }
         }
     }
@@ -244,7 +244,7 @@ impl<'co, 'ro, 'env, IO> EvaluationBuilder<'co, 'ro, 'env, IO> {
     pub fn with_source_map(self, source_map: SourceCode) -> Self {
         debug_assert!(
             self.source_map.is_none(),
-            "Cannot set the source_map on an EvaluationBuilder twice"
+            "Cannot set the source_map on an EvaluatorBuilder twice"
         );
         Self {
             source_map: Some(source_map),
@@ -297,21 +297,21 @@ impl<'co, 'ro, 'env, IO> EvaluationBuilder<'co, 'ro, 'env, IO> {
     }
 }
 
-impl<'co, 'ro, 'env, IO> EvaluationBuilder<'co, 'ro, 'env, IO> {
+impl<'co, 'ro, 'env, IO> EvaluatorBuilder<'co, 'ro, 'env, IO> {
     pub fn source_map(&mut self) -> &SourceCode {
         self.source_map.get_or_insert_with(SourceCode::default)
     }
 }
 
-impl<'co, 'ro, 'env> EvaluationBuilder<'co, 'ro, 'env, Box<dyn EvalIO>> {
-    /// Initialize an `Evaluation`, without the import statement available, and
+impl<'co, 'ro, 'env> EvaluatorBuilder<'co, 'ro, 'env, Box<dyn EvalIO>> {
+    /// Initialize an `Evaluator`, without the import statement available, and
     /// all IO operations stubbed out.
     pub fn new_pure() -> Self {
         Self::new(Box::new(DummyIO) as Box<dyn EvalIO>).with_enable_import(false)
     }
 
     #[cfg(feature = "impure")]
-    /// Configure an `Evaluation` to have impure features available
+    /// Configure an `Evaluator` to have impure features available
     /// with the given I/O implementation.
     ///
     /// If no I/O implementation is supplied, [`StdIO`] is used by
@@ -332,19 +332,19 @@ impl<'co, 'ro, 'env> EvaluationBuilder<'co, 'ro, 'env, Box<dyn EvalIO>> {
     }
 
     #[cfg(feature = "impure")]
-    /// Initialise an `Evaluation`, with all impure features turned on by default.
+    /// Initialise an `Evaluator`, with all impure features turned on by default.
     pub fn new_impure() -> Self {
         Self::new_pure().enable_impure(None)
     }
 }
 
-/// An `Evaluation` represents how a piece of Nix code is evaluated. It can be
+/// An `Evaluator` represents how a piece of Nix code is evaluated. It can be
 /// instantiated and configured directly, or it can be accessed through the
 /// various simplified helper methods available below.
 ///
 /// Public fields are intended to be set by the caller. Setting all
 /// fields is optional.
-pub struct Evaluation<'co, 'ro, 'env, IO> {
+pub struct Evaluator<'co, 'ro, 'env, IO> {
     /// Source code map used for error reporting.
     source_map: SourceCode,
 
@@ -382,7 +382,7 @@ pub struct Evaluation<'co, 'ro, 'env, IO> {
 /// will be present (and potentially some warnings!). If evaluation failed,
 /// errors will be present.
 #[derive(Debug, Default)]
-pub struct EvaluationResult {
+pub struct EvaluatorResult {
     /// Nix value that the code evaluated to.
     pub value: Option<Value>,
 
@@ -397,41 +397,41 @@ pub struct EvaluationResult {
     pub expr: Option<rnix::ast::Expr>,
 }
 
-impl<'co, 'ro, 'env, IO> Evaluation<'co, 'ro, 'env, IO> {
+impl<'co, 'ro, 'env, IO> Evaluator<'co, 'ro, 'env, IO> {
     /// Make a new [builder][] for configuring an evaluation
     ///
-    /// [builder]: EvaluationBuilder
-    pub fn builder(io_handle: IO) -> EvaluationBuilder<'co, 'ro, 'env, IO> {
-        EvaluationBuilder::new(io_handle)
+    /// [builder]: EvaluatorBuilder
+    pub fn builder(io_handle: IO) -> EvaluatorBuilder<'co, 'ro, 'env, IO> {
+        EvaluatorBuilder::new(io_handle)
     }
 
     /// Clone the reference to the map of Nix globals for this evaluation. If [`Value`]s are shared
-    /// across subsequent [`Evaluation`]s, it is important that those evaluations all have the same
+    /// across subsequent [`Evaluator`]s, it is important that those evaluations all have the same
     /// underlying globals map.
     pub fn globals(&self) -> Rc<GlobalsMap> {
         self.globals.clone()
     }
 
     /// Clone the reference to the contained source code map. This is used after an evaluation for
-    /// pretty error printing. Also, if [`Value`]s are shared across subsequent [`Evaluation`]s, it
+    /// pretty error printing. Also, if [`Value`]s are shared across subsequent [`Evaluator`]s, it
     /// is important that those evaluations all have the same underlying source code map.
     pub fn source_map(&self) -> SourceCode {
         self.source_map.clone()
     }
 }
 
-impl<'co, 'ro, 'env> Evaluation<'co, 'ro, 'env, Box<dyn EvalIO>> {
+impl<'co, 'ro, 'env> Evaluator<'co, 'ro, 'env, Box<dyn EvalIO>> {
     #[cfg(feature = "impure")]
-    pub fn builder_impure() -> EvaluationBuilder<'co, 'ro, 'env, Box<dyn EvalIO>> {
-        EvaluationBuilder::new_impure()
+    pub fn builder_impure() -> EvaluatorBuilder<'co, 'ro, 'env, Box<dyn EvalIO>> {
+        EvaluatorBuilder::new_impure()
     }
 
-    pub fn builder_pure() -> EvaluationBuilder<'co, 'ro, 'env, Box<dyn EvalIO>> {
-        EvaluationBuilder::new_pure()
+    pub fn builder_pure() -> EvaluatorBuilder<'co, 'ro, 'env, Box<dyn EvalIO>> {
+        EvaluatorBuilder::new_pure()
     }
 }
 
-impl<'co, 'ro, 'env, IO> Evaluation<'co, 'ro, 'env, IO>
+impl<'co, 'ro, 'env, IO> Evaluator<'co, 'ro, 'env, IO>
 where
     IO: AsRef<dyn EvalIO> + 'static,
 {
@@ -444,8 +444,8 @@ where
         mut self,
         code: impl AsRef<str>,
         location: Option<PathBuf>,
-    ) -> EvaluationResult {
-        let mut result = EvaluationResult::default();
+    ) -> EvaluatorResult {
+        let mut result = EvaluatorResult::default();
         let source = self.source_map();
 
         let location_str = location
@@ -475,12 +475,8 @@ where
     /// Evaluate the provided source code, at an optional location of the source
     /// code (i.e. path to the file it was read from; used for error reporting,
     /// and for resolving relative paths in impure functions)
-    pub fn evaluate(
-        mut self,
-        code: impl AsRef<str>,
-        location: Option<PathBuf>,
-    ) -> EvaluationResult {
-        let mut result = EvaluationResult::default();
+    pub fn evaluate(mut self, code: impl AsRef<str>, location: Option<PathBuf>) -> EvaluatorResult {
+        let mut result = EvaluatorResult::default();
         let source = self.source_map();
 
         let location_str = location
@@ -564,7 +560,7 @@ where
 /// between the public functions.
 #[allow(clippy::too_many_arguments)] // internal API, no point making an indirection type
 fn parse_compile_internal(
-    result: &mut EvaluationResult,
+    result: &mut EvaluatorResult,
     code: &str,
     file: Arc<codemap::File>,
     location: Option<PathBuf>,
