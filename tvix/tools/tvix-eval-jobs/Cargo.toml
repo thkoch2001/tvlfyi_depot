@@ -1,0 +1,23 @@
+[package]
+name = "tvix-eval-jobs"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "tvix-eval-jobs"
+path = "src/main.rs"
+
+[dependencies]
+nix-compat = { path = "../../nix-compat" }
+tvix-build = { path = "../../build" }
+tvix-castore = { path = "../../castore" }
+tvix-store = { path = "../../store", default-features = false, features = []}
+tvix-eval = { path = "../../eval" }
+tvix-glue = { path = "../../glue" }
+tvix-tracing = { path = "../../tracing" }
+clap = "4.5.16"
+tracing = "0.1.40"
+mimalloc = "0.1.43"
+tokio = "1.40.0"
+tracing-indicatif = "0.3.6"
+codemap.workspace = true
