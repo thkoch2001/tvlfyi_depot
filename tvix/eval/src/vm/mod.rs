@@ -383,7 +383,7 @@ where
 
     /// Run the VM's primary (outer) execution loop, continuing execution based
     /// on the current frame at the top of the frame stack.
-    fn execute(mut self) -> EvalResult<RuntimeResult> {
+    fn execute(&mut self) -> EvalResult<RuntimeResult> {
         while let Some(frame) = self.frames.pop() {
             self.reasonable_span = frame.span();
             let frame_id = self.frames.len();
@@ -438,7 +438,7 @@ where
             .expect("tvix bug: runtime stack empty after execution");
         Ok(RuntimeResult {
             value,
-            warnings: self.warnings,
+            warnings: std::mem::take(&mut self.warnings),
         })
     }
 
@@ -1378,6 +1378,37 @@ async fn final_deep_force(co: GenCo) -> Result<Value, ErrorKind> {
     Ok(generators::request_deep_force(&co, value).await)
 }
 
+/// Implementation for user-facing helper functions.
+impl<'o, IO> VM<'o, IO>
+where
+    IO: AsRef<dyn EvalIO> + 'static,
+{
+    pub fn run_lambda(
+        &mut self,
+        root_span: Span,
+        lambda: Rc<Lambda>,
+        strict: bool,
+    ) -> EvalResult<RuntimeResult> {
+        // When evaluating strictly, synthesise a frame that will instruct
+        // the VM to deep-force the final value before returning it.
+        if strict {
+            self.enqueue_generator("final_deep_force", root_span, final_deep_force);
+        }
+
+        self.frames.push(Frame::CallFrame {
+            span: root_span,
+            call_frame: CallFrame {
+                lambda,
+                upvalues: Rc::new(Upvalues::with_capacity(0)),
+                ip: CodeIdx(0),
+                stack_offset: 0,
+            },
+        });
+
+        self.execute()
+    }
+}
+
 pub fn run_lambda<IO>(
     nix_search_path: NixSearchPath,
     io_handle: IO,
@@ -1407,21 +1438,5 @@ where
         root_span,
     );
 
-    // When evaluating strictly, synthesise a frame that will instruct
-    // the VM to deep-force the final value before returning it.
-    if strict {
-        vm.enqueue_generator("final_deep_force", root_span, final_deep_force);
-    }
-
-    vm.frames.push(Frame::CallFrame {
-        span: root_span,
-        call_frame: CallFrame {
-            lambda,
-            upvalues: Rc::new(Upvalues::with_capacity(0)),
-            ip: CodeIdx(0),
-            stack_offset: 0,
-        },
-    });
-
-    vm.execute()
+    vm.run_lambda(root_span, lambda, strict)
 }
