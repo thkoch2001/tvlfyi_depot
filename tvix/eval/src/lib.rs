@@ -138,6 +138,7 @@ where
             nix_path: self.nix_path,
             compiler_observer: self.compiler_observer,
             runtime_observer: self.runtime_observer,
+            vm: None,
         }
     }
 }
@@ -376,6 +377,9 @@ pub struct Evaluator<'co, 'ro, 'env, IO> {
     /// (optional) runtime observer, for reporting on execution steps
     /// of Nix code.
     runtime_observer: Option<&'ro mut dyn RuntimeObserver>,
+
+    /// (optional) virtual machine handle, for further reuse
+    vm: Option<vm::VM<'ro, IO>>,
 }
 
 /// Result of evaluating a piece of Nix code. If evaluation succeeded, a value
