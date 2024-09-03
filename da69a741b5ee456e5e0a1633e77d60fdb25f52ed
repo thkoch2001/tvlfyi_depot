@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7caabc89_b749eefe",
+        "filename": "tools/eaglemode/plugins/qoi/src/PlQoi.cpp",
+        "patchSetId": 2
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-09-03T17:37:08Z",
+      "side": 1,
+      "message": "Note to self: Check if these are mandatory to implement.",
+      "range": {
+        "startLine": 238,
+        "startChar": 0,
+        "endLine": 241,
+        "endChar": 1
+      },
+      "revId": "da69a741b5ee456e5e0a1633e77d60fdb25f52ed",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
