@@ -52,6 +52,16 @@
   systemd.user.services.pipewire.wantedBy = [ "niri.service" ];
   systemd.user.services.pipewire.before = [ "niri.service" ];
 
+  # enable "desktop portals", which are important somehow
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-gnome
+    ];
+    config.common.default = "*";
+  };
+
   # swaylock needs an empty PAM configuration, otherwise it locks the user out
   security.pam.services.swaylock = { };
 
