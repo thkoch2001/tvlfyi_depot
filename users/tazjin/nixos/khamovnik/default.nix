@@ -117,6 +117,13 @@ in
   # Try to work around Intel CPU throttling bugs
   services.throttled.enable = true;
 
+  # Try to get suspend to work more reliably
+  services.logind = {
+    lidSwitch = "suspend";
+    lidSwitchDocked = "suspend";
+    lidSwitchExternalPower = "suspend";
+  };
+
   virtualisation.docker.enable = true;
 
   hardware.bluetooth.enable = true;
