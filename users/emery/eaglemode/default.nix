@@ -5,6 +5,7 @@ let
   config = depot.tools.eaglemode.etcDir {
     extraPaths = [
       depot.tools.eaglemode.commands.B
+      depot.tools.eaglemode.plugins.avif
       depot.tools.eaglemode.plugins.qoi
     ];
   };
