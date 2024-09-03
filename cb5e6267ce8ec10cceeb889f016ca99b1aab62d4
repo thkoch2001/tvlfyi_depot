@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "618b8bac_ed140791",
+        "filename": "tvix/tools/tvix-eval-jobs/src/main.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-03T11:30:33Z",
+      "side": 1,
+      "message": "it does configure, it\u0027s at service_addrs and build_service_addr!",
+      "revId": "cb5e6267ce8ec10cceeb889f016ca99b1aab62d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dbb6f81d_e7a4b8e0",
+        "filename": "tvix/tools/tvix-eval-jobs/src/main.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-03T11:30:33Z",
+      "side": 1,
+      "message": "this is copy pasted from somewhere, only use RUST_LOG please.",
+      "revId": "cb5e6267ce8ec10cceeb889f016ca99b1aab62d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29bc86d3_e05647a0",
+        "filename": "tvix/tools/tvix-eval-jobs/src/main.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-03T11:30:33Z",
+      "side": 1,
+      "message": "```suggestion\n                .expect(\"Did not find a string derivation path\")\n```\n\n\"did\" already makes it past tense.",
+      "revId": "cb5e6267ce8ec10cceeb889f016ca99b1aab62d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f6621f5_6e63a5ca",
+        "filename": "tvix/tools/tvix-eval-jobs/src/main.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-03T11:30:33Z",
+      "side": 1,
+      "message": "```suggestion\n                .expect(\"Did not find a string output path\")\n```\n\n\n\"did\" already makes it past tense.",
+      "revId": "cb5e6267ce8ec10cceeb889f016ca99b1aab62d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7a8a0b04_503154f5",
+        "filename": "tvix/tools/tvix-eval-jobs/src/main.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-03T11:30:33Z",
+      "side": 1,
+      "message": "why clones here?",
+      "revId": "cb5e6267ce8ec10cceeb889f016ca99b1aab62d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c15e9c9f_789ad36d",
+        "filename": "tvix/tools/tvix-eval-jobs/src/main.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-03T11:30:33Z",
+      "side": 1,
+      "message": "this should probably be a field of the method annotated with the instrument macro.",
+      "revId": "cb5e6267ce8ec10cceeb889f016ca99b1aab62d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "528dd8ab_3fc39c20",
+        "filename": "tvix/tools/tvix-eval-jobs/src/main.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-03T11:30:33Z",
+      "side": 1,
+      "message": "trace!, or remove?",
+      "revId": "cb5e6267ce8ec10cceeb889f016ca99b1aab62d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4e66b00_ea18e678",
+        "filename": "tvix/tools/tvix-eval-jobs/src/main.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-03T11:30:33Z",
+      "side": 1,
+      "message": "I\u0027d prefer derivations to be private. It\u0027s a bit unclear what we want to get from this later on, but maybe provide access to KnownPaths somehow?",
+      "revId": "cb5e6267ce8ec10cceeb889f016ca99b1aab62d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
