@@ -48,6 +48,10 @@
   # Do not restart the display manager automatically
   systemd.services.display-manager.restartIfChanged = lib.mkForce false;
 
+  # pipewire MUST start before niri, otherwise screen sharing doesn't work
+  systemd.user.services.pipewire.wantedBy = [ "niri.service" ];
+  systemd.user.services.pipewire.before = [ "niri.service" ];
+
   # swaylock needs an empty PAM configuration, otherwise it locks the user out
   security.pam.services.swaylock = { };
 
