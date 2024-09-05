@@ -35,7 +35,6 @@
     # support tooling
     alacritty
     qt5.qtwayland
-    sfwbar
     swayidle
     waybar
     wdisplays
