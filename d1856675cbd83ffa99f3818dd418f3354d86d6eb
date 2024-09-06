@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ade09c4b_19d3a85a",
+        "filename": "tvix/store/src/nar/seekable.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 219,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-06T14:09:42Z",
+      "side": 1,
+      "message": "We will never have 0 segments, if we do, we have a coding error. Let\u0027s make this an expect(\"no segments found\")",
+      "revId": "d1856675cbd83ffa99f3818dd418f3354d86d6eb",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
