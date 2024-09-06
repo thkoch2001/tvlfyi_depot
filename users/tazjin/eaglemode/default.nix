@@ -8,6 +8,9 @@ withConfig {
     extraPaths = [
       commands.emacsclient
       plugins.example
+      plugins.yatracker
+      plugins.qoi
+      plugins.avif
     ];
   };
 }
