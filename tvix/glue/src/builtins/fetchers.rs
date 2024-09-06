@@ -6,12 +6,18 @@ use crate::{
     tvix_store_io::TvixStoreIO,
 };
 use nix_compat::nixhash;
-use std::rc::Rc;
+use std::{rc::Rc, sync::Arc};
 use tvix_eval::builtin_macros::builtins;
 use tvix_eval::generators::Gen;
 use tvix_eval::generators::GenCo;
 use tvix_eval::{CatchableErrorKind, ErrorKind, Value};
 use url::Url;
+
+#[cfg(feature = "multithread")]
+type RefCounted<T> = Arc<T>;
+
+#[cfg(not(feature = "multithread"))]
+type RefCounted<T> = Rc<T>;
 
 // Used as a return type for extract_fetch_args, which is sharing some
 // parsing code between the fetchurl and fetchTarball builtins.
@@ -88,7 +94,7 @@ async fn extract_fetch_args(
 }
 
 #[allow(unused_variables)] // for the `state` arg, for now
-#[builtins(state = "Rc<TvixStoreIO>")]
+#[builtins(state = "RefCounted<TvixStoreIO>")]
 pub(crate) mod fetcher_builtins {
     use nix_compat::nixhash::NixHash;
 
@@ -99,13 +105,26 @@ pub(crate) mod fetcher_builtins {
     /// queue the fetch to be fetched lazily, and return the store path.
     /// If there's not enough info to calculate it, do the fetch now, and then
     /// return the store path.
-    fn fetch_lazy(state: Rc<TvixStoreIO>, name: String, fetch: Fetch) -> Result<Value, ErrorKind> {
+    fn fetch_lazy(
+        state: RefCounted<TvixStoreIO>,
+        name: String,
+        fetch: Fetch,
+    ) -> Result<Value, ErrorKind> {
         match fetch
             .store_path(&name)
             .map_err(|e| ErrorKind::TvixError(Rc::new(e)))?
         {
             Some(store_path) => {
                 // Move the fetch to KnownPaths, so it can be actually fetched later.
+                #[cfg(feature = "multithread")]
+                let sp = state
+                    .known_paths
+                    .write()
+                    .unwrap()
+                    .add_fetch(fetch, &name)
+                    .expect("Tvix bug: should only fail if the store path cannot be calculated");
+
+                #[cfg(not(feature = "multithread"))]
                 let sp = state
                     .known_paths
                     .borrow_mut()
@@ -134,7 +153,7 @@ pub(crate) mod fetcher_builtins {
 
     #[builtin("fetchurl")]
     async fn builtin_fetchurl(
-        state: Rc<TvixStoreIO>,
+        state: RefCounted<TvixStoreIO>,
         co: GenCo,
         args: Value,
     ) -> Result<Value, ErrorKind> {
@@ -160,7 +179,7 @@ pub(crate) mod fetcher_builtins {
 
     #[builtin("fetchTarball")]
     async fn builtin_fetch_tarball(
-        state: Rc<TvixStoreIO>,
+        state: RefCounted<TvixStoreIO>,
         co: GenCo,
         args: Value,
     ) -> Result<Value, ErrorKind> {
@@ -187,7 +206,7 @@ pub(crate) mod fetcher_builtins {
 
     #[builtin("fetchGit")]
     async fn builtin_fetch_git(
-        state: Rc<TvixStoreIO>,
+        state: RefCounted<TvixStoreIO>,
         co: GenCo,
         args: Value,
     ) -> Result<Value, ErrorKind> {

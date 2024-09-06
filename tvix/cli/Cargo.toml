@@ -34,5 +34,6 @@ wu-manber = { workspace = true }
 expect-test = { workspace = true }
 
 [features]
-default = []
+default = [ "multithread" ]
+multithread = [ "tvix-glue/multithread", "tvix-eval/multithread" ]
 tracy = ["tvix-tracing/tracy"]

@@ -46,10 +46,14 @@ tempfile = { workspace = true }
 tokio-test = { workspace = true }
 
 [features]
-default = ["nix_tests"]
+default = ["nix_tests", "multithread"]
 # Enables running the Nix language test suite from the original C++
 # Nix implementation (at version 2.3) against Tvix.
 nix_tests = []
+
+# Allow `TvixStoreIO` to be shared between multiple threads
+# Effectively, this locks the known path map behind a read-write lock instead of single-threaded interior mutability.
+multithread = []
 
 [[bench]]
 name = "eval"

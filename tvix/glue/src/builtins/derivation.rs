@@ -8,6 +8,7 @@ use nix_compat::nixhash;
 use nix_compat::store_path::{StorePath, StorePathRef};
 use std::collections::{btree_map, BTreeSet};
 use std::rc::Rc;
+use std::sync::Arc;
 use tvix_eval::builtin_macros::builtins;
 use tvix_eval::generators::{self, emit_warning_kind, GenCo};
 use tvix_eval::{
@@ -165,7 +166,13 @@ fn handle_fixed_output(
     Ok(None)
 }
 
-#[builtins(state = "Rc<TvixStoreIO>")]
+#[cfg(feature = "multithread")]
+type RefCounted<T> = Arc<T>;
+
+#[cfg(not(feature = "multithread"))]
+type RefCounted<T> = Rc<T>;
+
+#[builtins(state = "RefCounted<TvixStoreIO>")]
 pub(crate) mod derivation_builtins {
     use std::collections::BTreeMap;
     use std::io::Cursor;
@@ -206,7 +213,7 @@ pub(crate) mod derivation_builtins {
     /// use the higher-level `builtins.derivation` instead.
     #[builtin("derivationStrict")]
     async fn builtin_derivation_strict(
-        state: Rc<TvixStoreIO>,
+        state: RefCounted<TvixStoreIO>,
         co: GenCo,
         input: Value,
     ) -> Result<Value, ErrorKind> {
@@ -456,7 +463,12 @@ pub(crate) mod derivation_builtins {
             );
         }
 
+        #[cfg(feature = "multithread")]
+        let mut known_paths = state.as_ref().known_paths.write().unwrap();
+
+        #[cfg(not(feature = "multithread"))]
         let mut known_paths = state.as_ref().known_paths.borrow_mut();
+
         populate_inputs(&mut drv, input_context, &known_paths);
 
         // At this point, derivation fields are fully populated from
@@ -532,7 +544,7 @@ pub(crate) mod derivation_builtins {
 
     #[builtin("toFile")]
     async fn builtin_to_file(
-        state: Rc<TvixStoreIO>,
+        state: RefCounted<TvixStoreIO>,
         co: GenCo,
         name: Value,
         content: Value,

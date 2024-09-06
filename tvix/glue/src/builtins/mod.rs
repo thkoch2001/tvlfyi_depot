@@ -1,8 +1,14 @@
 //! Contains builtins that deal with the store or builder.
 
-use std::rc::Rc;
+use std::{rc::Rc, sync::Arc};
 
 use crate::tvix_store_io::TvixStoreIO;
+
+#[cfg(feature = "multithread")]
+type RefCounted<T> = Arc<T>;
+
+#[cfg(not(feature = "multithread"))]
+type RefCounted<T> = Rc<T>;
 
 mod derivation;
 mod errors;
@@ -20,10 +26,12 @@ pub use errors::{DerivationError, FetcherError, ImportError};
 /// `known_paths`.
 pub fn add_derivation_builtins<'co, 'ro, 'env, IO>(
     eval_builder: tvix_eval::EvaluationBuilder<'co, 'ro, 'env, IO>,
-    io: Rc<TvixStoreIO>,
+    io: RefCounted<TvixStoreIO>,
 ) -> tvix_eval::EvaluationBuilder<'co, 'ro, 'env, IO> {
     eval_builder
-        .add_builtins(derivation::derivation_builtins::builtins(Rc::clone(&io)))
+        .add_builtins(derivation::derivation_builtins::builtins(
+            RefCounted::clone(&io),
+        ))
         // Add the actual `builtins.derivation` from compiled Nix code
         .add_src_builtin("derivation", include_str!("derivation.nix"))
 }
@@ -35,9 +43,9 @@ pub fn add_derivation_builtins<'co, 'ro, 'env, IO>(
 /// * `fetchGit`
 pub fn add_fetcher_builtins<'co, 'ro, 'env, IO>(
     eval_builder: tvix_eval::EvaluationBuilder<'co, 'ro, 'env, IO>,
-    io: Rc<TvixStoreIO>,
+    io: RefCounted<TvixStoreIO>,
 ) -> tvix_eval::EvaluationBuilder<'co, 'ro, 'env, IO> {
-    eval_builder.add_builtins(fetchers::fetcher_builtins::builtins(Rc::clone(&io)))
+    eval_builder.add_builtins(fetchers::fetcher_builtins::builtins(RefCounted::clone(&io)))
 }
 
 /// Adds import-related builtins to the passed [tvix_eval::Evaluation].
@@ -47,7 +55,7 @@ pub fn add_fetcher_builtins<'co, 'ro, 'env, IO>(
 /// As they need to interact with the store implementation, we pass [`TvixStoreIO`].
 pub fn add_import_builtins<'co, 'ro, 'env, IO>(
     eval_builder: tvix_eval::EvaluationBuilder<'co, 'ro, 'env, IO>,
-    io: Rc<TvixStoreIO>,
+    io: RefCounted<TvixStoreIO>,
 ) -> tvix_eval::EvaluationBuilder<'co, 'ro, 'env, IO> {
     // TODO(raitobezarius): evaluate expressing filterSource as Nix code using path (b/372)
     eval_builder.add_builtins(import::import_builtins(io))
@@ -80,7 +88,7 @@ mod tests {
             })
             .expect("Failed to construct store services in memory");
 
-        let io = Rc::new(TvixStoreIO::new(
+        let io = RefCounted::new(TvixStoreIO::new(
             blob_service,
             directory_service,
             path_info_service,
@@ -89,9 +97,9 @@ mod tests {
             runtime.handle().clone(),
         ));
 
-        let mut eval_builder = tvix_eval::Evaluation::builder(io.clone() as Rc<dyn EvalIO>);
-        eval_builder = add_derivation_builtins(eval_builder, Rc::clone(&io));
-        eval_builder = add_fetcher_builtins(eval_builder, Rc::clone(&io));
+        let mut eval_builder = tvix_eval::Evaluation::builder(io.clone() as RefCounted<dyn EvalIO>);
+        eval_builder = add_derivation_builtins(eval_builder, RefCounted::clone(&io));
+        eval_builder = add_fetcher_builtins(eval_builder, RefCounted::clone(&io));
         eval_builder = add_import_builtins(eval_builder, io);
         let eval = eval_builder.build();
 

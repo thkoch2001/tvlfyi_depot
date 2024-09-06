@@ -11,9 +11,16 @@ use tvix_eval::{
 };
 
 use std::rc::Rc;
+use std::sync::Arc;
+
+#[cfg(feature = "multithread")]
+type RefCounted<T> = Arc<T>;
+
+#[cfg(not(feature = "multithread"))]
+type RefCounted<T> = Rc<T>;
 
 async fn filtered_ingest(
-    state: Rc<TvixStoreIO>,
+    state: RefCounted<TvixStoreIO>,
     co: GenCo,
     path: &Path,
     filter: Option<&Value>,
@@ -103,10 +110,11 @@ async fn filtered_ingest(
     })
 }
 
-#[builtins(state = "Rc<TvixStoreIO>")]
+#[builtins(state = "RefCounted<TvixStoreIO>")]
 mod import_builtins {
     use std::os::unix::ffi::OsStrExt;
     use std::rc::Rc;
+    use std::sync::Arc;
 
     use super::*;
 
@@ -122,7 +130,7 @@ mod import_builtins {
 
     #[builtin("path")]
     async fn builtin_path(
-        state: Rc<TvixStoreIO>,
+        state: RefCounted<TvixStoreIO>,
         co: GenCo,
         args: Value,
     ) -> Result<Value, ErrorKind> {
@@ -321,13 +329,13 @@ mod import_builtins {
 
     #[builtin("filterSource")]
     async fn builtin_filter_source(
-        state: Rc<TvixStoreIO>,
+        state: RefCounted<TvixStoreIO>,
         co: GenCo,
         #[lazy] filter: Value,
         path: Value,
     ) -> Result<Value, ErrorKind> {
         let p = path.to_path()?;
-        let root_node = filtered_ingest(Rc::clone(&state), co, &p, Some(&filter)).await?;
+        let root_node = filtered_ingest(RefCounted::clone(&state), co, &p, Some(&filter)).await?;
         let name = tvix_store::import::path_to_name(&p)?;
 
         let outpath = state
@@ -362,7 +370,7 @@ mod import_builtins {
 
     #[builtin("storePath")]
     async fn builtin_store_path(
-        state: Rc<TvixStoreIO>,
+        state: RefCounted<TvixStoreIO>,
         co: GenCo,
         path: Value,
     ) -> Result<Value, ErrorKind> {
