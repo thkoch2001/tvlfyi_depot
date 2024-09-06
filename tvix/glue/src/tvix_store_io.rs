@@ -5,6 +5,7 @@ use nix_compat::nixhash::NixHash;
 use nix_compat::store_path::StorePathRef;
 use nix_compat::{nixhash::CAHash, store_path::StorePath};
 use std::collections::BTreeMap;
+use std::sync::RwLock;
 use std::{
     cell::RefCell,
     io,
@@ -28,6 +29,12 @@ use tvix_store::{pathinfoservice::PathInfoService, proto::PathInfo};
 use crate::fetchers::Fetcher;
 use crate::known_paths::KnownPaths;
 use crate::tvix_build::derivation_to_build_request;
+
+#[cfg(feature = "multithread")]
+type Cell<T> = RwLock<T>;
+
+#[cfg(not(feature = "multithread"))]
+type Cell<T> = RefCell<T>;
 
 /// Implements [EvalIO], asking given [PathInfoService], [DirectoryService]
 /// and [BlobService].
@@ -65,7 +72,7 @@ pub struct TvixStoreIO {
     >,
 
     // Paths known how to produce, by building or fetching.
-    pub known_paths: RefCell<KnownPaths>,
+    pub known_paths: Cell<KnownPaths>,
 }
 
 impl TvixStoreIO {
@@ -151,6 +158,14 @@ impl TvixStoreIO {
                 // fetchers and FODs in KnownPaths, and prefer the former.
                 // This will also find [Fetch] synthesized from
                 // `builtin:fetchurl` Derivations.
+                #[cfg(feature = "multithread")]
+                let maybe_fetch = self
+                    .known_paths
+                    .read()
+                    .unwrap()
+                    .get_fetch_for_output_path(store_path);
+
+                #[cfg(not(feature = "multithread"))]
                 let maybe_fetch = self
                     .known_paths
                     .borrow()
@@ -177,7 +192,12 @@ impl TvixStoreIO {
                     None => {
                         // Look up the derivation for this output path.
                         let (drv_path, drv) = {
+                            #[cfg(not(feature = "multithread"))]
                             let known_paths = self.known_paths.borrow();
+
+                            #[cfg(feature = "multithread")]
+                            let known_paths = self.known_paths.read().unwrap();
+
                             match known_paths.get_drv_path_for_output_path(store_path) {
                                 Some(drv_path) => (
                                     drv_path.to_owned(),
@@ -203,7 +223,12 @@ impl TvixStoreIO {
                                 .map(|(input_drv_path, output_names)| {
                                     // look up the derivation object
                                     let input_drv = {
+                                        #[cfg(not(feature = "multithread"))]
                                         let known_paths = self.known_paths.borrow();
+
+                                        #[cfg(feature = "multithread")]
+                                        let known_paths = self.known_paths.read().unwrap();
+
                                         known_paths
                                             .get_drv_by_drvpath(input_drv_path)
                                             .unwrap_or_else(|| {

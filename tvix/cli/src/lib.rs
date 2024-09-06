@@ -176,9 +176,13 @@ pub fn evaluate(
     if let Some(dumpdir) = &args.drv_dumpdir {
         // Dump all known derivations files to `dumpdir`.
         std::fs::create_dir_all(dumpdir).expect("failed to create drv dumpdir");
-        tvix_store_io
-            .known_paths
-            .borrow()
+        #[cfg(feature = "multithread")]
+        let known_paths = tvix_store_io.known_paths.read().unwrap();
+
+        #[cfg(not(feature = "multithread"))]
+        let known_paths = tvix_store_io.known_paths.borrow();
+
+        known_paths
             .get_derivations()
             // Skip already dumped derivations.
             .filter(|(drv_path, _)| !dumpdir.join(drv_path.to_string()).exists())

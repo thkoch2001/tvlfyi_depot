@@ -106,6 +106,15 @@ pub(crate) mod fetcher_builtins {
         {
             Some(store_path) => {
                 // Move the fetch to KnownPaths, so it can be actually fetched later.
+                #[cfg(feature = "multithread")]
+                let sp = state
+                    .known_paths
+                    .write()
+                    .unwrap()
+                    .add_fetch(fetch, &name)
+                    .expect("Tvix bug: should only fail if the store path cannot be calculated");
+
+                #[cfg(not(feature = "multithread"))]
                 let sp = state
                     .known_paths
                     .borrow_mut()

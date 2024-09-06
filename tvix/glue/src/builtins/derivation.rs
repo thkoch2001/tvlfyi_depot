@@ -456,7 +456,12 @@ pub(crate) mod derivation_builtins {
             );
         }
 
+        #[cfg(feature = "multithread")]
+        let mut known_paths = state.as_ref().known_paths.write().unwrap();
+
+        #[cfg(not(feature = "multithread"))]
         let mut known_paths = state.as_ref().known_paths.borrow_mut();
+
         populate_inputs(&mut drv, input_context, &known_paths);
 
         // At this point, derivation fields are fully populated from
