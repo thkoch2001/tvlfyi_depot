@@ -46,7 +46,7 @@ rstest = { workspace = true }
 tempfile = { workspace = true }
 
 [features]
-default = ["impure", "arbitrary", "nix_tests"]
+default = ["impure", "arbitrary", "nix_tests", "multithread"]
 
 # Enables running the Nix language test suite from the original C++
 # Nix implementation (at version 2.3) against Tvix.
@@ -62,6 +62,9 @@ arbitrary = ["proptest", "test-strategy"]
 #
 # This is intended as a stop-gap until we have a garbage collector
 no_leak = []
+
+# Allow `Value` to be shared between multiple threads.
+multithread = []
 
 [[bench]]
 name = "eval"

@@ -5,6 +5,7 @@ use std::fmt::Display;
 use std::num::{NonZeroI32, NonZeroUsize};
 use std::path::PathBuf;
 use std::rc::Rc;
+use std::sync::Arc;
 
 use bstr::{BString, ByteVec};
 use codemap::Span;
@@ -55,6 +56,10 @@ pub enum Value {
     List(NixList),
 
     #[serde(skip)]
+    #[cfg(feature = "multithread")]
+    Closure(Arc<Closure>), // must use Arc<Closure> here in order to get proper pointer equality
+    #[cfg(not(feature = "multithread"))]
+    #[serde(skip)]
     Closure(Rc<Closure>), // must use Rc<Closure> here in order to get proper pointer equality
 
     #[serde(skip)]
@@ -70,6 +75,10 @@ pub enum Value {
     AttrNotFound,
 
     // this can only occur in Chunk::Constants and nowhere else
+    #[serde(skip)]
+    #[cfg(feature = "multithread")]
+    Blueprint(Arc<Lambda>),
+    #[cfg(not(feature = "multithread"))]
     #[serde(skip)]
     Blueprint(Rc<Lambda>),
 
@@ -648,10 +657,22 @@ impl Value {
 
                 (Value::Attrs(_), _) | (_, Value::Attrs(_)) => return Ok(Value::Bool(false)),
 
+                #[cfg(not(feature = "multithread"))]
                 (Value::Closure(c1), Value::Closure(c2))
                     if ptr_eq >= PointerEquality::AllowNested =>
                 {
                     if Rc::ptr_eq(&c1, &c2) {
+                        continue;
+                    } else {
+                        return Ok(Value::Bool(false));
+                    }
+                }
+
+                #[cfg(feature = "multithread")]
+                (Value::Closure(c1), Value::Closure(c2))
+                    if ptr_eq >= PointerEquality::AllowNested =>
+                {
+                    if Arc::ptr_eq(&c1, &c2) {
                         continue;
                     } else {
                         return Ok(Value::Bool(false));
@@ -721,6 +742,17 @@ impl Value {
     gen_cast!(to_path, Box<PathBuf>, "path", Value::Path(p), p.clone());
     gen_cast!(to_attrs, Box<NixAttrs>, "set", Value::Attrs(a), a.clone());
     gen_cast!(to_list, NixList, "list", Value::List(l), l.clone());
+
+    #[cfg(feature = "multithread")]
+    gen_cast!(
+        as_closure,
+        Arc<Closure>,
+        "lambda",
+        Value::Closure(c),
+        c.clone()
+    );
+
+    #[cfg(not(feature = "multithread"))]
     gen_cast!(
         as_closure,
         Rc<Closure>,

@@ -8,7 +8,10 @@
 use std::borrow::Borrow;
 use std::collections::{btree_map, BTreeMap};
 use std::iter::FromIterator;
+#[cfg(not(feature = "multithread"))]
 use std::rc::Rc;
+#[cfg(feature = "multithread")]
+use std::sync::Arc;
 
 use bstr::BStr;
 use lazy_static::lazy_static;
@@ -72,10 +75,24 @@ impl AttrsRep {
     }
 }
 
+#[cfg(feature = "multithread")]
+#[repr(transparent)]
+#[derive(Clone, Debug, Default)]
+pub struct NixAttrs(pub(super) Arc<AttrsRep>);
+
+#[cfg(not(feature = "multithread"))]
 #[repr(transparent)]
 #[derive(Clone, Debug, Default)]
 pub struct NixAttrs(pub(super) Rc<AttrsRep>);
 
+#[cfg(feature = "multithread")]
+impl From<AttrsRep> for NixAttrs {
+    fn from(rep: AttrsRep) -> Self {
+        NixAttrs(Arc::new(rep))
+    }
+}
+
+#[cfg(not(feature = "multithread"))]
 impl From<AttrsRep> for NixAttrs {
     fn from(rep: AttrsRep) -> Self {
         NixAttrs(Rc::new(rep))
@@ -172,10 +189,26 @@ impl NixAttrs {
         AttrsRep::Empty.into()
     }
 
+    #[cfg(not(feature = "multithread"))]
+    fn unwrap_or_clone(self) -> AttrsRep {
+        Rc::unwrap_or_clone(self.0)
+    }
+
+    #[cfg(feature = "multithread")]
+    fn unwrap_or_clone(self) -> AttrsRep {
+        Arc::unwrap_or_clone(self.0)
+    }
+
     /// Compare two attribute sets by pointer equality. Only makes
     /// sense for some attribute set representations, i.e. returning
     /// `false` does not mean that the two attribute sets do not have
     /// equal *content*.
+    #[cfg(feature = "multithread")]
+    pub fn ptr_eq(&self, other: &Self) -> bool {
+        Arc::ptr_eq(&self.0, &other.0)
+    }
+
+    #[cfg(not(feature = "multithread"))]
     pub fn ptr_eq(&self, other: &Self) -> bool {
         Rc::ptr_eq(&self.0, &other.0)
     }
@@ -199,7 +232,7 @@ impl NixAttrs {
         };
 
         // Slightly more advanced, but still optimised updates
-        match (Rc::unwrap_or_clone(self.0), Rc::unwrap_or_clone(other.0)) {
+        match (self.unwrap_or_clone(), other.unwrap_or_clone()) {
             (AttrsRep::Map(mut m), AttrsRep::KV { name, value }) => {
                 m.insert(NAME_S.clone(), name);
                 m.insert(VALUE_S.clone(), value);
@@ -384,7 +417,7 @@ impl IntoIterator for NixAttrs {
     type IntoIter = OwnedAttrsIterator;
 
     fn into_iter(self) -> Self::IntoIter {
-        match Rc::unwrap_or_clone(self.0) {
+        match self.unwrap_or_clone() {
             AttrsRep::Empty => OwnedAttrsIterator(IntoIterRepr::Empty),
             AttrsRep::KV { name, value } => OwnedAttrsIterator(IntoIterRepr::Finite(
                 vec![(NAME_REF.clone(), name), (VALUE_REF.clone(), value)].into_iter(),

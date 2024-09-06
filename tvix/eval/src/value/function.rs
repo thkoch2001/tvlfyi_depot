@@ -1,5 +1,5 @@
 //! This module implements the runtime representation of functions.
-use std::{collections::BTreeMap, hash::Hash, rc::Rc};
+use std::{collections::BTreeMap, hash::Hash, rc::Rc, sync::Arc};
 
 use codemap::Span;
 use smol_str::SmolStr;
@@ -73,6 +73,12 @@ impl Lambda {
     }
 }
 
+#[cfg(feature = "multithread")]
+type RefCounted<T> = Arc<T>;
+
+#[cfg(not(feature = "multithread"))]
+type RefCounted<T> = Rc<T>;
+
 ///
 /// In order to correctly reproduce cppnix's "pointer equality"
 /// semantics it is important that we never clone a Lambda --
@@ -82,19 +88,19 @@ impl Lambda {
 ///
 #[derive(/* do not add Clone here */ Debug)]
 pub struct Closure {
-    pub lambda: Rc<Lambda>,
-    pub upvalues: Rc<Upvalues>,
+    pub lambda: RefCounted<Lambda>,
+    pub upvalues: RefCounted<Upvalues>,
 }
 
 impl Closure {
-    pub fn new(lambda: Rc<Lambda>) -> Self {
+    pub fn new(lambda: RefCounted<Lambda>) -> Self {
         Self::new_with_upvalues(
-            Rc::new(Upvalues::with_capacity(lambda.upvalue_count)),
+            RefCounted::new(Upvalues::with_capacity(lambda.upvalue_count)),
             lambda,
         )
     }
 
-    pub fn new_with_upvalues(upvalues: Rc<Upvalues>, lambda: Rc<Lambda>) -> Self {
+    pub fn new_with_upvalues(upvalues: RefCounted<Upvalues>, lambda: RefCounted<Lambda>) -> Self {
         Closure { upvalues, lambda }
     }
 
@@ -102,11 +108,11 @@ impl Closure {
         &self.lambda.chunk
     }
 
-    pub fn lambda(&self) -> Rc<Lambda> {
+    pub fn lambda(&self) -> RefCounted<Lambda> {
         self.lambda.clone()
     }
 
-    pub fn upvalues(&self) -> Rc<Upvalues> {
+    pub fn upvalues(&self) -> RefCounted<Upvalues> {
         self.upvalues.clone()
     }
 }

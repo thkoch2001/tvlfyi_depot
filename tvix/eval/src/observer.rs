@@ -8,6 +8,7 @@
 /// what they are interested in observing.
 use std::io::Write;
 use std::rc::Rc;
+use std::sync::Arc;
 use std::time::Instant;
 use tabwriter::TabWriter;
 
@@ -18,12 +19,17 @@ use crate::value::Lambda;
 use crate::SourceCode;
 use crate::Value;
 
+#[cfg(feature = "multithread")]
+type RefCounted<T> = Arc<T>;
+#[cfg(not(feature = "multithread"))]
+type RefCounted<T> = Rc<T>;
+
 /// Implemented by types that wish to observe internal happenings of
 /// the Tvix compiler.
 pub trait CompilerObserver {
     /// Called when the compiler finishes compilation of the top-level
     /// of an expression (usually the root Nix expression of a file).
-    fn observe_compiled_toplevel(&mut self, _: &Rc<Lambda>) {}
+    fn observe_compiled_toplevel(&mut self, _: &RefCounted<Lambda>) {}
 
     /// Called when the compiler finishes compilation of a
     /// user-defined function.
@@ -31,17 +37,23 @@ pub trait CompilerObserver {
     /// Note that in Nix there are only single argument functions, so
     /// in an expression like `a: b: c: ...` this method will be
     /// called three times.
-    fn observe_compiled_lambda(&mut self, _: &Rc<Lambda>) {}
+    fn observe_compiled_lambda(&mut self, _: &RefCounted<Lambda>) {}
 
     /// Called when the compiler finishes compilation of a thunk.
-    fn observe_compiled_thunk(&mut self, _: &Rc<Lambda>) {}
+    fn observe_compiled_thunk(&mut self, _: &RefCounted<Lambda>) {}
 }
 
 /// Implemented by types that wish to observe internal happenings of
 /// the Tvix virtual machine at runtime.
 pub trait RuntimeObserver {
     /// Called when the runtime enters a new call frame.
-    fn observe_enter_call_frame(&mut self, _arg_count: usize, _: &Rc<Lambda>, _call_depth: usize) {}
+    fn observe_enter_call_frame(
+        &mut self,
+        _arg_count: usize,
+        _: &RefCounted<Lambda>,
+        _call_depth: usize,
+    ) {
+    }
 
     /// Called when the runtime exits a call frame.
     fn observe_exit_call_frame(&mut self, _frame_at: usize, _stack: &[Value]) {}
@@ -63,7 +75,7 @@ pub trait RuntimeObserver {
 
     /// Called when the runtime replaces the current call frame for a
     /// tail call.
-    fn observe_tail_call(&mut self, _frame_at: usize, _: &Rc<Lambda>) {}
+    fn observe_tail_call(&mut self, _frame_at: usize, _: &RefCounted<Lambda>) {}
 
     /// Called when the runtime enters a builtin.
     fn observe_enter_builtin(&mut self, _name: &'static str) {}
@@ -98,7 +110,7 @@ impl<W: Write> DisassemblingObserver<W> {
         }
     }
 
-    fn lambda_header(&mut self, kind: &str, lambda: &Rc<Lambda>) {
+    fn lambda_header(&mut self, kind: &str, lambda: &RefCounted<Lambda>) {
         let _ = writeln!(
             &mut self.writer,
             "=== compiled {} @ {:p} ({} ops) ===",
@@ -123,19 +135,19 @@ impl<W: Write> DisassemblingObserver<W> {
 }
 
 impl<W: Write> CompilerObserver for DisassemblingObserver<W> {
-    fn observe_compiled_toplevel(&mut self, lambda: &Rc<Lambda>) {
+    fn observe_compiled_toplevel(&mut self, lambda: &RefCounted<Lambda>) {
         self.lambda_header("toplevel", lambda);
         self.disassemble_chunk(&lambda.chunk);
         let _ = self.writer.flush();
     }
 
-    fn observe_compiled_lambda(&mut self, lambda: &Rc<Lambda>) {
+    fn observe_compiled_lambda(&mut self, lambda: &RefCounted<Lambda>) {
         self.lambda_header("lambda", lambda);
         self.disassemble_chunk(&lambda.chunk);
         let _ = self.writer.flush();
     }
 
-    fn observe_compiled_thunk(&mut self, lambda: &Rc<Lambda>) {
+    fn observe_compiled_thunk(&mut self, lambda: &RefCounted<Lambda>) {
         self.lambda_header("thunk", lambda);
         self.disassemble_chunk(&lambda.chunk);
         let _ = self.writer.flush();
@@ -208,7 +220,7 @@ impl<W: Write> RuntimeObserver for TracingObserver<W> {
     fn observe_enter_call_frame(
         &mut self,
         arg_count: usize,
-        lambda: &Rc<Lambda>,
+        lambda: &RefCounted<Lambda>,
         call_depth: usize,
     ) {
         self.maybe_write_time();
@@ -299,7 +311,7 @@ impl<W: Write> RuntimeObserver for TracingObserver<W> {
         self.write_stack(stack);
     }
 
-    fn observe_tail_call(&mut self, frame_at: usize, lambda: &Rc<Lambda>) {
+    fn observe_tail_call(&mut self, frame_at: usize, lambda: &RefCounted<Lambda>) {
         self.maybe_write_time();
         let _ = writeln!(
             &mut self.writer,

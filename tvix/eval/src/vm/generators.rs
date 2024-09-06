@@ -79,8 +79,8 @@ pub enum VMRequest {
     /// Request a call frame entering the given lambda immediately. This can be
     /// used to force thunks.
     EnterLambda {
-        lambda: Rc<Lambda>,
-        upvalues: Rc<Upvalues>,
+        lambda: RefCounted<Lambda>,
+        upvalues: RefCounted<Upvalues>,
         span: Span,
     },
 
@@ -702,8 +702,8 @@ pub async fn emit_warning_kind(co: &GenCo, kind: WarningKind) {
 /// Request that the VM enter the given lambda.
 pub(crate) async fn request_enter_lambda(
     co: &GenCo,
-    lambda: Rc<Lambda>,
-    upvalues: Rc<Upvalues>,
+    lambda: RefCounted<Lambda>,
+    upvalues: RefCounted<Upvalues>,
     span: Span,
 ) -> Value {
     let msg = VMRequest::EnterLambda {

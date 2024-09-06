@@ -25,6 +25,7 @@ use smol_str::SmolStr;
 use std::collections::BTreeMap;
 use std::path::{Path, PathBuf};
 use std::rc::{Rc, Weak};
+use std::sync::Arc;
 
 use crate::chunk::Chunk;
 use crate::errors::{CatchableErrorKind, Error, ErrorKind, EvalResult};
@@ -38,11 +39,16 @@ use crate::SourceCode;
 
 use self::scope::{LocalIdx, LocalPosition, Scope, Upvalue, UpvalueKind};
 
+#[cfg(feature = "multithread")]
+type RefCounted<T> = Arc<T>;
+#[cfg(not(feature = "multithread"))]
+type RefCounted<T> = Rc<T>;
+
 /// Represents the result of compiling a piece of Nix code. If
 /// compilation was successful, the resulting bytecode can be passed
 /// to the VM.
 pub struct CompilationOutput {
-    pub lambda: Rc<Lambda>,
+    pub lambda: RefCounted<Lambda>,
     pub warnings: Vec<EvalWarning>,
     pub errors: Vec<Error>,
 }
@@ -1254,7 +1260,7 @@ impl Compiler<'_, '_> {
             .chunk
             .push_op(Op::Return, self.span_for(node));
 
-        let lambda = Rc::new(compiled.lambda);
+        let lambda = RefCounted::new(compiled.lambda);
         if is_suspended_thunk {
             self.observer.observe_compiled_thunk(&lambda);
         } else {
@@ -1267,7 +1273,7 @@ impl Compiler<'_, '_> {
                 if is_suspended_thunk {
                     Value::Thunk(Thunk::new_suspended(lambda, span))
                 } else {
-                    Value::Closure(Rc::new(Closure::new(lambda)))
+                    Value::Closure(RefCounted::new(Closure::new(lambda)))
                 },
                 node,
             );
@@ -1671,7 +1677,7 @@ pub fn compile(
     }
     c.push_op(Op::Return, &root_span);
 
-    let lambda = Rc::new(c.contexts.pop().unwrap().lambda);
+    let lambda = RefCounted::new(c.contexts.pop().unwrap().lambda);
     c.observer.observe_compiled_toplevel(&lambda);
 
     Ok(CompilationOutput {

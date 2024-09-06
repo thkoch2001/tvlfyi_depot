@@ -1,6 +1,9 @@
 //! This module implements Nix lists.
 use std::ops::Index;
+#[cfg(not(feature = "multithread"))]
 use std::rc::Rc;
+#[cfg(feature = "multithread")]
+use std::sync::Arc;
 
 use serde::Deserialize;
 
@@ -8,9 +11,15 @@ use super::thunk::ThunkSet;
 use super::TotalDisplay;
 use super::Value;
 
+#[cfg(not(feature = "multithread"))]
 #[repr(transparent)]
 #[derive(Clone, Debug, Deserialize)]
 pub struct NixList(Rc<Vec<Value>>);
+
+#[cfg(feature = "multithread")]
+#[repr(transparent)]
+#[derive(Clone, Debug, Deserialize)]
+pub struct NixList(Arc<Vec<Value>>);
 
 impl TotalDisplay for NixList {
     fn total_fmt(&self, f: &mut std::fmt::Formatter<'_>, set: &mut ThunkSet) -> std::fmt::Result {
@@ -25,6 +34,14 @@ impl TotalDisplay for NixList {
     }
 }
 
+#[cfg(feature = "multithread")]
+impl From<Vec<Value>> for NixList {
+    fn from(vs: Vec<Value>) -> Self {
+        Self(Arc::new(vs))
+    }
+}
+
+#[cfg(not(feature = "multithread"))]
 impl From<Vec<Value>> for NixList {
     fn from(vs: Vec<Value>) -> Self {
         Self(Rc::new(vs))
@@ -52,17 +69,29 @@ impl NixList {
             stack_slice.len(),
         );
 
-        NixList(Rc::new(stack_slice))
+        NixList(stack_slice.into())
     }
 
     pub fn iter(&self) -> std::slice::Iter<Value> {
         self.0.iter()
     }
 
+    #[cfg(feature = "multithread")]
+    pub fn ptr_eq(&self, other: &Self) -> bool {
+        Arc::ptr_eq(&self.0, &other.0)
+    }
+
+    #[cfg(not(feature = "multithread"))]
     pub fn ptr_eq(&self, other: &Self) -> bool {
         Rc::ptr_eq(&self.0, &other.0)
     }
 
+    #[cfg(feature = "multithread")]
+    pub fn into_inner(self) -> Vec<Value> {
+        Arc::try_unwrap(self.0).unwrap_or_else(|arc| (*arc).clone())
+    }
+
+    #[cfg(not(feature = "multithread"))]
     pub fn into_inner(self) -> Vec<Value> {
         Rc::try_unwrap(self.0).unwrap_or_else(|rc| (*rc).clone())
     }

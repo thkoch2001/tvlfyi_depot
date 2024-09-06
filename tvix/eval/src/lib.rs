@@ -65,6 +65,11 @@ pub use crate::value::{Builtin, CoercionKind, NixAttrs, NixList, NixString, Valu
 #[cfg(feature = "impure")]
 pub use crate::io::StdIO;
 
+#[cfg(feature = "multithread")]
+type RefCounted<T> = Arc<T>;
+#[cfg(not(feature = "multithread"))]
+type RefCounted<T> = Rc<T>;
+
 struct BuilderBuiltins {
     builtins: Vec<(&'static str, Value)>,
     src_builtins: Vec<(&'static str, &'static str)>,
@@ -686,7 +691,7 @@ fn parse_compile_internal(
     globals: Rc<GlobalsMap>,
     env: Option<&FxHashMap<SmolStr, Value>>,
     compiler_observer: &mut dyn CompilerObserver,
-) -> Option<Rc<Lambda>> {
+) -> Option<RefCounted<Lambda>> {
     let parsed = rnix::ast::Root::parse(code);
     let parse_errors = parsed.errors();
 

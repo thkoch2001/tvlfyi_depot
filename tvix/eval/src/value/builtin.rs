@@ -7,10 +7,13 @@ use crate::vm::generators::Generator;
 
 use super::Value;
 
-use std::{
-    fmt::{Debug, Display},
-    rc::Rc,
-};
+use std::fmt::{Debug, Display};
+
+#[cfg(not(feature = "multithread"))]
+use std::rc::Rc;
+
+#[cfg(feature = "multithread")]
+use std::sync::Arc;
 
 /// Trait for closure types of builtins.
 ///
@@ -22,6 +25,7 @@ use std::{
 pub trait BuiltinGen: Fn(Vec<Value>) -> Generator {}
 impl<F: Fn(Vec<Value>) -> Generator> BuiltinGen for F {}
 
+#[cfg(not(feature = "multithread"))]
 #[derive(Clone)]
 pub struct BuiltinRepr {
     name: &'static str,
@@ -30,6 +34,20 @@ pub struct BuiltinRepr {
     arg_count: usize,
 
     func: Rc<dyn BuiltinGen>,
+
+    /// Partially applied function arguments.
+    partials: Vec<Value>,
+}
+
+#[cfg(feature = "multithread")]
+#[derive(Clone)]
+pub struct BuiltinRepr {
+    name: &'static str,
+    /// Optional documentation for the builtin.
+    documentation: Option<&'static str>,
+    arg_count: usize,
+
+    func: Arc<dyn BuiltinGen>,
 
     /// Partially applied function arguments.
     partials: Vec<Value>,
@@ -66,6 +84,24 @@ impl From<BuiltinRepr> for Builtin {
 }
 
 impl Builtin {
+    #[cfg(feature = "multithread")]
+    pub fn new<F: BuiltinGen + 'static>(
+        name: &'static str,
+        documentation: Option<&'static str>,
+        arg_count: usize,
+        func: F,
+    ) -> Self {
+        BuiltinRepr {
+            name,
+            documentation,
+            arg_count,
+            func: Arc::new(func),
+            partials: vec![],
+        }
+        .into()
+    }
+
+    #[cfg(not(feature = "multithread"))]
     pub fn new<F: BuiltinGen + 'static>(
         name: &'static str,
         documentation: Option<&'static str>,

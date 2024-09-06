@@ -16,7 +16,7 @@ use bstr::{BString, ByteSlice, ByteVec};
 use codemap::Span;
 use rustc_hash::FxHashMap;
 use serde_json::json;
-use std::{cmp::Ordering, ops::DerefMut, path::PathBuf, rc::Rc};
+use std::{cmp::Ordering, ops::DerefMut, path::PathBuf, rc::Rc, sync::Arc};
 
 use crate::{
     arithmetic_op,
@@ -42,6 +42,12 @@ use crate::{
 use generators::{call_functor, request_force, Generator, GeneratorState};
 
 use self::generators::{VMRequest, VMResponse};
+
+#[cfg(feature = "multithread")]
+type RefCounted<T> = Arc<T>;
+
+#[cfg(not(feature = "multithread"))]
+type RefCounted<T> = Rc<T>;
 
 /// Internal helper trait for taking a span from a variety of types, to make use
 /// of `WithSpan` (defined below) more ergonomic at call sites.
@@ -119,11 +125,11 @@ impl<T, S: GetSpan, IO> WithSpan<T, S, IO> for Result<T, ErrorKind> {
 
 struct CallFrame {
     /// The lambda currently being executed.
-    lambda: Rc<Lambda>,
+    lambda: RefCounted<Lambda>,
 
     /// Optional captured upvalues of this frame (if a thunk or
     /// closure if being evaluated).
-    upvalues: Rc<Upvalues>,
+    upvalues: RefCounted<Upvalues>,
 
     /// Instruction pointer to the instruction currently being
     /// executed.
@@ -592,8 +598,8 @@ where
                     let mut upvalues = Upvalues::with_capacity(blueprint.upvalue_count);
                     self.populate_upvalues(&mut frame, upvalue_count, &mut upvalues)?;
                     self.stack
-                        .push(Value::Closure(Rc::new(Closure::new_with_upvalues(
-                            Rc::new(upvalues),
+                        .push(Value::Closure(RefCounted::new(Closure::new_with_upvalues(
+                            RefCounted::new(upvalues),
                             blueprint,
                         ))));
                 }
@@ -1386,7 +1392,7 @@ pub fn run_lambda<IO>(
     observer: &mut dyn RuntimeObserver,
     source: SourceCode,
     globals: Rc<GlobalsMap>,
-    lambda: Rc<Lambda>,
+    lambda: RefCounted<Lambda>,
     strict: bool,
 ) -> EvalResult<RuntimeResult>
 where
@@ -1419,7 +1425,7 @@ where
         span: root_span,
         call_frame: CallFrame {
             lambda,
-            upvalues: Rc::new(Upvalues::with_capacity(0)),
+            upvalues: RefCounted::new(Upvalues::with_capacity(0)),
             ip: CodeIdx(0),
             stack_offset: 0,
         },

@@ -22,8 +22,14 @@ use rustc_hash::FxHashSet;
 use std::{
     cell::{Ref, RefCell, RefMut},
     fmt::Debug,
-    rc::Rc,
+    sync::RwLock,
 };
+
+#[cfg(feature = "multithread")]
+use std::sync::Arc;
+
+#[cfg(not(feature = "multithread"))]
+use std::rc::Rc;
 
 use crate::{
     errors::ErrorKind,
@@ -55,6 +61,14 @@ impl Debug for SuspendedNative {
 enum ThunkRepr {
     /// Thunk is closed over some values, suspended and awaiting
     /// execution.
+    #[cfg(feature = "multithread")]
+    Suspended {
+        lambda: Arc<Lambda>,
+        upvalues: Arc<Upvalues>,
+        span: Span,
+    },
+
+    #[cfg(not(feature = "multithread"))]
     Suspended {
         lambda: Rc<Lambda>,
         upvalues: Rc<Upvalues>,
@@ -125,35 +139,45 @@ impl ThunkRepr {
     }
 }
 
+#[cfg(feature = "multithread")]
+type RefCounted<T> = Arc<T>;
+#[cfg(feature = "multithread")]
+type Cell<T> = RwLock<T>;
+
+#[cfg(not(feature = "multithread"))]
+type RefCounted<T> = Rc<T>;
+#[cfg(not(feature = "multithread"))]
+type Cell<T> = RefCell<T>;
+
 /// A thunk is created for any value which requires non-strict
 /// evaluation due to self-reference or lazy semantics (or both).
 /// Every reference cycle involving `Value`s will contain at least
 /// one `Thunk`.
 #[derive(Clone, Debug)]
-pub struct Thunk(Rc<RefCell<ThunkRepr>>);
+pub struct Thunk(RefCounted<RefCell<ThunkRepr>>);
 
 impl Thunk {
-    pub fn new_closure(lambda: Rc<Lambda>) -> Self {
-        Thunk(Rc::new(RefCell::new(ThunkRepr::Evaluated(Value::Closure(
-            Rc::new(Closure {
-                upvalues: Rc::new(Upvalues::with_capacity(lambda.upvalue_count)),
+    pub fn new_closure(lambda: RefCounted<Lambda>) -> Self {
+        Thunk(RefCounted::new(RefCell::new(ThunkRepr::Evaluated(
+            Value::Closure(RefCounted::new(Closure {
+                upvalues: RefCounted::new(Upvalues::with_capacity(lambda.upvalue_count)),
                 lambda: lambda.clone(),
-            }),
-        )))))
+            })),
+        ))))
     }
 
-    pub fn new_suspended(lambda: Rc<Lambda>, span: Span) -> Self {
-        Thunk(Rc::new(RefCell::new(ThunkRepr::Suspended {
-            upvalues: Rc::new(Upvalues::with_capacity(lambda.upvalue_count)),
+    pub fn new_suspended(lambda: RefCounted<Lambda>, span: Span) -> Self {
+        Thunk(RefCounted::new(RefCell::new(ThunkRepr::Suspended {
+            upvalues: RefCounted::new(Upvalues::with_capacity(lambda.upvalue_count)),
             lambda: lambda.clone(),
             span,
         })))
     }
 
     pub fn new_suspended_native(native: Box<dyn Fn() -> Result<Value, ErrorKind>>) -> Self {
-        Thunk(Rc::new(RefCell::new(ThunkRepr::Native(SuspendedNative(
-            native,
-        )))))
+        Thunk(RefCounted::new(RefCell::new(ThunkRepr::Native(
+            SuspendedNative(native),
+        ))))
     }
 
     /// Helper function to create a [`Thunk`] that calls a function given as the
@@ -180,9 +204,9 @@ impl Thunk {
         // Inform the VM that the chunk has ended
         lambda.chunk.push_op(Op::Return, span);
 
-        Thunk(Rc::new(RefCell::new(ThunkRepr::Suspended {
-            upvalues: Rc::new(Upvalues::with_capacity(0)),
-            lambda: Rc::new(lambda),
+        Thunk(RefCounted::new(RefCell::new(ThunkRepr::Suspended {
+            upvalues: RefCounted::new(Upvalues::with_capacity(0)),
+            lambda: RefCounted::new(lambda),
             span,
         })))
     }
@@ -210,7 +234,7 @@ impl Thunk {
         // This vector of "thunks which point to the thunk-being-forced", to
         // be updated along with it, is necessary in order to write this
         // function in iterative (and later, mutual-tail-call) form.
-        let mut also_update: Vec<Rc<RefCell<ThunkRepr>>> = vec![];
+        let mut also_update: Vec<RefCounted<RefCell<ThunkRepr>>> = vec![];
 
         loop {
             // If the current thunk is already fully evaluated, return its evaluated
@@ -268,7 +292,7 @@ impl Thunk {
 
                 // nested thunks -- try to flatten before forcing
                 ThunkRepr::Evaluated(Value::Thunk(inner_thunk)) => {
-                    match Rc::try_unwrap(inner_thunk.0) {
+                    match RefCounted::try_unwrap(inner_thunk.0) {
                         Ok(refcell) => {
                             // we are the only reference to the inner thunk,
                             // so steal it
@@ -344,7 +368,7 @@ impl Thunk {
     /// to call this on a thunk that has not been forced, or is not
     /// otherwise known to be fully evaluated.
     fn unwrap_or_clone(self) -> Value {
-        match Rc::try_unwrap(self.0) {
+        match RefCounted::try_unwrap(self.0) {
             Ok(refcell) => refcell.into_inner().expect(),
             Err(rc) => Ref::map(rc.borrow(), |thunkrepr| thunkrepr.expect_ref()).clone(),
         }
@@ -360,9 +384,9 @@ impl Thunk {
 
     pub fn upvalues_mut(&self) -> RefMut<'_, Upvalues> {
         RefMut::map(self.0.borrow_mut(), |thunk| match thunk {
-            ThunkRepr::Suspended { upvalues, .. } => Rc::get_mut(upvalues).unwrap(),
-            ThunkRepr::Evaluated(Value::Closure(c)) => Rc::get_mut(
-                &mut Rc::get_mut(c).unwrap().upvalues,
+            ThunkRepr::Suspended { upvalues, .. } => RefCounted::get_mut(upvalues).unwrap(),
+            ThunkRepr::Evaluated(Value::Closure(c)) => RefCounted::get_mut(
+                &mut RefCounted::get_mut(c).unwrap().upvalues,
             )
             .expect(
                 "upvalues_mut() was called on a thunk which already had multiple references to it",
@@ -374,12 +398,12 @@ impl Thunk {
     /// Do not use this without first reading and understanding
     /// `tvix/docs/value-pointer-equality.md`.
     pub(crate) fn ptr_eq(&self, other: &Self) -> bool {
-        if Rc::ptr_eq(&self.0, &other.0) {
+        if RefCounted::ptr_eq(&self.0, &other.0) {
             return true;
         }
         match &*self.0.borrow() {
             ThunkRepr::Evaluated(Value::Closure(c1)) => match &*other.0.borrow() {
-                ThunkRepr::Evaluated(Value::Closure(c2)) => Rc::ptr_eq(c1, c2),
+                ThunkRepr::Evaluated(Value::Closure(c2)) => RefCounted::ptr_eq(c1, c2),
                 _ => false,
             },
             _ => false,
