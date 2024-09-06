@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9f5b1d8e_1a5f8116",
+        "filename": "tvix/nix-compat/src/nar/writer/sync.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-06T15:08:36Z",
+      "side": 1,
+      "message": "file writing, not blob writing. blobs are castore concept/terminology.",
+      "revId": "ad509da975fc115643e698cf2c89b0ddda5bcee5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "defa8fd4_775c8623",
+        "filename": "tvix/nix-compat/src/nar/writer/sync.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-06T15:08:36Z",
+      "side": 1,
+      "message": "might make sense to describe they get a \u0026mut of the writer handed out, need to use it to write the full file contents, and then call FileManualWrite::close with that writer.",
+      "revId": "ad509da975fc115643e698cf2c89b0ddda5bcee5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8abc974e_5db13d39",
+        "filename": "tvix/nix-compat/src/nar/writer/sync.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-06T15:08:36Z",
+      "side": 1,
+      "message": "... and to write the correct number of bytes to the writer",
+      "revId": "ad509da975fc115643e698cf2c89b0ddda5bcee5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "056e840f_6ca36384",
+        "filename": "tvix/nix-compat/src/nar/writer/sync.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-06T15:08:36Z",
+      "side": 1,
+      "message": "```suggestion\n    /// **Important:** This *must* be called with the writer returned by file_manual_write after the file contents have been manually and fully written to it.\n```\n\n(modulo line wrap)",
+      "revId": "ad509da975fc115643e698cf2c89b0ddda5bcee5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
