@@ -5,6 +5,8 @@
 
 
 let
+  inherit (depot.third_party) chicago95;
+
   # URL handler to open `tg://` URLs in telega.el
   telega-launcher = pkgs.writeShellScriptBin "telega-launcher" ''
     echo "Opening ''${1} in telega.el ..."
@@ -89,6 +91,18 @@ in
     onChange = ''
       ${pkgs.procps}/bin/pkill -u "$USER" ''${VERBOSE+-e} dunst || true
     '';
+  };
+
+  gtk = {
+    enable = true;
+    theme.name = "Chicago95";
+    theme.package = chicago95;
+
+    iconTheme.name = "Chicago95-tux";
+    iconTheme.package = chicago95;
+
+    cursorTheme.name = "Chicago95_Animated_Hourglass_Cursors_HiDPI";
+    cursorTheme.package = chicago95;
   };
 
   systemd.user.startServices = true;
