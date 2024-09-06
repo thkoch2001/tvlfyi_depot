@@ -52,6 +52,24 @@
       "parentUuid": "34e779c2_814b5b67",
       "revId": "4731329547d9746d99128d2c63e965c9c72baac5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "119b204d_9d10529c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-09-06T19:31:05Z",
+      "side": 1,
+      "message": "Please take a (careful) look at https://github.com/nix-community/nix-eval-jobs/blob/main/src/worker.cc ; are you suggesting that an `builtins.evalJobs` builtin should be created, and this one should *stream* JSON*L* in the VM?\n\nI understand the desire to avoid leaking internal Values from a VM but if this is opaque and transmitted to _another_ VM. You wrote \"tying the lifetime of stuff like bytecode to the lifetime of the VM\", but this is false? The VM can be torn down once you get the `Value` back. Yes, the bytecode needs to be around, though.\n\nSo, I am not yet convinced that the only way to control and drive an evaluation usefully is via a builtin or by being _inside_ a VM generator, but I agree that the solution implemented here is neither desirable, this is just a nice hack to work on getting tvix-eval-jobs right on many aspects.",
+      "parentUuid": "d390eddf_d5f41eb8",
+      "revId": "4731329547d9746d99128d2c63e965c9c72baac5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
