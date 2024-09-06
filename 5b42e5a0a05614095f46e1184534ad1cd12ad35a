@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa8557e7_7a815cec",
+        "filename": "tvix/store/src/nar/seekable.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-09-06T13:35:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d46252c6_3bf99901",
+      "revId": "5b42e5a0a05614095f46e1184534ad1cd12ad35a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dbdd8392_a8a81aa3",
@@ -65,6 +83,24 @@
       "writtenOn": "2024-09-06T12:40:52Z",
       "side": 1,
       "message": "can this be moved into the impl, and take a \u0026mut self?",
+      "revId": "5b42e5a0a05614095f46e1184534ad1cd12ad35a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "04cb465b_6bac1aea",
+        "filename": "tvix/store/src/nar/seekable.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-09-06T13:35:38Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0bb16d7e_be9df824",
       "revId": "5b42e5a0a05614095f46e1184534ad1cd12ad35a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
