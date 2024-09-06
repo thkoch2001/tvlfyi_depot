@@ -1,5 +1,6 @@
 pub use sync::*;
 
+pub mod interruptable;
 pub mod sync;
 
 #[cfg(test)]
