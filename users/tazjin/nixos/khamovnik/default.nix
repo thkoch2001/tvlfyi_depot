@@ -43,6 +43,8 @@ in
       "rtsx_pci_sdmmc"
     ];
     kernelModules = [ "kvm-intel" ];
+
+    tmp.cleanOnBoot = true;
   };
 
   fileSystems = {
