@@ -34,6 +34,24 @@
       "parentUuid": "8a70c230_f8a9ff06",
       "revId": "4731329547d9746d99128d2c63e965c9c72baac5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d390eddf_d5f41eb8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-09-06T12:38:33Z",
+      "side": 1,
+      "message": "The only possible way to do this (this is without checking in on why you\u0027re doing this, there might be a better solution overall) is to add a builtin and synthesise a call to it around whatever expression you\u0027re evaluating.\n\nA builtin is driven by the VM, and memory owned and managed by the VM is going to be valid within that code, and functions for forcing are available there.\n\nYou can not however add an interface to eval that hands out potentially unsafe stuff like Thunks (we are already doing this, and it\u0027s a bug that will be fixed).",
+      "parentUuid": "34e779c2_814b5b67",
+      "revId": "4731329547d9746d99128d2c63e965c9c72baac5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
