@@ -1447,3 +1447,23 @@ where
     });
     vm.execute()
 }
+
+pub fn deep_force<IO>(
+    nix_search_path: NixSearchPath,
+    io_handle: IO,
+    observer: &mut dyn RuntimeObserver,
+    source: SourceCode,
+    globals: Rc<GlobalsMap>,
+    value: Value,
+    span: Span,
+) -> EvalResult<RuntimeResult>
+where
+    IO: AsRef<dyn EvalIO> + 'static,
+{
+    let mut vm = VM::new(nix_search_path, io_handle, observer, source, globals, span);
+
+    vm.enqueue_generator("deep_force", span, |g| async move {
+        Ok(generators::request_deep_force(&g, value).await)
+    });
+    vm.execute()
+}
