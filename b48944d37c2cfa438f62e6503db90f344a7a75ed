@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7f25bf44_f48996c0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-06T12:32:37Z",
+      "side": 1,
+      "message": "This is quite a lot of duplication with the sync nar writer, including its comments.\n\nCan you reshape this and make this CL simply extend / change the parts in the existing sync nar writer? This is hard to review otherwise, I don\u0027t know where it differs.",
+      "revId": "b48944d37c2cfa438f62e6503db90f344a7a75ed",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
