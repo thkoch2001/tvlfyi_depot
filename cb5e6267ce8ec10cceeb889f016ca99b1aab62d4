@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4eb7aa2_ae0d20d4",
+        "filename": "tvix/tools/tvix-eval-jobs/src/main.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-09-06T14:24:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "618b8bac_ed140791",
+      "revId": "cb5e6267ce8ec10cceeb889f016ca99b1aab62d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "dbb6f81d_e7a4b8e0",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-09-03T11:30:33Z",
       "side": 1,
       "message": "this is copy pasted from somewhere, only use RUST_LOG please.",
+      "revId": "cb5e6267ce8ec10cceeb889f016ca99b1aab62d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34e64613_182a534f",
+        "filename": "tvix/tools/tvix-eval-jobs/src/main.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-09-06T14:24:36Z",
+      "side": 1,
+      "message": "Okay",
+      "parentUuid": "dbb6f81d_e7a4b8e0",
       "revId": "cb5e6267ce8ec10cceeb889f016ca99b1aab62d4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d571ab63_c0782353",
+        "filename": "tvix/tools/tvix-eval-jobs/src/main.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-09-06T14:24:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "29bc86d3_e05647a0",
+      "revId": "cb5e6267ce8ec10cceeb889f016ca99b1aab62d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f6621f5_6e63a5ca",
@@ -65,6 +119,24 @@
       "writtenOn": "2024-09-03T11:30:33Z",
       "side": 1,
       "message": "```suggestion\n                .expect(\"Did not find a string output path\")\n```\n\n\n\"did\" already makes it past tense.",
+      "revId": "cb5e6267ce8ec10cceeb889f016ca99b1aab62d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a1c685c_748a250d",
+        "filename": "tvix/tools/tvix-eval-jobs/src/main.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-09-06T14:24:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6f6621f5_6e63a5ca",
       "revId": "cb5e6267ce8ec10cceeb889f016ca99b1aab62d4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -86,6 +158,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "915b3610_25b4b3b1",
+        "filename": "tvix/tools/tvix-eval-jobs/src/main.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 97,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-09-06T14:24:36Z",
+      "side": 1,
+      "message": "\u003e why clones here?\n\nonly necessary for the tokio runtime indeed",
+      "parentUuid": "7a8a0b04_503154f5",
+      "revId": "cb5e6267ce8ec10cceeb889f016ca99b1aab62d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c15e9c9f_789ad36d",
@@ -99,6 +189,24 @@
       "writtenOn": "2024-09-03T11:30:33Z",
       "side": 1,
       "message": "this should probably be a field of the method annotated with the instrument macro.",
+      "revId": "cb5e6267ce8ec10cceeb889f016ca99b1aab62d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d017bad_b2291063",
+        "filename": "tvix/tools/tvix-eval-jobs/src/main.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 203,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-09-06T14:24:36Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c15e9c9f_789ad36d",
       "revId": "cb5e6267ce8ec10cceeb889f016ca99b1aab62d4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -120,6 +228,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53b9cc9b_37745f12",
+        "filename": "tvix/tools/tvix-eval-jobs/src/main.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-09-06T14:24:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "528dd8ab_3fc39c20",
+      "revId": "cb5e6267ce8ec10cceeb889f016ca99b1aab62d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4e66b00_ea18e678",
@@ -133,6 +259,24 @@
       "writtenOn": "2024-09-03T11:30:33Z",
       "side": 1,
       "message": "I\u0027d prefer derivations to be private. It\u0027s a bit unclear what we want to get from this later on, but maybe provide access to KnownPaths somehow?",
+      "revId": "cb5e6267ce8ec10cceeb889f016ca99b1aab62d4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e9b3064_72d96241",
+        "filename": "tvix/tools/tvix-eval-jobs/src/main.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 278,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-09-06T14:24:36Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "d4e66b00_ea18e678",
       "revId": "cb5e6267ce8ec10cceeb889f016ca99b1aab62d4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
