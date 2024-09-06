@@ -70,6 +70,24 @@
       "parentUuid": "d390eddf_d5f41eb8",
       "revId": "4731329547d9746d99128d2c63e965c9c72baac5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f3efbd30_0c17a842",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000073
+      },
+      "writtenOn": "2024-09-06T19:31:38Z",
+      "side": 1,
+      "message": "I understand the desire to avoid leaking internal Values from a VM but if this is opaque and transmitted to another VM, I think it\u0027s fine-ish. *",
+      "parentUuid": "119b204d_9d10529c",
+      "revId": "4731329547d9746d99128d2c63e965c9c72baac5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
