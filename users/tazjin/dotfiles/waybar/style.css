@@ -77,8 +77,23 @@ button:hover {
     margin: 0 4px;
 }
 
+#custom-start {
+    padding-bottom: 1px;
+    margin-right: 1px;
+}
+
+/* pop out left "modules" (start button) */
+.modules-left {
+    margin: 3px;
+    border-right: 1px solid gray;
+    border-bottom: 1px solid gray;
+    border-left: 1px solid white;
+    border-top: 1px solid white;
+    font-weight: bold;
+}
+
 /* indent right modules like in the original */
-.modules-right, .modules-left {
+.modules-right {
     margin: 3px;
     border-top: 1px solid gray;
     border-left: 1px solid gray;
