@@ -74,6 +74,15 @@ in
     };
   };
 
+  programs.waybar = {
+    enable = true;
+    settings = depot.users.tazjin.dotfiles.waybar.config;
+    style = depot.users.tazjin.dotfiles.waybar.style;
+    systemd.enable = true;
+  };
+  systemd.user.services.waybar.Unit.After = lib.mkForce [ "niri.service" ];
+
+
   services.swayidle = let cmd = "${pkgs.swaylock}/bin/swaylock -fFkl -c 008080"; in {
     enable = true;
     events = [

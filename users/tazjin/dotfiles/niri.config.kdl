@@ -38,7 +38,6 @@ layout {
 spawn-at-startup "xwayland-satellite"
 spawn-at-startup "xrandr --output eDP-1 --primary"
 spawn-at-startup "wpaperd" "-d"
-spawn-at-startup "waybar"
 spawn-at-startup "systemctl --user start xss-lock"
 
 environment {

@@ -1,5 +1,8 @@
-_: {
+args: {
   dunstrc = ./dunstrc;
   niri = ./niri.config.kdl;
-  waybar = ./waybar;
+  waybar = {
+    config = import ./waybar/config.nix args;
+    style = ./waybar/style.css;
+  };
 }
