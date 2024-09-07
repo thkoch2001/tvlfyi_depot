@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "628b0eda_278608a0",
+        "filename": "tvix/Cargo.toml",
+        "patchSetId": 16
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-09-07T15:29:34Z",
+      "side": 1,
+      "message": "Why does this need to be part of the tvix workspace? It can just be an independent program that uses tvix, no?",
+      "revId": "5eb9161f67e432072f498f72f5db72df967f9630",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
