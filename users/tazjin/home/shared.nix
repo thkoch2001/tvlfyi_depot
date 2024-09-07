@@ -109,7 +109,7 @@ in
     iconTheme.name = "Chicago95-tux";
     iconTheme.package = chicago95;
 
-    cursorTheme.name = "Chicago95_Animated_Hourglass_Cursors_HiDPI";
+    cursorTheme.name = lib.mkDefault "Chicago95_Animated_Hourglass_Cursors";
     cursorTheme.package = chicago95;
   };
 

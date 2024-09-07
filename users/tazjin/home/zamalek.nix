@@ -8,4 +8,6 @@
     depot.users.tazjin.home.shared
     depot.users.tazjin.home.persistence
   ];
+
+  cursorTheme.name = lib.mkDefault "Chicago95_Animated_Hourglass_Cursors_HiDPI";
 }
