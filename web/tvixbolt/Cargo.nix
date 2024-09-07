@@ -4168,9 +4168,9 @@ rec {
       };
       "thiserror" = rec {
         crateName = "thiserror";
-        version = "1.0.61";
+        version = "1.0.63";
         edition = "2021";
-        sha256 = "028prh962l16cmjivwb1g9xalbpqip0305zhq006mg74dc6whin5";
+        sha256 = "092p83mf4p1vkjb2j6h6z96dan4raq2simhirjv12slbndq26d60";
         authors = [
           "David Tolnay <dtolnay@gmail.com>"
         ];
@@ -4184,9 +4184,9 @@ rec {
       };
       "thiserror-impl" = rec {
         crateName = "thiserror-impl";
-        version = "1.0.61";
+        version = "1.0.63";
         edition = "2021";
-        sha256 = "0cvm37hp0kbcyk1xac1z0chpbd9pbn2g456iyid6sah0a113ihs6";
+        sha256 = "0qd21l2jjrkvnpr5da3l3b58v4wmrkn6aa0h1z5dg6kb8rc8nmd4";
         procMacro = true;
         libName = "thiserror_impl";
         authors = [
@@ -4638,6 +4638,10 @@ rec {
           {
             name = "tabwriter";
             packageId = "tabwriter";
+          }
+          {
+            name = "thiserror";
+            packageId = "thiserror";
           }
           {
             name = "toml";
