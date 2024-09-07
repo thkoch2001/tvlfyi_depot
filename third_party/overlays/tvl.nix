@@ -140,6 +140,42 @@ depot.nix.readTree.drvTargets {
     python3 = self.python311;
   };
 
+  # Temporarily pin niri to master. Overriding buildRustPackage is just too
+  # complicated, so lets redo it.
+  niri =
+    let
+      prev = super.niri;
+      src = self.fetchFromGitHub {
+        owner = "YaLTeR";
+        repo = "niri";
+        rev = "370fd4e172ec3daf9dc9c75dc0555fe91182f731";
+        hash = "sha256:0wyl0mpk9hg67bvj7q120wanrdqn3ls9zv9vjv9yxp11kan5pi1q";
+      };
+    in
+    self.rustPlatform.buildRustPackage {
+      inherit src;
+      inherit (prev.drvAttrs)
+        pname
+        version
+        nativeBuildInputs
+        runtimeDependencies
+        postPatch
+        postInstall;
+      inherit (prev) passthru meta;
+
+      buildInputs = prev.drvAttrs.buildInputs ++ [
+        self.libdisplay-info
+      ];
+
+      cargoLock = {
+        lockFile = "${src}/Cargo.lock";
+        outputHashes = {
+          "smithay-0.3.0" = "sha256:1vcm7j1l0wjq0z01qvxk6n3mlv65ga11vjm1srnm12d26iwvmryq";
+          "libspa-0.8.0" = "sha256:1nj7xbvhl9b4n8gnwcl1pjn08rd2njznlp0vy0zm037kas817bs7";
+        };
+      };
+    };
+
   # macFUSE bump containing fix for https://github.com/osxfuse/osxfuse/issues/974
   # https://github.com/NixOS/nixpkgs/pull/320197
   fuse =
