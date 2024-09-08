@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2346fba3_cd888669",
+        "filename": "tvix/store/src/nar/seekable.rs",
+        "patchSetId": 10
+      },
+      "lineNbr": 338,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-09-08T05:37:46Z",
+      "side": 1,
+      "message": "```suggestion\n                buf.put(\u0026data[offset_in_segment..offset_in_segment + read_size]);\n```\n\nBuf::slice will increment the refcount, to no useful end, since we\u0027ll immediately drop the resulting buffer afterwards.",
+      "range": {
+        "startLine": 338,
+        "startChar": 29,
+        "endLine": 338,
+        "endChar": 34
+      },
+      "revId": "c0b703422b631100d8078521ef072faa1848af60",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
