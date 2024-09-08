@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "864ad95f_cd58b423",
+        "filename": "tvix/nix-compat/src/nar/writer/sync.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-08T12:16:14Z",
+      "side": 1,
+      "message": "```suggestion\n    /// The user gets access to a writer to write the file contents to, plus a struct they must invoke a function on to finish writing the NAR file.\n```",
+      "revId": "a066c01723291b5231724a5628257f9da75a2a5a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
