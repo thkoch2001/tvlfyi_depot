@@ -45,7 +45,7 @@ impl<const N: usize> DerefMut for BytesMutWithDefaultCapacity<N> {
 
 impl<const N: usize> Default for BytesMutWithDefaultCapacity<N> {
     fn default() -> Self {
-        BytesMutWithDefaultCapacity {
+        Self {
             inner: bytes::BytesMut::with_capacity(N),
         }
     }

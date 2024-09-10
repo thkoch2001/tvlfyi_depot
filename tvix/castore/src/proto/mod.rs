@@ -19,7 +19,7 @@ pub const FILE_DESCRIPTOR_SET: &[u8] = tonic::include_file_descriptor_set!("tvix
 #[cfg(test)]
 mod tests;
 
-/// Errors that occur during StatBlobResponse validation
+/// Errors that occur during `StatBlobResponse` validation
 #[derive(Debug, PartialEq, Eq, thiserror::Error)]
 pub enum ValidateStatBlobResponseError {
     /// Invalid digest length encountered
@@ -28,13 +28,13 @@ pub enum ValidateStatBlobResponseError {
 }
 
 fn checked_sum(iter: impl IntoIterator<Item = u64>) -> Option<u64> {
-    iter.into_iter().try_fold(0u64, |acc, i| acc.checked_add(i))
+    iter.into_iter().try_fold(0u64, u64::checked_add)
 }
 
 impl Directory {
     /// The size of a directory is the number of all regular and symlink elements,
     /// the number of directory elements, and their size fields.
-    pub fn size(&self) -> u64 {
+    #[must_use]pub fn size(&self) -> u64 {
         if cfg!(debug_assertions) {
             self.size_checked()
                 .expect("Directory::size exceeds u64::MAX")
@@ -54,7 +54,7 @@ impl Directory {
 
     /// Calculates the digest of a Directory, which is the blake3 hash of a
     /// Directory protobuf message, serialized in protobuf canonical form.
-    pub fn digest(&self) -> B3Digest {
+    #[must_use]pub fn digest(&self) -> B3Digest {
         let mut hasher = blake3::Hasher::new();
 
         hasher
@@ -78,10 +78,10 @@ impl TryFrom<Directory> for crate::Directory {
             .iter()
             .try_fold(&b""[..], |prev_name, e| {
                 match e.name.as_ref().cmp(prev_name) {
-                    Ordering::Less => Err(DirectoryError::WrongSorting(e.name.to_owned())),
+                    Ordering::Less => Err(DirectoryError::WrongSorting(e.name.clone())),
                     Ordering::Equal => Err(DirectoryError::DuplicateName(
                         e.name
-                            .to_owned()
+                            .clone()
                             .try_into()
                             .map_err(DirectoryError::InvalidName)?,
                     )),
@@ -90,10 +90,10 @@ impl TryFrom<Directory> for crate::Directory {
             })?;
         value.files.iter().try_fold(&b""[..], |prev_name, e| {
             match e.name.as_ref().cmp(prev_name) {
-                Ordering::Less => Err(DirectoryError::WrongSorting(e.name.to_owned())),
+                Ordering::Less => Err(DirectoryError::WrongSorting(e.name.clone())),
                 Ordering::Equal => Err(DirectoryError::DuplicateName(
                     e.name
-                        .to_owned()
+                        .clone()
                         .try_into()
                         .map_err(DirectoryError::InvalidName)?,
                 )),
@@ -102,10 +102,10 @@ impl TryFrom<Directory> for crate::Directory {
         })?;
         value.symlinks.iter().try_fold(&b""[..], |prev_name, e| {
             match e.name.as_ref().cmp(prev_name) {
-                Ordering::Less => Err(DirectoryError::WrongSorting(e.name.to_owned())),
+                Ordering::Less => Err(DirectoryError::WrongSorting(e.name.clone())),
                 Ordering::Equal => Err(DirectoryError::DuplicateName(
                     e.name
-                        .to_owned()
+                        .clone()
                         .try_into()
                         .map_err(DirectoryError::InvalidName)?,
                 )),
@@ -133,7 +133,7 @@ impl TryFrom<Directory> for crate::Directory {
                     node: Some(node::Node::File(e)),
                 }
                 .into_name_and_node()?,
-            )
+            );
         }
 
         for e in value.symlinks {
@@ -142,10 +142,10 @@ impl TryFrom<Directory> for crate::Directory {
                     node: Some(node::Node::Symlink(e)),
                 }
                 .into_name_and_node()?,
-            )
+            );
         }
 
-        crate::Directory::try_from_iter(elems)
+        Self::try_from_iter(elems)
     }
 }
 
@@ -181,7 +181,7 @@ impl From<crate::Directory> for Directory {
             }
         }
 
-        Directory {
+        Self {
             directories,
             files,
             symlinks,
@@ -190,7 +190,7 @@ impl From<crate::Directory> for Directory {
 }
 
 impl Node {
-    /// Converts a proto [Node] to a [crate::Node], and splits off the name.
+    /// Converts a proto [Node] to a [`crate::Node`], and splits off the name.
     pub fn into_name_and_node(self) -> Result<(PathComponent, crate::Node), DirectoryError> {
         match self.node.ok_or_else(|| DirectoryError::NoNodeSet)? {
             node::Node::Directory(n) => {
@@ -236,8 +236,8 @@ impl Node {
         }
     }
 
-    /// Construsts a [Node] from a name and [crate::Node].
-    /// The name is a [bytes::Bytes], not a [PathComponent], as we have use an
+    /// Construsts a [Node] from a name and [`crate::Node`].
+    /// The name is a [`bytes::Bytes`], not a [`PathComponent`], as we have use an
     /// empty name in some places.
     pub fn from_name_and_node(name: bytes::Bytes, n: crate::Node) -> Self {
         match n {
@@ -271,7 +271,7 @@ impl Node {
 }
 
 impl StatBlobResponse {
-    /// Validates a StatBlobResponse. All chunks must have valid blake3 digests.
+    /// Validates a `StatBlobResponse`. All chunks must have valid blake3 digests.
     /// It is allowed to send an empty list, if no more granular chunking is
     /// available.
     pub fn validate(&self) -> Result<(), ValidateStatBlobResponseError> {

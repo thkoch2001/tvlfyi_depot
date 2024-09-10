@@ -102,7 +102,7 @@ impl FuseDaemon {
             });
         }
 
-        Ok(FuseDaemon {
+        Ok(Self {
             session: Arc::new(Mutex::new(session)),
             threads: Arc::new(threads),
         })
@@ -111,7 +111,7 @@ impl FuseDaemon {
     /// Waits for all threads to finish.
     #[instrument(skip_all)]
     pub fn wait(&self) {
-        self.threads.join()
+        self.threads.join();
     }
 
     /// Send the unmount command, and waits for all threads to finish.
@@ -131,7 +131,7 @@ impl FuseDaemon {
 impl Drop for FuseDaemon {
     fn drop(&mut self) {
         if let Err(error) = self.unmount() {
-            error!(?error, "failed to unmont fuse filesystem")
+            error!(?error, "failed to unmont fuse filesystem");
         }
     }
 }

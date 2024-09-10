@@ -6,7 +6,7 @@ use thiserror::Error;
 pub struct B3Digest(Bytes);
 
 // TODO: allow converting these errors to crate::Error
-#[derive(Error, Debug, PartialEq)]
+#[derive(Error, Debug, PartialEq, Eq)]
 pub enum Error {
     #[error("invalid digest length: {0}")]
     InvalidDigestLen(usize),
@@ -80,7 +80,7 @@ impl From<B3Digest> for [u8; B3_LEN] {
 
 impl Clone for B3Digest {
     fn clone(&self) -> Self {
-        Self(self.0.to_owned())
+        Self(self.0.clone())
     }
 }
 

@@ -56,7 +56,7 @@ impl RedbDirectoryService {
 }
 
 /// Ensures all tables are present.
-/// Opens a write transaction and calls open_table on DIRECTORY_TABLE, which will
+/// Opens a write transaction and calls `open_table` on `DIRECTORY_TABLE`, which will
 /// create it if not present.
 fn create_schema(db: &redb::Database) -> Result<(), redb::Error> {
     let txn = db.begin_write()?;
@@ -243,7 +243,7 @@ impl DirectoryPutter for RedbDirectoryPutter {
 pub struct RedbDirectoryServiceConfig {
     is_temporary: bool,
     #[serde(default)]
-    /// required when is_temporary = false
+    /// required when `is_temporary` = false
     path: Option<PathBuf>,
 }
 
@@ -257,12 +257,12 @@ impl TryFrom<url::Url> for RedbDirectoryServiceConfig {
         }
 
         Ok(if url.path().is_empty() {
-            RedbDirectoryServiceConfig {
+            Self {
                 is_temporary: true,
                 path: None,
             }
         } else {
-            RedbDirectoryServiceConfig {
+            Self {
                 is_temporary: false,
                 path: Some(url.path().into()),
             }
@@ -279,22 +279,22 @@ impl ServiceBuilder for RedbDirectoryServiceConfig {
         _context: &CompositionContext,
     ) -> Result<Arc<dyn DirectoryService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
         match self {
-            RedbDirectoryServiceConfig {
+            Self {
                 is_temporary: true,
                 path: None,
             } => Ok(Arc::new(RedbDirectoryService::new_temporary()?)),
-            RedbDirectoryServiceConfig {
+            Self {
                 is_temporary: true,
                 path: Some(_),
             } => Err(Error::StorageError(
                 "Temporary RedbDirectoryService can not have path".into(),
             )
             .into()),
-            RedbDirectoryServiceConfig {
+            Self {
                 is_temporary: false,
                 path: None,
             } => Err(Error::StorageError("RedbDirectoryService is missing path".into()).into()),
-            RedbDirectoryServiceConfig {
+            Self {
                 is_temporary: false,
                 path: Some(path),
             } => Ok(Arc::new(RedbDirectoryService::new(path.into()).await?)),

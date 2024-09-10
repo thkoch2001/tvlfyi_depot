@@ -29,7 +29,7 @@ impl<BS> ChunkedReader<BS>
 where
     BS: AsRef<dyn BlobService> + Clone + 'static + Send,
 {
-    /// Construct a new [ChunkedReader], by retrieving a list of chunks (their
+    /// Construct a new [`ChunkedReader`], by retrieving a list of chunks (their
     /// blake3 digests and chunk sizes)
     pub fn from_chunks(chunks_it: impl Iterator<Item = (B3Digest, u64)>, blob_service: BS) -> Self {
         let chunked_blob = ChunkedBlob::from_iter(chunks_it, blob_service);
@@ -43,7 +43,7 @@ where
     }
 }
 
-/// ChunkedReader implements BlobReader.
+/// `ChunkedReader` implements `BlobReader`.
 impl<BS> BlobReader for ChunkedReader<BS> where BS: Send + Clone + 'static + AsRef<dyn BlobService> {}
 
 impl<BS> tokio::io::AsyncRead for ChunkedReader<BS>
@@ -109,7 +109,7 @@ where
                 Err(std::io::Error::new(
                     std::io::ErrorKind::InvalidInput,
                     "seeked beyond EOF",
-                ))?
+                ))?;
             }
 
             // Update the position and the internal reader.
@@ -133,7 +133,7 @@ where
 
 /// Holds a list of blake3 digest for individual chunks (and their sizes).
 /// Is able to construct a Reader that seeked to a certain offset, which
-/// is useful to construct a BlobReader (that implements AsyncSeek).
+/// is useful to construct a `BlobReader` (that implements `AsyncSeek`).
 /// - the current chunk index, and a Custor<Vec<u8>> holding the data of that chunk.
 struct ChunkedBlob<BS> {
     blob_service: BS,
@@ -171,8 +171,7 @@ where
     fn blob_length(&self) -> u64 {
         self.chunks
             .last()
-            .map(|(chunk_offset, chunk_size, _)| chunk_offset + chunk_size)
-            .unwrap_or(0)
+            .map_or(0, |(chunk_offset, chunk_size, _)| chunk_offset + chunk_size)
     }
 
     /// For a given position pos, return the chunk containing the data.
@@ -216,13 +215,13 @@ where
         let chunks: Vec<_> = self.chunks[start_chunk_idx..].to_vec();
         let readers_stream = tokio_stream::iter(chunks.into_iter().enumerate()).map(
             move |(nth_chunk, (_chunk_start_offset, chunk_size, chunk_digest))| {
-                let chunk_digest = chunk_digest.to_owned();
+                let chunk_digest = chunk_digest;
                 let blob_service = blob_service.clone();
                 async move {
                     trace!(chunk_size=%chunk_size, chunk_digest=%chunk_digest, "open_read on chunk in stream");
                     let mut blob_reader = blob_service
                         .as_ref()
-                        .open_read(&chunk_digest.to_owned())
+                        .open_read(&chunk_digest.clone())
                         .await?
                         .ok_or_else(|| {
                             warn!(chunk.digest = %chunk_digest, "chunk not found");

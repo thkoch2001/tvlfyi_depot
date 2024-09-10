@@ -31,7 +31,7 @@ where
                             // If we didn't get the directory node that's linked, that's a store inconsistency, bail out!
                             warn!("directory {} does not exist", digest);
 
-                            Error::StorageError(format!("directory {} does not exist", digest))
+                            Error::StorageError(format!("directory {digest} does not exist"))
                         })?;
 
                 // look for the component in the [Directory].

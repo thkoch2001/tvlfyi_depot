@@ -49,7 +49,7 @@ impl TryFrom<url::Url> for MemoryBlobServiceConfig {
         if url.has_host() || !url.path().is_empty() {
             return Err(Error::StorageError("invalid url".to_string()).into());
         }
-        Ok(MemoryBlobServiceConfig {})
+        Ok(Self {})
     }
 }
 

@@ -155,7 +155,7 @@ where
 /// the newer entry will replace the latter entry, disconnecting the old node's children
 /// from the graph.
 ///
-/// Once all nodes are ingested a call to [IngestionEntryGraph::finalize] will return
+/// Once all nodes are ingested a call to [`IngestionEntryGraph::finalize`] will return
 /// a list of entries compute by performaing a DFS post order traversal of the graph
 /// from the top-level directory entry.
 ///
@@ -176,7 +176,7 @@ impl Default for IngestionEntryGraph {
 impl IngestionEntryGraph {
     /// Creates a new ingestion entry graph.
     pub fn new() -> Self {
-        IngestionEntryGraph {
+        Self {
             graph: DiGraph::new(),
             path_to_index: HashMap::new(),
             root_node: None,
@@ -213,7 +213,7 @@ impl IngestionEntryGraph {
                 }
             }
 
-            self.root_node = Some(index)
+            self.root_node = Some(index);
         } else if let Some(parent_path) = path.parent() {
             // Recursively add the parent node until it hits the root node.
             let parent_index = self.add(IngestionEntry::Dir {

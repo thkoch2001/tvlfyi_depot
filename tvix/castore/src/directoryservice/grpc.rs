@@ -14,7 +14,7 @@ use tokio_stream::wrappers::UnboundedReceiverStream;
 use tonic::{async_trait, Code, Status};
 use tracing::{instrument, warn, Instrument as _};
 
-/// Connects to a (remote) tvix-store DirectoryService over gRPC.
+/// Connects to a (remote) tvix-store `DirectoryService` over gRPC.
 #[derive(Clone)]
 pub struct GRPCDirectoryService<T> {
     /// The internal reference to a gRPC client.
@@ -23,7 +23,7 @@ pub struct GRPCDirectoryService<T> {
 }
 
 impl<T> GRPCDirectoryService<T> {
-    /// construct a [GRPCDirectoryService] from a [proto::directory_service_client::DirectoryServiceClient].
+    /// construct a [`GRPCDirectoryService`] from a [`proto::directory_service_client::DirectoryServiceClient`].
     /// panics if called outside the context of a tokio runtime.
     pub fn from_client(
         grpc_client: proto::directory_service_client::DirectoryServiceClient<T>,
@@ -66,8 +66,7 @@ where
                 let actual_digest = directory.digest();
                 if actual_digest != digest {
                     Err(crate::Error::StorageError(format!(
-                        "requested directory with digest {}, but got {}",
-                        digest, actual_digest
+                        "requested directory with digest {digest}, but got {actual_digest}"
                     )))
                 } else {
                     Ok(Some(directory.try_into().map_err(|_| {
@@ -136,8 +135,7 @@ where
                             // it if it's in received_directory_digests (as that
                             // means it once was in expected_directory_digests)
                             Err(crate::Error::StorageError(format!(
-                                "received unexpected directory {}",
-                                directory_digest
+                                "received unexpected directory {directory_digest}"
                             )))?;
                         }
                         received_directory_digests.insert(directory_digest);
@@ -172,8 +170,7 @@ where
                         // If this is not empty, then the closure is incomplete
                         if diff_len != 0 {
                             Err(crate::Error::StorageError(format!(
-                                "still expected {} directories, but got premature end of stream",
-                                diff_len
+                                "still expected {diff_len} directories, but got premature end of stream"
                             )))?
                         } else {
                             return
@@ -229,7 +226,7 @@ impl TryFrom<url::Url> for GRPCDirectoryServiceConfig {
         // - In the case of unix sockets, there must be a path, but may not be a host.
         // - In the case of non-unix sockets, there must be a host, but no path.
         // Constructing the channel is handled by tvix_castore::channel::from_url.
-        Ok(GRPCDirectoryServiceConfig {
+        Ok(Self {
             url: url.to_string(),
         })
     }
@@ -254,8 +251,8 @@ impl ServiceBuilder for GRPCDirectoryServiceConfig {
 pub struct GRPCPutter {
     /// Data about the current request - a handle to the task, and the tx part
     /// of the channel.
-    /// The tx part of the pipe is used to send [proto::Directory] to the ongoing request.
-    /// The task will yield a [proto::PutDirectoryResponse] once the stream is closed.
+    /// The tx part of the pipe is used to send [`proto::Directory`] to the ongoing request.
+    /// The task will yield a [`proto::PutDirectoryResponse`] once the stream is closed.
     #[allow(clippy::type_complexity)] // lol
     rq: Option<(
         JoinHandle<Result<proto::PutDirectoryResponse, Status>>,

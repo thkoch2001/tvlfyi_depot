@@ -4,9 +4,9 @@
 //! Store configs are deserialized with serde. The registry provides a stateful mapping from the
 //! `type` tag of an internally tagged enum on the serde side to a Config struct which is
 //! deserialized and then returned as a `Box<dyn ServiceBuilder<Output = dyn BlobService>>`
-//! (the same for DirectoryService instead of BlobService etc).
+//! (the same for `DirectoryService` instead of `BlobService` etc).
 //!
-//! ### Example 1.: Implementing a new BlobService
+//! ### Example 1.: Implementing a new `BlobService`
 //!
 //! You need a Config struct which implements `DeserializeOwned` and
 //! `ServiceBuilder<Output = dyn BlobService>`.
@@ -87,7 +87,7 @@
 //! add_my_service(&mut my_registry);
 //! ```
 //!
-//! Continue with Example 2, with my_registry instead of REG
+//! Continue with Example 2, with `my_registry` instead of REG
 
 use erased_serde::deserialize;
 use futures::future::BoxFuture;
@@ -149,7 +149,7 @@ impl<'r, 'de: 'r, T: 'static> SeedFactory<'de, TagString<'de>> for RegistryWithF
              .0
             .iter()
             .find(|(k, _)| *k == &(TypeId::of::<T>(), tag.as_ref()))
-            .ok_or_else(|| serde::de::Error::custom(format!("Unknown type: {}", tag)))?
+            .ok_or_else(|| serde::de::Error::custom(format!("Unknown type: {tag}")))?
             .1;
 
         let entry: &RegistryEntry<T> = <dyn Any>::downcast_ref(&**seed).unwrap();
@@ -172,7 +172,7 @@ impl Registry {
     /// After calling `register::<Box<dyn FooTrait>, FooStruct>("footype")`, when a user
     /// deserializes into an input with the type tag "myblobservicetype" into a
     /// `Box<dyn FooTrait>`, it will first call the Deserialize imple of `FooStruct` and
-    /// then convert it into a `Box<dyn FooTrait>` using From::from.
+    /// then convert it into a `Box<dyn FooTrait>` using `From::from`.
     pub fn register<
         T: 'static,
         C: DeserializeOwned
@@ -265,7 +265,7 @@ lazy_static! {
 
 // ---------- End of generic registry code --------- //
 
-/// Register the builtin services of tvix_castore with the given registry.
+/// Register the builtin services of `tvix_castore` with the given registry.
 /// This is useful for creating your own registry with the builtin types _and_
 /// extra third party types.
 pub fn add_default_services(reg: &mut Registry) {
@@ -282,7 +282,7 @@ pub struct CompositionContext<'a> {
 }
 
 impl<'a> CompositionContext<'a> {
-    pub fn blank() -> Self {
+    #[must_use]pub fn blank() -> Self {
         Self {
             stack: Default::default(),
             composition: None,
@@ -376,7 +376,7 @@ impl<T: ?Sized + Send + Sync + 'static>
                     (TypeId::of::<T>(), k),
                     Box::new(InstantiationState::Config(v.0)) as Box<dyn Any + Send + Sync>,
                 )
-            }))
+            }));
     }
 }
 
@@ -454,7 +454,7 @@ impl Composition {
                     (async move {
                         loop {
                             if let Some(v) =
-                                recv.borrow_and_update().as_ref().map(|res| res.clone())
+                                recv.borrow_and_update().as_ref().map(std::clone::Clone::clone)
                             {
                                 break v;
                             }

@@ -21,7 +21,7 @@ use tokio_util::{
 use tonic::{async_trait, Code, Status};
 use tracing::{instrument, Instrument as _};
 
-/// Connects to a (remote) tvix-store BlobService over gRPC.
+/// Connects to a (remote) tvix-store `BlobService` over gRPC.
 #[derive(Clone)]
 pub struct GRPCBlobService<T> {
     /// The internal reference to a gRPC client.
@@ -30,7 +30,7 @@ pub struct GRPCBlobService<T> {
 }
 
 impl<T> GRPCBlobService<T> {
-    /// construct a [GRPCBlobService] from a [proto::blob_service_client::BlobServiceClient].
+    /// construct a [`GRPCBlobService`] from a [`proto::blob_service_client::BlobServiceClient`].
     pub fn from_client(grpc_client: proto::blob_service_client::BlobServiceClient<T>) -> Self {
         Self { grpc_client }
     }
@@ -194,7 +194,7 @@ impl TryFrom<url::Url> for GRPCBlobServiceConfig {
         // - In the case of unix sockets, there must be a path, but may not be a host.
         // - In the case of non-unix sockets, there must be a host, but no path.
         // Constructing the channel is handled by tvix_castore::channel::from_url.
-        Ok(GRPCBlobServiceConfig {
+        Ok(Self {
             url: url.to_string(),
         })
     }
@@ -251,7 +251,7 @@ impl<W: tokio::io::AsyncWrite + Send + Sync + Unpin + 'static> BlobWriter for GR
                     let digest: B3Digest = resp.digest.try_into().map_err(|_| {
                         io::Error::new(
                             io::ErrorKind::Other,
-                            format!("invalid root digest length {} in response", digest_len),
+                            format!("invalid root digest length {digest_len} in response"),
                         )
                     })?;
                     self.digest = Some(digest.clone());

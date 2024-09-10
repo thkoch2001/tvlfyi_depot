@@ -26,8 +26,8 @@ use crate::{
 
 use super::{BlobReader, BlobService, BlobWriter, ChunkedReader};
 
-/// Uses any object storage supported by the [object_store] crate to provide a
-/// tvix-castore [BlobService].
+/// Uses any object storage supported by the [`object_store`] crate to provide a
+/// tvix-castore [`BlobService`].
 ///
 /// # Data format
 /// Data is organized in "blobs" and "chunks".
@@ -35,11 +35,11 @@ use super::{BlobReader, BlobService, BlobWriter, ChunkedReader};
 /// granular chunks that assemble to the contents requested.
 /// This allows clients to seek, and not download chunks they already have
 /// locally, as it's referred to from other files.
-/// Check `rpc_blobstore` and more general BlobStore docs on that.
+/// Check `rpc_blobstore` and more general `BlobStore` docs on that.
 ///
 /// ## Blobs
 /// Stored at `${base_path}/blobs/b3/$digest_key`. They contains the serialized
-/// StatBlobResponse for the blob with the digest.
+/// `StatBlobResponse` for the blob with the digest.
 ///
 /// ## Chunks
 /// Chunks are stored at `${base_path}/chunks/b3/$digest_key`. They contain
@@ -52,11 +52,11 @@ use super::{BlobReader, BlobService, BlobWriter, ChunkedReader};
 /// `${base_path}/blobs/b3/41/41f8394111eb713a22165c46c90ab8f0fd9399c92028fd6d288944b23ff5bf76`.
 ///
 /// This reduces the number of files in the same directory, which would be a
-/// problem at least when using [object_store::local::LocalFileSystem].
+/// problem at least when using [`object_store::local::LocalFileSystem`].
 ///
 /// # Future changes
 /// There's no guarantees about this being a final format yet.
-/// Once object_store gets support for additional metadata / content-types,
+/// Once `object_store` gets support for additional metadata / content-types,
 /// we can eliminate some requests (small blobs only consisting of a single
 /// chunk can be stored as-is, without the blob index file).
 /// It also allows signalling any compression of chunks in the content-type.
@@ -67,7 +67,7 @@ pub struct ObjectStoreBlobService {
     object_store: Arc<dyn ObjectStore>,
     base_path: Path,
 
-    /// Average chunk size for FastCDC, in bytes.
+    /// Average chunk size for `FastCDC`, in bytes.
     /// min value is half, max value double of that number.
     avg_chunk_size: u32,
 }
@@ -259,10 +259,10 @@ pub struct ObjectStoreBlobServiceConfig {
 
 impl TryFrom<url::Url> for ObjectStoreBlobServiceConfig {
     type Error = Box<dyn std::error::Error + Send + Sync>;
-    /// Constructs a new [ObjectStoreBlobService] from a [Url] supported by
-    /// [object_store].
+    /// Constructs a new [`ObjectStoreBlobService`] from a [Url] supported by
+    /// [`object_store`].
     /// Any path suffix becomes the base path of the object store.
-    /// additional options, the same as in [object_store::parse_url_opts] can
+    /// additional options, the same as in [`object_store::parse_url_opts`] can
     /// be passed.
     fn try_from(url: url::Url) -> Result<Self, Self::Error> {
         // We need to convert the URL to string, strip the prefix there, and then
@@ -277,7 +277,7 @@ impl TryFrom<url::Url> for ObjectStoreBlobServiceConfig {
             url.set_query(None);
             url
         };
-        Ok(ObjectStoreBlobServiceConfig {
+        Ok(Self {
             object_store_url: trimmed_url.into(),
             object_store_options: url
                 .query_pairs()
@@ -389,7 +389,7 @@ async fn chunk_and_upload<R: AsyncRead + Unpin>(
         }
         Err(err) => {
             // other error
-            Err(err)?
+            Err(err)?;
         }
     }
 
@@ -543,7 +543,7 @@ where
                         // for the error type, we need to cheat a bit, as
                         // they're not clone-able.
                         // Simply store a sloppy clone, with the same ErrorKind and message there.
-                        self.fut_output = Some(Err(std::io::Error::new(e.kind(), e.to_string())))
+                        self.fut_output = Some(Err(std::io::Error::new(e.kind(), e.to_string())));
                     }
                 }
                 resp

@@ -9,7 +9,7 @@ use crate::{
 };
 
 /// Errors related to communication with the store.
-#[derive(Debug, Error, PartialEq)]
+#[derive(Debug, Error, PartialEq, Eq)]
 pub enum Error {
     #[error("invalid request: {0}")]
     InvalidRequest(String),
@@ -18,8 +18,8 @@ pub enum Error {
     StorageError(String),
 }
 
-/// Errors that occur during construction of [crate::Node]
-#[derive(Debug, thiserror::Error, PartialEq)]
+/// Errors that occur during construction of [`crate::Node`]
+#[derive(Debug, thiserror::Error, PartialEq, Eq)]
 pub enum ValidateNodeError {
     /// Invalid digest length encountered
     #[error("invalid digest length: {0}")]
@@ -32,13 +32,13 @@ pub enum ValidateNodeError {
 impl From<crate::digests::Error> for ValidateNodeError {
     fn from(e: crate::digests::Error) -> Self {
         match e {
-            crate::digests::Error::InvalidDigestLen(n) => ValidateNodeError::InvalidDigestLen(n),
+            crate::digests::Error::InvalidDigestLen(n) => Self::InvalidDigestLen(n),
         }
     }
 }
 
-/// Errors that can occur when populating [crate::Directory] messages,
-/// or parsing [crate::proto::Directory]
+/// Errors that can occur when populating [`crate::Directory`] messages,
+/// or parsing [`crate::proto::Directory`]
 #[derive(Debug, thiserror::Error, PartialEq)]
 pub enum DirectoryError {
     /// Multiple elements with the same name encountered
@@ -62,15 +62,15 @@ pub enum DirectoryError {
 
 impl From<JoinError> for Error {
     fn from(value: JoinError) -> Self {
-        Error::StorageError(value.to_string())
+        Self::StorageError(value.to_string())
     }
 }
 
 impl From<Error> for Status {
     fn from(value: Error) -> Self {
         match value {
-            Error::InvalidRequest(msg) => Status::invalid_argument(msg),
-            Error::StorageError(msg) => Status::data_loss(format!("storage error: {}", msg)),
+            Error::InvalidRequest(msg) => Self::invalid_argument(msg),
+            Error::StorageError(msg) => Self::data_loss(format!("storage error: {msg}")),
         }
     }
 }
@@ -83,46 +83,46 @@ impl From<crate::tonic::Error> for Error {
 
 impl From<redb::Error> for Error {
     fn from(value: redb::Error) -> Self {
-        Error::StorageError(value.to_string())
+        Self::StorageError(value.to_string())
     }
 }
 
 impl From<redb::DatabaseError> for Error {
     fn from(value: redb::DatabaseError) -> Self {
-        Error::StorageError(value.to_string())
+        Self::StorageError(value.to_string())
     }
 }
 
 impl From<redb::TableError> for Error {
     fn from(value: redb::TableError) -> Self {
-        Error::StorageError(value.to_string())
+        Self::StorageError(value.to_string())
     }
 }
 
 impl From<redb::TransactionError> for Error {
     fn from(value: redb::TransactionError) -> Self {
-        Error::StorageError(value.to_string())
+        Self::StorageError(value.to_string())
     }
 }
 
 impl From<redb::StorageError> for Error {
     fn from(value: redb::StorageError) -> Self {
-        Error::StorageError(value.to_string())
+        Self::StorageError(value.to_string())
     }
 }
 
 impl From<redb::CommitError> for Error {
     fn from(value: redb::CommitError) -> Self {
-        Error::StorageError(value.to_string())
+        Self::StorageError(value.to_string())
     }
 }
 
 impl From<std::io::Error> for Error {
     fn from(value: std::io::Error) -> Self {
         if value.kind() == std::io::ErrorKind::InvalidInput {
-            Error::InvalidRequest(value.to_string())
+            Self::InvalidRequest(value.to_string())
         } else {
-            Error::StorageError(value.to_string())
+            Self::StorageError(value.to_string())
         }
     }
 }

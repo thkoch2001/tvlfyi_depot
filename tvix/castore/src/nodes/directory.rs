@@ -15,8 +15,8 @@ pub struct Directory {
 
 impl Directory {
     /// Constructs a new, empty Directory.
-    pub fn new() -> Self {
-        Directory {
+    #[must_use]pub fn new() -> Self {
+        Self {
             nodes: BTreeMap::new(),
         }
     }
@@ -27,7 +27,7 @@ impl Directory {
     /// well as exceeding the maximum size.
     pub fn try_from_iter<T: IntoIterator<Item = (PathComponent, Node)>>(
         iter: T,
-    ) -> Result<Directory, DirectoryError> {
+    ) -> Result<Self, DirectoryError> {
         let mut nodes = BTreeMap::new();
 
         iter.into_iter().try_fold(0u64, |size, (name, node)| {
@@ -39,7 +39,7 @@ impl Directory {
 
     /// The size of a directory is the number of all regular and symlink elements,
     /// the number of directory elements, and their size fields.
-    pub fn size(&self) -> u64 {
+    #[must_use]pub fn size(&self) -> u64 {
         // It's impossible to create a Directory where the size overflows, because we
         // check before every add() that the size won't overflow.
         (self.nodes.len() as u64)
@@ -54,7 +54,7 @@ impl Directory {
 
     /// Calculates the digest of a Directory, which is the blake3 hash of a
     /// Directory protobuf message, serialized in protobuf canonical form.
-    pub fn digest(&self) -> B3Digest {
+    #[must_use]pub fn digest(&self) -> B3Digest {
         proto::Directory::from(self.clone()).digest()
     }
 
@@ -77,7 +77,7 @@ impl Directory {
     /// will yield an error, as well as exceeding the maximum size.
     ///
     /// In case you want to construct a [Directory] from multiple elements, use
-    /// [from_iter] instead.
+    /// [`from_iter`] instead.
     pub fn add(&mut self, name: PathComponent, node: Node) -> Result<(), DirectoryError> {
         check_insert_node(self.size(), &mut self.nodes, name, node)?;
         Ok(())
@@ -85,10 +85,10 @@ impl Directory {
 }
 
 fn checked_sum(iter: impl IntoIterator<Item = u64>) -> Option<u64> {
-    iter.into_iter().try_fold(0u64, |acc, i| acc.checked_add(i))
+    iter.into_iter().try_fold(0u64, u64::checked_add)
 }
 
-/// Helper function dealing with inserting nodes into the nodes [BTreeMap],
+/// Helper function dealing with inserting nodes into the nodes [`BTreeMap`],
 /// after ensuring the new size doesn't overlow and the key doesn't exist already.
 ///
 /// Returns the new total size, or an error.

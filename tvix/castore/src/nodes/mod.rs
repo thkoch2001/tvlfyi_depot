@@ -6,12 +6,12 @@ use crate::B3Digest;
 pub use directory::Directory;
 pub use symlink_target::{SymlinkTarget, SymlinkTargetError};
 
-/// A Node is either a [DirectoryNode], [FileNode] or [SymlinkNode].
+/// A Node is either a [`DirectoryNode`], [`FileNode`] or [`SymlinkNode`].
 /// Nodes themselves don't have names, what gives them names is either them
 /// being inside a [Directory], or a root node with its own name attached to it.
 #[derive(Debug, Clone, PartialEq, Eq)]
 pub enum Node {
-    /// A DirectoryNode is a pointer to a [Directory], by its [Directory::digest].
+    /// A `DirectoryNode` is a pointer to a [Directory], by its [`Directory::digest`].
     /// It also records a`size`.
     /// Such a node is either an element in the [Directory] it itself is contained in,
     /// or a standalone root node.
@@ -29,7 +29,7 @@ pub enum Node {
         /// and easy to reject: you won't have an ordinal for some nodes.
         size: u64,
     },
-    /// A FileNode represents a regular or executable file in a Directory or at the root.
+    /// A `FileNode` represents a regular or executable file in a Directory or at the root.
     File {
         /// The blake3 digest of the file contents
         digest: B3Digest,
@@ -40,7 +40,7 @@ pub enum Node {
         /// Whether the file is executable
         executable: bool,
     },
-    /// A SymlinkNode represents a symbolic link in a Directory or at the root.
+    /// A `SymlinkNode` represents a symbolic link in a Directory or at the root.
     Symlink {
         /// The target of the symlink.
         target: SymlinkTarget,

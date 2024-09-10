@@ -41,7 +41,7 @@ where
     DS: DirectoryService,
 {
     let span = Span::current();
-    span.pb_set_message(&format!("Ingesting {:?}", path));
+    span.pb_set_message(&format!("Ingesting {path:?}"));
     span.pb_start();
 
     let iter = WalkDir::new(path.as_ref())
@@ -57,7 +57,7 @@ where
             let span = span.clone();
             move |e| {
                 if e.is_ok() {
-                    span.pb_inc(1)
+                    span.pb_inc(1);
                 }
             }
         }),
@@ -65,8 +65,8 @@ where
     .await
 }
 
-/// Converts an iterator of [walkdir::DirEntry]s into a stream of ingestion entries.
-/// This can then be fed into [ingest_entries] to ingest all the entries into the castore.
+/// Converts an iterator of [`walkdir::DirEntry`]s into a stream of ingestion entries.
+/// This can then be fed into [`ingest_entries`] to ingest all the entries into the castore.
 ///
 /// The produced stream is buffered, so uploads can happen concurrently.
 ///
@@ -102,8 +102,8 @@ where
     )
 }
 
-/// Converts a [walkdir::DirEntry] into an [IngestionEntry], uploading blobs to the
-/// provided [BlobService].
+/// Converts a [`walkdir::DirEntry`] into an [`IngestionEntry`], uploading blobs to the
+/// provided [`BlobService`].
 ///
 /// The prefix path is stripped from the path of each entry. This is usually the parent path
 /// of the path being ingested so that the last element of the stream only has one component.
@@ -124,7 +124,7 @@ where
 
     // convert to castore PathBuf
     let path = crate::path::PathBuf::from_host_path(fs_path, false)
-        .unwrap_or_else(|e| panic!("Tvix bug: walkdir direntry cannot be parsed: {}", e));
+        .unwrap_or_else(|e| panic!("Tvix bug: walkdir direntry cannot be parsed: {e}"));
 
     if file_type.is_dir() {
         Ok(IngestionEntry::Dir { path })

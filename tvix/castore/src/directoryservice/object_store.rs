@@ -29,7 +29,7 @@ use crate::{proto, B3Digest, Error, Node};
 /// (using `put_multiple_start`) are stored in a single object.
 /// Directories are stored in a length-delimited format with a 1MiB limit. The length field is a
 /// u32 and the directories are stored in root-to-leaves topological order, the same way they will
-/// be returned to the client in get_recursive.
+/// be returned to the client in `get_recursive`.
 #[derive(Clone)]
 pub struct ObjectStoreDirectoryService {
     object_store: Arc<dyn ObjectStore>,
@@ -49,10 +49,10 @@ fn derive_dirs_path(base_path: &Path, digest: &B3Digest) -> Path {
 const MAX_FRAME_LENGTH: usize = 1 * 1024 * 1024 * 1000; // 1 MiB
                                                         //
 impl ObjectStoreDirectoryService {
-    /// Constructs a new [ObjectStoreDirectoryService] from a [Url] supported by
-    /// [object_store].
+    /// Constructs a new [`ObjectStoreDirectoryService`] from a [Url] supported by
+    /// [`object_store`].
     /// Any path suffix becomes the base path of the object store.
-    /// additional options, the same as in [object_store::parse_url_opts] can
+    /// additional options, the same as in [`object_store::parse_url_opts`] can
     /// be passed.
     pub fn parse_url_opts<I, K, V>(url: &Url, options: I) -> Result<Self, object_store::Error>
     where
@@ -68,7 +68,7 @@ impl ObjectStoreDirectoryService {
         })
     }
 
-    /// Like [Self::parse_url_opts], except without the options.
+    /// Like [`Self::parse_url_opts`], except without the options.
     pub fn parse_url(url: &Url) -> Result<Self, object_store::Error> {
         Self::parse_url_opts(url, Vec::<(String, String)>::new())
     }
@@ -141,8 +141,7 @@ impl DirectoryService for ObjectStoreDirectoryService {
                         // Ensure to only decode the directory objects whose digests we trust
                         if !order_validator.digest_allowed(&digest) {
                             return Err(crate::Error::StorageError(format!(
-                                "received unexpected directory {}",
-                                digest
+                                "received unexpected directory {digest}"
                             )));
                         }
 
@@ -203,7 +202,7 @@ impl TryFrom<url::Url> for ObjectStoreDirectoryServiceConfig {
             url.set_query(None);
             url
         };
-        Ok(ObjectStoreDirectoryServiceConfig {
+        Ok(Self {
             object_store_url: trimmed_url.into(),
             object_store_options: url
                 .query_pairs()

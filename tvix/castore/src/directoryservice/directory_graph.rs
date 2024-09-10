@@ -24,9 +24,9 @@ struct EdgeWeight {
 /// This can be used to validate and/or re-order a Directory closure (DAG of
 /// connected Directories), and their insertion order.
 ///
-/// The DirectoryGraph is parametrized on the insertion order, and can be
+/// The `DirectoryGraph` is parametrized on the insertion order, and can be
 /// constructed using the Default trait, or using `with_order` if the
-/// OrderValidator needs to be customized.
+/// `OrderValidator` needs to be customized.
 ///
 /// If the user is receiving directories from canonical protobuf encoding in
 /// root-to-leaves order, and parsing them, she can call `digest_allowed`
@@ -119,7 +119,7 @@ impl DirectoryGraph<RootToLeavesValidator> {
 }
 
 impl<O: OrderValidator> DirectoryGraph<O> {
-    /// Customize the ordering, i.e. for pre-setting the root of the RootToLeavesValidator
+    /// Customize the ordering, i.e. for pre-setting the root of the `RootToLeavesValidator`
     pub fn with_order(order_validator: O) -> Self {
         Self {
             graph: Default::default(),
@@ -174,12 +174,13 @@ impl<O: OrderValidator> DirectoryGraph<O> {
 
         // validate the edges from parents to this node
         // this collects edge ids in a Vec because there is no edges_directed_mut :'c
+        #[allow(clippy::needless_collect)] // FIXME: find a better solution
         for edge_id in self
             .graph
             .edges_directed(ix, Direction::Incoming)
             .map(|edge_ref| edge_ref.id())
             .collect::<Vec<_>>()
-            .into_iter()
+            
         {
             let edge_weight = self
                 .graph

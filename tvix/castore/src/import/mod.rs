@@ -1,5 +1,5 @@
-//! The main library function here is [ingest_entries], receiving a stream of
-//! [IngestionEntry].
+//! The main library function here is [`ingest_entries`], receiving a stream of
+//! [`IngestionEntry`].
 //!
 //! Specific implementations, such as ingesting from the filesystem, live in
 //! child modules.
@@ -94,7 +94,7 @@ where
                     |e: SymlinkTargetError| {
                         IngestionError::UploadDirectoryError(
                             entry.path().to_owned(),
-                            crate::Error::StorageError(format!("invalid symlink target: {}", e)),
+                            crate::Error::StorageError(format!("invalid symlink target: {e}")),
                         )
                     },
                 )?,
@@ -124,7 +124,7 @@ where
                 .file_name()
                 // If this is the root node, it will have an empty name.
                 .unwrap_or_else(|| "".try_into().unwrap())
-                .to_owned();
+                .clone();
 
             // record node in parent directory, creating a new [Directory] if not there yet.
             directories
@@ -192,14 +192,14 @@ pub enum IngestionEntry {
 impl IngestionEntry {
     fn path(&self) -> &Path {
         match self {
-            IngestionEntry::Regular { path, .. } => path,
-            IngestionEntry::Symlink { path, .. } => path,
-            IngestionEntry::Dir { path } => path,
+            Self::Regular { path, .. } => path,
+            Self::Symlink { path, .. } => path,
+            Self::Dir { path } => path,
         }
     }
 
     fn is_dir(&self) -> bool {
-        matches!(self, IngestionEntry::Dir { .. })
+        matches!(self, Self::Dir { .. })
     }
 }
 

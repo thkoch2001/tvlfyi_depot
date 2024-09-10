@@ -12,11 +12,11 @@ use tokio_util::io::InspectReader;
 
 use crate::{blobservice::BlobService, B3Digest, Path, PathBuf};
 
-/// Files smaller than this threshold, in bytes, are uploaded to the [BlobService] in the
+/// Files smaller than this threshold, in bytes, are uploaded to the [`BlobService`] in the
 /// background.
 ///
 /// This is a u32 since we acquire a weighted semaphore using the size of the blob.
-/// [Semaphore::acquire_many_owned] takes a u32, so we need to ensure the size of
+/// [`Semaphore::acquire_many_owned`] takes a u32, so we need to ensure the size of
 /// the blob can be represented using a u32 and will not cause an overflow.
 const CONCURRENT_BLOB_UPLOAD_THRESHOLD: u32 = 1024 * 1024;
 
@@ -49,7 +49,7 @@ pub enum Error {
 /// round trip time with the blob service. The concurrent blob uploader will buffer small
 /// blobs in memory and upload them to the blob service in the background.
 ///
-/// Once all blobs have been uploaded, make sure to call [ConcurrentBlobUploader::join] to wait
+/// Once all blobs have been uploaded, make sure to call [`ConcurrentBlobUploader::join`] to wait
 /// for all background jobs to complete and check for any errors.
 pub struct ConcurrentBlobUploader<BS> {
     blob_service: BS,
@@ -84,7 +84,7 @@ where
     where
         R: AsyncRead + Unpin,
     {
-        if expected_size < CONCURRENT_BLOB_UPLOAD_THRESHOLD as u64 {
+        if expected_size < u64::from(CONCURRENT_BLOB_UPLOAD_THRESHOLD) {
             let mut buffer = Vec::with_capacity(expected_size as usize);
             let mut hasher = blake3::Hasher::new();
             let mut reader = InspectReader::new(&mut r, |bytes| {

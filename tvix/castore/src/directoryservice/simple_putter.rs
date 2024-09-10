@@ -7,7 +7,7 @@ use tonic::async_trait;
 use tracing::instrument;
 use tracing::warn;
 
-/// This is an implementation of DirectoryPutter that simply
+/// This is an implementation of `DirectoryPutter` that simply
 /// inserts individual Directory messages one by one, on close, after
 /// they successfully validated.
 pub struct SimplePutter<DS: DirectoryService> {

@@ -58,7 +58,7 @@ macro_rules! make {
                 /// Minimal suitably sized buffer for reading the wire representation
                 type Buf = [u8; tag::buf_of(&[$($TOK.len()),+])];
 
-                /// Make an instance of [Self::Buf]
+                /// Make an instance of [`Self::Buf`]
                 #[inline(always)]
                 fn make_buf() -> Self::Buf {
                     [0u8; tag::buf_of(&[$($TOK.len()),+])]

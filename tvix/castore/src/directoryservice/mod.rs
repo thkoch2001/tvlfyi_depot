@@ -132,7 +132,7 @@ pub trait DirectoryPutter: Send {
     async fn close(&mut self) -> Result<B3Digest, Error>;
 }
 
-/// Registers the builtin DirectoryService implementations with the registry
+/// Registers the builtin `DirectoryService` implementations with the registry
 pub(crate) fn register_directory_services(reg: &mut Registry) {
     reg.register::<Box<dyn ServiceBuilder<Output = dyn DirectoryService>>, super::directoryservice::ObjectStoreDirectoryServiceConfig>("objectstore");
     reg.register::<Box<dyn ServiceBuilder<Output = dyn DirectoryService>>, super::directoryservice::MemoryDirectoryServiceConfig>("memory");

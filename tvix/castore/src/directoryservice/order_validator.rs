@@ -98,7 +98,7 @@ impl OrderValidator for LeavesToRootValidator {
             }
         }
 
-        self.allowed_references.insert(digest.clone());
+        self.allowed_references.insert(digest);
 
         true
     }

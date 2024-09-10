@@ -46,3 +46,13 @@ cargo = "warn"
 [profile.release-with-debug]
 inherits = "release"
 debug = true
+
+[patch.crates-io]
+tonic = { git = "https://github.com/thecaralice/tonic/", branch = "wildcard-imports" }
+tonic-build = { git = "https://github.com/thecaralice/tonic/", branch = "wildcard-imports" }
+tonic-reflection = { git = "https://github.com/thecaralice/tonic/", branch = "wildcard-imports" }
+tonic-health = { git = "https://github.com/thecaralice/tonic/", branch = "wildcard-imports" }
+prost = { git = "https://github.com/thecaralice/prost", branch = "use-self" }
+prost-build = { git = "https://github.com/thecaralice/prost", branch = "use-self" }
+prost-derive = { git = "https://github.com/thecaralice/prost", branch = "use-self" }
+prost-types = { git = "https://github.com/thecaralice/prost", branch = "use-self" }

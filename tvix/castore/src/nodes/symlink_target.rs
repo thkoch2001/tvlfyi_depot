@@ -2,7 +2,7 @@ use bstr::ByteSlice;
 use std::fmt::{self, Debug, Display};
 
 /// A wrapper type for symlink targets.
-/// Internally uses a [bytes::Bytes], but disallows empty targets and those
+/// Internally uses a [`bytes::Bytes`], but disallows empty targets and those
 /// containing null bytes.
 #[repr(transparent)]
 #[derive(Clone, PartialEq, Eq)]
@@ -97,7 +97,7 @@ impl Display for SymlinkTarget {
     }
 }
 
-/// Errors created when constructing / converting to [SymlinkTarget].
+/// Errors created when constructing / converting to [`SymlinkTarget`].
 #[derive(Debug, PartialEq, Eq, thiserror::Error)]
 #[cfg_attr(test, derive(Clone))]
 pub enum SymlinkTargetError {

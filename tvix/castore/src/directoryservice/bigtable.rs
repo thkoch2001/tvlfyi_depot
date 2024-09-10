@@ -19,7 +19,7 @@ use crate::{proto, B3Digest, Error};
 /// https://cloud.google.com/bigtable/docs/schema-design#cells
 const CELL_SIZE_LIMIT: u64 = 10 * 1024 * 1024;
 
-/// Provides a [DirectoryService] implementation using
+/// Provides a [`DirectoryService`] implementation using
 /// [Bigtable](https://cloud.google.com/bigtable/docs/)
 /// as an underlying K/V store.
 ///
@@ -193,7 +193,7 @@ impl DirectoryService for BigtableDirectoryService {
         let mut response = client
             .read_rows(request)
             .await
-            .map_err(|e| Error::StorageError(format!("unable to read rows: {}", e)))?;
+            .map_err(|e| Error::StorageError(format!("unable to read rows: {e}")))?;
 
         if response.len() != 1 {
             if response.len() > 1 {
@@ -236,16 +236,15 @@ impl DirectoryService for BigtableDirectoryService {
         let got_digest = B3Digest::from(blake3::hash(&row_cell.value).as_bytes());
         if got_digest != *digest {
             return Err(Error::StorageError(format!(
-                "invalid digest: {}",
-                got_digest
+                "invalid digest: {got_digest}"
             )));
         }
 
         // Try to parse the value into a Directory message.
         let directory = proto::Directory::decode(Bytes::from(row_cell.value))
-            .map_err(|e| Error::StorageError(format!("unable to decode directory proto: {}", e)))?
+            .map_err(|e| Error::StorageError(format!("unable to decode directory proto: {e}")))?
             .try_into()
-            .map_err(|e| Error::StorageError(format!("invalid Directory message: {}", e)))?;
+            .map_err(|e| Error::StorageError(format!("invalid Directory message: {e}")))?;
 
         Ok(Some(directory))
     }
@@ -291,10 +290,10 @@ impl DirectoryService for BigtableDirectoryService {
                 ],
             })
             .await
-            .map_err(|e| Error::StorageError(format!("unable to mutate rows: {}", e)))?;
+            .map_err(|e| Error::StorageError(format!("unable to mutate rows: {e}")))?;
 
         if resp.predicate_matched {
-            trace!("already existed")
+            trace!("already existed");
         }
 
         Ok(directory_digest)
@@ -321,7 +320,7 @@ impl DirectoryService for BigtableDirectoryService {
 /// This currently conflates both connect parameters and data model/client
 /// behaviour parameters.
 #[serde_as]
-#[derive(Clone, Debug, PartialEq, Deserialize, Serialize)]
+#[derive(Clone, Debug, PartialEq, Eq, Deserialize, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct BigtableParameters {
     project_id: String,
@@ -368,8 +367,8 @@ impl TryFrom<url::Url> for BigtableParameters {
         url.query_pairs_mut()
             .append_pair("instance_name", &instance_name);
 
-        let params: BigtableParameters = serde_qs::from_str(url.query().unwrap_or_default())
-            .map_err(|e| Error::InvalidRequest(format!("failed to parse parameters: {}", e)))?;
+        let params: Self = serde_qs::from_str(url.query().unwrap_or_default())
+            .map_err(|e| Error::InvalidRequest(format!("failed to parse parameters: {e}")))?;
 
         Ok(params)
     }

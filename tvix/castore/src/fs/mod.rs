@@ -44,7 +44,7 @@ use tokio::{
 use tracing::{debug, error, instrument, warn, Instrument as _, Span};
 
 /// This implements a read-only FUSE filesystem for a tvix-store
-/// with the passed [BlobService], [DirectoryService] and [RootNodes].
+/// with the passed [`BlobService`], [`DirectoryService`] and [`RootNodes`].
 ///
 /// Linux uses inodes in filesystems. When implementing FUSE, most calls are
 /// *for* a given inode.
@@ -153,9 +153,9 @@ where
     }
 
     /// Retrieves the inode for a given root node basename, if present.
-    /// This obtains a read lock on self.root_nodes.
+    /// This obtains a read lock on `self.root_nodes`.
     fn get_inode_for_root_name(&self, name: &PathComponent) -> Option<u64> {
-        self.root_nodes.read().get(name).cloned()
+        self.root_nodes.read().get(name).copied()
     }
 
     /// For a given inode, look up the given directory behind it (from
@@ -232,12 +232,12 @@ where
     }
 
     /// This will turn a lookup request for a name in the root to a ino and
-    /// [InodeData].
-    /// It will peek in [self.root_nodes], and then either look it up from
-    /// [self.inode_tracker],
-    /// or otherwise fetch from [self.root_nodes], and then insert into
-    /// [self.inode_tracker].
-    /// In the case the name can't be found, a libc::ENOENT is returned.
+    /// [`InodeData`].
+    /// It will peek in [`self.root_nodes`], and then either look it up from
+    /// [`self.inode_tracker`],
+    /// or otherwise fetch from [`self.root_nodes`], and then insert into
+    /// [`self.inode_tracker`].
+    /// In the case the name can't be found, a `libc::ENOENT` is returned.
     fn name_in_root_to_ino_and_data(
         &self,
         name: &PathComponent,
@@ -252,7 +252,7 @@ where
                     .read()
                     .get(inode)
                     .expect("must exist")
-                    .to_owned(),
+                    ,
             ));
         }
 
@@ -766,7 +766,7 @@ where
             let mut buf: Vec<u8> = Vec::with_capacity(size as usize);
 
             // copy things from the internal buffer into buf to fill it till up until size
-            tokio::io::copy(&mut blob_reader.as_mut().take(size as u64), &mut buf).await?;
+            tokio::io::copy(&mut blob_reader.as_mut().take(u64::from(size)), &mut buf).await?;
 
             Ok::<_, std::io::Error>(buf)
         })?;
@@ -817,8 +817,8 @@ where
             .get(inode)
             .ok_or_else(|| io::Error::from_raw_os_error(libc::ENODATA))?
         {
-            InodeData::Directory(DirectoryInodeData::Sparse(ref digest, _))
-            | InodeData::Directory(DirectoryInodeData::Populated(ref digest, _))
+            InodeData::Directory(DirectoryInodeData::Sparse(ref digest, _) |
+DirectoryInodeData::Populated(ref digest, _))
                 if name.to_bytes() == XATTR_NAME_DIRECTORY_DIGEST =>
             {
                 digest.to_string()
@@ -875,7 +875,7 @@ where
         } else if size < xattrs_names.len() as u32 {
             Err(io::Error::from_raw_os_error(libc::ERANGE))
         } else {
-            Ok(ListxattrReply::Names(xattrs_names.to_vec()))
+            Ok(ListxattrReply::Names(xattrs_names))
         }
     }
 }

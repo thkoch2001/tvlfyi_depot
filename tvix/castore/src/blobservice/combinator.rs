@@ -8,13 +8,13 @@ use crate::{B3Digest, Error};
 
 use super::{BlobReader, BlobService, BlobWriter, ChunkedReader};
 
-/// Combinator for a BlobService, using a "local" and "remote" blobservice.
+/// Combinator for a `BlobService`, using a "local" and "remote" blobservice.
 /// Requests are tried in (and returned from) the local store first, only if
-/// things are not present there, the remote BlobService is queried.
+/// things are not present there, the remote `BlobService` is queried.
 /// In case the local blobservice doesn't have the blob, we ask the remote
 /// blobservice for chunks, and try to read each of these chunks from the local
 /// blobservice again, before falling back to the remote one.
-/// The remote BlobService is never written to.
+/// The remote `BlobService` is never written to.
 pub struct CombinedBlobService<BL, BR> {
     local: BL,
     remote: BR,

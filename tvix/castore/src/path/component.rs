@@ -2,7 +2,7 @@ use bstr::ByteSlice;
 use std::fmt::{self, Debug, Display};
 
 /// A wrapper type for validated path components in the castore model.
-/// Internally uses a [bytes::Bytes], but disallows
+/// Internally uses a [`bytes::Bytes`], but disallows
 /// slashes, and null bytes to be present, as well as
 /// '.', '..' and the empty string.
 /// It also rejects components that are too long (> 255 bytes).
@@ -113,7 +113,7 @@ impl Display for PathComponent {
     }
 }
 
-/// Errors created when parsing / validating [PathComponent].
+/// Errors created when parsing / validating [`PathComponent`].
 #[derive(Debug, PartialEq, thiserror::Error)]
 #[cfg_attr(test, derive(Clone))]
 pub enum PathComponentError {

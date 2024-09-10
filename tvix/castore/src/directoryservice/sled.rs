@@ -52,7 +52,7 @@ impl DirectoryService for SledDirectoryService {
         .await?
         .map_err(|e| {
             warn!("failed to retrieve directory: {}", e);
-            Error::StorageError(format!("failed to retrieve directory: {}", e))
+            Error::StorageError(format!("failed to retrieve directory: {e}"))
         })?;
 
         match resp {
@@ -67,14 +67,13 @@ impl DirectoryService for SledDirectoryService {
                     let actual_digest = directory.digest();
                     if actual_digest != *digest {
                         return Err(Error::StorageError(format!(
-                            "requested directory with digest {}, but got {}",
-                            digest, actual_digest
+                            "requested directory with digest {digest}, but got {actual_digest}"
                         )));
                     }
 
                     let directory = directory.try_into().map_err(|e| {
                         warn!("failed to retrieve directory: {}", e);
-                        Error::StorageError(format!("failed to retrieve directory: {}", e))
+                        Error::StorageError(format!("failed to retrieve directory: {e}"))
                     })?;
 
                     Ok(Some(directory))
@@ -132,7 +131,7 @@ impl DirectoryService for SledDirectoryService {
 pub struct SledDirectoryServiceConfig {
     is_temporary: bool,
     #[serde(default)]
-    /// required when is_temporary = false
+    /// required when `is_temporary` = false
     path: Option<String>,
 }
 
@@ -148,12 +147,12 @@ impl TryFrom<url::Url> for SledDirectoryServiceConfig {
         // TODO: expose compression and other parameters as URL parameters?
 
         Ok(if url.path().is_empty() {
-            SledDirectoryServiceConfig {
+            Self {
                 is_temporary: true,
                 path: None,
             }
         } else {
-            SledDirectoryServiceConfig {
+            Self {
                 is_temporary: false,
                 path: Some(url.path().to_string()),
             }
@@ -170,22 +169,22 @@ impl ServiceBuilder for SledDirectoryServiceConfig {
         _context: &CompositionContext,
     ) -> Result<Arc<dyn DirectoryService>, Box<dyn std::error::Error + Send + Sync + 'static>> {
         match self {
-            SledDirectoryServiceConfig {
+            Self {
                 is_temporary: true,
                 path: None,
             } => Ok(Arc::new(SledDirectoryService::new_temporary()?)),
-            SledDirectoryServiceConfig {
+            Self {
                 is_temporary: true,
                 path: Some(_),
             } => Err(Error::StorageError(
                 "Temporary SledDirectoryService can not have path".into(),
             )
             .into()),
-            SledDirectoryServiceConfig {
+            Self {
                 is_temporary: false,
                 path: None,
             } => Err(Error::StorageError("SledDirectoryService is missing path".into()).into()),
-            SledDirectoryServiceConfig {
+            Self {
                 is_temporary: false,
                 path: Some(path),
             } => Ok(Arc::new(SledDirectoryService::new(path)?)),
@@ -250,7 +249,7 @@ impl DirectoryPutter for SledDirectoryPutter {
                         }
 
                         tree.apply_batch(batch).map_err(|e| {
-                            Error::StorageError(format!("unable to apply batch: {}", e))
+                            Error::StorageError(format!("unable to apply batch: {e}"))
                         })?;
 
                         Ok(root_digest)

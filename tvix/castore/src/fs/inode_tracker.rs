@@ -3,7 +3,7 @@ use std::{collections::HashMap, sync::Arc};
 use super::inodes::{DirectoryInodeData, InodeData};
 use crate::B3Digest;
 
-/// InodeTracker keeps track of inodes, stores data being these inodes and deals
+/// `InodeTracker` keeps track of inodes, stores data being these inodes and deals
 /// with inode allocation.
 pub struct InodeTracker {
     data: HashMap<u64, Arc<InodeData>>,
@@ -45,9 +45,7 @@ impl InodeTracker {
     // Replaces data for a given inode.
     // Panics if the inode doesn't already exist.
     pub fn replace(&mut self, ino: u64, data: Arc<InodeData>) {
-        if self.data.insert(ino, data).is_none() {
-            panic!("replace called on unknown inode");
-        }
+        assert!(self.data.insert(ino, data).is_some(), "replace called on unknown inode");
     }
 
     // Stores data and returns the inode for it.

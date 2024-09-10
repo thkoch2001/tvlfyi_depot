@@ -9,7 +9,7 @@ fn url_wants_wait_connect(url: &url::Url) -> bool {
         > 0
 }
 
-/// Turn a [url::Url] to a [Channel] if it can be parsed successfully.
+/// Turn a [`url::Url`] to a [Channel] if it can be parsed successfully.
 /// It supports the following schemes (and URLs):
 ///  - `grpc+http://[::1]:8000`, connecting over unencrypted HTTP/2 (h2c)
 ///  - `grpc+https://[::1]:8000`, connecting over encrypted HTTP/2
@@ -27,7 +27,7 @@ pub async fn channel_from_url(url: &url::Url) -> Result<Channel, self::Error> {
             let connector = tower::service_fn({
                 let url = url.clone();
                 move |_: tonic::transport::Uri| {
-                    let unix = UnixStream::connect(url.path().to_string().clone());
+                    let unix = UnixStream::connect(url.path().to_string());
                     async move { Ok::<_, std::io::Error>(TokioIo::new(unix.await?)) }
                 }
             });

@@ -93,17 +93,17 @@ pub trait BlobWriter: tokio::io::AsyncWrite + Send + Unpin {
     async fn close(&mut self) -> io::Result<B3Digest>;
 }
 
-/// BlobReader is a [tokio::io::AsyncRead] that also allows seeking.
+/// `BlobReader` is a [`tokio::io::AsyncRead`] that also allows seeking.
 pub trait BlobReader: tokio::io::AsyncRead + tokio::io::AsyncSeek + Send + Unpin + 'static {}
 
-/// A [`io::Cursor<Vec<u8>>`] can be used as a BlobReader.
+/// A [`io::Cursor<Vec<u8>>`] can be used as a `BlobReader`.
 impl BlobReader for io::Cursor<&'static [u8]> {}
 impl BlobReader for io::Cursor<&'static [u8; 0]> {}
 impl BlobReader for io::Cursor<Vec<u8>> {}
 impl BlobReader for io::Cursor<bytes::Bytes> {}
 impl BlobReader for tokio::fs::File {}
 
-/// Registers the builtin BlobService implementations with the registry
+/// Registers the builtin `BlobService` implementations with the registry
 pub(crate) fn register_blob_services(reg: &mut Registry) {
     reg.register::<Box<dyn ServiceBuilder<Output = dyn BlobService>>, super::blobservice::ObjectStoreBlobServiceConfig>("objectstore");
     reg.register::<Box<dyn ServiceBuilder<Output = dyn BlobService>>, super::blobservice::MemoryBlobServiceConfig>("memory");

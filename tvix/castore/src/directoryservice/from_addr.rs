@@ -8,7 +8,7 @@ use crate::composition::{
 
 use super::DirectoryService;
 
-/// Constructs a new instance of a [DirectoryService] from an URI.
+/// Constructs a new instance of a [`DirectoryService`] from an URI.
 ///
 /// The following URIs are supported:
 /// - `memory:`
@@ -32,7 +32,7 @@ pub async fn from_addr(
 ) -> Result<Arc<dyn DirectoryService>, Box<dyn std::error::Error + Send + Sync>> {
     #[allow(unused_mut)]
     let mut url = Url::parse(uri)
-        .map_err(|e| crate::Error::StorageError(format!("unable to parse url: {}", e)))?;
+        .map_err(|e| crate::Error::StorageError(format!("unable to parse url: {e}")))?;
 
     let directory_service_config = with_registry(&REG, || {
         <DeserializeWithRegistry<Box<dyn ServiceBuilder<Output = dyn DirectoryService>>>>::try_from(

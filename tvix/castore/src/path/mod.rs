@@ -25,15 +25,15 @@ pub struct Path {
 #[allow(dead_code)]
 impl Path {
     // SAFETY: The empty path is valid.
-    pub const ROOT: &'static Path = unsafe { Path::from_bytes_unchecked(&[]) };
+    pub const ROOT: &'static Self = unsafe { Self::from_bytes_unchecked(&[]) };
 
     /// Convert a byte slice to a path, without checking validity.
-    const unsafe fn from_bytes_unchecked(bytes: &[u8]) -> &Path {
+    const unsafe fn from_bytes_unchecked(bytes: &[u8]) -> &Self {
         // SAFETY: &[u8] and &Path have the same representation.
         unsafe { mem::transmute(bytes) }
     }
 
-    fn from_bytes(bytes: &[u8]) -> Option<&Path> {
+    fn from_bytes(bytes: &[u8]) -> Option<&Self> {
         if !bytes.is_empty() {
             // Ensure all components are valid castore node names.
             for component in bytes.split_str(b"/") {
@@ -44,19 +44,19 @@ impl Path {
         }
 
         // SAFETY: We have verified that the path contains no empty components.
-        Some(unsafe { Path::from_bytes_unchecked(bytes) })
+        Some(unsafe { Self::from_bytes_unchecked(bytes) })
     }
 
-    pub fn into_boxed_bytes(self: Box<Path>) -> Box<[u8]> {
+    #[must_use]pub fn into_boxed_bytes(self: Box<Self>) -> Box<[u8]> {
         // SAFETY: Box<Path> and Box<[u8]> have the same representation.
         unsafe { mem::transmute(self) }
     }
 
     /// Returns the path without its final component, if there is one.
     ///
-    /// Note that the parent of a bare file name is [Path::ROOT].
-    /// [Path::ROOT] is the only path without a parent.
-    pub fn parent(&self) -> Option<&Path> {
+    /// Note that the parent of a bare file name is [`Path::ROOT`].
+    /// [`Path::ROOT`] is the only path without a parent.
+    #[must_use]pub fn parent(&self) -> Option<&Self> {
         // The root does not have a parent.
         if self.inner.is_empty() {
             return None;
@@ -65,15 +65,15 @@ impl Path {
         Some(
             if let Some((parent, _file_name)) = self.inner.rsplit_once_str(b"/") {
                 // SAFETY: The parent of a valid Path is a valid Path.
-                unsafe { Path::from_bytes_unchecked(parent) }
+                unsafe { Self::from_bytes_unchecked(parent) }
             } else {
                 // The parent of a bare file name is the root.
-                Path::ROOT
+                Self::ROOT
             },
         )
     }
 
-    /// Creates a PathBuf with `name` adjoined to self.
+    /// Creates a `PathBuf` with `name` adjoined to self.
     pub fn try_join(&self, name: &[u8]) -> Result<PathBuf, std::io::Error> {
         let mut v = PathBuf::with_capacity(self.inner.len() + name.len() + 1);
         v.inner.extend_from_slice(&self.inner);
@@ -83,7 +83,7 @@ impl Path {
     }
 
     /// Provides an iterator over the components of the path,
-    /// which are invividual [PathComponent].
+    /// which are invividual [`PathComponent`].
     /// In case the path is empty, an empty iterator is returned.
     pub fn components(&self) -> impl Iterator<Item = PathComponent> + '_ {
         let mut iter = self.inner.split_str(&b"/");
@@ -113,16 +113,16 @@ impl Path {
     }
 
     /// Returns the final component of the Path, if there is one, in bytes.
-    pub fn file_name(&self) -> Option<PathComponent> {
+    #[must_use]pub fn file_name(&self) -> Option<PathComponent> {
         self.components().last()
     }
 
     /// Returns the final component of the Path, if there is one, in bytes.
-    pub fn file_name_bytes(&self) -> Option<&[u8]> {
+    #[must_use]pub fn file_name_bytes(&self) -> Option<&[u8]> {
         self.components_bytes().last()
     }
 
-    pub fn as_bytes(&self) -> &[u8] {
+    #[must_use]pub fn as_bytes(&self) -> &[u8] {
         &self.inner
     }
 }
@@ -139,13 +139,13 @@ impl Display for Path {
     }
 }
 
-impl AsRef<Path> for Path {
-    fn as_ref(&self) -> &Path {
+impl AsRef<Self> for Path {
+    fn as_ref(&self) -> &Self {
         self
     }
 }
 
-/// Represents a owned PathBuf in the castore model.
+/// Represents a owned `PathBuf` in the castore model.
 /// These are always relative, and platform-independent, which distinguishes
 /// them from the ones provided in the standard library.
 #[derive(Clone, Default, Eq, Hash, PartialEq)]
@@ -187,7 +187,7 @@ impl Borrow<Path> for PathBuf {
 impl From<Box<Path>> for PathBuf {
     fn from(value: Box<Path>) -> Self {
         // SAFETY: Box<Path> is always a valid path.
-        unsafe { PathBuf::from_bytes_unchecked(value.into_boxed_bytes().into_vec()) }
+        unsafe { Self::from_bytes_unchecked(value.into_boxed_bytes().into_vec()) }
     }
 }
 
@@ -200,7 +200,7 @@ impl From<&Path> for PathBuf {
 impl FromStr for PathBuf {
     type Err = std::io::Error;
 
-    fn from_str(s: &str) -> Result<PathBuf, Self::Err> {
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
         Ok(Path::from_bytes(s.as_bytes())
             .ok_or(std::io::ErrorKind::InvalidData)?
             .to_owned())
@@ -220,11 +220,11 @@ impl Display for PathBuf {
 }
 
 impl PathBuf {
-    pub fn new() -> PathBuf {
+    #[must_use]pub fn new() -> Self {
         Self::default()
     }
 
-    pub fn with_capacity(capacity: usize) -> PathBuf {
+    #[must_use]pub fn with_capacity(capacity: usize) -> Self {
         // SAFETY: The empty path is a valid path.
         Self {
             inner: Vec::with_capacity(capacity),
@@ -246,12 +246,12 @@ impl PathBuf {
         Ok(())
     }
 
-    /// Convert a byte vector to a PathBuf, without checking validity.
-    unsafe fn from_bytes_unchecked(bytes: Vec<u8>) -> PathBuf {
-        PathBuf { inner: bytes }
+    /// Convert a byte vector to a `PathBuf`, without checking validity.
+    unsafe fn from_bytes_unchecked(bytes: Vec<u8>) -> Self {
+        Self { inner: bytes }
     }
 
-    /// Convert from a [&std::path::Path] to [Self].
+    /// Convert from a [&`std::path::Path`] to [Self].
     ///
     /// - Self uses `/` as path separator.
     /// - Absolute paths are always rejected, are are these with custom prefixes.
@@ -270,7 +270,7 @@ impl PathBuf {
         host_path: &std::path::Path,
         canonicalize_dotdot: bool,
     ) -> Result<Self, std::io::Error> {
-        let mut p = PathBuf::with_capacity(host_path.as_os_str().len());
+        let mut p = Self::with_capacity(host_path.as_os_str().len());
 
         for component in host_path.components() {
             match component {
@@ -308,7 +308,7 @@ impl PathBuf {
                             std::io::ErrorKind::InvalidData,
                             "encountered invalid node in sub_path component",
                         )
-                    })?
+                    })?;
                 }
             }
         }
@@ -316,13 +316,13 @@ impl PathBuf {
         Ok(p)
     }
 
-    pub fn into_boxed_path(self) -> Box<Path> {
+    #[must_use]pub fn into_boxed_path(self) -> Box<Path> {
         // SAFETY: Box<[u8]> and Box<Path> have the same representation,
         // and PathBuf always contains a valid Path.
         unsafe { mem::transmute(self.inner.into_boxed_slice()) }
     }
 
-    pub fn into_bytes(self) -> Vec<u8> {
+    #[must_use]pub fn into_bytes(self) -> Vec<u8> {
         self.inner
     }
 }
