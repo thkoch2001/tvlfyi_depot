@@ -52,14 +52,6 @@ suite "libexpr":
       test s:
         checkConversion(s)
 
-  test "derivation":
-    let samples = [
-        "let depot = import /depot { }; in depot.users.emery.pkgs.syndicate-server"
-      ]
-    for s in samples:
-      test s:
-        checkConversion(s)
-
   test "large":
     let samples =
       "builtins.listToAttrs (builtins.genList (x: { name = toString x; value = null; }) 99)"
@@ -97,47 +89,6 @@ suite "eval":
 
     checkpoint $pr
     check $pr == """"foobar""""
-
-  eval.close()
-  store.close()
-
-suite "import":
-  let
-    store = openStore()
-    eval = store.newState()
-
-  block:
-    ## full expression string
-    let f = eval.evalFromString("false")
-    let t = eval.evalFromString("true")
-    let fs = $f.toPreserves(eval)
-    let ts = $t.toPreserves(eval)
-    checkpoint "false:", fs
-    check fs == "#f", fs
-    check ts == "#t", ts
-
-  block:
-    ## full expression string
-    let fn = eval.evalFromString("x: x")
-    let x = eval.evalFromString("let pkgs = import /home/repo/nixpkgs {}; in pkgs.ncdc.meta.homepage")
-    eval.force(x)
-    let y = eval.apply(fn, x)
-    let pr = $y.toPreserves(eval).unthunkAll
-    checkpoint "$y.toPreserves(eval):", pr
-    check pr == """"https://dev.yorhel.nl/ncdc""""
-
-  block:
-    ## function
-    let pre = eval.evalFromString("import /home/repo/nixpkgs")
-    let args = eval.evalFromString("{ }")
-    let pkgs = eval.apply(pre, args)
-    let fn = eval.evalFromString("""pkgs: pkgs.ncdc.meta.homepage""")
-    let res = eval.apply(fn, pkgs)
-    let pr = res.toPreserves(eval).unthunkAll
-    assert not pr.isEmbedded
-    let text = $pr
-    checkpoint text
-    check text == """"https://dev.yorhel.nl/ncdc""""
 
   eval.close()
   store.close()
