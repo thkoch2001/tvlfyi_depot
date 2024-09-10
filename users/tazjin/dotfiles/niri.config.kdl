@@ -77,19 +77,19 @@ binds {
 
     Mod+Q { close-window; }
 
-    Mod+Left      { focus-column-left; }
-    Mod+Right     { focus-column-right; }
-    Mod+Down      { focus-column-right; }
-    Mod+Up        { focus-column-left; }
-    Mod+J         { focus-column-left; }
-    Mod+K         { focus-column-right; }
+    Mod+Left      { focus-column-or-monitor-left; }
+    Mod+Right     { focus-column-or-monitor-right; }
+    Mod+Down      { focus-column-or-monitor-right; }
+    Mod+Up        { focus-column-or-monitor-left; }
+    Mod+J         { focus-column-or-monitor-left; }
+    Mod+K         { focus-column-or-monitor-right; }
     Mod+L         { focus-window-up; }
     Mod+Semicolon { focus-window-down; }
 
-    Mod+Ctrl+Left  { move-column-left; }
-    Mod+Ctrl+Right { move-column-right; }
-    Mod+Ctrl+J     { move-column-left; }
-    Mod+Ctrl+K     { move-column-right; }
+    Mod+Ctrl+Left  { move-column-left-or-to-monitor-left; }
+    Mod+Ctrl+Right { move-column-right-or-to-monitor-right; }
+    Mod+Ctrl+J     { move-column-left-or-to-monitor-left; }
+    Mod+Ctrl+K     { move-column-right-or-to-monitor-right; }
 
     Mod+Home { focus-column-first; }
     Mod+End  { focus-column-last; }
@@ -97,29 +97,11 @@ binds {
     Mod+Ctrl+Home { move-column-to-first; }
     Mod+Ctrl+End  { move-column-to-last; }
 
-    Mod+Shift+Left  { focus-monitor-left; }
-    Mod+Shift+Down  { focus-monitor-down; }
-    Mod+Shift+Up    { focus-monitor-up; }
-    Mod+Shift+Right { focus-monitor-right; }
-    Mod+Shift+H     { focus-monitor-left; }
-    Mod+Shift+J     { focus-monitor-down; }
-    Mod+Shift+K     { focus-monitor-up; }
-    Mod+Shift+L     { focus-monitor-right; }
-
-    Mod+Shift+Ctrl+Left  { move-column-to-monitor-left; }
-    Mod+Shift+Ctrl+Down  { move-column-to-monitor-down; }
-    Mod+Shift+Ctrl+Up    { move-column-to-monitor-up; }
-    Mod+Shift+Ctrl+Right { move-column-to-monitor-right; }
-    Mod+Shift+Ctrl+H     { move-column-to-monitor-left; }
-    Mod+Shift+Ctrl+J     { move-column-to-monitor-down; }
-    Mod+Shift+Ctrl+K     { move-column-to-monitor-up; }
-    Mod+Shift+Ctrl+L     { move-column-to-monitor-right; }
-
     // Scroll (or move windows) between columns when holding the modifier down.
-    Mod+WheelScrollDown      cooldown-ms=150 { focus-column-right; }
-    Mod+WheelScrollUp        cooldown-ms=150 { focus-column-left; }
-    Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-right; }
-    Mod+Ctrl+WheelScrollUp   cooldown-ms=150 { move-column-left; }
+    Mod+WheelScrollDown      cooldown-ms=150 { focus-column-or-monitor-right; }
+    Mod+WheelScrollUp        cooldown-ms=150 { focus-column-or-monitor-left; }
+    Mod+Ctrl+WheelScrollDown cooldown-ms=150 { move-column-right-or-to-monitor-right; }
+    Mod+Ctrl+WheelScrollUp   cooldown-ms=150 { move-column-left-or-to-monitor-left; }
 
     Mod+Comma  { consume-window-into-column; }
     Mod+Period { expel-window-from-column; }
