@@ -1,10 +1,8 @@
 PROJECT_DIR = $(TUP_CWD)
-include ../syndicate-nim/depends.tup
 
 PKG_CONFIG_PATH += @(PKG_CONFIG_PATH_nix)
 NIM_CFG_LINES += "putenv:PKG_CONFIG=\"@(PKG_CONFIG)\""
 NIM_CFG_LINES += "putenv:PKG_CONFIG_PATH=\"$(PKG_CONFIG_PATH)\""
-NIM_CFG_LINES += "path:\"$(TUP_CWD)/../syndicate-nim/src\""
 
 NIM_GROUPS += $(TUP_CWD)/<lock>
 NIM_GROUPS += $(TUP_CWD)/<protocol>
