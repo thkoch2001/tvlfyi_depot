@@ -1,0 +1,61 @@
+version 1 .
+embeddedType EntityRef.Cap .
+
+# Gatekeeper step to access a Nix store.
+StoreResolveStep = <nix-store @detail StoreResolveDetail> .
+StoreResolveDetail = { storeUri: string }
+& @storeParams StoreParams
+.
+
+# Gatekeeper step to access a Nix evaluator.
+# The resulting capability is a Nix evaluation state with an initial value of <null>.
+EvalResolveStep = <nix @detail EvalResolveDetail> .
+EvalResolveDetail = { }
+& @lookupPath  LookupPath
+& @storeUri    StoreUri
+& @storeParams StoreParams
+.
+
+# List of strings corresponding to entries in NIX_PATH.
+# For example:
+#  [ "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos"
+#    "nixos-config=/etc/nixos/configuration.nix"
+#    "/nix/var/nix/profiles/per-user/root/channels"
+#  ]
+LookupPath = @lookupPath { lookupPath: [string ...] } / @absent { } .
+
+StoreUri = @storeUri { storeUri: string } / @absent { } .
+
+StoreParams = @storeParams { storeParams: AttrSet } / @absent { } .
+
+# Assertion.
+# Advance a Nix evaluation state.
+# @expr must be a function that takes two parameters,
+# the first is the current evaluation value and the second
+# is @args. A new Nix value capability is return via @result.
+# This capability can be observed using the Dataspace
+# protocol but store paths may not be locally available.
+Eval = <eval @expr string @args any @result #:Result> .
+
+# Assertion.
+# Realise a Nix evaluation state to a string.
+# This makes the closure of store paths referred to by the
+# string present in the evaluation store.
+RealiseString = <realise-string @result #:Result> .
+
+# Assertion.
+# Check at a Nix store if a store path is present and valid.
+CheckStorePath = <check-path @path string @valid #:bool> .
+
+# Assertion.
+# Replicate a store path closure between stores.
+# A Result value is asserted to @result.
+Replicate = <replicate @target #:any @storePath string @result #:Result> .
+
+AttrSet = {symbol: any ...:...} .
+
+# Value.
+Result = Error / <ok @value any>.
+
+# Common error type.
+Error = <error @message any>.
