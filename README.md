@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (e573f8 docs(tvix/nix-compat/wire/bytes/reader): None case doesn't e)
 depot
 =====
 
@@ -121,3 +122,40 @@ Hackint also provide a [web chat][tvl-webchat].
 [tvl-xmpp]: xmpp:#tvl@irc.hackint.org?join
 [tvl-webchat]: https://webirc.hackint.org/#ircs://irc.hackint.org/#tvl
 [Nixery]: https://nixery.dev
+=======
+# Syndicated Nix Actor
+
+An actor for interacting with the [Nix](https://nixos.org/) daemon via the [Syndicated Actor Model](https://syndicate-lang.org/).
+
+See [protocol.prs](./protocol.prs) for the Syndicate protocol [schema](https://preserves.dev/preserves-schema.html).
+
+## Evaluation state as entity capabililties
+
+The actor exposes on its initial capability a gatekeeper that resolves requests in the form `<nix { lookupPath: [ … ], store: … } >`.
+
+The resolved entity is an evaluation state that responds to the assertions `<eval @expr string @args any @result #:Result>` as well as observation of literal values via the dataspace protocol.
+The evaluation state is initialized with the value `nil` and is advanced with Nix functions in the form of `prev: args: body` with a type of `Any -> Any -> Any`.
+
+To evaluate the `hello` package from Nixpkgs one could use an assertion like `<eval "_: pkgName: builtins.getAttr pkgName (import <nixpkgs> {})" "hello" #:…>` which would assert back a new assertion state at `hello`.
+
+The evaluation state represents a lazy Nix expression and must be "realised" to become a physical store path.
+Asserting `<realise-string @result #:Result>` to an evaluation state will return a string with its realized closure at the evaluation store.
+
+With the exception of observations the result value of `<ok @value any>` or `<error @message any>` is used for response assertions.
+
+Dataspace observations work over evaluation state.
+In the example case of an evaluation state positioned at the `hello` package the observation of `{ hello: { meta: { license: { shortName: ? } } } }` would capture the value `"gpl3Plus"`.
+If an attrset contains an `outPath` attribute then the value of `outPath` is captured in place of the attrset.
+This is to avoid traversing deeply nested and recursive Nix values.
+
+## Store replication
+
+Nix stores can be opened using the gatekeeper step `<nix-store { storeUri: "…" }>`.
+The store entity responds to `<check-path @store-path string @result #:any>` with true or false.
+
+To replicate paths between two stores, assert `<replicate @target #:any @storePath string @result #:Result>` to a store entity or a evaluation entity, with `target` set to a store entity or a evaluation entity.
+
+## Worker protocol
+
+The was once an abstraction of the Nix worker socket that could intermediate between clients and the worker but that code has been removed, refer to git history for that.
+>>>>>>> BRANCH (d8606c Make defaut.nix TVL depot compatible)

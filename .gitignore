@@ -1,3 +1,4 @@
+<<<<<<< HEAD   (e573f8 docs(tvix/nix-compat/wire/bytes/reader): None case doesn't e)
 # Ignore the garbage folder, in which I slowly assemble a bunch of
 # trash locally that might be valuable in the future.
 garbage/
@@ -11,3 +12,6 @@ result-*
 # Nix result symlink used by //nix/buildkite
 /nix-buildkite-extra-step-command-script
 /nix-buildkite-extra-step-command-script-*
+=======
+/nim.cfg
+>>>>>>> BRANCH (d8606c Make defaut.nix TVL depot compatible)
