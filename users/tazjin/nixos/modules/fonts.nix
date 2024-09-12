@@ -12,7 +12,6 @@
       noto-fonts-cjk
       noto-fonts-color-emoji
       noto-fonts-monochrome-emoji
-      depot.third_party.chicago95
     ];
 
     fontconfig = {
