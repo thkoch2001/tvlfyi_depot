@@ -88,6 +88,24 @@
       "parentUuid": "119b204d_9d10529c",
       "revId": "4731329547d9746d99128d2c63e965c9c72baac5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a10d62f1_ef3f2ff1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-09-13T10:52:07Z",
+      "side": 1,
+      "message": "\u003e The VM can be torn down once you get the Value back\n\nTechnically right now, yes, but this is *incorrect* and *unsafe* and something we need to fix, not start attempting to depend on. We need to split Value into a public Value type, and an internal value type, and make sure that the VM only returns \"safe\" values (where thunks become opaque and unevaluatable if they remain, and no internal variants can remain).\n\n\u003e but if this is opaque and transmitted to another VM\n\nThis will crash if you try it, or in the worst case lead to even weirder undefined behaviour because array indices will mismatch. You can not pair the output of one VM\u0027s compiler with another VM\u0027s runtime, and changing that is non-trivial for now.\n\n\u003e are you suggesting that an builtins.evalJobs builtin should be created, and this one should stream JSONL in the VM?\n\nYes, this sounds like a decent solution, and it\u0027s safe. Your builtin would of course only exist in the place where you are using it (i.e. it doesn\u0027t get added to eval itself, of course).",
+      "parentUuid": "f3efbd30_0c17a842",
+      "revId": "4731329547d9746d99128d2c63e965c9c72baac5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
