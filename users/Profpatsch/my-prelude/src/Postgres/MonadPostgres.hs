@@ -930,6 +930,72 @@ withEvent span start end act = do
     )
   pure res
 
+
+unzipPGArray ::
+  forall l1 t1 l2 t2 r.
+  ( HasField l1 r t1,
+    HasField l2 r t2
+  ) =>
+  [r] ->
+  (PGArray t1, PGArray t2)
+{-# INLINEABLE unzipPGArray #-}
+unzipPGArray xs =
+  ( PGArray $ getField @l1 <$> xs,
+    PGArray $ getField @l2 <$> xs
+  )
+
+unzip3PGArray ::
+  forall l1 t1 l2 t2 l3 t3 r.
+  ( HasField l1 r t1,
+    HasField l2 r t2,
+    HasField l3 r t3
+  ) =>
+  [r] ->
+  (PGArray t1, PGArray t2, PGArray t3)
+{-# INLINEABLE unzip3PGArray #-}
+unzip3PGArray xs =
+  ( PGArray $ getField @l1 <$> xs,
+    PGArray $ getField @l2 <$> xs,
+    PGArray $ getField @l3 <$> xs
+  )
+
+unzip4PGArray ::
+  forall l1 t1 l2 t2 l3 t3 l4 t4 r.
+  ( HasField l1 r t1,
+    HasField l2 r t2,
+    HasField l3 r t3,
+    HasField l4 r t4
+  ) =>
+  [r] ->
+  (PGArray t1, PGArray t2, PGArray t3, PGArray t4)
+{-# INLINEABLE unzip4PGArray #-}
+unzip4PGArray xs =
+  ( PGArray $ getField @l1 <$> xs,
+    PGArray $ getField @l2 <$> xs,
+    PGArray $ getField @l3 <$> xs,
+    PGArray $ getField @l4 <$> xs
+  )
+
+unzip5PGArray ::
+  forall l1 t1 l2 t2 l3 t3 l4 t4 l5 t5 r.
+  ( HasField l1 r t1,
+    HasField l2 r t2,
+    HasField l3 r t3,
+    HasField l4 r t4,
+    HasField l5 r t5
+  ) =>
+  [r] ->
+  (PGArray t1, PGArray t2, PGArray t3, PGArray t4, PGArray t5)
+{-# INLINEABLE unzip5PGArray #-}
+unzip5PGArray xs =
+  ( PGArray $ getField @l1 <$> xs,
+    PGArray $ getField @l2 <$> xs,
+    PGArray $ getField @l3 <$> xs,
+    PGArray $ getField @l4 <$> xs,
+    PGArray $ getField @l5 <$> xs
+  )
+
+
 instance (ToField t1) => ToRow (Label l1 t1) where
   toRow t2 = toRow $ PG.Only $ getField @l1 t2
 
