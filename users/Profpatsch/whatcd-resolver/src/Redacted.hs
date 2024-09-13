@@ -275,19 +275,22 @@ redactedSearchAndInsert extraArguments = do
             , torrent_id
             , full_json_result)
           |]
-        ( [ ( dat.torrentGroupIdPg :: Int,
-              group.torrentId :: Int,
-              group.fullJsonResult :: Json.Value
-            )
+        ( [ T3
+              (getLabel @"torrentGroupIdPg" dat)
+              (getLabel @"torrentId" group)
+              (getLabel @"fullJsonResult" group)
             | dat <- dats,
               group <- dat.torrents
           ]
             & unzip3PGArray
+              @"torrentGroupIdPg"
+              @Int
+              @"torrentId"
+              @Int
+              @"fullJsonResult"
+              @Json.Value
         )
       pure ()
-
-unzip3PGArray :: [(a1, a2, a3)] -> (PGArray a1, PGArray a2, PGArray a3)
-unzip3PGArray xs = xs & unzip3 & \(a, b, c) -> (PGArray a, PGArray b, PGArray c)
 
 redactedGetTorrentFileAndInsert ::
   ( HasField "torrentId" r Int,
