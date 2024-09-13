@@ -158,10 +158,6 @@ let
               name = "scripts/lw";
               path = depot.users.Profpatsch.lorri-wait-for-eval;
             }
-            {
-              name = "scripts/lyric";
-              path = depot.users.Profpatsch.lyric;
-            }
           ]
           ++
           (lib.pipe depot.users.Profpatsch.aliases [
