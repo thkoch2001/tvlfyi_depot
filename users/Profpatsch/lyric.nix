@@ -23,9 +23,8 @@ depot.nix.writeExecline "lyric" { readNArgs = 1; } [
     ''
       select
           synced_lyrics,
-          source,
-          t.name,
-          t.artist_name
+          has_synced_lyrics,
+          plain_lyrics
       from
           tracks_fts(:searchstring) tf
           join tracks t on t.rowid = tf.rowid
@@ -41,5 +40,15 @@ depot.nix.writeExecline "lyric" { readNArgs = 1; } [
   ]
   bins.jq
   "-r"
-  ".[0].synced_lyrics"
+  ''
+    if .[0] == null
+    then ""
+    else
+      .[0]
+        | if .has_synced_lyrics == 1
+          then .synced_lyrics
+          else .plain_lyrics
+          end
+    end
+  ''
 ]
