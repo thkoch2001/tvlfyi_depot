@@ -62,7 +62,7 @@ in
     domain = "tazj.in";
     useDHCP = true;
     firewall.enable = true;
-    firewall.allowedTCPPorts = [ 22 80 443 ];
+    firewall.allowedTCPPorts = [ 22 80 443 8776 ];
 
     wireless.enable = true;
     wireless.networks."How do I computer fast?" = {
@@ -169,13 +169,14 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    bat
     curl
+    emacs-nox
     htop
     jq
-    nmap
-    bat
-    emacs-nox
     nano
+    nmap
+    radicle-node
     wget
   ];
 

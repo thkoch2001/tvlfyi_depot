@@ -75,6 +75,7 @@ in
         pulseaudio # for pactl
         pwgen
         quasselClient
+        radicle-node
         rink
         ripgrep
         rustup
