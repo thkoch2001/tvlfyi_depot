@@ -1,5 +1,11 @@
 -- get_lrc_subtitles.lua
 
+-- Function to remove Unicode symbol characters
+function remove_symbols(str)
+    -- This pattern matches anything that is not a letter, digit, or whitespace
+    return str:gsub("[%p%c%z]", "") -- remove punctuation, control, and zero-width characters
+end
+
 -- Asynchronous callback function to handle the result of the 'get_subtitles' command
 function handle_subtitle_result(success, result)
     if not success or result.status ~= 0 then
@@ -40,6 +46,9 @@ function load_lrc_subtitles()
 
     -- Concatenate the metadata
     local query = string.format("%s %s %s", artist, album, title)
+
+    -- Remove Unicode symbols from the query string
+    query = remove_symbols(query)
 
     -- Create the command array
     local cmd = {"@get_subtitles_command@", query}
