@@ -13,4 +13,5 @@ in
   "geesefs-tazjins-files.age".publicKeys = allKeys;
   "miniflux.age".publicKeys = allKeys;
   "tgsa-yandex.age".publicKeys = allKeys;
+  "lego-yandex.age".publicKeys = allKeys;
 }
