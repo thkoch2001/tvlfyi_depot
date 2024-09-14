@@ -233,6 +233,7 @@ in
 
     settings = {
       web.pinned.repositories = [
+        "rad:z3r5zMi9U3az3i4cPKxMcA3K7xx9L" # depot
         "rad:z2mdnBK1tX6pibdBfRct3ThCgheHu" # tvix-go
       ];
 
@@ -263,7 +264,26 @@ in
   services.nginx.virtualHosts."rad.y.tazj.in" = {
     enableSSL = true;
     useACMEHost = "y.tazj.in";
-    locations."/".proxyPass = "http://127.0.0.1:7235";
+    locations = config.services.nginx.virtualHosts."rad.tazj.in".locations;
+  };
+
+  services.nginx.virtualhosts."src.tazj.in" = {
+    enableACME = true;
+    forceSSL = true;
+
+    locations."/" = {
+      root = depot.third_party.radicle-explorer;
+      index = "index.html";
+      extraConfig = ''
+        try_files $uri $uri/ /index.html;
+      '';
+    };
+  };
+
+  services.nginx.virtualhosts."src.y.tazj.in" = {
+    enableSSL = true;
+    useACMEHost = "y.tazj.in";
+    locations = config.services.nginx.virtualHosts."src.tazj.in".locations;
   };
 
   programs.mtr.enable = true;
