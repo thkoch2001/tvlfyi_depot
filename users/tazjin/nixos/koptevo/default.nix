@@ -11,12 +11,12 @@ in
   imports = [
     (mod "quassel.nix")
     (mod "www/base.nix")
-    (mod "www/tazj.in.nix")
     (usermod "airsonic.nix")
     (usermod "geesefs.nix")
+    (usermod "homepage.nix")
+    (usermod "miniflux.nix")
     (usermod "predlozhnik.nix")
     (usermod "tgsa.nix")
-    (usermod "miniflux.nix")
     (depot.third_party.agenix.src + "/modules/age.nix")
   ];
 
