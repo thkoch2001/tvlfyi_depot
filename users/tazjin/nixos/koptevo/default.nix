@@ -98,6 +98,8 @@ in
     openssh.authorizedKeys.keys = depot.users.tazjin.keys.all;
   };
 
+  users.users.nginx.extraGroups = [ "acme" ];
+
   age.secrets =
     let
       secretFile = name: depot.users.tazjin.secrets."${name}.age";
