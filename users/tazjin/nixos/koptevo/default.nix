@@ -257,13 +257,23 @@ in
   services.nginx.virtualHosts."rad.tazj.in" = {
     enableACME = true;
     forceSSL = true;
+    locations."= /".return = "302 /web";
+
+    locations."/web" = {
+      root = depot.third_party.radicle-explorer;
+      index = "index.html";
+      extraConfig = ''
+        try_files $uri $uri/ /index.html;
+      '';
+    };
+
     locations."/".proxyPass = "http://127.0.0.1:7235";
   };
 
   services.nginx.virtualHosts."rad.y.tazj.in" = {
     enableSSL = true;
     useACMEHost = "y.tazj.in";
-    locations."/".proxyPass = "http://127.0.0.1:7235";
+    locations = config.services.nginx.virtualHosts."rad.tazj.in".locations;
   };
 
   programs.mtr.enable = true;
