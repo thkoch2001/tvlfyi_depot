@@ -102,6 +102,13 @@ in
     # run manually patchelfed binaries
     environment.stub-ld.enable = false;
 
+    # Enable yggdrasil network.
+    services.yggdrasil = {
+      enable = true;
+      persistentKeys = true;
+      settings.IfName = "ygg0";
+    };
+
     programs = {
       fish.enable = true;
       mosh.enable = true;
