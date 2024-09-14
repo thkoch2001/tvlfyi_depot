@@ -62,7 +62,7 @@ in
     domain = "tazj.in";
     useDHCP = true;
     firewall.enable = true;
-    firewall.allowedTCPPorts = [ 22 80 443 8776 ];
+    firewall.allowedTCPPorts = [ 22 80 443 8776 9443 ];
 
     wireless.enable = true;
     wireless.networks."How do I computer fast?" = {
@@ -194,6 +194,30 @@ in
     radicle-node
     wget
   ];
+
+  # configure Yggdrasil network
+  services.yggdrasil = {
+    enable = true;
+    persistentKeys = true;
+    openMulticastPort = true;
+
+    settings = {
+      Listen = [ "tls://[::]:0" ];
+      IfName = "ygg0";
+      Peers = [
+        "quic://ygg-msk-1.averyan.ru:8364"
+        "tls://ekb.itrus.su:7992"
+        "tls://s-mow-1.sergeysedoy97.ru:65534"
+      ];
+
+      MulticastInterfaces = [{
+        Regex = "enp.*";
+        Beacon = true;
+        Listen = true;
+        Port = 9443; # yggd
+      }];
+    };
+  };
 
   programs.mtr.enable = true;
   programs.mosh.enable = true;
