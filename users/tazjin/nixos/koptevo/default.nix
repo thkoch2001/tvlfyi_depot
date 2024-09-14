@@ -270,9 +270,13 @@ in
   services.nginx.virtualHosts."src.tazj.in" = {
     enableACME = true;
     forceSSL = true;
+    root = depot.third_party.radicle-explorer.withPreferredSeeds [{
+      hostname = "rad.tazj.in";
+      port = 443;
+      scheme = "https";
+    }];
 
     locations."/" = {
-      root = depot.third_party.radicle-explorer;
       index = "index.html";
       extraConfig = ''
         try_files $uri $uri/ /index.html;
@@ -283,6 +287,12 @@ in
   services.nginx.virtualHosts."src.y.tazj.in" = {
     enableSSL = true;
     useACMEHost = "y.tazj.in";
+    root = depot.third_party.radicle-explorer.withPreferredSeeds [{
+      hostname = "rad.y.tazj.in";
+      port = 443;
+      scheme = "https";
+    }];
+
     locations = config.services.nginx.virtualHosts."src.tazj.in".locations;
   };
 
