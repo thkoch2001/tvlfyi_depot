@@ -2,7 +2,7 @@
 #
 # They have an upstream Nix derivation, but it only works with experimental
 # features Nix and is quite messy, so this is a copy of the relevant parts.
-{ pkgs, ... }:
+{ lib, pkgs, ... }:
 
 let
   twemoji-assets = pkgs.fetchFromGitHub {
@@ -14,7 +14,7 @@ let
 
   httpdSrc = pkgs.radicle-httpd.src;
 in
-pkgs.buildNpmPackage rec {
+lib.fix (self: pkgs.buildNpmPackage rec {
   pname = "radicle-explorer";
   version = (builtins.fromJSON (builtins.readFile "${src}/package.json")).version;
 
@@ -44,4 +44,19 @@ pkgs.buildNpmPackage rec {
     runHook postInstall
   '';
 
-}
+  # Override the build-time configuration with other preferred seeds which are
+  # displayed on the landing page.
+  passthru.withPreferredSeeds = seeds:
+    let
+      originalConfig = builtins.fromJSON (builtins.readFile "${src}/config/default.json");
+      config = originalConfig // {
+        preferredSeeds = seeds;
+      };
+      newConfig = pkgs.writeText "local.json" (builtins.toJSON config);
+    in
+    self.overrideAttrs (_: {
+      preBuild = ''
+        cp ${newConfig} config/local.json
+      '';
+    });
+})
