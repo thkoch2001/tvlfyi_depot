@@ -72,8 +72,22 @@ in
 
   time.timeZone = "UTC";
 
-  security.acme.acceptTerms = true;
-  security.acme.defaults.email = lib.mkForce "acme@tazj.in";
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = lib.mkForce "acme@tazj.in";
+
+    # wildcard cert for usage with Yggdrasil services
+    certs."y.tazj.in" = {
+      dnsProvider = "yandexcloud";
+      credentialFiles.YANDEX_CLOUD_IAM_TOKEN_FILE = "/run/agenix/lego-yandex";
+      extraDomainNames = [ "*.y.tazj.in" ];
+
+      # folder tvl/tazjin-private/default
+      environmentFile = builtins.toFile "lego-yandex-env" ''
+        YANDEX_CLOUD_FOLDER_ID=b1gq41rsbggeum4qafnh
+      '';
+    };
+  };
 
   programs.fish.enable = true;
 
@@ -89,6 +103,7 @@ in
       secretFile = name: depot.users.tazjin.secrets."${name}.age";
     in
     {
+      lego-yandex.file = secretFile "lego-yandex";
       tgsa-yandex.file = secretFile "tgsa-yandex";
     };
 
