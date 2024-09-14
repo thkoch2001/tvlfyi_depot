@@ -184,5 +184,17 @@ in
   programs.mosh.enable = true;
   zramSwap.enable = true;
 
+  # temp access for ehmry to debug network stuff
+  users.users.emery = {
+    isNormalUser = true;
+    createHome = true;
+    uid = 1002;
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICgL2kRs+cXAcUzOO2Tp+mtMBVuHqMuslQy3LN+HLSP4 emery@nixos"
+    ];
+  };
+
+  nix.settings.trusted-users = [ "emery" ];
+
   system.stateVersion = "23.05";
 }
