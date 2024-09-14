@@ -225,6 +225,47 @@ in
     };
   };
 
+  # TODO(tazjin): move this to a module for radicle stuff
+  services.radicle = {
+    enable = true;
+    publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILHs6jSvMdtu9oJCt48etEs8ExjfGY5PmWQsRzFleogS";
+    privateKeyFile = "/etc/secrets/radicle"; # TODO: to manage, or not to manage ...
+
+    settings = {
+      web.pinned.repositories = [
+        "rad:z2mdnBK1tX6pibdBfRct3ThCgheHu" # tvix-go
+      ];
+
+      node = {
+        alias = "rad.tazj.in";
+        seedingPolicy.default = "block";
+      };
+    };
+
+    node = {
+      openFirewall = true;
+      listenAddress = "[::]";
+    };
+
+    httpd = {
+      enable = true;
+      listenAddress = "127.0.0.1";
+      listenPort = 7235; # radl
+    };
+  };
+
+  services.nginx.virtualHosts."rad.tazj.in" = {
+    enableACME = true;
+    forceSSL = true;
+    locations."/".proxyPass = "http://127.0.0.1:7235";
+  };
+
+  services.nginx.virtualHosts."rad.y.tazj.in" = {
+    enableSSL = true;
+    useACMEHost = "y.tazj.in";
+    locations."/".proxyPass = "http://127.0.0.1:7235";
+  };
+
   programs.mtr.enable = true;
   programs.mosh.enable = true;
   zramSwap.enable = true;
