@@ -204,7 +204,7 @@ in
     openMulticastPort = true;
 
     settings = {
-      Listen = [ "tls://[::]:0" ];
+      Listen = [ "tls://[::]:9443" ]; # yggd
       IfName = "ygg0";
       Peers = [
         "quic://ygg-msk-1.averyan.ru:8364"
@@ -216,11 +216,11 @@ in
         Regex = "enp.*";
         Beacon = true;
         Listen = true;
-        Port = 9443; # yggd
+        Port = 59443; # l(ocal) yggd(rasil)
       }];
 
       AllowedPublicKeys = [
-        "573fd89392e2741ead4edd85034c91c88f1e560d991bbdbf1fccb6233db4d325" # koptevo
+        "573fd89392e2741ead4edd85034c91c88f1e560d991bbdbf1fccb6233db4d325" # khamovnik
       ];
     };
   };
