@@ -43,6 +43,7 @@ spawn-at-startup "systemctl --user start xss-lock"
 environment {
   QT_QPA_PLATFORM "wayland"
   DISPLAY ":0"
+  EDITOR "emacsclient"
 }
 
 hotkey-overlay {
