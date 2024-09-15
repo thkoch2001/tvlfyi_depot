@@ -26,7 +26,11 @@ lib.fix (self: pkgs.buildNpmPackage rec {
 
   # This might change during nixpkgs bumps and will need updating. Need to fix
   # upstream so that there is a normal, callable derivation.
-  npmDepsHash = "sha256:0kw6rvqm0s21j1rss35idvgcrzzczfy6qi3323y385djw4ygk5xs";
+  npmDepsHash = "sha256:1hbrzfjkfc0q8qk03yi6qb9zqm57h7hnkn7fl0yxkrzbrljaljaz";
+
+  patches = [
+    ./0001-remove-dependency-on-plausible.patch
+  ];
 
   postPatch = ''
     patchShebangs --build ./scripts
