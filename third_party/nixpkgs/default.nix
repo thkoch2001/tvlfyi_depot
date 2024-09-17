@@ -61,6 +61,9 @@ let
 
     # mypaint is broken on stable (2024-09-05)
     mypaint = stableNixpkgs.mypaint;
+
+    # sysbench is broken on stable (2024-09-17)
+    sysbench = stableNixpkgs.sysbench;
   };
 
   # Overlay to expose the nixpkgs commits we are using to other Nix code.
