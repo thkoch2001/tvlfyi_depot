@@ -13,7 +13,7 @@ in
     ../modules/games.nix
     ../modules/obs.nix
     ../modules/development/agda.nix
-    ../modules/development/readyset.nix
+    # ../modules/development/readyset.nix
     ../modules/development/ocaml.nix
   ] ++ (lib.optional (pathExists ../modules/private.nix) ../modules/private.nix);
 
