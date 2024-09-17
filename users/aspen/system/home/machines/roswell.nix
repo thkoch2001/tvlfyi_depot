@@ -11,7 +11,7 @@ in
     ../modules/development.nix
     ../modules/emacs.nix
     ../modules/vim.nix
-    ../modules/development/readyset.nix
+    # ../modules/development/readyset.nix
     ../modules/tmux.nix
   ] ++ (lib.optional (pathExists ../modules/private.nix) ../modules/private.nix);
 
