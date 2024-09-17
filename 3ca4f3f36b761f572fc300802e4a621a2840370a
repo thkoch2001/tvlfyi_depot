@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c24f42c4_d45c7976",
+        "filename": "tvix/website/landing-en.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-09-17T09:57:41Z",
+      "side": 1,
+      "message": "The TVL monorepo doesn\u0027t have a github mirror, only the tvix part of it is mirrored.",
+      "revId": "3ca4f3f36b761f572fc300802e4a621a2840370a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
