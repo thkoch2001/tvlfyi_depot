@@ -19,7 +19,7 @@
     # TODO remove override when https://github.com/NixOS/nixpkgs/pull/233826 is merged
     (sysbench.overrideDerivation (oldAttrs: {
       configureFlags = oldAttrs.configureFlags ++ [ "--with-pgsql" ];
-      buildInputs = oldAttrs.buildInputs ++ [ postgresql ];
+      buildInputs = oldAttrs.buildInputs ++ [ stablePostgresForSysbench ];
     }))
   ];
 

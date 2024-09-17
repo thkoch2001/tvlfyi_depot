@@ -61,6 +61,12 @@ let
 
     # mypaint is broken on stable (2024-09-05)
     mypaint = stableNixpkgs.mypaint;
+
+    # sysbench+postgresql is broken on stable (2024-09-17)
+    #
+    # This is used in an override in //users/aspen, which adds Postgres support.
+    sysbench = stableNixpkgs.sysbench;
+    stablePostgresForSysbench = stableNixpkgs.postgresql;
   };
 
   # Overlay to expose the nixpkgs commits we are using to other Nix code.
