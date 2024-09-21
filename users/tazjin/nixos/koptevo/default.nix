@@ -118,6 +118,7 @@ in
     acmeHost = "koptevo.tazj.in";
     bindAddresses = [
       "0.0.0.0"
+      "::"
     ];
   };
 
