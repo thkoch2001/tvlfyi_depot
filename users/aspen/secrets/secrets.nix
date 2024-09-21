@@ -7,7 +7,7 @@ in
 
 {
   "bbbg.age".publicKeys = [ grfn mugwump bbbg ];
-  "cloudflare.age".publicKeys = [ grfn mugwump ];
+  "cloudflare.age".publicKeys = [ grfn mugwump ogopogo ];
   "ddclient-password.age".publicKeys = [ grfn ogopogo ];
   "buildkite-ssh-key.age".publicKeys = [ grfn mugwump ogopogo ];
   "buildkite-token.age".publicKeys = [ grfn mugwump ogopogo ];
