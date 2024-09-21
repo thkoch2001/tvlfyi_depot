@@ -96,4 +96,28 @@
       wal_level = "logical";
     };
   };
+
+  # ddclient
+  age.secrets =
+    let
+      secret = name: depot.users.aspen.secrets."${name}.age";
+    in
+    {
+      ddclient-password.file = secret "ddclient-password";
+    };
+
+  services.ddclient = {
+    enable = true;
+    domains = [ "home.gws.fyi" ];
+    interval = "1d";
+    zone = "gws.fyi";
+    protocol = "cloudflare";
+    username = "root@gws.fyi";
+    passwordFile = config.age.secretsDir + "/ddclient-password";
+    quiet = true;
+  }
+  # TODO(aspen): Remove when upgrading past 4.0.0
+  // lib.optionalAttrs (lib.versionOlder pkgs.ddclient.verion "4.0.0") {
+    ssl = false;
+  };
 }
