@@ -239,6 +239,7 @@ in
 
       node = {
         alias = "rad.tazj.in";
+        log = "DEBUG";
         seedingPolicy.default = "block";
       };
     };
