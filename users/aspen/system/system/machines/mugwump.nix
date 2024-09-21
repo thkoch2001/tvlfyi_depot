@@ -9,7 +9,6 @@ with lib;
     (depot.path.origSrc + "/ops/modules/prometheus-fail2ban-exporter.nix")
     (depot.path.origSrc + "/users/aspen/xanthous/server/module.nix")
     (depot.third_party.agenix.src + "/modules/age.nix")
-    depot.third_party.ddclient.module
   ];
 
   networking.hostName = "mugwump";
@@ -83,7 +82,6 @@ with lib;
     in
     {
       cloudflare.file = secret "cloudflare";
-      ddclient-password.file = secret "ddclient-password";
 
       buildkite-ssh-key = {
         file = secret "buildkite-ssh-key";
@@ -162,18 +160,6 @@ with lib;
         };
       };
     };
-  };
-
-  services.deprecated-ddclient = {
-    package = depot.third_party.ddclient;
-    enable = true;
-    domains = [ "home.gws.fyi" ];
-    interval = "1d";
-    zone = "gws.fyi";
-    protocol = "cloudflare";
-    username = "root@gws.fyi";
-    passwordFile = config.age.secretsDir + "/ddclient-password";
-    quiet = true;
   };
 
   security.acme.certs."metrics.gws.fyi" = {
