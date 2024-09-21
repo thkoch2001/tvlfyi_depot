@@ -11,6 +11,8 @@
     ../modules/tvl.nix
     ../modules/development.nix
     ../modules/wireshark.nix
+    ../modules/metrics.nix
+    ../modules/prometheus-exporter.nix
   ];
 
   networking.hostName = "ogopogo";
@@ -92,7 +94,6 @@
     dataDir = "/data/postgresql";
     package = pkgs.postgresql_15;
     settings = {
-      port = 5431;
       wal_level = "logical";
     };
   };
@@ -117,7 +118,7 @@
     quiet = true;
   }
   # TODO(aspen): Remove when upgrading past 4.0.0
-  // lib.optionalAttrs (lib.versionOlder pkgs.ddclient.verion "4.0.0") {
+  // lib.optionalAttrs (lib.versionOlder pkgs.ddclient.version "4.0.0") {
     ssl = false;
   };
 }
