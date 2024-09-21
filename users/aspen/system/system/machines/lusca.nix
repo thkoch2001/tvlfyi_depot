@@ -10,6 +10,7 @@
     ../modules/sound.nix
     ../modules/tvl.nix
     ../modules/development.nix
+    ../modules/prometheus-exporter.nix
   ];
 
   networking.hostName = "lusca";
