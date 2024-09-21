@@ -63,6 +63,5 @@ in rec {
   whitbySystem = (nixosFor depot.ops.machines.whitby).system;
   sandunySystem = (nixosFor depot.ops.machines.sanduny).system;
   nixeryDev01System = (nixosFor depot.ops.machines.nixery-01).system;
-  volgaSprintCacheSystem = (nixosFor depot.ops.machines.volgasprint-cache).system;
   meta.ci.targets = [ "sandunySystem" "whitbySystem" "nixeryDev01System" ];
 }
