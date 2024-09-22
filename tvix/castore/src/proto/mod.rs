@@ -1,5 +1,8 @@
 use prost::Message;
+
 use std::cmp::Ordering;
+
+use bstr::ByteSlice;
 
 mod grpc_blobservice_wrapper;
 mod grpc_directoryservice_wrapper;
@@ -191,24 +194,39 @@ impl From<crate::Directory> for Directory {
 
 impl Node {
     /// Converts a proto [Node] to a [crate::Node], and splits off the name.
+    pub fn into_node(self) -> Result<crate::Node, DirectoryError> {
+        let (_, node) = self.into_unvalidated_name_and_node()?;
+        Ok(node)
+    }
+    /// Converts a proto [Node] to a [crate::Node], and splits off the name.
     pub fn into_name_and_node(self) -> Result<(PathComponent, crate::Node), DirectoryError> {
+        let (unvalidated_name, node) = self.into_unvalidated_name_and_node()?;
+        Ok((
+            unvalidated_name
+                .try_into()
+                .map_err(DirectoryError::InvalidName)?,
+            node,
+        ))
+    }
+
+    fn into_unvalidated_name_and_node(self) -> Result<(bytes::Bytes, crate::Node), DirectoryError> {
         match self.node.ok_or_else(|| DirectoryError::NoNodeSet)? {
             node::Node::Directory(n) => {
-                let name: PathComponent = n.name.try_into().map_err(DirectoryError::InvalidName)?;
-                let digest = B3Digest::try_from(n.digest)
-                    .map_err(|e| DirectoryError::InvalidNode(name.clone(), e.into()))?;
+                let digest = B3Digest::try_from(n.digest).map_err(|e| {
+                    DirectoryError::InvalidNode(n.name.as_bstr().to_string(), e.into())
+                })?;
 
                 let node = crate::Node::Directory {
                     digest,
                     size: n.size,
                 };
 
-                Ok((name, node))
+                Ok((n.name, node))
             }
             node::Node::File(n) => {
-                let name: PathComponent = n.name.try_into().map_err(DirectoryError::InvalidName)?;
-                let digest = B3Digest::try_from(n.digest)
-                    .map_err(|e| DirectoryError::InvalidNode(name.clone(), e.into()))?;
+                let digest = B3Digest::try_from(n.digest).map_err(|e| {
+                    DirectoryError::InvalidNode(n.name.as_bstr().to_string(), e.into())
+                })?;
 
                 let node = crate::Node::File {
                     digest,
@@ -216,22 +234,20 @@ impl Node {
                     executable: n.executable,
                 };
 
-                Ok((name, node))
+                Ok((n.name, node))
             }
 
             node::Node::Symlink(n) => {
-                let name: PathComponent = n.name.try_into().map_err(DirectoryError::InvalidName)?;
-
                 let node = crate::Node::Symlink {
                     target: n.target.try_into().map_err(|e| {
                         DirectoryError::InvalidNode(
-                            name.clone(),
+                            n.name.as_bstr().to_string(),
                             crate::ValidateNodeError::InvalidSymlinkTarget(e),
                         )
                     })?,
                 };
 
-                Ok((name, node))
+                Ok((n.name, node))
             }
         }
     }

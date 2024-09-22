@@ -46,7 +46,7 @@ pub enum DirectoryError {
     DuplicateName(PathComponent),
     /// Node failed validation
     #[error("invalid node with name {}: {:?}", .0, .1.to_string())]
-    InvalidNode(PathComponent, ValidateNodeError),
+    InvalidNode(String, ValidateNodeError),
     #[error("Total size exceeds u64::MAX")]
     SizeOverflow,
     /// Invalid name encountered
