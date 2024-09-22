@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcdf1e5e_96febe1a",
+        "filename": "tvix/nix-compat/src/nar/writer/sync.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-09-22T11:49:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9f5b1d8e_1a5f8116",
+      "revId": "ad509da975fc115643e698cf2c89b0ddda5bcee5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "defa8fd4_775c8623",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-09-06T15:08:36Z",
       "side": 1,
       "message": "might make sense to describe they get a \u0026mut of the writer handed out, need to use it to write the full file contents, and then call FileManualWrite::close with that writer.",
+      "revId": "ad509da975fc115643e698cf2c89b0ddda5bcee5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e5fdc206_45a45cef",
+        "filename": "tvix/nix-compat/src/nar/writer/sync.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-09-22T11:49:13Z",
+      "side": 1,
+      "message": "I\u0027ve added an example, hope that is sufficient",
+      "parentUuid": "defa8fd4_775c8623",
       "revId": "ad509da975fc115643e698cf2c89b0ddda5bcee5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6af13719_f9545f96",
+        "filename": "tvix/nix-compat/src/nar/writer/sync.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 127,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-09-22T11:49:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8abc974e_5db13d39",
+      "revId": "ad509da975fc115643e698cf2c89b0ddda5bcee5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "056e840f_6ca36384",
@@ -65,6 +119,24 @@
       "writtenOn": "2024-09-06T15:08:36Z",
       "side": 1,
       "message": "```suggestion\n    /// **Important:** This *must* be called with the writer returned by file_manual_write after the file contents have been manually and fully written to it.\n```\n\n(modulo line wrap)",
+      "revId": "ad509da975fc115643e698cf2c89b0ddda5bcee5",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce1a1d42_df619233",
+        "filename": "tvix/nix-compat/src/nar/writer/sync.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-09-22T11:49:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "056e840f_6ca36384",
       "revId": "ad509da975fc115643e698cf2c89b0ddda5bcee5",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
