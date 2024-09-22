@@ -158,6 +158,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "897cf7c9_2fa4c0f5",
+        "filename": "tvix/store/src/nar/seekable.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-09-22T11:18:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "195bd827_35891484",
+      "revId": "5b42e5a0a05614095f46e1184534ad1cd12ad35a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3ff50b9c_da49a43a",
