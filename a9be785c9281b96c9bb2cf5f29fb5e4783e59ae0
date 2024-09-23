@@ -18,6 +18,23 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "e15cc119_04350bf2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-23T12:02:40Z",
+      "side": 1,
+      "message": "This was an oversight from the conversion to stricter types (some of the CLs in the serious containing cl/12217).\n\nWe need a version converting a protobuf without a name to our stricter types, but an empty PathComponent cannot be constructed.\n\nSo we need a `into_name_and_node()` version that returns the name as Bytes, not PathComponent.",
+      "revId": "a9be785c9281b96c9bb2cf5f29fb5e4783e59ae0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "55e11aee_b33658f2",
@@ -65,6 +82,24 @@
       "writtenOn": "2024-09-23T11:54:16Z",
       "side": 1,
       "message": "The function name alone doesn\u0027t clarify that only the name is not validated, but the node is.\n\nPlease add a docstring, similar to the one above, but mention that caveat.",
+      "revId": "a9be785c9281b96c9bb2cf5f29fb5e4783e59ae0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7cad581b_f4b5c340",
+        "filename": "tvix/castore/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-23T12:02:40Z",
+      "side": 1,
+      "message": "Maybe into_name_bytes_and_node()?",
+      "parentUuid": "632b30e4_92bf662e",
       "revId": "a9be785c9281b96c9bb2cf5f29fb5e4783e59ae0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
