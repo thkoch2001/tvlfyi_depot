@@ -61,6 +61,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1f551479_5bed1cea",
+        "filename": "tvix/store/src/nar/seekable.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-09-23T13:47:58Z",
+      "side": 1,
+      "message": "cur_segment does not only contain the things written by file_manual_write, but _everything_ up to the beginning of the file contents, including previous directory entries/symlinks.",
+      "parentUuid": "c28d682b_d3dd138a",
+      "range": {
+        "startLine": 89,
+        "startChar": 17,
+        "endLine": 89,
+        "endChar": 28
+      },
+      "revId": "41d004b93b283c6c84ad1b91c91e3071a4eb52d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cf6fb668_9a9da9b5",
         "filename": "tvix/store/src/nar/seekable.rs",
         "patchSetId": 16
