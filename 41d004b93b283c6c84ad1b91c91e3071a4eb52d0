@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02bb8e10_a63a8780",
+        "filename": "tvix/store/src/nar/seekable.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-23T12:19:48Z",
+      "side": 1,
+      "message": "I initially was confused why we pass `cur_segment` as `\u0026mut Vec\u003cu8\u003e`, and not as a `\u0026[u8]`.\n\nI assume the std::mem::take taking ownership of the `Vec\u003cu8\u003e` in cur_segment also allocates, so it should be cleaner to just pass a `\u0026[u8]` as cur_segment, and then do a `segments.push(*offset, Data::Literal(Vec::copy_from_slice(cur_segment))`. WDYT?",
+      "revId": "41d004b93b283c6c84ad1b91c91e3071a4eb52d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c28d682b_d3dd138a",
+        "filename": "tvix/store/src/nar/seekable.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-23T12:19:48Z",
+      "side": 1,
+      "message": "what about calling this buf_segment? We mostly care about what `file_manual_write` wrote into it so far, so treat it as a buffer of some sort.",
+      "range": {
+        "startLine": 89,
+        "startChar": 17,
+        "endLine": 89,
+        "endChar": 28
+      },
+      "revId": "41d004b93b283c6c84ad1b91c91e3071a4eb52d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf6fb668_9a9da9b5",
+        "filename": "tvix/store/src/nar/seekable.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-23T12:19:48Z",
+      "side": 1,
+      "message": "Extend the comment stating we explicitly do not write the contents as the docstring in `file_manual_write` asks us to, but do this in the AsyncRead.",
+      "revId": "41d004b93b283c6c84ad1b91c91e3071a4eb52d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b3adc29_b7359643",
+        "filename": "tvix/store/src/tests/nar_renderer_seekable.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-23T12:19:48Z",
+      "side": 1,
+      "message": "We don\u0027t do any actual seeking here, just always \"read_to_end\".\n\nThis needs some more tests actually seeking to interesting positions.",
+      "revId": "41d004b93b283c6c84ad1b91c91e3071a4eb52d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
