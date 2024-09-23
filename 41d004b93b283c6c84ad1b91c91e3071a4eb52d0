@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "bbb2377d_ee865930",
+        "filename": "tvix/store/src/nar/seekable.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-09-23T13:45:11Z",
+      "side": 1,
+      "message": "The std::mem::take allocates the new empty vec for the next segment, but never copies the data from one vec to another.\nTaking a slice and then doing Vec::copy_from_slice seems like a waste when we already have it in a Vec.\n\nInstead, we could move the std::mem::take out of the flush_segment and pass an owned Vec to flush_segment.",
+      "parentUuid": "02bb8e10_a63a8780",
+      "revId": "41d004b93b283c6c84ad1b91c91e3071a4eb52d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c28d682b_d3dd138a",
         "filename": "tvix/store/src/nar/seekable.rs",
         "patchSetId": 16
