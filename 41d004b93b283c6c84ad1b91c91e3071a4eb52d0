@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "516c679f_6329285c",
+        "filename": "tvix/store/src/nar/seekable.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-23T14:09:11Z",
+      "side": 1,
+      "message": "Agree, that\u0027d also work and make it easier to grasp.",
+      "parentUuid": "bbb2377d_ee865930",
+      "revId": "41d004b93b283c6c84ad1b91c91e3071a4eb52d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c28d682b_d3dd138a",
         "filename": "tvix/store/src/nar/seekable.rs",
         "patchSetId": 16
