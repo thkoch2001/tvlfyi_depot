@@ -16,6 +16,24 @@
       "message": "I don\u0027t think we should drop the check.\n\nWe don\u0027t want to handle URLs where the name field is not empty / unset, and rejecting that here ensures there\u0027s only one URL generating this content.\n\nIf we would allow the name field to be not empty, someone could craft new URLs and bust caches.",
       "revId": "6f028165f2c710578ad3941eb303e1bc9f8a8c0b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7c827b97_42dbbfd0",
+        "filename": "tvix/nar-bridge/src/nar.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2024-09-23T16:29:09Z",
+      "side": 0,
+      "message": "Done",
+      "parentUuid": "92066d15_d7c03a8e",
+      "revId": "6f028165f2c710578ad3941eb303e1bc9f8a8c0b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

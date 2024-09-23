@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "949fa22e_97c64ed5",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2024-09-23T16:29:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "850d8847_1fa60d65",
+      "revId": "a9be785c9281b96c9bb2cf5f29fb5e4783e59ae0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e15cc119_04350bf2",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-09-23T12:02:40Z",
       "side": 1,
       "message": "This was an oversight from the conversion to stricter types (some of the CLs in the serious containing cl/12217).\n\nWe need a version converting a protobuf without a name to our stricter types, but an empty PathComponent cannot be constructed.\n\nSo we need a `into_name_and_node()` version that returns the name as Bytes, not PathComponent.",
+      "revId": "a9be785c9281b96c9bb2cf5f29fb5e4783e59ae0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c75707a4_35656eb4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2024-09-23T16:29:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e15cc119_04350bf2",
       "revId": "a9be785c9281b96c9bb2cf5f29fb5e4783e59ae0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -65,6 +101,24 @@
       "writtenOn": "2024-09-23T11:54:16Z",
       "side": 1,
       "message": "```suggestion\n    InvalidNode(bytes::Bytes, ValidateNodeError),\n```\n\n(see below)",
+      "revId": "a9be785c9281b96c9bb2cf5f29fb5e4783e59ae0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e6ae5c63_e14e88eb",
+        "filename": "tvix/castore/src/errors.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2024-09-23T16:29:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c0640601_e565a0e4",
       "revId": "a9be785c9281b96c9bb2cf5f29fb5e4783e59ae0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -104,6 +158,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "883b9f96_f31f24be",
+        "filename": "tvix/castore/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2024-09-23T16:29:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7cad581b_f4b5c340",
+      "revId": "a9be785c9281b96c9bb2cf5f29fb5e4783e59ae0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99d53bcb_6fe60d9c",
@@ -117,6 +189,24 @@
       "writtenOn": "2024-09-23T11:54:16Z",
       "side": 1,
       "message": "You use the BStr `to_string()` method, which replaces invalid unicode with replacement characters, and then store that String in the error type.\n\nIt\u0027s probably cleaner to store just the `bytes::Bytes` in the error type, and do a `.0.as_bstr()` in the error `#[error(…)]` macro. It allows us to get back the real bytes.",
+      "revId": "a9be785c9281b96c9bb2cf5f29fb5e4783e59ae0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6cc8b446_4764bd32",
+        "filename": "tvix/castore/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2024-09-23T16:29:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99d53bcb_6fe60d9c",
       "revId": "a9be785c9281b96c9bb2cf5f29fb5e4783e59ae0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
