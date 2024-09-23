@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "850d8847_1fa60d65",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-23T11:56:41Z",
+      "side": 1,
+      "message": "fix(tvix/nar-bridge):",
+      "revId": "a9be785c9281b96c9bb2cf5f29fb5e4783e59ae0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "55e11aee_b33658f2",
