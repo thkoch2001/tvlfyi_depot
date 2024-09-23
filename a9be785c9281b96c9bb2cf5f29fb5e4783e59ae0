@@ -16,6 +16,57 @@
       "message": "I hope the code meets the standards. I don\u0027t really know also who to add as a reviewer. I apologize if I missed people or I wrongly pinged people.",
       "revId": "a9be785c9281b96c9bb2cf5f29fb5e4783e59ae0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c0640601_e565a0e4",
+        "filename": "tvix/castore/src/errors.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-23T11:54:16Z",
+      "side": 1,
+      "message": "```suggestion\n    InvalidNode(bytes::Bytes, ValidateNodeError),\n```\n\n(see below)",
+      "revId": "a9be785c9281b96c9bb2cf5f29fb5e4783e59ae0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "632b30e4_92bf662e",
+        "filename": "tvix/castore/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-23T11:54:16Z",
+      "side": 1,
+      "message": "The function name alone doesn\u0027t clarify that only the name is not validated, but the node is.\n\nPlease add a docstring, similar to the one above, but mention that caveat.",
+      "revId": "a9be785c9281b96c9bb2cf5f29fb5e4783e59ae0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99d53bcb_6fe60d9c",
+        "filename": "tvix/castore/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 216,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-23T11:54:16Z",
+      "side": 1,
+      "message": "You use the BStr `to_string()` method, which replaces invalid unicode with replacement characters, and then store that String in the error type.\n\nIt\u0027s probably cleaner to store just the `bytes::Bytes` in the error type, and do a `.0.as_bstr()` in the error `#[error(…)]` macro. It allows us to get back the real bytes.",
+      "revId": "a9be785c9281b96c9bb2cf5f29fb5e4783e59ae0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
