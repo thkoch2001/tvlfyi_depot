@@ -222,6 +222,9 @@ in
 
       AllowedPublicKeys = [
         "573fd89392e2741ead4edd85034c91c88f1e560d991bbdbf1fccb6233db4d325" # khamovnik
+        "a56300c3af1ad54840f4b38b9438e3c108a0aa0fd72793dc7d6bd57325c6d691" # zamalek
+        "152b658f8a3e0cd6d1486c3cb984795ec7c9a02274c9f096bd2045cabf8bfa92" # A9
+        "550f4920592d2831d013fd1c83ba9ad174ec352273260fd5d7c2627dbe60d097" # matepad
       ];
     };
   };
