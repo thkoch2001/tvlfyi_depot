@@ -103,6 +103,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "205b2f12_ac3ed59e",
+        "filename": "tvix/store/src/nar/seekable.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-23T14:13:23Z",
+      "side": 1,
+      "message": "ok, please add a comment somewhere where it makes sense, maybe before the let binding, or as a docstring on one of the methods, explaining how we assemble the segments?",
+      "parentUuid": "1f551479_5bed1cea",
+      "range": {
+        "startLine": 89,
+        "startChar": 17,
+        "endLine": 89,
+        "endChar": 28
+      },
+      "revId": "41d004b93b283c6c84ad1b91c91e3071a4eb52d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cf6fb668_9a9da9b5",
         "filename": "tvix/store/src/nar/seekable.rs",
         "patchSetId": 16
