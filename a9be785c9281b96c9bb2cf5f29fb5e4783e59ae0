@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "55e11aee_b33658f2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2024-09-23T11:37:59Z",
+      "side": 1,
+      "message": "I hope the code meets the standards. I don\u0027t really know also who to add as a reviewer. I apologize if I missed people or I wrongly pinged people.",
+      "revId": "a9be785c9281b96c9bb2cf5f29fb5e4783e59ae0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
