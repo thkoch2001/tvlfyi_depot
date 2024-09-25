@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2636d7a2_47fcb6cd",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 496,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-25T22:35:34Z",
+      "side": 1,
+      "message": "this should probably say what the function does in the first line, and then describe what it\u0027s parameters mean.",
+      "revId": "036f80e44e1a262e17fc0df33acd0c758e27bed3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4598bf0_eccd0a27",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 498,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-25T22:35:34Z",
+      "side": 1,
+      "message": "does this now also allow specifying a url as identifiers elsewhere? think about a \"combined\" Blobservice with an anonymous local or remote defined inline.\n\nif that\u0027s the case, we probably might want to move this to the module-level docstrings, and add a doctest example.",
+      "revId": "036f80e44e1a262e17fc0df33acd0c758e27bed3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
