@@ -54,6 +54,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3796cd17_eb0d5db9",
+        "filename": "tvix/store/src/nar/seekable.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-09-25T13:53:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "516c679f_6329285c",
+      "revId": "41d004b93b283c6c84ad1b91c91e3071a4eb52d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c28d682b_d3dd138a",
@@ -155,6 +173,24 @@
       "writtenOn": "2024-09-23T12:19:48Z",
       "side": 1,
       "message": "We don\u0027t do any actual seeking here, just always \"read_to_end\".\n\nThis needs some more tests actually seeking to interesting positions.",
+      "revId": "41d004b93b283c6c84ad1b91c91e3071a4eb52d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d4ed498_44e2f4e5",
+        "filename": "tvix/store/src/tests/nar_renderer_seekable.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-09-25T13:53:57Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b3adc29_b7359643",
       "revId": "41d004b93b283c6c84ad1b91c91e3071a4eb52d0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
