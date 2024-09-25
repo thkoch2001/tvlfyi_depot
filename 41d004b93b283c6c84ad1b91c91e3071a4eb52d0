@@ -143,6 +143,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c8cdfe3_b60ef2f8",
+        "filename": "tvix/store/src/nar/seekable.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-09-25T15:09:50Z",
+      "side": 1,
+      "message": "Added to the `new()` function",
+      "parentUuid": "205b2f12_ac3ed59e",
+      "range": {
+        "startLine": 89,
+        "startChar": 17,
+        "endLine": 89,
+        "endChar": 28
+      },
+      "revId": "41d004b93b283c6c84ad1b91c91e3071a4eb52d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf6fb668_9a9da9b5",
@@ -156,6 +180,24 @@
       "writtenOn": "2024-09-23T12:19:48Z",
       "side": 1,
       "message": "Extend the comment stating we explicitly do not write the contents as the docstring in `file_manual_write` asks us to, but do this in the AsyncRead.",
+      "revId": "41d004b93b283c6c84ad1b91c91e3071a4eb52d0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4c54f9d5_607caa96",
+        "filename": "tvix/store/src/nar/seekable.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-09-25T15:09:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf6fb668_9a9da9b5",
       "revId": "41d004b93b283c6c84ad1b91c91e3071a4eb52d0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
