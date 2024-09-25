@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b66ee9a9_a7f91044",
+        "filename": "tvix/store/src/nar/seekable.rs",
+        "patchSetId": 24
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-25T18:17:37Z",
+      "side": 1,
+      "message": "```suggestion\n    /// of a specific BLAKE3 digest and known size. The AsyncRead implementation will then switch\n```",
+      "revId": "44273ad972a436dfe840e0f1cd4332740928d508",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
