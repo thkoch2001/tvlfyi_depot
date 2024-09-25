@@ -1,0 +1,89 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "126dc7e7_b53b535a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-25T10:26:44Z",
+      "side": 1,
+      "message": "add motivation",
+      "revId": "1e65de52bc23917fa0438c081aa94d25030781b4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2868a7bd_934f0fca",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-25T10:26:44Z",
+      "side": 1,
+      "message": "drop, we dont want to import `Error` directly, as some errors themselves are called `Error` (L309).",
+      "revId": "1e65de52bc23917fa0438c081aa94d25030781b4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57b492ec_3d8a5772",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-25T10:26:44Z",
+      "side": 1,
+      "message": "```suggestion\n#[derive(thiserror::Error, Clone, Debug)]\n```",
+      "revId": "1e65de52bc23917fa0438c081aa94d25030781b4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "77440026_afb792f8",
+        "filename": "tvix/eval/src/errors.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-25T10:26:44Z",
+      "side": 1,
+      "message": "```suggestion\n#[derive(thiserror::Error, Clone, Debug)]\n```",
+      "revId": "1e65de52bc23917fa0438c081aa94d25030781b4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35b182f6_35b56b4f",
+        "filename": "web/tvixbolt/Cargo.lock",
+        "patchSetId": 3
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-25T10:26:44Z",
+      "side": 1,
+      "message": "interesting CI didn\u0027t catch this...",
+      "revId": "1e65de52bc23917fa0438c081aa94d25030781b4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
