@@ -23,4 +23,18 @@ pkgs.stdenv.mkDerivation {
     cp -R $src/. .
     mdbook build -d $out
   '';
+
+  meta.ci.extraSteps.deploy = {
+    label = ":rocket: deploy docs";
+    needsOutput = true;
+    alwaysRun = true;
+    prompt = "Deploy tvix-docs?";
+    phase = "release";
+    # branches = ["canon"];
+    command = pkgs.writeShellScript "deploy-tvix-docs" ''
+      RCLONE_WEBDAV_URL="https://api.garage.flokli.io/tvix-docs" \
+      RCLONE_WEBDAV_BEARER_TOKEN_COMMAND="${pkgs.buildkite-agent}/bin/buildkite-agent oidc request-token --audience api.garage.flokli.io" \
+      ${pkgs.rclone}/bin/rclone sync result/. :webdav:
+    '';
+  };
 }
