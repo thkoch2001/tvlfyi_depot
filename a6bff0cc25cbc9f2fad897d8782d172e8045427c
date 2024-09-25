@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4479420a_b59ae241",
+        "filename": "tvix/store/src/pathinfoservice/signing_wrapper.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-25T06:09:28Z",
+      "side": 1,
+      "message": "there\u0027s no service builder anymore, and simply for `cargo doc` and \"exploring all implementations\" usecases it would make sense for this to have docstring describing behavior. \n\n\nWe can say it works for any ed25519::signature::Signer here.",
+      "parentUuid": "e92e2917_62098ec3",
+      "revId": "a6bff0cc25cbc9f2fad897d8782d172e8045427c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e5cad3af_a5074429",
         "filename": "tvix/store/src/pathinfoservice/signing_wrapper.rs",
         "patchSetId": 1
@@ -102,6 +120,41 @@
       "side": 1,
       "message": "Oups",
       "parentUuid": "e5cad3af_a5074429",
+      "revId": "a6bff0cc25cbc9f2fad897d8782d172e8045427c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b4450ec6_20810c25",
+        "filename": "tvix/store/src/pathinfoservice/signing_wrapper.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-25T06:09:28Z",
+      "side": 1,
+      "message": "still missing",
+      "parentUuid": "4edac505_5f30c588",
+      "revId": "a6bff0cc25cbc9f2fad897d8782d172e8045427c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bbbab635_48af7305",
+        "filename": "tvix/store/src/pathinfoservice/signing_wrapper.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-25T06:09:28Z",
+      "side": 1,
+      "message": "add a docstring here, for the structs and individual fields.",
       "revId": "a6bff0cc25cbc9f2fad897d8782d172e8045427c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
