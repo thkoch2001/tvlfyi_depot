@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c45fa45a_65b23a88",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-09-25T10:41:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "126dc7e7_b53b535a",
+      "revId": "1e65de52bc23917fa0438c081aa94d25030781b4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2868a7bd_934f0fca",
@@ -136,6 +154,24 @@
       "writtenOn": "2024-09-25T10:26:44Z",
       "side": 1,
       "message": "interesting CI didn\u0027t catch this...",
+      "revId": "1e65de52bc23917fa0438c081aa94d25030781b4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bec48cff_f4cfa977",
+        "filename": "web/tvixbolt/Cargo.lock",
+        "patchSetId": 3
+      },
+      "lineNbr": 741,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-09-25T10:41:32Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "35b182f6_35b56b4f",
       "revId": "1e65de52bc23917fa0438c081aa94d25030781b4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
