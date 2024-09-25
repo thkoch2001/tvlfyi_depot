@@ -82,6 +82,20 @@ in
       cargo doc --document-private-items
       mv target/doc $out
     '';
+
+    meta.ci.extraSteps.deploy = {
+      label = ":rocket: deploy";
+      needsOutput = true;
+      alwaysRun = true;
+      prompt = "Deploy rust-docs?";
+      phase = "release";
+      # branches = ["canon"];
+      command = pkgs.writeShellScript "deploy-tvix-rust-docs" ''
+        RCLONE_WEBDAV_URL="https://api.garage.flokli.io/tvix-rust-docs" \
+        RCLONE_WEBDAV_BEARER_TOKEN_COMMAND="${pkgs.buildkite-agent}/bin/buildkite-agent oidc request-token --audience api.garage.flokli.io" \
+        ${pkgs.rclone}/bin/rclone sync result/. :webdav:
+      '';
+    };
   };
 
   # Run cargo clippy. We run it with -Dwarnings, so warnings cause a nonzero
