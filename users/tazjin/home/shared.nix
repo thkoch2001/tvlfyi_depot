@@ -61,6 +61,9 @@ in
     };
   };
 
+  # put Niri configuration in place
+  xdg.configFile."niri/config.kdl".source = depot.users.tazjin.dotfiles.niri;
+
   programs.wpaperd = {
     enable = true;
     settings = {
