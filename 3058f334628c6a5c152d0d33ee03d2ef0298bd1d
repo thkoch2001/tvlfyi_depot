@@ -16,6 +16,24 @@
       "message": "```suggestion\n/// The [PathInfo] with the added signature is then put into the inner [PathInfoService].\n```",
       "revId": "3058f334628c6a5c152d0d33ee03d2ef0298bd1d",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0cf901b8_e8ed0530",
+        "filename": "tvix/store/src/pathinfoservice/signing_wrapper.rs",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2024-09-26T12:14:02Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "47dcfc65_6acfffad",
+      "revId": "3058f334628c6a5c152d0d33ee03d2ef0298bd1d",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
