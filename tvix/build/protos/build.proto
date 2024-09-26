@@ -9,18 +9,18 @@ import "tvix/castore/protos/castore.proto";
 
 option go_package = "code.tvl.fyi/tvix/build-go;buildv1";
 
-// A BuildRequest describes the request of something to be run on the builder.
-// It is distinct from an actual [Build] that has already happened, or might be
+// A `BuildRequest` describes the request of something to be run on the builder.
+// It is distinct from an actual [`Build`] that has already happened, or might be
 // currently ongoing.
 //
-// A BuildRequest can be seen as a more normalized version of a Derivation
+// A `BuildRequest` can be seen as a more normalized version of a Derivation
 // (parsed from A-Term), "writing out" some of the Nix-internal details about
 // how e.g. environment variables in the build are set.
 //
-// Nix has some impurities when building a Derivation, for example the --cores option
+// Nix has some impurities when building a `Derivation`, for example the --cores option
 // ends up as an environment variable in the build, that's not part of the ATerm.
 //
-// As of now, we serialize this into the BuildRequest, so builders can stay dumb.
+// As of now, we serialize this into the `BuildRequest`, so builders can stay dumb.
 // This might change in the future.
 //
 // There's also a big difference when it comes to how inputs are modelled:
@@ -36,13 +36,13 @@ option go_package = "code.tvl.fyi/tvix/build-go;buildv1";
 //    builder from having to "trust" any input-addressed paths, contrary to Nix.
 //
 // While this approach gives a better hermeticity, it has one downside:
-// A BuildRequest can only be sent once the contents of all its inputs are known.
+// A `BuildRequest` can only be sent once the contents of all its inputs are known.
 //
 // As of now, we're okay to accept this, but it prevents uploading an
-// entirely-non-IFD subgraph of BuildRequests eagerly.
+// entirely-non-IFD subgraph of `BuildRequests` eagerly.
 //
 // FUTUREWORK: We might be introducing another way to refer to inputs, to
-// support "send all BuildRequest for a nixpkgs eval to a remote builder and put
+// support "send all `BuildRequest` for a nixpkgs eval to a remote builder and put
 // the laptop to sleep" usecases later.
 message BuildRequest {
   // The list of all root nodes that should be visible in `inputs_dir` at the
@@ -87,9 +87,9 @@ message BuildRequest {
   // The list of environment variables and their values that should be set
   // inside the build environment.
   // This includes both environment vars set inside the derivation, as well as
-  // more "ephemeral" ones like NIX_BUILD_CORES, controlled by the `--cores`
+  // more "ephemeral" ones like `NIX_BUILD_CORES`, controlled by the `--cores`
   // CLI option of `nix-build`.
-  // For now, we consume this as an option when turning a Derivation into a BuildRequest,
+  // For now, we consume this as an option when turning a Derivation into a `BuildRequest`,
   // similar to how Nix has a `--cores` option.
   // We don't want to bleed these very nix-specific sandbox impl details into
   // (dumber) builders if we don't have to.
@@ -106,7 +106,7 @@ message BuildRequest {
   // Build can be started.
   BuildConstraints constraints = 8;
 
-  // BuildConstraints represents certain conditions that must be fulfilled
+  // `BuildConstraints` represents certain conditions that must be fulfilled
   // inside the build environment to be able to build this.
   // Constraints can be things like required architecture and minimum amount of memory.
   // The required input paths are *not* represented in here, because it
@@ -135,8 +135,8 @@ message BuildRequest {
   }
 
   // Additional (small) files and their contents that should be placed into the
-  // build environment, but outside inputs_dir.
-  // Used for passAsFile and structuredAttrs in Nix.
+  // build environment, but outside `inputs_dir`.
+  // Used for `passAsFile` and `structuredAttrs` in Nix.
   repeated AdditionalFile additional_files = 9;
 
   message AdditionalFile {
@@ -147,10 +147,10 @@ message BuildRequest {
   // TODO: allow describing something like "preferLocal", to influence composition?
 }
 
-// A Build is (one possible) outcome of executing a [BuildRequest].
+// A `Build` is (one possible) outcome of executing a [`BuildRequest`].
 message Build {
   // The orginal build request producing the build.
-  BuildRequest build_request = 1; // <- TODO: define hashing scheme for BuildRequest, refer to it by hash?
+  BuildRequest build_request = 1; // <- TODO: define hashing scheme for `BuildRequest`, refer to it by hash?
 
   // The outputs that were produced after successfully building.
   // They are sorted by their names.

@@ -67,7 +67,7 @@ pub enum AllowIncomplete {
 }
 
 impl AllowIncomplete {
-    fn allow(&self) -> bool {
+    const fn allow(self) -> bool {
         matches!(self, Self::Allow)
     }
 }
@@ -83,7 +83,7 @@ pub struct EvalResult {
 /// Interprets the given code snippet, printing out warnings and errors and returning the result
 #[allow(clippy::too_many_arguments)]
 pub fn evaluate(
-    tvix_store_io: Rc<TvixStoreIO>,
+    tvix_store_io: &Rc<TvixStoreIO>,
     code: &str,
     path: Option<PathBuf>,
     args: &Args,
@@ -104,16 +104,13 @@ pub fn evaluate(
     .with_strict(args.strict)
     .env(env);
 
-    match globals {
-        Some(globals) => {
-            eval_builder = eval_builder.with_globals(globals);
-        }
-        None => {
-            eval_builder = eval_builder.add_builtins(impure_builtins());
-            eval_builder = add_derivation_builtins(eval_builder, Rc::clone(&tvix_store_io));
-            eval_builder = add_fetcher_builtins(eval_builder, Rc::clone(&tvix_store_io));
-            eval_builder = add_import_builtins(eval_builder, Rc::clone(&tvix_store_io));
-        }
+    if let Some(globals) = globals {
+        eval_builder = eval_builder.with_globals(globals);
+    } else {
+        eval_builder = eval_builder.add_builtins(impure_builtins());
+        eval_builder = add_derivation_builtins(eval_builder, Rc::clone(tvix_store_io));
+        eval_builder = add_fetcher_builtins(eval_builder, Rc::clone(tvix_store_io));
+        eval_builder = add_import_builtins(eval_builder, Rc::clone(tvix_store_io));
     };
     eval_builder = configure_nix_path(eval_builder, &args.nix_search_path);
 
@@ -222,7 +219,7 @@ impl InterpretResult {
     }
 
     #[must_use]
-    pub fn success(&self) -> bool {
+    pub const fn success(&self) -> bool {
         self.success
     }
 }
@@ -233,7 +230,7 @@ impl InterpretResult {
 #[instrument(skip_all, fields(indicatif.pb_show=1))]
 #[allow(clippy::too_many_arguments)]
 pub fn interpret(
-    tvix_store_io: Rc<TvixStoreIO>,
+    tvix_store_io: &Rc<TvixStoreIO>,
     code: &str,
     path: Option<PathBuf>,
     args: &Args,

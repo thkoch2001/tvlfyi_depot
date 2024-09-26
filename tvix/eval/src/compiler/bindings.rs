@@ -32,7 +32,7 @@ enum BindingsKind {
 }
 
 impl BindingsKind {
-    fn is_attrs(&self) -> bool {
+    const fn is_attrs(self) -> bool {
         matches!(self, Self::Attrs | Self::RecAttrs)
     }
 }
@@ -193,8 +193,7 @@ impl TrackedBinding {
     /// Used to determine which binding to merge another one into.
     fn matches(&self, key: &str) -> bool {
         match &self.key_slot {
-            KeySlot::None { name } => name == key,
-            KeySlot::Static { name, .. } => name == key,
+            KeySlot::Static { name, .. } | KeySlot::None { name } => name == key,
             KeySlot::Dynamic { .. } => false,
         }
     }
@@ -205,7 +204,7 @@ struct TrackedBindings {
 }
 
 impl TrackedBindings {
-    fn new() -> Self {
+    const fn new() -> Self {
         Self { bindings: vec![] }
     }
 
@@ -231,18 +230,16 @@ impl TrackedBindings {
 
         // If the first element of the path is not statically known, the entry
         // can not be merged.
-        let name = match expr_static_attr_str(name) {
-            Some(name) => name,
-            None => return false,
+        let Some(name) = expr_static_attr_str(name) else {
+            return false;
         };
 
         // If there is no existing binding with this key, the entry can not be
         // merged.
         // TODO: benchmark whether using a map or something is useful over the
         // `find` here
-        let binding = match self.bindings.iter_mut().find(|b| b.matches(&name)) {
-            Some(b) => b,
-            None => return false,
+        let Some(binding) = self.bindings.iter_mut().find(|b| b.matches(&name)) else {
+            return false;
         };
 
         // No more excuses ... the binding can be merged!
@@ -341,12 +338,9 @@ impl Compiler<'_, '_> {
 
                 None => {
                     for attr in inherit.attrs() {
-                        let name = match expr_static_attr_str(&attr) {
-                            Some(name) => name,
-                            None => {
-                                self.emit_error(&attr, ErrorKind::DynamicKeyInScope("inherit"));
-                                continue;
-                            }
+                        let Some(name) = expr_static_attr_str(&attr) else {
+                            self.emit_error(&attr, ErrorKind::DynamicKeyInScope("inherit"));
+                            continue;
                         };
 
                         // If the identifier resolves statically in a `let`, it
@@ -392,12 +386,9 @@ impl Compiler<'_, '_> {
 
                 Some(from) => {
                     for attr in inherit.attrs() {
-                        let name = match expr_static_attr_str(&attr) {
-                            Some(name) => name,
-                            None => {
-                                self.emit_error(&attr, ErrorKind::DynamicKeyInScope("inherit"));
-                                continue;
-                            }
+                        let Some(name) = expr_static_attr_str(&attr) else {
+                            self.emit_error(&attr, ErrorKind::DynamicKeyInScope("inherit"));
+                            continue;
                         };
 
                         *count += 1;

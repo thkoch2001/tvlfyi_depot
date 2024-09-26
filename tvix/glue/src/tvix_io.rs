@@ -17,7 +17,7 @@ pub struct TvixIO<T> {
 }
 
 impl<T> TvixIO<T> {
-    pub fn new(actual: T) -> Self {
+    pub const fn new(actual: T) -> Self {
         Self { actual }
     }
 }

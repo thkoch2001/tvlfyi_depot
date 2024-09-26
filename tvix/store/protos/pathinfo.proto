@@ -8,7 +8,7 @@ import "tvix/castore/protos/castore.proto";
 
 option go_package = "code.tvl.fyi/tvix/store-go;storev1";
 
-// PathInfo shows information about a Nix Store Path.
+// `PathInfo` shows information about a Nix Store Path.
 // That's a single element inside /nix/store.
 message PathInfo {
   // The path can be a directory, file or symlink.
@@ -23,7 +23,7 @@ message PathInfo {
   NARInfo narinfo = 3;
 }
 
-// Represents a path in the Nix store (a direct child of STORE_DIR).
+// Represents a path in the Nix store (a direct child of `STORE_DIR`).
 // It is commonly formatted by a nixbase32-encoding the digest, and
 // concatenating the name, separated by a `-`.
 message StorePath {
@@ -62,11 +62,11 @@ message NARInfo {
   // A list of references. To validate .narinfo signatures, a fingerprint needs
   // to be constructed.
   // This fingerprint doesn't just contain the hashes of the output paths of all
-  // references (like PathInfo.references), but their whole (base)names, so we
+  // references (like `PathInfo.references`), but their whole (base)names, so we
   // need to keep them somewhere.
   repeated string reference_names = 4;
 
-  // The StorePath of the .drv file producing this output.
+  // The `StorePath` of the .drv file producing this output.
   // The .drv suffix is omitted in its `name` field.
   StorePath deriver = 5;
 
@@ -74,7 +74,7 @@ message NARInfo {
   // Its textual representations seen in the wild are one of the following:
   //  - `fixed:r:sha256:1gcky5hlf5vqfzpyhihydmm54grhc94mcs8w7xr8613qsqb1v2j6`
   //    fixed-output derivations using "recursive" `outputHashMode`.
-  //  - `fixed:sha256:19xqkh72crbcba7flwxyi3n293vav6d7qkzkh2v4zfyi4iia8vj8
+  //  - `fixed:sha256:19xqkh72crbcba7flwxyi3n293vav6d7qkzkh2v4zfyi4iia8vj8`
   //    fixed-output derivations using "flat" `outputHashMode`
   //  - `text:sha256:19xqkh72crbcba7flwxyi3n293vav6d7qkzkh2v4zfyi4iia8vj8`
   //    Text hashing, used for uploaded .drv files and outputs produced by
@@ -105,7 +105,7 @@ message NARInfo {
 
       // Produced when uploading .drv files or outputs produced by
       // builtins.toFile.
-      // Produces equivalent digests as FLAT_SHA256, but is a separate
+      // Produces equivalent digests as `FLAT_SHA256`, but is a separate
       // hashing type in Nix, affecting output path calculation.
       TEXT_SHA256 = 4;
 

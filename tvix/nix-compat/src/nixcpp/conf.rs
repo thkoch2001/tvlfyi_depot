@@ -28,6 +28,59 @@ impl<'a> NixConfig<'a> {
     /// It does not support parsing multiple config files, merging semantics,
     /// and also does not understand `include` and `!include` statements.
     pub fn parse(input: &'a str) -> Result<Self, Error> {
+        #[inline]
+        fn parse_val<'a>(this: &mut NixConfig<'a>, tag: &str, val: &'a str) -> Option<()> {
+            match tag {
+                "allowed-users" => {
+                    this.allowed_users = Some(val.split_whitespace().collect());
+                }
+                "auto-optimise-store" => {
+                    this.auto_optimise_store = Some(val.parse::<bool>().ok()?);
+                }
+                "cores" => {
+                    this.cores = Some(val.parse().ok()?);
+                }
+                "max-jobs" => {
+                    this.max_jobs = Some(val.parse().ok()?);
+                }
+                "require-sigs" => {
+                    this.require_sigs = Some(val.parse().ok()?);
+                }
+                "sandbox" => this.sandbox = Some(val.parse().ok()?),
+                "sandbox-fallback" => this.sandbox_fallback = Some(val.parse().ok()?),
+                "substituters" => this.substituters = Some(val.split_whitespace().collect()),
+                "system-features" => {
+                    this.system_features = Some(val.split_whitespace().collect());
+                }
+                "trusted-public-keys" => {
+                    this.trusted_public_keys = Some(
+                        val.split_whitespace()
+                            .map(crate::narinfo::VerifyingKey::parse)
+                            .collect::<Result<Vec<crate::narinfo::VerifyingKey>, _>>()
+                            .ok()?,
+                    );
+                }
+                "trusted-substituters" => {
+                    this.trusted_substituters = Some(val.split_whitespace().collect());
+                }
+                "trusted-users" => this.trusted_users = Some(val.split_whitespace().collect()),
+                "extra-platforms" => {
+                    this.extra_platforms = Some(val.split_whitespace().collect());
+                }
+                "extra-sandbox-paths" => {
+                    this.extra_sandbox_paths = Some(val.split_whitespace().collect());
+                }
+                "experimental-features" => {
+                    this.experimental_features = Some(val.split_whitespace().collect());
+                }
+                "builders-use-substitutes" => {
+                    this.builders_use_substitutes = Some(val.parse().ok()?);
+                }
+                _ => return None,
+            }
+            Some(())
+        }
+
         let mut out = Self::default();
 
         for line in input.lines() {
@@ -50,59 +103,6 @@ impl<'a> NixConfig<'a> {
             // trim whitespace
             let tag = tag.trim();
             let val = val.trim();
-
-            #[inline]
-            fn parse_val<'a>(this: &mut NixConfig<'a>, tag: &str, val: &'a str) -> Option<()> {
-                match tag {
-                    "allowed-users" => {
-                        this.allowed_users = Some(val.split_whitespace().collect());
-                    }
-                    "auto-optimise-store" => {
-                        this.auto_optimise_store = Some(val.parse::<bool>().ok()?);
-                    }
-                    "cores" => {
-                        this.cores = Some(val.parse().ok()?);
-                    }
-                    "max-jobs" => {
-                        this.max_jobs = Some(val.parse().ok()?);
-                    }
-                    "require-sigs" => {
-                        this.require_sigs = Some(val.parse().ok()?);
-                    }
-                    "sandbox" => this.sandbox = Some(val.parse().ok()?),
-                    "sandbox-fallback" => this.sandbox_fallback = Some(val.parse().ok()?),
-                    "substituters" => this.substituters = Some(val.split_whitespace().collect()),
-                    "system-features" => {
-                        this.system_features = Some(val.split_whitespace().collect());
-                    }
-                    "trusted-public-keys" => {
-                        this.trusted_public_keys = Some(
-                            val.split_whitespace()
-                                .map(crate::narinfo::VerifyingKey::parse)
-                                .collect::<Result<Vec<crate::narinfo::VerifyingKey>, _>>()
-                                .ok()?,
-                        );
-                    }
-                    "trusted-substituters" => {
-                        this.trusted_substituters = Some(val.split_whitespace().collect());
-                    }
-                    "trusted-users" => this.trusted_users = Some(val.split_whitespace().collect()),
-                    "extra-platforms" => {
-                        this.extra_platforms = Some(val.split_whitespace().collect());
-                    }
-                    "extra-sandbox-paths" => {
-                        this.extra_sandbox_paths = Some(val.split_whitespace().collect());
-                    }
-                    "experimental-features" => {
-                        this.experimental_features = Some(val.split_whitespace().collect());
-                    }
-                    "builders-use-substitutes" => {
-                        this.builders_use_substitutes = Some(val.parse().ok()?);
-                    }
-                    _ => return None,
-                }
-                Some(())
-            }
 
             parse_val(&mut out, tag, val)
                 .ok_or_else(|| Error::InvalidValue(tag.to_string(), val.to_string()))?;

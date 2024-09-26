@@ -16,7 +16,7 @@ pub enum HashAlgo {
 impl HashAlgo {
     // return the number of bytes in the digest of the given hash algo.
     #[must_use]
-    pub fn digest_length(&self) -> usize {
+    pub const fn digest_length(&self) -> usize {
         match self {
             Self::Sha1 => 20,
             Self::Sha256 => 32,

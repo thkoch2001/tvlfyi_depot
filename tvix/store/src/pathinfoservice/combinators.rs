@@ -21,7 +21,7 @@ pub struct Cache<PS1, PS2> {
 }
 
 impl<PS1, PS2> Cache<PS1, PS2> {
-    pub fn new(near: PS1, far: PS2) -> Self {
+    pub const fn new(near: PS1, far: PS2) -> Self {
         Self { near, far }
     }
 }
@@ -34,23 +34,19 @@ where
 {
     #[instrument(level = "trace", skip_all, fields(path_info.digest = nixbase32::encode(&digest)))]
     async fn get(&self, digest: [u8; 20]) -> Result<Option<PathInfo>, Error> {
-        match self.near.get(digest).await? {
-            Some(path_info) => {
-                debug!("serving from cache");
-                Ok(Some(path_info))
+        Ok(if let Some(path_info) = self.near.get(digest).await? {
+            debug!("serving from cache");
+            Some(path_info)
+        } else {
+            debug!("not found in near, asking remote…");
+            if let Some(path_info) = self.far.get(digest).await? {
+                debug!("found in remote, adding to cache");
+                self.near.put(path_info.clone()).await?;
+                Some(path_info)
+            } else {
+                None
             }
-            None => {
-                debug!("not found in near, asking remote…");
-                match self.far.get(digest).await? {
-                    None => Ok(None),
-                    Some(path_info) => {
-                        debug!("found in remote, adding to cache");
-                        self.near.put(path_info.clone()).await?;
-                        Ok(Some(path_info))
-                    }
-                }
-            }
-        }
+        })
     }
 
     async fn put(&self, _path_info: PathInfo) -> Result<PathInfo, Error> {

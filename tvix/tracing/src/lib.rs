@@ -165,7 +165,7 @@ impl TracingBuilder {
     /// Set the log level for all layers: stderr und otlp if configured. `RUST_LOG` still has a
     /// higher priority over this value.
     #[must_use]
-    pub fn level(mut self, level: Level) -> Self {
+    pub const fn level(mut self, level: Level) -> Self {
         self.level = level;
         self
     }
@@ -173,14 +173,14 @@ impl TracingBuilder {
     #[cfg(feature = "otlp")]
     /// Enable otlp by setting a custom `service_name`
     #[must_use]
-    pub fn enable_otlp(mut self, service_name: &'static str) -> Self {
+    pub const fn enable_otlp(mut self, service_name: &'static str) -> Self {
         self.service_name = Some(service_name);
         self
     }
 
     /// Enable progress bar layer, default is disabled
     #[must_use]
-    pub fn enable_progressbar(mut self) -> Self {
+    pub const fn enable_progressbar(mut self) -> Self {
         self.progess_bar = true;
         self
     }

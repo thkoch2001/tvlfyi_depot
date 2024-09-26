@@ -31,7 +31,9 @@ pub struct GRPCBlobService<T> {
 
 impl<T> GRPCBlobService<T> {
     /// construct a [`GRPCBlobService`] from a [`proto::blob_service_client::BlobServiceClient`].
-    pub fn from_client(grpc_client: proto::blob_service_client::BlobServiceClient<T>) -> Self {
+    pub const fn from_client(
+        grpc_client: proto::blob_service_client::BlobServiceClient<T>,
+    ) -> Self {
         Self { grpc_client }
     }
 }
@@ -229,10 +231,9 @@ impl<W: tokio::io::AsyncWrite + Send + Sync + Unpin + 'static> BlobWriter for GR
         if self.task_and_writer.is_none() {
             // if we're already closed, return the b3 digest, which must exist.
             // If it doesn't, we already closed and failed once, and didn't handle the error.
-            match &self.digest {
-                Some(digest) => Ok(digest.clone()),
-                None => Err(io::Error::new(io::ErrorKind::BrokenPipe, "already closed")),
-            }
+            self.digest
+                .clone()
+                .ok_or_else(|| io::Error::new(io::ErrorKind::BrokenPipe, "already closed"))
         } else {
             let (task, mut writer) = self.task_and_writer.take().unwrap();
 
@@ -363,25 +364,28 @@ mod tests {
         .await
         .expect("failed to wait for socket");
 
-        // prepare a client
-        let grpc_client = {
-            let url = url::Url::parse(&format!(
-                "grpc+unix://{}?wait-connect=1",
-                socket_path.display()
-            ))
-            .expect("must parse");
-            let client = BlobServiceClient::new(
-                crate::tonic::channel_from_url(&url)
-                    .await
-                    .expect("must succeed"),
-            );
-            GRPCBlobService::from_client(client)
-        };
+        let has = {
+            // prepare a client
+            let grpc_client = {
+                let url = url::Url::parse(&format!(
+                    "grpc+unix://{}?wait-connect=1",
+                    socket_path.display()
+                ))
+                .expect("must parse");
+                let client = BlobServiceClient::new(
+                    crate::tonic::channel_from_url(&url)
+                        .await
+                        .expect("must succeed"),
+                );
+                GRPCBlobService::from_client(client)
+            };
 
-        let has = grpc_client
-            .has(&fixtures::BLOB_A_DIGEST)
-            .await
-            .expect("must not be err");
+            
+            grpc_client
+                .has(&fixtures::BLOB_A_DIGEST)
+                .await
+                .expect("must not be err")
+        };
 
         assert!(!has);
     }

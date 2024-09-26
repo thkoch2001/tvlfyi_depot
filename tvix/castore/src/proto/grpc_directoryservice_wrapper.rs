@@ -12,7 +12,7 @@ pub struct GRPCDirectoryServiceWrapper<T> {
 }
 
 impl<T> GRPCDirectoryServiceWrapper<T> {
-    pub fn new(directory_service: T) -> Self {
+    pub const fn new(directory_service: T) -> Self {
         Self { directory_service }
     }
 }
@@ -43,7 +43,17 @@ where
                     .map_err(|_e| Status::invalid_argument("invalid digest length"))?;
 
                 Ok(tonic::Response::new({
-                    if !req_inner.recursive {
+                    if req_inner.recursive {
+                        // If recursive was requested, traverse via get_recursive.
+                        Box::pin(
+                            self.directory_service
+                                .get_recursive(&digest)
+                                .map_ok(proto::Directory::from)
+                                .map_err(|e| {
+                                    tonic::Status::new(tonic::Code::Internal, e.to_string())
+                                }),
+                        )
+                    } else {
                         let directory = self
                             .directory_service
                             .get(&digest)
@@ -57,16 +67,6 @@ where
                             })?;
 
                         Box::pin(once(Ok(directory.into())))
-                    } else {
-                        // If recursive was requested, traverse via get_recursive.
-                        Box::pin(
-                            self.directory_service
-                                .get_recursive(&digest)
-                                .map_ok(proto::Directory::from)
-                                .map_err(|e| {
-                                    tonic::Status::new(tonic::Code::Internal, e.to_string())
-                                }),
-                        )
                     }
                 }))
             }

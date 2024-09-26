@@ -93,7 +93,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
                 let reflection_svc = tonic_reflection::server::Builder::configure()
                     .register_encoded_file_descriptor_set(CASTORE_FILE_DESCRIPTOR_SET)
                     .register_encoded_file_descriptor_set(FILE_DESCRIPTOR_SET)
-                    .build()?;
+                    .build_v1()?;
                 router = router.add_service(reflection_svc);
             }
 

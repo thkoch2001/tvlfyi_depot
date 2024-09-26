@@ -142,9 +142,8 @@ mod tests {
                 // We don't really care anymore what finalize() would return, as
                 // the add() failed.
                 return;
-            } else {
-                assert!(resp, "expect put to succeed");
             }
+            assert!(resp, "expect put to succeed");
         }
     }
 
@@ -180,9 +179,8 @@ mod tests {
                 // We don't really care anymore what finalize() would return, as
                 // the add() failed.
                 return;
-            } else {
-                assert!(resp, "expect put to succeed");
             }
+            assert!(resp, "expect put to succeed");
         }
     }
 }

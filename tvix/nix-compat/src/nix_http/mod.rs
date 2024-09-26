@@ -16,19 +16,19 @@ pub fn parse_nar_str(s: &str) -> Option<([u8; 32], &str)> {
     // we know hash_str is 52 bytes, so it's ok to unwrap here.
     let hash_str_fixed: [u8; 52] = hash_str.as_bytes().try_into().unwrap();
 
-    match suffix.strip_prefix(".nar") {
-        Some(compression_suffix) => match nixbase32::decode_fixed(hash_str_fixed) {
+    suffix.strip_prefix(".nar").map_or_else(
+        || {
+            trace!("no .nar suffix");
+            None
+        },
+        |compression_suffix| match nixbase32::decode_fixed(hash_str_fixed) {
             Err(e) => {
                 trace!(err=%e, "invalid nixbase32 encoding");
                 None
             }
             Ok(digest) => Some((digest, compression_suffix)),
         },
-        None => {
-            trace!("no .nar suffix");
-            None
-        }
-    }
+    )
 }
 
 /// Parses a `3mzh8lvgbynm9daj7c82k2sfsfhrsfsy.narinfo` string and returns the
@@ -39,23 +39,20 @@ pub fn parse_narinfo_str(s: &str) -> Option<[u8; 20]> {
         return None;
     }
 
-    match s.split_at(32) {
-        (hash_str, ".narinfo") => {
-            // we know this is 32 bytes, so it's ok to unwrap here.
-            let hash_str_fixed: [u8; 32] = hash_str.as_bytes().try_into().unwrap();
+    if let (hash_str, ".narinfo") = s.split_at(32) {
+        // we know this is 32 bytes, so it's ok to unwrap here.
+        let hash_str_fixed: [u8; 32] = hash_str.as_bytes().try_into().unwrap();
 
-            match nixbase32::decode_fixed(hash_str_fixed) {
-                Err(e) => {
-                    trace!(err=%e, "invalid nixbase32 encoding");
-                    None
-                }
-                Ok(digest) => Some(digest),
+        match nixbase32::decode_fixed(hash_str_fixed) {
+            Err(e) => {
+                trace!(err=%e, "invalid nixbase32 encoding");
+                None
             }
+            Ok(digest) => Some(digest),
         }
-        _ => {
-            trace!("invalid string, no .narinfo suffix");
-            None
-        }
+    } else {
+        trace!("invalid string, no .narinfo suffix");
+        None
     }
 }
 

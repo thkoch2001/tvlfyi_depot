@@ -104,7 +104,7 @@ impl<P: AsRef<[u8]>> ReferenceScanner<P> {
     }
 
     #[must_use]
-    pub fn pattern(&self) -> &ReferencePattern<P> {
+    pub const fn pattern(&self) -> &ReferencePattern<P> {
         &self.pattern
     }
 
@@ -163,7 +163,7 @@ where
         }
     }
 
-    pub fn scanner(&self) -> &ReferenceScanner<P> {
+    pub const fn scanner(&self) -> &ReferenceScanner<P> {
         &self.scanner
     }
 }

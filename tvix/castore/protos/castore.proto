@@ -7,7 +7,7 @@ package tvix.castore.v1;
 
 option go_package = "code.tvl.fyi/tvix/castore-go;castorev1";
 
-// A Directory can contain Directory, File or Symlink nodes.
+// A `Directory` can contain Directory, File or Symlink nodes.
 // Each of these nodes have a name attribute, which is the basename in that
 // directory and node type specific attributes.
 // The name attribute:
@@ -22,13 +22,13 @@ message Directory {
   repeated SymlinkNode symlinks = 3;
 }
 
-// A DirectoryNode represents a directory in a Directory.
+// A `DirectoryNode` represents a directory in a `Directory`.
 message DirectoryNode {
   // The (base)name of the directory
   bytes name = 1;
-  // The blake3 hash of a Directory message, serialized in protobuf canonical form.
+  // The blake3 hash of a `Directory` message, serialized in protobuf canonical form.
   bytes digest = 2;
-  // Number of child elements in the Directory referred to by `digest`.
+  // Number of child elements in the `Directory` referred to by `digest`.
   // Calculated by summing up the numbers of `directories`, `files` and
   // `symlinks`, and for each directory, its size field. Used for inode number
   // calculation.
@@ -41,7 +41,7 @@ message DirectoryNode {
   uint64 size = 3;
 }
 
-// A FileNode represents a regular or executable file in a Directory.
+// A `FileNode` represents a regular or executable file in a `Directory`.
 message FileNode {
   // The (base)name of the file
   bytes name = 1;
@@ -53,7 +53,7 @@ message FileNode {
   bool executable = 4;
 }
 
-// A SymlinkNode represents a symbolic link in a Directory.
+// A `SymlinkNode` represents a symbolic link in a `Directory`.
 message SymlinkNode {
   // The (base)name of the symlink
   bytes name = 1;
@@ -61,7 +61,7 @@ message SymlinkNode {
   bytes target = 2;
 }
 
-// A Node is either a DirectoryNode, FileNode or SymlinkNode.
+// A `Node` is either a `DirectoryNode`, `FileNode` or `SymlinkNode`.
 message Node {
   oneof node {
     DirectoryNode directory = 1;

@@ -9,9 +9,9 @@ use crate::{
 use hyper_util::rt::TokioIo;
 use tonic::transport::{Endpoint, Server, Uri};
 
-/// Constructs and returns a gRPC DirectoryService.
-/// The server part is a [MemoryDirectoryService], exposed via the
-/// [GRPCDirectoryServiceWrapper], and connected through a DuplexStream.
+/// Constructs and returns a gRPC `DirectoryService`.
+/// The server part is a [`MemoryDirectoryService`], exposed via the
+/// [`GRPCDirectoryServiceWrapper`], and connected through a `DuplexStream`.
 pub async fn make_grpc_directory_service_client() -> Box<dyn DirectoryService> {
     let (left, right) = tokio::io::duplex(64);
 

@@ -15,7 +15,11 @@ mod grpc_pathinfoservice_wrapper;
 
 pub use grpc_pathinfoservice_wrapper::GRPCPathInfoServiceWrapper;
 
-tonic::include_proto!("tvix.store.v1");
+#[allow(clippy::pedantic, clippy::nursery)]
+mod pb {
+    tonic::include_proto!("tvix.store.v1");
+}
+pub use pb::*;
 
 #[cfg(feature = "tonic-reflection")]
 /// Compiled file descriptors for implementing [gRPC
@@ -59,7 +63,7 @@ pub enum ValidatePathInfoError {
     InvalidNarinfoReferenceName(usize, String),
 
     /// The digest in the parsed `.narinfo.reference_names[i]` does not match
-    /// the one in `.references[i]`.`
+    /// the one in `.references[i]`.
     #[error("digest in reference_name at position {} does not match digest in PathInfo, expected {}, got {}", .0, BASE64.encode(.1), BASE64.encode(.2))]
     InconsistentNarinfoReferenceNameDigest(
         usize,
@@ -180,7 +184,7 @@ impl PathInfo {
     }
 
     /// With self and its store path name, this reconstructs a
-    /// [`nix_compat::narinfo::NarInfo`<'_>].
+    /// [`nix_compat::narinfo::NarInfo<'_>`][nix_compat::narinfo::NarInfo].
     /// It can be used to validate Signatures, or get back a (sparse) `NarInfo`
     /// struct to prepare writing it out.
     ///

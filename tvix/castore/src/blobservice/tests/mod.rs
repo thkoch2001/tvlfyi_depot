@@ -1,5 +1,5 @@
-//! This contains test scenarios that a given [BlobService] needs to pass.
-//! We use [rstest] and [rstest_reuse] to provide all services we want to test
+//! This contains test scenarios that a given [`BlobService`] needs to pass.
+//! We use [`rstest`] and [`rstest_reuse`] to provide all services we want to test
 //! against, and then apply this template to all test functions.
 
 use rstest::*;
@@ -58,7 +58,7 @@ async fn not_found_read(blob_service: impl BlobService) {
         .open_read(&BLOB_A_DIGEST)
         .await
         .expect("must not fail")
-        .is_none())
+        .is_none());
 }
 
 /// Put a blob in the store, check has, get it back.

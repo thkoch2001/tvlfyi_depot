@@ -19,16 +19,16 @@ where
     BS: AsRef<dyn BlobService> + Send + Sync + Clone + 'static,
     DS: AsRef<dyn DirectoryService> + Send + Sync + Clone + 'static,
 {
-    let url =
+    let uri =
         Url::parse(uri).map_err(|e| std::io::Error::other(format!("unable to parse url: {e}")))?;
 
-    Ok(match url.scheme() {
+    Ok(match uri.scheme() {
         // dummy doesn't care about parameters.
         "dummy" => Box::<DummyBuildService>::default(),
         scheme => {
             if scheme.starts_with("grpc+") {
                 let client = crate::proto::build_service_client::BuildServiceClient::new(
-                    tvix_castore::tonic::channel_from_url(&url)
+                    tvix_castore::tonic::channel_from_url(&uri)
                         .await
                         .map_err(std::io::Error::other)?,
                 );
@@ -38,7 +38,7 @@ where
             } else {
                 Err(std::io::Error::other(format!(
                     "unknown scheme: {}",
-                    url.scheme()
+                    uri.scheme()
                 )))?
             }
         }

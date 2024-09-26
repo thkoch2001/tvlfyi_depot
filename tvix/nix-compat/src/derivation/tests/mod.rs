@@ -410,7 +410,7 @@ fn output_path_construction() {
         "foo",
         &foo_drv.hash_derivation_modulo(|drv_path| {
             assert!(
-                !(drv_path.to_string() != "0hm2f1psjpcwg8fijsmr4wwxrx59s092-bar.drv"),
+                drv_path.to_string() == "0hm2f1psjpcwg8fijsmr4wwxrx59s092-bar.drv",
                 "lookup called with unexpected drv_path: {drv_path}"
             );
             bar_drv_hash_derivation_modulo

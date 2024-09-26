@@ -478,8 +478,8 @@ to a missing value in the attribute set(s) included via `with`."#
                 write!(f, "Error converting JSON to a Nix value or back: {msg}")
             }
 
-            Self::NotSerialisableToJson(_type) => {
-                write!(f, "a {_type} cannot be converted to JSON")
+            Self::NotSerialisableToJson(r#type) => {
+                write!(f, "a {type} cannot be converted to JSON")
             }
 
             Self::FromTomlError(msg) => {
@@ -544,7 +544,8 @@ impl Display for Error {
 pub type EvalResult<T> = Result<T, Error>;
 
 /// Human-readable names for rnix syntaxes.
-fn name_for_syntax(syntax: &rnix::SyntaxKind) -> &'static str {
+fn name_for_syntax(syntax: rnix::SyntaxKind) -> &'static str {
+    #[allow(clippy::match_same_arms)]
     match syntax {
         rnix::SyntaxKind::TOKEN_COMMENT => "a comment",
         rnix::SyntaxKind::TOKEN_WHITESPACE => "whitespace",
@@ -641,7 +642,7 @@ fn name_for_syntax(syntax: &rnix::SyntaxKind) -> &'static str {
 fn expected_syntax(one_of: &[rnix::SyntaxKind]) -> String {
     match one_of.len() {
         0 => "nothing".into(),
-        1 => format!("'{}'", name_for_syntax(&one_of[0])),
+        1 => format!("'{}'", name_for_syntax(one_of[0])),
         _ => {
             let mut out: String = "one of: ".into();
             let end = one_of.len() - 1;
@@ -653,7 +654,7 @@ fn expected_syntax(one_of: &[rnix::SyntaxKind]) -> String {
                     out.push_str(", or ");
                 };
 
-                out.push_str(name_for_syntax(item));
+                out.push_str(name_for_syntax(*item));
             }
 
             out
@@ -690,7 +691,7 @@ fn spans_for_parse_errors(file: &File, errors: &[rnix::parser::ParseError]) -> V
                         span,
                         format!(
                             "found '{}', but expected {}",
-                            name_for_syntax(found),
+                            name_for_syntax(*found),
                             expected_syntax(wanted),
                         ),
                     )
@@ -776,8 +777,9 @@ impl Error {
     /// the underlined span of the error.
     fn span_label(&self) -> Option<String> {
         let label = match &self.kind {
-            ErrorKind::DuplicateAttrsKey { .. } => "in this attribute set",
-            ErrorKind::InvalidAttributeName(_) => "in this attribute set",
+            ErrorKind::DuplicateAttrsKey { .. } | ErrorKind::InvalidAttributeName(_) => {
+                "in this attribute set"
+            }
             ErrorKind::RelativePathResolution(_) => "in this path literal",
             ErrorKind::UnexpectedArgumentBuiltin { .. } => "while calling this builtin",
             ErrorKind::UnexpectedArgumentFormals { .. } => "in this function call",
@@ -1060,15 +1062,13 @@ impl Error {
 
 // Check if this error is in a different span from its immediate ancestor.
 fn is_new_span(this_span: Span, parent: Option<&SpanLabel>) -> bool {
-    match parent {
-        None => true,
-        Some(parent) => parent.span != this_span,
-    }
+    parent.map_or(true, |parent| parent.span != this_span)
 }
 
 // Convenience methods to add context on other types.
 pub trait AddContext {
     /// Add context to the error-carrying type.
+    #[must_use]
     fn context<S: Into<String>>(self, ctx: S) -> Self;
 }
 

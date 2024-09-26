@@ -70,7 +70,7 @@ fn size_unchecked_panic() {
         ..Default::default()
     };
 
-    d.size();
+    let _ = d.size();
 }
 
 #[test]
@@ -141,7 +141,7 @@ fn digest() {
     assert_eq!(
         d.digest(),
         (&hex!("af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262")).into()
-    )
+    );
 }
 
 #[test]
@@ -242,7 +242,7 @@ fn validate_invalid_digest() {
     };
     match crate::Directory::try_from(d).expect_err("must fail") {
         DirectoryError::InvalidNode(_, ValidateNodeError::InvalidDigestLen(n)) => {
-            assert_eq!(n, 2)
+            assert_eq!(n, 2);
         }
         _ => panic!("unexpected error"),
     }

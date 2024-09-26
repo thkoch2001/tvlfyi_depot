@@ -16,7 +16,7 @@ pub struct GRPCBlobServiceWrapper<T> {
 }
 
 impl<T> GRPCBlobServiceWrapper<T> {
-    pub fn new(blob_service: T) -> Self {
+    pub const fn new(blob_service: T) -> Self {
         Self { blob_service }
     }
 }

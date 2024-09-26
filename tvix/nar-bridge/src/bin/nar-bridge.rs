@@ -1,6 +1,7 @@
 use clap::Parser;
 use mimalloc::MiMalloc;
 use nar_bridge::AppState;
+use tokio_listener::SystemOptions;
 use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, TraceLayer};
 use tracing::info;
@@ -75,7 +76,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 
     let listener = tokio_listener::Listener::bind(
         listen_address,
-        &Default::default(),
+        &SystemOptions::default(),
         &cli.listen_args.listener_options,
     )
     .await?;

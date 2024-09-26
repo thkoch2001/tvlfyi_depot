@@ -10,7 +10,7 @@ pub struct GRPCBuildService {
 
 impl GRPCBuildService {
     #[allow(dead_code)]
-    pub fn from_client(client: BuildServiceClient<Channel>) -> Self {
+    pub const fn from_client(client: BuildServiceClient<Channel>) -> Self {
         Self { client }
     }
 }

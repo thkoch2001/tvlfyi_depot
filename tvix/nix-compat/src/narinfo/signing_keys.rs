@@ -19,7 +19,7 @@ where
     S: ed25519::signature::Signer<ed25519::Signature>,
 {
     /// Constructs a singing key, using a name and a signing key.
-    pub fn new(name: String, signing_key: S) -> Self {
+    pub const fn new(name: String, signing_key: S) -> Self {
         Self { name, signing_key }
     }
 
@@ -37,6 +37,8 @@ where
 pub fn parse_keypair(
     input: &str,
 ) -> Result<(SigningKey<ed25519_dalek::SigningKey>, VerifyingKey), Error> {
+    const DECODED_BYTES_LEN: usize = SECRET_KEY_LENGTH + PUBLIC_KEY_LENGTH;
+
     let (name, bytes64) = input.split_once(':').ok_or(Error::MissingSeparator)?;
 
     if name.is_empty()
@@ -47,7 +49,6 @@ pub fn parse_keypair(
         return Err(Error::InvalidName(name.to_string()));
     }
 
-    const DECODED_BYTES_LEN: usize = SECRET_KEY_LENGTH + PUBLIC_KEY_LENGTH;
     if bytes64.len() != BASE64.encode_len(DECODED_BYTES_LEN) {
         return Err(Error::InvalidSigningKeyLen(bytes64.len()));
     }

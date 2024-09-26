@@ -282,7 +282,7 @@ pub enum OpArg {
 }
 
 impl Op {
-    pub fn arg_type(&self) -> OpArg {
+    pub const fn arg_type(&self) -> OpArg {
         match self {
             Self::Constant
             | Self::Attrs
@@ -314,27 +314,27 @@ impl Op {
 pub struct Position(pub u64);
 
 impl Position {
-    pub fn stack_index(idx: StackIdx) -> Self {
+    pub const fn stack_index(idx: StackIdx) -> Self {
         Self((idx.0 as u64) << 2)
     }
 
-    pub fn deferred_local(idx: StackIdx) -> Self {
+    pub const fn deferred_local(idx: StackIdx) -> Self {
         Self(((idx.0 as u64) << 2) | 1)
     }
 
-    pub fn upvalue_index(idx: UpvalueIdx) -> Self {
+    pub const fn upvalue_index(idx: UpvalueIdx) -> Self {
         Self(((idx.0 as u64) << 2) | 2)
     }
 
-    pub fn runtime_stack_index(&self) -> Option<StackIdx> {
-        if (self.0 & 0b11) == 0 {
+    pub const fn runtime_stack_index(self) -> Option<StackIdx> {
+        if self.0.trailing_zeros() >= 2 {
             return Some(StackIdx((self.0 >> 2) as usize));
         }
 
         None
     }
 
-    pub fn runtime_deferred_local(&self) -> Option<StackIdx> {
+    pub const fn runtime_deferred_local(self) -> Option<StackIdx> {
         if (self.0 & 0b11) == 1 {
             return Some(StackIdx((self.0 >> 2) as usize));
         }
@@ -342,7 +342,7 @@ impl Position {
         None
     }
 
-    pub fn runtime_upvalue_index(&self) -> Option<UpvalueIdx> {
+    pub const fn runtime_upvalue_index(self) -> Option<UpvalueIdx> {
         if (self.0 & 0b11) == 2 {
             return Some(UpvalueIdx((self.0 >> 2) as usize));
         }

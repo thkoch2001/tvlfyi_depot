@@ -40,7 +40,6 @@ use rustc_hash::FxHashMap;
 use std::path::PathBuf;
 use std::rc::Rc;
 use std::str::FromStr;
-use std::sync::Arc;
 
 use crate::observer::{CompilerObserver, RuntimeObserver};
 use crate::value::Lambda;
@@ -179,6 +178,7 @@ impl<'co, 'ro, 'env, IO> EvaluationBuilder<'co, 'ro, 'env, IO> {
         }
     }
 
+    #[must_use]
     pub fn with_enable_import(self, enable_import: bool) -> Self {
         Self {
             enable_import,
@@ -186,10 +186,12 @@ impl<'co, 'ro, 'env, IO> EvaluationBuilder<'co, 'ro, 'env, IO> {
         }
     }
 
+    #[must_use]
     pub fn disable_import(self) -> Self {
         self.with_enable_import(false)
     }
 
+    #[must_use]
     pub fn enable_import(self) -> Self {
         self.with_enable_import(true)
     }
@@ -209,6 +211,7 @@ impl<'co, 'ro, 'env, IO> EvaluationBuilder<'co, 'ro, 'env, IO> {
     /// # Panics
     ///
     /// Panics if this evaluation builder has had globals set via [`with_globals`]
+    #[must_use]
     pub fn add_builtins<I>(mut self, builtins: I) -> Self
     where
         I: IntoIterator<Item = (&'static str, Value)>,
@@ -223,6 +226,7 @@ impl<'co, 'ro, 'env, IO> EvaluationBuilder<'co, 'ro, 'env, IO> {
     /// # Panics
     ///
     /// Panics if this evaluation builder has had globals set via [`with_globals`]
+    #[must_use]
     pub fn add_src_builtin(mut self, name: &'static str, src: &'static str) -> Self {
         self.builtins_mut().src_builtins.push((name, src));
         self
@@ -234,6 +238,7 @@ impl<'co, 'ro, 'env, IO> EvaluationBuilder<'co, 'ro, 'env, IO> {
     /// Discards any builtins previously configured via [`add_builtins`] and [`add_src_builtins`].
     /// If either of those methods is called on the evaluation builder after this one, they will
     /// panic.
+    #[must_use]
     pub fn with_globals(self, globals: Rc<GlobalsMap>) -> Self {
         Self {
             globals: BuilderGlobals::Globals(globals),
@@ -241,6 +246,7 @@ impl<'co, 'ro, 'env, IO> EvaluationBuilder<'co, 'ro, 'env, IO> {
         }
     }
 
+    #[must_use]
     pub fn with_source_map(self, source_map: SourceCode) -> Self {
         debug_assert!(
             self.source_map.is_none(),
@@ -252,22 +258,27 @@ impl<'co, 'ro, 'env, IO> EvaluationBuilder<'co, 'ro, 'env, IO> {
         }
     }
 
+    #[must_use]
     pub fn with_strict(self, strict: bool) -> Self {
         Self { strict, ..self }
     }
 
+    #[must_use]
     pub fn strict(self) -> Self {
         self.with_strict(true)
     }
 
+    #[must_use]
     pub fn nix_path(self, nix_path: Option<String>) -> Self {
         Self { nix_path, ..self }
     }
 
+    #[must_use]
     pub fn env(self, env: Option<&'env FxHashMap<SmolStr, Value>>) -> Self {
         Self { env, ..self }
     }
 
+    #[must_use]
     pub fn compiler_observer(
         self,
         compiler_observer: Option<&'co mut dyn CompilerObserver>,
@@ -285,6 +296,7 @@ impl<'co, 'ro, 'env, IO> EvaluationBuilder<'co, 'ro, 'env, IO> {
         self.compiler_observer = compiler_observer;
     }
 
+    #[must_use]
     pub fn runtime_observer(self, runtime_observer: Option<&'ro mut dyn RuntimeObserver>) -> Self {
         Self {
             runtime_observer,
@@ -465,7 +477,7 @@ where
         parse_compile_internal(
             &mut result,
             code.as_ref(),
-            file,
+            &file,
             location,
             source,
             self.globals,
@@ -499,7 +511,7 @@ where
         let lambda = match parse_compile_internal(
             &mut result,
             code.as_ref(),
-            file.clone(),
+            &file,
             location,
             source.clone(),
             self.globals.clone(),
@@ -569,7 +581,7 @@ where
 fn parse_compile_internal(
     result: &mut EvaluationResult,
     code: &str,
-    file: Arc<codemap::File>,
+    file: &codemap::File,
     location: Option<PathBuf>,
     source: SourceCode,
     globals: Rc<GlobalsMap>,
@@ -599,7 +611,7 @@ fn parse_compile_internal(
         globals,
         env,
         &source,
-        &file,
+        file,
         compiler_observer,
     ) {
         Ok(result) => result,

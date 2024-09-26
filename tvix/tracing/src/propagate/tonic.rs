@@ -7,6 +7,7 @@ use tracing_opentelemetry::OpenTelemetrySpanExt;
 
 /// Trace context propagation: associate the current span with the otlp trace of the given request,
 /// if any and valid. This only sets the parent trace if the otlp feature is also enabled.
+#[cfg_attr(not(feature = "otlp"), allow(clippy::missing_const_for_fn))]
 pub fn accept_trace<B>(request: http::Request<B>) -> http::Request<B> {
     // we only extract and set a parent trace if otlp feature is enabled, otherwise this feature is
     // an noop and we return the request as is
@@ -44,7 +45,7 @@ impl Injector for MetadataInjector<'_> {
 
 /// Trace context propagation: send the trace context by injecting it into the metadata of the given
 /// request. This only injects the current span if the otlp feature is also enabled.
-#[allow(unused_mut)]
+#[cfg_attr(not(feature = "otlp"), allow(unused_mut, clippy::missing_const_for_fn))]
 pub fn send_trace<T>(mut request: tonic::Request<T>) -> Result<tonic::Request<T>, tonic::Status> {
     #[cfg(feature = "otlp")]
     {

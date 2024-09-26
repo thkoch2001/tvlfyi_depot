@@ -17,7 +17,7 @@ use tvix_castore::composition::{CompositionContext, ServiceBuilder};
 use tvix_castore::Error;
 
 /// There should not be more than 10 MiB in a single cell.
-/// https://cloud.google.com/bigtable/docs/schema-design#cells
+/// <https://cloud.google.com/bigtable/docs/schema-design#cells>
 const CELL_SIZE_LIMIT: u64 = 10 * 1024 * 1024;
 
 /// Provides a [`PathInfoService`] implementation using
@@ -151,48 +151,50 @@ fn derive_pathinfo_key(digest: &[u8; 20]) -> String {
 impl PathInfoService for BigtablePathInfoService {
     #[instrument(level = "trace", skip_all, fields(path_info.digest = nixbase32::encode(&digest)))]
     async fn get(&self, digest: [u8; 20]) -> Result<Option<PathInfo>, Error> {
-        let mut client = self.client.clone();
         let path_info_key = derive_pathinfo_key(&digest);
 
-        let request = bigtable_v2::ReadRowsRequest {
-            app_profile_id: self.params.app_profile_id.to_string(),
-            table_name: client.get_full_table_name(&self.params.table_name),
-            rows_limit: 1,
-            rows: Some(bigtable_v2::RowSet {
-                row_keys: vec![path_info_key.clone().into()],
-                row_ranges: vec![],
-            }),
-            // Filter selected family name, and column qualifier matching the digest.
-            // The latter is to ensure we don't fail once we start adding more metadata.
-            filter: Some(bigtable_v2::RowFilter {
-                filter: Some(bigtable_v2::row_filter::Filter::Chain(
-                    bigtable_v2::row_filter::Chain {
-                        filters: vec![
-                            bigtable_v2::RowFilter {
-                                filter: Some(
-                                    bigtable_v2::row_filter::Filter::FamilyNameRegexFilter(
-                                        self.params.family_name.to_string(),
+        let mut response = {
+            let mut client = self.client.clone();
+            let request = bigtable_v2::ReadRowsRequest {
+                app_profile_id: self.params.app_profile_id.to_string(),
+                table_name: client.get_full_table_name(&self.params.table_name),
+                rows_limit: 1,
+                rows: Some(bigtable_v2::RowSet {
+                    row_keys: vec![path_info_key.clone().into()],
+                    row_ranges: vec![],
+                }),
+                // Filter selected family name, and column qualifier matching the digest.
+                // The latter is to ensure we don't fail once we start adding more metadata.
+                filter: Some(bigtable_v2::RowFilter {
+                    filter: Some(bigtable_v2::row_filter::Filter::Chain(
+                        bigtable_v2::row_filter::Chain {
+                            filters: vec![
+                                bigtable_v2::RowFilter {
+                                    filter: Some(
+                                        bigtable_v2::row_filter::Filter::FamilyNameRegexFilter(
+                                            self.params.family_name.to_string(),
+                                        ),
                                     ),
-                                ),
-                            },
-                            bigtable_v2::RowFilter {
-                                filter: Some(
-                                    bigtable_v2::row_filter::Filter::ColumnQualifierRegexFilter(
-                                        path_info_key.clone().into(),
+                                },
+                                bigtable_v2::RowFilter {
+                                    filter: Some(
+                                        bigtable_v2::row_filter::Filter::ColumnQualifierRegexFilter(
+                                            path_info_key.clone().into(),
+                                        ),
                                     ),
-                                ),
-                            },
-                        ],
-                    },
-                )),
-            }),
-            ..Default::default()
-        };
+                                },
+                            ],
+                        },
+                    )),
+                }),
+                ..Default::default()
+            };
 
-        let mut response = client
-            .read_rows(request)
-            .await
-            .map_err(|e| Error::StorageError(format!("unable to read rows: {e}")))?;
+            client
+                .read_rows(request)
+                .await
+                .map_err(|e| Error::StorageError(format!("unable to read rows: {e}")))?
+        };
 
         if response.len() != 1 {
             if response.len() > 1 {
@@ -252,45 +254,46 @@ impl PathInfoService for BigtablePathInfoService {
             .validate()
             .map_err(|e| Error::InvalidRequest(format!("pathinfo failed validation: {e}")))?;
 
-        let mut client = self.client.clone();
-        let path_info_key = derive_pathinfo_key(store_path.digest());
+        let resp = {
+            let mut client = self.client.clone();
+            let path_info_key = derive_pathinfo_key(store_path.digest());
 
-        let data = path_info.encode_to_vec();
-        if data.len() as u64 > CELL_SIZE_LIMIT {
-            return Err(Error::StorageError(
-                "PathInfo exceeds cell limit on Bigtable".into(),
-            ));
-        }
-
-        let resp = client
-            .check_and_mutate_row(bigtable_v2::CheckAndMutateRowRequest {
-                table_name: client.get_full_table_name(&self.params.table_name),
-                app_profile_id: self.params.app_profile_id.to_string(),
-                row_key: path_info_key.clone().into(),
-                predicate_filter: Some(bigtable_v2::RowFilter {
-                    filter: Some(bigtable_v2::row_filter::Filter::ColumnQualifierRegexFilter(
-                        path_info_key.clone().into(),
-                    )),
-                }),
-                // If the column was already found, do nothing.
-                true_mutations: vec![],
-                // Else, do the insert.
-                false_mutations: vec![
-                    // https://cloud.google.com/bigtable/docs/writes
-                    bigtable_v2::Mutation {
-                        mutation: Some(bigtable_v2::mutation::Mutation::SetCell(
-                            bigtable_v2::mutation::SetCell {
-                                family_name: self.params.family_name.to_string(),
-                                column_qualifier: path_info_key.clone().into(),
-                                timestamp_micros: -1, // use server time to fill timestamp
-                                value: data,
-                            },
+            let data = path_info.encode_to_vec();
+            if data.len() as u64 > CELL_SIZE_LIMIT {
+                return Err(Error::StorageError(
+                    "PathInfo exceeds cell limit on Bigtable".into(),
+                ));
+            }
+            client
+                .check_and_mutate_row(bigtable_v2::CheckAndMutateRowRequest {
+                    table_name: client.get_full_table_name(&self.params.table_name),
+                    app_profile_id: self.params.app_profile_id.to_string(),
+                    row_key: path_info_key.clone().into(),
+                    predicate_filter: Some(bigtable_v2::RowFilter {
+                        filter: Some(bigtable_v2::row_filter::Filter::ColumnQualifierRegexFilter(
+                            path_info_key.clone().into(),
                         )),
-                    },
-                ],
-            })
-            .await
-            .map_err(|e| Error::StorageError(format!("unable to mutate rows: {e}")))?;
+                    }),
+                    // If the column was already found, do nothing.
+                    true_mutations: vec![],
+                    // Else, do the insert.
+                    false_mutations: vec![
+                        // https://cloud.google.com/bigtable/docs/writes
+                        bigtable_v2::Mutation {
+                            mutation: Some(bigtable_v2::mutation::Mutation::SetCell(
+                                bigtable_v2::mutation::SetCell {
+                                    family_name: self.params.family_name.to_string(),
+                                    column_qualifier: path_info_key.clone().into(),
+                                    timestamp_micros: -1, // use server time to fill timestamp
+                                    value: data,
+                                },
+                            )),
+                        },
+                    ],
+                })
+                .await
+                .map_err(|e| Error::StorageError(format!("unable to mutate rows: {e}")))?
+        };
 
         if resp.predicate_matched {
             trace!("already existed");
@@ -299,6 +302,7 @@ impl PathInfoService for BigtablePathInfoService {
         Ok(path_info)
     }
 
+    #[allow(clippy::significant_drop_tightening)]
     fn list(&self) -> BoxStream<'static, Result<PathInfo, Error>> {
         let mut client = self.client.clone();
 
@@ -408,11 +412,14 @@ fn default_app_profile_id() -> String {
     "default".to_owned()
 }
 
-fn default_channel_size() -> usize {
+// TODO: change to a const
+const fn default_channel_size() -> usize {
     4
 }
 
-fn default_timeout() -> Option<std::time::Duration> {
+// TODO: change to a constant
+#[allow(clippy::unnecessary_wraps)]
+const fn default_timeout() -> Option<std::time::Duration> {
     Some(std::time::Duration::from_secs(4))
 }
 

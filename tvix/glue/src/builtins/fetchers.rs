@@ -27,6 +27,8 @@ async fn extract_fetch_args(
     co: &GenCo,
     args: Value,
 ) -> Result<Result<NixFetchArgs, CatchableErrorKind>, ErrorKind> {
+    const VALID_KEYS: [&[u8]; 3] = [b"url", b"name", b"sha256"];
+
     if let Ok(url_str) = args.to_str() {
         // Get the raw bytes, not the ToString repr.
         let url_str =
@@ -62,7 +64,6 @@ async fn extract_fetch_args(
 
     // Disallow other attrset keys, to match Nix' behaviour.
     // We complain about the first unexpected key we find in the list.
-    const VALID_KEYS: [&[u8]; 3] = [b"url", b"name", b"sha256"];
     if let Some(first_invalid_key) = attrs.keys().find(|k| !&VALID_KEYS.contains(&k.as_bytes())) {
         return Err(ErrorKind::UnexpectedArgumentBuiltin(
             first_invalid_key.clone(),
@@ -101,36 +102,33 @@ pub mod fetcher_builtins {
     /// queue the fetch to be fetched lazily, and return the store path.
     /// If there's not enough info to calculate it, do the fetch now, and then
     /// return the store path.
-    fn fetch_lazy(state: Rc<TvixStoreIO>, name: String, fetch: Fetch) -> Result<Value, ErrorKind> {
-        match fetch
-            .store_path(&name)
+    fn fetch_lazy(state: &TvixStoreIO, name: &str, fetch: Fetch) -> Result<Value, ErrorKind> {
+        if let Some(store_path) = fetch
+            .store_path(name)
             .map_err(|e| ErrorKind::TvixError(Rc::new(e)))?
         {
-            Some(store_path) => {
-                // Move the fetch to KnownPaths, so it can be actually fetched later.
-                let sp = state
-                    .known_paths
-                    .borrow_mut()
-                    .add_fetch(fetch, &name)
-                    .expect("Tvix bug: should only fail if the store path cannot be calculated");
+            // Move the fetch to KnownPaths, so it can be actually fetched later.
+            let sp = state
+                .known_paths
+                .borrow_mut()
+                .add_fetch(fetch, name)
+                .expect("Tvix bug: should only fail if the store path cannot be calculated");
 
-                debug_assert_eq!(
-                    sp, store_path,
-                    "calculated store path by KnownPaths should match"
-                );
+            debug_assert_eq!(
+                sp, store_path,
+                "calculated store path by KnownPaths should match"
+            );
 
-                // Emit the calculated Store Path.
-                Ok(Value::Path(Box::new(store_path.to_absolute_path().into())))
-            }
-            None => {
-                // If we don't have enough info, do the fetch now.
-                let (store_path, _root_node) = state
-                    .tokio_handle
-                    .block_on(async { state.fetcher.ingest_and_persist(&name, fetch).await })
-                    .map_err(|e| ErrorKind::TvixError(Rc::new(e)))?;
+            // Emit the calculated Store Path.
+            Ok(Value::Path(Box::new(store_path.to_absolute_path().into())))
+        } else {
+            // If we don't have enough info, do the fetch now.
+            let (store_path, _root_node) = state
+                .tokio_handle
+                .block_on(async { state.fetcher.ingest_and_persist(name, fetch).await })
+                .map_err(|e| ErrorKind::TvixError(Rc::new(e)))?;
 
-                Ok(Value::Path(Box::new(store_path.to_absolute_path().into())))
-            }
+            Ok(Value::Path(Box::new(store_path.to_absolute_path().into())))
         }
     }
 
@@ -151,8 +149,8 @@ pub mod fetcher_builtins {
             .unwrap_or_else(|| url_basename(&args.url).to_owned());
 
         fetch_lazy(
-            state,
-            name,
+            &state,
+            &name,
             Fetch::URL {
                 url: args.url,
                 exp_hash: args.sha256.map(NixHash::Sha256),
@@ -166,20 +164,20 @@ pub mod fetcher_builtins {
         co: GenCo,
         args: Value,
     ) -> Result<Value, ErrorKind> {
+        // Name defaults to "source" if not set explicitly.
+        const DEFAULT_NAME_FETCH_TARBALL: &str = "source";
         let args = match extract_fetch_args(&co, args).await? {
             Ok(args) => args,
             Err(cek) => return Ok(Value::from(cek)),
         };
 
-        // Name defaults to "source" if not set explicitly.
-        const DEFAULT_NAME_FETCH_TARBALL: &str = "source";
         let name = args
             .name
             .unwrap_or_else(|| DEFAULT_NAME_FETCH_TARBALL.to_owned());
 
         fetch_lazy(
-            state,
-            name,
+            &state,
+            &name,
             Fetch::Tarball {
                 url: args.url,
                 exp_nar_sha256: args.sha256,

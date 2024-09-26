@@ -161,7 +161,7 @@ impl DirectoryService for RedbDirectoryService {
     fn put_multiple_start(&self) -> Box<dyn DirectoryPutter> {
         Box::new(RedbDirectoryPutter {
             db: self.db.clone(),
-            directory_validator: Some(Default::default()),
+            directory_validator: Some(DirectoryGraph::default()),
         })
     }
 }

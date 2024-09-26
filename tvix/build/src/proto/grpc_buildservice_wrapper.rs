@@ -11,7 +11,7 @@ pub struct GRPCBuildServiceWrapper<BUILD> {
 }
 
 impl<BUILD> GRPCBuildServiceWrapper<BUILD> {
-    pub fn new(build_service: BUILD) -> Self {
+    pub const fn new(build_service: BUILD) -> Self {
         Self {
             inner: build_service,
         }

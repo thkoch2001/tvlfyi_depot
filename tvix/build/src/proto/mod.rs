@@ -7,7 +7,11 @@ mod grpc_buildservice_wrapper;
 
 pub use grpc_buildservice_wrapper::GRPCBuildServiceWrapper;
 
-tonic::include_proto!("tvix.build.v1");
+#[allow(clippy::pedantic, clippy::nursery)]
+mod pb {
+    tonic::include_proto!("tvix.build.v1");
+}
+pub use pb::*;
 
 #[cfg(feature = "tonic-reflection")]
 /// Compiled file descriptors for implementing [gRPC
@@ -71,10 +75,8 @@ fn is_clean_path<P: AsRef<Path>>(p: P) -> bool {
     let mut cleaned_p = PathBuf::new();
     for component in p.components() {
         match component {
-            std::path::Component::Prefix(_) => {}
-            std::path::Component::RootDir => {}
-            std::path::Component::CurDir => return false,
-            std::path::Component::ParentDir => return false,
+            std::path::Component::RootDir | std::path::Component::Prefix(_) => {}
+            std::path::Component::CurDir | std::path::Component::ParentDir => return false,
             std::path::Component::Normal(a) => {
                 if a.is_empty() {
                     return false;
@@ -135,9 +137,8 @@ impl BuildRequest {
 
             if name.as_ref() <= last_name.as_ref() {
                 return Err(ValidateBuildRequestError::InputNodesNotSorted);
-            } else {
-                last_name = name.into();
             }
+            last_name = name.into();
         }
 
         // validate working_dir

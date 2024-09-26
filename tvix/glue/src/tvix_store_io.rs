@@ -91,7 +91,7 @@ impl TvixStoreIO {
                 path_info_service,
                 nar_calculation_service,
             ),
-            known_paths: Default::default(),
+            known_paths: RefCell::default(),
         }
     }
 
@@ -113,7 +113,7 @@ impl TvixStoreIO {
         // produced that would build it, fall back to triggering the build.
         // To populate the input nodes, it might recursively trigger builds of
         // its dependencies too.
-        let root_node = match self
+        let root_node = if let Some(path_info) = self
             .path_info_service
             .as_ref()
             .get(*store_path.digest())
@@ -121,21 +121,20 @@ impl TvixStoreIO {
         {
             // if we have a PathInfo, we know there will be a root_node (due to validation)
             // TODO: use stricter typed BuildRequest here.
-            Some(path_info) => {
-                let (name, node) = path_info
-                    .node
-                    .expect("no node")
-                    .into_name_and_node()
-                    .expect("invalid node");
+            let (name, node) = path_info
+                .node
+                .expect("no node")
+                .into_name_and_node()
+                .expect("invalid node");
 
-                assert_eq!(
-                    store_path.to_string().as_bytes(),
-                    name.as_ref(),
-                    "returned node basename must match requested store path"
-                );
+            assert_eq!(
+                store_path.to_string().as_bytes(),
+                name.as_ref(),
+                "returned node basename must match requested store path"
+            );
 
-                node
-            }
+            node
+        } else {
             // If there's no PathInfo found, this normally means we have to
             // trigger the build (and insert into PathInfoService, after
             // reference scanning).
@@ -145,219 +144,198 @@ impl TvixStoreIO {
             // that evaluation clearly is an impurity, we still need to support
             // it for things like <nixpkgs> pointing to a store path.
             // In the future, these things will (need to) have PathInfo.
-            None => {
-                // The store path doesn't exist yet, so we need to fetch or build it.
-                // We check for fetches first, as we might have both native
-                // fetchers and FODs in KnownPaths, and prefer the former.
-                // This will also find [Fetch] synthesized from
-                // `builtin:fetchurl` Derivations.
-                let maybe_fetch = self
-                    .known_paths
-                    .borrow()
-                    .get_fetch_for_output_path(store_path);
+            // The store path doesn't exist yet, so we need to fetch or build it.
+            // We check for fetches first, as we might have both native
+            // fetchers and FODs in KnownPaths, and prefer the former.
+            // This will also find [Fetch] synthesized from
+            // `builtin:fetchurl` Derivations.
+            let maybe_fetch = self
+                .known_paths
+                .borrow()
+                .get_fetch_for_output_path(store_path);
 
-                match maybe_fetch {
-                    Some((name, fetch)) => {
-                        let (sp, root_node) = self
-                            .fetcher
-                            .ingest_and_persist(&name, fetch)
-                            .await
-                            .map_err(|e| {
-                            std::io::Error::new(std::io::ErrorKind::InvalidData, e)
-                        })?;
+            if let Some((name, fetch)) = maybe_fetch {
+                let (sp, root_node) = self
+                    .fetcher
+                    .ingest_and_persist(&name, fetch)
+                    .await
+                    .map_err(|e| std::io::Error::new(std::io::ErrorKind::InvalidData, e))?;
 
-                        debug_assert_eq!(
-                            sp.to_absolute_path(),
-                            store_path.as_ref().to_absolute_path(),
-                            "store path returned from fetcher must match store path we have in fetchers"
-                        );
+                debug_assert_eq!(
+                    sp.to_absolute_path(),
+                    store_path.as_ref().to_absolute_path(),
+                    "store path returned from fetcher must match store path we have in fetchers"
+                );
 
-                        root_node
-                    }
-                    None => {
-                        // Look up the derivation for this output path.
-                        let (drv_path, drv) = {
-                            let known_paths = self.known_paths.borrow();
-                            match known_paths.get_drv_path_for_output_path(store_path) {
-                                Some(drv_path) => (
-                                    drv_path.to_owned(),
-                                    known_paths.get_drv_by_drvpath(drv_path).unwrap().to_owned(),
-                                ),
-                                None => {
-                                    warn!(store_path=%store_path, "no drv found");
-                                    // let StdIO take over
-                                    return Ok(None);
-                                }
-                            }
-                        };
-                        let span = Span::current();
-                        span.pb_start();
-                        span.pb_set_style(&tvix_tracing::PB_SPINNER_STYLE);
-                        span.pb_set_message(&format!("⏳Waiting for inputs {}", &store_path));
+                root_node
+            } else {
+                // Look up the derivation for this output path.
+                let (drv_path, drv) = {
+                    let known_paths = self.known_paths.borrow();
 
-                        // derivation_to_build_request needs castore nodes for all inputs.
-                        // Provide them, which means, here is where we recursively build
-                        // all dependencies.
-                        let mut inputs: BTreeMap<Bytes, Node> =
-                            futures::stream::iter(drv.input_derivations.iter())
-                                .map(|(input_drv_path, output_names)| {
-                                    // look up the derivation object
-                                    let input_drv = {
-                                        let known_paths = self.known_paths.borrow();
-                                        known_paths
-                                            .get_drv_by_drvpath(input_drv_path)
-                                            .unwrap_or_else(|| panic!("{input_drv_path} not found"))
-                                            .to_owned()
-                                    };
+                    let Some(drv_path) = known_paths.get_drv_path_for_output_path(store_path)
+                    else {
+                        warn!(store_path=%store_path, "no drv found");
+                        // let StdIO take over
+                        return Ok(None);
+                    };
+                    (
+                        drv_path.to_owned(),
+                        known_paths.get_drv_by_drvpath(drv_path).unwrap().to_owned(),
+                    )
+                };
+                let span = Span::current();
+                span.pb_start();
+                span.pb_set_style(&tvix_tracing::PB_SPINNER_STYLE);
+                span.pb_set_message(&format!("⏳Waiting for inputs {}", &store_path));
 
-                                    // convert output names to actual paths
-                                    let output_paths: Vec<StorePath<String>> = output_names
-                                        .iter()
-                                        .map(|output_name| {
-                                            input_drv
-                                                .outputs
-                                                .get(output_name)
-                                                .expect("missing output_name")
-                                                .path
-                                                .as_ref()
-                                                .expect("missing output path")
-                                                .clone()
-                                        })
-                                        .collect();
-
-                                    // For each output, ask for the castore node.
-                                    // We're in a per-derivation context, so if they're
-                                    // not built yet they'll all get built together.
-                                    // If they don't need to build, we can however still
-                                    // substitute all in parallel (if they don't need to
-                                    // be built) - so we turn this into a stream of streams.
-                                    // It's up to the builder to deduplicate same build requests.
-                                    futures::stream::iter(output_paths.into_iter()).map(
-                                        |output_path| async move {
-                                            let node = self
-                                                .store_path_to_node(&output_path, Path::new(""))
-                                                .await?;
-
-                                            if let Some(node) = node {
-                                                Ok((output_path.to_string().into(), node))
-                                            } else {
-                                                Err(io::Error::other("no node produced"))
-                                            }
-                                        },
-                                    )
-                                })
-                                .flatten()
-                                .buffer_unordered(
-                                    1, /* TODO: increase again once we prevent redundant fetches */
-                                ) // TODO: make configurable
-                                .try_collect()
-                                .await?;
-
-                        // FUTUREWORK: merge these who things together
-                        // add input sources
-                        let input_sources: BTreeMap<_, _> =
-                            futures::stream::iter(drv.input_sources.iter())
-                                .then(|input_source| {
-                                    Box::pin({
-                                        let input_source = input_source.clone();
-                                        async move {
-                                            let node = self
-                                                .store_path_to_node(&input_source, Path::new(""))
-                                                .await?;
-                                            if let Some(node) = node {
-                                                Ok((input_source.to_string().into(), node))
-                                            } else {
-                                                Err(io::Error::other("no node produced"))
-                                            }
-                                        }
-                                    })
-                                })
-                                .try_collect()
-                                .await?;
-
-                        inputs.extend(input_sources);
-
-                        span.pb_set_message(&format!("🔨Building {}", &store_path));
-
-                        // TODO: check if input sources are sufficiently dealth with,
-                        // I think yes, they must be imported into the store by other
-                        // operations, so dealt with in the Some(…) match arm
-
-                        // synthesize the build request.
-                        let build_request = derivation_to_build_request(&drv, inputs)?;
-
-                        // create a build
-                        let build_result = self
-                            .build_service
-                            .as_ref()
-                            .do_build(build_request)
-                            .await
-                            .map_err(|e| std::io::Error::new(io::ErrorKind::Other, e))?;
-
-                        // TODO: refscan
-
-                        // For each output, insert a PathInfo.
-                        for output in &build_result.outputs {
-                            let (output_name, output_node) =
-                                output.clone().into_name_and_node().expect("invalid node");
-
-                            // calculate the nar representation
-                            let (nar_size, nar_sha256) = self
-                                .nar_calculation_service
-                                .calculate_nar(&output_node)
-                                .await?;
-
-                            // assemble the PathInfo to persist
-                            let path_info = PathInfo {
-                                node: Some(tvix_castore::proto::Node::from_name_and_node(
-                                    output_name.into(),
-                                    output_node,
-                                )),
-                                references: vec![], // TODO: refscan
-                                narinfo: Some(tvix_store::proto::NarInfo {
-                                    nar_size,
-                                    nar_sha256: Bytes::from(nar_sha256.to_vec()),
-                                    signatures: vec![],
-                                    reference_names: vec![], // TODO: refscan
-                                    deriver: Some(tvix_store::proto::StorePath {
-                                        name: drv_path
-                                            .name()
-                                            .strip_suffix(".drv")
-                                            .expect("missing .drv suffix")
-                                            .to_string(),
-                                        digest: drv_path.digest().to_vec().into(),
-                                    }),
-                                    ca: drv.fod_digest().map(
-                                        |fod_digest| -> tvix_store::proto::nar_info::Ca {
-                                            (&CAHash::Nar(nix_compat::nixhash::NixHash::Sha256(
-                                                fod_digest,
-                                            )))
-                                                .into()
-                                        },
-                                    ),
-                                }),
+                // derivation_to_build_request needs castore nodes for all inputs.
+                // Provide them, which means, here is where we recursively build
+                // all dependencies.
+                let mut inputs: BTreeMap<Bytes, Node> =
+                    futures::stream::iter(drv.input_derivations.iter())
+                        .map(|(input_drv_path, output_names)| {
+                            // look up the derivation object
+                            let input_drv = {
+                                let known_paths = self.known_paths.borrow();
+                                known_paths
+                                    .get_drv_by_drvpath(input_drv_path)
+                                    .unwrap_or_else(|| panic!("{input_drv_path} not found"))
+                                    .to_owned()
                             };
 
-                            self.path_info_service
-                                .put(path_info)
-                                .await
-                                .map_err(|e| std::io::Error::new(io::ErrorKind::Other, e))?;
-                        }
+                            // convert output names to actual paths
+                            let output_paths: Vec<StorePath<String>> = output_names
+                                .iter()
+                                .map(|output_name| {
+                                    input_drv
+                                        .outputs
+                                        .get(output_name)
+                                        .expect("missing output_name")
+                                        .path
+                                        .as_ref()
+                                        .expect("missing output path")
+                                        .clone()
+                                })
+                                .collect(); // TODO: maybe remove this collect?
 
-                        // find the output for the store path requested
-                        let s = store_path.to_string();
+                            // For each output, ask for the castore node.
+                            // We're in a per-derivation context, so if they're
+                            // not built yet they'll all get built together.
+                            // If they don't need to build, we can however still
+                            // substitute all in parallel (if they don't need to
+                            // be built) - so we turn this into a stream of streams.
+                            // It's up to the builder to deduplicate same build requests.
+                            futures::stream::iter(output_paths).map(|output_path| async move {
+                                let node =
+                                    self.store_path_to_node(&output_path, Path::new("")).await?;
 
-                        build_result
-                            .outputs
-                            .into_iter()
-                            .map(|e| e.into_name_and_node().expect("invalid node"))
-                            .find(|(output_name, _output_node)| {
-                                output_name.as_ref() == s.as_bytes()
+                                node.ok_or_else(|| io::Error::other("no node produced"))
+                                    .map(|node| (output_path.to_string().into(), node))
                             })
-                            .expect("build didn't produce the store path")
-                            .1
-                    }
+                        })
+                        .flatten()
+                        .buffer_unordered(
+                            1, /* TODO: increase again once we prevent redundant fetches */
+                        ) // TODO: make configurable
+                        .try_collect()
+                        .await?;
+
+                // FUTUREWORK: merge these who things together
+                // add input sources
+                let input_sources: BTreeMap<_, _> = futures::stream::iter(drv.input_sources.iter())
+                    .then(|input_source| {
+                        Box::pin({
+                            let input_source = input_source.clone();
+                            async move {
+                                let node = self
+                                    .store_path_to_node(&input_source, Path::new(""))
+                                    .await?;
+                                node.ok_or_else(|| io::Error::other("no node produced"))
+                                    .map(|node| (input_source.to_string().into(), node))
+                            }
+                        })
+                    })
+                    .try_collect()
+                    .await?;
+
+                inputs.extend(input_sources);
+
+                span.pb_set_message(&format!("🔨Building {}", &store_path));
+
+                // TODO: check if input sources are sufficiently dealth with,
+                // I think yes, they must be imported into the store by other
+                // operations, so dealt with in the Some(…) match arm
+
+                // synthesize the build request.
+                let build_request = derivation_to_build_request(&drv, inputs)?;
+
+                // create a build
+                let build_result = self
+                    .build_service
+                    .as_ref()
+                    .do_build(build_request)
+                    .await
+                    .map_err(|e| std::io::Error::new(io::ErrorKind::Other, e))?;
+
+                // TODO: refscan
+
+                // For each output, insert a PathInfo.
+                for output in &build_result.outputs {
+                    let (output_name, output_node) =
+                        output.clone().into_name_and_node().expect("invalid node");
+
+                    // calculate the nar representation
+                    let (nar_size, nar_sha256) = self
+                        .nar_calculation_service
+                        .calculate_nar(&output_node)
+                        .await?;
+
+                    // assemble the PathInfo to persist
+                    let path_info = PathInfo {
+                        node: Some(tvix_castore::proto::Node::from_name_and_node(
+                            output_name.into(),
+                            output_node,
+                        )),
+                        references: vec![], // TODO: refscan
+                        narinfo: Some(tvix_store::proto::NarInfo {
+                            nar_size,
+                            nar_sha256: Bytes::from(nar_sha256.to_vec()),
+                            signatures: vec![],
+                            reference_names: vec![], // TODO: refscan
+                            deriver: Some(tvix_store::proto::StorePath {
+                                name: drv_path
+                                    .name()
+                                    .strip_suffix(".drv")
+                                    .expect("missing .drv suffix")
+                                    .to_string(),
+                                digest: drv_path.digest().to_vec().into(),
+                            }),
+                            ca: drv.fod_digest().map(
+                                |fod_digest| -> tvix_store::proto::nar_info::Ca {
+                                    (&CAHash::Nar(nix_compat::nixhash::NixHash::Sha256(fod_digest)))
+                                        .into()
+                                },
+                            ),
+                        }),
+                    };
+
+                    self.path_info_service
+                        .put(path_info)
+                        .await
+                        .map_err(|e| std::io::Error::new(io::ErrorKind::Other, e))?;
                 }
+
+                // find the output for the store path requested
+                let s = store_path.to_string();
+
+                build_result
+                    .outputs
+                    .into_iter()
+                    .map(|e| e.into_name_and_node().expect("invalid node"))
+                    .find(|(output_name, _output_node)| output_name.as_ref() == s.as_bytes())
+                    .expect("build didn't produce the store path")
+                    .1
             }
         };
 
@@ -476,28 +454,22 @@ impl EvalIO for TvixStoreIO {
                             format!("tried to open directory at {path:?}"),
                         ))
                     }
-                    Node::File { digest, .. } => {
-                        self.tokio_handle.block_on(async {
-                            let resp = self.blob_service.as_ref().open_read(&digest).await?;
-                            match resp {
-                                Some(blob_reader) => {
-                                    // The VM Response needs a sync [std::io::Reader].
-                                    Ok(Box::new(SyncIoBridge::new(blob_reader))
-                                        as Box<dyn io::Read>)
-                                }
-                                None => {
-                                    error!(
-                                        blob.digest = %digest,
-                                        "blob not found",
-                                    );
-                                    Err(io::Error::new(
-                                        io::ErrorKind::NotFound,
-                                        format!("blob {} not found", &digest),
-                                    ))
-                                }
-                            }
+                    Node::File { digest, .. } => self.tokio_handle.block_on(async {
+                        let resp = self.blob_service.as_ref().open_read(&digest).await?;
+                        resp.map(|blob_reader| {
+                            Box::new(SyncIoBridge::new(blob_reader)) as Box<dyn io::Read>
                         })
-                    }
+                        .ok_or_else(|| {
+                            error!(
+                                blob.digest = %digest,
+                                "blob not found",
+                            );
+                            io::Error::new(
+                                io::ErrorKind::NotFound,
+                                format!("blob {} not found", &digest),
+                            )
+                        })
+                    }),
                     Node::Symlink { .. } => Err(io::Error::new(
                         io::ErrorKind::Unsupported,
                         "open for symlinks is unsupported",
@@ -519,18 +491,16 @@ impl EvalIO for TvixStoreIO {
         if let Ok((store_path, sub_path)) =
             StorePath::from_absolute_path_full(&path.to_string_lossy())
         {
-            if let Some(node) = self
+            (self
                 .tokio_handle
-                .block_on(async { self.store_path_to_node(&store_path, sub_path).await })?
-            {
-                match node {
-                    Node::Directory { .. } => Ok(FileType::Directory),
-                    Node::File { .. } => Ok(FileType::Regular),
-                    Node::Symlink { .. } => Ok(FileType::Symlink),
-                }
-            } else {
-                self.std_io.file_type(path)
-            }
+                .block_on(async { self.store_path_to_node(&store_path, sub_path).await })?)
+            .map(|node| match node {
+                Node::Directory { .. } => FileType::Directory,
+                Node::File { .. } => FileType::Regular,
+                Node::Symlink { .. } => FileType::Symlink,
+            })
+            .ok_or(())
+            .or_else(|()| self.std_io.file_type(path))
         } else {
             self.std_io.file_type(path)
         }

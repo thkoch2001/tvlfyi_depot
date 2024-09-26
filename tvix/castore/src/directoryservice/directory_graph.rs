@@ -102,8 +102,8 @@ impl DirectoryGraph<RootToLeavesValidator> {
     /// If the user is parsing directories from canonical protobuf encoding, she can
     /// call `digest_allowed` _before_ parsing the protobuf record and then add it
     /// with `add_unchecked`.
-    pub fn digest_allowed(&self, digest: B3Digest) -> bool {
-        self.order_validator.digest_allowed(&digest)
+    pub fn digest_allowed(&self, digest: &B3Digest) -> bool {
+        self.order_validator.digest_allowed(digest)
     }
 
     /// Insert a new Directory into the closure
@@ -122,8 +122,8 @@ impl<O: OrderValidator> DirectoryGraph<O> {
     /// Customize the ordering, i.e. for pre-setting the root of the `RootToLeavesValidator`
     pub fn with_order(order_validator: O) -> Self {
         Self {
-            graph: Default::default(),
-            digest_to_node_ix: Default::default(),
+            graph: petgraph::Graph::default(),
+            digest_to_node_ix: HashMap::default(),
             order_validator,
         }
     }
@@ -180,7 +180,6 @@ impl<O: OrderValidator> DirectoryGraph<O> {
             .edges_directed(ix, Direction::Incoming)
             .map(|edge_ref| edge_ref.id())
             .collect::<Vec<_>>()
-            
         {
             let edge_weight = self
                 .graph
@@ -336,9 +335,8 @@ mod tests {
                 // We don't really care anymore what finalize() would return, as
                 // the add() failed.
                 return;
-            } else {
-                assert!(resp.is_ok(), "expect put to succeed");
             }
+            assert!(resp.is_ok(), "expect put to succeed");
         }
 
         // everything was uploaded successfully. Test finalize().
@@ -349,7 +347,7 @@ mod tests {
         match exp_finalize {
             Some(directories) => {
                 assert_eq!(
-                    Vec::from_iter(directories.iter().map(|e| (*e).to_owned())),
+                    directories.into_iter().cloned().collect::<Vec<_>>(),
                     resp.expect("drain should succeed")
                 );
             }
@@ -390,9 +388,8 @@ mod tests {
                 // We don't really care anymore what finalize() would return, as
                 // the add() failed.
                 return;
-            } else {
-                assert!(resp.is_ok(), "expect put to succeed");
             }
+            assert!(resp.is_ok(), "expect put to succeed");
         }
 
         // everything was uploaded successfully. Test finalize().
@@ -403,7 +400,7 @@ mod tests {
         match exp_finalize {
             Some(directories) => {
                 assert_eq!(
-                    Vec::from_iter(directories.iter().map(|e| (*e).to_owned())),
+                    directories.into_iter().cloned().collect::<Vec<_>>(),
                     resp.expect("drain should succeed")
                 );
             }

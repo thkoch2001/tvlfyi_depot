@@ -1,4 +1,4 @@
-use std::{rc::Rc, sync::Arc};
+use std::{path::Path, rc::Rc, sync::Arc};
 
 use clap::Parser;
 use pretty_assertions::assert_eq;
@@ -16,7 +16,7 @@ use crate::{
     tvix_store_io::TvixStoreIO,
 };
 
-fn eval_test(code_path: PathBuf, expect_success: bool) {
+fn eval_test(code_path: &Path, expect_success: bool) {
     assert_eq!(
         code_path.extension().unwrap(),
         "nix",
@@ -25,7 +25,7 @@ fn eval_test(code_path: PathBuf, expect_success: bool) {
     let exp_path = code_path.with_extension("exp");
     let exp_xml_path = code_path.with_extension("exp.xml");
 
-    let code = std::fs::read_to_string(&code_path).expect("should be able to read test code");
+    let code = std::fs::read_to_string(code_path).expect("should be able to read test code");
 
     if exp_xml_path.exists() {
         // We can't test them at the moment because we don't have XML output yet.
@@ -63,7 +63,7 @@ fn eval_test(code_path: PathBuf, expect_success: bool) {
 
     let eval = eval_builder.build();
 
-    let result = eval.evaluate(code, Some(code_path.clone()));
+    let result = eval.evaluate(code, Some(code_path.to_owned()));
     let failed = match result.value {
         Some(Value::Catchable(_)) => true,
         _ => !result.errors.is_empty(),
@@ -119,14 +119,14 @@ fn eval_test(code_path: PathBuf, expect_success: bool) {
 // are guaranteed to be valid Nix code.
 #[rstest]
 fn eval_okay(#[files("src/tests/tvix_tests/eval-okay-*.nix")] code_path: PathBuf) {
-    eval_test(code_path, true);
+    eval_test(&code_path, true);
 }
 
 // eval-okay-* tests from the original Nix test suite.
 #[cfg(feature = "nix_tests")]
 #[rstest]
 fn nix_eval_okay(#[files("src/tests/nix_tests/eval-okay-*.nix")] code_path: PathBuf) {
-    eval_test(code_path, true);
+    eval_test(&code_path, true);
 }
 
 // eval-okay-* tests from the original Nix test suite which do not yet pass for tvix
@@ -155,5 +155,5 @@ fn nix_eval_okay(#[files("src/tests/nix_tests/eval-okay-*.nix")] code_path: Path
 // (assertion, parse error, etc) is not currently checked.
 #[rstest]
 fn eval_fail(#[files("src/tests/tvix_tests/eval-fail-*.nix")] code_path: PathBuf) {
-    eval_test(code_path, false);
+    eval_test(&code_path, false);
 }

@@ -16,7 +16,12 @@ use bstr::{BString, ByteSlice, ByteVec};
 use codemap::Span;
 use rustc_hash::FxHashMap;
 use serde_json::json;
-use std::{cmp::Ordering, ops::DerefMut, path::PathBuf, rc::Rc};
+use std::{
+    cmp::Ordering,
+    ops::DerefMut,
+    path::{Path, PathBuf},
+    rc::Rc,
+};
 
 use crate::{
     arithmetic_op,
@@ -226,7 +231,7 @@ enum Frame {
 }
 
 impl Frame {
-    pub fn span(&self) -> Span {
+    pub const fn span(&self) -> Span {
         match self {
             Self::CallFrame { span, .. } | Self::Generator { span, .. } => *span,
         }
@@ -251,19 +256,13 @@ struct ImportCache(FxHashMap<PathBuf, Value>);
 /// like pointer equality and `builtins.trace`.
 impl ImportCache {
     fn get(&self, path: PathBuf) -> Option<&Value> {
-        let path = match std::fs::canonicalize(path.as_path()).map_err(ErrorKind::from) {
-            Ok(path) => path,
-            Err(_) => path,
-        };
+        let path = path.canonicalize().map_err(ErrorKind::from).unwrap_or(path);
         self.0.get(&path)
     }
 
     fn insert(&mut self, path: PathBuf, value: Value) -> Option<Value> {
         self.0.insert(
-            match std::fs::canonicalize(path.as_path()).map_err(ErrorKind::from) {
-                Ok(path) => path,
-                Err(_) => path,
-            },
+            path.canonicalize().map_err(ErrorKind::from).unwrap_or(path),
             value,
         )
     }
@@ -371,7 +370,7 @@ where
             stack: vec![],
             with_stack: vec![],
             warnings: vec![],
-            import_cache: Default::default(),
+            import_cache: ImportCache::default(),
             try_eval_frames: vec![],
         }
     }
@@ -502,9 +501,8 @@ where
 
                 Op::Force => {
                     if let Some(Value::Thunk(_)) = self.stack.last() {
-                        let thunk = match self.stack_pop() {
-                            Value::Thunk(t) => t,
-                            _ => unreachable!(),
+                        let Value::Thunk(thunk) = self.stack_pop() else {
+                            unreachable!()
                         };
 
                         let gen_span = frame.current_span();
@@ -653,10 +651,9 @@ where
                 Op::AttrsTrySelect => {
                     let key = self.stack_pop().to_str().with_span(&frame, self)?;
                     let value = match self.stack_pop() {
-                        Value::Attrs(attrs) => match attrs.select(&key) {
-                            Some(value) => value.clone(),
-                            None => Value::AttrNotFound,
-                        },
+                        Value::Attrs(attrs) => {
+                            attrs.select(&key).cloned().unwrap_or(Value::AttrNotFound)
+                        }
 
                         _ => Value::AttrNotFound,
                     };
@@ -1065,7 +1062,7 @@ where
     ///
     /// Due to this, once control flow exits this function, the generator will
     /// automatically be run by the VM.
-    fn call_builtin(&mut self, span: Span, mut builtin: Builtin) -> EvalResult<()> {
+    fn call_builtin(&mut self, span: Span, mut builtin: Builtin) {
         let builtin_name = builtin.name();
         self.observer.observe_enter_builtin(builtin_name);
 
@@ -1083,8 +1080,6 @@ where
                 state: GeneratorState::Running,
             }),
         }
-
-        Ok(())
     }
 
     fn call_value(
@@ -1094,7 +1089,10 @@ where
         callable: Value,
     ) -> EvalResult<()> {
         match callable {
-            Value::Builtin(builtin) => self.call_builtin(span, builtin),
+            Value::Builtin(builtin) => {
+                self.call_builtin(span, builtin);
+                Ok(())
+            }
             Value::Thunk(thunk) => self.call_value(span, parent, thunk.value().clone()),
 
             Value::Closure(closure) => {
@@ -1281,11 +1279,11 @@ async fn resolve_with(
 }
 
 // TODO(amjoseph): de-asyncify this
-async fn add_values(co: GenCo, a: Value, b: Value) -> Result<Value, ErrorKind> {
+async fn add_values(co: GenCo, lhs: Value, rhs: Value) -> Result<Value, ErrorKind> {
     // What we try to do is solely determined by the type of the first value!
-    let result = match (a, b) {
-        (Value::Path(p), v) => {
-            let mut path = p.into_os_string();
+    let result = match (lhs, rhs) {
+        (Value::Path(path), v) => {
+            let mut path = path.into_os_string();
             match generators::request_string_coerce(
                 &co,
                 v,
@@ -1308,13 +1306,13 @@ async fn add_values(co: GenCo, a: Value, b: Value) -> Result<Value, ErrorKind> {
             {
                 Ok(vs) => {
                     path.push(vs.to_os_str()?);
-                    crate::value::canon_path(PathBuf::from(path)).into()
+                    crate::value::canon_path(Path::new(&path)).into()
                 }
                 Err(c) => Value::Catchable(Box::new(c)),
             }
         }
-        (Value::String(s1), Value::String(s2)) => Value::String(s1.concat(&s2)),
-        (Value::String(s1), v) => generators::request_string_coerce(
+        (Value::String(lhs), Value::String(rhs)) => Value::String(lhs.concat(&rhs)),
+        (Value::String(str), v) => generators::request_string_coerce(
             &co,
             v,
             CoercionKind {
@@ -1324,32 +1322,31 @@ async fn add_values(co: GenCo, a: Value, b: Value) -> Result<Value, ErrorKind> {
             },
         )
         .await
-        .map(|s2| Value::String(s1.concat(&s2)))
+        .map(|rhs| Value::String(str.concat(&rhs)))
         .into(),
-        (a @ (Value::Integer(_) | Value::Float(_)), b) => arithmetic_op!(&a, &b, +)?,
-        (a, b) => {
-            let r1 = generators::request_string_coerce(
+        (num @ (Value::Integer(_) | Value::Float(_)), rhs) => arithmetic_op!(&num, &rhs, +)?,
+        (lhs, rhs) => {
+            let lhs = generators::request_string_coerce(
                 &co,
-                a,
+                lhs,
                 CoercionKind {
                     strong: false,
                     import_paths: false,
                 },
             )
             .await;
-            let r2 = generators::request_string_coerce(
+            let rhs = generators::request_string_coerce(
                 &co,
-                b,
+                rhs,
                 CoercionKind {
                     strong: false,
                     import_paths: false,
                 },
             )
             .await;
-            match (r1, r2) {
-                (Ok(s1), Ok(s2)) => Value::String(s1.concat(&s2)),
-                (Err(c), _) => return Ok(Value::from(c)),
-                (_, Err(c)) => return Ok(Value::from(c)),
+            match (lhs, rhs) {
+                (Ok(lhs), Ok(rhs)) => Value::String(lhs.concat(&rhs)),
+                (Err(c), _) | (_, Err(c)) => return Ok(Value::from(c)),
             }
         }
     };

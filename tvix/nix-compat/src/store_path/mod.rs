@@ -70,11 +70,11 @@ impl<S> StorePath<S>
 where
     S: std::cmp::Eq + Deref<Target = str>,
 {
-    pub fn digest(&self) -> &[u8; DIGEST_SIZE] {
+    pub const fn digest(&self) -> &[u8; DIGEST_SIZE] {
         &self.digest
     }
 
-    pub fn name(&self) -> &S {
+    pub const fn name(&self) -> &S {
         &self.name
     }
 
@@ -151,10 +151,9 @@ where
     where
         S: From<&'a str>,
     {
-        match s.strip_prefix(STORE_DIR_WITH_SLASH.as_bytes()) {
-            Some(s_stripped) => Self::from_bytes(s_stripped),
-            None => Err(Error::MissingStoreDir),
-        }
+        s.strip_prefix(STORE_DIR_WITH_SLASH.as_bytes())
+            .ok_or(Error::MissingStoreDir)
+            .and_then(|s_stripped| Self::from_bytes(s_stripped))
     }
 
     /// Decompose a string into a [`StorePath`] and a [`PathBuf`] containing the
@@ -404,8 +403,8 @@ mod tests {
     /// Nix 2.4 accidentally permitted this behaviour, but the revert came
     /// too late to beat Hyrum's law. It is now considered permissible.
     ///
-    /// https://github.com/NixOS/nix/pull/9095 (revert)
-    /// https://github.com/NixOS/nix/pull/9867 (revert-of-revert)
+    /// <https://github.com/NixOS/nix/pull/9095> (revert)
+    /// <https://github.com/NixOS/nix/pull/9867> (revert-of-revert)
     #[test]
     fn starts_with_dot() {
         StorePathRef::from_bytes(b"fli4bwscgna7lpm7v5xgnjxrxh0yc7ra-.gitignore")

@@ -257,7 +257,7 @@ pub fn with_registry<R>(reg: &'static Registry, f: impl FnOnce() -> R) -> R {
 lazy_static! {
     /// The provided registry of tvix_castore, with all builtin BlobStore/DirectoryStore implementations
     pub static ref REG: Registry = {
-        let mut reg = Default::default();
+        let mut reg = Registry::default();
         add_default_services(&mut reg);
         reg
     };
@@ -282,9 +282,10 @@ pub struct CompositionContext<'a> {
 }
 
 impl<'a> CompositionContext<'a> {
-    #[must_use]pub fn blank() -> Self {
+    #[must_use]
+    pub const fn blank() -> Self {
         Self {
-            stack: Default::default(),
+            stack: vec![],
             composition: None,
         }
     }
@@ -397,15 +398,15 @@ impl Composition {
         self.build_internal(vec![], entrypoint.to_string()).await
     }
 
+    #[allow(clippy::significant_drop_tightening)]
     fn build_internal<T: ?Sized + Send + Sync + 'static>(
         &self,
         stack: Vec<(TypeId, String)>,
         entrypoint: String,
     ) -> BoxFuture<'_, Result<Arc<T>, CompositionError>> {
         let mut stores = self.stores.lock().unwrap();
-        let entry = match stores.get_mut(&(TypeId::of::<T>(), entrypoint.clone())) {
-            Some(v) => v,
-            None => return Box::pin(futures::future::err(CompositionError::NotFound(entrypoint))),
+        let Some(entry) = stores.get_mut(&(TypeId::of::<T>(), entrypoint.clone())) else {
+            return Box::pin(futures::future::err(CompositionError::NotFound(entrypoint)));
         };
         // for lifetime reasons, we put a placeholder value in the hashmap while we figure out what
         // the new value should be. the Mutex stays locked the entire time, so nobody will ever see
@@ -453,8 +454,10 @@ impl Composition {
                 (InstantiationState::InProgress(recv.clone()), {
                     (async move {
                         loop {
-                            if let Some(v) =
-                                recv.borrow_and_update().as_ref().map(std::clone::Clone::clone)
+                            if let Some(v) = recv
+                                .borrow_and_update()
+                                .as_ref()
+                                .map(std::clone::Clone::clone)
                             {
                                 break v;
                             }
@@ -469,7 +472,7 @@ impl Composition {
         ret
     }
 
-    pub fn context(&self) -> CompositionContext {
+    pub const fn context(&self) -> CompositionContext {
         CompositionContext {
             stack: vec![],
             composition: Some(self),
@@ -533,7 +536,7 @@ mod test {
             .await
         {
             Err(CompositionError::Recursion(stack)) => {
-                assert_eq!(stack, vec!["default".to_string(), "other".to_string()])
+                assert_eq!(stack, vec!["default".to_string(), "other".to_string()]);
             }
             other => panic!("should have returned an error, returned: {:?}", other.err()),
         }

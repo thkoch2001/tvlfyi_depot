@@ -62,7 +62,7 @@ where
     W: AsyncWrite,
 {
     /// Constructs a new `BytesWriter`, using the underlying passed writer.
-    pub fn new(w: W, payload_len: u64) -> Self {
+    pub const fn new(w: W, payload_len: u64) -> Self {
         Self {
             inner: w,
             payload_len,
@@ -183,16 +183,15 @@ where
                     // Write remaining padding, if there is padding to write.
                     let total_padding_len = padding_len(*this.payload_len) as usize;
 
-                    if pos != total_padding_len {
-                        let bytes_written = ensure_nonzero_bytes_written(ready!(this
-                            .inner
-                            .as_mut()
-                            .poll_write(cx, &EMPTY_BYTES[pos..total_padding_len]))?)?;
-                        *this.state = BytesPacketPosition::Padding(pos + bytes_written);
-                    } else {
+                    if pos == total_padding_len {
                         // everything written, break
                         break;
                     }
+                    let bytes_written = ensure_nonzero_bytes_written(ready!(this
+                        .inner
+                        .as_mut()
+                        .poll_write(cx, &EMPTY_BYTES[pos..total_padding_len]))?)?;
+                    *this.state = BytesPacketPosition::Padding(pos + bytes_written);
                 }
             }
         }

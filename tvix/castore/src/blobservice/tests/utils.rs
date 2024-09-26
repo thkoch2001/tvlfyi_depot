@@ -5,9 +5,9 @@ use crate::{blobservice::GRPCBlobService, proto::blob_service_server::BlobServic
 use hyper_util::rt::TokioIo;
 use tonic::transport::{Endpoint, Server, Uri};
 
-/// Constructs and returns a gRPC BlobService.
-/// The server part is a [MemoryBlobService], exposed via the
-/// [GRPCBlobServiceWrapper], and connected through a DuplexStream
+/// Constructs and returns a gRPC `BlobService`.
+/// The server part is a [`MemoryBlobService`], exposed via the
+/// [`GRPCBlobServiceWrapper`], and connected through a `DuplexStream`
 pub async fn make_grpc_blob_service_client() -> Box<dyn BlobService> {
     let (left, right) = tokio::io::duplex(64);
 

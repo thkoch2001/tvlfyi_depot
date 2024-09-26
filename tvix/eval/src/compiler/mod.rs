@@ -58,7 +58,7 @@ impl LambdaCtx {
     fn new() -> Self {
         Self {
             lambda: Lambda::default(),
-            scope: Default::default(),
+            scope: Scope::default(),
             captures_with_stack: false,
         }
     }
@@ -99,16 +99,16 @@ enum TrackedFormal {
 }
 
 impl TrackedFormal {
-    fn pattern_entry(&self) -> &ast::PatEntry {
+    const fn pattern_entry(&self) -> &ast::PatEntry {
         match self {
-            Self::NoDefault { pattern_entry, .. } => pattern_entry,
-            Self::WithDefault { pattern_entry, .. } => pattern_entry,
+            Self::NoDefault { pattern_entry, .. } | Self::WithDefault { pattern_entry, .. } => {
+                pattern_entry
+            }
         }
     }
-    fn local_idx(&self) -> LocalIdx {
+    const fn local_idx(&self) -> LocalIdx {
         match self {
-            Self::NoDefault { local_idx, .. } => *local_idx,
-            Self::WithDefault { local_idx, .. } => *local_idx,
+            Self::NoDefault { local_idx, .. } | Self::WithDefault { local_idx, .. } => *local_idx,
         }
     }
 }
@@ -447,7 +447,7 @@ impl Compiler<'_, '_> {
 
         // TODO: Use https://github.com/rust-lang/rfcs/issues/2208
         // once it is available
-        let value = Value::Path(Box::new(crate::value::canon_path(path)));
+        let value = Value::Path(Box::new(crate::value::canon_path(&path)));
         self.emit_constant(value, node);
     }
 
@@ -458,7 +458,7 @@ impl Compiler<'_, '_> {
         &mut self,
         slot: LocalIdx,
         parent_node: &ast::Str,
-        parts: Vec<ast::InterpolPart<String>>,
+        parts: &[ast::InterpolPart<String>],
     ) {
         // The string parts are produced in literal order, however
         // they need to be reversed on the stack in order to
@@ -506,10 +506,10 @@ impl Compiler<'_, '_> {
         // value of the inner expression, so we need to wrap it in another thunk.
         if parts.len() != 1 || matches!(&parts[0], ast::InterpolPart::Interpolation(_)) {
             self.thunk(slot, node, move |c, s| {
-                c.compile_str_parts(s, node, parts);
+                c.compile_str_parts(s, node, &parts);
             });
         } else {
-            self.compile_str_parts(slot, node, parts);
+            self.compile_str_parts(slot, node, &parts);
         }
     }
 
@@ -675,12 +675,11 @@ impl Compiler<'_, '_> {
             // Start tracing new stack slots from the second list
             // element onwards. The first list element is located in
             // the stack slot of the list itself.
-            let item_slot = match count {
-                0 => slot,
-                _ => {
-                    let item_span = self.span_for(&item);
-                    self.scope_mut().declare_phantom(item_span, false)
-                }
+            let item_slot = if count == 0 {
+                slot
+            } else {
+                let item_span = self.span_for(&item);
+                self.scope_mut().declare_phantom(item_span, false)
             };
 
             count += 1;
@@ -780,7 +779,7 @@ impl Compiler<'_, '_> {
         let path = node.attrpath().unwrap();
 
         if node.or_token().is_some() {
-            return self.compile_select_or(slot, set, path, node.default_expr().unwrap());
+            return self.compile_select_or(slot, set, &path, node.default_expr().unwrap());
         }
 
         // Push the set onto the stack
@@ -835,11 +834,11 @@ impl Compiler<'_, '_> {
         &mut self,
         slot: LocalIdx,
         set: ast::Expr,
-        path: ast::Attrpath,
+        path: &ast::Attrpath,
         default: ast::Expr,
     ) {
         self.compile(slot, set);
-        if self.optimise_select(&path) {
+        if self.optimise_select(path) {
             return;
         }
 
@@ -853,7 +852,7 @@ impl Compiler<'_, '_> {
             self.push_u16(0);
         }
 
-        let final_jump = self.push_op(Op::Jump, &path);
+        let final_jump = self.push_op(Op::Jump, path);
         self.push_u16(0);
 
         for jump in jumps {
@@ -1297,12 +1296,7 @@ impl Compiler<'_, '_> {
         );
 
         if !is_suspended_thunk && !self.scope()[outer_slot].needs_finaliser {
-            if !self.scope()[outer_slot].must_thunk {
-                // The closure has upvalues, but is not recursive. Therefore no
-                // thunk is required, which saves us the overhead of
-                // Rc<RefCell<>>
-                self.chunk().code[code_idx.0] = Op::Closure as u8;
-            } else {
+            if self.scope()[outer_slot].must_thunk {
                 // This case occurs when a closure has upvalue-references to
                 // itself but does not need a finaliser. Since no OpFinalise
                 // will be emitted later on we synthesize one here. It is needed
@@ -1313,6 +1307,11 @@ impl Compiler<'_, '_> {
                     self.push_op(Op::Finalise, &self.span_for(node));
                     self.push_uvarint(self.scope().stack_index(outer_slot).0 as u64);
                 }
+            } else {
+                // The closure has upvalues, but is not recursive. Therefore no
+                // thunk is required, which saves us the overhead of
+                // Rc<RefCell<>>
+                self.chunk().code[code_idx.0] = Op::Closure as u8;
             }
         }
     }
@@ -1353,15 +1352,15 @@ impl Compiler<'_, '_> {
 
                     // If the target is not yet initialised, we need to defer
                     // the local access
-                    if !target.initialised {
-                        self.push_uvarint(Position::deferred_local(stack_idx).0);
-                        self.scope_mut().mark_needs_finaliser(slot);
-                    } else {
+                    if target.initialised {
                         // a self-reference
                         if slot == idx {
                             self.scope_mut().mark_must_thunk(slot);
                         }
                         self.push_uvarint(Position::stack_index(stack_idx).0);
+                    } else {
+                        self.push_uvarint(Position::deferred_local(stack_idx).0);
+                        self.scope_mut().mark_needs_finaliser(slot);
                     }
                 }
 
@@ -1418,7 +1417,7 @@ impl Compiler<'_, '_> {
     /// determine the stack offset of variables.
     fn declare_local<S: Into<String>, N: ToSpan>(&mut self, node: &N, name: S) -> LocalIdx {
         let name = name.into();
-        let depth = self.scope().scope_depth();
+        let depth = self.scope().depth();
 
         // Do this little dance to turn name:&'a str into the same
         // string with &'static lifetime, as required by WarningKind
@@ -1628,7 +1627,7 @@ pub fn prepare_globals(
         // in the global scope.
         globals.insert(
             "builtins",
-            Value::attrs(NixAttrs::from_iter(builtins.clone())),
+            Value::attrs(builtins.clone().into_iter().collect()),
         );
 
         // Finally, the builtins that should be globally available are
@@ -1652,7 +1651,7 @@ pub fn compile(
     file: &codemap::File,
     observer: &mut dyn CompilerObserver,
 ) -> EvalResult<CompilationOutput> {
-    let mut c = Compiler::new(location, globals.clone(), env, source, file, observer)?;
+    let mut c = Compiler::new(location, globals, env, source, file, observer)?;
 
     let root_span = c.span_for(expr);
     let root_slot = c.scope_mut().declare_phantom(root_span, false);

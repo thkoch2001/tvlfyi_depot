@@ -13,12 +13,12 @@ impl ProtocolVersion {
     }
 
     #[must_use]
-    pub fn major(&self) -> u8 {
+    pub const fn major(&self) -> u8 {
         ((self.0 & 0xff00) >> 8) as u8
     }
 
     #[must_use]
-    pub fn minor(&self) -> u8 {
+    pub const fn minor(&self) -> u8 {
         (self.0 & 0x00ff) as u8
     }
 }

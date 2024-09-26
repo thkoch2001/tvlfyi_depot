@@ -161,8 +161,8 @@ mod tests {
             if let Ok(v) = std::str::from_utf8(v) {
                 assert_eq!(
                     Err(SymlinkTargetError::Convert(
-                        exp_err_v.clone(),
-                        Box::new(err.clone())
+                        exp_err_v,
+                        Box::new(err)
                     )),
                     SymlinkTarget::try_from(v),
                     "conversion must fail as expected"
@@ -176,7 +176,7 @@ mod tests {
         assert_eq!(
             Err(SymlinkTargetError::TooLong),
             validate_symlink_target("X".repeat(5000).into_bytes().as_slice())
-        )
+        );
     }
 
     #[rstest]
@@ -197,7 +197,7 @@ mod tests {
                 Ok(exp.clone()),
                 SymlinkTarget::try_from(v),
                 "conversion must succeed"
-            )
+            );
         }
 
         // &[u8]
@@ -206,17 +206,17 @@ mod tests {
                 Ok(exp.clone()),
                 SymlinkTarget::try_from(v),
                 "conversion must succeed"
-            )
+            );
         }
 
         // &str, if this is valid UTF-8
         {
             if let Ok(v) = std::str::from_utf8(v) {
                 assert_eq!(
-                    Ok(exp.clone()),
+                    Ok(exp),
                     SymlinkTarget::try_from(v),
                     "conversion must succeed"
-                )
+                );
             }
         }
     }

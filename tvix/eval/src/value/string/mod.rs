@@ -102,19 +102,22 @@ impl NixStringInner {
             // layout of the len both have non-zero size
             let ptr = alloc(layout);
 
-            if let Some(this) = NonNull::new(ptr.cast::<c_void>()) {
-                // SAFETY: We've allocated with a layout that causes the len_offset to be in-bounds
-                // and writeable, and if the allocation succeeded it won't wrap
-                this.as_ptr()
-                    .cast::<u8>()
-                    .add(len_offset)
-                    .cast::<usize>()
-                    .write(len);
-                debug_assert_eq!(Self::len(this), len);
-                this
-            } else {
-                handle_alloc_error(layout);
-            }
+            NonNull::new(ptr.cast::<c_void>()).map_or_else(
+                || {
+                    handle_alloc_error(layout);
+                },
+                |this| {
+                    // SAFETY: We've allocated with a layout that causes the len_offset to be in-bounds
+                    // and writeable, and if the allocation succeeded it won't wrap
+                    this.as_ptr()
+                        .cast::<u8>()
+                        .add(len_offset)
+                        .cast::<usize>()
+                        .write(len);
+                    debug_assert_eq!(Self::len(this), len);
+                    this
+                },
+            )
         }
     }
 
@@ -150,7 +153,7 @@ impl NixStringInner {
     ///
     /// This function must only be called with a pointer that has been properly initialized with
     /// [`Self::alloc`]
-    unsafe fn context_ptr(this: NonNull<c_void>) -> *mut Option<Box<NixContext>> {
+    const unsafe fn context_ptr(this: NonNull<c_void>) -> *mut Option<Box<NixContext>> {
         // SAFETY: The context is the first field in the layout of the allocation
         this.as_ptr().cast::<Option<Box<NixContext>>>()
     }
@@ -240,13 +243,16 @@ impl NixStringInner {
     unsafe fn clone(this: NonNull<c_void>) -> NonNull<c_void> {
         let (layout, _, _) = Self::layout_of(this);
         let ptr = alloc(layout);
-        if let Some(new) = NonNull::new(ptr.cast()) {
-            ptr::copy_nonoverlapping(this.as_ptr(), new.as_ptr(), layout.size());
-            Self::context_ptr(new).write(Self::context_ref(this).clone());
-            new
-        } else {
-            handle_alloc_error(layout);
-        }
+        NonNull::new(ptr.cast()).map_or_else(
+            || {
+                handle_alloc_error(layout);
+            },
+            |new| {
+                ptr::copy_nonoverlapping(this.as_ptr(), new.as_ptr(), layout.size());
+                Self::context_ptr(new).write(Self::context_ref(this).clone());
+                new
+            },
+        )
     }
 }
 
@@ -311,7 +317,7 @@ thread_local! {
 /// represented as a single *thin* pointer to a packed data structure containing the
 /// [context][NixContext] and the string data itself (which is a raw byte array, to match the Nix
 /// string semantics that allow any array of bytes to be represented by a string).
-
+///
 /// This memory representation is documented in [`NixStringInner`], but since Rust prefers to deal
 /// with slices via *fat pointers* (pointers that include the length in the *pointer*, not in the
 /// heap allocation), we have to do mostly manual layout management and allocation for this
@@ -787,7 +793,7 @@ impl NixString {
     }
 }
 
-fn nix_escape_char(ch: char, next: Option<&char>) -> Option<&'static str> {
+const fn nix_escape_char(ch: char, next: Option<&char>) -> Option<&'static str> {
     match (ch, next) {
         ('\\', _) => Some("\\\\"),
         ('"', _) => Some("\\\""),

@@ -190,9 +190,8 @@ fn parse_input_sources(i: &[u8]) -> NomResult<&[u8], BTreeSet<StorePath<String>>
                 input: i,
                 code: ErrorKind::DuplicateInputSource(input_source.to_owned()),
             }));
-        } else {
-            input_sources.insert(input_source);
         }
+        input_sources.insert(input_source);
     }
 
     Ok((i, input_sources))

@@ -23,7 +23,7 @@ pub fn add_derivation_builtins<'co, 'ro, 'env, IO>(
     io: Rc<TvixStoreIO>,
 ) -> tvix_eval::EvaluationBuilder<'co, 'ro, 'env, IO> {
     eval_builder
-        .add_builtins(derivation::derivation_builtins::builtins(Rc::clone(&io)))
+        .add_builtins(derivation::derivation_builtins::builtins(io))
         // Add the actual `builtins.derivation` from compiled Nix code
         .add_src_builtin("derivation", include_str!("derivation.nix"))
 }
@@ -37,7 +37,7 @@ pub fn add_fetcher_builtins<'co, 'ro, 'env, IO>(
     eval_builder: tvix_eval::EvaluationBuilder<'co, 'ro, 'env, IO>,
     io: Rc<TvixStoreIO>,
 ) -> tvix_eval::EvaluationBuilder<'co, 'ro, 'env, IO> {
-    eval_builder.add_builtins(fetchers::fetcher_builtins::builtins(Rc::clone(&io)))
+    eval_builder.add_builtins(fetchers::fetcher_builtins::builtins(io))
 }
 
 /// Adds import-related builtins to the passed [`tvix_eval::Evaluation`].

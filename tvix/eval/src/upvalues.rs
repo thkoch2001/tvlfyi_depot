@@ -55,15 +55,12 @@ impl Upvalues {
         self.with_stack = Some(with_stack);
     }
 
-    pub fn with_stack(&self) -> Option<&Vec<Value>> {
+    pub const fn with_stack(&self) -> Option<&Vec<Value>> {
         self.with_stack.as_ref()
     }
 
     pub fn with_stack_len(&self) -> usize {
-        match &self.with_stack {
-            None => 0,
-            Some(stack) => stack.len(),
-        }
+        self.with_stack.as_ref().map_or(0, Vec::len)
     }
 
     /// Resolve deferred upvalues from the provided stack slice,

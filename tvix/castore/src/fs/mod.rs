@@ -141,12 +141,12 @@ where
             show_xattr,
 
             root_nodes: RwLock::new(HashMap::default()),
-            inode_tracker: RwLock::new(Default::default()),
+            inode_tracker: RwLock::new(InodeTracker::default()),
 
-            dir_handles: RwLock::new(Default::default()),
+            dir_handles: RwLock::new(HashMap::default()),
             next_dir_handle: AtomicU64::new(1),
 
-            file_handles: RwLock::new(Default::default()),
+            file_handles: RwLock::new(HashMap::default()),
             next_file_handle: AtomicU64::new(1),
             tokio_handle: tokio::runtime::Handle::current(),
         }
@@ -238,6 +238,7 @@ where
     /// or otherwise fetch from [`self.root_nodes`], and then insert into
     /// [`self.inode_tracker`].
     /// In the case the name can't be found, a `libc::ENOENT` is returned.
+    #[allow(clippy::significant_drop_tightening)]
     fn name_in_root_to_ino_and_data(
         &self,
         name: &PathComponent,
@@ -248,11 +249,7 @@ where
         if let Some(inode) = self.get_inode_for_root_name(name) {
             return Ok((
                 inode,
-                self.inode_tracker
-                    .read()
-                    .get(inode)
-                    .expect("must exist")
-                    ,
+                self.inode_tracker.read().get(inode).expect("must exist"),
             ));
         }
 
@@ -324,13 +321,14 @@ where
             return Ok((ROOT_FILE_ATTR.into(), Duration::MAX));
         }
 
-        match self.inode_tracker.read().get(inode) {
-            None => Err(io::Error::from_raw_os_error(libc::ENOENT)),
-            Some(inode_data) => {
+        self.inode_tracker
+            .read()
+            .get(inode)
+            .map(|inode_data| {
                 debug!(inode_data = ?inode_data, "found node");
-                Ok((inode_data.as_fuse_file_attr(inode).into(), Duration::MAX))
-            }
-        }
+                (inode_data.as_fuse_file_attr(inode).into(), Duration::MAX)
+            })
+            .ok_or_else(|| io::Error::from_raw_os_error(libc::ENOENT))
     }
 
     #[tracing::instrument(skip_all, fields(rq.parent_inode = parent, rq.name = ?name))]
@@ -451,12 +449,9 @@ where
             }
 
             // get the handle from [self.dir_handles]
-            let (_span, rx) = match self.dir_handles.read().get(&handle) {
-                Some(rx) => rx.clone(),
-                None => {
-                    warn!("dir handle {} unknown", handle);
-                    return Err(io::Error::from_raw_os_error(libc::EIO));
-                }
+            let Some((_span, rx)) = self.dir_handles.read().get(&handle).cloned() else {
+                warn!("dir handle {} unknown", handle);
+                return Err(io::Error::from_raw_os_error(libc::EIO));
             };
 
             let mut rx = rx
@@ -540,12 +535,9 @@ where
             }
 
             // get the handle from [self.dir_handles]
-            let (_span, rx) = match self.dir_handles.read().get(&handle) {
-                Some(rx) => rx.clone(),
-                None => {
-                    warn!("dir handle {} unknown", handle);
-                    return Err(io::Error::from_raw_os_error(libc::EIO));
-                }
+            let Some((_span, rx)) = self.dir_handles.read().get(&handle).cloned() else {
+                warn!("dir handle {} unknown", handle);
+                return Err(io::Error::from_raw_os_error(libc::EIO));
             };
 
             let mut rx = rx
@@ -622,12 +614,8 @@ where
     ) -> io::Result<()> {
         if inode == ROOT_ID {
             // drop the rx part of the channel.
-            match self.dir_handles.write().remove(&handle) {
-                // drop it, which will close it.
-                Some(rx) => drop(rx),
-                None => {
-                    warn!("dir handle not found");
-                }
+            if self.dir_handles.write().remove(&handle).is_none() {
+                warn!("dir handle not found");
             }
         }
 
@@ -649,47 +637,44 @@ where
             return Err(io::Error::from_raw_os_error(libc::ENOSYS));
         }
 
-        // lookup the inode
-        match *self.inode_tracker.read().get(inode).unwrap() {
-            // read is invalid on non-files.
-            InodeData::Directory(..) | InodeData::Symlink(_) => {
-                warn!("is directory");
-                Err(io::Error::from_raw_os_error(libc::EISDIR))
+        let InodeData::Regular(ref blob_digest, _blob_size, _) =
+            *self.inode_tracker.read().get(inode).unwrap()
+        else {
+            warn!("is directory");
+            return Err(io::Error::from_raw_os_error(libc::EISDIR));
+        };
+
+        Span::current().record("blob.digest", blob_digest.to_string());
+
+        match self.tokio_handle.block_on({
+            let blob_service = self.blob_service.clone();
+            let blob_digest = blob_digest.clone();
+            async move { blob_service.as_ref().open_read(&blob_digest).await }
+        }) {
+            Ok(None) => {
+                warn!("blob not found");
+                Err(io::Error::from_raw_os_error(libc::EIO))
             }
-            InodeData::Regular(ref blob_digest, _blob_size, _) => {
-                Span::current().record("blob.digest", blob_digest.to_string());
+            Err(e) => {
+                warn!(e=?e, "error opening blob");
+                Err(io::Error::from_raw_os_error(libc::EIO))
+            }
+            Ok(Some(blob_reader)) => {
+                // get a new file handle
+                // TODO: this will overflow after 2**64 operations,
+                // which is fine for now.
+                // See https://cl.tvl.fyi/c/depot/+/8834/comment/a6684ce0_d72469d1
+                // for the discussion on alternatives.
+                let fh = self.next_file_handle.fetch_add(1, Ordering::SeqCst);
 
-                match self.tokio_handle.block_on({
-                    let blob_service = self.blob_service.clone();
-                    let blob_digest = blob_digest.clone();
-                    async move { blob_service.as_ref().open_read(&blob_digest).await }
-                }) {
-                    Ok(None) => {
-                        warn!("blob not found");
-                        Err(io::Error::from_raw_os_error(libc::EIO))
-                    }
-                    Err(e) => {
-                        warn!(e=?e, "error opening blob");
-                        Err(io::Error::from_raw_os_error(libc::EIO))
-                    }
-                    Ok(Some(blob_reader)) => {
-                        // get a new file handle
-                        // TODO: this will overflow after 2**64 operations,
-                        // which is fine for now.
-                        // See https://cl.tvl.fyi/c/depot/+/8834/comment/a6684ce0_d72469d1
-                        // for the discussion on alternatives.
-                        let fh = self.next_file_handle.fetch_add(1, Ordering::SeqCst);
+                self.file_handles
+                    .write()
+                    .insert(fh, (Span::current(), Arc::new(Mutex::new(blob_reader))));
 
-                        self.file_handles
-                            .write()
-                            .insert(fh, (Span::current(), Arc::new(Mutex::new(blob_reader))));
-
-                        Ok((
-                            Some(fh),
-                            fuse_backend_rs::api::filesystem::OpenOptions::empty(),
-                        ))
-                    }
-                }
+                Ok((
+                    Some(fh),
+                    fuse_backend_rs::api::filesystem::OpenOptions::empty(),
+                ))
             }
         }
     }
@@ -705,13 +690,9 @@ where
         _flock_release: bool,
         _lock_owner: Option<u64>,
     ) -> io::Result<()> {
-        match self.file_handles.write().remove(&handle) {
-            // drop the blob reader, which will close it.
-            Some(blob_reader) => drop(blob_reader),
-            None => {
-                // These might already be dropped if a read error occured.
-                warn!("file handle not found");
-            }
+        if self.file_handles.write().remove(&handle).is_none() {
+            // These might already be dropped if a read error occured.
+            warn!("file handle not found");
         }
 
         Ok(())
@@ -783,6 +764,7 @@ where
         Ok(bytes_written as usize)
     }
 
+    #[allow(clippy::significant_drop_in_scrutinee)]
     #[tracing::instrument(skip_all, fields(rq.inode = inode))]
     fn readlink(&self, _ctx: &Context, inode: Self::Inode) -> io::Result<Vec<u8>> {
         if inode == ROOT_ID {
@@ -798,6 +780,7 @@ where
         }
     }
 
+    #[allow(clippy::significant_drop_in_scrutinee)]
     #[tracing::instrument(skip_all, fields(rq.inode = inode, name=?name))]
     fn getxattr(
         &self,
@@ -817,12 +800,10 @@ where
             .get(inode)
             .ok_or_else(|| io::Error::from_raw_os_error(libc::ENODATA))?
         {
-            InodeData::Directory(DirectoryInodeData::Sparse(ref digest, _) |
-DirectoryInodeData::Populated(ref digest, _))
-                if name.to_bytes() == XATTR_NAME_DIRECTORY_DIGEST =>
-            {
-                digest.to_string()
-            }
+            InodeData::Directory(
+                DirectoryInodeData::Sparse(ref digest, _)
+                | DirectoryInodeData::Populated(ref digest, _),
+            ) if name.to_bytes() == XATTR_NAME_DIRECTORY_DIGEST => digest.to_string(),
             InodeData::Regular(ref digest, _, _) if name.to_bytes() == XATTR_NAME_BLOB_DIGEST => {
                 digest.to_string()
             }
@@ -864,7 +845,7 @@ DirectoryInodeData::Populated(ref digest, _))
                         out.extend_from_slice(XATTR_NAME_BLOB_DIGEST);
                         out.push_byte(b'\x00');
                     }
-                    _ => {}
+                    InodeData::Symlink(_) => {}
                 }
             }
             out

@@ -80,9 +80,8 @@ fn parse_module_args(args: TokenStream) -> Option<Type> {
     }
 
     let meta: Meta = syn::parse(args).expect("could not parse arguments to `builtins`-attribute");
-    let name_value = match meta {
-        Meta::NameValue(nv) => nv,
-        _ => panic!("arguments to `builtins`-attribute must be of the form `name = value`"),
+    let Meta::NameValue(name_value) = meta else {
+        panic!("arguments to `builtins`-attribute must be of the form `name = value`")
     };
 
     if *name_value.path.get_ident().unwrap() != "state" {
@@ -148,14 +147,11 @@ pub fn builtins(args: TokenStream, item: TokenStream) -> TokenStream {
     // parse the optional state type, which users might want to pass to builtins
     let state_type = parse_module_args(args);
 
-    let (_, items) = match &mut module.content {
-        Some(content) => content,
-        None => {
-            return (quote_spanned!(module.span() =>
-                compile_error!("Builtin modules must be defined in-line")
-            ))
-            .into();
-        }
+    let Some((_, items)) = &mut module.content else {
+        return (quote_spanned!(module.span() =>
+            compile_error!("Builtin modules must be defined in-line")
+        ))
+        .into();
     };
 
     let mut builtins = vec![];
@@ -284,6 +280,7 @@ pub fn builtins(args: TokenStream, item: TokenStream) -> TokenStream {
                             f.block = Box::new(parse_quote_spanned! {arg.span=> {
                                 let #ident: #ty = tvix_eval::generators::request_force(&co, values.pop()
                                   .expect("Tvix bug: builtin called with incorrect number of arguments")).await;
+                                #[allow(clippy::used_underscore_binding)]
                                 if #ident.is_catchable() {
                                     return Ok(#ident);
                                 }
@@ -302,10 +299,8 @@ pub fn builtins(args: TokenStream, item: TokenStream) -> TokenStream {
 
                 let fn_name = f.sig.ident.clone();
                 let arg_count = builtin_arguments.len();
-                let docstring = match extract_docstring(&f.attrs) {
-                    Some(docs) => quote!(Some(#docs)),
-                    None => quote!(None),
-                };
+                let docstring = extract_docstring(&f.attrs)
+                    .map_or_else(|| quote!(None), |docs| quote!(Some(#docs)));
 
                 if captures_state {
                     builtins.push(quote_spanned! { builtin_attr.span() => {
@@ -333,12 +328,14 @@ pub fn builtins(args: TokenStream, item: TokenStream) -> TokenStream {
 
     if let Some(state_type) = state_type {
         items.push(parse_quote! {
+            #[allow(clippy::redundant_clone)]
             pub fn builtins(state: #state_type) -> Vec<(&'static str, Value)> {
                 vec![#(#builtins),*].into_iter().map(|b| (b.name(), Value::Builtin(b))).collect()
             }
         });
     } else {
         items.push(parse_quote! {
+            #[allow(clippy::redundant_clone)]
             pub fn builtins() -> Vec<(&'static str, Value)> {
                 vec![#(#builtins),*].into_iter().map(|b| (b.name(), Value::Builtin(b))).collect()
             }

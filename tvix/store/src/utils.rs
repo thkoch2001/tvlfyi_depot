@@ -138,7 +138,7 @@ pub async fn addrs_to_configs(
         return Ok(with_registry(&REG, || toml::from_str(&conf_text))?);
     }
 
-    let mut configs: CompositionConfigs = Default::default();
+    let mut configs = CompositionConfigs::default();
 
     let blob_service_url = Url::parse(&urls.blob_service_addr)?;
     let directory_service_url = Url::parse(&urls.directory_service_addr)?;

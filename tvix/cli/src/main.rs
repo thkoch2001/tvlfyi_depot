@@ -62,10 +62,10 @@ fn main() {
     let io_handle = init_io_handle(&tokio_runtime, &args);
 
     if let Some(file) = &args.script {
-        run_file(io_handle, file.clone(), &args);
+        run_file(&io_handle, file.clone(), &args);
     } else if let Some(expr) = &args.expr {
         if !interpret(
-            io_handle,
+            &io_handle,
             expr,
             None,
             &args,
@@ -86,7 +86,7 @@ fn main() {
     }
 }
 
-fn run_file(io_handle: Rc<TvixStoreIO>, mut path: PathBuf, args: &Args) {
+fn run_file(io_handle: &Rc<TvixStoreIO>, mut path: PathBuf, args: &Args) {
     if path.is_dir() {
         path.push("default.nix");
     }

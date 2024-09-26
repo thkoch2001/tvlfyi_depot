@@ -203,51 +203,46 @@ impl<BS, DS, PS, NS> Fetcher<BS, DS, PS, NS> {
             redact_url(&url)
         ));
 
-        match url.scheme() {
-            "file" => {
-                let f = tokio::fs::File::open(url.to_file_path().map_err(|()| {
-                    // "Returns Err if the host is neither empty nor "localhost"
-                    // (except on Windows, where file: URLs may have a non-local host)"
-                    FetcherError::Io(std::io::Error::new(
-                        std::io::ErrorKind::Other,
-                        "invalid host for file:// scheme",
-                    ))
-                })?)
-                .await?;
+        if url.scheme() == "file" {
+            let f = tokio::fs::File::open(url.to_file_path().map_err(|()| {
+                // "Returns Err if the host is neither empty nor "localhost"
+                // (except on Windows, where file: URLs may have a non-local host)"
+                FetcherError::Io(std::io::Error::new(
+                    std::io::ErrorKind::Other,
+                    "invalid host for file:// scheme",
+                ))
+            })?)
+            .await?;
 
-                span.pb_set_length(f.metadata().await?.len());
-                span.pb_set_style(&tvix_tracing::PB_TRANSFER_STYLE);
-                span.pb_start();
-                Ok(Box::new(tokio::io::BufReader::new(InspectReader::new(
-                    f,
-                    move |d| {
+            span.pb_set_length(f.metadata().await?.len());
+            span.pb_set_style(&tvix_tracing::PB_TRANSFER_STYLE);
+            span.pb_start();
+            Ok(Box::new(tokio::io::BufReader::new(InspectReader::new(
+                f,
+                move |d| {
+                    span.pb_inc(d.len() as u64);
+                },
+            ))))
+        } else {
+            let resp = self.http_client.get(url).send().await?;
+
+            if let Some(content_length) = resp.content_length() {
+                span.pb_set_length(content_length);
+            }
+            span.pb_set_style(&tvix_tracing::PB_TRANSFER_STYLE);
+            span.pb_start();
+
+            Ok(Box::new(tokio_util::io::StreamReader::new(
+                resp.bytes_stream()
+                    .inspect_ok(move |d| {
                         span.pb_inc(d.len() as u64);
-                    },
-                ))))
-            }
-            _ => {
-                let resp = self.http_client.get(url).send().await?;
-
-                if let Some(content_length) = resp.content_length() {
-                    span.pb_set_length(content_length);
-                    span.pb_set_style(&tvix_tracing::PB_TRANSFER_STYLE);
-                } else {
-                    span.pb_set_style(&tvix_tracing::PB_TRANSFER_STYLE);
-                }
-                span.pb_start();
-
-                Ok(Box::new(tokio_util::io::StreamReader::new(
-                    resp.bytes_stream()
-                        .inspect_ok(move |d| {
-                            span.pb_inc(d.len() as u64);
-                        })
-                        .map_err(|e| {
-                            let e = e.without_url();
-                            warn!(%e, "failed to get response body");
-                            std::io::Error::new(std::io::ErrorKind::BrokenPipe, e)
-                        }),
-                )))
-            }
+                    })
+                    .map_err(|e| {
+                        let e = e.without_url();
+                        warn!(%e, "failed to get response body");
+                        std::io::Error::new(std::io::ErrorKind::BrokenPipe, e)
+                    }),
+            )))
         }
     }
 }
@@ -608,16 +603,10 @@ pub(crate) fn url_basename(url: &Url) -> &str {
         return "";
     }
 
-    let pos = match s[..=last].rfind('/') {
-        Some(pos) => {
-            if pos == last - 1 {
-                0
-            } else {
-                pos
-            }
-        }
-        None => 0,
-    };
+    let pos = s[..=last]
+        .rfind('/')
+        .filter(|pos| *pos != last - 1)
+        .unwrap_or(0);
 
     &s[(pos + 1)..=last]
 }

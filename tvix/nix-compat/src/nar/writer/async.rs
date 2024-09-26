@@ -152,6 +152,7 @@ type Name = ();
 
 fn into_name(_name: &[u8]) -> Name {
     #[cfg(debug_assertions)]
+    #[allow(clippy::used_underscore_binding)]
     _name.to_owned()
 }
 
@@ -162,7 +163,7 @@ pub struct Directory<'a, 'w> {
 }
 
 impl<'a, 'w> Directory<'a, 'w> {
-    fn new(node: Node<'a, 'w>) -> Self {
+    const fn new(node: Node<'a, 'w>) -> Self {
         Self {
             node,
             prev_name: None,
@@ -195,6 +196,7 @@ impl<'a, 'w> Directory<'a, 'w> {
             }
             Some(ref mut _prev_name) => {
                 #[cfg(debug_assertions)]
+                #[allow(clippy::used_underscore_binding)]
                 {
                     use bstr::ByteSlice;
                     assert!(

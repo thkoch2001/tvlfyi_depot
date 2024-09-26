@@ -136,12 +136,12 @@ impl<'a, 'r> FileReader<'a, 'r> {
     }
 
     #[must_use]
-    pub fn is_empty(&self) -> bool {
+    pub const fn is_empty(&self) -> bool {
         self.len == 0
     }
 
     #[must_use]
-    pub fn len(&self) -> u64 {
+    pub const fn len(&self) -> u64 {
         self.len
     }
 }
@@ -275,7 +275,7 @@ pub struct Entry<'a, 'r> {
 }
 
 impl<'a, 'r> DirReader<'a, 'r> {
-    fn new(reader: ArchiveReader<'a, 'r>) -> Self {
+    const fn new(reader: ArchiveReader<'a, 'r>) -> Self {
         Self {
             reader,
             prev_name: vec![],
@@ -363,7 +363,7 @@ enum ArchiveReaderStatus<'a> {
 }
 
 impl ArchiveReaderStatus<'_> {
-    fn top() -> Self {
+    const fn top() -> Self {
         #[cfg(debug_assertions)]
         {
             ArchiveReaderStatus::StackTop {
@@ -420,7 +420,7 @@ impl ArchiveReaderStatus<'_> {
         }
     }
 
-    fn ready(&self) -> bool {
+    const fn ready(&self) -> bool {
         match self {
             #[cfg(not(debug_assertions))]
             ArchiveReaderStatus::None(_) => true,

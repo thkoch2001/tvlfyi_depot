@@ -175,7 +175,6 @@ mod tests {
     #[case::simple_path("a/b/c", "c")]
     #[case::simple_path_containing_dotdot("a/b/../c", "c")]
     #[case::path_containing_multiple_dotdot("a/b/../c/d/../e", "e")]
-
     fn test_path_to_name(#[case] path: &str, #[case] expected_name: &str) {
         let path: PathBuf = path.into();
         assert_eq!(path_to_name(&path).expect("must succeed"), expected_name);

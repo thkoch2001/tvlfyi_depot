@@ -27,7 +27,7 @@ where
     S: Deref<Target = str>,
 {
     /// Constructs a new [Signature] from a name and public key.
-    pub fn new(name: S, bytes: ed25519::SignatureBytes) -> Self {
+    pub const fn new(name: S, bytes: ed25519::SignatureBytes) -> Self {
         Self { name, bytes }
     }
 
@@ -69,12 +69,12 @@ where
     }
 
     /// Returns the name field of the signature.
-    pub fn name(&self) -> &S {
+    pub const fn name(&self) -> &S {
         &self.name
     }
 
     /// Returns the 64 bytes of signatures.
-    pub fn bytes(&self) -> &ed25519::SignatureBytes {
+    pub const fn bytes(&self) -> &ed25519::SignatureBytes {
         &self.bytes
     }
 
@@ -110,9 +110,9 @@ where
     }
 }
 
-impl<S: Display> Serialize for Signature<S>
+impl<S> Serialize for Signature<S>
 where
-    S: Deref<Target = str>,
+    S: Deref<Target = str> + Display,
 {
     fn serialize<SR>(&self, serializer: SR) -> Result<SR::Ok, SR::Error>
     where

@@ -15,7 +15,8 @@ pub struct Directory {
 
 impl Directory {
     /// Constructs a new, empty Directory.
-    #[must_use]pub fn new() -> Self {
+    #[must_use]
+    pub const fn new() -> Self {
         Self {
             nodes: BTreeMap::new(),
         }
@@ -39,7 +40,8 @@ impl Directory {
 
     /// The size of a directory is the number of all regular and symlink elements,
     /// the number of directory elements, and their size fields.
-    #[must_use]pub fn size(&self) -> u64 {
+    #[must_use]
+    pub fn size(&self) -> u64 {
         // It's impossible to create a Directory where the size overflows, because we
         // check before every add() that the size won't overflow.
         (self.nodes.len() as u64)
@@ -54,7 +56,8 @@ impl Directory {
 
     /// Calculates the digest of a Directory, which is the blake3 hash of a
     /// Directory protobuf message, serialized in protobuf canonical form.
-    #[must_use]pub fn digest(&self) -> B3Digest {
+    #[must_use]
+    pub fn digest(&self) -> B3Digest {
         proto::Directory::from(self.clone()).digest()
     }
 

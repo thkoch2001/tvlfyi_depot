@@ -73,16 +73,16 @@ where
     SP: std::cmp::Eq + std::ops::Deref<Target = str> + std::convert::From<&'a str>,
     I: IntoIterator<Item = S>,
 {
-    // self references are only allowed for CAHash::Nar(NixHash::Sha256(_)).
-    if self_reference && matches!(ca_hash, CAHash::Nar(NixHash::Sha256(_))) {
-        return Err(BuildStorePathError::InvalidReference());
-    }
-
     /// Helper function, used for the non-sha256 [`CAHash::Nar`] and all [`CAHash::Flat`].
     fn fixed_out_digest(prefix: &str, hash: &NixHash) -> [u8; 32] {
         Sha256::new_with_prefix(format!("{}:{}:", prefix, hash.to_nix_hex_string()))
             .finalize()
             .into()
+    }
+
+    // self references are only allowed for CAHash::Nar(NixHash::Sha256(_)).
+    if self_reference && matches!(ca_hash, CAHash::Nar(NixHash::Sha256(_))) {
+        return Err(BuildStorePathError::InvalidReference());
     }
 
     let (ty, inner_digest) = match &ca_hash {

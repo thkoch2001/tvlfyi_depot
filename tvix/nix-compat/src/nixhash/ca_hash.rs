@@ -32,16 +32,15 @@ pub enum HashMode {
 
 impl CAHash {
     #[must_use]
-    pub fn hash(&self) -> Cow<NixHash> {
+    pub const fn hash(&self) -> Cow<NixHash> {
         match *self {
-            Self::Flat(ref digest) => Cow::Borrowed(digest),
-            Self::Nar(ref digest) => Cow::Borrowed(digest),
+            Self::Flat(ref digest) | Self::Nar(ref digest) => Cow::Borrowed(digest),
             Self::Text(digest) => Cow::Owned(NixHash::Sha256(digest)),
         }
     }
 
     #[must_use]
-    pub fn mode(&self) -> HashMode {
+    pub const fn mode(&self) -> HashMode {
         match self {
             Self::Flat(_) => HashMode::Flat,
             Self::Nar(_) => HashMode::Nar,
@@ -76,6 +75,7 @@ impl CAHash {
     /// - `fixed:r:$algo:$nixbase32digest`
     /// - `fixed:$algo:$nixbase32digest`
     /// which is the format that's used in the `NARInfo` for example.
+    #[must_use]
     pub fn from_nix_hex_str(s: &str) -> Option<Self> {
         let (tag, s) = s.split_once(':')?;
 
@@ -85,13 +85,10 @@ impl CAHash {
                 let digest = nixbase32::decode_fixed(digest).ok()?;
                 Some(Self::Text(digest))
             }
-            "fixed" => {
-                if let Some(s) = s.strip_prefix("r:") {
-                    NixHash::from_nix_hex_str(s).map(CAHash::Nar)
-                } else {
-                    NixHash::from_nix_hex_str(s).map(CAHash::Flat)
-                }
-            }
+            "fixed" => s.strip_prefix("r:").map_or_else(
+                || NixHash::from_nix_hex_str(s).map(CAHash::Flat),
+                |s| NixHash::from_nix_hex_str(s).map(CAHash::Nar),
+            ),
             _ => None,
         }
     }
@@ -145,11 +142,9 @@ impl CAHash {
         let hash_algo = hash_algo_v.as_str().ok_or_else(|| {
             serde::de::Error::invalid_type(Unexpected::Other(&hash_algo_v.to_string()), &"a string")
         })?;
-        let (mode_is_nar, hash_algo) = if let Some(s) = hash_algo.strip_prefix("r:") {
-            (true, s)
-        } else {
-            (false, hash_algo)
-        };
+        let (mode_is_nar, hash_algo) = hash_algo
+            .strip_prefix("r:")
+            .map_or((false, hash_algo), |s| (true, s));
         let hash_algo = HashAlgo::try_from(hash_algo).map_err(|e| {
             serde::de::Error::invalid_value(
                 Unexpected::Other(&e.to_string()),
@@ -210,10 +205,7 @@ impl<'de> Deserialize<'de> for CAHash {
     {
         let value = Self::from_map::<D>(&Map::deserialize(deserializer)?)?;
 
-        match value {
-            None => Err(serde::de::Error::custom("couldn't parse as map")),
-            Some(v) => Ok(v),
-        }
+        value.ok_or_else(|| serde::de::Error::custom("couldn't parse as map"))
     }
 }
 

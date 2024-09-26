@@ -9,7 +9,6 @@ use std::{
 use crate::{
     self as tvix_eval,
     errors::ErrorKind,
-    value::NixAttrs,
     vm::generators::{self, GenCo},
     NixString, Value,
 };
@@ -19,7 +18,7 @@ mod impure_builtins {
     use std::ffi::OsStr;
     use std::os::unix::ffi::OsStrExt;
 
-    use super::{env, generators, tvix_eval, ErrorKind, Gen, GenCo, NixAttrs, NixString, Value};
+    use super::{env, generators, tvix_eval, ErrorKind, Gen, GenCo, NixString, Value};
     use crate::builtins::{coerce_value_to_path, hash::hash_nix_string};
 
     #[builtin("getEnv")]
@@ -63,7 +62,7 @@ mod impure_builtins {
                     )
                 });
 
-                Ok(Value::attrs(NixAttrs::from_iter(res)))
+                Ok(Value::attrs(res.collect()))
             }
         }
     }

@@ -49,6 +49,7 @@ impl PathInfoService for LruPathInfoService {
         Ok(path_info)
     }
 
+    #[allow(clippy::significant_drop_tightening)]
     fn list(&self) -> BoxStream<'static, Result<PathInfo, Error>> {
         let lru = self.lru.clone();
         Box::pin(try_stream! {

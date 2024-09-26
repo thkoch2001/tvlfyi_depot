@@ -12,7 +12,7 @@ clap = { version = "4.0", features = ["derive", "env"] }
 data-encoding = "2.3.3"
 futures = "0.3.30"
 itertools = "0.12.0"
-prost = "0.13.1"
+prost = "0.13.3"
 nix-compat = { path = "../nix-compat", features = ["async"] }
 thiserror = "1.0.56"
 tokio = { version = "1.32.0" }
@@ -31,7 +31,7 @@ parking_lot = "0.12.3"
 mimalloc = "0.1.43"
 
 [build-dependencies]
-prost-build = "0.13.1"
+prost-build = "0.13.3"
 tonic-build = "0.12.0"
 
 [features]

@@ -57,10 +57,9 @@ where
     T: ToSpan,
 {
     fn span_for(&self, file: &File) -> Span {
-        match &self.0 {
-            Some(t) => t.span_for(file),
-            None => EntireFile.span_for(file),
-        }
+        self.0
+            .as_ref()
+            .map_or_else(|| EntireFile.span_for(file), |t| t.span_for(file))
     }
 }
 

@@ -4,5 +4,6 @@ ignore-interior-mutability = [
   # make sure to specify the originating type name, not re-exports!
   "bytes::Bytes",
   "tvix_castore::digests::B3Digest",
-  "tvix_castore::path::component::PathComponent"
+  "tvix_castore::path::component::PathComponent",
 ]
+doc-valid-idents = ["NARInfo", "ProtoBuf", "ATerm", ".."]

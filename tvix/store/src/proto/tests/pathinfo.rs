@@ -11,7 +11,6 @@ use tvix_castore::{DirectoryError, ValidateNodeError};
 #[rstest]
 #[case::no_node(None, Err(ValidatePathInfoError::NoNodePresent))]
 #[case::no_node_2(Some(castorepb::Node { node: None}), Err(ValidatePathInfoError::InvalidRootNode(DirectoryError::NoNodeSet)))]
-
 fn validate_pathinfo(
     #[case] node: Option<castorepb::Node>,
     #[case] exp_result: Result<StorePath<String>, ValidatePathInfoError>,

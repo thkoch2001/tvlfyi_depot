@@ -25,10 +25,10 @@ pub fn value_to_xml<W: Write>(mut writer: W, value: &Value) -> Result<NixContext
     Ok(emitter.into_context())
 }
 
-fn write_typed_value<W: Write, V: ToString>(
+fn write_typed_value<W: Write, V: ToString + ?Sized>(
     w: &mut XmlEmitter<W>,
     name_unescaped: &str,
-    value: V,
+    value: &V,
 ) -> Result<(), ErrorKind> {
     w.write_self_closing_tag(name_unescaped, &[("value", &value.to_string())])?;
     Ok(())
@@ -52,7 +52,7 @@ fn value_variant_to_xml<W: Write>(w: &mut XmlEmitter<W>, value: &Value) -> Resul
             }
             return write_typed_value(w, "string", s.to_str()?);
         }
-        Value::Path(p) => return write_typed_value(w, "path", p.to_string_lossy()),
+        Value::Path(p) => return write_typed_value(w, "path", &p.to_string_lossy()),
 
         Value::List(list) => {
             w.write_open_tag("list", &[])?;
@@ -151,7 +151,7 @@ impl<W: Write> XmlEmitter<W> {
         Self {
             cur_indent: 0,
             writer,
-            context: Default::default(),
+            context: NixContext::default(),
         }
     }
 
@@ -241,7 +241,7 @@ impl<W: Write> XmlEmitter<W> {
         }
     }
 
-    fn should_escape_char(c: char) -> Option<&'static str> {
+    const fn should_escape_char(c: char) -> Option<&'static str> {
         match c {
             '<' => Some("&lt;"),
             '>' => Some("&gt;"),

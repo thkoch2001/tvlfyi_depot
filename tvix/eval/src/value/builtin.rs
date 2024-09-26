@@ -124,10 +124,10 @@ impl Debug for Builtin {
 
 impl Display for Builtin {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        if !self.0.partials.is_empty() {
-            f.write_str("<PRIMOP-APP>")
-        } else {
+        if self.0.partials.is_empty() {
             f.write_str("<PRIMOP>")
+        } else {
+            f.write_str("<PRIMOP-APP>")
         }
     }
 }

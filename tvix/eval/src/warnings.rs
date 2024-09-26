@@ -116,7 +116,7 @@ impl EvalWarning {
 
     /// Return the unique warning code for this variant which can be
     /// used to refer users to documentation.
-    fn code(&self) -> &'static str {
+    const fn code(&self) -> &'static str {
         match self.kind {
             WarningKind::DeprecatedLiteralURL => "W001",
             WarningKind::UselessInherit => "W002",

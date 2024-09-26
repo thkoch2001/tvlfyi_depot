@@ -20,7 +20,7 @@ use crate::NixString;
 
 use super::{
     CallFrame, CatchableErrorKind, CodeIdx, CoercionKind, ErrorKind, EvalIO, EvalResult, Frame,
-    Lambda, NixContext, PathBuf, Rc, RuntimeObserver, Span, Upvalues, Value, WithSpan, VM,
+    Lambda, NixContext, PathBuf, Rc, Span, Upvalues, Value, WithSpan, VM,
 };
 
 // -- Implementation of generic generator logic.

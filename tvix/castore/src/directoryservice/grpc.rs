@@ -25,7 +25,7 @@ pub struct GRPCDirectoryService<T> {
 impl<T> GRPCDirectoryService<T> {
     /// construct a [`GRPCDirectoryService`] from a [`proto::directory_service_client::DirectoryServiceClient`].
     /// panics if called outside the context of a tokio runtime.
-    pub fn from_client(
+    pub const fn from_client(
         grpc_client: proto::directory_service_client::DirectoryServiceClient<T>,
     ) -> Self {
         Self { grpc_client }
@@ -64,14 +64,14 @@ where
                 // Validate the retrieved Directory indeed has the
                 // digest we expect it to have, to detect corruptions.
                 let actual_digest = directory.digest();
-                if actual_digest != digest {
-                    Err(crate::Error::StorageError(format!(
-                        "requested directory with digest {digest}, but got {actual_digest}"
-                    )))
-                } else {
+                if actual_digest == digest {
                     Ok(Some(directory.try_into().map_err(|_| {
                         Error::StorageError("invalid root digest length in response".to_string())
                     })?))
+                } else {
+                    Err(crate::Error::StorageError(format!(
+                        "requested directory with digest {digest}, but got {actual_digest}"
+                    )))
                 }
             }
             Ok(None) => Ok(None),
@@ -321,6 +321,7 @@ mod tests {
     };
 
     /// This ensures connecting via gRPC works as expected.
+    #[allow(clippy::significant_drop_tightening)]
     #[tokio::test]
     async fn test_valid_unix_path_ping_pong() {
         let tmpdir = TempDir::new().unwrap();
@@ -378,6 +379,6 @@ mod tests {
             .get(&fixtures::DIRECTORY_A.digest())
             .await
             .expect("must not fail")
-            .is_none())
+            .is_none());
     }
 }

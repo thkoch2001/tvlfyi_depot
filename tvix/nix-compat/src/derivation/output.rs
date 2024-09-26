@@ -23,14 +23,16 @@ impl<'de> Deserialize<'de> for Output {
         let fields = Map::deserialize(deserializer)?;
         let path: &str = fields
             .get("path")
-            .ok_or(serde::de::Error::missing_field(
-                "`path` is missing but required for outputs",
-            ))?
+            .ok_or_else(|| {
+                serde::de::Error::missing_field("`path` is missing but required for outputs")
+            })?
             .as_str()
-            .ok_or(serde::de::Error::invalid_type(
-                serde::de::Unexpected::Other("certainly not a string"),
-                &"a string",
-            ))?;
+            .ok_or_else(|| {
+                serde::de::Error::invalid_type(
+                    serde::de::Unexpected::Other("certainly not a string"),
+                    &"a string",
+                )
+            })?;
 
         let path = StorePath::from_absolute_path(path.as_bytes())
             .map_err(|_| serde::de::Error::invalid_value(Unexpected::Str(path), &"StorePath"))?;
@@ -43,17 +45,16 @@ impl<'de> Deserialize<'de> for Output {
 
 impl Output {
     #[must_use]
-    pub fn is_fixed(&self) -> bool {
+    pub const fn is_fixed(&self) -> bool {
         self.ca_hash.is_some()
     }
 
     /// The output path as a string -- use `""` to indicate an unset output path.
     #[must_use]
     pub fn path_str(&self) -> Cow<str> {
-        match &self.path {
-            None => Cow::Borrowed(""),
-            Some(path) => Cow::Owned(path.to_absolute_path()),
-        }
+        self.path.as_ref().map_or(Cow::Borrowed(""), |path| {
+            Cow::Owned(path.to_absolute_path())
+        })
     }
 
     pub fn validate(&self, validate_output_paths: bool) -> Result<(), OutputError> {
@@ -62,7 +63,7 @@ impl Output {
                 CAHash::Flat(_) | CAHash::Nar(_) => {
                     // all hashes allowed for Flat, and Nar.
                 }
-                _ => return Err(OutputError::InvalidCAHash(fixed_output_hash.clone())),
+                CAHash::Text(_) => return Err(OutputError::InvalidCAHash(fixed_output_hash.clone())),
             }
         }
 

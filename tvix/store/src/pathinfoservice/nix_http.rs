@@ -274,7 +274,7 @@ impl TryFrom<Url> for NixHTTPPathInfoServiceConfig {
             .filter(|(k, _)| k == "trusted-public-keys")
         {
             public_keys
-                .get_or_insert(Default::default())
+                .get_or_insert(vec![])
                 .extend(v.split_ascii_whitespace().map(ToString::to_string));
         }
         Ok(Self {

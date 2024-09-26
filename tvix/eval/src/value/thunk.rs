@@ -116,7 +116,7 @@ impl ThunkRepr {
         }
     }
 
-    pub fn is_forced(&self) -> bool {
+    pub const fn is_forced(&self) -> bool {
         match self {
             Self::Evaluated(Value::Thunk(_)) => false,
             Self::Evaluated(_) => true,
@@ -137,7 +137,7 @@ impl Thunk {
         Self(Rc::new(RefCell::new(ThunkRepr::Evaluated(Value::Closure(
             Rc::new(Closure {
                 upvalues: Rc::new(Upvalues::with_capacity(lambda.upvalue_count)),
-                lambda: lambda.clone(),
+                lambda,
             }),
         )))))
     }
@@ -145,7 +145,7 @@ impl Thunk {
     pub fn new_suspended(lambda: Rc<Lambda>, span: Span) -> Self {
         Self(Rc::new(RefCell::new(ThunkRepr::Suspended {
             upvalues: Rc::new(Upvalues::with_capacity(lambda.upvalue_count)),
-            lambda: lambda.clone(),
+            lambda,
             span,
         })))
     }
@@ -401,7 +401,7 @@ impl TotalDisplay for Thunk {
         match &*self.0.borrow() {
             ThunkRepr::Evaluated(v) => v.total_fmt(f, set),
             ThunkRepr::Suspended { .. } | ThunkRepr::Native(_) => f.write_str("<CODE>"),
-            other => write!(f, "internal[{}]", other.debug_repr()),
+            other @ ThunkRepr::Blackhole { .. } => write!(f, "internal[{}]", other.debug_repr()),
         }
     }
 }

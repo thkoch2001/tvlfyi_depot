@@ -211,15 +211,17 @@ impl Derivation {
         self.fod_digest().unwrap_or({
             // For each input_derivation, look up the hash derivation modulo,
             // and replace the derivation path in the aterm with it's HEXLOWER digest.
-            let aterm_bytes = self.to_aterm_bytes_with_replacements(&BTreeMap::from_iter(
-                self.input_derivations
+            let aterm_bytes = self.to_aterm_bytes_with_replacements(
+                &self
+                    .input_derivations
                     .iter()
                     .map(|(drv_path, output_names)| {
                         let hash = fn_lookup_hash_derivation_modulo(&drv_path.as_ref());
 
                         (hash, output_names.to_owned())
-                    }),
-            ));
+                    })
+                    .collect(),
+            );
 
             // write the ATerm of that to the hash function and return its digest.
             Sha256::new_with_prefix(aterm_bytes).finalize().into()
@@ -305,6 +307,6 @@ fn ca_kind_prefix(ca_hash: &CAHash) -> &'static str {
     match ca_hash {
         CAHash::Flat(_) => "",
         CAHash::Nar(_) => "r:",
-        _ => panic!("invalid ca hash in derivation context: {ca_hash:?}"),
+        CAHash::Text(_) => panic!("invalid ca hash in derivation context: {ca_hash:?}"),
     }
 }

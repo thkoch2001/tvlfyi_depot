@@ -135,16 +135,14 @@ impl ByName {
     fn remove_idx(&mut self) -> bool {
         match self {
             Self::Single(_) => false,
-            Self::Shadowed(indices) => match indices[..] {
-                [fst, _snd] => {
+            Self::Shadowed(indices) => {
+                if let [fst, _snd] = indices[..] {
                     *self = Self::Single(fst);
-                    true
-                }
-                _ => {
+                } else {
                     indices.pop();
-                    true
-                }
-            },
+                };
+                true
+            }
         }
     }
 
@@ -168,7 +166,7 @@ pub struct Scope {
     by_name: FxHashMap<String, ByName>,
 
     /// How many scopes "deep" are these locals?
-    scope_depth: usize,
+    depth: usize,
 
     /// Current size of the `with`-stack at runtime.
     with_stack_size: usize,
@@ -188,7 +186,7 @@ impl Scope {
     /// scope features like dynamic resolution are present).
     pub fn inherit(&self) -> Self {
         Self {
-            scope_depth: self.scope_depth + 1,
+            depth: self.depth + 1,
             with_stack_size: self.with_stack_size,
             ..Default::default()
         }
@@ -206,7 +204,7 @@ impl Scope {
 
     /// Does this scope currently require dynamic runtime resolution
     /// of identifiers that could not be found?
-    pub fn has_with(&self) -> bool {
+    pub const fn has_with(&self) -> bool {
         self.with_stack_size > 0
     }
 
@@ -243,7 +241,7 @@ impl Scope {
             initialised,
             span: Some(span),
             name: LocalName::Phantom,
-            depth: self.scope_depth,
+            depth: self.depth,
             needs_finaliser: false,
             must_thunk: false,
             used: true,
@@ -265,7 +263,7 @@ impl Scope {
         self.locals.push(Local {
             name: LocalName::Ident(name.clone()),
             span: Some(span),
-            depth: self.scope_depth,
+            depth: self.depth,
             initialised: false,
             needs_finaliser: false,
             must_thunk: false,
@@ -335,7 +333,7 @@ impl Scope {
     /// Increase the current scope depth (e.g. within a new bindings
     /// block, or `with`-scope).
     pub fn begin_scope(&mut self) {
-        self.scope_depth += 1;
+        self.depth += 1;
     }
 
     /// Decrease the scope depth and remove all locals still tracked
@@ -347,14 +345,14 @@ impl Scope {
     /// definitions of unused locals (used by the compiler to emit
     /// unused binding warnings).
     pub fn end_scope(&mut self) -> (usize, Vec<codemap::Span>) {
-        debug_assert!(self.scope_depth != 0, "can not end top scope");
+        debug_assert!(self.depth != 0, "can not end top scope");
 
         let mut pops = 0;
         let mut unused_spans = vec![];
 
         // TL;DR - iterate from the back while things belonging to the
         // ended scope still exist.
-        while self.locals.last().unwrap().depth == self.scope_depth {
+        while self.locals.last().unwrap().depth == self.depth {
             if let Some(local) = self.locals.pop() {
                 // pop the local from the stack if it was actually
                 // initialised
@@ -384,13 +382,13 @@ impl Scope {
             }
         }
 
-        self.scope_depth -= 1;
+        self.depth -= 1;
 
         (pops, unused_spans)
     }
 
     /// Access the current scope depth.
-    pub fn scope_depth(&self) -> usize {
-        self.scope_depth
+    pub const fn depth(&self) -> usize {
+        self.depth
     }
 }

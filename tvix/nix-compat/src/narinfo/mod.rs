@@ -169,9 +169,7 @@ impl<'a> NarInfo<'a> {
                         .strip_prefix("sha256:")
                         .ok_or_else(|| Error::MissingPrefixForHash(tag.to_string()))?;
 
-                    let val = if val.len() != HEXLOWER.encode_len(32) {
-                        nixbase32::decode_fixed::<32>(val)
-                    } else {
+                    let val = if val.len() == HEXLOWER.encode_len(32) {
                         flags |= Flags::NAR_HASH_HEX;
 
                         let val = val.as_bytes();
@@ -181,6 +179,8 @@ impl<'a> NarInfo<'a> {
                             .decode_mut(val, &mut buf)
                             .map_err(|e| e.error)
                             .map(|_| buf)
+                    } else {
+                        nixbase32::decode_fixed::<32>(val)
                     };
 
                     let val = val.map_err(|e| Error::UnableToDecodeHash(tag.to_string(), e))?;
@@ -199,7 +199,9 @@ impl<'a> NarInfo<'a> {
                     }
                 }
                 "References" => {
-                    let val: Vec<StorePathRef> = if !val.is_empty() {
+                    let val: Vec<StorePathRef> = if val.is_empty() {
+                        vec![]
+                    } else {
                         let mut prev = "";
                         val.split(' ')
                             .enumerate()
@@ -213,8 +215,6 @@ impl<'a> NarInfo<'a> {
                                     .map_err(|err| Error::InvalidReference(i, err))
                             })
                             .collect::<Result<_, _>>()?
-                    } else {
-                        vec![]
                     };
 
                     if references.replace(val).is_some() {

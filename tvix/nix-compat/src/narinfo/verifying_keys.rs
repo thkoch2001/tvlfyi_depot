@@ -19,7 +19,7 @@ pub struct VerifyingKey {
 
 impl VerifyingKey {
     #[must_use]
-    pub fn new(name: String, verifying_key: ed25519_dalek::VerifyingKey) -> Self {
+    pub const fn new(name: String, verifying_key: ed25519_dalek::VerifyingKey) -> Self {
         Self {
             name,
             verifying_key,

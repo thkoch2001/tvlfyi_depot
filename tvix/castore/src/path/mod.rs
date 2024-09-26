@@ -47,7 +47,8 @@ impl Path {
         Some(unsafe { Self::from_bytes_unchecked(bytes) })
     }
 
-    #[must_use]pub fn into_boxed_bytes(self: Box<Self>) -> Box<[u8]> {
+    #[must_use]
+    pub fn into_boxed_bytes(self: Box<Self>) -> Box<[u8]> {
         // SAFETY: Box<Path> and Box<[u8]> have the same representation.
         unsafe { mem::transmute(self) }
     }
@@ -56,7 +57,8 @@ impl Path {
     ///
     /// Note that the parent of a bare file name is [`Path::ROOT`].
     /// [`Path::ROOT`] is the only path without a parent.
-    #[must_use]pub fn parent(&self) -> Option<&Self> {
+    #[must_use]
+    pub fn parent(&self) -> Option<&Self> {
         // The root does not have a parent.
         if self.inner.is_empty() {
             return None;
@@ -113,16 +115,19 @@ impl Path {
     }
 
     /// Returns the final component of the Path, if there is one, in bytes.
-    #[must_use]pub fn file_name(&self) -> Option<PathComponent> {
+    #[must_use]
+    pub fn file_name(&self) -> Option<PathComponent> {
         self.components().last()
     }
 
     /// Returns the final component of the Path, if there is one, in bytes.
-    #[must_use]pub fn file_name_bytes(&self) -> Option<&[u8]> {
+    #[must_use]
+    pub fn file_name_bytes(&self) -> Option<&[u8]> {
         self.components_bytes().last()
     }
 
-    #[must_use]pub fn as_bytes(&self) -> &[u8] {
+    #[must_use]
+    pub const fn as_bytes(&self) -> &[u8] {
         &self.inner
     }
 }
@@ -220,11 +225,13 @@ impl Display for PathBuf {
 }
 
 impl PathBuf {
-    #[must_use]pub fn new() -> Self {
+    #[must_use]
+    pub fn new() -> Self {
         Self::default()
     }
 
-    #[must_use]pub fn with_capacity(capacity: usize) -> Self {
+    #[must_use]
+    pub fn with_capacity(capacity: usize) -> Self {
         // SAFETY: The empty path is a valid path.
         Self {
             inner: Vec::with_capacity(capacity),
@@ -316,13 +323,15 @@ impl PathBuf {
         Ok(p)
     }
 
-    #[must_use]pub fn into_boxed_path(self) -> Box<Path> {
+    #[must_use]
+    pub fn into_boxed_path(self) -> Box<Path> {
         // SAFETY: Box<[u8]> and Box<Path> have the same representation,
         // and PathBuf always contains a valid Path.
         unsafe { mem::transmute(self.inner.into_boxed_slice()) }
     }
 
-    #[must_use]pub fn into_bytes(self) -> Vec<u8> {
+    #[must_use]
+    pub fn into_bytes(self) -> Vec<u8> {
         self.inner
     }
 }

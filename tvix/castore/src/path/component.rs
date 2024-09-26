@@ -202,8 +202,8 @@ mod tests {
                 let v = v.as_ref();
                 assert_eq!(
                     Err(PathComponentError::Convert(
-                        exp_err_v.clone(),
-                        Box::new(err.clone())
+                        exp_err_v,
+                        Box::new(err)
                     )),
                     PathComponent::try_from(v),
                     "conversion must fail as expected"
@@ -217,7 +217,7 @@ mod tests {
         assert_eq!(
             Err(PathComponentError::TooLong),
             validate_name("X".repeat(500).into_bytes().as_slice())
-        )
+        );
     }
 
     #[test]
@@ -259,7 +259,7 @@ mod tests {
             let v = CString::new("aa").expect("CString must construct");
             let v = v.as_c_str();
             assert_eq!(
-                Ok(exp.clone()),
+                Ok(exp),
                 PathComponent::try_from(v),
                 "conversion must succeed"
             );

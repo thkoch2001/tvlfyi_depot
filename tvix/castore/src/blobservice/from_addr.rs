@@ -19,11 +19,11 @@ use super::BlobService;
 pub async fn from_addr(
     uri: &str,
 ) -> Result<Arc<dyn BlobService>, Box<dyn std::error::Error + Send + Sync>> {
-    let url = Url::parse(uri)
+    let uri = Url::parse(uri)
         .map_err(|e| crate::Error::StorageError(format!("unable to parse url: {e}")))?;
 
     let blob_service_config = with_registry(&REG, || {
-        <DeserializeWithRegistry<Box<dyn ServiceBuilder<Output = dyn BlobService>>>>::try_from(url)
+        <DeserializeWithRegistry<Box<dyn ServiceBuilder<Output = dyn BlobService>>>>::try_from(uri)
     })?
     .0;
     let blob_service = blob_service_config

@@ -1,5 +1,6 @@
 use nix_compat::nar::reader::r#async as nar_reader;
 use sha2::Digest;
+use std::io::Write;
 use tokio::{
     io::{AsyncBufRead, AsyncRead},
     sync::mpsc,
@@ -35,7 +36,6 @@ where
     // Assemble NarHash and NarSize as we read bytes.
     let r = tokio_util::io::InspectReader::new(r, |b| {
         nar_size += b.len() as u64;
-        use std::io::Write;
         nar_hash.write_all(b).unwrap();
     });
 

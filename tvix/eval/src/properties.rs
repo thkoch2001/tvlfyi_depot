@@ -6,7 +6,7 @@ macro_rules! eq_laws {
         eq_laws!(
             #[strategy(::proptest::arbitrary::any::<$ty>())]
             $ty,
-            Default::default()
+            proptest::prelude::ProptestConfig::default()
         );
     };
     ($ty: ty, $config: expr) => {
@@ -49,7 +49,7 @@ macro_rules! ord_laws {
         ord_laws!(
             #[strategy(::proptest::arbitrary::any::<$ty>())]
             $ty,
-            Default::default()
+            proptest::prelude::ProptestConfig::default()
         );
     };
     ($ty: ty, $config: expr) => {
@@ -125,7 +125,7 @@ macro_rules! hash_laws {
         hash_laws!(
             #[strategy(::proptest::arbitrary::any::<$ty>())]
             $ty,
-            Default::default()
+            proptest::prelude::ProptestConfig::default()
         );
     };
     ($ty: ty, $config: expr) => {

@@ -108,7 +108,7 @@ impl<'a> Repl<'a> {
             env: FxHashMap::default(),
             io_handle,
             args,
-            source_map: Default::default(),
+            source_map: SourceCode::default(),
             globals: None,
         }
     }
@@ -169,13 +169,11 @@ impl<'a> Repl<'a> {
             };
         }
 
-        let input = if let Some(mi) = &mut self.multiline_input {
+        let input = self.multiline_input.as_mut().map_or(&line, |mi| {
             mi.push('\n');
             mi.push_str(&line);
             mi
-        } else {
-            &line
-        };
+        });
 
         let res = match ReplCommand::parse(input) {
             ReplCommand::Quit => {
@@ -189,7 +187,7 @@ impl<'a> Repl<'a> {
                 Ok(InterpretResult::empty_success(None))
             }
             ReplCommand::Expr(input) => interpret(
-                Rc::clone(&self.io_handle),
+                &self.io_handle,
                 input,
                 None,
                 self.args,
@@ -201,7 +199,7 @@ impl<'a> Repl<'a> {
             ),
             ReplCommand::Assign(Assignment { ident, value }) => {
                 match evaluate(
-                    Rc::clone(&self.io_handle),
+                    &self.io_handle,
                     &value.to_string(), /* FIXME: don't re-parse */
                     None,
                     self.args,
@@ -220,7 +218,7 @@ impl<'a> Repl<'a> {
                 }
             }
             ReplCommand::Explain(input) => interpret(
-                Rc::clone(&self.io_handle),
+                &self.io_handle,
                 input,
                 None,
                 self.args,
@@ -231,7 +229,7 @@ impl<'a> Repl<'a> {
                 Some(self.source_map.clone()),
             ),
             ReplCommand::Print(input) => interpret(
-                Rc::clone(&self.io_handle),
+                &self.io_handle,
                 input,
                 None,
                 &Args {

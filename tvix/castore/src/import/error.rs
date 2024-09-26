@@ -8,7 +8,7 @@ use crate::Error as CastoreError;
 /// It also contains a generic error kind that'll carry ingestion-method
 /// specific errors.
 #[derive(Debug, thiserror::Error)]
-pub enum IngestionError<E: std::fmt::Display> {
+pub enum IngestionError<E> {
     #[error("error from producer: {0}")]
     Producer(#[from] E),
 

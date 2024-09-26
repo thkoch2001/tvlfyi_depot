@@ -7,7 +7,7 @@ edition = "2021"
 bytes = "1.4.0"
 clap = { version = "4.0", features = ["derive", "env"] }
 itertools = "0.12.0"
-prost = "0.13.1"
+prost = "0.13.3"
 thiserror = "1.0.56"
 tokio = { version = "1.32.0" }
 tokio-listener = { version = "0.4.1", features = [ "tonic012" ] }
@@ -23,7 +23,7 @@ optional = true
 version = "0.12.0"
 
 [build-dependencies]
-prost-build = "0.13.1"
+prost-build = "0.13.3"
 tonic-build = "0.12.0"
 
 [features]

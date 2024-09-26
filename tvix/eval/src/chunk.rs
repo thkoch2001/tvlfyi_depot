@@ -176,13 +176,6 @@ impl Chunk {
             write!(writer, "{line:4}\t")?;
         }
 
-        let _fmt_constant = |idx: ConstantIdx| match &self.constants[idx.0] {
-            Value::Thunk(t) => t.debug_repr(),
-            Value::Closure(c) => format!("closure({:p})", c.lambda),
-            Value::Blueprint(b) => format!("blueprint({b:p})"),
-            val => format!("{val}"),
-        };
-
         let op: Op = self.code[idx.0].into();
 
         match op.arg_type() {
@@ -203,7 +196,7 @@ impl Chunk {
                 Ok(1 + size)
             }
 
-            _ => match op {
+            OpArg::Custom => match op {
                 Op::CoerceToString => {
                     let kind: CoercionKind = self.code[idx.0 + 1].into();
                     writeln!(writer, "Op{op:?}({kind:?})")?;

@@ -16,7 +16,7 @@ pub struct SimpleRenderer<BS, DS> {
 }
 
 impl<BS, DS> SimpleRenderer<BS, DS> {
-    pub fn new(blob_service: BS, directory_service: DS) -> Self {
+    pub const fn new(blob_service: BS, directory_service: DS) -> Self {
         Self {
             blob_service,
             directory_service,
@@ -133,17 +133,17 @@ where
             size,
             executable,
         } => {
-            let mut blob_reader = match blob_service
+            let mut blob_reader = blob_service
                 .open_read(digest)
                 .await
                 .map_err(RenderError::StoreError)?
-            {
-                Some(blob_reader) => Ok(BufReader::new(blob_reader)),
-                None => Err(RenderError::NARWriterError(io::Error::new(
-                    io::ErrorKind::NotFound,
-                    format!("blob with digest {} not found", &digest),
-                ))),
-            }?;
+                .map(BufReader::new)
+                .ok_or_else(|| {
+                    RenderError::NARWriterError(io::Error::new(
+                        io::ErrorKind::NotFound,
+                        format!("blob with digest {digest} not found"),
+                    ))
+                })?;
 
             nar_node
                 .file(*executable, *size, &mut blob_reader)

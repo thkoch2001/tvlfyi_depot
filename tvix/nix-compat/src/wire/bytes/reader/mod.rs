@@ -38,7 +38,7 @@ pub struct BytesReader<R, T: Tag = Pad> {
 /// the non-terminal 8-byte blocks, and the ≤8 bytes of user data contained in
 /// the trailer block.
 #[inline(always)]
-fn split_user_len(user_len: NonZeroU64) -> (u64, u8) {
+const fn split_user_len(user_len: NonZeroU64) -> (u64, u8) {
     let n = user_len.get() - 1;
     let body_len = n & !7;
     let tail_len = (n & 7) as u8 + 1;

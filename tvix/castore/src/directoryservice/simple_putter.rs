@@ -20,7 +20,7 @@ impl<DS: DirectoryService> SimplePutter<DS> {
     pub fn new(directory_service: DS) -> Self {
         Self {
             directory_service,
-            directory_validator: Some(Default::default()),
+            directory_validator: Some(DirectoryGraph::default()),
         }
     }
 }

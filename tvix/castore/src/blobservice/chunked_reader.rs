@@ -306,12 +306,12 @@ mod test {
         );
     }
 
-    /// ensure ChunkedBlob can't be used with an empty list of chunks
+    /// ensure [`ChunkedBlob`] can't be used with an empty list of chunks
     #[test]
     #[should_panic]
     fn from_iter_empty() {
         ChunkedBlob::from_iter(
-            [].into_iter(),
+            std::iter::empty(),
             Arc::new(MemoryBlobService::default()) as Arc<dyn BlobService>,
         );
     }
@@ -354,7 +354,7 @@ mod test {
         );
     }
 
-    /// returns a blobservice with all chunks in BLOB_1 present.
+    /// returns a blobservice with all chunks in `BLOB_1` present.
     async fn gen_blobservice_blob1() -> Arc<dyn BlobService> {
         let blob_service = Arc::new(MemoryBlobService::default()) as Arc<dyn BlobService>;
 

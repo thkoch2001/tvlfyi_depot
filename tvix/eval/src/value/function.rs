@@ -94,7 +94,7 @@ impl Closure {
         )
     }
 
-    pub fn new_with_upvalues(upvalues: Rc<Upvalues>, lambda: Rc<Lambda>) -> Self {
+    pub const fn new_with_upvalues(upvalues: Rc<Upvalues>, lambda: Rc<Lambda>) -> Self {
         Self { lambda, upvalues }
     }
 

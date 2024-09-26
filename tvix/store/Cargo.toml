@@ -17,7 +17,7 @@ futures = "0.3.30"
 lazy_static = "1.4.0"
 nix-compat = { path = "../nix-compat", features = ["async"] }
 pin-project-lite = "0.2.13"
-prost = "0.13.1"
+prost = "0.13.3"
 serde = { version = "1.0.197", features = [ "derive" ] }
 serde_json = "1.0"
 serde_with = "3.7.0"
@@ -57,7 +57,7 @@ optional = true
 version = "0.2.10"
 
 [build-dependencies]
-prost-build = "0.13.1"
+prost-build = "0.13.3"
 tonic-build = "0.12.0"
 
 [dev-dependencies]

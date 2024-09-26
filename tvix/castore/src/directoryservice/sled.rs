@@ -121,7 +121,7 @@ impl DirectoryService for SledDirectoryService {
     {
         Box::new(SledDirectoryPutter {
             tree: self.db.deref().clone(),
-            directory_validator: Some(Default::default()),
+            directory_validator: Some(DirectoryGraph::default()),
         })
     }
 }

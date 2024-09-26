@@ -44,10 +44,10 @@ impl TryFrom<Vec<u8>> for B3Digest {
     // constructs a [B3Digest] from a [Vec<u8>].
     // Returns an error if the digest has the wrong length.
     fn try_from(value: Vec<u8>) -> Result<Self, Self::Error> {
-        if value.len() != B3_LEN {
-            Err(Error::InvalidDigestLen(value.len()))
-        } else {
+        if value.len() == B3_LEN {
             Ok(Self(value.into()))
+        } else {
+            Err(Error::InvalidDigestLen(value.len()))
         }
     }
 }
@@ -58,10 +58,10 @@ impl TryFrom<bytes::Bytes> for B3Digest {
     // constructs a [B3Digest] from a [bytes::Bytes].
     // Returns an error if the digest has the wrong length.
     fn try_from(value: bytes::Bytes) -> Result<Self, Self::Error> {
-        if value.len() != B3_LEN {
-            Err(Error::InvalidDigestLen(value.len()))
-        } else {
+        if value.len() == B3_LEN {
             Ok(Self(value))
+        } else {
+            Err(Error::InvalidDigestLen(value.len()))
         }
     }
 }

@@ -188,10 +188,8 @@ impl NixAttrs {
     pub fn update(self, other: Self) -> Self {
         // Short-circuit on some optimal cases:
         match (self.0.as_ref(), other.0.as_ref()) {
-            (AttrsRep::Empty, AttrsRep::Empty) => return self,
-            (AttrsRep::Empty, _) => return other,
             (_, AttrsRep::Empty) => return self,
-            (AttrsRep::KV { .. }, AttrsRep::KV { .. }) => return other,
+            (AttrsRep::Empty, _) | (AttrsRep::KV { .. }, AttrsRep::KV { .. }) => return other,
 
             // Explicitly handle all branches instead of falling
             // through, to ensure that we get at least some compiler
@@ -350,7 +348,7 @@ impl NixAttrs {
 
         // Optimisation: KV pattern
         if count == 2 {
-            if let Some(kv) = attempt_optimise_kv(&mut stack_slice) {
+            if let Some(kv) = attempt_optimise_kv(&stack_slice) {
                 return Ok(Ok(kv));
             }
         }
@@ -415,7 +413,7 @@ impl IntoIterator for NixAttrs {
 ///   index:   0       1 2      3
 ///   stack:   3       2 1      0
 /// ```
-fn attempt_optimise_kv(slice: &mut [Value]) -> Option<NixAttrs> {
+fn attempt_optimise_kv(slice: &[Value]) -> Option<NixAttrs> {
     let (name_idx, value_idx) = {
         match (&slice[2], &slice[0]) {
             (Value::String(s1), Value::String(s2)) if (*s1 == *NAME_S && *s2 == *VALUE_S) => (3, 1),
@@ -541,7 +539,7 @@ impl<'a> Iterator for Keys<'a> {
 
     fn next(&mut self) -> Option<Self::Item> {
         match &mut self.0 {
-            KeysInner::Empty => None,
+            KeysInner::KV(IterKV::Done) | KeysInner::Empty => None,
             KeysInner::KV(at @ IterKV::Name) => {
                 at.next();
                 Some(&NAME_REF)
@@ -550,7 +548,6 @@ impl<'a> Iterator for Keys<'a> {
                 at.next();
                 Some(&VALUE_REF)
             }
-            KeysInner::KV(IterKV::Done) => None,
             KeysInner::Map(m) => m.next(),
         }
     }

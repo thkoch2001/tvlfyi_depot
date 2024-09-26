@@ -80,7 +80,7 @@ pub fn read_trailer<R: AsyncRead + Unpin, T: Tag>(reader: R, data_len: u8) -> Re
 }
 
 impl<R, T: Tag> ReadTrailer<R, T> {
-    pub fn len(&self) -> u8 {
+    pub const fn len(&self) -> u8 {
         self.data_len
     }
 }

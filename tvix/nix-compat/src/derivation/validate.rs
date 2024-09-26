@@ -53,7 +53,10 @@ impl Derivation {
         // Validate all input_derivations
         for (input_derivation_path, output_names) in &self.input_derivations {
             // Validate input_derivation_path
-            if !input_derivation_path.name().ends_with(".drv") {
+            if !std::path::Path::new(input_derivation_path.name())
+                .extension()
+                .map_or(false, |ext| ext.eq_ignore_ascii_case("drv"))
+            {
                 return Err(DerivationError::InvalidInputDerivationPrefix(
                     input_derivation_path.to_string(),
                 ));

@@ -9,6 +9,7 @@ use serde::Deserialize;
 use serde::Serialize;
 use std::path::PathBuf;
 use std::sync::Arc;
+use tokio_listener::SystemOptions;
 use tonic::transport::Server;
 use tower::ServiceBuilder;
 use tower_http::trace::{DefaultMakeSpan, TraceLayer};
@@ -204,7 +205,7 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error + Send + Sync
                 let reflection_svc = tonic_reflection::server::Builder::configure()
                     .register_encoded_file_descriptor_set(CASTORE_FILE_DESCRIPTOR_SET)
                     .register_encoded_file_descriptor_set(FILE_DESCRIPTOR_SET)
-                    .build()?;
+                    .build_v1()?;
                 router = router.add_service(reflection_svc);
             }
 
@@ -216,7 +217,7 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error + Send + Sync
 
             let listener = tokio_listener::Listener::bind(
                 listen_address,
-                &Default::default(),
+                &SystemOptions::default(),
                 &listen_args.listener_options,
             )
             .await?;
@@ -279,6 +280,7 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error + Send + Sync
             // Parse the file at reference_graph_path.
             let reference_graph_json = tokio::fs::read(&reference_graph_path).await?;
 
+            #[allow(clippy::items_after_statements)]
             #[derive(Deserialize, Serialize)]
             struct ReferenceGraph<'a> {
                 #[serde(borrow)]
@@ -355,16 +357,20 @@ async fn run_cli(cli: Cli) -> Result<(), Box<dyn std::error::Error + Send + Sync
                         elem.path.to_string().into(),
                         root_node,
                     )),
-                    references: Vec::from_iter(
-                        elem.references.iter().map(|e| e.digest().to_vec().into()),
-                    ),
+                    references: elem
+                        .references
+                        .iter()
+                        .map(|e| e.digest().to_vec().into())
+                        .collect(),
                     narinfo: Some(NarInfo {
                         nar_size: elem.nar_size,
                         nar_sha256: elem.nar_sha256.to_vec().into(),
                         signatures: vec![],
-                        reference_names: Vec::from_iter(
-                            elem.references.iter().map(std::string::ToString::to_string),
-                        ),
+                        reference_names: elem
+                            .references
+                            .iter()
+                            .map(std::string::ToString::to_string)
+                            .collect(),
                         deriver: None,
                         ca: None,
                     }),

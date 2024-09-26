@@ -10,15 +10,17 @@ fn is_second_coordinate(x: &str) -> bool {
 /// as "however cppnix handles it".
 pub fn llvm_triple_to_nix_double(llvm_triple: &str) -> String {
     let parts: Vec<&str> = llvm_triple.split('-').collect();
-    let cpu = match parts[0] {
+    let [cpu, ref stem @ ..] = parts[..] else {
+        panic!("unrecognized triple {llvm_triple}")
+    };
+    let cpu = match cpu {
         "armv6" => "armv6l", // cppnix appends an "l" to armv6
         "armv7" => "armv7l", // cppnix appends an "l" to armv7
-        x => match x.as_bytes() {
-            [b'i', _, b'8', b'6'] => "i686", // cppnix glob-matches against i*86
-            _ => x,
-        },
+        // cppnix glob-matches against i*86
+        x if matches!(x.as_bytes(), [b'i', _, b'8', b'6']) => "i686",
+        x => x,
     };
-    let os = match parts[1..] {
+    let os = match stem {
         [_vendor, kernel, _environment] if is_second_coordinate(kernel) => kernel,
         [_vendor, kernel] if is_second_coordinate(kernel) => kernel,
         [kernel, _environment] if is_second_coordinate(kernel) => kernel,

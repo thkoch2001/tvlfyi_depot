@@ -1,5 +1,5 @@
-//! This contains test scenarios that a given [DirectoryService] needs to pass.
-//! We use [rstest] and [rstest_reuse] to provide all services we want to test
+//! This contains test scenarios that a given [`DirectoryService`] needs to pass.
+//! We use [rstest] and [`rstest_reuse`] to provide all services we want to test
 //! against, and then apply this template to all test functions.
 
 use futures::StreamExt;
@@ -102,7 +102,7 @@ async fn put_get_multiple_success(directory_service: impl DirectoryService) {
             .get_recursive(&DIRECTORY_C.digest())
             .collect::<Vec<_>>()
             .await
-    )
+    );
 }
 
 /// Puts a directory closure, but simulates a dumb client not deduplicating
@@ -129,7 +129,7 @@ async fn put_get_multiple_dedup(directory_service: impl DirectoryService) {
             .get_recursive(&DIRECTORY_C.digest())
             .collect::<Vec<_>>()
             .await
-    )
+    );
 }
 
 /// This tests the insertion and retrieval of a closure which contains a duplicated directory
@@ -167,9 +167,7 @@ async fn put_get_foo(directory_service: impl DirectoryService) {
             Ok(DIRECTORY_B.clone()),
         ],
     ];
-    if !valid_closures.contains(&retrieved_closure) {
-        panic!("invalid closure returned: {:?}", retrieved_closure);
-    }
+    assert!(valid_closures.contains(&retrieved_closure), "invalid closure returned: {retrieved_closure:?}");
 }
 
 /// Uploading A, then C (referring to A twice), then B (itself referring to A) should fail during close,
@@ -206,7 +204,7 @@ async fn upload_reject_dangling_pointer(directory_service: impl DirectoryService
         assert!(
             handle.close().await.is_err(),
             "when succeeding put, close must fail"
-        )
+        );
     }
 }
 
@@ -233,6 +231,6 @@ async fn upload_reject_wrong_size(directory_service: impl DirectoryService) {
         assert!(
             handle.close().await.is_err(),
             "when second put succeeds, close must fail"
-        )
+        );
     }
 }

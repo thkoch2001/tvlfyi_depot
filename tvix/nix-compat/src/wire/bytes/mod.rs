@@ -132,7 +132,7 @@ where
 }
 
 /// SAFETY: The bytes have to actually be initialized.
-unsafe fn assume_init_bytes(slice: &[MaybeUninit<u8>]) -> &[u8] {
+const unsafe fn assume_init_bytes(slice: &[MaybeUninit<u8>]) -> &[u8] {
     &*(std::ptr::from_ref::<[MaybeUninit<u8>]>(slice) as *const [u8])
 }
 
@@ -176,7 +176,7 @@ pub async fn write_bytes<W: AsyncWriteExt + Unpin, B: AsRef<[u8]>>(
 
 /// Computes the number of bytes we should add to len (a length in
 /// bytes) to be aligned on 64 bits (8 bytes).
-fn padding_len(len: u64) -> u8 {
+const fn padding_len(len: u64) -> u8 {
     let aligned = len.wrapping_add(7) & !7;
     aligned.wrapping_sub(len) as u8
 }

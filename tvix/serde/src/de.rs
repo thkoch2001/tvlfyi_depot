@@ -62,7 +62,7 @@ where
     T::deserialize(de)
 }
 
-fn unexpected(expected: &'static str, got: &Value) -> Error {
+const fn unexpected(expected: &'static str, got: &Value) -> Error {
     Error::UnexpectedType {
         expected,
         got: got.type_of(),

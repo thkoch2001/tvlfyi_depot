@@ -75,10 +75,10 @@ pub fn write_char(writer: &mut impl Write, c: char) -> io::Result<()> {
 pub fn write_field<S: AsRef<[u8]>>(writer: &mut impl Write, s: S, escape: bool) -> io::Result<()> {
     write_char(writer, QUOTE)?;
 
-    if !escape {
-        writer.write_all(s.as_ref())?;
-    } else {
+    if escape {
         writer.write_all(&escape_bytes(s.as_ref()))?;
+    } else {
+        writer.write_all(s.as_ref())?;
     }
 
     write_char(writer, QUOTE)?;
@@ -116,13 +116,15 @@ pub fn write_outputs(
         let path_str = output.path_str();
         let mut elements: Vec<&str> = vec![output_name, &path_str];
 
-        let (mode_and_algo, digest) = match &output.ca_hash {
-            Some(ca_hash) => (
-                format!("{}{}", ca_kind_prefix(ca_hash), ca_hash.hash().algo()),
-                data_encoding::HEXLOWER.encode(ca_hash.hash().digest_as_bytes()),
-            ),
-            None => (String::new(), String::new()),
-        };
+        let (mode_and_algo, digest) = output.ca_hash.as_ref().map_or_else(
+            || (String::new(), String::new()),
+            |ca_hash| {
+                (
+                    format!("{}{}", ca_kind_prefix(ca_hash), ca_hash.hash().algo()),
+                    data_encoding::HEXLOWER.encode(ca_hash.hash().digest_as_bytes()),
+                )
+            },
+        );
 
         elements.push(&mode_and_algo);
         elements.push(&digest);

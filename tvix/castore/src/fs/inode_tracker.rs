@@ -25,11 +25,11 @@ pub struct InodeTracker {
 impl Default for InodeTracker {
     fn default() -> Self {
         Self {
-            data: Default::default(),
+            data: HashMap::default(),
 
-            blob_digest_to_inode: Default::default(),
-            symlink_target_to_inode: Default::default(),
-            directory_digest_to_inode: Default::default(),
+            blob_digest_to_inode: HashMap::default(),
+            symlink_target_to_inode: HashMap::default(),
+            directory_digest_to_inode: HashMap::default(),
 
             next_inode: 2,
         }
@@ -45,7 +45,10 @@ impl InodeTracker {
     // Replaces data for a given inode.
     // Panics if the inode doesn't already exist.
     pub fn replace(&mut self, ino: u64, data: Arc<InodeData>) {
-        assert!(self.data.insert(ino, data).is_some(), "replace called on unknown inode");
+        assert!(
+            self.data.insert(ino, data).is_some(),
+            "replace called on unknown inode"
+        );
     }
 
     // Stores data and returns the inode for it.
@@ -53,6 +56,7 @@ impl InodeTracker {
     // is returned, otherwise a new one is allocated.
     // In case data is a [InodeData::Directory], inodes for all items are looked
     // up
+    #[allow(clippy::option_if_let_else)]
     pub fn put(&mut self, data: InodeData) -> u64 {
         match data {
             InodeData::Regular(ref digest, _, _) => {

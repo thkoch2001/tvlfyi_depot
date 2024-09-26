@@ -74,5 +74,6 @@ pkgs.mkShell {
   # refactorings are not observed as eval perf changes.
   shellHook = ''
     export TVIX_BENCH_NIX_PATH=nixpkgs=${pkgs.path}
+    export RUST_SRC_PATH=${pkgs.rustPlatform.rustLibSrc}
   '';
 }

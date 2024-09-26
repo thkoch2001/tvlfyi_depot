@@ -118,26 +118,25 @@ where
 
         if parent == crate::Path::ROOT {
             break node;
-        } else {
-            let name = entry
-                .path()
-                .file_name()
-                // If this is the root node, it will have an empty name.
-                .unwrap_or_else(|| "".try_into().unwrap())
-                .clone();
-
-            // record node in parent directory, creating a new [Directory] if not there yet.
-            directories
-                .entry(parent.to_owned())
-                .or_default()
-                .add(name, node)
-                .map_err(|e| {
-                    IngestionError::UploadDirectoryError(
-                        entry.path().to_owned(),
-                        crate::Error::StorageError(e.to_string()),
-                    )
-                })?;
         }
+        let name = entry
+            .path()
+            .file_name()
+            // If this is the root node, it will have an empty name.
+            .unwrap_or_else(|| "".try_into().unwrap())
+            .clone();
+
+        // record node in parent directory, creating a new [Directory] if not there yet.
+        directories
+            .entry(parent.to_owned())
+            .or_default()
+            .add(name, node)
+            .map_err(|e| {
+                IngestionError::UploadDirectoryError(
+                    entry.path().to_owned(),
+                    crate::Error::StorageError(e.to_string()),
+                )
+            })?;
     };
 
     assert!(
@@ -192,13 +191,11 @@ pub enum IngestionEntry {
 impl IngestionEntry {
     fn path(&self) -> &Path {
         match self {
-            Self::Regular { path, .. } => path,
-            Self::Symlink { path, .. } => path,
-            Self::Dir { path } => path,
+            Self::Regular { path, .. } | Self::Symlink { path, .. } | Self::Dir { path } => path,
         }
     }
 
-    fn is_dir(&self) -> bool {
+    const fn is_dir(&self) -> bool {
         matches!(self, Self::Dir { .. })
     }
 }

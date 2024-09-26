@@ -14,7 +14,7 @@ pub struct GRPCPathInfoServiceWrapper<PS, NS> {
 }
 
 impl<PS, NS> GRPCPathInfoServiceWrapper<PS, NS> {
-    pub fn new(path_info_service: PS, nar_calculation_service: NS) -> Self {
+    pub const fn new(path_info_service: PS, nar_calculation_service: NS) -> Self {
         Self {
             path_info_service,
             nar_calculation_service,
@@ -109,11 +109,12 @@ where
 impl From<RenderError> for tonic::Status {
     fn from(value: RenderError) -> Self {
         match value {
-            RenderError::BlobNotFound(_, _) => Self::not_found(value.to_string()),
-            RenderError::DirectoryNotFound(_, _) => Self::not_found(value.to_string()),
-            RenderError::NARWriterError(_) => Self::internal(value.to_string()),
-            RenderError::StoreError(_) => Self::internal(value.to_string()),
-            RenderError::UnexpectedBlobMeta(_, _, _, _) => Self::internal(value.to_string()),
+            RenderError::BlobNotFound(_, _) | RenderError::DirectoryNotFound(_, _) => {
+                Self::not_found(value.to_string())
+            }
+            RenderError::NARWriterError(_)
+            | RenderError::StoreError(_)
+            | RenderError::UnexpectedBlobMeta(_, _, _, _) => Self::internal(value.to_string()),
         }
     }
 }

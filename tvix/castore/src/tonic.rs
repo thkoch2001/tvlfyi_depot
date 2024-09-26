@@ -18,52 +18,49 @@ fn url_wants_wait_connect(url: &url::Url) -> bool {
 /// All URLs support adding `wait-connect=1` as a URL parameter, in which case
 /// the connection is established lazily.
 pub async fn channel_from_url(url: &url::Url) -> Result<Channel, self::Error> {
-    match url.scheme() {
-        "grpc+unix" => {
-            if url.host_str().is_some() {
-                return Err(Error::HostSetForUnixSocket());
-            }
+    if url.scheme() == "grpc+unix" {
+        if url.host_str().is_some() {
+            return Err(Error::HostSetForUnixSocket());
+        }
 
-            let connector = tower::service_fn({
-                let url = url.clone();
-                move |_: tonic::transport::Uri| {
-                    let unix = UnixStream::connect(url.path().to_string());
-                    async move { Ok::<_, std::io::Error>(TokioIo::new(unix.await?)) }
+        let connector = tower::service_fn({
+            let url = url.clone();
+            move |_: tonic::transport::Uri| {
+                let unix = UnixStream::connect(url.path().to_string());
+                async move { Ok::<_, std::io::Error>(TokioIo::new(unix.await?)) }
+            }
+        });
+
+        // the URL doesn't matter
+        let endpoint = Endpoint::from_static("http://[::]:50051");
+        if url_wants_wait_connect(url) {
+            Ok(endpoint.connect_with_connector(connector).await?)
+        } else {
+            Ok(endpoint.connect_with_connector_lazy(connector))
+        }
+    } else {
+                // ensure path is empty, not supported with gRPC.
+                if !url.path().is_empty() {
+                    return Err(Error::PathMayNotBeSet());
                 }
-            });
 
-            // the URL doesn't matter
-            let endpoint = Endpoint::from_static("http://[::]:50051");
-            if url_wants_wait_connect(url) {
-                Ok(endpoint.connect_with_connector(connector).await?)
-            } else {
-                Ok(endpoint.connect_with_connector_lazy(connector))
-            }
-        }
-        _ => {
-            // ensure path is empty, not supported with gRPC.
-            if !url.path().is_empty() {
-                return Err(Error::PathMayNotBeSet());
-            }
+                // Stringify the URL and remove the grpc+ prefix.
+                // We can't use `url.set_scheme(rest)`, as it disallows
+                // setting something http(s) that previously wasn't.
+                let unprefixed_url_str = match url.to_string().strip_prefix("grpc+") {
+                    None => return Err(Error::MissingGRPCPrefix()),
+                    Some(url_str) => url_str.to_owned(),
+                };
 
-            // Stringify the URL and remove the grpc+ prefix.
-            // We can't use `url.set_scheme(rest)`, as it disallows
-            // setting something http(s) that previously wasn't.
-            let unprefixed_url_str = match url.to_string().strip_prefix("grpc+") {
-                None => return Err(Error::MissingGRPCPrefix()),
-                Some(url_str) => url_str.to_owned(),
-            };
-
-            // Use the regular tonic transport::Endpoint logic, but unprefixed_url_str,
-            // as tonic doesn't know about grpc+http[s].
-            let endpoint = Endpoint::try_from(unprefixed_url_str)?;
-            if url_wants_wait_connect(url) {
-                Ok(endpoint.connect().await?)
-            } else {
-                Ok(endpoint.connect_lazy())
+                // Use the regular tonic transport::Endpoint logic, but unprefixed_url_str,
+                // as tonic doesn't know about grpc+http[s].
+                let endpoint = Endpoint::try_from(unprefixed_url_str)?;
+                if url_wants_wait_connect(url) {
+                    Ok(endpoint.connect().await?)
+                } else {
+                    Ok(endpoint.connect_lazy())
+                }
             }
-        }
-    }
 }
 
 /// Errors occuring when trying to connect to a backend
@@ -121,6 +118,6 @@ mod tests {
     #[tokio::test]
     async fn test_from_addr_tokio(#[case] uri_str: &str, #[case] is_ok: bool) {
         let url = Url::parse(uri_str).expect("must parse");
-        assert_eq!(channel_from_url(&url).await.is_ok(), is_ok)
+        assert_eq!(channel_from_url(&url).await.is_ok(), is_ok);
     }
 }

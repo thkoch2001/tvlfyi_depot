@@ -22,12 +22,8 @@ impl DirectoryService for MemoryDirectoryService {
     async fn get(&self, digest: &B3Digest) -> Result<Option<Directory>, Error> {
         let db = self.db.read().await;
 
-        match db.get(digest) {
-            // The directory was not found, return
-            None => Ok(None),
-
-            // The directory was found, try to parse the data as Directory message
-            Some(directory) => {
+        db.get(digest)
+            .map(|directory| {
                 // Validate the retrieved Directory indeed has the
                 // digest we expect it to have, to detect corruptions.
                 let actual_digest = directory.digest();
@@ -37,11 +33,12 @@ impl DirectoryService for MemoryDirectoryService {
                     )));
                 }
 
-                Ok(Some(directory.clone().try_into().map_err(|e| {
-                    crate::Error::StorageError(format!("corrupted directory: {e}"))
-                })?))
-            }
-        }
+                directory
+                    .clone()
+                    .try_into()
+                    .map_err(|e| crate::Error::StorageError(format!("corrupted directory: {e}")))
+            })
+            .transpose()
     }
 
     #[instrument(skip(self, directory), fields(directory.digest = %directory.digest()))]
@@ -49,8 +46,10 @@ impl DirectoryService for MemoryDirectoryService {
         let digest = directory.digest();
 
         // store it
-        let mut db = self.db.write().await;
-        db.insert(digest.clone(), directory.into());
+        self.db
+            .write()
+            .await
+            .insert(digest.clone(), directory.into());
 
         Ok(digest)
     }

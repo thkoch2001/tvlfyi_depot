@@ -377,10 +377,10 @@ mod pure_builtins {
         if i < 0 {
             Err(ErrorKind::IndexOutOfBounds { index: i })
         } else {
-            match xs.get(i as usize) {
-                Some(x) => Ok(x.clone()),
-                None => Err(ErrorKind::IndexOutOfBounds { index: i }),
-            }
+            xs.get(i as usize).map_or_else(
+                || Err(ErrorKind::IndexOutOfBounds { index: i }),
+                |x| Ok(x.clone()),
+            )
         }
     }
 
@@ -431,14 +431,16 @@ mod pure_builtins {
     #[builtin("functionArgs")]
     async fn builtin_function_args(co: GenCo, f: Value) -> Result<Value, ErrorKind> {
         let lambda = &f.as_closure()?.lambda();
-        let formals = if let Some(formals) = &lambda.formals {
-            formals
-        } else {
+        let Some(formals) = &lambda.formals else {
             return Ok(Value::attrs(NixAttrs::empty()));
         };
-        Ok(Value::attrs(NixAttrs::from_iter(
-            formals.arguments.iter().map(|(k, v)| (k.clone(), (*v))),
-        )))
+        Ok(Value::attrs(
+            formals
+                .arguments
+                .iter()
+                .map(|(k, v)| (k.clone(), (*v)))
+                .collect(),
+        ))
     }
 
     #[builtin("fromJSON")]
@@ -542,12 +544,14 @@ mod pure_builtins {
         let k = key.to_str()?;
         let xs = set.to_attrs()?;
 
-        match xs.select(&k) {
-            Some(x) => Ok(x.clone()),
-            None => Err(ErrorKind::AttributeNotFound {
-                name: k.to_string(),
-            }),
-        }
+        xs.select(&k).map_or_else(
+            || {
+                Err(ErrorKind::AttributeNotFound {
+                    name: k.to_string(),
+                })
+            },
+            |x| Ok(x.clone()),
+        )
     }
 
     #[builtin("groupBy")]
@@ -565,10 +569,11 @@ mod pure_builtins {
 
             res.entry(key).or_default().push(val);
         }
-        Ok(Value::attrs(NixAttrs::from_iter(
+        Ok(Value::attrs(
             res.into_iter()
-                .map(|(k, v)| (k, Value::List(NixList::from(v)))),
-        )))
+                .map(|(k, v)| (k, Value::List(NixList::from(v))))
+                .collect(),
+        ))
     }
 
     #[builtin("hasAttr")]
@@ -674,10 +679,10 @@ mod pure_builtins {
                     )));
                 }
 
-                (key.clone(), Value::attrs(NixAttrs::from_iter(vec_attrs.into_iter())))
+                (key.clone(), Value::attrs(vec_attrs.into_iter().collect()))
             });
 
-        Ok(Value::attrs(NixAttrs::from_iter(elements)))
+        Ok(Value::attrs(elements.collect()))
     }
 
     #[builtin("appendContext")]
@@ -770,10 +775,10 @@ mod pure_builtins {
             return Ok(list);
         }
 
-        match list.to_list()?.get(0) {
-            Some(x) => Ok(x.clone()),
-            None => Err(ErrorKind::IndexOutOfBounds { index: 0 }),
-        }
+        list.to_list()?.get(0).map_or_else(
+            || Err(ErrorKind::IndexOutOfBounds { index: 0 }),
+            |x| Ok(x.clone()),
+        )
     }
 
     #[builtin("intersectAttrs")]
@@ -973,7 +978,7 @@ mod pure_builtins {
             // Map entries earlier in the list take precedence over entries later in the list
             map.entry(name).or_insert(value);
         }
-        Ok(Value::attrs(NixAttrs::from_iter(map.into_iter())))
+        Ok(Value::attrs(map.into_iter().collect()))
     }
 
     #[builtin("map")]
@@ -1031,25 +1036,27 @@ mod pure_builtins {
         }
         let re = re.to_str()?;
         let re: Regex = Regex::new(&format!("^{}$", re.to_str()?)).unwrap();
-        match re.captures(s.to_str()?) {
-            Some(caps) => Ok(Value::List(
-                caps.iter()
-                    .skip(1)
-                    .map(|grp| {
-                        // Surprisingly, Nix does not propagate
-                        // the original context here.
-                        // Though, it accepts contextful strings as an argument.
-                        // An example of such behaviors in nixpkgs
-                        // can be observed in make-initrd.nix when it comes
-                        // to compressors which are matched over their full command
-                        // and then a compressor name will be extracted from that.
-                        grp.map_or(Value::Null, |g| Value::from(g.as_str()))
-                    })
-                    .collect::<Vec<Value>>()
-                    .into(),
-            )),
-            None => Ok(Value::Null),
-        }
+        re.captures(s.to_str()?).map_or_else(
+            || Ok(Value::Null),
+            |caps| {
+                Ok(Value::List(
+                    caps.iter()
+                        .skip(1)
+                        .map(|grp| {
+                            // Surprisingly, Nix does not propagate
+                            // the original context here.
+                            // Though, it accepts contextful strings as an argument.
+                            // An example of such behaviors in nixpkgs
+                            // can be observed in make-initrd.nix when it comes
+                            // to compressors which are matched over their full command
+                            // and then a compressor name will be extracted from that.
+                            grp.map_or(Value::Null, |g| Value::from(g.as_str()))
+                        })
+                        .collect::<Vec<Value>>()
+                        .into(),
+                ))
+            },
+        )
     }
 
     #[builtin("mul")]
@@ -1080,17 +1087,19 @@ mod pure_builtins {
         let version = dash_and_version
             .split_first()
             .map_or(Ok(""), |x| core::str::from_utf8(x.1))?;
-        Ok(Value::attrs(NixAttrs::from_iter(
-            [("name", core::str::from_utf8(name)?), ("version", version)].into_iter(),
-        )))
+        Ok(Value::attrs(
+            [("name", core::str::from_utf8(name)?), ("version", version)]
+                .into_iter()
+                .collect(),
+        ))
     }
 
     #[builtin("partition")]
     async fn builtin_partition(co: GenCo, pred: Value, list: Value) -> Result<Value, ErrorKind> {
-        let mut right: Vec<Value> = Default::default();
-        let mut wrong: Vec<Value> = Default::default();
+        let mut right = vec![];
+        let mut wrong = vec![];
 
-        let list: NixList = list.to_list()?;
+        let list = list.to_list()?;
         for elem in list {
             let result = generators::request_call_with(&co, pred.clone(), [elem.clone()]).await;
 
@@ -1106,7 +1115,7 @@ mod pure_builtins {
             ("wrong", Value::List(NixList::from(wrong))),
         ];
 
-        Ok(Value::attrs(NixAttrs::from_iter(res.into_iter())))
+        Ok(Value::attrs(res.into_iter().collect()))
     }
 
     #[builtin("removeAttrs")]
@@ -1121,14 +1130,11 @@ mod pure_builtins {
             .into_iter()
             .map(|v| v.to_str())
             .collect::<Result<FxHashSet<_>, _>>()?;
-        let res = attrs.iter().filter_map(|(k, v)| {
-            if !keys.contains(k) {
-                Some((k.clone(), v.clone()))
-            } else {
-                None
-            }
-        });
-        Ok(Value::attrs(NixAttrs::from_iter(res)))
+        let res = attrs
+            .iter()
+            .filter(|&(k, _)| !keys.contains(k))
+            .map(|(k, v)| (k.clone(), v.clone()));
+        Ok(Value::attrs(res.collect()))
     }
 
     #[builtin("replaceStrings")]
@@ -1499,11 +1505,7 @@ mod pure_builtins {
             buf,
             // FUTUREWORK: We have a distinction between an empty context, and
             // no context at all. Fix this.
-            if !context.is_empty() {
-                Some(Box::new(context))
-            } else {
-                None
-            },
+            (!context.is_empty()).then(|| Box::new(context)),
         )
             .into())
     }
@@ -1525,7 +1527,7 @@ mod pure_builtins {
         match coerce_value_to_path(&co, s).await? {
             Err(cek) => Ok(Value::from(cek)),
             Ok(path) => {
-                let path: Value = crate::value::canon_path(path).into();
+                let path: Value = crate::value::canon_path(&path).into();
                 let span = generators::request_span(&co).await;
                 Ok(path
                     .coerce_to_string(
@@ -1548,7 +1550,7 @@ mod pure_builtins {
             value => [("value", value), ("success", true.into())],
         };
 
-        Ok(Value::attrs(NixAttrs::from_iter(res.into_iter())))
+        Ok(Value::attrs(res.into_iter().collect()))
     }
 
     #[builtin("typeOf")]
@@ -1610,11 +1612,15 @@ pub fn pure_builtins() -> Vec<(&'static str, Value)> {
         "__curPos",
         Value::Thunk(Thunk::new_suspended_native(Box::new(move || {
             // TODO: implement for nixpkgs compatibility
-            Ok(Value::attrs(NixAttrs::from_iter([
-                ("line", 42.into()),
-                ("column", 42.into()),
-                ("file", Value::String("/deep/thought".into())),
-            ])))
+            Ok(Value::attrs(
+                [
+                    ("line", 42.into()),
+                    ("column", 42.into()),
+                    ("file", Value::String("/deep/thought".into())),
+                ]
+                .into_iter()
+                .collect(),
+            ))
         }))),
     ));
 
@@ -1626,8 +1632,7 @@ mod placeholder_builtins {
     use crate::NixContext;
 
     use super::{
-        generators, tvix_eval, ByteVec, CoercionKind, ErrorKind, Gen, GenCo, NixAttrs, NixString,
-        Value, WarningKind,
+        generators, tvix_eval, CoercionKind, ErrorKind, Gen, GenCo, NixString, Value, WarningKind,
     };
 
     #[builtin("unsafeDiscardStringContext")]
@@ -1718,7 +1723,7 @@ mod placeholder_builtins {
             ("column", 42.into()),
             ("file", Value::String("/deep/thought".into())),
         ];
-        Ok(Value::attrs(NixAttrs::from_iter(res.into_iter())))
+        Ok(Value::attrs(res.into_iter().collect()))
     }
 }
 

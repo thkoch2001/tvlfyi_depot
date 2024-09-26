@@ -132,7 +132,7 @@ async fn populate_symlink(root_nodes: &mut BTreeMap<PathComponent, Node>) {
 }
 
 /// This writes a symlink pointing to /nix/store/somewhereelse,
-/// which is the same symlink target as "aa" inside DIRECTORY_COMPLICATED.
+/// which is the same symlink target as "aa" inside `DIRECTORY_COMPLICATED`.
 async fn populate_symlink2(root_nodes: &mut BTreeMap<PathComponent, Node>) {
     root_nodes.insert(
         SYMLINK_NAME2.try_into().unwrap(),
@@ -169,7 +169,7 @@ async fn populate_directory_with_keep(
     );
 }
 
-/// Create a root node for DIRECTORY_WITH_KEEP, but don't upload the Directory
+/// Create a root node for `DIRECTORY_WITH_KEEP`, but don't upload the Directory
 /// itself.
 async fn populate_directorynode_without_directory(root_nodes: &mut BTreeMap<PathComponent, Node>) {
     root_nodes.insert(
@@ -181,7 +181,7 @@ async fn populate_directorynode_without_directory(root_nodes: &mut BTreeMap<Path
     );
 }
 
-/// Insert BLOB_A, but don't provide the blob .keep is pointing to.
+/// Insert `BLOB_A`, but don't provide the blob .keep is pointing to.
 async fn populate_filenode_without_blob(root_nodes: &mut BTreeMap<PathComponent, Node>) {
     root_nodes.insert(
         BLOB_A_NAME.try_into().unwrap(),

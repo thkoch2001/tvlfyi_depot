@@ -27,7 +27,7 @@ pub struct Cache<DS1, DS2> {
 }
 
 impl<DS1, DS2> Cache<DS1, DS2> {
-    pub fn new(near: DS1, far: DS2) -> Self {
+    pub const fn new(near: DS1, far: DS2) -> Self {
         Self { near, far }
     }
 }
@@ -40,44 +40,40 @@ where
 {
     #[instrument(skip(self, digest), fields(directory.digest = %digest))]
     async fn get(&self, digest: &B3Digest) -> Result<Option<Directory>, Error> {
-        match self.near.get(digest).await? {
-            Some(directory) => {
-                trace!("serving from cache");
-                Ok(Some(directory))
-            }
-            None => {
-                trace!("not found in near, asking remote…");
-
-                let mut copy = DirectoryGraph::with_order(
-                    RootToLeavesValidator::new_with_root_digest(digest.clone()),
-                );
-
-                let mut stream = self.far.get_recursive(digest);
-                let root = stream.try_next().await?;
-
-                if let Some(root) = root.clone() {
-                    copy.add(root)
-                        .map_err(|e| Error::StorageError(e.to_string()))?;
-                }
-
-                while let Some(dir) = stream.try_next().await? {
-                    copy.add(dir)
-                        .map_err(|e| Error::StorageError(e.to_string()))?;
-                }
-
-                let copy = copy
-                    .validate()
-                    .map_err(|e| Error::StorageError(e.to_string()))?;
-
-                let mut put = self.near.put_multiple_start();
-                for dir in copy.drain_leaves_to_root() {
-                    put.put(dir).await?;
-                }
-                put.close().await?;
-
-                Ok(root)
-            }
+        if let Some(directory) = self.near.get(digest).await? {
+            trace!("serving from cache");
+            return Ok(Some(directory));
         }
+
+        trace!("not found in near, asking remote…");
+
+        let mut copy =
+            DirectoryGraph::with_order(RootToLeavesValidator::new_with_root_digest(digest.clone()));
+
+        let mut stream = self.far.get_recursive(digest);
+        let root = stream.try_next().await?;
+
+        if let Some(root) = root.clone() {
+            copy.add(root)
+                .map_err(|e| Error::StorageError(e.to_string()))?;
+        }
+
+        while let Some(dir) = stream.try_next().await? {
+            copy.add(dir)
+                .map_err(|e| Error::StorageError(e.to_string()))?;
+        }
+
+        let copy = copy
+            .validate()
+            .map_err(|e| Error::StorageError(e.to_string()))?;
+
+        let mut put = self.near.put_multiple_start();
+        for dir in copy.drain_leaves_to_root() {
+            put.put(dir).await?;
+        }
+        put.close().await?;
+
+        Ok(root)
     }
 
     #[instrument(skip_all)]
@@ -96,42 +92,37 @@ where
         Box::pin(
             (async move {
                 let mut stream = near.get_recursive(&digest);
-                match stream.try_next().await? {
-                    Some(first) => {
-                        trace!("serving from cache");
-                        Ok(futures::stream::once(async { Ok(first) })
-                            .chain(stream)
-                            .left_stream())
-                    }
-                    None => {
-                        trace!("not found in near, asking remote…");
-
-                        let mut copy_for_near = DirectoryGraph::with_order(
-                            RootToLeavesValidator::new_with_root_digest(digest.clone()),
-                        );
-                        let mut copy_for_client = vec![];
-
-                        let mut stream = far.get_recursive(&digest);
-                        while let Some(dir) = stream.try_next().await? {
-                            copy_for_near
-                                .add(dir.clone())
-                                .map_err(|e| Error::StorageError(e.to_string()))?;
-                            copy_for_client.push(dir);
-                        }
-
-                        let copy_for_near = copy_for_near
-                            .validate()
-                            .map_err(|e| Error::StorageError(e.to_string()))?;
-                        let mut put = near.put_multiple_start();
-                        for dir in copy_for_near.drain_leaves_to_root() {
-                            put.put(dir).await?;
-                        }
-                        put.close().await?;
-
-                        Ok(futures::stream::iter(copy_for_client.into_iter().map(Ok))
-                            .right_stream())
-                    }
+                if let Some(first) = stream.try_next().await? {
+                    trace!("serving from cache");
+                    return Ok(futures::stream::once(async { Ok(first) })
+                        .chain(stream)
+                        .left_stream());
                 }
+                trace!("not found in near, asking remote…");
+
+                let mut copy_for_near = DirectoryGraph::with_order(
+                    RootToLeavesValidator::new_with_root_digest(digest.clone()),
+                );
+                let mut copy_for_client = vec![];
+
+                let mut stream = far.get_recursive(&digest);
+                while let Some(dir) = stream.try_next().await? {
+                    copy_for_near
+                        .add(dir.clone())
+                        .map_err(|e| Error::StorageError(e.to_string()))?;
+                    copy_for_client.push(dir);
+                }
+
+                let copy_for_near = copy_for_near
+                    .validate()
+                    .map_err(|e| Error::StorageError(e.to_string()))?;
+                let mut put = near.put_multiple_start();
+                for dir in copy_for_near.drain_leaves_to_root() {
+                    put.put(dir).await?;
+                }
+                put.close().await?;
+
+                Ok(futures::stream::iter(copy_for_client.into_iter().map(Ok)).right_stream())
             })
             .try_flatten_stream(),
         )

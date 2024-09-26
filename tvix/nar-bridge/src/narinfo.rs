@@ -133,27 +133,24 @@ pub async fn put(
     let maybe_root_node: Option<tvix_castore::Node> =
         root_nodes.read().peek(&narinfo.nar_hash).cloned();
 
-    match maybe_root_node {
-        Some(root_node) => {
-            // Set the root node from the lookup.
-            // We need to rename the node to the narinfo storepath basename, as
-            // that's where it's stored in PathInfo.
-            pathinfo.node = Some(castorepb::Node::from_name_and_node(
-                narinfo.store_path.to_string().into(),
-                root_node,
-            ));
+    let root_node = maybe_root_node.ok_or_else(|| {
+        warn!("received narinfo with unknown NARHash");
+        StatusCode::BAD_REQUEST
+    })?;
 
-            // Persist the PathInfo.
-            path_info_service.put(pathinfo).await.map_err(|e| {
-                warn!(err=%e, "failed to persist the PathInfo");
-                StatusCode::INTERNAL_SERVER_ERROR
-            })?;
+    // Set the root node from the lookup.
+    // We need to rename the node to the narinfo storepath basename, as
+    // that's where it's stored in PathInfo.
+    pathinfo.node = Some(castorepb::Node::from_name_and_node(
+        narinfo.store_path.to_string().into(),
+        root_node,
+    ));
 
-            Ok("")
-        }
-        None => {
-            warn!("received narinfo with unknown NARHash");
-            Err(StatusCode::BAD_REQUEST)
-        }
-    }
+    // Persist the PathInfo.
+    path_info_service.put(pathinfo).await.map_err(|e| {
+        warn!(err=%e, "failed to persist the PathInfo");
+        StatusCode::INTERNAL_SERVER_ERROR
+    })?;
+
+    Ok("")
 }

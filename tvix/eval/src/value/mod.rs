@@ -125,7 +125,6 @@ lazy_static! {
 /// type, or a type error. This only works for types that implement
 /// `Copy`, as returning a reference to an inner thunk value is not
 /// possible.
-
 /// Generate an `as_*/to_*` accessor method that returns either the
 /// expected type, or a type error.
 macro_rules! gen_cast {
@@ -241,11 +240,7 @@ impl Value {
     ///
     /// This is a generator function.
     pub(super) async fn deep_force(self, co: GenCo, span: Span) -> Result<Self, ErrorKind> {
-        if let Some(v) = Self::deep_force_(self.clone(), co, span).await? {
-            Ok(v)
-        } else {
-            Ok(self)
-        }
+        (Self::deep_force_(self.clone(), co, span).await?).map_or_else(|| Ok(self), Ok)
     }
 
     /// Returns Some(v) or None to indicate the returned value is myself
@@ -253,12 +248,10 @@ impl Value {
         // This is a stack of values which still remain to be forced.
         let mut vals = vec![myself];
 
-        let mut thunk_set: ThunkSet = Default::default();
+        let mut thunk_set = ThunkSet::default();
 
         loop {
-            let v = if let Some(v) = vals.pop() {
-                v
-            } else {
+            let Some(v) = vals.pop() else {
                 return Ok(None);
             };
 
@@ -406,9 +399,8 @@ impl Value {
                     } else if let Some(out_path) = attrs.select("outPath") {
                         vals.push(out_path.clone());
                         continue;
-                    } else {
-                        return Err(ErrorKind::NotCoercibleToString { from: "set", kind });
                     }
+                    return Err(ErrorKind::NotCoercibleToString { from: "set", kind });
                 }
 
                 // strong coercions
@@ -470,10 +462,10 @@ impl Value {
             };
 
             if let Some(head) = is_list_head {
-                if !head {
-                    result.push(b' ');
-                } else {
+                if head {
                     is_list_head = Some(false);
+                } else {
+                    result.push(b' ');
                 }
             }
 
@@ -514,9 +506,7 @@ impl Value {
         let mut vals = vec![((self, other), ptr_eq)];
 
         loop {
-            let ((a, b), ptr_eq) = if let Some(abp) = vals.pop() {
-                abp
-            } else {
+            let Some(((a, b), ptr_eq)) = vals.pop() else {
                 // stack is empty, so comparison has succeeded
                 return Ok(Self::Bool(true));
             };
@@ -545,8 +535,7 @@ impl Value {
 
             let result = match (a, b) {
                 // Trivial comparisons
-                (c @ Self::Catchable(_), _) => return Ok(c),
-                (_, c @ Self::Catchable(_)) => return Ok(c),
+                (c @ Self::Catchable(_), _) | (_, c @ Self::Catchable(_)) => return Ok(c),
                 (Self::Null, Self::Null) => true,
                 (Self::Bool(b1), Self::Bool(b2)) => b1 == b2,
                 (Self::String(s1), Self::String(s2)) => s1 == s2,
@@ -554,9 +543,10 @@ impl Value {
 
                 // Numerical comparisons (they work between float & int)
                 (Self::Integer(i1), Self::Integer(i2)) => i1 == i2,
-                (Self::Integer(i), Self::Float(f)) => i as f64 == f,
                 (Self::Float(f1), Self::Float(f2)) => f1 == f2,
-                (Self::Float(f), Self::Integer(i)) => i as f64 == f,
+                (Self::Integer(i), Self::Float(f)) | (Self::Float(f), Self::Integer(i)) => {
+                    i as f64 == f
+                }
 
                 // List comparisons
                 (Self::List(l1), Self::List(l2)) => {
@@ -573,8 +563,6 @@ impl Value {
                     ));
                     continue;
                 }
-
-                (_, Self::List(_)) | (Self::List(_), _) => return Ok(Self::Bool(false)),
 
                 // Attribute set comparisons
                 (Self::Attrs(a1), Self::Attrs(a2)) => {
@@ -627,9 +615,8 @@ impl Value {
                                         out1.to_contextful_str()? == out2.to_contextful_str()?;
                                     if !result {
                                         return Ok(Self::Bool(false));
-                                    } else {
-                                        continue;
                                     }
+                                    continue;
                                 }
                             }
                         }
@@ -658,16 +645,13 @@ impl Value {
                     continue;
                 }
 
-                (Self::Attrs(_), _) | (_, Self::Attrs(_)) => return Ok(Self::Bool(false)),
-
                 (Self::Closure(c1), Self::Closure(c2))
                     if ptr_eq >= PointerEquality::AllowNested =>
                 {
                     if Rc::ptr_eq(&c1, &c2) {
                         continue;
-                    } else {
-                        return Ok(Self::Bool(false));
                     }
+                    return Ok(Self::Bool(false));
                 }
 
                 // Everything else is either incomparable (e.g. internal types) or
@@ -681,7 +665,7 @@ impl Value {
     }
 
     #[must_use]
-    pub fn type_of(&self) -> &'static str {
+    pub const fn type_of(&self) -> &'static str {
         match self {
             Self::Null => "null",
             Self::Bool(_) => "bool",
@@ -754,7 +738,7 @@ impl Value {
     ///
     /// [`Thunk`]: Value::Thunk
     #[must_use]
-    pub fn is_thunk(&self) -> bool {
+    pub const fn is_thunk(&self) -> bool {
         matches!(self, Self::Thunk(..))
     }
 
@@ -783,9 +767,7 @@ impl Value {
         let mut vals = vec![((myself, other), PointerEquality::ForbidAll)];
 
         loop {
-            let ((mut a, mut b), ptr_eq) = if let Some(abp) = vals.pop() {
-                abp
-            } else {
+            let Some(((mut a, mut b), ptr_eq)) = vals.pop() else {
                 // stack is empty, so they are equal
                 return Ok(Ok(Ordering::Equal));
             };
@@ -801,8 +783,7 @@ impl Value {
                 b = b.force(&co, span).await?;
             }
             let result = match (a, b) {
-                (Self::Catchable(c), _) => return Ok(Err(*c)),
-                (_, Self::Catchable(c)) => return Ok(Err(*c)),
+                (Self::Catchable(c), _) | (_, Self::Catchable(c)) => return Ok(Err(*c)),
                 // same types
                 (Self::Integer(i1), Self::Integer(i2)) => i1.cmp(&i2),
                 (Self::Float(f1), Self::Float(f2)) => f1.total_cmp(&f2),
@@ -874,11 +855,7 @@ impl Value {
             Self::List(list) => format!("a {}-item list", list.len()),
 
             Self::Closure(f) => {
-                if let Some(name) = &f.lambda.name {
-                    format!("the user-defined Nix function '{name}'")
-                } else {
-                    "a user-defined Nix function".to_string()
-                }
+                f.lambda.name.as_ref().map_or_else(|| "a user-defined Nix function".to_string(), |name| format!("the user-defined Nix function '{name}'"))
             }
 
             Self::Builtin(b) => {
@@ -911,7 +888,7 @@ trait TotalDisplay {
 
 impl Display for Value {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        self.total_fmt(f, &mut Default::default())
+        self.total_fmt(f, &mut ThunkSet::default())
     }
 }
 
@@ -1048,7 +1025,7 @@ impl From<PathBuf> for Value {
     }
 }
 
-fn type_error(expected: &'static str, actual: &Value) -> ErrorKind {
+const fn type_error(expected: &'static str, actual: &Value) -> ErrorKind {
     ErrorKind::TypeError {
         expected,
         actual: actual.type_of(),

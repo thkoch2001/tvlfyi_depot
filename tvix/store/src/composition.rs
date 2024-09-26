@@ -7,7 +7,7 @@ lazy_static! {
     /// tvix_castore (BlobStore/DirectoryStore) and tvix_store
     /// (PathInfoService) implementations.
     pub static ref REG: Registry = {
-        let mut reg = Default::default();
+        let mut reg = Registry::default();
         add_default_services(&mut reg);
         reg
     };

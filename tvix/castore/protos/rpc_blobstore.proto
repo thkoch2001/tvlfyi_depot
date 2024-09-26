@@ -6,7 +6,7 @@ package tvix.castore.v1;
 
 option go_package = "code.tvl.fyi/tvix/castore-go;castorev1";
 
-// BlobService allows reading (or uploading) content-addressed blobs of data.
+// `BlobService` allows reading (or uploading) content-addressed blobs of data.
 // BLAKE3 is used as a hashing function for the data. Uploading a blob will
 // return the BLAKE3 digest of it, and that's the identifier used to Read/Stat
 // them too.
@@ -23,16 +23,16 @@ service BlobService {
   // its contents.
   // If the backend communicated more granular chunks in the `Stat` request,
   // this can also be used to read chunks.
-  // This request returns a stream of BlobChunk, which is just a container for
+  // This request returns a stream of `BlobChunk`, which is just a container for
   // a stream of bytes.
   // The server may decide on whatever chunking it may seem fit as a size for
-  // the individual BlobChunk sent in the response stream, this is mostly to
+  // the individual `BlobChunk` sent in the response stream, this is mostly to
   // keep individual messages at a manageable size.
   rpc Read(ReadBlobRequest) returns (stream BlobChunk);
 
-  // Put uploads a Blob, by reading a stream of bytes.
+  // Put uploads a `Blob`, by reading a stream of bytes.
   //
-  // The way the data is chunked up in individual BlobChunk messages sent in
+  // The way the data is chunked up in individual `BlobChunk` messages sent in
   // the stream has no effect on how the server ends up chunking blobs up, if
   // it does at all.
   rpc Put(stream BlobChunk) returns (PutBlobResponse);

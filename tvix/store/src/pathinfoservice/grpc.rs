@@ -25,7 +25,7 @@ pub struct GRPCPathInfoService<T> {
 impl<T> GRPCPathInfoService<T> {
     /// construct a [`GRPCPathInfoService`] from a [`proto::path_info_service_client::PathInfoServiceClient`].
     /// panics if called outside the context of a tokio runtime.
-    pub fn from_client(
+    pub const fn from_client(
         grpc_client: proto::path_info_service_client::PathInfoServiceClient<T>,
     ) -> Self {
         Self { grpc_client }

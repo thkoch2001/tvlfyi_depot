@@ -90,18 +90,18 @@ impl KnownPaths {
         for output in drv.outputs.values() {
             self.outputs_to_drvpath
                 .entry(output.path.as_ref().expect("missing store path").clone())
-                .or_insert(drv_path.to_owned());
+                .or_insert_with(|| drv_path.to_owned());
         }
 
         // insert the derivation itself
-        #[allow(unused_variables)] // assertions on this only compiled in debug builds
-        let old = self
+        let _old = self
             .derivations
-            .insert(drv_path.to_owned(), (hash_derivation_modulo, drv));
+            .insert(drv_path, (hash_derivation_modulo, drv));
 
         #[cfg(debug_assertions)]
+        #[allow(clippy::used_underscore_binding)]
         {
-            if let Some(old) = old {
+            if let Some(old) = _old {
                 debug_assert!(
                     old.0 == hash_derivation_modulo,
                     "hash derivation modulo for a given derivation should always be calculated the same"

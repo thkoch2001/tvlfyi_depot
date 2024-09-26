@@ -377,16 +377,13 @@ mod import_builtins {
             }
         })?;
 
-        let path_exists =
-            if let Ok((store_path, sub_path)) = StorePathRef::from_absolute_path_full(p) {
-                if !sub_path.as_os_str().is_empty() {
-                    false
-                } else {
-                    state.store_path_exists(store_path.as_ref()).await?
-                }
-            } else {
-                false
-            };
+        let path_exists = if let Ok((store_path, sub_path)) =
+            StorePathRef::from_absolute_path_full(p)
+        {
+            sub_path.as_os_str().is_empty() && state.store_path_exists(store_path.as_ref()).await?
+        } else {
+            false
+        };
 
         if !path_exists {
             return Err(ImportError::PathNotInStore(p.into()).into());

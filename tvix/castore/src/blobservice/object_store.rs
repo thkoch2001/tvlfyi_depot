@@ -148,7 +148,7 @@ impl BlobService for ObjectStoreBlobService {
                 // TODO: make this configurable, and/or clarify behaviour for
                 // the gRPC server surface (explicitly document behaviour in the
                 // proto docs)
-                if let Some(chunks) = self.chunks(digest).await? {
+                Ok((self.chunks(digest).await?).map(|chunks| {
                     let chunked_reader = ChunkedReader::from_chunks(
                         chunks.into_iter().map(|chunk| {
                             (
@@ -159,11 +159,8 @@ impl BlobService for ObjectStoreBlobService {
                         Arc::new(self.clone()) as Arc<dyn BlobService>,
                     );
 
-                    Ok(Some(Box::new(chunked_reader)))
-                } else {
-                    // This is neither a chunk nor a blob, return None.
-                    Ok(None)
-                }
+                    Box::new(chunked_reader) as _
+                }))
             }
             Err(e) => Err(e.into()),
         }
@@ -244,7 +241,7 @@ impl BlobService for ObjectStoreBlobService {
     }
 }
 
-fn default_avg_chunk_size() -> u32 {
+const fn default_avg_chunk_size() -> u32 {
     256 * 1024
 }
 
@@ -271,7 +268,7 @@ impl TryFrom<url::Url> for ObjectStoreBlobServiceConfig {
             let s = url.to_string();
             let mut url = Url::parse(
                 s.strip_prefix("objectstore+")
-                    .ok_or(Error::StorageError("Missing objectstore uri".into()))?,
+                    .ok_or_else(|| Error::StorageError("Missing objectstore uri".into()))?,
             )?;
             // trim the query pairs, they might contain credentials or local settings we don't want to send as-is.
             url.set_query(None);
@@ -320,12 +317,6 @@ async fn chunk_and_upload<R: AsyncRead + Unpin>(
     avg_chunk_size: u32,
     max_chunk_size: u32,
 ) -> io::Result<B3Digest> {
-    // wrap reader with something calculating the blake3 hash of all data read.
-    let mut b3_r = B3HashingReader::from(r);
-    // set up a fastcdc chunker
-    let mut chunker =
-        AsyncStreamCDC::new(&mut b3_r, min_chunk_size, avg_chunk_size, max_chunk_size);
-
     /// This really should just belong into the closure at
     /// `chunker.as_stream().then(|_| { … })``, but if we try to, rustc spits
     /// higher-ranked lifetime errors at us.
@@ -340,6 +331,12 @@ async fn chunk_and_upload<R: AsyncRead + Unpin>(
 
         upload_chunk(object_store, chunk_digest, chunk_path, chunk_data.data).await
     }
+
+    // wrap reader with something calculating the blake3 hash of all data read.
+    let mut b3_r = B3HashingReader::from(r);
+    // set up a fastcdc chunker
+    let mut chunker =
+        AsyncStreamCDC::new(&mut b3_r, min_chunk_size, avg_chunk_size, max_chunk_size);
 
     // Use the fastcdc chunker to produce a stream of chunks, and upload these
     // that don't exist to the backend.

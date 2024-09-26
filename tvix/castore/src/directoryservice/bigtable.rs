@@ -16,7 +16,7 @@ use crate::composition::{CompositionContext, ServiceBuilder};
 use crate::{proto, B3Digest, Error};
 
 /// There should not be more than 10 MiB in a single cell.
-/// https://cloud.google.com/bigtable/docs/schema-design#cells
+/// <https://cloud.google.com/bigtable/docs/schema-design#cells>
 const CELL_SIZE_LIMIT: u64 = 10 * 1024 * 1024;
 
 /// Provides a [`DirectoryService`] implementation using
@@ -194,6 +194,7 @@ impl DirectoryService for BigtableDirectoryService {
             .read_rows(request)
             .await
             .map_err(|e| Error::StorageError(format!("unable to read rows: {e}")))?;
+        drop(client);
 
         if response.len() != 1 {
             if response.len() > 1 {
@@ -235,9 +236,7 @@ impl DirectoryService for BigtableDirectoryService {
         // For the data in that cell, ensure the digest matches what's requested, before parsing.
         let got_digest = B3Digest::from(blake3::hash(&row_cell.value).as_bytes());
         if got_digest != *digest {
-            return Err(Error::StorageError(format!(
-                "invalid digest: {got_digest}"
-            )));
+            return Err(Error::StorageError(format!("invalid digest: {got_digest}")));
         }
 
         // Try to parse the value into a Directory message.
@@ -291,6 +290,7 @@ impl DirectoryService for BigtableDirectoryService {
             })
             .await
             .map_err(|e| Error::StorageError(format!("unable to mutate rows: {e}")))?;
+        drop(client);
 
         if resp.predicate_matched {
             trace!("already existed");
@@ -378,10 +378,13 @@ fn default_app_profile_id() -> String {
     "default".to_owned()
 }
 
-fn default_channel_size() -> usize {
+// TODO: replace with const
+const fn default_channel_size() -> usize {
     4
 }
 
-fn default_timeout() -> Option<std::time::Duration> {
+// TODO: replace with const
+#[allow(clippy::unnecessary_wraps)]
+const fn default_timeout() -> Option<std::time::Duration> {
     Some(std::time::Duration::from_secs(4))
 }

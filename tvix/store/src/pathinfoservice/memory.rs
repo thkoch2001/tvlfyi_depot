@@ -21,10 +21,7 @@ impl PathInfoService for MemoryPathInfoService {
     async fn get(&self, digest: [u8; 20]) -> Result<Option<PathInfo>, Error> {
         let db = self.db.read().await;
 
-        match db.get(&digest) {
-            None => Ok(None),
-            Some(path_info) => Ok(Some(path_info.clone())),
-        }
+        Ok(db.get(&digest).cloned())
     }
 
     #[instrument(level = "trace", skip_all, fields(path_info.root_node = ?path_info.node))]
@@ -38,14 +35,17 @@ impl PathInfoService for MemoryPathInfoService {
             // In case the PathInfo is valid, and we were able to extract a NixPath, store it in the database.
             // This overwrites existing PathInfo objects.
             Ok(nix_path) => {
-                let mut db = self.db.write().await;
-                db.insert(*nix_path.digest(), path_info.clone());
+                self.db
+                    .write()
+                    .await
+                    .insert(*nix_path.digest(), path_info.clone());
 
                 Ok(path_info)
             }
         }
     }
 
+    #[allow(clippy::significant_drop_tightening)]
     fn list(&self) -> BoxStream<'static, Result<PathInfo, Error>> {
         let db = self.db.clone();
 

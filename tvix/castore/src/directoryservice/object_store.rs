@@ -196,7 +196,7 @@ impl TryFrom<url::Url> for ObjectStoreDirectoryServiceConfig {
             let s = url.to_string();
             let mut url = Url::parse(
                 s.strip_prefix("objectstore+")
-                    .ok_or(Error::StorageError("Missing objectstore uri".into()))?,
+                    .ok_or_else(|| Error::StorageError("Missing objectstore uri".into()))?,
             )?;
             // trim the query pairs, they might contain credentials or local settings we don't want to send as-is.
             url.set_query(None);
@@ -244,7 +244,7 @@ impl ObjectStoreDirectoryPutter {
         Self {
             object_store,
             base_path,
-            directory_validator: Some(Default::default()),
+            directory_validator: Some(DirectoryGraph::default()),
         }
     }
 }

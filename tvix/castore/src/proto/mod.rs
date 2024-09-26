@@ -8,7 +8,11 @@ use crate::{path::PathComponent, B3Digest, DirectoryError};
 pub use grpc_blobservice_wrapper::GRPCBlobServiceWrapper;
 pub use grpc_directoryservice_wrapper::GRPCDirectoryServiceWrapper;
 
-tonic::include_proto!("tvix.castore.v1");
+#[allow(clippy::pedantic, clippy::nursery)]
+mod pb {
+    tonic::include_proto!("tvix.castore.v1");
+}
+pub use pb::*;
 
 #[cfg(feature = "tonic-reflection")]
 /// Compiled file descriptors for implementing [gRPC
@@ -34,7 +38,8 @@ fn checked_sum(iter: impl IntoIterator<Item = u64>) -> Option<u64> {
 impl Directory {
     /// The size of a directory is the number of all regular and symlink elements,
     /// the number of directory elements, and their size fields.
-    #[must_use]pub fn size(&self) -> u64 {
+    #[must_use]
+    pub fn size(&self) -> u64 {
         if cfg!(debug_assertions) {
             self.size_checked()
                 .expect("Directory::size exceeds u64::MAX")
@@ -54,7 +59,8 @@ impl Directory {
 
     /// Calculates the digest of a Directory, which is the blake3 hash of a
     /// Directory protobuf message, serialized in protobuf canonical form.
-    #[must_use]pub fn digest(&self) -> B3Digest {
+    #[must_use]
+    pub fn digest(&self) -> B3Digest {
         let mut hasher = blake3::Hasher::new();
 
         hasher

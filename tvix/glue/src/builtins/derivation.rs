@@ -10,9 +10,7 @@ use std::collections::{btree_map, BTreeSet};
 use std::rc::Rc;
 use tvix_eval::builtin_macros::builtins;
 use tvix_eval::generators::{self, emit_warning_kind, GenCo};
-use tvix_eval::{
-    AddContext, ErrorKind, NixAttrs, NixContext, NixContextElement, Value, WarningKind,
-};
+use tvix_eval::{AddContext, ErrorKind, NixContext, NixContextElement, Value, WarningKind};
 
 // Constants used for strangely named fields in derivation inputs.
 const STRUCTURED_ATTRS: &str = "__structuredAttrs";
@@ -20,7 +18,7 @@ const IGNORE_NULLS: &str = "__ignoreNulls";
 
 /// Populate the inputs of a derivation from the build references
 /// found when scanning the derivation's parameters and extracting their contexts.
-fn populate_inputs(drv: &mut Derivation, full_context: NixContext, known_paths: &KnownPaths) {
+fn populate_inputs(drv: &mut Derivation, full_context: &NixContext, known_paths: &KnownPaths) {
     for element in full_context.iter() {
         match element {
             NixContextElement::Plain(source) => {
@@ -41,10 +39,13 @@ fn populate_inputs(drv: &mut Derivation, full_context: NixContext, known_paths: 
                     StorePath::from_absolute_path_full(derivation_str).expect("valid store path");
 
                 #[cfg(debug_assertions)]
-                assert!(
-                    _rest.iter().next().is_none(),
-                    "Extra path not empty for {derivation_str}"
-                );
+                #[allow(clippy::used_underscore_binding)]
+                {
+                    assert!(
+                        _rest.iter().next().is_none(),
+                        "Extra path not empty for {derivation_str}"
+                    );
+                }
 
                 match drv.input_derivations.entry(derivation.clone()) {
                     btree_map::Entry::Vacant(entry) => {
@@ -62,10 +63,13 @@ fn populate_inputs(drv: &mut Derivation, full_context: NixContext, known_paths: 
                     StorePath::from_absolute_path_full(drv_path).expect("valid store path");
 
                 #[cfg(debug_assertions)]
-                assert!(
-                    _rest.iter().next().is_none(),
-                    "Extra path not empty for {drv_path}"
-                );
+                #[allow(clippy::used_underscore_binding)]
+                {
+                    assert!(
+                        _rest.iter().next().is_none(),
+                        "Extra path not empty for {drv_path}"
+                    );
+                }
 
                 // We need to know all the outputs *names* of that derivation.
                 let output_names = known_paths
@@ -118,7 +122,7 @@ fn handle_fixed_output(
     drv: &mut Derivation,
     hash_str: Option<String>,      // in nix: outputHash
     hash_algo_str: Option<String>, // in nix: outputHashAlgo
-    hash_mode_str: Option<String>, // in nix: outputHashmode
+    hash_mode_str: Option<&str>,   // in nix: outputHashmode
 ) -> Result<Option<WarningKind>, ErrorKind> {
     // If outputHash is provided, ensure hash_algo_str is compatible.
     // If outputHash is not provided, do nothing.
@@ -140,7 +144,7 @@ fn handle_fixed_output(
             "out".to_string(),
             Output {
                 path: None,
-                ca_hash: match hash_mode_str.as_deref() {
+                ca_hash: match hash_mode_str {
                     None | Some("flat") => Some(nixhash::CAHash::Flat(nixhash)),
                     Some("recursive") => Some(nixhash::CAHash::Nar(nixhash)),
                     Some(other) => {
@@ -173,11 +177,12 @@ pub mod derivation_builtins {
 
     use super::{
         emit_warning_kind, generators, handle_fixed_output, populate_inputs, AddContext, BString,
-        Derivation, DerivationError, ErrorKind, GenCo, NixAttrs, Rc, StorePathRef, TvixStoreIO,
-        Value, WarningKind, IGNORE_NULLS, STRUCTURED_ATTRS,
+        Derivation, DerivationError, ErrorKind, GenCo, Rc, StorePathRef, TvixStoreIO, Value,
+        WarningKind, IGNORE_NULLS, STRUCTURED_ATTRS,
     };
     use bstr::ByteSlice;
     use md5::Digest;
+    use nix_compat::derivation::Output;
     use nix_compat::nixhash::CAHash;
     use nix_compat::store_path::{build_ca_path, hash_placeholder};
     use sha2::Sha256;
@@ -212,6 +217,19 @@ pub mod derivation_builtins {
         co: GenCo,
         input: Value,
     ) -> Result<Value, ErrorKind> {
+        /// Inserts a key and value into the drv.environment BTreeMap, and fails if the
+        /// key did already exist before.
+        fn insert_env(
+            drv: &mut Derivation,
+            k: &str, /* TODO: non-utf8 env keys */
+            v: BString,
+        ) -> Result<(), DerivationError> {
+            if drv.environment.insert(k.into(), v).is_some() {
+                return Err(DerivationError::DuplicateEnvVar(k.into()));
+            }
+            Ok(())
+        }
+
         if input.is_catchable() {
             return Ok(input);
         }
@@ -230,21 +248,8 @@ pub mod derivation_builtins {
         let name = name.to_str()?;
 
         let mut drv = Derivation::default();
-        drv.outputs.insert("out".to_string(), Default::default());
+        drv.outputs.insert("out".to_string(), Output::default());
         let mut input_context = NixContext::new();
-
-        /// Inserts a key and value into the drv.environment BTreeMap, and fails if the
-        /// key did already exist before.
-        fn insert_env(
-            drv: &mut Derivation,
-            k: &str, /* TODO: non-utf8 env keys */
-            v: BString,
-        ) -> Result<(), DerivationError> {
-            if drv.environment.insert(k.into(), v).is_some() {
-                return Err(DerivationError::DuplicateEnvVar(k.into()));
-            }
-            Ok(())
-        }
 
         // Check whether null attributes should be ignored or passed through.
         let ignore_nulls = match input.select(IGNORE_NULLS) {
@@ -260,7 +265,7 @@ pub mod derivation_builtins {
                 Some(b) => generators::request_force(&co, b.clone())
                     .await
                     .as_bool()?
-                    .then_some(Default::default()),
+                    .then_some(BTreeMap::default()),
                 None => None,
             };
 
@@ -315,7 +320,7 @@ pub mod derivation_builtins {
                         // Populate drv.outputs
                         if drv
                             .outputs
-                            .insert(output_name.to_str()?.to_owned(), Default::default())
+                            .insert(output_name.to_str()?.to_owned(), Output::default())
                             .is_some()
                         {
                             Err(DerivationError::DuplicateOutput(
@@ -429,9 +434,12 @@ pub mod derivation_builtins {
                 Ok(s) => s,
             };
 
-            if let Some(warning) =
-                handle_fixed_output(&mut drv, output_hash, output_hash_algo, output_hash_mode)?
-            {
+            if let Some(warning) = handle_fixed_output(
+                &mut drv,
+                output_hash,
+                output_hash_algo,
+                output_hash_mode.as_deref(),
+            )? {
                 emit_warning_kind(&co, warning).await;
             }
         }
@@ -459,7 +467,7 @@ pub mod derivation_builtins {
         }
 
         let mut known_paths = state.as_ref().known_paths.borrow_mut();
-        populate_inputs(&mut drv, input_context, &known_paths);
+        populate_inputs(&mut drv, &input_context, &known_paths);
 
         // At this point, derivation fields are fully populated from
         // eval data structures.
@@ -490,7 +498,7 @@ pub mod derivation_builtins {
             .map_err(DerivationError::InvalidDerivation)?;
 
         // Assemble the attrset to return from this builtin.
-        let out = Value::Attrs(Box::new(NixAttrs::from_iter(
+        let out = Value::Attrs(Box::new(
             drv.outputs
                 .iter()
                 .map(|(name, output)| {
@@ -512,8 +520,9 @@ pub mod derivation_builtins {
                         NixContextElement::Derivation(drv_path.to_absolute_path()).into(),
                         drv_path.to_absolute_path(),
                     ),
-                ))),
-        )));
+                )))
+                .collect(),
+        ));
 
         // If the derivation is a fake derivation (builtins:fetchurl),
         // synthesize a [Fetch] and add it there, too.
@@ -630,8 +639,8 @@ pub mod derivation_builtins {
         })?;
 
         let abs_path = store_path.to_absolute_path();
-        let context: NixContext = NixContextElement::Plain(abs_path.clone()).into();
+        let ctx = NixContextElement::Plain(abs_path.clone()).into();
 
-        Ok(Value::from(NixString::new_context_from(context, abs_path)))
+        Ok(Value::from(NixString::new_context_from(ctx, abs_path)))
     }
 }

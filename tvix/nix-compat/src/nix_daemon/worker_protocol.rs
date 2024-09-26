@@ -220,54 +220,53 @@ where
 {
     let worker_magic_1 = conn.read_u64_le().await?;
     if worker_magic_1 != WORKER_MAGIC_1 {
-        Err(std::io::Error::new(
+        return Err(std::io::Error::new(
             ErrorKind::InvalidData,
             format!("Incorrect worker magic number received: {worker_magic_1}"),
-        ))
-    } else {
-        conn.write_u64_le(WORKER_MAGIC_2).await?;
-        conn.write_u64_le(PROTOCOL_VERSION.into()).await?;
-        conn.flush().await?;
-        let client_version = conn.read_u64_le().await?;
-        // Parse into ProtocolVersion.
-        let client_version: ProtocolVersion = client_version
-            .try_into()
-            .map_err(|e| Error::new(ErrorKind::Unsupported, e))?;
-        if client_version < ProtocolVersion::from_parts(1, 10) {
-            return Err(Error::new(
-                ErrorKind::Unsupported,
-                format!("The nix client version {client_version} is too old"),
-            ));
-        }
-        if client_version.minor() >= 14 {
-            // Obsolete CPU affinity.
-            let read_affinity = conn.read_u64_le().await?;
-            if read_affinity != 0 {
-                let _cpu_affinity = conn.read_u64_le().await?;
-            };
-        }
-        if client_version.minor() >= 11 {
-            // Obsolete reserveSpace
-            let _reserve_space = conn.read_u64_le().await?;
-        }
-        if client_version.minor() >= 33 {
-            // Nix version. We're plain lying, we're not Nix, but eh…
-            // Setting it to the 2.3 lineage. Not 100% sure this is a
-            // good idea.
-            wire::write_bytes(&mut conn, nix_version).await?;
-            conn.flush().await?;
-        }
-        if client_version.minor() >= 35 {
-            write_worker_trust_level(&mut conn, trusted).await?;
-        }
-        Ok(client_version)
+        ));
+    } ;
+    conn.write_u64_le(WORKER_MAGIC_2).await?;
+    conn.write_u64_le(PROTOCOL_VERSION.into()).await?;
+    conn.flush().await?;
+    let client_version = conn.read_u64_le().await?;
+    // Parse into ProtocolVersion.
+    let client_version: ProtocolVersion = client_version
+        .try_into()
+        .map_err(|e| Error::new(ErrorKind::Unsupported, e))?;
+    if client_version < ProtocolVersion::from_parts(1, 10) {
+        return Err(Error::new(
+            ErrorKind::Unsupported,
+            format!("The nix client version {client_version} is too old"),
+        ));
     }
+    if client_version.minor() >= 14 {
+        // Obsolete CPU affinity.
+        let read_affinity = conn.read_u64_le().await?;
+        if read_affinity != 0 {
+            let _cpu_affinity = conn.read_u64_le().await?;
+        };
+    }
+    if client_version.minor() >= 11 {
+        // Obsolete reserveSpace
+        let _reserve_space = conn.read_u64_le().await?;
+    }
+    if client_version.minor() >= 33 {
+        // Nix version. We're plain lying, we're not Nix, but eh…
+        // Setting it to the 2.3 lineage. Not 100% sure this is a
+        // good idea.
+        wire::write_bytes(&mut conn, nix_version).await?;
+        conn.flush().await?;
+    }
+    if client_version.minor() >= 35 {
+        write_worker_trust_level(&mut conn, trusted).await?;
+    }
+    Ok(client_version)
 }
 
 /// Read a worker [Operation] from the wire.
 pub async fn read_op<R: AsyncReadExt + Unpin>(r: &mut R) -> std::io::Result<Operation> {
     let op_number = r.read_u64_le().await?;
-    Operation::from_u64(op_number).ok_or(Error::new(
+    Operation::from_u64(op_number).ok_or_else(|| Error::new(
         ErrorKind::InvalidData,
         format!("Invalid OP number {op_number}"),
     ))
@@ -275,7 +274,7 @@ pub async fn read_op<R: AsyncReadExt + Unpin>(r: &mut R) -> std::io::Result<Oper
 
 /// Write a worker [Operation] to the wire.
 pub async fn write_op<W: AsyncWriteExt + Unpin>(w: &mut W, op: &Operation) -> std::io::Result<()> {
-    let op = Operation::to_u64(op).ok_or(Error::new(
+    let op = Operation::to_u64(op).ok_or_else(|| Error::new(
         ErrorKind::Other,
         format!("Can't convert the OP {op:?} to u64"),
     ))?;

@@ -34,7 +34,7 @@ async fn symlink() {
             target: "/nix/store/somewhereelse".try_into().unwrap()
         },
         root_node,
-    )
+    );
 }
 
 #[tokio::test]
@@ -91,7 +91,7 @@ async fn complicated() {
     // ensure root_node matched expectations
     assert_eq!(
         Node::Directory {
-            digest: DIRECTORY_COMPLICATED.digest().clone(),
+            digest: DIRECTORY_COMPLICATED.digest(),
             size: DIRECTORY_COMPLICATED.size(),
         },
         root_node,

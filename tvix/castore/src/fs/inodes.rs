@@ -43,9 +43,8 @@ impl InodeData {
             // FUTUREWORK: play with this numbers, as it affects read sizes for client applications.
             blocks: 1024,
             size: match self {
-                Self::Regular(_, size, _) => *size,
                 Self::Symlink(target) => target.len() as u64,
-                Self::Directory(DirectoryInodeData::Sparse(_, size)) => *size,
+                Self::Regular(_, size, _) | Self::Directory(DirectoryInodeData::Sparse(_, size)) => *size,
                 Self::Directory(DirectoryInodeData::Populated(_, ref children)) => {
                     children.len() as u64
                 }
@@ -55,7 +54,7 @@ impl InodeData {
         }
     }
 
-    fn mode(&self) -> u32 {
+    const fn mode(&self) -> u32 {
         match self {
             Self::Regular(_, _, false) | Self::Symlink(_) => 0o444,
             Self::Regular(_, _, true) | Self::Directory(_) => 0o555,

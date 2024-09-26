@@ -26,10 +26,11 @@ impl BlobService for MemoryBlobService {
     async fn open_read(&self, digest: &B3Digest) -> io::Result<Option<Box<dyn BlobReader>>> {
         let db = self.db.read();
 
-        match db.get(digest).map(|x| Cursor::new(x.clone())) {
-            Some(result) => Ok(Some(Box::new(result))),
-            None => Ok(None),
-        }
+        Ok(db
+            .get(digest)
+            .cloned()
+            .map(Cursor::new)
+            .map(|result| Box::new(result) as _))
     }
 
     #[instrument(skip_all)]
@@ -128,10 +129,10 @@ impl tokio::io::AsyncWrite for MemoryBlobWriter {
 impl BlobWriter for MemoryBlobWriter {
     async fn close(&mut self) -> io::Result<B3Digest> {
         if self.writers.is_none() {
-            match &self.digest {
-                Some(digest) => Ok(digest.clone()),
-                None => Err(io::Error::new(io::ErrorKind::BrokenPipe, "already closed")),
-            }
+            self.digest.clone().map_or_else(
+                || Err(io::Error::new(io::ErrorKind::BrokenPipe, "already closed")),
+                Ok,
+            )
         } else {
             let (buf, hasher) = self.writers.take().unwrap();
 
@@ -145,7 +146,9 @@ impl BlobWriter for MemoryBlobWriter {
                     // and put buf in there. This will move buf out.
                     db.insert(digest.clone(), buf);
                 });
-            }
+            };
+
+            drop(db);
 
             self.digest = Some(digest.clone());
 
