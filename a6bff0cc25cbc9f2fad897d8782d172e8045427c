@@ -107,6 +107,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e7b03dcd_236ff234",
+        "filename": "tvix/store/src/pathinfoservice/signing_wrapper.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-26T11:26:58Z",
+      "side": 1,
+      "message": "looks good, one small comment there though.",
+      "parentUuid": "295866c6_10b37ce8",
+      "revId": "a6bff0cc25cbc9f2fad897d8782d172e8045427c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e5cad3af_a5074429",
