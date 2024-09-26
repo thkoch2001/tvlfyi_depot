@@ -229,11 +229,16 @@ in
       grafana.file = secretFile "grafana";
       irccat.file = secretFile "irccat";
       keycloak-db.file = secretFile "keycloak-db";
-      nix-cache-priv.file = secretFile "nix-cache-priv";
       owothia.file = secretFile "owothia";
       panettone.file = secretFile "panettone";
       smtprelay.file = secretFile "smtprelay";
       teleirc.file = secretFile "teleirc";
+
+      nix-cache-priv = {
+        file = secretFile "nix-cache-priv";
+        mode = "0440";
+        group = "harmonia";
+      };
 
       buildkite-agent-token = {
         file = secretFile "buildkite-agent-token";
@@ -477,11 +482,11 @@ in
     ];
   };
 
-  services.nix-serve = {
+  services.harmonia = {
     enable = true;
-    port = 6443;
-    secretKeyFile = config.age.secretsDir + "/nix-cache-priv";
-    bindAddress = "localhost";
+    signKeyPath = config.age.secretsDir + "/nix-cache-priv";
+    settings.bind = "127.0.0.1:6443";
+    settings.priority = 50;
   };
 
   services.fail2ban.enable = true;
