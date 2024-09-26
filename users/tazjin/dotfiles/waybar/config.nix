@@ -7,36 +7,40 @@ in
   mainBar = {
     layer = "top";
     position = "bottom";
-    modules-left = [ "image#start" "custom/start" ];
-
-    "image#start" = {
-      path = "${depot.third_party.chicago95}/share/icons/Chicago95/panel/24/start-here.png";
-      size = 24;
-      on-click = "xfce4-appfinder --disable-server";
-    };
+    modules-left = [ "custom/start" ];
 
     "custom/start" = {
       format = " Start";
       on-click = "xfce4-appfinder --disable-server";
     };
 
-    modules-right = [ "pulseaudio" "backlight" "battery" "tray" "clock" ];
+    modules-right = [ "tray" "backlight" "battery" "pulseaudio" "clock" ];
 
     pulseaudio = {
       on-click = "pavucontrol";
-      # Font "Awesome" speaker icons can't be made to render, I don't care why, emoji time.
-      format = "{volume}% 🎧";
-      format-muted = "{volume}% ";
+      format = " "; #styling only
+      states = {
+        low = 1;
+        medium = 40;
+        high = 75;
+      };
     };
 
     battery = {
-      format = "{capacity}% {icon}";
-      format-icons = [ "" "" "" "" "" ];
+      format = " "; # styling only
+      interval = 10;
+      states = {
+        full = 100;
+        good = 85;
+        medium = 60;
+        low = 40;
+        warning = 20;
+        critical = 10;
+      };
     };
 
     backlight = {
-      format = "{percent}% {icon}";
-      format-icons = [ "" ];
+      format = "{percent}%"; # styling only
       on-scroll-up = "light -A 1";
       on-scroll-down = "light -U 1";
     };
