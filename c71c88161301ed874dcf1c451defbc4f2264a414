@@ -16,6 +16,24 @@
       "message": "I think we can use `HOME \u003d \"\\${RUNTIME_DIRECTORY}\"`, systemd should substitute that?!",
       "revId": "c71c88161301ed874dcf1c451defbc4f2264a414",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bed85e81_c1388327",
+        "filename": "ops/modules/harmonia.nix",
+        "patchSetId": 4
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-09-26T23:27:25Z",
+      "side": 1,
+      "message": "I don\u0027t really wanna change more stuff than we need in our copy of this module, we can fix this upstream instead.",
+      "parentUuid": "617104b9_66baafa6",
+      "revId": "c71c88161301ed874dcf1c451defbc4f2264a414",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
