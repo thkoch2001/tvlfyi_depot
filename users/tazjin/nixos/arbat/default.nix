@@ -55,7 +55,7 @@ in
 
   hardware = {
     enableRedistributableFirmware = true;
-    opengl.enable = true;
+    graphics.enable = true;
     bluetooth.enable = true;
   };
 
@@ -66,8 +66,6 @@ in
     mouse.naturalScrolling = false;
     mouse.disableWhileTyping = true;
   };
-  # services.xserver.libinput.touchpad.clickMethod = "clickfinger";
-  # services.xserver.libinput.touchpad.tapping = false;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   system.stateVersion = "24.11";

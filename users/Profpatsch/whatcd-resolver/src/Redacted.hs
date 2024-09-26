@@ -275,19 +275,22 @@ redactedSearchAndInsert extraArguments = do
             , torrent_id
             , full_json_result)
           |]
-        ( [ ( dat.torrentGroupIdPg :: Int,
-              group.torrentId :: Int,
-              group.fullJsonResult :: Json.Value
-            )
+        ( [ T3
+              (getLabel @"torrentGroupIdPg" dat)
+              (getLabel @"torrentId" group)
+              (getLabel @"fullJsonResult" group)
             | dat <- dats,
               group <- dat.torrents
           ]
             & unzip3PGArray
+              @"torrentGroupIdPg"
+              @Int
+              @"torrentId"
+              @Int
+              @"fullJsonResult"
+              @Json.Value
         )
       pure ()
-
-unzip3PGArray :: [(a1, a2, a3)] -> (PGArray a1, PGArray a2, PGArray a3)
-unzip3PGArray xs = xs & unzip3 & \(a, b, c) -> (PGArray a, PGArray b, PGArray c)
 
 redactedGetTorrentFileAndInsert ::
   ( HasField "torrentId" r Int,
@@ -357,7 +360,7 @@ assertOneUpdated ::
   m ()
 assertOneUpdated span name x = case x.numberOfRowsAffected of
   1 -> pure ()
-  n -> appThrowTree span ([fmt|{name :: Text}: Expected to update exactly one row, but updated {n :: Natural} row(s)|])
+  n -> appThrow span ([fmt|{name :: Text}: Expected to update exactly one row, but updated {n :: Natural} row(s)|])
 
 data TorrentData transmissionInfo = TorrentData
   { groupId :: Int,
@@ -365,7 +368,8 @@ data TorrentData transmissionInfo = TorrentData
     seedingWeight :: Int,
     artists :: [T2 "artistId" Int "artistName" Text],
     torrentGroupJson :: TorrentGroupJson,
-    torrentStatus :: TorrentStatus transmissionInfo
+    torrentStatus :: TorrentStatus transmissionInfo,
+    torrentFormat :: Text
   }
 
 data TorrentGroupJson = TorrentGroupJson
@@ -413,7 +417,11 @@ getBestTorrents opts = do
           -- filter by artist id
           AND
           (?::bool OR (to_jsonb(?::int) <@ (jsonb_path_query_array(full_json_result, '$.artists[*].id'))))
-        ORDER BY torrent_group, seeding_weight DESC
+        ORDER BY
+          torrent_group,
+          -- prefer torrents which we already downloaded
+          torrent_file,
+          seeding_weight DESC
       )
       SELECT
         tg.group_id,
@@ -423,7 +431,8 @@ getBestTorrents opts = do
         tg.full_json_result->>'groupName' AS group_name,
         tg.full_json_result->>'groupYear' AS group_year,
         t.torrent_file IS NOT NULL AS has_torrent_file,
-        t.transmission_torrent_hash
+        t.transmission_torrent_hash,
+        t.full_json_result->>'encoding' AS torrent_format
       FROM filtered_torrents f
       JOIN redacted.torrents t ON t.id = f.id
       JOIN redacted.torrent_groups tg ON tg.id = t.torrent_group
@@ -452,8 +461,8 @@ getBestTorrents opts = do
           groupYear <- Dec.textParse Field.decimalNatural
           pure $ TorrentGroupJson {..}
         hasTorrentFile <- Dec.fromField @Bool
-        transmissionTorrentHash <-
-          Dec.fromField @(Maybe Text)
+        transmissionTorrentHash <- Dec.fromField @(Maybe Text)
+        torrentFormat <- Dec.text
         pure $
           TorrentData
             { torrentStatus =
@@ -463,6 +472,13 @@ getBestTorrents opts = do
                   | Just hash <- transmissionTorrentHash ->
                       InTransmission $
                         T2 (label @"torrentHash" hash) (label @"transmissionInfo" ()),
+              torrentFormat = case torrentFormat of
+                "Lossless" -> "flac"
+                "V0 (VBR)" -> "V0"
+                "V2 (VBR)" -> "V2"
+                "320" -> "320"
+                "256" -> "256"
+                o -> o,
               ..
             }
     )
@@ -513,7 +529,7 @@ httpTorrent span req =
             | statusCode == 200,
               Nothing <- contentType ->
                 Left [fmt|Redacted returned a body with unspecified content type|]
-            | code <- statusCode -> Left [fmt|Redacted returned an non-200 error code, code {code}: {resp & showPretty}|]
+            | code <- statusCode -> Left $ AppExceptionPretty [[fmt|Redacted returned an non-200 error code, code {code}|], pretty resp]
       )
 
 redactedApiRequestJson ::

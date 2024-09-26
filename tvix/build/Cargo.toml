@@ -4,6 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 bytes = "1.4.0"
 clap = { version = "4.0", features = ["derive", "env"] }
 itertools = "0.12.0"
@@ -12,26 +13,38 @@ thiserror = "1.0.56"
 tokio = { version = "1.32.0" }
 tokio-listener = { version = "0.4.1", features = [ "tonic012" ] }
 tonic = { version = "0.12.0", features = ["tls", "tls-roots"] }
+=======
+bytes = { workspace = true }
+clap = { workspace = true, features = ["derive", "env"] }
+itertools = { workspace = true }
+prost = { workspace = true }
+thiserror = { workspace = true }
+tokio = { workspace = true }
+tokio-listener = { workspace = true, features = ["tonic012"] }
+tonic = { workspace = true, features = ["tls", "tls-roots"] }
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 tvix-castore = { path = "../castore" }
 tvix-tracing = { path = "../tracing" }
-tracing = "0.1.40"
-url = "2.4.0"
-mimalloc = "0.1.43"
-
-[dependencies.tonic-reflection]
-optional = true
-version = "0.12.0"
+tracing = { workspace = true }
+url = { workspace = true }
+mimalloc = { workspace = true }
+tonic-reflection = { workspace = true, optional = true }
 
 [build-dependencies]
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 prost-build = "0.13.3"
 tonic-build = "0.12.0"
+=======
+prost-build = { workspace = true }
+tonic-build = { workspace = true }
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 
 [features]
 default = []
 tonic-reflection = ["dep:tonic-reflection", "tvix-castore/tonic-reflection"]
 
 [dev-dependencies]
-rstest = "0.19.0"
+rstest = { workspace = true }
 
 [lints]
 workspace = true

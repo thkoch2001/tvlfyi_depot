@@ -1,0 +1,5 @@
+[gerrit]
+host=cl.tvl.fyi
+port=29418
+project=depot
+defaultbranch=canon

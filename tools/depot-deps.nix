@@ -8,6 +8,7 @@ depot.nix.lazy-deps {
   depotfmt.attr = "tools.depotfmt";
   fetch-depot-inbox.attr = "tools.fetch-depot-inbox";
   git-r.attr = "tools.git-r";
+  git-review.attr = "third_party.nixpkgs.git-review";
   gerrit-update.attr = "tools.gerrit-update";
   gerrit.attr = "tools.gerrit-cli";
   hash-password.attr = "tools.hash-password";

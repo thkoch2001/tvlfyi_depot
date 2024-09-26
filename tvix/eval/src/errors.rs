@@ -35,15 +35,23 @@ use crate::{SourceCode, Value};
 /// because Rust's magic `?`-syntax does not work on nested Result
 /// values like this.
 // TODO(amjoseph): investigate result<T,Either<CatchableErrorKind,ErrorKind>>
-#[derive(Clone, Debug)]
+#[derive(thiserror::Error, Clone, Debug)]
 pub enum CatchableErrorKind {
+    #[error("error thrown: {0}")]
     Throw(Box<str>),
+
+    #[error("assertion failed")]
     AssertionFailed,
+
+    #[error("feature {0} is not implemented yet")]
     UnimplementedFeature(Box<str>),
+
     /// Resolving a user-supplied angle brackets path literal failed in some way.
+    #[error("Nix path entry could not be resolved: {0}")]
     NixPathResolution(Box<str>),
 }
 
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 impl Display for CatchableErrorKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
@@ -60,71 +68,95 @@ impl Display for CatchableErrorKind {
 }
 
 #[derive(Clone, Debug)]
+=======
+#[derive(thiserror::Error, Clone, Debug)]
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 pub enum ErrorKind {
     /// These are user-generated errors through builtins.
+    #[error("evaluation aborted: {0}")]
     Abort(String),
 
+    #[error("division by zero")]
     DivisionByZero,
 
-    DuplicateAttrsKey {
-        key: String,
-    },
+    #[error("attribute key '{key}' already defined")]
+    DuplicateAttrsKey { key: String },
 
     /// Attempted to specify an invalid key type (e.g. integer) in a
     /// dynamic attribute name.
+    #[error(
+        "found attribute name '{0}' of type '{}', but attribute names must be strings",
+        .0.type_of()
+    )]
     InvalidAttributeName(Value),
 
-    AttributeNotFound {
-        name: String,
-    },
+    #[error("attribute with name '{name}' could not be found in the set")]
+    AttributeNotFound { name: String },
 
     /// Attempted to index into a list beyond its boundaries.
-    IndexOutOfBounds {
-        index: i64,
-    },
+    #[error("list index '{index}' is out of bounds")]
+    IndexOutOfBounds { index: i64 },
 
     /// Attempted to call `builtins.tail` on an empty list.
+    #[error("'tail' called on an empty list")]
     TailEmptyList,
 
+    #[error("expected value of type '{expected}', but found a '{actual}'")]
     TypeError {
         expected: &'static str,
         actual: &'static str,
     },
 
+    #[error("can not compare a {lhs} with a {rhs}")]
     Incomparable {
         lhs: &'static str,
         rhs: &'static str,
     },
 
     /// Resolving a user-supplied relative or home-relative path literal failed in some way.
+    #[error("could not resolve path: {0}")]
     RelativePathResolution(String),
 
     /// Dynamic keys are not allowed in some scopes.
+    #[error("dynamically evaluated keys are not allowed in {0}")]
     DynamicKeyInScope(&'static str),
 
     /// Unknown variable in statically known scope.
+    #[error("variable not found")]
     UnknownStaticVariable,
 
     /// Unknown variable in dynamic scope (with, rec, ...).
+    #[error(
+        r#"variable '{0}' could not be found
+
+Note that this occured within a `with`-expression. The problem may be related
+to a missing value in the attribute set(s) included via `with`."#
+    )]
     UnknownDynamicVariable(String),
 
     /// User is defining the same variable twice at the same depth.
+    #[error("variable has already been defined")]
     VariableAlreadyDefined(Option<Span>),
 
     /// Attempt to call something that is not callable.
+    #[error("only functions and builtins can be called, but this is a '{0}'")]
     NotCallable(&'static str),
 
     /// Infinite recursion encountered while forcing thunks.
+    #[error("infinite recursion encountered")]
     InfiniteRecursion {
         first_force: Span,
         suspended_at: Option<Span>,
         content_span: Option<Span>,
     },
 
+    // Errors themselves ignored here & handled in Self::spans instead
+    #[error("failed to parse Nix code:")]
     ParseErrors(Vec<rnix::parser::ParseError>),
 
     /// An error occured while executing some native code (e.g. a
     /// builtin), and needs to be chained up.
+    #[error("while evaluating this as native code ({gen_type})")]
     NativeError {
         gen_type: &'static str,
         err: Box<Error>,
@@ -132,31 +164,44 @@ pub enum ErrorKind {
 
     /// An error occured while executing Tvix bytecode, but needs to
     /// be chained up.
+    #[error("while evaluating this Nix code")]
     BytecodeError(Box<Error>),
 
     /// Given type can't be coerced to a string in the respective context
+    #[error("cannot ({}) coerce {from} to a string{}", 
+        (if .kind.strong { "strongly" } else { "weakly" }),
+        (if *.from == "set" {
+            ", missing a `__toString` or `outPath` attribute"
+        } else {
+            ""
+        })
+    )]
     NotCoercibleToString {
         from: &'static str,
         kind: CoercionKind,
     },
 
     /// The given string doesn't represent an absolute path
+    #[error("string '{}' does not represent an absolute path", .0.to_string_lossy())]
     NotAnAbsolutePath(PathBuf),
 
     /// An error occurred when parsing an integer
+    #[error("invalid integer: {0}")]
     ParseIntError(ParseIntError),
 
     // Errors specific to nested attribute sets and merges thereof.
     /// Nested attributes can not be merged with an inherited value.
-    UnmergeableInherit {
-        name: SmolStr,
-    },
+    #[error("cannot merge a nested attribute set into the inherited entry '{name}'")]
+    UnmergeableInherit { name: SmolStr },
 
     /// Nested attributes can not be merged with values that are not
     /// literal attribute sets.
+    #[error("nested attribute sets or keys can only be merged with literal attribute sets")]
     UnmergeableValue,
 
+    // Errors themselves ignored here & handled in Self::spans instead
     /// Parse errors occured while importing a file.
+    #[error("parse errors occured while importing '{}'", .path.to_string_lossy())]
     ImportParseError {
         path: PathBuf,
         file: Arc<File>,
@@ -164,44 +209,70 @@ pub enum ErrorKind {
     },
 
     /// Compilation errors occured while importing a file.
-    ImportCompilerError {
-        path: PathBuf,
-        errors: Vec<Error>,
-    },
+    #[error("compiler errors occured while importing '{}'", .path.to_string_lossy())]
+    ImportCompilerError { path: PathBuf, errors: Vec<Error> },
 
     /// I/O errors
+    #[error("I/O error: {}",
+        ({
+            let mut msg = String::new();
+
+            if let Some(path) = .path {
+                msg.push_str(&format!("{}: ", path.display()));
+            }
+
+            msg.push_str(&.error.to_string());
+
+            msg
+        })
+    )]
     IO {
         path: Option<PathBuf>,
         error: Rc<io::Error>,
     },
 
     /// Errors parsing JSON, or serializing as JSON.
+    #[error("Error converting JSON to a Nix value or back: {0}")]
     JsonError(String),
 
     /// Nix value that can not be serialised to JSON.
+    #[error("a {0} cannot be converted to JSON")]
     NotSerialisableToJson(&'static str),
 
     /// Errors converting TOML to a value
+    #[error("Error converting TOML to a Nix value: {0}")]
     FromTomlError(String),
 
     /// An unexpected argument was supplied to a builtin
+    #[error("Unexpected agrument `{0}` passed to builtin")]
     UnexpectedArgumentBuiltin(NixString),
 
     /// An unexpected argument was supplied to a function that takes formal parameters
-    UnexpectedArgumentFormals {
-        arg: NixString,
-        formals_span: Span,
-    },
+    #[error("Unexpected argument `{arg}` supplied to function")]
+    UnexpectedArgumentFormals { arg: NixString, formals_span: Span },
 
     /// Invalid UTF-8 was encoutered somewhere
+    #[error("Invalid UTF-8 in string")]
     Utf8,
 
     /// Variant for errors that bubble up to eval from other Tvix
     /// components.
+    #[error("{0}")]
     TvixError(Rc<dyn error::Error>),
 
     /// Variant for code paths that are known bugs in Tvix (usually
     /// issues with the compiler/VM interaction).
+    #[error("{}",
+        ({
+            let mut disp = format!("Tvix bug: {}", .msg);
+
+            if let Some(metadata) = .metadata {
+                disp.push_str(&format!("; metadata: {:?}", metadata));
+            }
+
+            disp
+        })
+    )]
     TvixBug {
         msg: &'static str,
         metadata: Option<Rc<dyn Debug>>,
@@ -210,15 +281,18 @@ pub enum ErrorKind {
     /// Tvix internal warning for features triggered by users that are
     /// not actually implemented yet, and without which eval can not
     /// proceed.
+    #[error("feature not yet implemented in Tvix: {0}")]
     NotImplemented(&'static str),
 
     /// Internal variant which should disappear during error construction.
+    #[error("internal ErrorKind::WithContext variant leaked")]
     WithContext {
         context: String,
         underlying: Box<ErrorKind>,
     },
 
     /// Unexpected context string
+    #[error("unexpected context string")]
     UnexpectedContext,
 
     /// Top-level evaluation result was a catchable Nix error, and
@@ -227,10 +301,12 @@ pub enum ErrorKind {
     /// This variant **must** only be used at the top-level of
     /// tvix-eval when returning a result to the user, never inside of
     /// eval code.
+    #[error("{0}")]
     CatchableError(CatchableErrorKind),
 
     /// Invalid hash type specified, must be one of "md5", "sha1", "sha256"
     /// or "sha512"
+    #[error("unknown hash type '{0}'")]
     UnknownHashType(String),
 }
 
@@ -335,6 +411,7 @@ impl Error {
     }
 }
 
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 impl Display for ErrorKind {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match &self {
@@ -535,6 +612,8 @@ to a missing value in the attribute set(s) included via `with`."#
     }
 }
 
+=======
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 impl Display for Error {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         write!(f, "{}", self.kind)

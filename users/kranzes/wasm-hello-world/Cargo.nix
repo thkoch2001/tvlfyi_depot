@@ -102,6 +102,7 @@ rec {
         version = "1.0.0";
         edition = "2018";
         sha256 = "1za0vb97n4brpzpv8lsbnzmq5r8f2b0cpqqr0sy8h5bn751xxwds";
+        libName = "cfg_if";
         authors = [
           "Alex Crichton <alex@alexcrichton.com>"
         ];
@@ -232,6 +233,7 @@ rec {
         version = "1.0.12";
         edition = "2018";
         sha256 = "0jzf1znfpb2gx8nr8mvmyqs1crnv79l57nxnbiszc7xf7ynbjm1k";
+        libName = "unicode_ident";
         authors = [
           "David Tolnay <dtolnay@gmail.com>"
         ];
@@ -239,9 +241,10 @@ rec {
       };
       "wasm-bindgen" = rec {
         crateName = "wasm-bindgen";
-        version = "0.2.92";
-        edition = "2018";
-        sha256 = "1a4mcw13nsk3fr8fxjzf9kk1wj88xkfsmnm0pjraw01ryqfm7qjb";
+        version = "0.2.93";
+        edition = "2021";
+        sha256 = "1dfr7pka5kwvky2fx82m9d060p842hc5fyyw8igryikcdb0xybm8";
+        libName = "wasm_bindgen";
         authors = [
           "The wasm-bindgen Developers"
         ];
@@ -251,6 +254,10 @@ rec {
             packageId = "cfg-if";
           }
           {
+            name = "once_cell";
+            packageId = "once_cell";
+          }
+          {
             name = "wasm-bindgen-macro";
             packageId = "wasm-bindgen-macro";
           }
@@ -258,7 +265,6 @@ rec {
         features = {
           "default" = [ "spans" "std" ];
           "enable-interning" = [ "std" ];
-          "gg-alloc" = [ "wasm-bindgen-test/gg-alloc" ];
           "serde" = [ "dep:serde" ];
           "serde-serialize" = [ "serde" "serde_json" "std" ];
           "serde_json" = [ "dep:serde_json" ];
@@ -270,9 +276,10 @@ rec {
       };
       "wasm-bindgen-backend" = rec {
         crateName = "wasm-bindgen-backend";
-        version = "0.2.92";
-        edition = "2018";
-        sha256 = "1nj7wxbi49f0rw9d44rjzms26xlw6r76b2mrggx8jfbdjrxphkb1";
+        version = "0.2.93";
+        edition = "2021";
+        sha256 = "0yypblaf94rdgqs5xw97499xfwgs1096yx026d6h88v563d9dqwx";
+        libName = "wasm_bindgen_backend";
         authors = [
           "The wasm-bindgen Developers"
         ];
@@ -314,10 +321,11 @@ rec {
       };
       "wasm-bindgen-macro" = rec {
         crateName = "wasm-bindgen-macro";
-        version = "0.2.92";
-        edition = "2018";
-        sha256 = "09npa1srjjabd6nfph5yc03jb26sycjlxhy0c2a1pdrpx4yq5y51";
+        version = "0.2.93";
+        edition = "2021";
+        sha256 = "1kycd1xfx4d9xzqknvzbiqhwb5fzvjqrrn88x692q1vblj8lqp2q";
         procMacro = true;
+        libName = "wasm_bindgen_macro";
         authors = [
           "The wasm-bindgen Developers"
         ];
@@ -339,9 +347,10 @@ rec {
       };
       "wasm-bindgen-macro-support" = rec {
         crateName = "wasm-bindgen-macro-support";
-        version = "0.2.92";
-        edition = "2018";
-        sha256 = "1dqv2xs8zcyw4kjgzj84bknp2h76phmsb3n7j6hn396h4ssifkz9";
+        version = "0.2.93";
+        edition = "2021";
+        sha256 = "0dp8w6jmw44srym6l752nkr3hkplyw38a2fxz5f3j1ch9p3l1hxg";
+        libName = "wasm_bindgen_macro_support";
         authors = [
           "The wasm-bindgen Developers"
         ];
@@ -376,10 +385,11 @@ rec {
       };
       "wasm-bindgen-shared" = rec {
         crateName = "wasm-bindgen-shared";
-        version = "0.2.92";
-        edition = "2018";
+        version = "0.2.93";
+        edition = "2021";
         links = "wasm_bindgen";
-        sha256 = "15kyavsrna2cvy30kg03va257fraf9x00ny554vxngvpyaa0q6dg";
+        sha256 = "1104bny0hv40jfap3hp8jhs0q4ya244qcrvql39i38xlghq0lan6";
+        libName = "wasm_bindgen_shared";
         authors = [
           "The wasm-bindgen Developers"
         ];
@@ -508,52 +518,41 @@ rec {
                 testPostRun
               ]);
           in
-          pkgs.runCommand "run-tests-${testCrate.name}"
-            {
-              inherit testCrateFlags;
-              buildInputs = testInputs;
-            } ''
-            set -e
+          pkgs.stdenvNoCC.mkDerivation {
+            name = "run-tests-${testCrate.name}";
 
-            export RUST_BACKTRACE=1
+            inherit (crate) src;
 
-            # recreate a file hierarchy as when running tests with cargo
+            inherit testCrateFlags;
 
-            # the source for test data
-            # It's necessary to locate the source in $NIX_BUILD_TOP/source/
-            # instead of $NIX_BUILD_TOP/
-            # because we compiled those test binaries in the former and not the latter.
-            # So all paths will expect source tree to be there and not in the build top directly.
-            # For example: $NIX_BUILD_TOP := /build in general, if you ask yourself.
-            # NOTE: There could be edge cases if `crate.sourceRoot` does exist but
-            # it's very hard to reason about them.
-            # Open a bug if you run into this!
-            mkdir -p source/
-            cd source/
+            buildInputs = testInputs;
 
-            ${pkgs.buildPackages.xorg.lndir}/bin/lndir ${crate.src}
+            buildPhase = ''
+              set -e
+              export RUST_BACKTRACE=1
 
-            # build outputs
-            testRoot=target/debug
-            mkdir -p $testRoot
+              # build outputs
+              testRoot=target/debug
+              mkdir -p $testRoot
 
-            # executables of the crate
-            # we copy to prevent std::env::current_exe() to resolve to a store location
-            for i in ${crate}/bin/*; do
-              cp "$i" "$testRoot"
-            done
-            chmod +w -R .
+              # executables of the crate
+              # we copy to prevent std::env::current_exe() to resolve to a store location
+              for i in ${crate}/bin/*; do
+                cp "$i" "$testRoot"
+              done
+              chmod +w -R .
 
-            # test harness executables are suffixed with a hash, like cargo does
-            # this allows to prevent name collision with the main
-            # executables of the crate
-            hash=$(basename $out)
-            for file in ${drv}/tests/*; do
-              f=$testRoot/$(basename $file)-$hash
-              cp $file $f
-              ${testCommand}
-            done
-          '';
+              # test harness executables are suffixed with a hash, like cargo does
+              # this allows to prevent name collision with the main
+              # executables of the crate
+              hash=$(basename $out)
+              for file in ${drv}/tests/*; do
+                f=$testRoot/$(basename $file)-$hash
+                cp $file $f
+                ${testCommand}
+              done
+            '';
+          };
       in
       pkgs.runCommand "${crate.name}-linked"
         {

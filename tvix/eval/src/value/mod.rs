@@ -210,6 +210,7 @@ where
     }
 }
 
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 /// Constructors
 impl Value {
     /// Construct a [`Value::Attrs`] from a [`NixAttrs`].
@@ -219,6 +220,8 @@ impl Value {
     }
 }
 
+=======
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 /// Controls what kind of by-pointer equality comparison is allowed.
 ///
 /// See `//tvix/docs/value-pointer-equality.md` for details.
@@ -235,6 +238,11 @@ pub enum PointerEquality {
 }
 
 impl Value {
+    /// Construct a [`Value::Attrs`] from a [`NixAttrs`].
+    pub fn attrs(attrs: NixAttrs) -> Self {
+        Self::Attrs(Box::new(attrs))
+    }
+
     /// Deeply forces a value, traversing e.g. lists and attribute sets and forcing
     /// their contents, too.
     ///
@@ -879,6 +887,12 @@ impl Value {
             | Self::Json(..)
             | Self::FinaliseRequest(_) => "an internal Tvix evaluator value".into(),
         }
+    }
+
+    /// Constructs a thunk that will be evaluated lazily at runtime. This lets
+    /// users of Tvix implement their own lazy builtins and so on.
+    pub fn suspended_native_thunk(native: Box<dyn Fn() -> Result<Value, ErrorKind>>) -> Self {
+        Value::Thunk(Thunk::new_suspended_native(native))
     }
 }
 

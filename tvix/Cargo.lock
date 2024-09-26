@@ -116,9 +116,17 @@ dependencies = [
 
 [[package]]
 name = "anyhow"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "1.0.88"
+=======
+version = "1.0.86"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 source = "registry+https://github.com/rust-lang/crates.io-index"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 checksum = "4e1496f8fb1fbf272686b8d37f523dab3e4a7443300055e74cdaa449f3114356"
+=======
+checksum = "b3d1d046238990b9cf5bcde22a3fb3584ee5cf65fb2765f454ed428c7a0063da"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 
 [[package]]
 name = "arc-swap"
@@ -254,7 +262,11 @@ checksum = "16e62a023e7c117e27523144c5d2459f4397fcc3cab0085af8e2224f643a0193"
 dependencies = [
  "proc-macro2",
  "quote",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
+=======
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 ]
 
 [[package]]
@@ -281,7 +293,11 @@ checksum = "a27b8a3a6e1a44fa4c8baf1f653e4172e81486d4941f2237e20dc2d0cf4ddff1"
 dependencies = [
  "proc-macro2",
  "quote",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
+=======
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 ]
 
 [[package]]
@@ -294,7 +310,11 @@ checksum = "1505bd5d3d116872e7271a6d4e16d81d0c8570876c8de68093a09ac269d8aac0"
 name = "autocfg"
 version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 checksum = "0c4b4d0bd25bd0b74681c0ad21497610ce1b7c91b1022cd21c80c6fbdd9476b0"
+=======
+checksum = "d468802bab17cbc0cc575e9b053f41e72aa36bfa6b7f55e3529ffa43161b97fa"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 
 [[package]]
 name = "axum"
@@ -380,9 +400,14 @@ checksum = "8c3c1a368f70d6cf7302d78f8f7093da241fb8e8807c05cc9e51a125895a6d5b"
 
 [[package]]
 name = "bigtable_rs"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "0.2.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "cd7b68bc0154855cc76e6474ef42d8ca131de33ffdaa89a9c410432d9334cb18"
+=======
+version = "0.2.10"
+source = "git+https://github.com/liufuyang/bigtable_rs?rev=1818355a5373a5bc2c84287e3a4e3807154ac8ef#1818355a5373a5bc2c84287e3a4e3807154ac8ef"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "gcp_auth",
  "http",
@@ -392,7 +417,6 @@ dependencies = [
  "prost-build",
  "prost-types",
  "prost-wkt",
- "prost-wkt-build",
  "prost-wkt-types",
  "serde",
  "serde_with",
@@ -520,9 +544,17 @@ checksum = "37b2a672a2cb129a2e41c10b1224bb368f9f37a2b16b612598138befd7b37eb5"
 
 [[package]]
 name = "cc"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "1.1.18"
+=======
+version = "1.1.15"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 source = "registry+https://github.com/rust-lang/crates.io-index"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 checksum = "b62ac837cdb5cb22e10a256099b4fc502b1dfe560cb282963a974d7abd80e476"
+=======
+checksum = "57b6a275aa2903740dc87da01c62040406b8812552e97129a63ea8850a17c6e6"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "jobserver",
  "libc",
@@ -579,9 +611,17 @@ dependencies = [
 
 [[package]]
 name = "clap"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "4.5.17"
+=======
+version = "4.5.16"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 source = "registry+https://github.com/rust-lang/crates.io-index"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 checksum = "3e5a21b8495e732f1b3c364c9949b201ca7bae518c502c80256c96ad79eaf6ac"
+=======
+checksum = "ed6719fffa43d0d87e5fd8caeab59be1554fb028cd30edc88fc4369b17971019"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "clap_builder",
  "clap_derive",
@@ -589,14 +629,22 @@ dependencies = [
 
 [[package]]
 name = "clap_builder"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "4.5.17"
+=======
+version = "4.5.15"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 source = "registry+https://github.com/rust-lang/crates.io-index"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 checksum = "8cf2dd12af7a047ad9d6da2b6b249759a22a7abc0f474c1dae1777afa4b21a73"
+=======
+checksum = "216aec2b177652e3846684cbfe25c9964d18ec45234f0f5da5157b207ed1aab6"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "anstream",
  "anstyle",
  "clap_lex",
- "strsim",
+ "strsim 0.11.1",
 ]
 
 [[package]]
@@ -608,7 +656,11 @@ dependencies = [
  "heck 0.5.0",
  "proc-macro2",
  "quote",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
+=======
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 ]
 
 [[package]]
@@ -818,15 +870,16 @@ dependencies = [
 
 [[package]]
 name = "curve25519-dalek"
-version = "4.1.3"
+version = "4.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "97fb8b7c4503de7d6ae7b42ab72a5a59857b4c937ec27a3d4539dba95b5ab2be"
+checksum = "e89b8c6a2e4b1f45971ad09761aafb85514a84744b67a95e32c3cc1352d1f65c"
 dependencies = [
  "cfg-if",
  "cpufeatures",
  "curve25519-dalek-derive",
  "digest",
  "fiat-crypto",
+ "platforms",
  "rustc_version",
  "subtle",
  "zeroize",
@@ -840,7 +893,11 @@ checksum = "f46882e17999c6cc590af592290432be3bce0428cb0d5f8b6715e4dc7b383eb3"
 dependencies = [
  "proc-macro2",
  "quote",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
+=======
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 ]
 
 [[package]]
@@ -863,8 +920,13 @@ dependencies = [
  "ident_case",
  "proc-macro2",
  "quote",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "strsim",
  "syn 2.0.77",
+=======
+ "strsim 0.10.0",
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 ]
 
 [[package]]
@@ -875,7 +937,11 @@ checksum = "d336a2a514f6ccccaa3e09b02d41d35330c07ddf03a62165fcec10bb561c7806"
 dependencies = [
  "darling_core",
  "quote",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
+=======
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 ]
 
 [[package]]
@@ -1033,7 +1099,11 @@ checksum = "ba7795da175654fe16979af73f81f26a8ea27638d8d9823d317016888a63dc4c"
 dependencies = [
  "num-traits",
  "quote",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
+=======
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 ]
 
 [[package]]
@@ -1280,7 +1350,11 @@ checksum = "87750cf4b7a4c0625b1529e4c543c2182106e4dedc60a2a6455e00d212c489ac"
 dependencies = [
  "proc-macro2",
  "quote",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
+=======
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 ]
 
 [[package]]
@@ -1335,7 +1409,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "536c79e79dde296a800738474691e97031769bed9b54e6dd0401b169d35d693d"
 dependencies = [
  "async-trait",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "base64",
+=======
+ "base64 0.22.1",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
  "bytes",
  "chrono",
  "home",
@@ -1420,6 +1498,7 @@ checksum = "d2fabcfbdc87f4758337ca535fb41a6d701b65693ce38287d856d1674551ec9b"
 
 [[package]]
 name = "h2"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "0.4.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "524e8ac6999421f49a846c2d4411f337e53497d8ec55d67753beffa43c5d9205"
@@ -1431,6 +1510,19 @@ dependencies = [
  "futures-sink",
  "http",
  "indexmap 2.5.0",
+=======
+version = "0.4.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "816ec7294445779408f36fe57bc5b7fc1cf59664059096c65f905c1c61f58069"
+dependencies = [
+ "bytes",
+ "fnv",
+ "futures-core",
+ "futures-sink",
+ "futures-util",
+ "http",
+ "indexmap 2.1.0",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
  "slab",
  "tokio",
  "tokio-util",
@@ -1480,12 +1572,15 @@ name = "hermit-abi"
 version = "0.3.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d231dfb89cfffdbc30e7fc41579ed6066ad03abda9e567ccafae602b97ec5024"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 
 [[package]]
 name = "hermit-abi"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fbf6a919d6cf397374f7dfeeea91d974c7c0a7221d0d0f4f20d859d329e53fcc"
+=======
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 
 [[package]]
 name = "hex"
@@ -1521,9 +1616,15 @@ dependencies = [
 
 [[package]]
 name = "http-body"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "1efedce1fb8e6913f23e0c92de8e62cd5b772a67e7b3946df930a62566c93184"
+=======
+version = "1.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1cac85db508abc24a2e48553ba12a996e87244a0395ce011e62b37158745d643"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "bytes",
  "http",
@@ -1536,7 +1637,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "793429d76616a256bcb62c2a2ec2bed781c8307e797e2598c50010f2bee2544f"
 dependencies = [
  "bytes",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "futures-util",
+=======
+ "futures-core",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
  "http",
  "http-body",
  "pin-project-lite",
@@ -1583,16 +1688,26 @@ dependencies = [
 
 [[package]]
 name = "hyper-rustls"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "0.27.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "08afdbb5c31130e3034af566421053ab03787c640246a446327f550d11bcb333"
+=======
+version = "0.27.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5ee4be2c948921a1a5320b629c4193916ed787a7f7f293fd3f7f5a6c9de74155"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "futures-util",
  "http",
  "hyper",
  "hyper-util",
  "rustls",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "rustls-native-certs 0.8.0",
+=======
+ "rustls-native-certs",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
  "rustls-pki-types",
  "tokio",
  "tokio-rustls",
@@ -1614,9 +1729,17 @@ dependencies = [
 
 [[package]]
 name = "hyper-util"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "0.1.8"
+=======
+version = "0.1.7"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 source = "registry+https://github.com/rust-lang/crates.io-index"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 checksum = "da62f120a8a37763efb0cf8fdf264b884c7b8b9ac8660b900c8661030c00e6ba"
+=======
+checksum = "cde7055719c54e36e95e8719f95883f22072a48ede39db7fc17a4e1d5281e9b9"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "bytes",
  "futures-channel",
@@ -2073,6 +2196,21 @@ dependencies = [
 [[package]]
 name = "mio"
 version = "1.0.2"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
+=======
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "80e04d1dcff3aae0704555fe5fee3bcfaf3d1fdf8a7e521d5b9d2b42acb52cec"
+dependencies = [
+ "hermit-abi",
+ "libc",
+ "wasi",
+ "windows-sys 0.52.0",
+]
+
+[[package]]
+name = "multimap"
+version = "0.8.3"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "80e04d1dcff3aae0704555fe5fee3bcfaf3d1fdf8a7e521d5b9d2b42acb52cec"
 dependencies = [
@@ -2184,6 +2322,7 @@ version = "0.1.0"
 dependencies = [
  "bitflags 2.6.0",
  "bstr",
+ "bytes",
  "criterion",
  "data-encoding",
  "ed25519",
@@ -2194,6 +2333,7 @@ dependencies = [
  "hex-literal",
  "lazy_static",
  "mimalloc",
+ "nix-compat-derive",
  "nom",
  "num-traits",
  "pin-project-lite",
@@ -2208,6 +2348,35 @@ dependencies = [
  "tokio-test",
  "tracing",
  "zstd",
+]
+
+[[package]]
+name = "nix-compat-derive"
+version = "0.1.0"
+dependencies = [
+ "hex-literal",
+ "nix-compat",
+ "pretty_assertions",
+ "proc-macro2",
+ "quote",
+ "rstest",
+ "syn 2.0.76",
+ "tokio",
+ "tokio-test",
+]
+
+[[package]]
+name = "nix-compat-derive-tests"
+version = "0.1.0"
+dependencies = [
+ "hex-literal",
+ "nix-compat",
+ "nix-compat-derive",
+ "pretty_assertions",
+ "rstest",
+ "tokio",
+ "tokio-test",
+ "trybuild",
 ]
 
 [[package]]
@@ -2564,7 +2733,11 @@ checksum = "2f38a4412a78282e09a2cf38d195ea5420d15ba0602cb375210efbc877243965"
 dependencies = [
  "proc-macro2",
  "quote",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
+=======
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 ]
 
 [[package]]
@@ -2605,6 +2778,12 @@ name = "pkg-config"
 version = "0.3.30"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d231b230927b5e4ad203db57bbcbee2802f6bce620b1e4a9024a07d94e2907ec"
+
+[[package]]
+name = "platforms"
+version = "3.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "626dec3cac7cc0e1577a2ec3fc496277ec2baa084bebad95bb6fdbfae235f84c"
 
 [[package]]
 name = "plotters"
@@ -2687,7 +2866,11 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "479cf940fbbb3426c32c5d5176f62ad57549a0bb84773423ba8be9d089f5faba"
 dependencies = [
  "proc-macro2",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
+=======
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 ]
 
 [[package]]
@@ -2718,6 +2901,7 @@ dependencies = [
 
 [[package]]
 name = "prost"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "0.13.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7b0487d90e047de87f984913713b85c601c05609aad5b0df4b4573fbf69aa13f"
@@ -2746,19 +2930,56 @@ dependencies = [
  "pulldown-cmark-to-cmark",
  "regex",
  "syn 2.0.77",
+=======
+version = "0.13.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e13db3d3fde688c61e2446b4d843bc27a7e8af269a69440c0308021dc92333cc"
+dependencies = [
+ "bytes",
+ "prost-derive",
+]
+
+[[package]]
+name = "prost-build"
+version = "0.13.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5bb182580f71dd070f88d01ce3de9f4da5021db7115d2e1c3605a754153b77c1"
+dependencies = [
+ "bytes",
+ "heck 0.4.1",
+ "itertools 0.10.5",
+ "log",
+ "multimap",
+ "once_cell",
+ "petgraph",
+ "prettyplease",
+ "prost",
+ "prost-types",
+ "pulldown-cmark",
+ "pulldown-cmark-to-cmark",
+ "regex",
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
  "tempfile",
 ]
 
 [[package]]
 name = "prost-derive"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "0.13.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e9552f850d5f0964a4e4d0bf306459ac29323ddfbae05e35a7c0d35cb0803cc5"
+=======
+version = "0.13.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "18bec9b0adc4eba778b33684b7ba3e7137789434769ee3ce3930463ef904cfca"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "anyhow",
- "itertools 0.13.0",
+ "itertools 0.10.5",
  "proc-macro2",
  "quote",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
 ]
 
@@ -2767,6 +2988,16 @@ name = "prost-types"
 version = "0.13.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4759aa0d3a6232fb8dbdb97b61de2c20047c68aca932c7ed76da9d788508d670"
+=======
+ "syn 2.0.76",
+]
+
+[[package]]
+name = "prost-types"
+version = "0.13.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "cee5168b05f49d4b0ca581206eb14a7b22fafd963efe729ac48eb03266e25cc2"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "prost",
 ]
@@ -2792,7 +3023,11 @@ version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8a669d5acbe719010c6f62a64e6d7d88fdedc1fe46e419747949ecb6312e9b14"
 dependencies = [
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "heck 0.5.0",
+=======
+ "heck 0.4.1",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
  "prost",
  "prost-build",
  "prost-types",
@@ -2857,9 +3092,14 @@ dependencies = [
  "pin-project-lite",
  "quinn-proto",
  "quinn-udp",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "rustc-hash 2.0.0",
  "rustls",
  "socket2",
+=======
+ "rustc-hash 1.1.0",
+ "rustls",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
  "thiserror",
  "tokio",
  "tracing",
@@ -2874,7 +3114,11 @@ dependencies = [
  "bytes",
  "rand",
  "ring",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "rustc-hash 2.0.0",
+=======
+ "rustc-hash 1.1.0",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
  "rustls",
  "slab",
  "thiserror",
@@ -3029,7 +3273,11 @@ dependencies = [
  "aho-corasick",
  "memchr",
  "regex-automata 0.4.7",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "regex-syntax 0.8.4",
+=======
+ "regex-syntax 0.8.2",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 ]
 
 [[package]]
@@ -3096,7 +3344,11 @@ dependencies = [
  "pin-project-lite",
  "quinn",
  "rustls",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "rustls-native-certs 0.7.3",
+=======
+ "rustls-native-certs",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
  "rustls-pemfile",
  "rustls-pki-types",
  "serde",
@@ -3209,7 +3461,11 @@ dependencies = [
  "regex",
  "relative-path",
  "rustc_version",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
+=======
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
  "unicode-ident",
 ]
 
@@ -3222,7 +3478,11 @@ dependencies = [
  "quote",
  "rand",
  "rustc_version",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
+=======
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 ]
 
 [[package]]
@@ -3254,9 +3514,17 @@ dependencies = [
 
 [[package]]
 name = "rustix"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "0.38.37"
+=======
+version = "0.38.35"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 source = "registry+https://github.com/rust-lang/crates.io-index"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 checksum = "8acb788b847c24f28525660c4d7758620a7210875711f79e7f663cc152726811"
+=======
+checksum = "a85d50532239da68e9addb745ba38ff4612a242c1c7ceea689c4bc7c2f43c36f"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "bitflags 2.6.0",
  "errno",
@@ -3267,9 +3535,15 @@ dependencies = [
 
 [[package]]
 name = "rustls"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "0.23.13"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f2dabaac7466917e566adb06783a81ca48944c6898a1b08b9374106dd671f4c8"
+=======
+version = "0.23.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ebbbdb961df0ad3f2652da8f3fdc4b36122f568f968f45ad3316f26c025c677b"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "log",
  "once_cell",
@@ -3282,6 +3556,7 @@ dependencies = [
 
 [[package]]
 name = "rustls-native-certs"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "0.7.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e5bfb394eeed242e909609f56089eecfe5fda225042e8b171791b9c95f5931e5"
@@ -3296,6 +3571,9 @@ dependencies = [
 [[package]]
 name = "rustls-native-certs"
 version = "0.8.0"
+=======
+version = "0.7.0"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fcaf18a4f2be7326cd874a5fa579fae794320a0f388d365dca7e480e55f83f8a"
 dependencies = [
@@ -3308,11 +3586,19 @@ dependencies = [
 
 [[package]]
 name = "rustls-pemfile"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "2.1.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "196fe16b00e106300d3e45ecfcb764fa292a535d7326a29a5875c579c7417425"
 dependencies = [
  "base64",
+=======
+version = "2.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3c333bb734fcdedcea57de1602543590f545f127dc8b533324318fd492c5c70b"
+dependencies = [
+ "base64 0.21.7",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
  "rustls-pki-types",
 ]
 
@@ -3324,9 +3610,15 @@ checksum = "fc0a2ce646f8655401bb81e7927b812614bd5d91dbc968696be50603510fcaf0"
 
 [[package]]
 name = "rustls-webpki"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "0.102.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "64ca1bc8749bd4cf37b5ce386cc146580777b4e8572c7b97baf22c83f444bee9"
+=======
+version = "0.102.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "faaa0a62740bedb9b2ef5afa303da42764c012f743917351dc9a237ea1663610"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "ring",
  "rustls-pki-types",
@@ -3429,22 +3721,42 @@ checksum = "61697e0a1c7e512e84a621326239844a24d8207b4669b41bc18b32ea5cbf988b"
 
 [[package]]
 name = "serde"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "1.0.210"
+=======
+version = "1.0.209"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 source = "registry+https://github.com/rust-lang/crates.io-index"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 checksum = "c8e3592472072e6e22e0a54d5904d9febf8508f65fb8552499a1abc7d1078c3a"
+=======
+checksum = "99fce0ffe7310761ca6bf9faf5115afbc19688edd00171d81b1bb1b116c63e09"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "serde_derive",
 ]
 
 [[package]]
 name = "serde_derive"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "1.0.210"
+=======
+version = "1.0.209"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 source = "registry+https://github.com/rust-lang/crates.io-index"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 checksum = "243902eda00fad750862fc144cea25caca5e20d615af0a81bee94ca738f1df1f"
+=======
+checksum = "a5831b979fd7b5439637af1752d535ff49f4860c0f341d1baeb6faf0f4242170"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "proc-macro2",
  "quote",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
+=======
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 ]
 
 [[package]]
@@ -3517,7 +3829,11 @@ version = "3.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "69cecfa94848272156ea67b2b1a53f20fc7bc638c4a46d2f8abde08f05f4b857"
 dependencies = [
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "base64",
+=======
+ "base64 0.22.1",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
  "chrono",
  "hex",
  "indexmap 1.9.3",
@@ -3538,7 +3854,11 @@ dependencies = [
  "darling",
  "proc-macro2",
  "quote",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
+=======
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 ]
 
 [[package]]
@@ -3575,6 +3895,15 @@ dependencies = [
 [[package]]
 name = "shlex"
 version = "1.3.0"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
+=======
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
+
+[[package]]
+name = "signal-hook-registry"
+version = "1.4.1"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0fda2ff0d084019ba4d7c6f371c95d8fd75ce3524c3cb8fb653a3023f6323e64"
 
@@ -3703,6 +4032,12 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7da8b5736845d9f2fcb837ea5d9e2628564b3b043a70948a3f0b778838c5fb4f"
 
 [[package]]
+name = "strsim"
+version = "0.11.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7da8b5736845d9f2fcb837ea5d9e2628564b3b043a70948a3f0b778838c5fb4f"
+
+[[package]]
 name = "structmeta"
 version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3744,9 +4079,17 @@ dependencies = [
 
 [[package]]
 name = "syn"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "2.0.77"
+=======
+version = "2.0.76"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 source = "registry+https://github.com/rust-lang/crates.io-index"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 checksum = "9f35bcdf61fd8e7be6caf75f429fdca8beb3ed76584befb503b1569faee373ed"
+=======
+checksum = "578e081a14e0cefc3279b0472138c513f37b41a08d5a3cca9b6e4e8ceb6cd525"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "proc-macro2",
  "quote",
@@ -3833,7 +4176,11 @@ checksum = "a4558b58466b9ad7ca0f102865eccc95938dca1a74a856f2b57b6629050da261"
 dependencies = [
  "proc-macro2",
  "quote",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
+=======
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 ]
 
 [[package]]
@@ -3913,9 +4260,17 @@ checksum = "1f3ccbac311fea05f86f61904b462b55fb3df8837a366dfc601a0161d0532f20"
 
 [[package]]
 name = "tokio"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "1.40.0"
+=======
+version = "1.39.3"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 source = "registry+https://github.com/rust-lang/crates.io-index"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 checksum = "e2b070231665d27ad9ec9b8df639893f46727666c6767db40317fbe920a5d998"
+=======
+checksum = "9babc99b9923bfa4804bd74722ff02c0381021eafa4db9949217e3be8e84fff5"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "backtrace",
  "bytes",
@@ -3960,7 +4315,11 @@ checksum = "693d596312e88961bc67d7f1f97af8a70227d9f90c31bba5806eec004978d752"
 dependencies = [
  "proc-macro2",
  "quote",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
+=======
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 ]
 
 [[package]]
@@ -3987,9 +4346,17 @@ dependencies = [
 
 [[package]]
 name = "tokio-stream"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "0.1.16"
+=======
+version = "0.1.15"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 source = "registry+https://github.com/rust-lang/crates.io-index"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 checksum = "4f4e6ce100d0eb49a2734f8c0812bcd324cf357d21810932c5df6b96ef2b86f1"
+=======
+checksum = "267ac89e0bec6e691e5813911606935d77c476ff49024f98abcea3e7b15e37af"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "futures-core",
  "pin-project-lite",
@@ -4026,9 +4393,17 @@ dependencies = [
 
 [[package]]
 name = "tokio-util"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 version = "0.7.12"
+=======
+version = "0.7.11"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 source = "registry+https://github.com/rust-lang/crates.io-index"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 checksum = "61e7c3654c13bcd040d4a03abee2c75b1d14a37b423cf5a813ceae1cc903ec6a"
+=======
+checksum = "9cf6b47b3771c49ac75ad09a6162f53ad4b8088b76ac60e8ec1455b31a189fe1"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "bytes",
  "futures-core",
@@ -4109,12 +4484,21 @@ dependencies = [
 [[package]]
 name = "tonic"
 version = "0.12.2"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 source = "git+https://github.com/hyperium/tonic/#626b094754cc52973adbfc8d2b9790701d54ef84"
+=======
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c6f6ba989e4b2c58ae83d862d3a3e27690b6e3ae630d0deb59f3697f32aa88ad"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "async-stream",
  "async-trait",
  "axum",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "base64",
+=======
+ "base64 0.22.1",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
  "bytes",
  "h2",
  "http",
@@ -4126,7 +4510,11 @@ dependencies = [
  "percent-encoding",
  "pin-project",
  "prost",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "rustls-native-certs 0.8.0",
+=======
+ "rustls-native-certs",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
  "rustls-pemfile",
  "socket2",
  "tokio",
@@ -4141,20 +4529,37 @@ dependencies = [
 [[package]]
 name = "tonic-build"
 version = "0.12.2"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 source = "git+https://github.com/hyperium/tonic/#626b094754cc52973adbfc8d2b9790701d54ef84"
+=======
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fe4ee8877250136bd7e3d2331632810a4df4ea5e004656990d8d66d2f5ee8a67"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "prettyplease",
  "proc-macro2",
  "prost-build",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "prost-types",
+=======
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
  "quote",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
+=======
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 ]
 
 [[package]]
 name = "tonic-health"
 version = "0.12.2"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 source = "git+https://github.com/hyperium/tonic/#626b094754cc52973adbfc8d2b9790701d54ef84"
+=======
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ec0a34e6f706bae26b2b490e1da5c3f6a6ff87cae442bcbc7c881bab9631b5a7"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "async-stream",
  "prost",
@@ -4166,7 +4571,12 @@ dependencies = [
 [[package]]
 name = "tonic-reflection"
 version = "0.12.2"
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 source = "git+https://github.com/hyperium/tonic/#626b094754cc52973adbfc8d2b9790701d54ef84"
+=======
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7b56b874eedb04f89907573b408eab1e87c1c1dce43aac6ad63742f57faa99ff"
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 dependencies = [
  "prost",
  "prost-types",
@@ -4244,7 +4654,11 @@ checksum = "34704c8d6ebcbc939824180af020566b01a7c01f80641264eba0999f6c2b6be7"
 dependencies = [
  "proc-macro2",
  "quote",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
+=======
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 ]
 
 [[package]]
@@ -4380,6 +4794,20 @@ name = "try-lock"
 version = "0.2.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e421abadd41a4225275504ea4d6566923418b7f05506fbc9c0fe86ba7396114b"
+
+[[package]]
+name = "trybuild"
+version = "1.0.99"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "207aa50d36c4be8d8c6ea829478be44a372c6a77669937bb39c698e52f1491e8"
+dependencies = [
+ "glob",
+ "serde",
+ "serde_derive",
+ "serde_json",
+ "termcolor",
+ "toml 0.8.19",
+]
 
 [[package]]
 name = "tvix-build"
@@ -4531,6 +4959,7 @@ dependencies = [
  "tabwriter",
  "tempfile",
  "test-strategy",
+ "thiserror",
  "toml 0.6.0",
  "tvix-eval-builtin-macros",
  "vu128",
@@ -4713,7 +5142,11 @@ checksum = "70b20a22c42c8f1cd23ce5e34f165d4d37038f5b663ad20fb6adbdf029172483"
 dependencies = [
  "proc-macro2",
  "quote",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
+=======
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 ]
 
 [[package]]
@@ -4978,7 +5411,11 @@ dependencies = [
  "once_cell",
  "proc-macro2",
  "quote",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
+=======
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
  "wasm-bindgen-shared",
 ]
 
@@ -5012,7 +5449,11 @@ checksum = "afc340c74d9005395cf9dd098506f7f44e38f2b4a21c6aaacf9a105ea5e1e836"
 dependencies = [
  "proc-macro2",
  "quote",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
+=======
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
  "wasm-bindgen-backend",
  "wasm-bindgen-shared",
 ]
@@ -5093,7 +5534,11 @@ version = "0.58.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dd04d41d93c4992d421894c18c8b43496aa748dd4c081bac0dc93eb0489272b6"
 dependencies = [
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "windows-core 0.58.0",
+=======
+ "windows-core 0.54.0",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
  "windows-targets 0.52.6",
 ]
 
@@ -5147,7 +5592,21 @@ version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e400001bb720a623c1c69032f8e3e4cf09984deec740f007dd2b03ec864804b0"
 dependencies = [
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "windows-result",
+=======
+ "windows-result 0.1.2",
+ "windows-targets 0.52.6",
+]
+
+[[package]]
+name = "windows-registry"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e400001bb720a623c1c69032f8e3e4cf09984deec740f007dd2b03ec864804b0"
+dependencies = [
+ "windows-result 0.2.0",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
  "windows-strings",
  "windows-targets 0.52.6",
 ]
@@ -5162,12 +5621,30 @@ dependencies = [
 ]
 
 [[package]]
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 name = "windows-strings"
 version = "0.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4cd9b125c486025df0eabcb585e62173c6c9eddcec5d117d3b6e8c30e2ee4d10"
 dependencies = [
  "windows-result",
+=======
+name = "windows-result"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1d1043d8214f791817bab27572aaa8af63732e11bf84aa21a45a78d6c317ae0e"
+dependencies = [
+ "windows-targets 0.52.6",
+]
+
+[[package]]
+name = "windows-strings"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4cd9b125c486025df0eabcb585e62173c6c9eddcec5d117d3b6e8c30e2ee4d10"
+dependencies = [
+ "windows-result 0.2.0",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
  "windows-targets 0.52.6",
 ]
 
@@ -5377,7 +5854,11 @@ checksum = "fa4f8080344d4671fb4e831a13ad1e68092748387dfc4f55e356242fae12ce3e"
 dependencies = [
  "proc-macro2",
  "quote",
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
  "syn 2.0.77",
+=======
+ "syn 2.0.76",
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 ]
 
 [[package]]

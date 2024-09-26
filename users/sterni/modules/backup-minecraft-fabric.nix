@@ -10,7 +10,8 @@ let
   inherit (depot.nix) getBins;
 
   bins = getBins pkgs.borgbackup [ "borg" ]
-    // getBins pkgs.mcrcon [ "mcrcon" ];
+    // getBins pkgs.mcrcon [ "mcrcon" ]
+    // getBins pkgs.systemd [ "systemd-creds" ];
 
   unvaried = ls: builtins.all (l: l == builtins.head ls) ls;
 
@@ -29,7 +30,7 @@ let
       export MCRCON_HOST="localhost"
       export MCRCON_PORT="${toString instanceCfg.serverProperties."rcon.port"}"
       # Unfortunately, mcrcon can't read the password from a file
-      export MCRCON_PASS="$(cat "''${CREDENTIALS_DIRECTORY}/${instanceName}-rcon-password")"
+      export MCRCON_PASS="$(${bins.systemd-creds} cat "${instanceName}-rcon-password")"
 
       ${bins.mcrcon} save-all
       unset MCRCON_PASS

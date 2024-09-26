@@ -50,13 +50,14 @@ in
       interval = "1d";
     };
 
+    libinput = {
+      enable = true;
+      touchpad.naturalScrolling = false;
+      touchpad.tapping = false;
+    };
+
     xserver = {
       enable = true;
-      libinput = {
-        enable = true;
-        touchpad.naturalScrolling = false;
-        touchpad.tapping = false;
-      };
       xkb.layout = "us";
       xkb.options = "caps:escape";
       displayManager = {
@@ -77,9 +78,6 @@ in
       };
     };
   };
-
-  # Enable sound.
-  hardware.pulseaudio.enable = true;
 
   users.mutableUsers = true;
   users.users.wpcarro = {

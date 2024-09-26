@@ -3,6 +3,7 @@
 (with depot.ops.machines; [
   sanduny
   whitby
+  nixery-01
 ]) ++
 
 (with depot.users.tazjin.nixos; [

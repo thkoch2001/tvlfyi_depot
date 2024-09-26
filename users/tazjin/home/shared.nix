@@ -5,6 +5,8 @@
 
 
 let
+  inherit (depot.third_party) chicago95;
+
   # URL handler to open `tg://` URLs in telega.el
   telega-launcher = pkgs.writeShellScriptBin "telega-launcher" ''
     echo "Opening ''${1} in telega.el ..."
@@ -38,12 +40,6 @@ in
     '';
   };
 
-  services.screen-locker = {
-    enable = true;
-    inactiveInterval = 10; # minutes
-    lockCmd = "${depot.users.tazjin.screenLock}/bin/tazjin-screen-lock";
-  };
-
   home.packages = [ telega-launcher ];
 
   xdg.desktopEntries.telega-launcher = {
@@ -65,13 +61,35 @@ in
     };
   };
 
-  services.picom = {
+  programs.wpaperd = {
     enable = true;
-    vSync = true;
-    backend = "glx";
+    settings = {
+      default = {
+        duration = "1d";
+        mode = "center";
+        sorting = "random";
+      };
+
+      any.path = ../wallpapers;
+    };
   };
 
-  services.syncthing.enable = true;
+  programs.waybar = {
+    enable = true;
+    settings = depot.users.tazjin.dotfiles.waybar.config;
+    style = depot.users.tazjin.dotfiles.waybar.style;
+    systemd.enable = true;
+  };
+  systemd.user.services.waybar.Unit.After = lib.mkForce [ "niri.service" ];
+
+
+  services.swayidle = let cmd = "${pkgs.swaylock}/bin/swaylock -fFkl -c 008080"; in {
+    enable = true;
+    events = [
+      { event = "before-sleep"; command = cmd; }
+      { event = "lock"; command = cmd; }
+    ];
+  };
 
   # Enable the dunst notification daemon, but force the
   # configuration file separately instead of going via the strange
@@ -82,6 +100,18 @@ in
     onChange = ''
       ${pkgs.procps}/bin/pkill -u "$USER" ''${VERBOSE+-e} dunst || true
     '';
+  };
+
+  gtk = {
+    enable = true;
+    theme.name = "Chicago95";
+    theme.package = chicago95;
+
+    iconTheme.name = "Chicago95-tux";
+    iconTheme.package = chicago95;
+
+    cursorTheme.name = lib.mkDefault "Chicago95_Animated_Hourglass_Cursors";
+    cursorTheme.package = chicago95;
   };
 
   systemd.user.startServices = true;

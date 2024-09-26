@@ -44,38 +44,12 @@ fn depot_path_cgit_query() {
 }
 
 #[test]
-fn depot_path_sourcegraph_query() {
-    assert_eq!(
-        dispatch(
-            &handlers(),
-            &Query {
-                query: "//web/atward/default.nix".to_string(),
-                cs: true,
-            }
-        ),
-        Some("https://cs.tvl.fyi/depot/-/tree/web/atward/default.nix".to_string()),
-    );
-
-    assert_eq!(
-        dispatch(
-            &handlers(),
-            &Query {
-                query: "/not/a/depot/path".to_string(),
-                cs: true,
-            }
-        ),
-        None
-    );
-}
-
-#[test]
 fn depot_root_cgit_query() {
     assert_eq!(
         dispatch(
             &handlers(),
             &Query {
                 query: "//".to_string(),
-                cs: false,
             }
         ),
         Some("https://code.tvl.fyi/tree/".to_string()),
@@ -112,62 +86,12 @@ fn request_to_query() {
             .expect("request should parse to a query"),
         Query {
             query: "b/42".to_string(),
-            cs: false,
         },
     );
 
     assert_eq!(
         Query::from_request(&Request::fake_http("GET", "/", vec![], vec![])),
         None
-    );
-}
-
-#[test]
-fn settings_from_cookie() {
-    assert_eq!(
-        Query::from_request(&Request::fake_http(
-            "GET",
-            "/?q=b%2F42",
-            vec![("Cookie".to_string(), "cs=true;".to_string())],
-            vec![]
-        ))
-        .expect("request should parse to a query"),
-        Query {
-            query: "b/42".to_string(),
-            cs: true,
-        },
-    );
-}
-
-#[test]
-fn settings_from_query_parameter() {
-    assert_eq!(
-        Query::from_request(&Request::fake_http(
-            "GET",
-            "/?q=b%2F42&cs=true",
-            vec![],
-            vec![]
-        ))
-        .expect("request should parse to a query"),
-        Query {
-            query: "b/42".to_string(),
-            cs: true,
-        },
-    );
-
-    // Query parameter should override cookie
-    assert_eq!(
-        Query::from_request(&Request::fake_http(
-            "GET",
-            "/?q=b%2F42&cs=false",
-            vec![("Cookie".to_string(), "cs=true;".to_string())],
-            vec![]
-        ))
-        .expect("request should parse to a query"),
-        Query {
-            query: "b/42".to_string(),
-            cs: false,
-        },
     );
 }
 

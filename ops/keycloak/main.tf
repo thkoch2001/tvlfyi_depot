@@ -10,20 +10,29 @@ terraform {
   }
 
   backend "s3" {
-    endpoint = "https://objects.dc-sto1.glesys.net"
-    bucket   = "tvl-state"
-    key      = "terraform/tvl-keycloak"
-    region   = "glesys"
+    endpoints = {
+      s3 = "https://objects.dc-sto1.glesys.net"
+    }
+    bucket = "tvl-state"
+    key    = "terraform/tvl-keycloak"
+    region = "glesys"
 
     skip_credentials_validation = true
     skip_region_validation      = true
     skip_metadata_api_check     = true
+    skip_requesting_account_id  = true
+    skip_s3_checksum            = true
   }
 }
 
 provider "keycloak" {
   client_id = "terraform"
   url       = "https://auth.tvl.fyi"
+  # NOTE: Docs mention this applies to "users of the legacy distribution of keycloak".
+  # However, we get a "failed to perform initial login to Keycloak: error
+  # sending POST request to https://auth.tvl.fyi/realms/master/protocol/openid-connect/token: 404 Not Found"
+  # if we don't set this.
+  base_path = "/auth"
 }
 
 resource "keycloak_realm" "tvl" {

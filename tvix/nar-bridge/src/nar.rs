@@ -52,7 +52,7 @@ pub async fn get(
             StatusCode::NOT_FOUND
         })?;
 
-    let (root_name, root_node) = root_node.into_name_and_node().map_err(|e| {
+    let (root_name, root_node) = root_node.into_name_bytes_and_node().map_err(|e| {
         warn!(err=%e, "root node validation failed");
         StatusCode::BAD_REQUEST
     })?;
@@ -77,6 +77,7 @@ pub async fn get(
         .status(StatusCode::OK)
         .header("cache-control", "max-age=31536000, immutable")
         .header("content-length", nar_size)
+        .header("content-type", nix_http::MIME_TYPE_NAR)
         .body(Body::from_stream(ReaderStream::new(r)))
         .unwrap())
 }

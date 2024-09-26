@@ -1,9 +1,12 @@
+#[cfg(feature = "async")]
+use std::mem::MaybeUninit;
 use std::{
     io::{Error, ErrorKind},
-    mem::MaybeUninit,
     ops::RangeInclusive,
 };
-use tokio::io::{self, AsyncReadExt, AsyncWriteExt, ReadBuf};
+#[cfg(feature = "async")]
+use tokio::io::ReadBuf;
+use tokio::io::{self, AsyncReadExt, AsyncWriteExt};
 
 pub mod reader;
 pub use reader::BytesReader;
@@ -11,7 +14,7 @@ mod writer;
 pub use writer::BytesWriter;
 
 /// 8 null bytes, used to write out padding.
-const EMPTY_BYTES: &[u8; 8] = &[0u8; 8];
+pub(crate) const EMPTY_BYTES: &[u8; 8] = &[0u8; 8];
 
 /// The length of the size field, in bytes is always 8.
 const LEN_SIZE: usize = 8;
@@ -79,7 +82,12 @@ where
     Ok(buf)
 }
 
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 pub async fn read_bytes_buf<'a, const N: usize, R>(
+=======
+#[cfg(feature = "async")]
+pub(crate) async fn read_bytes_buf<'a, const N: usize, R>(
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
     reader: &mut R,
     buf: &'a mut [MaybeUninit<u8>; N],
     allowed_size: RangeInclusive<usize>,
@@ -132,8 +140,14 @@ where
 }
 
 /// SAFETY: The bytes have to actually be initialized.
+<<<<<<< HEAD   (649ccd chore(clippy): fix clippy (lvl2: MachineApplicable, human-ai)
 const unsafe fn assume_init_bytes(slice: &[MaybeUninit<u8>]) -> &[u8] {
     &*(std::ptr::from_ref::<[MaybeUninit<u8>]>(slice) as *const [u8])
+=======
+#[cfg(feature = "async")]
+unsafe fn assume_init_bytes(slice: &[MaybeUninit<u8>]) -> &[u8] {
+    &*(slice as *const [MaybeUninit<u8>] as *const [u8])
+>>>>>>> BRANCH (e4378f feat(tvix/store): seekable nar renderer)
 }
 
 /// Read a "bytes wire packet" of from the `AsyncRead` and tries to parse as string.

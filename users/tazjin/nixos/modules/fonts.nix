@@ -1,15 +1,17 @@
 # Attempt at configuring reasonable font-rendering.
 
-{ pkgs, ... }:
+{ depot, pkgs, ... }:
 
 {
   fonts = {
     packages = with pkgs; [
       corefonts
       dejavu_fonts
+      font-awesome
       jetbrains-mono
       noto-fonts-cjk
-      noto-fonts-emoji
+      noto-fonts-color-emoji
+      noto-fonts-monochrome-emoji
     ];
 
     fontconfig = {

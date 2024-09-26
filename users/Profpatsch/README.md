@@ -2,7 +2,7 @@
 
 Welcome, Welcome.
 
-Welcome to my user dir, where we optimize f*** around, in order to optimize finding out.
+Welcome to my user dir, where we optimize f\*\*\*ing around, in order to optimize finding out.
 
 ![fafo graph](./fafo.jpg)
 

@@ -1,3 +1,4 @@
+{-# LANGUAGE DeriveAnyClass #-}
 {-# LANGUAGE QuasiQuotes #-}
 
 module WhatcdResolver where
@@ -41,7 +42,6 @@ import Network.URI qualified
 import Network.Wai (ResponseReceived)
 import Network.Wai qualified as Wai
 import Network.Wai.Handler.Warp qualified as Warp
-import Network.Wai.Parse qualified as Wai
 import OpenTelemetry.Attributes qualified as Otel
 import OpenTelemetry.Trace qualified as Otel hiding (getTracer, inSpan, inSpan')
 import OpenTelemetry.Trace.Monad qualified as Otel
@@ -91,14 +91,17 @@ htmlUi = do
     let catchAppException act =
           try act >>= \case
             Right a -> pure a
-            Left (AppException err) -> do
-              runInIO (logError err)
+            Left (AppExceptionTree err) -> do
+              runInIO (logError (prettyErrorTree err))
+              respondOrig (Wai.responseLBS Http.status500 [] "")
+            Left (AppExceptionPretty err) -> do
+              runInIO (logError (err & Pretty.prettyErrsNoColor & stringToText))
               respondOrig (Wai.responseLBS Http.status500 [] "")
 
     catchAppException $ do
       let mp span parser =
             Multipart.parseMultipartOrThrow
-              (appThrowTree span)
+              (appThrow span . AppExceptionTree)
               parser
               req
 
@@ -111,7 +114,7 @@ htmlUi = do
 
       let parseQueryArgsNewSpan spanName parser =
             Parse.runParse "Unable to find the right request query arguments" (lmap Wai.queryString parser) req
-              & assertMNewSpan spanName id
+              & assertMNewSpan spanName (first AppExceptionTree)
 
       let handlers :: Handlers (AppT IO)
           handlers respond =
@@ -160,7 +163,7 @@ htmlUi = do
                       file <-
                         getTorrentFileById dat
                           <&> annotate [fmt|No torrent file for torrentId "{dat.torrentId}"|]
-                          >>= orAppThrowTree span
+                          >>= orAppThrow span
 
                       running <-
                         lift @Transaction $
@@ -311,6 +314,12 @@ htmlPageChrome title body =
         <title>{title}</title>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!--
+          prevent favicon request, based on answers in
+          https://stackoverflow.com/questions/1321878/how-to-prevent-favicon-ico-requests
+          TODO: create favicon
+        -->
+        <link rel="icon" href="data:,">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
         <script src="https://unpkg.com/htmx.org@1.9.2" integrity="sha384-L6OqL9pRWyyFU3+/bjdSri+iIphTN/bvYyM37tICVyOJkWZLpP2vGn6VUEXgzg6h" crossorigin="anonymous"></script>
@@ -551,25 +560,36 @@ getBestTorrentsData ::
   Transaction m [TorrentData (Label "percentDone" Percentage)]
 getBestTorrentsData artistFilter = inSpan' "get torrents table data" $ \span -> do
   artistFilter & doIfJust (\a -> addAttribute span "artist-filter.redacted-id" (a.artistRedactedId & showToText & Otel.toAttribute))
-  bestStale :: [TorrentData ()] <- getBestTorrents GetBestTorrentsFilter {onlyArtist = artistFilter, onlyDownloaded = False}
-  actual <-
+  let getBest = getBestTorrents GetBestTorrentsFilter {onlyArtist = artistFilter, onlyDownloaded = False}
+  bestStale :: [TorrentData ()] <- getBest
+  (statusInfo, transmissionStatus) <-
     getAndUpdateTransmissionTorrentsStatus
       ( bestStale
           & mapMaybe
             ( \td -> case td.torrentStatus of
-                InTransmission h -> Just h
+                InTransmission h -> Just (getLabel @"torrentHash" h, td)
                 _ -> Nothing
             )
-          <&> (\t -> (getLabel @"torrentHash" t, t.transmissionInfo))
           & Map.fromList
       )
+  bestBest <-
+    -- Instead of serving a stale table when a torrent gets deleted, fetch
+    -- the whole view again. This is a little wasteful, but torrents
+    -- shouldn’t get deleted very often, so it’s fine.
+    -- Re-evaluate invariant if this happens too often.
+    if statusInfo.knownTorrentsStale
+      then inSpan' "Fetch torrents table data again" $
+        \span' -> do
+          addEventSimple span' "The transmission torrent list was out of date, refetching torrent list."
+          getBest
+      else pure bestStale
   pure $
-    bestStale
+    bestBest
       --  we have to update the status of every torrent that’s not in tranmission anymore
       -- TODO I feel like it’s easier (& more correct?) to just do the database request again …
       <&> ( \td -> case td.torrentStatus of
               InTransmission info ->
-                case actual & Map.lookup (getLabel @"torrentHash" info) of
+                case transmissionStatus & Map.lookup (getLabel @"torrentHash" info) of
                   -- TODO this is also pretty dumb, cause it assumes that we have the torrent file if it was in transmission before,
                   -- which is an internal factum that is established in getBestTorrents (and might change later)
                   Nothing -> td {torrentStatus = NotInTransmissionYet}
@@ -621,6 +641,7 @@ mkBestTorrentsTable fresh = do
                   </td>
                   <td>{Html.toHtml @Natural b.torrentGroupJson.groupYear}</td>
                   <td>{Html.toHtml @Int b.seedingWeight}</td>
+                  <td>{Html.toHtml @Text b.torrentFormat}</td>
                   <td><details hx-trigger="toggle once" hx-post="snips/redacted/torrentDataJson" hx-vals={Enc.encToBytesUtf8 $ Enc.object [("torrent-id", Enc.int b.torrentId)]}></details></td>
                   </tr>
                 |]
@@ -635,8 +656,8 @@ mkBestTorrentsTable fresh = do
               <th>Name</th>
               <th>Year</th>
               <th>Weight</th>
+              <th>Format</th>
               <th>Torrent</th>
-              <th>Torrent Group</th>
             </tr>
           </thead>
           <tbody>
@@ -689,7 +710,7 @@ assertOneUpdated ::
   m ()
 assertOneUpdated span name x = case x.numberOfRowsAffected of
   1 -> pure ()
-  n -> appThrowTree span ([fmt|{name :: Text}: Expected to update exactly one row, but updated {n :: Natural} row(s)|])
+  n -> appThrow span ([fmt|{name :: Text}: Expected to update exactly one row, but updated {n :: Natural} row(s)|])
 
 migrate ::
   ( MonadPostgres m,
@@ -730,7 +751,8 @@ migrate = inSpan "Database Migration" $ do
     CREATE OR REPLACE FUNCTION calc_seeding_weight(full_json_result jsonb) RETURNS int AS $$
     BEGIN
       RETURN
-        ((full_json_result->'seeders')::integer*3
+        -- three times seeders plus one times snatches
+        (3 * (full_json_result->'seeders')::integer
         + (full_json_result->'snatches')::integer
         )
         -- prefer remasters by multiplying them with 3
@@ -738,7 +760,26 @@ migrate = inSpan "Database Migration" $ do
             WHEN full_json_result->>'remasterTitle' ILIKE '%remaster%'
             THEN 3
             ELSE 1
-          END);
+          END)
+        -- slightly push mp3 V0, to make sure it’s preferred over 320 CBR
+        * (CASE
+            WHEN full_json_result->>'encoding' ILIKE '%v0%'
+            THEN 2
+            ELSE 1
+          END)
+        -- remove 24bit torrents from the result (wayyy too big)
+        * (CASE
+            WHEN full_json_result->>'encoding' ILIKE '%24bit%'
+            THEN 0
+            ELSE 1
+          END)
+        -- discount FLACS, so we only use them when there’s no mp3 alternative (to save space)
+        / (CASE
+            WHEN full_json_result->>'encoding' ILIKE '%lossless%'
+            THEN 5
+            ELSE 1
+          END)
+        ;
     END;
     $$ LANGUAGE plpgsql IMMUTABLE;
 
@@ -763,38 +804,6 @@ migrate = inSpan "Database Migration" $ do
     CREATE INDEX IF NOT EXISTS torrents_json_snatches ON redacted.torrents_json(((full_json_result->'snatches')::integer));
   |]
     ()
-
-httpTorrent ::
-  ( MonadIO m,
-    MonadThrow m
-  ) =>
-  Otel.Span ->
-  Http.Request ->
-  m ByteString
-httpTorrent span req =
-  Http.httpBS req
-    >>= assertM
-      span
-      ( \resp -> do
-          let statusCode = resp & Http.responseStatus & (.statusCode)
-              contentType =
-                resp
-                  & Http.responseHeaders
-                  & List.lookup "content-type"
-                  <&> Wai.parseContentType
-                  <&> (\(ct, _mimeAttributes) -> ct)
-          if
-            | statusCode == 200,
-              Just "application/x-bittorrent" <- contentType ->
-                Right $ (resp & Http.responseBody)
-            | statusCode == 200,
-              Just otherType <- contentType ->
-                Left [fmt|Redacted returned a non-torrent body, with content-type "{otherType}"|]
-            | statusCode == 200,
-              Nothing <- contentType ->
-                Left [fmt|Redacted returned a body with unspecified content type|]
-            | code <- statusCode -> Left [fmt|Redacted returned an non-200 error code, code {code}: {resp & showPretty}|]
-      )
 
 runAppWith :: AppT IO a -> IO (Either TmpPg.StartError a)
 runAppWith appT = withTracer $ \tracer -> withDb $ \db -> do
@@ -828,6 +837,17 @@ runAppWith appT = withTracer $ \tracer -> withDb $ \db -> do
         logInfo [fmt|Connected to database at {db & TmpPg.toDataDirectory} on socket {db & TmpPg.toConnectionString}|]
         appT
   runReaderT newAppT.unAppT Context {..}
+    `catch` ( \case
+                AppExceptionPretty p -> throwM $ EscapedException (p & Pretty.prettyErrs)
+                AppExceptionTree t -> throwM $ EscapedException (t & prettyErrorTree & textToString)
+            )
+
+-- | Just a silly wrapper so that correctly format any 'AppException' that would escape the runAppWith scope.
+newtype EscapedException = EscapedException String
+  deriving anyclass (Exception)
+
+instance Show EscapedException where
+  show (EscapedException s) = s
 
 withTracer :: (Otel.Tracer -> IO c) -> IO c
 withTracer f = do

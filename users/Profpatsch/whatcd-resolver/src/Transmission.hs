@@ -49,18 +49,20 @@ scientificPercentage =
               | otherwise -> Right $ Percentage $ ceiling (f * 100)
         )
 
--- | Fetch the current status from transmission, and remove the tranmission hash from our database
--- iff it does not exist in transmission anymore
+-- | Fetch the current status from transmission,
+--  and remove the transmission hash and torrent file from our database iff it does not exist in transmission anymore
 getAndUpdateTransmissionTorrentsStatus ::
   ( MonadTransmission m,
     MonadThrow m,
     MonadLogger m,
     MonadPostgres m,
-    MonadOtel m
+    MonadOtel m,
+    HasField "groupId" info Int,
+    HasField "torrentId" info Int
   ) =>
-  Map (Label "torrentHash" Text) () ->
-  (Transaction m (Map (Label "torrentHash" Text) (Label "percentDone" Percentage)))
-getAndUpdateTransmissionTorrentsStatus knownTorrents = do
+  Map (Label "torrentHash" Text) info ->
+  (Transaction m (Label "knownTorrentsStale" Bool, (Map (Label "torrentHash" Text) (Label "percentDone" Percentage))))
+getAndUpdateTransmissionTorrentsStatus knownTorrents = inSpan' "getAndUpdateTransmissionTorrentsStatus" $ \span -> do
   let fields = ["hashString", "percentDone"]
   actualTorrents <-
     lift @Transaction $
@@ -77,14 +79,36 @@ getAndUpdateTransmissionTorrentsStatus knownTorrents = do
         )
         <&> Map.fromList
   let toDelete = Map.difference knownTorrents actualTorrents
-  execute
-    [fmt|
-    UPDATE redacted.torrents_json
-    SET transmission_torrent_hash = NULL
-    WHERE transmission_torrent_hash = ANY (?::text[])
-  |]
-    $ Only (toDelete & Map.keys <&> (.torrentHash) & PGArray :: PGArray Text)
-  pure actualTorrents
+  if
+    | Map.null toDelete -> do
+        addEventSimple span "We know about all transmission hashes."
+        pure (label @"knownTorrentsStale" False, actualTorrents)
+    | otherwise -> inSpan' "Delete outdated transmission hashes" $ \span' -> do
+        addAttribute
+          span'
+          "db.delete-transmission-hashes"
+          ( toDelete
+              & Map.toList
+              & Enc.list
+                ( \(k, v) ->
+                    Enc.object
+                      [ ("torrentHash", Enc.text k.torrentHash),
+                        ("groupId", Enc.int v.groupId),
+                        ("torrentId", Enc.int v.torrentId)
+                      ]
+                )
+              & jsonAttribute
+          )
+        _ <-
+          execute
+            [fmt|
+          UPDATE redacted.torrents_json
+          SET transmission_torrent_hash = NULL,
+              torrent_file = NULL
+          WHERE transmission_torrent_hash = ANY (?::text[])
+        |]
+            $ Only (toDelete & Map.keys <&> (.torrentHash) & PGArray :: PGArray Text)
+        pure (label @"knownTorrentsStale" True, actualTorrents)
 
 getTransmissionTorrentsTable ::
   (MonadTransmission m, MonadThrow m, MonadLogger m, MonadOtel m) => m Html
@@ -205,9 +229,9 @@ doTransmissionRequest' req = inSpan' "Transmission Request" $ \span -> do
       transmissionConnectionConfig
       req
   case resp.result of
-    TransmissionResponseFailure err -> appThrowTree span (nestedError "Transmission RPC error" $ singleError $ newError err)
+    TransmissionResponseFailure err -> appThrow span (AppExceptionTree $ nestedError "Transmission RPC error" $ singleError $ newError err)
     TransmissionResponseSuccess -> case resp.arguments of
-      Nothing -> appThrowTree span "Transmission RPC error: No `arguments` field in response"
+      Nothing -> appThrow span "Transmission RPC error: No `arguments` field in response"
       Just out -> pure out
 
 -- | Contact the transmission RPC, and do the CSRF protection dance.
@@ -305,8 +329,8 @@ doTransmissionRequest span dat (req, parser) = do
             case Json.eitherDecodeStrict' @Json.Value (resp & Http.getResponseBody) of
               Left _err -> pure ()
               Right val -> logInfo [fmt|failing transmission response: {showPrettyJson val}|]
-            appThrowTree span err
-    _ -> liftIO $ unwrapIOError $ Left [fmt|Non-200 response: {showPretty resp}|]
+            appThrow span (AppExceptionTree err)
+    _ -> appThrow span $ AppExceptionPretty [[fmt|Non-200 response:|], pretty resp]
 
 class MonadTransmission m where
   getCurrentTransmissionSessionId :: m (Maybe ByteString)

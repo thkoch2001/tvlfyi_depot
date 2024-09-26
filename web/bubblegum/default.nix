@@ -21,6 +21,7 @@ let
       # nixpkgs for lib and packages
       "third_party/nixpkgs"
       "third_party/overlays"
+      "third_party/sources"
       # bubblegum and its dependencies
       "web/bubblegum"
       "nix/runExecline"

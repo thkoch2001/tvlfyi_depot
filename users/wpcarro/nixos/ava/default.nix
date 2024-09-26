@@ -76,9 +76,6 @@ in
     };
   };
 
-  # Enable sound.
-  hardware.pulseaudio.enable = true;
-
   users.mutableUsers = true;
   users.users.root.openssh.authorizedKeys.keys = with wpcarro.keys; [
     iphone
