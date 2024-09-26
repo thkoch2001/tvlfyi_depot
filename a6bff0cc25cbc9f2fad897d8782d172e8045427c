@@ -91,6 +91,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "295866c6_10b37ce8",
+        "filename": "tvix/store/src/pathinfoservice/signing_wrapper.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2024-09-26T07:31:05Z",
+      "side": 1,
+      "message": "Not sure to understand everything that is needed to be added to the the docstring. Is it good like this ?",
+      "parentUuid": "4479420a_b59ae241",
+      "revId": "a6bff0cc25cbc9f2fad897d8782d172e8045427c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e5cad3af_a5074429",
         "filename": "tvix/store/src/pathinfoservice/signing_wrapper.rs",
         "patchSetId": 1
@@ -142,6 +160,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5789ac92_ec25d552",
+        "filename": "tvix/store/src/pathinfoservice/signing_wrapper.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 40,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2024-09-26T07:31:05Z",
+      "side": 1,
+      "message": "In the latest patchset this code had disapeared I think. Were you looking at the right patchset ?",
+      "parentUuid": "b4450ec6_20810c25",
+      "revId": "a6bff0cc25cbc9f2fad897d8782d172e8045427c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bbbab635_48af7305",
@@ -155,6 +191,24 @@
       "writtenOn": "2024-09-25T06:09:28Z",
       "side": 1,
       "message": "add a docstring here, for the structs and individual fields.",
+      "revId": "a6bff0cc25cbc9f2fad897d8782d172e8045427c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4160f16d_4576183a",
+        "filename": "tvix/store/src/pathinfoservice/signing_wrapper.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2024-09-26T07:31:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bbbab635_48af7305",
       "revId": "a6bff0cc25cbc9f2fad897d8782d172e8045427c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
