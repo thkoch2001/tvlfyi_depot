@@ -14,6 +14,7 @@ in
     (mod "cheddar.nix")
     (mod "clbot.nix")
     (mod "gerrit-autosubmit.nix")
+    (mod "harmonia.nix")
     (mod "irccat.nix")
     (mod "josh.nix")
     (mod "journaldriver.nix")
@@ -229,11 +230,16 @@ in
       grafana.file = secretFile "grafana";
       irccat.file = secretFile "irccat";
       keycloak-db.file = secretFile "keycloak-db";
-      nix-cache-priv.file = secretFile "nix-cache-priv";
       owothia.file = secretFile "owothia";
       panettone.file = secretFile "panettone";
       smtprelay.file = secretFile "smtprelay";
       teleirc.file = secretFile "teleirc";
+
+      nix-cache-priv = {
+        file = secretFile "nix-cache-priv";
+        mode = "0440";
+        group = "harmonia";
+      };
 
       buildkite-agent-token = {
         file = secretFile "buildkite-agent-token";
@@ -477,11 +483,14 @@ in
     ];
   };
 
-  services.nix-serve = {
+  # Run a Harmonia binary cache.
+  #
+  # TODO(tazjin): switch to upstream module after fix for Nix 2.3
+  services.depot.harmonia = {
     enable = true;
-    port = 6443;
-    secretKeyFile = config.age.secretsDir + "/nix-cache-priv";
-    bindAddress = "localhost";
+    signKeyPaths = [ (config.age.secretsDir + "/nix-cache-priv") ];
+    settings.bind = "127.0.0.1:6443";
+    settings.priority = 50;
   };
 
   services.fail2ban.enable = true;
