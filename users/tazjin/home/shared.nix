@@ -90,6 +90,7 @@ in
       { event = "lock"; command = cmd; }
     ];
   };
+  systemd.user.services.swayidle.Unit.After = lib.mkForce [ "niri.service" ];
 
   # Enable the dunst notification daemon, but force the
   # configuration file separately instead of going via the strange
