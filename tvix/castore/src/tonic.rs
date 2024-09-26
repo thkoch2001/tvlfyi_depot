@@ -39,28 +39,28 @@ pub async fn channel_from_url(url: &url::Url) -> Result<Channel, self::Error> {
             Ok(endpoint.connect_with_connector_lazy(connector))
         }
     } else {
-                // ensure path is empty, not supported with gRPC.
-                if !url.path().is_empty() {
-                    return Err(Error::PathMayNotBeSet());
-                }
+        // ensure path is empty, not supported with gRPC.
+        if !url.path().is_empty() {
+            return Err(Error::PathMayNotBeSet());
+        }
 
-                // Stringify the URL and remove the grpc+ prefix.
-                // We can't use `url.set_scheme(rest)`, as it disallows
-                // setting something http(s) that previously wasn't.
-                let unprefixed_url_str = match url.to_string().strip_prefix("grpc+") {
-                    None => return Err(Error::MissingGRPCPrefix()),
-                    Some(url_str) => url_str.to_owned(),
-                };
+        // Stringify the URL and remove the grpc+ prefix.
+        // We can't use `url.set_scheme(rest)`, as it disallows
+        // setting something http(s) that previously wasn't.
+        let unprefixed_url_str = match url.to_string().strip_prefix("grpc+") {
+            None => return Err(Error::MissingGRPCPrefix()),
+            Some(url_str) => url_str.to_owned(),
+        };
 
-                // Use the regular tonic transport::Endpoint logic, but unprefixed_url_str,
-                // as tonic doesn't know about grpc+http[s].
-                let endpoint = Endpoint::try_from(unprefixed_url_str)?;
-                if url_wants_wait_connect(url) {
-                    Ok(endpoint.connect().await?)
-                } else {
-                    Ok(endpoint.connect_lazy())
-                }
-            }
+        // Use the regular tonic transport::Endpoint logic, but unprefixed_url_str,
+        // as tonic doesn't know about grpc+http[s].
+        let endpoint = Endpoint::try_from(unprefixed_url_str)?;
+        if url_wants_wait_connect(url) {
+            Ok(endpoint.connect().await?)
+        } else {
+            Ok(endpoint.connect_lazy())
+        }
+    }
 }
 
 /// Errors occuring when trying to connect to a backend

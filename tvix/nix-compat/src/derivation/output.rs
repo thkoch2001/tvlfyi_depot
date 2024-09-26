@@ -63,7 +63,9 @@ impl Output {
                 CAHash::Flat(_) | CAHash::Nar(_) => {
                     // all hashes allowed for Flat, and Nar.
                 }
-                CAHash::Text(_) => return Err(OutputError::InvalidCAHash(fixed_output_hash.clone())),
+                CAHash::Text(_) => {
+                    return Err(OutputError::InvalidCAHash(fixed_output_hash.clone()))
+                }
             }
         }
 

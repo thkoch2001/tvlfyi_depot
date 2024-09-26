@@ -15,7 +15,7 @@ let
     source-filter=${depot.tools.cheddar}/bin/cheddar
     enable-log-filecount=1
     enable-log-linecount=1
-    enable-follow-links=1
+    enable-follow-links=0
     enable-blame=1
     mimetype-file=${pkgs.mime-types}/etc/mime.types
     logo=https://static.tvl.fyi/${depot.web.static.drvHash}/logo-animated.svg

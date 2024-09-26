@@ -10,42 +10,62 @@
       pulse.enable = true;
     };
 
-    redshift.enable = true;
     blueman.enable = true;
     libinput.enable = true;
 
     xserver = {
-      enable = true;
-      xkb.layout = "us";
-      xkb.options = "caps:super";
-
-      displayManager = {
-        # Give EXWM permission to control the session.
-        sessionCommands = "${pkgs.xorg.xhost}/bin/xhost +SI:localuser:$USER";
-        lightdm.enable = true;
-        # lightdm.greeters.gtk.clock-format = "%H:%M"; # TODO(tazjin): TZ?
+      enable = true; # wayland doesn't work otherwise ...?!
+      displayManager.gdm = {
+        enable = true;
+        wayland = true;
       };
-
-      windowManager.session = lib.singleton {
-        name = "exwm";
-        start = "${config.tazjin.emacs}/bin/tazjins-emacs --internal-border=0 --border-width=0";
-      };
-      desktopManager.xfce.enable = true;
     };
   };
 
-  # Set variables to enable EXWM-XIM and other Emacs features.
-  environment.sessionVariables = {
-    XMODIFIERS = "@im=exwm-xim";
-    GTK_IM_MODULE = "xim";
-    QT_IM_MODULE = "xim";
-    CLUTTER_IM_MODULE = "xim";
-    EDITOR = "emacsclient";
-    _JAVA_AWT_WM_NONREPARENTING = "1";
-  };
+  services.displayManager.sessionPackages = [ pkgs.niri ];
+
+  programs.xwayland.enable = true;
+
+  environment.systemPackages = with pkgs; [
+    # core packages
+    niri
+    xwayland-satellite
+    swaylock
+
+    # support tooling
+    alacritty
+    qt5.qtwayland
+    swayidle
+    waybar
+    wdisplays
+    wl-mirror
+    xfce.xfce4-appfinder
+    depot.users.tazjin.niri-reap
+  ];
 
   # Do not restart the display manager automatically
   systemd.services.display-manager.restartIfChanged = lib.mkForce false;
+
+  # pipewire MUST start before niri, otherwise screen sharing doesn't work
+  systemd.user.services.pipewire.wantedBy = [ "niri.service" ];
+  systemd.user.services.pipewire.before = [ "niri.service" ];
+
+  # enable "desktop portals", which are important somehow
+  xdg.portal = {
+    enable = true;
+    extraPortals = with pkgs; [
+      xdg-desktop-portal-gtk
+      xdg-desktop-portal-gnome
+    ];
+    config.common.default = "*";
+  };
+
+  # swaylock needs an empty PAM configuration, otherwise it locks the user out
+  security.pam.services.swaylock = { };
+
+  # enable theming support for Qt that is compatible with Chicago95 theme
+  qt.enable = true;
+  qt.platformTheme = "qt5ct";
 
   # If something needs more than 10s to stop it should probably be
   # killed.

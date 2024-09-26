@@ -160,10 +160,7 @@ mod tests {
         {
             if let Ok(v) = std::str::from_utf8(v) {
                 assert_eq!(
-                    Err(SymlinkTargetError::Convert(
-                        exp_err_v,
-                        Box::new(err)
-                    )),
+                    Err(SymlinkTargetError::Convert(exp_err_v, Box::new(err))),
                     SymlinkTarget::try_from(v),
                     "conversion must fail as expected"
                 );

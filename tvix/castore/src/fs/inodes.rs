@@ -44,7 +44,8 @@ impl InodeData {
             blocks: 1024,
             size: match self {
                 Self::Symlink(target) => target.len() as u64,
-                Self::Regular(_, size, _) | Self::Directory(DirectoryInodeData::Sparse(_, size)) => *size,
+                Self::Regular(_, size, _)
+                | Self::Directory(DirectoryInodeData::Sparse(_, size)) => *size,
                 Self::Directory(DirectoryInodeData::Populated(_, ref children)) => {
                     children.len() as u64
                 }

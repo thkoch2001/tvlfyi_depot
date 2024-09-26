@@ -201,10 +201,7 @@ mod tests {
             if let Ok(v) = CString::new(v) {
                 let v = v.as_ref();
                 assert_eq!(
-                    Err(PathComponentError::Convert(
-                        exp_err_v,
-                        Box::new(err)
-                    )),
+                    Err(PathComponentError::Convert(exp_err_v, Box::new(err))),
                     PathComponent::try_from(v),
                     "conversion must fail as expected"
                 );

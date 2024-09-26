@@ -9,8 +9,11 @@ import Data.Error.Tree
 import Data.HashMap.Strict (HashMap)
 import Data.HashMap.Strict qualified as HashMap
 import Data.Pool (Pool)
+import Data.String (IsString (fromString))
 import Data.Text qualified as Text
 import Database.PostgreSQL.Simple qualified as Postgres
+import FieldParser (FieldParser)
+import FieldParser qualified as Field
 import GHC.Stack qualified
 import Json.Enc
 import Json.Enc qualified as Enc
@@ -20,6 +23,7 @@ import OpenTelemetry.Trace.Core qualified as Otel hiding (inSpan, inSpan')
 import OpenTelemetry.Trace.Monad qualified as Otel
 import PossehlAnalyticsPrelude
 import Postgres.MonadPostgres
+import Pretty qualified
 import System.IO qualified as IO
 import UnliftIO
 import Prelude hiding (span)
@@ -40,13 +44,17 @@ data Context = Context
 newtype AppT m a = AppT {unAppT :: ReaderT Context m a}
   deriving newtype (Functor, Applicative, Monad, MonadIO, MonadUnliftIO, MonadThrow)
 
-newtype AppException = AppException Text
+data AppException
+  = AppExceptionTree ErrorTree
+  | AppExceptionPretty [Pretty.Err]
   deriving anyclass (Exception)
 
-instance Show AppException where
-  showsPrec _ (AppException t) = ("AppException: " ++) . (textToString t ++)
+instance IsString AppException where
+  fromString s = AppExceptionTree (fromString s)
 
--- *  Logging & Opentelemetry
+instance Show AppException where
+  showsPrec _ (AppExceptionTree t) = ("AppException: " ++) . ((textToString $ prettyErrorTree t) ++)
+  showsPrec _ (AppExceptionPretty t) = ("AppException: " ++) . ((Pretty.prettyErrsNoColor t) ++)
 
 instance (MonadIO m) => MonadLogger (AppT m) where
   monadLoggerLog loc src lvl msg = liftIO $ Logger.defaultOutput IO.stderr loc src lvl (Logger.toLogStr msg)
@@ -88,47 +96,58 @@ addEventSimple span name =
 jsonAttribute :: Enc -> Otel.Attribute
 jsonAttribute e = e & Enc.encToTextPretty & Otel.toAttribute
 
-orThrowAppErrorNewSpan :: (MonadThrow m, MonadOtel m) => Text -> Either ErrorTree a -> m a
+parseOrThrow :: (MonadThrow m, MonadIO m) => Otel.Span -> FieldParser from to -> from -> m to
+parseOrThrow span fp f =
+  f & Field.runFieldParser fp & \case
+    Left err -> appThrow span (AppExceptionTree $ singleError err)
+    Right a -> pure a
+
+orThrowAppErrorNewSpan :: (MonadThrow m, MonadOtel m) => Text -> Either AppException a -> m a
 orThrowAppErrorNewSpan msg = \case
-  Left err -> appThrowTreeNewSpan msg err
+  Left err -> appThrowNewSpan msg err
   Right a -> pure a
 
-appThrowTreeNewSpan :: (MonadThrow m, MonadOtel m) => Text -> ErrorTree -> m a
-appThrowTreeNewSpan spanName exc = inSpan' spanName $ \span -> do
-  let msg = prettyErrorTree exc
+appThrowNewSpan :: (MonadThrow m, MonadOtel m) => Text -> AppException -> m a
+appThrowNewSpan spanName exc = inSpan' spanName $ \span -> do
+  let msg = case exc of
+        AppExceptionTree e -> prettyErrorTree e
+        AppExceptionPretty p -> Pretty.prettyErrsNoColor p & stringToText
   recordException
     span
     ( T2
         (label @"type_" "AppException")
         (label @"message" msg)
     )
-  throwM $ AppException msg
+  throwM $ exc
 
-appThrowTree :: (MonadThrow m, MonadIO m) => Otel.Span -> ErrorTree -> m a
-appThrowTree span exc = do
-  let msg = prettyErrorTree exc
+appThrow :: (MonadThrow m, MonadIO m) => Otel.Span -> AppException -> m a
+appThrow span exc = do
+  let msg = case exc of
+        AppExceptionTree e -> prettyErrorTree e
+        AppExceptionPretty p -> Pretty.prettyErrsNoColor p & stringToText
   recordException
     span
     ( T2
         (label @"type_" "AppException")
         (label @"message" msg)
     )
-  throwM $ AppException msg
+  throwM $ exc
 
-orAppThrowTree :: (MonadThrow m, MonadIO m) => Otel.Span -> Either ErrorTree a -> m a
-orAppThrowTree span = \case
-  Left err -> appThrowTree span err
+orAppThrow :: (MonadThrow m, MonadIO m) => Otel.Span -> Either AppException a -> m a
+orAppThrow span = \case
+  Left err -> appThrow span err
   Right a -> pure a
 
-assertM :: (MonadThrow f, MonadIO f) => Otel.Span -> (t -> Either ErrorTree a) -> t -> f a
+-- | If action returns a Left, throw an AppException
+assertM :: (MonadThrow f, MonadIO f) => Otel.Span -> (t -> Either AppException a) -> t -> f a
 assertM span f v = case f v of
   Right a -> pure a
-  Left err -> appThrowTree span err
+  Left err -> appThrow span err
 
-assertMNewSpan :: (MonadThrow f, MonadOtel f) => Text -> (t -> Either ErrorTree a) -> t -> f a
+assertMNewSpan :: (MonadThrow f, MonadOtel f) => Text -> (t -> Either AppException a) -> t -> f a
 assertMNewSpan spanName f v = case f v of
   Right a -> pure a
-  Left err -> appThrowTreeNewSpan spanName err
+  Left err -> appThrowNewSpan spanName err
 
 -- | A specialized variant of @addEvent@ that records attributes conforming to
 -- the OpenTelemetry specification's

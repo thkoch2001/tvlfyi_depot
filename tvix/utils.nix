@@ -1,4 +1,4 @@
-{ lib, depot, ... }:
+{ pkgs, lib, depot, ... }:
 
 {
   mkFeaturePowerset = { crateName, features, override ? { } }:
@@ -34,7 +34,7 @@
       fileset = lib.fileset.intersection
         (lib.fileset.fromSource root) # We build our final fileset from the original src
         (lib.fileset.unions ([
-          (root + "/src")
+          (lib.fileset.maybeMissing (root + "/src")) # src may be missing if the crate just has tests for example
           (lib.fileset.fileFilter (f: f.hasExt "rs") root)
         ] ++ lib.optionals cargoSupport [
           (lib.fileset.fileFilter (f: f.name == "Cargo.toml") root)
@@ -62,6 +62,15 @@
           extraFileset = root + "/testdata";
         };
       };
+
+      nix-compat-derive = prev: {
+        src = depot.tvix.utils.filterRustCrateSrc { root = prev.src.origSrc; };
+      };
+
+      nix-compat-derive-tests = prev: {
+        src = depot.tvix.utils.filterRustCrateSrc { root = prev.src.origSrc; };
+      };
+
       tvix-build = prev: {
         src = depot.tvix.utils.filterRustCrateSrc rec {
           root = prev.src.origSrc;
@@ -124,5 +133,28 @@
       tvix-tracing = prev: {
         src = depot.tvix.utils.filterRustCrateSrc { root = prev.src.origSrc; };
       };
+    };
+
+  # This creates an extraStep in CI to check whether the Cargo.nix file is up-to-date.
+  mkCrate2nixCheck =
+    path: # The path to the Cargo.nix to be checked.
+    let
+      relCrateRoot = lib.removePrefix "./" (builtins.dirOf (lib.path.removePrefix depot.path.origSrc path));
+    in
+    {
+      label = "crate2nix check for ${relCrateRoot}";
+      needsOutput = true;
+      alwaysRun = true;
+      command = pkgs.writeShellScript "crate2nix-check-for-${lib.replaceStrings [ "/" ] ["-"] relCrateRoot}" ''
+        (cd $(git rev-parse --show-toplevel)/${relCrateRoot} &&
+          ${depot.tools.crate2nix-generate}/bin/crate2nix-generate &&
+          if [[ -n "$(git status --porcelain -unormal Cargo.nix)" ]]; then
+              echo "----------------------------------------------------------------------------------------------------"
+              echo "Cargo.nix needs to be updated, run 'mg run //tools/crate2nix-generate' in ${relCrateRoot}"
+              echo "----------------------------------------------------------------------------------------------------"
+              exit 1
+          fi
+        )
+      '';
     };
 }

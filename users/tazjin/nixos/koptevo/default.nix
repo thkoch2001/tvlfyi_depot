@@ -11,12 +11,12 @@ in
   imports = [
     (mod "quassel.nix")
     (mod "www/base.nix")
-    (mod "www/tazj.in.nix")
     (usermod "airsonic.nix")
     (usermod "geesefs.nix")
+    (usermod "homepage.nix")
+    (usermod "miniflux.nix")
     (usermod "predlozhnik.nix")
     (usermod "tgsa.nix")
-    (usermod "miniflux.nix")
     (depot.third_party.agenix.src + "/modules/age.nix")
   ];
 
@@ -62,7 +62,7 @@ in
     domain = "tazj.in";
     useDHCP = true;
     firewall.enable = true;
-    firewall.allowedTCPPorts = [ 22 80 443 ];
+    firewall.allowedTCPPorts = [ 22 80 443 8776 9443 ];
 
     wireless.enable = true;
     wireless.networks."How do I computer fast?" = {
@@ -72,8 +72,22 @@ in
 
   time.timeZone = "UTC";
 
-  security.acme.acceptTerms = true;
-  security.acme.defaults.email = lib.mkForce "acme@tazj.in";
+  security.acme = {
+    acceptTerms = true;
+    defaults.email = lib.mkForce "acme@tazj.in";
+
+    # wildcard cert for usage with Yggdrasil services
+    certs."y.tazj.in" = {
+      dnsProvider = "yandexcloud";
+      credentialFiles.YANDEX_CLOUD_IAM_TOKEN_FILE = "/run/agenix/lego-yandex";
+      extraDomainNames = [ "*.y.tazj.in" ];
+
+      # folder tvl/tazjin-private/default
+      environmentFile = builtins.toFile "lego-yandex-env" ''
+        YANDEX_CLOUD_FOLDER_ID=b1gq41rsbggeum4qafnh
+      '';
+    };
+  };
 
   programs.fish.enable = true;
 
@@ -84,11 +98,14 @@ in
     openssh.authorizedKeys.keys = depot.users.tazjin.keys.all;
   };
 
+  users.users.nginx.extraGroups = [ "acme" ];
+
   age.secrets =
     let
       secretFile = name: depot.users.tazjin.secrets."${name}.age";
     in
     {
+      lego-yandex.file = secretFile "lego-yandex";
       tgsa-yandex.file = secretFile "tgsa-yandex";
     };
 
@@ -101,6 +118,7 @@ in
     acmeHost = "koptevo.tazj.in";
     bindAddresses = [
       "0.0.0.0"
+      "::"
     ];
   };
 
@@ -169,15 +187,118 @@ in
   # List packages installed in system profile. To search, run:
   # $ nix search wget
   environment.systemPackages = with pkgs; [
+    bat
     curl
+    emacs-nox
     htop
     jq
-    nmap
-    bat
-    emacs-nox
     nano
+    nmap
+    radicle-node
     wget
   ];
+
+  # configure Yggdrasil network
+  services.yggdrasil = {
+    enable = true;
+    persistentKeys = true;
+    openMulticastPort = true;
+
+    settings = {
+      Listen = [ "tls://[::]:9443" ]; # yggd
+      IfName = "ygg0";
+      Peers = [
+        "quic://ygg-msk-1.averyan.ru:8364"
+        "tls://ekb.itrus.su:7992"
+        "tls://s-mow-1.sergeysedoy97.ru:65534"
+      ];
+
+      MulticastInterfaces = [{
+        Regex = "enp.*";
+        Beacon = true;
+        Listen = true;
+        Port = 0;
+      }];
+
+      AllowedPublicKeys = [
+        "573fd89392e2741ead4edd85034c91c88f1e560d991bbdbf1fccb6233db4d325" # khamovnik
+        "a56300c3af1ad54840f4b38b9438e3c108a0aa0fd72793dc7d6bd57325c6d691" # zamalek
+        "152b658f8a3e0cd6d1486c3cb984795ec7c9a02274c9f096bd2045cabf8bfa92" # A9
+        "550f4920592d2831d013fd1c83ba9ad174ec352273260fd5d7c2627dbe60d097" # matepad
+      ];
+    };
+  };
+
+  # TODO(tazjin): move this to a module for radicle stuff
+  services.radicle = {
+    enable = true;
+    publicKey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILHs6jSvMdtu9oJCt48etEs8ExjfGY5PmWQsRzFleogS";
+    privateKeyFile = "/etc/secrets/radicle"; # TODO: to manage, or not to manage ...
+
+    settings = {
+      web.pinned.repositories = [
+        "rad:z3r5zMi9U3az3i4cPKxMcA3K7xx9L" # depot
+        "rad:z2mdnBK1tX6pibdBfRct3ThCgheHu" # tvix-go
+      ];
+
+      node = {
+        alias = "rad.tazj.in";
+        seedingPolicy.default = "block";
+      };
+    };
+
+    node = {
+      openFirewall = true;
+      listenAddress = "[::]";
+    };
+
+    httpd = {
+      enable = true;
+      listenAddress = "127.0.0.1";
+      listenPort = 7235; # radl
+    };
+  };
+
+  services.nginx.virtualHosts."rad.tazj.in" = {
+    enableACME = true;
+    forceSSL = true;
+    locations."/".proxyPass = "http://127.0.0.1:7235";
+  };
+
+  services.nginx.virtualHosts."rad.y.tazj.in" = {
+    enableSSL = true;
+    useACMEHost = "y.tazj.in";
+    locations = config.services.nginx.virtualHosts."rad.tazj.in".locations;
+  };
+
+  services.nginx.virtualHosts."src.tazj.in" = {
+    enableACME = true;
+    forceSSL = true;
+    root = depot.third_party.radicle-explorer.withPreferredSeeds [{
+      hostname = "rad.tazj.in";
+      port = 443;
+      scheme = "https";
+    }];
+
+    locations."/" = {
+      index = "index.html";
+      extraConfig = ''
+        try_files $uri $uri/ /index.html;
+      '';
+    };
+  };
+
+  services.nginx.virtualHosts."src.y.tazj.in" = {
+    enableSSL = true;
+    useACMEHost = "y.tazj.in";
+    root = depot.third_party.radicle-explorer.withPreferredSeeds [{
+      hostname = "rad.y.tazj.in";
+      port = 443;
+      scheme = "https";
+    }];
+
+    locations = config.services.nginx.virtualHosts."src.tazj.in".locations;
+  };
 
   programs.mtr.enable = true;
   programs.mosh.enable = true;

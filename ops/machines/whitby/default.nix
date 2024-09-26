@@ -11,6 +11,7 @@ in
   imports = [
     (mod "atward.nix")
     (mod "cgit.nix")
+    (mod "cheddar.nix")
     (mod "clbot.nix")
     (mod "gerrit-autosubmit.nix")
     (mod "irccat.nix")
@@ -24,7 +25,6 @@ in
     (mod "paroxysm.nix")
     (mod "restic.nix")
     (mod "smtprelay.nix")
-    (mod "sourcegraph.nix")
     (mod "teleirc.nix")
     (mod "tvl-buildkite.nix")
     (mod "tvl-slapd/default.nix")
@@ -306,6 +306,9 @@ in
     agentCount = 32;
   };
 
+  # Run Markdown/code renderer
+  services.depot.cheddar.enable = true;
+
   # Start a local SMTP relay to Gmail (used by gerrit)
   services.depot.smtprelay = {
     enable = true;
@@ -374,9 +377,6 @@ in
   };
 
   services.depot = {
-    # Run a SourceGraph code search instance
-    sourcegraph.enable = true;
-
     # Run a livegrep code search instance
     livegrep.enable = true;
 

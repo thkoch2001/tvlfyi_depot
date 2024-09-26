@@ -20,11 +20,12 @@ in
     environment.systemPackages =
       # programs from the depot
       (with depot; [
-        users.tazjin.screenLock
-        users.tazjin.chase-geese
         config.tazjin.emacs
         third_party.agenix.cli
         tools.when
+        users.tazjin.chase-geese
+        users.tazjin.eaglemode
+        users.tazjin.screenLock
       ]) ++
 
       # programs from nixpkgs
@@ -74,6 +75,7 @@ in
         pulseaudio # for pactl
         pwgen
         quasselClient
+        radicle-node
         rink
         ripgrep
         rustup
@@ -99,6 +101,13 @@ in
     # Disable the thing that prints annoying warnings when trying to
     # run manually patchelfed binaries
     environment.stub-ld.enable = false;
+
+    # Enable yggdrasil network.
+    services.yggdrasil = {
+      enable = true;
+      persistentKeys = true;
+      settings.IfName = "ygg0";
+    };
 
     programs = {
       fish.enable = true;

@@ -91,13 +91,13 @@ httpJson opts parser req = inSpan' "HTTP Request (JSON)" $ \span -> do
             | statusCode == 200,
               Nothing <- contentType ->
                 Left [fmt|Server returned a body with unspecified content type|]
-            | code <- statusCode -> Left [fmt|Server returned an non-200 error code, code {code}: {resp & showPretty}|]
+            | code <- statusCode -> Left $ AppExceptionPretty [[fmt|Server returned an non-200 error code, code {code}:|], pretty resp]
       )
     >>= assertM
       span
       ( \body ->
           Json.parseStrict parser body
-            & first (Json.parseErrorTree "could not parse redacted response")
+            & first (AppExceptionTree . Json.parseErrorTree "could not parse HTTP response")
       )
 
 doRequestJson ::

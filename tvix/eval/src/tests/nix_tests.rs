@@ -38,7 +38,6 @@ mod mock_builtins {
 
 #[cfg(feature = "impure")]
 fn eval_test(code_path: &std::path::Path, expect_success: bool) {
-
     std::env::set_var("TEST_VAR", "foo"); // for eval-okay-getenv.nix
 
     eprintln!("path: {}", code_path.display());

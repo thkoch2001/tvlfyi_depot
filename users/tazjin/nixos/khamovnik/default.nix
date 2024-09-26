@@ -43,6 +43,8 @@ in
       "rtsx_pci_sdmmc"
     ];
     kernelModules = [ "kvm-intel" ];
+
+    tmp.cleanOnBoot = true;
   };
 
   fileSystems = {
@@ -64,12 +66,13 @@ in
   tvl.cache.enable = true;
 
   networking.hostName = "khamovnik";
+  networking.networkmanager.enable = true;
 
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   powerManagement.cpuFreqGovernor = lib.mkDefault "powersave";
   hardware.cpu.intel.updateMicrocode = true;
   hardware.enableRedistributableFirmware = true;
-  hardware.opengl.extraPackages = with pkgs; [
+  hardware.graphics.extraPackages = with pkgs; [
     intel-compute-runtime
     intel-media-driver
     intel-vaapi-driver
@@ -115,6 +118,13 @@ in
 
   # Try to work around Intel CPU throttling bugs
   services.throttled.enable = true;
+
+  # Try to get suspend to work more reliably
+  services.logind = {
+    lidSwitch = "suspend";
+    lidSwitchDocked = "suspend";
+    lidSwitchExternalPower = "suspend";
+  };
 
   virtualisation.docker.enable = true;
 

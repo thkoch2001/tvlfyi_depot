@@ -6,7 +6,7 @@
   users.users.tazjin = {
     isNormalUser = true;
     createHome = true;
-    extraGroups = [ "wheel" "networkmanager" "video" "adbusers" ];
+    extraGroups = [ "wheel" "networkmanager" "video" "adbusers" "yggdrasil" ];
     uid = 1000;
     shell = pkgs.fish;
     initialHashedPassword = "$2b$05$1eBPdoIgan/C/L8JFqIHBuVscQyTKw1L/4VBlzlLvLBEf6CXS3EW6";

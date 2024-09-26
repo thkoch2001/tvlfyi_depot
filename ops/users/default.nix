@@ -22,6 +22,11 @@
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$5NEYPJ19nDITK5sGr4bzhQ$Xzpzth6y4w+HGvioHiYgzqFiwMDx0B7HAh+PVbkRuuk";
   }
   {
+    username = "azahi";
+    email = "azat@bahawi.net";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$BVRzgfs8YIorOTq62B00CQ$5UXHyG/Ivn5TqB7UNgfjYJMxTjun3NDvAStWFom4oas";
+  }
+  {
     username = "chickadee";
     email = "matthewktromp@gmail.com";
     password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$HoZjVdJ90JmTEJf1MMLuDg$5Pa8kpJdFVsIxgoOTDsH0gv6CLumSIkMqYEn5UVfjwU";
@@ -35,6 +40,11 @@
     username = "cynthia";
     email = "me@cynthia.re";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=4,p=1$TxjbMGenhEmkyYLrg5uGhbr60THB86YeRZg5bPdiTJo$k9gbRlAPjmxwdUwzbavvsAVkckgQZ0jS2oTtvZBPysk";
+  }
+  {
+    username = "domenkozar";
+    email = "domen@cachix.org";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$c9WgMrTqPJZenOr5+wlnnQ$XOpRZRTkduzP2+NJBxkg2jhffurg7PDla4/RoAyclwI";
   }
   {
     username = "edef";
@@ -117,6 +127,11 @@
     password = "{SSHA}7a85VNhpFElFw+N5xcjgGmt4HnBsaGp4";
   }
   {
+    username = "mrflos";
+    email = "mrflos@yeswiki.pro";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$/D1y+6n3+0GigG9mCMqK8A$9PseWm3+QATxN/M3Wu4JM+CnIppLD/LbQaVEKLItv9o";
+  }
+  {
     username = "noteed";
     email = "noteed@gmail.com";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$rcLfF9xXysSx5sahVQLiMA$EgRgAVXn8+r2Csa3XgIHIEBf3hX4Y58pOHf2eDaBUnA";
@@ -157,6 +172,11 @@
     username = "tazjin";
     email = "tazjin@tvl.su";
     password = "{ARGON2}$argon2id$v=19$m=65536,t=2,p=1$wOPEl9D3kSke//oLtbvqrg$j0npwwXgaXQ/emefKUwL59tH8hdmtzbgH2rQzWSmE2Y";
+  }
+  {
+    username = "yl3dy";
+    email = "aleksandr.kiselyov@gmail.com";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$vPvOa0/7RzDLuD/icQuIzQ$IVMSI7hh/frihuL11sNRj6Jz8TTn1wZZHjZZGszz3pI";
   }
   {
     username = "implr";
@@ -263,5 +283,25 @@
     username = "sinavir";
     email = "tvix@sinavir.fr";
     password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$5GXvoN/enVljV97yE/Zasg$OrgY9/ge2LoxNm9OOqxh/kKLxoAvU54MbQa9WWiT0jY";
+  }
+  {
+    username = "emery";
+    email = "emery@dmz.rs";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$b2k5UpTJafqM7yjHfVRjBg$zFGy/ZeI9Hb71TUfJwFp7qDKyUl8tdyFDUK1uNBYfUI";
+  }
+  {
+    username = "aziz";
+    email = "abd.aziz89@gmail.com";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$xTvdtTF+gavMfF8556CiiQ$IshnauhlEr80skpv5s6ueJLkQxlynzBt6oCp3cQrNCY";
+  }
+  {
+    username = "nikiv";
+    email = "nikita@nikiv.dev";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$79mMAD2XYa5dg7D9ueWMpw$Edf5WODrFpkNDyWaMdLKcgcErFLx4khmPIk8wzmYGUE";
+  }
+  {
+    username = "ein-shved";
+    email = "mestofel13@gmail.com";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$D4wzfJoyFye48QNdrC66VA$aBJ/ZaL+rTgXoQa/nFdpHap3G/Oju8WlHaWTii95X8E";
   }
 ]

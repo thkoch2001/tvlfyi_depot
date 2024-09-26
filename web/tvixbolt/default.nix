@@ -27,4 +27,6 @@ in
         "$@" \
         ${depot.web.tvixbolt}
   '';
+
+  meta.ci.extraSteps.crate2nix-check = depot.tvix.utils.mkCrate2nixCheck ./Cargo.nix;
 })

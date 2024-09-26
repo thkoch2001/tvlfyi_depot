@@ -11,6 +11,8 @@
     ../modules/tvl.nix
     ../modules/development.nix
     ../modules/wireshark.nix
+    ../modules/metrics.nix
+    ../modules/prometheus-exporter.nix
   ];
 
   networking.hostName = "ogopogo";
@@ -77,12 +79,13 @@
     videoDrivers = [ "nvidia" ];
     dpi = 100;
   };
-  hardware.opengl.enable = true;
+  hardware.graphics.enable = true;
   services.picom = {
     enable = true;
     vSync = true;
   };
   hardware.graphics.enable32Bit = true;
+  hardware.nvidia.open = true;
 
   services.postgresql = {
     enable = true;
@@ -90,9 +93,32 @@
     authentication = "host all all 0.0.0.0/0 md5";
     dataDir = "/data/postgresql";
     package = pkgs.postgresql_15;
-    port = 5431;
     settings = {
       wal_level = "logical";
     };
+  };
+
+  # ddclient
+  age.secrets =
+    let
+      secret = name: depot.users.aspen.secrets."${name}.age";
+    in
+    {
+      ddclient-password.file = secret "ddclient-password";
+    };
+
+  services.ddclient = {
+    enable = true;
+    domains = [ "home.gws.fyi" ];
+    interval = "1d";
+    zone = "gws.fyi";
+    protocol = "cloudflare";
+    username = "root@gws.fyi";
+    passwordFile = config.age.secretsDir + "/ddclient-password";
+    quiet = true;
+  }
+  # TODO(aspen): Remove when upgrading past 4.0.0
+  // lib.optionalAttrs (lib.versionOlder pkgs.ddclient.version "4.0.0") {
+    ssl = false;
   };
 }

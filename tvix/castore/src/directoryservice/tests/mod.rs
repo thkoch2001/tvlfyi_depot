@@ -167,7 +167,10 @@ async fn put_get_foo(directory_service: impl DirectoryService) {
             Ok(DIRECTORY_B.clone()),
         ],
     ];
-    assert!(valid_closures.contains(&retrieved_closure), "invalid closure returned: {retrieved_closure:?}");
+    assert!(
+        valid_closures.contains(&retrieved_closure),
+        "invalid closure returned: {retrieved_closure:?}"
+    );
 }
 
 /// Uploading A, then C (referring to A twice), then B (itself referring to A) should fail during close,

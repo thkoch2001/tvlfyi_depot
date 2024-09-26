@@ -387,6 +387,7 @@ impl Thunk {
     }
 
     /// Helper function to format thunks in observer output.
+    #[allow(dead_code)]
     pub(crate) fn debug_repr(&self) -> String {
         self.0.borrow().debug_repr()
     }

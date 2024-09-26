@@ -35,11 +35,8 @@ use std::io::{
     Write,
 };
 
-/// Convenience type alias for types implementing [`Write`].
-pub type Writer<'a> = dyn Write + Send + 'a;
-
 /// Create a new NAR, writing the output to the specified writer.
-pub fn open<'a, 'w: 'a>(writer: &'a mut Writer<'w>) -> io::Result<Node<'a, 'w>> {
+pub fn open<W: Write>(writer: &mut W) -> io::Result<Node<W>> {
     let mut node = Node { writer };
     node.write(&wire::TOK_NAR)?;
     Ok(node)
@@ -49,11 +46,11 @@ pub fn open<'a, 'w: 'a>(writer: &'a mut Writer<'w>) -> io::Result<Node<'a, 'w>> 
 ///
 /// A NAR can be thought of as a tree of nodes represented by this type. Each
 /// node can be a file, a symlink or a directory containing other nodes.
-pub struct Node<'a, 'w: 'a> {
-    writer: &'a mut Writer<'w>,
+pub struct Node<'a, W: Write> {
+    writer: &'a mut W,
 }
 
-impl<'a, 'w> Node<'a, 'w> {
+impl<'a, W: Write> Node<'a, W> {
     fn write(&mut self, data: &[u8]) -> io::Result<()> {
         self.writer.write_all(data)
     }
@@ -123,12 +120,59 @@ impl<'a, 'w> Node<'a, 'w> {
         Ok(())
     }
 
+    /// Make this node a single file but let the user handle the writing of the file contents.
+    /// The user gets access to a writer to write the file contents to, plus a struct they must
+    /// invoke a function on to finish writing the NAR file.
+    ///
+    /// It is the caller's responsibility to write the correct number of bytes to the writer and
+    /// invoke [`FileManualWrite::close`], or invalid archives will be produced silently.
+    ///
+    /// ```rust
+    /// # use std::io::BufReader;
+    /// # use std::io::Write;
+    /// #
+    /// # // Output location to write the NAR to.
+    /// # let mut sink: Vec<u8> = Vec::new();
+    /// #
+    /// # // Instantiate writer for this output location.
+    /// # let mut nar = nix_compat::nar::writer::open(&mut sink)?;
+    /// #
+    /// let contents = "Hello world\n".as_bytes();
+    /// let size = contents.len() as u64;
+    /// let executable = false;
+    ///
+    /// let (writer, skip) = nar
+    ///     .file_manual_write(executable, size)?;
+    ///
+    /// // Write the contents
+    /// writer.write_all(&contents)?;
+    ///
+    /// // Close the file node
+    /// skip.close(writer)?;
+    /// # Ok::<(), std::io::Error>(())
+    /// ```
+    pub fn file_manual_write(
+        mut self,
+        executable: bool,
+        size: u64,
+    ) -> io::Result<(&'a mut W, FileManualWrite)> {
+        self.write(if executable {
+            &wire::TOK_EXE
+        } else {
+            &wire::TOK_REG
+        })?;
+
+        self.write(&size.to_le_bytes())?;
+
+        Ok((self.writer, FileManualWrite { size }))
+    }
+
     /// Make this node a directory, the content of which is set using the
     /// resulting [`Directory`] value.
     ///
     /// It is the caller's responsibility to invoke [`Directory::close`],
     /// or invalid archives will be produced silently.
-    pub fn directory(mut self) -> io::Result<Directory<'a, 'w>> {
+    pub fn directory(mut self) -> io::Result<Directory<'a, W>> {
         self.write(&wire::TOK_DIR)?;
         Ok(Directory::new(self))
     }
@@ -146,13 +190,13 @@ fn into_name(_name: &[u8]) -> Name {
 }
 
 /// Content of a NAR node that represents a directory.
-pub struct Directory<'a, 'w> {
-    node: Node<'a, 'w>,
+pub struct Directory<'a, W: Write> {
+    node: Node<'a, W>,
     prev_name: Option<Name>,
 }
 
-impl<'a, 'w> Directory<'a, 'w> {
-    const fn new(node: Node<'a, 'w>) -> Self {
+impl<'a, W: Write> Directory<'a, W> {
+    const fn new(node: Node<'a, W>) -> Self {
         Self {
             node,
             prev_name: None,
@@ -167,7 +211,7 @@ impl<'a, 'w> Directory<'a, 'w> {
     /// It is the caller's responsibility to ensure that directory entries are
     /// written in order of ascending name. If this is not ensured, this method
     /// may panic or silently produce invalid archives.
-    pub fn entry(&mut self, name: &[u8]) -> io::Result<Node<'_, 'w>> {
+    pub fn entry(&mut self, name: &[u8]) -> io::Result<Node<'_, W>> {
         debug_assert!(
             name.len() <= wire::MAX_NAME_LEN,
             "name.len() > {}",
@@ -221,6 +265,27 @@ impl<'a, 'w> Directory<'a, 'w> {
         }
 
         self.node.write(&wire::TOK_PAR)?;
+        Ok(())
+    }
+}
+
+/// Content of a NAR node that represents a file whose contents are being written out manually.
+/// Returned by the `file_manual_write` function.
+#[must_use]
+pub struct FileManualWrite {
+    size: u64,
+}
+
+impl FileManualWrite {
+    /// Finish writing the file structure to the NAR after having manually written the file contents.
+    ///
+    /// **Important:** This *must* be called with the writer returned by `file_manual_write` after
+    /// the file contents have been manually and fully written. Otherwise the resulting NAR file
+    /// will be invalid.
+    pub fn close<W: Write>(self, writer: &mut W) -> io::Result<()> {
+        let mut node = Node { writer };
+        node.pad(self.size)?;
+        node.write(&wire::TOK_PAR)?;
         Ok(())
     }
 }

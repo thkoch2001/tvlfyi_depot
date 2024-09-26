@@ -90,13 +90,6 @@ depot.nix.readTree.drvTargets {
     };
   }));
 
-  # https://github.com/googleapis/google-cloud-go/pull/9665
-  cbtemulator = super.cbtemulator.overrideAttrs (old: {
-    patches = old.patches or [ ] ++ [
-      ./patches/cbtemulator-uds.patch
-    ];
-  });
-
   crate2nix = super.crate2nix.overrideAttrs (old: {
     patches = old.patches or [ ] ++ [
       # TODO(Kranzes): Remove in next release.

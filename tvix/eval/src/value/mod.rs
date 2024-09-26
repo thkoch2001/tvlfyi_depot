@@ -210,15 +210,6 @@ where
     }
 }
 
-/// Constructors
-impl Value {
-    /// Construct a [`Value::Attrs`] from a [`NixAttrs`].
-    #[must_use]
-    pub fn attrs(attrs: NixAttrs) -> Self {
-        Self::Attrs(Box::new(attrs))
-    }
-}
-
 /// Controls what kind of by-pointer equality comparison is allowed.
 ///
 /// See `//tvix/docs/value-pointer-equality.md` for details.
@@ -235,6 +226,11 @@ pub enum PointerEquality {
 }
 
 impl Value {
+    /// Construct a [`Value::Attrs`] from a [`NixAttrs`].
+    pub fn attrs(attrs: NixAttrs) -> Self {
+        Self::Attrs(Box::new(attrs))
+    }
+
     /// Deeply forces a value, traversing e.g. lists and attribute sets and forcing
     /// their contents, too.
     ///
@@ -854,9 +850,10 @@ impl Value {
             Self::Attrs(attrs) => format!("a {}-item attribute set", attrs.len()),
             Self::List(list) => format!("a {}-item list", list.len()),
 
-            Self::Closure(f) => {
-                f.lambda.name.as_ref().map_or_else(|| "a user-defined Nix function".to_string(), |name| format!("the user-defined Nix function '{name}'"))
-            }
+            Self::Closure(f) => f.lambda.name.as_ref().map_or_else(
+                || "a user-defined Nix function".to_string(),
+                |name| format!("the user-defined Nix function '{name}'"),
+            ),
 
             Self::Builtin(b) => {
                 let mut out = format!("the builtin function '{}'", b.name());
@@ -879,6 +876,12 @@ impl Value {
             | Self::Json(..)
             | Self::FinaliseRequest(_) => "an internal Tvix evaluator value".into(),
         }
+    }
+
+    /// Constructs a thunk that will be evaluated lazily at runtime. This lets
+    /// users of Tvix implement their own lazy builtins and so on.
+    pub fn suspended_native_thunk(native: Box<dyn Fn() -> Result<Value, ErrorKind>>) -> Self {
+        Value::Thunk(Thunk::new_suspended_native(native))
     }
 }
 

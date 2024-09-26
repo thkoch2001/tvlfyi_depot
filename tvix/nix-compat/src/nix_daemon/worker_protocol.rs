@@ -224,7 +224,7 @@ where
             ErrorKind::InvalidData,
             format!("Incorrect worker magic number received: {worker_magic_1}"),
         ));
-    } ;
+    };
     conn.write_u64_le(WORKER_MAGIC_2).await?;
     conn.write_u64_le(PROTOCOL_VERSION.into()).await?;
     conn.flush().await?;
@@ -266,18 +266,22 @@ where
 /// Read a worker [Operation] from the wire.
 pub async fn read_op<R: AsyncReadExt + Unpin>(r: &mut R) -> std::io::Result<Operation> {
     let op_number = r.read_u64_le().await?;
-    Operation::from_u64(op_number).ok_or_else(|| Error::new(
-        ErrorKind::InvalidData,
-        format!("Invalid OP number {op_number}"),
-    ))
+    Operation::from_u64(op_number).ok_or_else(|| {
+        Error::new(
+            ErrorKind::InvalidData,
+            format!("Invalid OP number {op_number}"),
+        )
+    })
 }
 
 /// Write a worker [Operation] to the wire.
 pub async fn write_op<W: AsyncWriteExt + Unpin>(w: &mut W, op: &Operation) -> std::io::Result<()> {
-    let op = Operation::to_u64(op).ok_or_else(|| Error::new(
-        ErrorKind::Other,
-        format!("Can't convert the OP {op:?} to u64"),
-    ))?;
+    let op = Operation::to_u64(op).ok_or_else(|| {
+        Error::new(
+            ErrorKind::Other,
+            format!("Can't convert the OP {op:?} to u64"),
+        )
+    })?;
     w.write_u64(op).await
 }
 

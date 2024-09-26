@@ -1,9 +1,12 @@
+#[cfg(feature = "async")]
+use std::mem::MaybeUninit;
 use std::{
     io::{Error, ErrorKind},
-    mem::MaybeUninit,
     ops::RangeInclusive,
 };
-use tokio::io::{self, AsyncReadExt, AsyncWriteExt, ReadBuf};
+#[cfg(feature = "async")]
+use tokio::io::ReadBuf;
+use tokio::io::{self, AsyncReadExt, AsyncWriteExt};
 
 pub mod reader;
 pub use reader::BytesReader;
@@ -11,7 +14,7 @@ mod writer;
 pub use writer::BytesWriter;
 
 /// 8 null bytes, used to write out padding.
-const EMPTY_BYTES: &[u8; 8] = &[0u8; 8];
+pub(crate) const EMPTY_BYTES: &[u8; 8] = &[0u8; 8];
 
 /// The length of the size field, in bytes is always 8.
 const LEN_SIZE: usize = 8;
@@ -79,7 +82,8 @@ where
     Ok(buf)
 }
 
-pub async fn read_bytes_buf<'a, const N: usize, R>(
+#[cfg(feature = "async")]
+pub(crate) async fn read_bytes_buf<'a, const N: usize, R>(
     reader: &mut R,
     buf: &'a mut [MaybeUninit<u8>; N],
     allowed_size: RangeInclusive<usize>,
@@ -132,6 +136,7 @@ where
 }
 
 /// SAFETY: The bytes have to actually be initialized.
+#[cfg(feature = "async")]
 const unsafe fn assume_init_bytes(slice: &[MaybeUninit<u8>]) -> &[u8] {
     &*(std::ptr::from_ref::<[MaybeUninit<u8>]>(slice) as *const [u8])
 }

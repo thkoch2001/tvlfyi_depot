@@ -8,4 +8,6 @@
     depot.users.tazjin.home.shared
     depot.users.tazjin.home.persistence
   ];
+
+  gtk.cursorTheme.name = lib.mkForce "Chicago95_Animated_Hourglass_Cursors_HiDPI";
 }

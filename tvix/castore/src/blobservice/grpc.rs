@@ -380,7 +380,6 @@ mod tests {
                 GRPCBlobService::from_client(client)
             };
 
-            
             grpc_client
                 .has(&fixtures::BLOB_A_DIGEST)
                 .await

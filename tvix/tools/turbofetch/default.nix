@@ -6,4 +6,6 @@
       src = depot.tvix.utils.filterRustCrateSrc { root = prev.src.origSrc; };
     };
   };
-}).rootCrate.build
+}).rootCrate.build.overrideAttrs {
+  meta.ci.extraSteps.crate2nix-check = depot.tvix.utils.mkCrate2nixCheck ./Cargo.nix;
+}

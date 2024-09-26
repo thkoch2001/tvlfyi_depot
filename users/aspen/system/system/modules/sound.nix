@@ -3,6 +3,7 @@
 {
   # Enable sound.
   hardware.pulseaudio.enable = true;
+  services.pipewire.enable = false;
 
   environment.systemPackages = with pkgs; [
     pulseaudio-ctl

@@ -1,3 +1,5 @@
+# This configuration redirects from the previous Sourcegraph instance to
+# livegrep/cgit where appropriate.
 { config, ... }:
 
 {
@@ -13,17 +15,50 @@
       forceSSL = true;
 
       extraConfig = ''
-        location = / {
-          return 301 https://cs.tvl.fyi/depot;
+        set $lineno "";
+
+        # depot root
+        location = /depot {
+            return 301 https://code.tvl.fyi/tree/;
+        }
+
+        # folder/file on canon
+        location ~ ^/depot/-/(blob|tree)/([^\s]*)$ {
+            set $path $2;
+            if ($args ~ ^L(\d+)(-\d+)?$) {
+                set $lineno "#n$1";
+            }
+
+            return 302 https://code.tvl.fyi/tree/$path$lineno;
+        }
+
+        # folder/file on specific commit
+        location ~ ^/depot@([a-f0-9]+)/-/(blob|tree)/([^\s]*)$ {
+            set $commit $1;
+            set $path $3;
+
+            if ($args ~ ^L(\d+)(-\d+)?$) {
+                set $lineno "#n$1";
+            }
+
+            return 302 https://code.tvl.fyi/tree/$path?id=$commit$lineno;
+        }
+
+        # commit info
+        location ~ ^/depot/-/commit/([a-f0-9]+)$ {
+            set $commit $1;
+            return 302 https://code.tvl.fyi/commit/?id=$commit;
+        }
+
+        # search handler
+        # This only redirects to the new search, it doesn't try to parse and
+        # rewrite the query.
+        location /search {
+            return 302 https://grep.tvl.fyi/search;
         }
 
         location / {
-          proxy_set_header X-Sg-Auth "Anonymous";
-          proxy_pass http://localhost:${toString config.services.depot.sourcegraph.port};
-        }
-
-        location /users/Anonymous/settings {
-          return 301 https://cs.tvl.fyi;
+            return 404 "TVL code search has moved to grep.tvl.fyi and we could not figure out how to rewrite your query. Sorry!";
         }
       '';
     };

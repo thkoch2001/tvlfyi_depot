@@ -5,8 +5,5 @@ edition = "2021"
 
 [dependencies]
 tvix-eval = { path = "../eval" }
-serde = { version = "1.0", features = ["derive"] }
-bstr = { version = "1.8.0", features = ["serde"] }
-
-[lints]
-workspace = true
+serde = { workspace = true, features = ["derive"] }
+bstr = { workspace = true, features = ["serde"] }
