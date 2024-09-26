@@ -17,13 +17,8 @@
           alias /run/agenix/nix-cache-pub;
         }
 
-        location = /nix-cache-info {
-          add_header Content-Type text/plain;
-          return 200 "StoreDir: /nix/store\nWantMassQuery: 1\nPriority: 50\n";
-        }
-
         location / {
-          proxy_pass http://localhost:${toString config.services.nix-serve.port};
+          proxy_pass http://${config.services.harmonia.settings.bind};
         }
       '';
     };
