@@ -349,4 +349,24 @@ always opens in the same window in which the command was invoked."
          '((display-buffer-same-window) . ((inhibit-same-window . nil)))))
     (call-interactively #'execute-extended-command)))
 
+;; Some Niri hackery
+
+(defun niri-go-anywhere ()
+  "Interactively select and switch to an open Niri window, or an
+  Emacs buffer."
+  (interactive)
+  (let* ((windows
+          (json-parse-string
+           (shell-command-to-string "niri msg -j windows")))
+         (selectable (seq-map (lambda (w) (cons (format "%s [%s]"
+                                                        (map-elt w "title")
+                                                        (map-elt w "app_id"))
+                                                w))
+                              windows))
+         (target (completing-read "Switch to window: " (seq-map #'car selectable)))
+         (target-window (cdr (assoc target selectable))))
+    (shell-command (format "niri msg action focus-window --id %d"
+                           (map-elt target-window "id")))))
+
+
 (provide 'functions)
