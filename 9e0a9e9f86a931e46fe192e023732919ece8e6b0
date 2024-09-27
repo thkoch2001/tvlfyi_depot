@@ -16,6 +16,24 @@
       "message": "Is it a good idea to rely on the nar size received from the client here?",
       "revId": "9e0a9e9f86a931e46fe192e023732919ece8e6b0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "358070d8_de8dfb04",
+        "filename": "tvix/nar-bridge/src/nar.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-27T13:37:04Z",
+      "side": 1,
+      "message": "As long as our seekable reader doesn\u0027t panic if you seek past the file, it should be fine, no?\n\nWe probably can determine the total length (and expose) and reject if it differs, but that\u0027s probably something for a follow-up.",
+      "parentUuid": "aea21cad_d16b9d3b",
+      "revId": "9e0a9e9f86a931e46fe192e023732919ece8e6b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
