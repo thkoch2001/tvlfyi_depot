@@ -100,6 +100,14 @@ pub(crate) fn derivation_to_build_request(
     });
 
     let build_request = BuildRequest {
+        refscan_needles: derivation
+            .outputs
+            .values()
+            .filter_map(|output| output.path.as_ref())
+            .chain(derivation.input_sources.iter())
+            .chain(derivation.input_derivations.keys())
+            .map(|path| Ok(nixbase32::encode(path.digest())))
+            .collect::<Result<_, std::io::Error>>()?,
         command_args,
         outputs: output_paths,
 
@@ -276,6 +284,10 @@ mod test {
                 additional_files: vec![],
                 working_dir: "build".into(),
                 scratch_paths: vec!["build".into(), "nix/store".into()],
+                refscan_needles: vec![
+                    "fhaj6gmwns62s6ypkcldbaj2ybvkhx3p".into(),
+                    "ss2p4wmxijn652haqyd7dckxwl4c7hxx".into()
+                ],
             },
             build_request
         );
@@ -345,6 +357,7 @@ mod test {
                 additional_files: vec![],
                 working_dir: "build".into(),
                 scratch_paths: vec!["build".into(), "nix/store".into()],
+                refscan_needles: vec!["4q0pg5zpfmznxscq3avycvf9xdvx50n3".into()],
             },
             build_request
         );
@@ -431,6 +444,7 @@ mod test {
                 ],
                 working_dir: "build".into(),
                 scratch_paths: vec!["build".into(), "nix/store".into()],
+                refscan_needles: vec!["pp17lwra2jkx8rha15qabg2q3wij72lj".into()],
             },
             build_request
         );
