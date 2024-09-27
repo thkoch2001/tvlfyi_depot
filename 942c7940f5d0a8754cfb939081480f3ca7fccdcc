@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b20dc2d9_0578d50a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-27T22:19:44Z",
+      "side": 1,
+      "message": "please bring back the author ;-)",
+      "revId": "942c7940f5d0a8754cfb939081480f3ca7fccdcc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
