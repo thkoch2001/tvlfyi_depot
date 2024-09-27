@@ -1,0 +1,6 @@
+/dist/
+/.ninja/
+/node_modules/
+
+# ignore for now
+/package-lock.json
