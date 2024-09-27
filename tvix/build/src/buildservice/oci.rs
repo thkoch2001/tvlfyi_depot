@@ -190,15 +190,19 @@ where
                 async move {
                     debug!(host.path=?p, output.path=?output_path, "ingesting path");
 
-                    let output_node =
-                        ingest_path(self.blob_service.clone(), &self.directory_service, p)
-                            .await
-                            .map_err(|e| {
-                                std::io::Error::new(
-                                    std::io::ErrorKind::InvalidData,
-                                    format!("Unable to ingest output: {}", e),
-                                )
-                            })?;
+                    let output_node = ingest_path::<_, _, _, &[u8]>(
+                        self.blob_service.clone(),
+                        &self.directory_service,
+                        p,
+                        None,
+                    )
+                    .await
+                    .map_err(|e| {
+                        std::io::Error::new(
+                            std::io::ErrorKind::InvalidData,
+                            format!("Unable to ingest output: {}", e),
+                        )
+                    })?;
 
                     Ok::<_, std::io::Error>(tvix_castore::proto::Node::from_name_and_node(
                         "".into(),
