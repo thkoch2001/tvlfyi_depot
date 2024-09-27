@@ -77,6 +77,21 @@ all Emacs buffers."
   Emacs buffer."
   (interactive)
   (let* ((selectables (niri--list-selectables))
+         ;; Annotate buffers that display remote files. I frequently
+         ;; want to see it, because I might have identically named
+         ;; files open locally and remotely at the same time, and it
+         ;; helps with differentiating them.
+         (completion-extra-properties
+          '(:annotation-function
+            (lambda (name)
+              (let ((elt (map-elt selectables name)))
+                (pcase (car elt)
+                  (:emacs
+                   (if-let* ((file (buffer-file-name (cdr elt)))
+                             (remote (file-remote-p file)))
+                       (format " [%s]" remote)))
+                  (:niri (format " [%s]" (map-elt (cdr elt) "app_id"))))))))
+
          (target-key (completing-read "Switch to: " (map-keys selectables)))
          (target (map-elt selectables target-key)))
 
