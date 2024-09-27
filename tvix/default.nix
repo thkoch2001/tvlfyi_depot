@@ -3,8 +3,114 @@
 
 let
   # Load the crate2nix crate tree.
-  crates = pkgs.callPackage ./Cargo.nix {
-    defaultCrateOverrides = depot.tvix.utils.defaultCrateOverridesForPkgs pkgs;
+  crates = import ./Cargo.nix {
+    inherit pkgs;
+    nixpkgs = pkgs.path;
+
+    # Hack to fix Darwin build
+    # See https://github.com/NixOS/nixpkgs/issues/218712
+    buildRustCrateForPkgs = pkgs:
+      if pkgs.stdenv.isDarwin then
+        let
+          buildRustCrate = pkgs.buildRustCrate;
+          buildRustCrate_ = args: buildRustCrate args // { dontStrip = true; };
+          override = o: args: buildRustCrate.override o (args // { dontStrip = true; });
+        in
+        pkgs.makeOverridable override { }
+      else pkgs.buildRustCrate;
+
+    defaultCrateOverrides = pkgs.defaultCrateOverrides // {
+      zstd-sys = prev: {
+        nativeBuildInputs = prev.nativeBuildInputs or [ ];
+        buildInputs = prev.buildInputs or [ ] ++ iconvDarwinDep;
+      };
+
+      opentelemetry-proto = prev: {
+        nativeBuildInputs = protobufDep prev;
+      };
+
+      prost-build = prev: {
+        nativeBuildInputs = protobufDep prev;
+      };
+
+      prost-wkt-types = prev: {
+        nativeBuildInputs = protobufDep prev;
+      };
+
+      tonic-reflection = prev: {
+        nativeBuildInputs = protobufDep prev;
+      };
+
+      tvix-build = prev: {
+        src = filterRustCrateSrc rec {
+          root = prev.src.origSrc;
+          extraFileset = (lib.fileset.fileFilter (f: f.hasExt "proto") root);
+        };
+        PROTO_ROOT = depot.tvix.build.protos.protos;
+        TVIX_BUILD_SANDBOX_SHELL = "${pkgs.busybox-sandbox-shell}/bin/busybox";
+        nativeBuildInputs = protobufDep prev;
+        buildInputs = darwinDeps;
+      };
+
+      tvix-castore = prev: {
+        src = filterRustCrateSrc rec {
+          root = prev.src.origSrc;
+          extraFileset = (lib.fileset.fileFilter (f: f.hasExt "proto") root);
+        };
+        PROTO_ROOT = depot.tvix.castore.protos.protos;
+        nativeBuildInputs = protobufDep prev;
+      };
+
+      tvix-cli = prev: {
+        src = filterRustCrateSrc { root = prev.src.origSrc; };
+        buildInputs = prev.buildInputs or [ ] ++ darwinDeps;
+      };
+
+      tvix-store = prev: {
+        src = filterRustCrateSrc rec {
+          root = prev.src.origSrc;
+          extraFileset = (lib.fileset.fileFilter (f: f.hasExt "proto") root);
+        };
+        PROTO_ROOT = depot.tvix.store.protos.protos;
+        nativeBuildInputs = protobufDep prev;
+        # fuse-backend-rs uses DiskArbitration framework to handle mount/unmount on Darwin
+        buildInputs = prev.buildInputs or [ ]
+          ++ darwinDeps
+          ++ lib.optional pkgs.stdenv.isDarwin pkgs.buildPackages.darwin.apple_sdk.frameworks.DiskArbitration;
+      };
+
+      tvix-eval-builtin-macros = prev: {
+        src = filterRustCrateSrc { root = prev.src.origSrc; };
+      };
+
+      tvix-eval = prev: {
+        src = filterRustCrateSrc rec {
+          root = prev.src.origSrc;
+          extraFileset = (root + "/proptest-regressions");
+        };
+      };
+
+      tvix-glue = prev: {
+        src = filterRustCrateSrc {
+          root = prev.src.origSrc;
+        };
+      };
+
+      tvix-serde = prev: {
+        src = filterRustCrateSrc { root = prev.src.origSrc; };
+      };
+
+      tvix-tracing = prev: {
+        src = filterRustCrateSrc { root = prev.src.origSrc; };
+      };
+
+      nix-compat = prev: {
+        src = filterRustCrateSrc rec {
+          root = prev.src.origSrc;
+          extraFileset = (root + "/testdata");
+        };
+      };
+    };
   };
 
   # Cargo dependencies to be used with nixpkgs rustPlatform functions.
@@ -65,6 +171,7 @@ in
     inherit cargoDeps src;
     name = "tvix-rust-docs";
     PROTO_ROOT = protos;
+    TVIX_BUILD_SANDBOX_SHELL = "/homeless-shelter";
 
     nativeBuildInputs = with pkgs; [
       cargo
@@ -90,6 +197,7 @@ in
     inherit cargoDeps src;
     name = "tvix-clippy";
     PROTO_ROOT = protos;
+    TVIX_BUILD_SANDBOX_SHELL = "/homeless-shelter";
 
     buildInputs = [
       pkgs.fuse
