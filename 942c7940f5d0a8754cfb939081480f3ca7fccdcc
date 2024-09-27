@@ -16,6 +16,24 @@
       "message": "please bring back the author ;-)",
       "revId": "942c7940f5d0a8754cfb939081480f3ca7fccdcc",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "65121af6_c83bc09d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 12
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-09-27T22:43:03Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b20dc2d9_0578d50a",
+      "revId": "942c7940f5d0a8754cfb939081480f3ca7fccdcc",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
