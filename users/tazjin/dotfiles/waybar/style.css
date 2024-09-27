@@ -124,6 +124,7 @@ button:hover {
 
 #backlight {
     background-image: url("${CHICAGO95}/share/icons/Chicago95/status/32/xfpm-brightness-lcd.png");
+    font-size: 0px;
 }
 
 /* battery levels matching Chicago95 icons */
@@ -190,7 +191,7 @@ button:hover {
     background-image: url("${CHICAGO95}/share/icons/Chicago95/status/32/audio-volume-medium.png");
 }
 
-#pulseaudio.high {
+#pulseaudio { /* default, if no lower volume state is set */
     background-image: url("${CHICAGO95}/share/icons/Chicago95/status/32/audio-volume-high.png");
 }
 
