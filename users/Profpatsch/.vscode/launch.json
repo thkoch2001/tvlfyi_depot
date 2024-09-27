@@ -13,6 +13,32 @@
             "runtimeArgs": [
                 "run",
             ],
+        },
+        {
+            "type": "node",
+            "name": "Run tap-bpm",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "request": "launch",
+            "program": "${workspaceFolder}/lyric/dist/index.js",
+            "preLaunchTask": "ninja build lyric",
+            "outFiles": [
+                "${workspaceFolder}/lyric/dist/**/*.js"
+            ],
+            "args": [
+                "tap-bpm"
+            ]
+        },
+        {
+            "preLaunchTask": "npm build lyric extension",
+            "name": "Launch lyric vscode Extension",
+            "type": "extensionHost",
+            "request": "launch",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}/lyric/extension",
+                "${workspaceFolder}/lyric/extension"
+            ]
         }
     ]
 }
