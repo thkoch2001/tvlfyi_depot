@@ -15180,6 +15180,10 @@ rec {
             packageId = "petgraph";
           }
           {
+            name = "pin-project";
+            packageId = "pin-project";
+          }
+          {
             name = "pin-project-lite";
             packageId = "pin-project-lite";
           }
@@ -15305,6 +15309,10 @@ rec {
             packageId = "walkdir";
           }
           {
+            name = "wu-manber";
+            packageId = "wu-manber";
+          }
+          {
             name = "zstd";
             packageId = "zstd";
           }
@@ -15347,6 +15355,10 @@ rec {
           {
             name = "tokio-retry";
             packageId = "tokio-retry";
+          }
+          {
+            name = "tokio-test";
+            packageId = "tokio-test";
           }
           {
             name = "xattr";
@@ -15805,10 +15817,6 @@ rec {
             name = "walkdir";
             packageId = "walkdir";
           }
-          {
-            name = "wu-manber";
-            packageId = "wu-manber";
-          }
         ];
         devDependencies = [
           {
@@ -15844,10 +15852,6 @@ rec {
           {
             name = "tempfile";
             packageId = "tempfile";
-          }
-          {
-            name = "tokio-test";
-            packageId = "tokio-test";
           }
         ];
         features = {
