@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aea21cad_d16b9d3b",
+        "filename": "tvix/nar-bridge/src/nar.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-09-27T13:06:57Z",
+      "side": 1,
+      "message": "Is it a good idea to rely on the nar size received from the client here?",
+      "revId": "9e0a9e9f86a931e46fe192e023732919ece8e6b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
