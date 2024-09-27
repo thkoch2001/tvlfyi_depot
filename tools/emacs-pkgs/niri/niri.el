@@ -45,15 +45,24 @@
 (defun niri-list-windows ()
   "List all currently open Niri windows."
   (json-parse-string
-   (shell-command-to-string "niri msg -j windows")))
+   (shell-command-to-string "niri msg -j windows")
+   :false-object nil))
+
+(defun niri--window-is-emacs (window)
+  (equal (map-elt window "app_id") "emacs"))
 
 (defun niri--list-selectables ()
   "Lists all currently selectable things in a format that can work
-with completing-read. Selectable means all open Niri windows and
-all Emacs buffers."
-  (let* (;; all niri windows except for emacs frames
-         (windows (seq-filter (lambda (w) (not (equal (map-elt w "app_id") "emacs")))
-                              (niri-list-windows)))
+with completing-read. Selectable means all open Niri
+windows (except Emacs windows) and all Emacs buffers.
+
+Emacs windows are returned separately, as they are required for
+frame navigation."
+  (let* (;; all niri windows, with emacs/non-emacs windows split up
+         (all-windows (niri-list-windows))
+         (windows (seq-filter (lambda (w) (not (niri--window-is-emacs w)))
+                              all-windows))
+         (emacs-windows (seq-filter #'niri--window-is-emacs all-windows))
 
          ;; all non-hidden buffers
          (buffers (seq-filter (lambda (b) (not (string-prefix-p " " (buffer-name b))))
@@ -69,14 +78,27 @@ all Emacs buffers."
               (map-put! selectables (buffer-name buf)
                         (cons :emacs buf)))
             buffers)
+    (cons selectables emacs-windows)))
 
-    selectables))
+(defun niri--focus-window (window)
+  (shell-command (format "niri msg action focus-window --id %d"
+                         (map-elt window "id"))))
+
+(defun niri--target-action-internal (target)
+  "Focus the given TARGET (a Niri window or Emacs buffer). This is
+used when called from inside of Emacs. It will NOT correctly
+switch Niri windows when called from outside of Emacs."
+  (pcase (car target)
+    (:emacs (pop-to-buffer (cdr target) '((display-buffer-reuse-window
+                                           display-buffer-same-window)
+                                          (reusable-frames . 0))))
+    (:niri (niri--focus-window (cdr target)))))
 
 (defun niri-go-anywhere ()
   "Interactively select and switch to an open Niri window, or an
   Emacs buffer."
   (interactive)
-  (let* ((selectables (niri--list-selectables))
+  (let* ((selectables (car (niri--list-selectables)))
          ;; Annotate buffers that display remote files. I frequently
          ;; want to see it, because I might have identically named
          ;; files open locally and remotely at the same time, and it
@@ -95,10 +117,63 @@ all Emacs buffers."
          (target-key (completing-read "Switch to: " (map-keys selectables)))
          (target (map-elt selectables target-key)))
 
-    (pcase (car target)
-      (:emacs (pop-to-buffer (cdr target) '((display-buffer-reuse-window
-                                             display-buffer-same-window)
-                                            (reusable-frames . 0))))
-      (:niri
-       (shell-command (format "niri msg action focus-window --id %d"
-                              (map-elt (cdr target) "id")))))))
+    (niri--target-action-internal target)))
+
+
+(defun niri--target-action-external (target frames)
+  "Focus the given TARGET (a Niri window or Emacs buffer). This
+always behaves correctly, but does more work than the -internal
+variant. It should only be called when invoking the switcher from
+outside of Emacs (i.e. through `emacsclient').
+
+FRAMES is the exact list of Emacs frames that existed at the time
+the switcher was invoked."
+  (pcase (car target)
+    (:niri (niri--focus-window (cdr target)))
+
+    ;; When switching to an Emacs buffer from outside of Emacs, we run into the
+    ;; additional complication that Wayland does not allow arbitrary
+    ;; applications to change the focused window. Calling e.g.
+    ;; `select-frame-set-input-focus' has no effect on Wayland when not called
+    ;; from within a focused Emacs frame.
+    ;;
+    ;; However, due to concurrency, frames may change between the moment when we
+    ;; start the switcher (and potentially wait for user input), and when the
+    ;; final selection happens.
+    ;;
+    ;; To get around this we try to match the target Emacs frame (if present) to
+    ;; a Niri window, switch to it optimistically, and *then* execute the final
+    ;; buffer switching command.
+    (:emacs
+     (if-let ((window (get-buffer-window (cdr target) t))
+              (frame (window-frame window))
+              (frame-name (frame-parameter frame 'name))
+              (niri-window (seq-find (lambda (w)
+                                       (equal (map-elt w "title") frame-name))
+                                     frames)))
+         ;; Target frame found and could be matched to a Niri window: Go there!
+         (progn (select-window window) ;; ensure the right window in the frame has focus
+                (niri--focus-window niri-window)
+                (message "Switched to existing window for \"%s\"" (buffer-name (cdr target))))
+
+       ;; Target frame not found; is Emacs the focused program?
+       (if (seq-find (lambda (w) (map-elt w "is_focused")) frames)
+           (switch-to-buffer (cdr target))
+         ;; if not, just make a new frame
+         (display-buffer (cdr target) '(display-buffer-pop-up-frame)))))))
+
+(defun niri-go-anywhere-external ()
+  "Use a dmenu-compatible launcher like `fuzzel' to achieve the same
+effect as `niri-go-anywhere', but from outside of Emacs through
+Emacsclient."
+  (interactive) ;; TODO no?
+  (let* ((all (niri--list-selectables))
+         (selectables (car all))
+         (input (mapconcat #'identity (map-keys selectables) "\n"))
+         (target (with-temp-buffer
+                   (dolist (key (map-keys selectables))
+                     (insert key "\n"))
+                   (call-process-region nil nil "fuzzel" t t nil "-d")
+                   (string-trim (buffer-string)))))
+    (unless (string-empty-p target)
+      (niri--target-action-external (map-elt selectables target) (cdr all)))))
