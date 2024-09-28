@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c58d5753_0342efd7",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 310,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-09-28T15:07:55Z",
+      "side": 1,
+      "message": "What is the advantage to having this be a map instead of a Vec with indexes matching `refscan_needles`? As far as I can see it doesn\u0027t bring any advantage and only complicates the lookup later since that then needs `refscan_needles`, nixbase32 decoding and a map lookup instead of a simple index lookup.",
+      "revId": "99493b9b0b9db966b4d591b760f1a80cbbe83d44",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ff08884_11eac610",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 329,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-09-28T15:07:55Z",
+      "side": 1,
+      "message": "If `possible_referenced_paths` was a Vec this would be:\n```suggestion\n                                    possible_referenced_paths\n```",
+      "revId": "99493b9b0b9db966b4d591b760f1a80cbbe83d44",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e5e8442_6fbf8a8a",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 341,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-09-28T15:07:55Z",
+      "side": 1,
+      "message": "This would not be needed it `possible_referenced_paths` was a Vec",
+      "revId": "99493b9b0b9db966b4d591b760f1a80cbbe83d44",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6388191_aa7f32d3",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 12
+      },
+      "lineNbr": 351,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-09-28T15:07:55Z",
+      "side": 1,
+      "message": "And neither would this map lookup.",
+      "revId": "99493b9b0b9db966b4d591b760f1a80cbbe83d44",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
