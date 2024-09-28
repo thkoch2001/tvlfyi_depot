@@ -16,6 +16,24 @@
       "message": "Hmmh, I was more thinking about cloning ReferencePattern and having one ReferenceScanner per worker - so this can be outside the knowledge of each individual instances. Joining the results at the end is also cheap, and we don\u0027t need to worry about synchronization for scanning.\n\nThis doesn\u0027t matter so much when simply scanning for references and flipping bools, but once we start tracking positions too (which we\u0027ll need for the CA story) it might make more sense to use individual scanners.",
       "revId": "3d8b1a9066fb65908313cb02cbfd02ab191c40cd",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b4817fa_02efe46f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-09-28T11:39:18Z",
+      "side": 1,
+      "message": "I want to keep the general interface for passing a scanner object to ingest_path(), which accumulates the matches in this scanner context, because otherwise it would be a very unwieldy interface returning a `Result\u003c(..., Option\u003cVec\u003cbool\u003e\u003e)\u003e` and then multiple unwraps are necessary to get back the results.\n\nThere is no reason to clone the pattern when we can share it as an immutable reference.\n\nMaybe we can include the sender side of a channel in the scanner object instead, so that the scanning can asynchronously report its results to be merged with other results later.\n\nBut I\u0027d like to do this in a followup CL.",
+      "parentUuid": "3ba5a177_0fa1483c",
+      "revId": "3d8b1a9066fb65908313cb02cbfd02ab191c40cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
