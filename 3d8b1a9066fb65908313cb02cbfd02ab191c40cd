@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3ba5a177_0fa1483c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 9
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-28T07:18:33Z",
+      "side": 1,
+      "message": "Hmmh, I was more thinking about cloning ReferencePattern and having one ReferenceScanner per worker - so this can be outside the knowledge of each individual instances. Joining the results at the end is also cheap, and we don\u0027t need to worry about synchronization for scanning.\n\nThis doesn\u0027t matter so much when simply scanning for references and flipping bools, but once we start tracking positions too (which we\u0027ll need for the CA story) it might make more sense to use individual scanners.",
+      "revId": "3d8b1a9066fb65908313cb02cbfd02ab191c40cd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
