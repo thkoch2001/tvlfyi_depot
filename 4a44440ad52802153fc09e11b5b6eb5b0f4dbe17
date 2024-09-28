@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fc18de40_80b0e57d",
+        "filename": "tvix/castore/src/import/fs.rs",
+        "patchSetId": 9
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-28T18:28:02Z",
+      "side": 1,
+      "message": "symlink targets also need to be refscanned.",
+      "revId": "4a44440ad52802153fc09e11b5b6eb5b0f4dbe17",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
