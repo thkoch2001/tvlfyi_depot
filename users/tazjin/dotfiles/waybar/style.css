@@ -223,3 +223,32 @@ label:focus {
     background-color: #ecf0f1;
     color: #2d3436;
 }
+
+#taskbar {
+    color: @button_text_color;
+    margin: 0.2em;
+    margin-top: 0.35em;
+}
+
+#taskbar button {
+    padding: 0.2em;
+    margin-right: 0.3em;
+    border: 0.1em solid;
+    border-radius: 0em;
+    color: @button_text_color;
+    outline-color: @outline_color;
+    border-top-color: @border_bright;
+    border-right-color: @border_dark;
+    border-left-color: @border_bright;
+    border-bottom-color: @border_dark;
+    background-color: @button_bg_color;
+    box-shadow: inset -0.1em -0.1em @border_shade, inset 0.1em 0.1em @border_light;
+}
+
+#taskbar button.active {
+    border-top-color: @border_dark;
+    border-right-color: @border_bright;
+    border-left-color: @border_dark;
+    border-bottom-color: @border_bright;
+    box-shadow: inset 1px 1px @border_shade;
+}
