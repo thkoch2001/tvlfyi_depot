@@ -5,9 +5,20 @@ export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(...registerCheckLineTimestamp(context));
   context.subscriptions.push(
     vscode.commands.registerCommand('extension.jumpToLrcPosition', jumpToLrcPosition),
+    vscode.commands.registerCommand('extension.shiftLyricsDown', shiftLyricsDown),
+    vscode.commands.registerCommand('extension.shiftLyricsUp', shiftLyricsUp),
   );
 }
 
+/**
+ * Jumps to the position in the lyric file corresponding to the current cursor position in the active text editor.
+ * Sends a command to a socket to seek to the specified position in mpv at the socket path `~/tmp/mpv-socket`.
+ * @remarks
+ * This function requires the following dependencies:
+ * - `vscode` module for accessing the active text editor and displaying messages.
+ * - `net` module for creating a socket connection.
+ * @throws {Error} If there is an error sending the command to the socket.
+ */
 function jumpToLrcPosition() {
   const editor = vscode.window.activeTextEditor;
 
@@ -18,7 +29,7 @@ function jumpToLrcPosition() {
 
   const ext = new Ext(editor.document);
   const position = editor.selection.active;
-  const res = ext.getTimestampFromLine(position);
+  const res = ext.getTimestampFromLine(position.line);
 
   if (!res) {
     return;
@@ -44,6 +55,108 @@ function jumpToLrcPosition() {
 
   socket.on('error', err => {
     vscode.window.showErrorMessage(`Failed to send command: ${err.message}`);
+  });
+}
+
+/**
+ * Shifts the lyrics down by one line starting from the current cursor position in the active text editor.
+ * @remarks
+ * This function requires the following dependencies:
+ * - `vscode` module for accessing the active text editor and displaying messages.
+ */
+async function shiftLyricsDown() {
+  const editor = vscode.window.activeTextEditor;
+
+  if (!editor) {
+    vscode.window.showInformationMessage('No active editor found.');
+    return;
+  }
+
+  const ext = new Ext(editor.document);
+
+  const getLine = (line: number) => ({
+    number: line,
+    range: editor.document.lineAt(line),
+  });
+
+  // get the document range from the beginning of the current line to the end of the file
+  const documentRange = new vscode.Range(
+    getLine(editor.selection.active.line).range.range.start,
+    editor.document.lineAt(editor.document.lineCount - 1).range.end,
+  );
+
+  let newLines: string = '';
+  // iterate through all lines under the current line, save the lyric text from the current line, and replace it with the lyric text from the previous line
+  let previousLineText = '';
+  for (
+    // get the current line range
+    let line = getLine(editor.selection.active.line);
+    line.number < editor.document.lineCount - 1;
+    // next line as position from line number
+    line = getLine(line.number + 1)
+  ) {
+    const timestamp = ext.getTimestampFromLine(line.number);
+    if (timestamp === undefined) {
+      newLines += line.range.text + '\n';
+      continue;
+    }
+    newLines += `[${formatTimestamp(timestamp.milliseconds)}]` + previousLineText + '\n';
+    previousLineText = timestamp.text;
+  }
+  // replace documentRange with newLines
+  await editor.edit(editBuilder => {
+    editBuilder.replace(documentRange, newLines);
+  });
+}
+
+/**
+ * Shifts the lyrics up by one line starting from the current cursor position in the active text editor.
+ * @remarks
+ * This function requires the following dependencies:
+ * - `vscode` module for accessing the active text editor and displaying messages.
+ */
+async function shiftLyricsUp() {
+  const editor = vscode.window.activeTextEditor;
+
+  if (!editor) {
+    vscode.window.showInformationMessage('No active editor found.');
+    return;
+  }
+
+  const ext = new Ext(editor.document);
+
+  const getLine = (line: number) => ({
+    number: line,
+    range: editor.document.lineAt(line),
+  });
+
+  // get the document range from the beginning of the current line to the end of the file
+  const documentRange = new vscode.Range(
+    getLine(editor.selection.active.line).range.range.start,
+    editor.document.lineAt(editor.document.lineCount - 1).range.end,
+  );
+
+  let newLines: string = '';
+  // iterate through all lines under the current line, save the lyric text from the current line, and replace it with the lyric text from the next line
+  for (
+    // get the current line range
+    let line = getLine(editor.selection.active.line);
+    line.number < editor.document.lineCount - 2;
+    // next line as position from line number
+    line = getLine(line.number + 1)
+  ) {
+    const nextLineText =
+      ext.getTimestampFromLine(line.number + 1)?.text ??
+      ext.document.lineAt(line.number + 1).text;
+    const timestamp = ext.getTimestampFromLine(line.number);
+    if (timestamp === undefined) {
+      continue;
+    }
+    newLines += `[${formatTimestamp(timestamp.milliseconds)}]` + nextLineText + '\n';
+  }
+  // replace documentRange with newLines
+  await editor.edit(editBuilder => {
+    editBuilder.replace(documentRange, newLines);
   });
 }
 
@@ -154,10 +267,8 @@ class Ext {
   constructor(public document: vscode.TextDocument) {}
 
   getTimeDifferenceToNextLineTimestamp(position: vscode.Position) {
-    const thisLineTimestamp = this.getTimestampFromLine(position);
-    const nextLineTimestamp = this.getTimestampFromLine(
-      position.with({ line: position.line + 1 }),
-    );
+    const thisLineTimestamp = this.getTimestampFromLine(position.line);
+    const nextLineTimestamp = this.getTimestampFromLine(position.line + 1);
     if (!thisLineTimestamp || !nextLineTimestamp) {
       return;
     }
@@ -167,9 +278,18 @@ class Ext {
     };
   }
 
-  getTimestampFromLine(position: vscode.Position) {
-    const lineText = this.document.lineAt(position.line).text;
+  /**
+   * Retrieves the timestamp and text from the line at the given position in the active text editor.
+   *
+   * @param position - The position of the line in the editor.
+   * @returns An object containing the milliseconds, seconds, and text extracted from the line.
+   */
+  getTimestampFromLine(line: number) {
+    const lineText = this.document.lineAt(line).text;
+    return this.getTimestampFromLineText(lineText);
+  }
 
+  getTimestampFromLineText(lineText: string) {
     // Extract timestamp [mm:ss.ms] from the current line
     const match = lineText.match(/\[(\d+:\d+\.\d+)\](.*)/);
     if (!match) {
