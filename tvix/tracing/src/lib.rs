@@ -258,6 +258,23 @@ impl TracingBuilder {
     }
 }
 
+fn gen_resources(service_name: String) -> Resource {
+    // use SdkProvidedResourceDetector.detect to detect resources,
+    // but replace the default service name with our default.
+    // https://github.com/open-telemetry/opentelemetry-rust/issues/1298
+    let resources = SdkProvidedResourceDetector.detect(std::time::Duration::from_secs(0));
+    // SdkProvidedResourceDetector currently always sets
+    // `service.name`, but we don't like its default.
+    if resources.get("service.name".into()).unwrap() == "unknown_service".into() {
+        resources.merge(&Resource::new([KeyValue::new(
+            "service.name",
+            service_name,
+        )]))
+    } else {
+        resources
+    }
+}
+
 /// Returns an OTLP tracer, and the TX part of a channel, which can be used
 /// to request flushes (and signal back the completion of the flush).
 #[cfg(feature = "otlp")]
@@ -267,6 +284,8 @@ fn gen_otlp_tracer(
     impl Tracer + tracing_opentelemetry::PreSampledTracer,
     mpsc::Sender<Option<oneshot::Sender<()>>>,
 ) {
+    use std::time::Duration;
+
     let tracer_provider = opentelemetry_otlp::new_pipeline()
         .tracing()
         .with_exporter(opentelemetry_otlp::new_exporter().tonic())
@@ -284,24 +303,28 @@ fn gen_otlp_tracer(
                 .with_scheduled_delay(std::time::Duration::from_secs(10))
                 .build(),
         )
-        .with_trace_config(opentelemetry_sdk::trace::Config::default().with_resource({
-            // use SdkProvidedResourceDetector.detect to detect resources,
-            // but replace the default service name with our default.
-            // https://github.com/open-telemetry/opentelemetry-rust/issues/1298
-            let resources = SdkProvidedResourceDetector.detect(std::time::Duration::from_secs(0));
-            // SdkProvidedResourceDetector currently always sets
-            // `service.name`, but we don't like its default.
-            if resources.get("service.name".into()).unwrap() == "unknown_service".into() {
-                resources.merge(&Resource::new([KeyValue::new(
-                    "service.name",
-                    service_name,
-                )]))
-            } else {
-                resources
-            }
-        }))
+        .with_trace_config(
+            opentelemetry_sdk::trace::Config::default()
+                .with_resource(gen_resources(service_name.clone())),
+        )
         .install_batch(opentelemetry_sdk::runtime::Tokio)
         .expect("Failed to install batch exporter using Tokio");
+
+    // TODO: move this to separate function?
+    let meter_provider = opentelemetry_otlp::new_pipeline()
+        .metrics(opentelemetry_sdk::runtime::Tokio)
+        .with_exporter(opentelemetry_otlp::new_exporter().tonic())
+        .with_resource(gen_resources(service_name))
+        .with_period(Duration::from_secs(3))
+        .with_timeout(Duration::from_secs(10))
+        .with_aggregation_selector(
+            opentelemetry_sdk::metrics::reader::DefaultAggregationSelector::new(),
+        )
+        .with_temporality_selector(
+            opentelemetry_sdk::metrics::reader::DefaultTemporalitySelector::new(),
+        )
+        .build()
+        .expect("failed to build meter provider");
 
     // Trace provider is need for later use like flushing the provider.
     // Needs to be kept around for each message to rx we need to handle.
@@ -320,7 +343,14 @@ fn gen_otlp_tracer(
             // https://github.com/open-telemetry/opentelemetry-rust/issues/1395#issuecomment-1953280335
             let _ = tokio::task::spawn_blocking({
                 let tracer_provider = tracer_provider.clone();
-                move || tracer_provider.force_flush()
+                let meter_provider = meter_provider.clone();
+
+                move || {
+                    tracer_provider.force_flush();
+                    if let Err(e) = meter_provider.force_flush() {
+                        eprintln!("failed to flush meter provider: {}", e);
+                    }
+                }
             })
             .await;
             if let Some(tx) = m {
