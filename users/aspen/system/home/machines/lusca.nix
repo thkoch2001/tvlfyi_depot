@@ -1,14 +1,13 @@
 { pkgs, lib, config, ... }:
 
-let
-  inherit (builtins) pathExists;
-in
-{
+let inherit (builtins) pathExists;
+in {
   imports = [
     ../platforms/linux.nix
     ../modules/common.nix
 
     ../modules/email.nix
+    ../modules/depot-inbox.nix
     ../modules/desktop.nix
   ] ++ (lib.optional (pathExists ../modules/private.nix)
     ../modules/private.nix);
