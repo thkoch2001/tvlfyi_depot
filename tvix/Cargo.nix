@@ -1450,6 +1450,63 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "tracing" "typed-header" ];
       };
+      "axum-otel-metrics" = rec {
+        crateName = "axum-otel-metrics";
+        version = "0.8.1";
+        edition = "2021";
+        sha256 = "1gc2mfpi38abhyd0ms68lcbcmnjxs7fy5hhgclk97jkdfxkvvd8i";
+        libName = "axum_otel_metrics";
+        dependencies = [
+          {
+            name = "axum";
+            packageId = "axum";
+          }
+          {
+            name = "futures-util";
+            packageId = "futures-util";
+          }
+          {
+            name = "http";
+            packageId = "http";
+          }
+          {
+            name = "http-body";
+            packageId = "http-body";
+          }
+          {
+            name = "opentelemetry";
+            packageId = "opentelemetry 0.22.0";
+            features = [ "metrics" ];
+          }
+          {
+            name = "opentelemetry-prometheus";
+            packageId = "opentelemetry-prometheus";
+            features = [ "prometheus-encoding" ];
+          }
+          {
+            name = "opentelemetry-semantic-conventions";
+            packageId = "opentelemetry-semantic-conventions";
+          }
+          {
+            name = "opentelemetry_sdk";
+            packageId = "opentelemetry_sdk 0.22.1";
+            features = [ "rt-tokio" ];
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+          }
+          {
+            name = "prometheus";
+            packageId = "prometheus";
+          }
+          {
+            name = "tower";
+            packageId = "tower";
+          }
+        ];
+
+      };
       "axum-range" = rec {
         crateName = "axum-range";
         version = "0.4.0";
@@ -6844,6 +6901,10 @@ rec {
             packageId = "axum-extra";
           }
           {
+            name = "axum-otel-metrics";
+            packageId = "axum-otel-metrics";
+          }
+          {
             name = "axum-range";
             packageId = "axum-range";
           }
@@ -8041,6 +8102,41 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "grpc-tonic" "http" "logs" "metrics" "prost" "tokio" "tonic" "trace" ];
       };
+      "opentelemetry-prometheus" = rec {
+        crateName = "opentelemetry-prometheus";
+        version = "0.15.0";
+        edition = "2021";
+        sha256 = "0bnhvjb7k8gdz9x78a6bzjrsain46sng0hsq7qcy5dya85iwzfrh";
+        libName = "opentelemetry_prometheus";
+        dependencies = [
+          {
+            name = "once_cell";
+            packageId = "once_cell";
+          }
+          {
+            name = "opentelemetry";
+            packageId = "opentelemetry 0.22.0";
+            usesDefaultFeatures = false;
+            features = [ "metrics" ];
+          }
+          {
+            name = "opentelemetry_sdk";
+            packageId = "opentelemetry_sdk 0.22.1";
+            usesDefaultFeatures = false;
+            features = [ "metrics" ];
+          }
+          {
+            name = "prometheus";
+            packageId = "prometheus";
+          }
+          {
+            name = "protobuf";
+            packageId = "protobuf";
+          }
+        ];
+        features = { };
+        resolvedDefaultFeatures = [ "prometheus-encoding" ];
+      };
       "opentelemetry-proto" = rec {
         crateName = "opentelemetry-proto";
         version = "0.7.0";
@@ -8097,6 +8193,14 @@ rec {
           "zpages" = [ "trace" ];
         };
         resolvedDefaultFeatures = [ "gen-tonic" "gen-tonic-messages" "logs" "metrics" "prost" "tonic" "trace" ];
+      };
+      "opentelemetry-semantic-conventions" = rec {
+        crateName = "opentelemetry-semantic-conventions";
+        version = "0.14.0";
+        edition = "2021";
+        sha256 = "04197racbkpj75fh9jnwkdznjzv6l2ljpbr8ryfk9f9gqkb5pazr";
+        libName = "opentelemetry_semantic_conventions";
+
       };
       "opentelemetry_sdk 0.22.1" = rec {
         crateName = "opentelemetry_sdk";
@@ -8162,6 +8266,18 @@ rec {
             packageId = "thiserror";
             usesDefaultFeatures = false;
           }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            optional = true;
+            usesDefaultFeatures = false;
+            features = [ "rt" "time" ];
+          }
+          {
+            name = "tokio-stream";
+            packageId = "tokio-stream";
+            optional = true;
+          }
         ];
         features = {
           "async-std" = [ "dep:async-std" ];
@@ -8188,7 +8304,7 @@ rec {
           "trace" = [ "opentelemetry/trace" "crossbeam-channel" "rand" "async-trait" "percent-encoding" ];
           "url" = [ "dep:url" ];
         };
-        resolvedDefaultFeatures = [ "async-trait" "crossbeam-channel" "glob" "metrics" "percent-encoding" "rand" "trace" ];
+        resolvedDefaultFeatures = [ "async-trait" "crossbeam-channel" "default" "glob" "metrics" "percent-encoding" "rand" "rt-tokio" "tokio" "tokio-stream" "trace" ];
       };
       "opentelemetry_sdk 0.24.1" = rec {
         crateName = "opentelemetry_sdk";
@@ -8990,6 +9106,61 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "proc-macro" ];
       };
+      "prometheus" = rec {
+        crateName = "prometheus";
+        version = "0.13.4";
+        edition = "2018";
+        sha256 = "1lbymqdsh9v4zk4fjdq2gq6lbxspp1w3z2b9vfb7y7vp625c4crx";
+        authors = [
+          "overvenus@gmail.com"
+          "siddontang@gmail.com"
+          "vistaswx@gmail.com"
+        ];
+        dependencies = [
+          {
+            name = "cfg-if";
+            packageId = "cfg-if";
+          }
+          {
+            name = "fnv";
+            packageId = "fnv";
+          }
+          {
+            name = "lazy_static";
+            packageId = "lazy_static";
+          }
+          {
+            name = "memchr";
+            packageId = "memchr";
+          }
+          {
+            name = "parking_lot";
+            packageId = "parking_lot 0.12.3";
+          }
+          {
+            name = "protobuf";
+            packageId = "protobuf";
+            optional = true;
+          }
+          {
+            name = "thiserror";
+            packageId = "thiserror";
+          }
+        ];
+        features = {
+          "default" = [ "protobuf" ];
+          "gen" = [ "protobuf-codegen-pure" ];
+          "libc" = [ "dep:libc" ];
+          "nightly" = [ "libc" ];
+          "process" = [ "libc" "procfs" ];
+          "procfs" = [ "dep:procfs" ];
+          "protobuf" = [ "dep:protobuf" ];
+          "protobuf-codegen-pure" = [ "dep:protobuf-codegen-pure" ];
+          "push" = [ "reqwest" "libc" "protobuf" ];
+          "reqwest" = [ "dep:reqwest" ];
+        };
+        resolvedDefaultFeatures = [ "default" "protobuf" ];
+      };
       "proptest" = rec {
         crateName = "proptest";
         version = "1.5.0";
@@ -9395,6 +9566,22 @@ rec {
           "vendored-protox" = [ "protox" ];
         };
         resolvedDefaultFeatures = [ "default" "std" ];
+      };
+      "protobuf" = rec {
+        crateName = "protobuf";
+        version = "2.28.0";
+        edition = "2018";
+        sha256 = "154dfzjvxlpx37ha3cmp7fkhcsnyzbnfv7aisvz34x23k2gdjv8h";
+        authors = [
+          "Stepan Koltsov <stepan.koltsov@gmail.com>"
+        ];
+        features = {
+          "bytes" = [ "dep:bytes" ];
+          "serde" = [ "dep:serde" ];
+          "serde_derive" = [ "dep:serde_derive" ];
+          "with-bytes" = [ "bytes" ];
+          "with-serde" = [ "serde" "serde_derive" ];
+        };
       };
       "pulldown-cmark" = rec {
         crateName = "pulldown-cmark";

@@ -2,6 +2,7 @@ use axum::http::StatusCode;
 use axum::response::IntoResponse;
 use axum::routing::{head, put};
 use axum::{routing::get, Router};
+use axum_otel_metrics::HttpMetricsLayerBuilder;
 use lru::LruCache;
 use nix_compat::nix_http;
 use parking_lot::RwLock;
@@ -51,7 +52,13 @@ impl AppState {
 }
 
 pub fn gen_router(priority: u64) -> Router<AppState> {
+    let metrics = HttpMetricsLayerBuilder::new()
+        .with_prefix("nar_bridge".to_string())
+        .build();
+
     Router::new()
+        // export metrics at `/metrics` endpoint
+        .merge(metrics.routes())
         .route("/", get(root))
         // FUTUREWORK: respond for NARs that we still have in root_nodes (at least HEAD)
         // This avoids some unnecessary NAR uploading from multiple concurrent clients, and is cheap.
@@ -64,6 +71,7 @@ pub fn gen_router(priority: u64) -> Router<AppState> {
         .route("/:narinfo_str", head(narinfo::head))
         .route("/:narinfo_str", put(narinfo::put))
         .route("/nix-cache-info", get(move || nix_cache_info(priority)))
+        .layer(metrics)
 }
 
 async fn root() -> &'static str {

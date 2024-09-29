@@ -385,6 +385,25 @@ dependencies = [
 ]
 
 [[package]]
+name = "axum-otel-metrics"
+version = "0.8.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "11b5bd67776dca9326650fc2e2ddd15ddaca16a3c8e80a9a874ba111afab82bd"
+dependencies = [
+ "axum",
+ "futures-util",
+ "http",
+ "http-body",
+ "opentelemetry 0.22.0",
+ "opentelemetry-prometheus",
+ "opentelemetry-semantic-conventions",
+ "opentelemetry_sdk 0.22.1",
+ "pin-project-lite",
+ "prometheus",
+ "tower",
+]
+
+[[package]]
 name = "axum-range"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2196,6 +2215,7 @@ version = "0.1.0"
 dependencies = [
  "axum",
  "axum-extra",
+ "axum-otel-metrics",
  "axum-range",
  "bytes",
  "clap",
@@ -2530,6 +2550,19 @@ dependencies = [
 ]
 
 [[package]]
+name = "opentelemetry-prometheus"
+version = "0.15.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "30bbcf6341cab7e2193e5843f0ac36c446a5b3fccb28747afaeda17996dcd02e"
+dependencies = [
+ "once_cell",
+ "opentelemetry 0.22.0",
+ "opentelemetry_sdk 0.22.1",
+ "prometheus",
+ "protobuf",
+]
+
+[[package]]
 name = "opentelemetry-proto"
 version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2540,6 +2573,12 @@ dependencies = [
  "prost",
  "tonic",
 ]
+
+[[package]]
+name = "opentelemetry-semantic-conventions"
+version = "0.14.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f9ab5bd6c42fb9349dcf28af2ba9a0667f697f9bdcca045d39f2cec5543e2910"
 
 [[package]]
 name = "opentelemetry_sdk"
@@ -2559,6 +2598,8 @@ dependencies = [
  "percent-encoding",
  "rand",
  "thiserror",
+ "tokio",
+ "tokio-stream",
 ]
 
 [[package]]
@@ -2837,6 +2878,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "prometheus"
+version = "0.13.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3d33c28a30771f7f96db69893f78b857f7450d7e0237e9c8fc6427a81bae7ed1"
+dependencies = [
+ "cfg-if",
+ "fnv",
+ "lazy_static",
+ "memchr",
+ "parking_lot 0.12.3",
+ "protobuf",
+ "thiserror",
+]
+
+[[package]]
 name = "proptest"
 version = "1.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2953,6 +3009,12 @@ dependencies = [
  "serde_derive",
  "serde_json",
 ]
+
+[[package]]
+name = "protobuf"
+version = "2.28.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "106dd99e98437432fed6519dedecfade6a06a73bb7b2a1e019fdd2bee5778d94"
 
 [[package]]
 name = "pulldown-cmark"
