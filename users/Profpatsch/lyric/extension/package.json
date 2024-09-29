@@ -19,6 +19,16 @@
         "command": "extension.jumpToLrcPosition",
         "title": "Jump to .lrc Position",
         "category": "LRC"
+      },
+      {
+        "command": "extension.shiftLyricsDown",
+        "title": "Shift Lyrics Down from Current Line",
+        "category": "LRC"
+      },
+      {
+        "command": "extension.shiftLyricsUp",
+        "title": "Shift Lyrics Up from Current Line",
+        "category": "LRC"
       }
     ],
     "languages": [
