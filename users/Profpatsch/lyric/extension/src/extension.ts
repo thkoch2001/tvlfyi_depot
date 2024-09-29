@@ -16,7 +16,7 @@ function jumpToLrcPosition() {
     return;
   }
 
-  const ext = new Ext(editor);
+  const ext = new Ext(editor.document);
   const position = editor.selection.active;
   const res = ext.getTimestampFromLine(position);
 
@@ -56,41 +56,40 @@ export function registerCheckLineTimestamp(_context: vscode.ExtensionContext) {
     vscode.workspace.onDidChangeTextDocument(e => {
       changesToCheck.add(e.document);
       if (vscode.window.activeTextEditor?.document === e.document) {
-        doEditorChecks(vscode.window.activeTextEditor, everSeen, changesToCheck);
+        doEditorChecks(vscode.window.activeTextEditor.document, everSeen, changesToCheck);
       }
     }),
     vscode.workspace.onDidOpenTextDocument(e => {
       changesToCheck.add(e);
       everSeen.add(e);
       if (vscode.window.activeTextEditor?.document === e) {
-        doEditorChecks(vscode.window.activeTextEditor, everSeen, changesToCheck);
+        doEditorChecks(vscode.window.activeTextEditor.document, everSeen, changesToCheck);
       }
     }),
 
     vscode.window.onDidChangeActiveTextEditor(editor => {
       if (editor) {
-        doEditorChecks(editor, everSeen, changesToCheck);
+        doEditorChecks(editor.document, everSeen, changesToCheck);
       }
     }),
     vscode.window.onDidChangeVisibleTextEditors(editors => {
       for (const editor of editors) {
-        doEditorChecks(editor, everSeen, changesToCheck);
+        doEditorChecks(editor.document, everSeen, changesToCheck);
       }
     }),
   ];
 }
 
 function doEditorChecks(
-  editor: vscode.TextEditor,
+  document: vscode.TextDocument,
   everSeen: Set<vscode.TextDocument>,
   changesToCheck: Set<vscode.TextDocument>,
 ) {
-  const ext = new Ext(editor);
-  const document = editor.document;
+  const ext = new Ext(document);
 
-  if (!everSeen.has(editor.document)) {
-    changesToCheck.add(editor.document);
-    everSeen.add(editor.document);
+  if (!everSeen.has(document)) {
+    changesToCheck.add(document);
+    everSeen.add(document);
   }
 
   if (!changesToCheck.has(document)) {
@@ -152,7 +151,7 @@ function nextLineTimestampSmallerThanCurrent(ext: Ext, line: number): string | u
 }
 
 class Ext {
-  constructor(public editor: vscode.TextEditor) {}
+  constructor(public document: vscode.TextDocument) {}
 
   getTimeDifferenceToNextLineTimestamp(position: vscode.Position) {
     const thisLineTimestamp = this.getTimestampFromLine(position);
@@ -169,8 +168,7 @@ class Ext {
   }
 
   getTimestampFromLine(position: vscode.Position) {
-    const document = this.editor.document;
-    const lineText = document.lineAt(position.line).text;
+    const lineText = this.document.lineAt(position.line).text;
 
     // Extract timestamp [mm:ss.ms] from the current line
     const match = lineText.match(/\[(\d+:\d+\.\d+)\](.*)/);
