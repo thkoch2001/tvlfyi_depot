@@ -61,8 +61,9 @@ in
     };
   };
 
-  # put Niri configuration in place
+  # put Niri (& related tools) configuration in place
   xdg.configFile."niri/config.kdl".source = depot.users.tazjin.dotfiles.niri;
+  xdg.configFile."fuzzel/fuzzel.ini".source = depot.users.tazjin.dotfiles.fuzzel;
 
   programs.wpaperd = {
     enable = true;
