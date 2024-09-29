@@ -7,7 +7,7 @@ in
   mainBar = {
     layer = "top";
     position = "bottom";
-    modules-left = [ "custom/start" ];
+    modules-left = [ "custom/start" "wlr/taskbar" ];
 
     "custom/start" = {
       format = " Start";
@@ -50,6 +50,15 @@ in
     tray = {
       icon-size = 20;
       spacing = 10;
+    };
+
+    "wlr/taskbar" = {
+      format = "{icon} {title}";
+      on-click = "activate";
+      rewrite = {
+        # Truncate any format over 16 characters.
+        "^(.{16}).+$" = "$1…";
+      };
     };
   };
 }
