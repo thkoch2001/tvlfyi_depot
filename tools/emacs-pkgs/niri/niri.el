@@ -116,8 +116,9 @@ switch Niri windows when called from outside of Emacs."
 
          (target-key (completing-read "Switch to: " (map-keys selectables)))
          (target (map-elt selectables target-key)))
-
-    (niri--target-action-internal target)))
+    (if target
+        (niri--target-action-internal target)
+      (switch-to-buffer target-key nil t))))
 
 
 (defun niri--target-action-external (target frames)
@@ -174,7 +175,7 @@ Emacsclient."
                      (insert key "\n"))
                    (call-process-region nil nil "fuzzel" t t nil "-d")
                    (string-trim (buffer-string)))))
-    (unless (string-empty-p target)
-      (niri--target-action-external (map-elt selectables target) (cdr all)))))
+    (when-let ((selectable (map-elt selectables target)))
+      (niri--target-action-external selectable (cdr all)))))
 
 (provide 'niri)
