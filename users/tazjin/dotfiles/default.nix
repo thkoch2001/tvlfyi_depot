@@ -3,6 +3,7 @@
 rec {
   dunstrc = ./dunstrc;
   niri = ./niri.config.kdl;
+  fuzzel = ./fuzzel.ini;
   waybar = {
     config = import ./waybar/config.nix args;
     style = pkgs.runCommandNoCC "waybar-style.css"

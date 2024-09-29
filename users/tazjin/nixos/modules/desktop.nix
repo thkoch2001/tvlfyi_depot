@@ -39,6 +39,7 @@
     swayidle
     waybar
     wdisplays
+    wl-clipboard
     wl-mirror
     xfce.xfce4-appfinder
     depot.users.tazjin.niri-reap
