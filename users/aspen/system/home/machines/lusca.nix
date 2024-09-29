@@ -27,7 +27,18 @@ in {
 
   programs.alacritty.settings.font.size = lib.mkForce 5.5;
 
-  home.packages = with pkgs; [ discord steam tdesktop slack ];
+  home.packages = with pkgs; [
+    discord
+    steam
+    tdesktop
+    slack
+    (makeDesktopItem {
+      name = "Ogopogo Emacs";
+      desktopName = "Ogopogo Emacs";
+      icon = "emacs";
+      exec = "ssh -Y ogopogo emacs";
+    })
+  ];
 
   xsession.windowManager.i3.config.keybindings.XF86AudioMedia = "exec lock";
 }
