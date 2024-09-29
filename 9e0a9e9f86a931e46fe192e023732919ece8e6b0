@@ -52,6 +52,24 @@
       "parentUuid": "358070d8_de8dfb04",
       "revId": "9e0a9e9f86a931e46fe192e023732919ece8e6b0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "41ae1fe4_123ca052",
+        "filename": "tvix/nar-bridge/src/nar.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-29T17:15:11Z",
+      "side": 1,
+      "message": "Done. also removed setting some headers redundantly.",
+      "parentUuid": "d5c5d15e_7bb86e16",
+      "revId": "9e0a9e9f86a931e46fe192e023732919ece8e6b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
