@@ -34,6 +34,24 @@
       "parentUuid": "aea21cad_d16b9d3b",
       "revId": "9e0a9e9f86a931e46fe192e023732919ece8e6b0",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5c5d15e_7bb86e16",
+        "filename": "tvix/nar-bridge/src/nar.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-09-29T17:03:59Z",
+      "side": 1,
+      "message": "I just realized we know the nar_size we\u0027re expecting, it\u0027s in stream_len(). will update the CL in a minute.",
+      "parentUuid": "358070d8_de8dfb04",
+      "revId": "9e0a9e9f86a931e46fe192e023732919ece8e6b0",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
