@@ -4,45 +4,47 @@ import * as net from 'net';
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(...registerCheckLineTimestamp(context));
   context.subscriptions.push(
-    vscode.commands.registerCommand('extension.jumpToLrcPosition', () => {
-      const editor = vscode.window.activeTextEditor;
-
-      if (!editor) {
-        vscode.window.showInformationMessage('No active editor found.');
-        return;
-      }
-
-      const ext = new Ext(editor);
-      const position = editor.selection.active;
-      const res = ext.getTimestampFromLine(position);
-
-      if (!res) {
-        return;
-      }
-      const { milliseconds, seconds } = res;
-
-      // Prepare JSON command to send to the socket
-      const jsonCommand = {
-        command: ['seek', seconds, 'absolute'],
-      };
-
-      const socket = new net.Socket();
-
-      const socketPath = process.env.HOME + '/tmp/mpv-socket';
-      socket.connect(socketPath, () => {
-        socket.write(JSON.stringify(jsonCommand));
-        socket.write('\n');
-        vscode.window.showInformationMessage(
-          `Sent command to jump to [${formatTimestamp(milliseconds)}].`,
-        );
-        socket.end();
-      });
-
-      socket.on('error', err => {
-        vscode.window.showErrorMessage(`Failed to send command: ${err.message}`);
-      });
-    }),
+    vscode.commands.registerCommand('extension.jumpToLrcPosition', jumpToLrcPosition),
   );
+}
+
+function jumpToLrcPosition() {
+  const editor = vscode.window.activeTextEditor;
+
+  if (!editor) {
+    vscode.window.showInformationMessage('No active editor found.');
+    return;
+  }
+
+  const ext = new Ext(editor);
+  const position = editor.selection.active;
+  const res = ext.getTimestampFromLine(position);
+
+  if (!res) {
+    return;
+  }
+  const { milliseconds, seconds } = res;
+
+  // Prepare JSON command to send to the socket
+  const jsonCommand = {
+    command: ['seek', seconds, 'absolute'],
+  };
+
+  const socket = new net.Socket();
+
+  const socketPath = process.env.HOME + '/tmp/mpv-socket';
+  socket.connect(socketPath, () => {
+    socket.write(JSON.stringify(jsonCommand));
+    socket.write('\n');
+    vscode.window.showInformationMessage(
+      `Sent command to jump to [${formatTimestamp(milliseconds)}].`,
+    );
+    socket.end();
+  });
+
+  socket.on('error', err => {
+    vscode.window.showErrorMessage(`Failed to send command: ${err.message}`);
+  });
 }
 
 // If the difference to the timestamp on the next line is larger than 10 seconds, underline the next line and show a warning message on hover
