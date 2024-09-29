@@ -34,6 +34,7 @@
 
     # support tooling
     alacritty
+    fuzzel
     qt5.qtwayland
     swayidle
     waybar

@@ -63,6 +63,7 @@ binds {
     Mod+Shift+T { spawn "alacritty"; } // fallback terminal
     Mod+D { spawn "xfce4-appfinder" "--disable-server"; }
     Super+Alt+L { spawn "swaylock" "-fFkl" "-c" "#008080"; }
+    Super+B { spawn "emacsclient" "-e" "(niri-go-anywhere-external)"; }
 
     // Volume control
     XF86AudioRaiseVolume allow-when-locked=true { spawn "wpctl" "set-volume" "@DEFAULT_AUDIO_SINK@" "0.1+"; }

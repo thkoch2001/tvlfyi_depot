@@ -113,6 +113,7 @@ pkgs.makeOverridable
 
       # Custom depot packages (either ours, or overridden ones)
       tvlPackages.dottime
+      tvlPackages.niri
       tvlPackages.nix-util
       tvlPackages.passively
       tvlPackages.rcirc
