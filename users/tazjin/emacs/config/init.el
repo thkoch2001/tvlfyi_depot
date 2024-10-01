@@ -150,6 +150,7 @@
   (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode)))
 
 (use-package markdown-toc)
+(use-package niri)
 
 (use-package nix-mode
   :hook ((nix-mode . (lambda ()
