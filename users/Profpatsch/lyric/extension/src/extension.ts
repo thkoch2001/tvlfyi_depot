@@ -416,7 +416,7 @@ class Ext {
     if (!match) {
       return;
     }
-    const [, timestamp, text] = match!;
+    const [, timestamp, text] = match;
     const milliseconds = parseTimestamp(timestamp);
     const seconds = milliseconds / 1000;
     return { milliseconds, seconds, text };
