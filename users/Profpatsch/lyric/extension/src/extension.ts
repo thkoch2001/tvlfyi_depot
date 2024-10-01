@@ -11,6 +11,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('extension.jumpToLrcPosition', jumpToLrcPosition),
     vscode.commands.registerCommand('extension.shiftLyricsDown', shiftLyricsDown),
     vscode.commands.registerCommand('extension.shiftLyricsUp', shiftLyricsUp),
+    vscode.commands.registerCommand('extension.tapBpm', tapBpm),
     vscode.commands.registerCommand('extension.quantizeToEigthNote', quantizeToEigthNote),
     vscode.commands.registerCommand(
       'extension.fineTuneTimestampDown100MsAndPlay',
@@ -40,7 +41,7 @@ function jumpToLrcPosition() {
   const editor = vscode.window.activeTextEditor;
 
   if (!editor) {
-    vscode.window.showInformationMessage('No active editor found.');
+    vscode.window.showErrorMessage('No active editor found.');
     return;
   }
 
@@ -90,7 +91,7 @@ async function shiftLyricsDown() {
   const editor = vscode.window.activeTextEditor;
 
   if (!editor) {
-    vscode.window.showInformationMessage('No active editor found.');
+    vscode.window.showErrorMessage('No active editor found.');
     return;
   }
 
@@ -141,7 +142,7 @@ async function shiftLyricsUp() {
   const editor = vscode.window.activeTextEditor;
 
   if (!editor) {
-    vscode.window.showInformationMessage('No active editor found.');
+    vscode.window.showErrorMessage('No active editor found.');
     return;
   }
 
@@ -182,25 +183,44 @@ async function shiftLyricsUp() {
   });
 }
 
+/**
+ * Tap the BPM of the track and write it to the header of the active text editor.
+ * @remarks
+ * This function requires the following dependencies:
+ * - `vscode` module for accessing the active text editor and displaying messages.
+ */
+async function tapBpm() {
+  const editor = vscode.window.activeTextEditor;
+
+  if (!editor) {
+    vscode.window.showErrorMessage('No active editor found.');
+    return;
+  }
+
+  const ext = new Ext(editor.document);
+  const startBpm = ext.findBpmHeader();
+
+  const bpm = await timeInputBpm(startBpm);
+
+  if (bpm === undefined) {
+    return;
+  }
+
+  await ext.writeHeader('bpm', bpm.toString());
+}
+
 /** first ask the user for the BPM of the track, then quantize the timestamps in the active text editor to the closest eighth note based on the given BPM */
 async function quantizeToEigthNote() {
   const editor = vscode.window.activeTextEditor;
 
   if (!editor) {
-    vscode.window.showInformationMessage('No active editor found.');
+    vscode.window.showErrorMessage('No active editor found.');
     return;
   }
 
   const ext = new Ext(editor.document);
 
-  const startBpmStr = ext.findHeader('bpm')?.value;
-  let startBpm;
-  if (startBpmStr !== undefined) {
-    startBpm = parseInt(startBpmStr, 10);
-    if (isNaN(startBpm)) {
-      startBpm = undefined;
-    }
-  }
+  const startBpm = ext.findBpmHeader();
   const bpm = await timeInputBpm(startBpm);
 
   if (bpm === undefined) {
@@ -250,7 +270,7 @@ function fineTuneTimestampAndPlay(amountMs: number) {
     const editor = vscode.window.activeTextEditor;
 
     if (!editor) {
-      vscode.window.showInformationMessage('No active editor found.');
+      vscode.window.showErrorMessage('No active editor found.');
       return;
     }
 
@@ -371,7 +391,7 @@ async function uploadToLrclibDotNet() {
   const editor = vscode.window.activeTextEditor;
 
   if (!editor) {
-    vscode.window.showInformationMessage('No active editor found.');
+    vscode.window.showErrorMessage('No active editor found.');
     return;
   }
 
@@ -518,7 +538,7 @@ async function uploadToLrclibDotNet() {
   }
 }
 
-// If the difference to the timestamp on the next line is larger than 10 seconds, underline the next line and show a warning message on hover
+// If the difference to the timestamp on the next line is larger than 10 seconds (for 120 BPM), underline the next line and show a warning message on hover
 export function registerCheckLineTimestamp(_context: vscode.ExtensionContext) {
   const changesToCheck: Set<vscode.TextDocument> = new Set();
   const everSeen = new Set<vscode.TextDocument>();
@@ -590,19 +610,30 @@ function doEditorChecks(
   }
 }
 
-/** Warn if the difference to the timestamp on the next line is larger than 10 seconds */
+/** Warn if the difference to the timestamp on the next line is larger than
+ * * 10 seconds at 120 BPM
+ * * 5 seconds at 240 BPM
+ * * 20 seconds at 60 BPM
+ * * etc
+ */
 function timeDifferenceTooLarge(ext: Ext, line: number): string | undefined {
+  const bpm = ext.findBpmHeader() ?? 120;
+  const maxTimeDifference = 10000 * (120 / bpm);
   const timeDifference = ext.getTimeDifferenceToNextLineTimestamp(
     new vscode.Position(line, 0),
   );
   if (
     !timeDifference ||
     timeDifference.thisLineIsEmpty ||
-    timeDifference.difference <= 10000
+    timeDifference.difference <= maxTimeDifference
   ) {
     return;
   }
-  return `Time difference to next line is ${formatTimestamp(timeDifference.difference)}`;
+  return `Time difference to next line is ${formatTimestamp(
+    timeDifference.difference,
+  )}, should there be silence here? At ${bpm} BPM, we assume anything more than ${(
+    maxTimeDifference / 1000
+  ).toFixed(2)} seconds is a mistake.`;
 }
 
 /** Warn if the timestamp on the next line is smaller or equal to the current timestamp */
@@ -673,6 +704,19 @@ class Ext {
         return { key: match[1], value: match[2], line: line };
       }
     }
+  }
+
+  /** Find the bpm header and return the bpm as number, if any */
+  findBpmHeader() {
+    const startBpmStr = this.findHeader('bpm')?.value;
+    let bpm;
+    if (startBpmStr !== undefined) {
+      bpm = parseInt(startBpmStr, 10);
+      if (isNaN(bpm)) {
+        bpm = undefined;
+      }
+    }
+    return bpm;
   }
 
   // check if the given line is a header line
