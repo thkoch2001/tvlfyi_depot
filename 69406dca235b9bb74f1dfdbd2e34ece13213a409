@@ -16,6 +16,24 @@
       "message": "test(tvix/castore/refscan): add empty pattern regression test",
       "revId": "69406dca235b9bb74f1dfdbd2e34ece13213a409",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3e5b1b8_49f955ee",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-10-01T15:09:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "124c1a6a_dff507b1",
+      "revId": "69406dca235b9bb74f1dfdbd2e34ece13213a409",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
