@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import * as net from 'net';
+import { adjustTimestampToEighthNote, bpmToEighthNoteDuration } from './quantize-lrc';
 
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(...registerCheckLineTimestamp(context));
@@ -7,6 +8,7 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('extension.jumpToLrcPosition', jumpToLrcPosition),
     vscode.commands.registerCommand('extension.shiftLyricsDown', shiftLyricsDown),
     vscode.commands.registerCommand('extension.shiftLyricsUp', shiftLyricsUp),
+    vscode.commands.registerCommand('extension.quantizeToEigthNote', quantizeLrc),
   );
 }
 
@@ -158,6 +160,102 @@ async function shiftLyricsUp() {
   await editor.edit(editBuilder => {
     editBuilder.replace(documentRange, newLines);
   });
+}
+
+/** first ask the user for the BPM of the track, then quantize the timestamps in the active text editor to the closest eighth note based on the given BPM */
+async function quantizeLrc() {
+  const bpm = await timeInputBpm();
+
+  if (bpm === undefined) {
+    return;
+  }
+
+  const editor = vscode.window.activeTextEditor;
+
+  if (!editor) {
+    vscode.window.showInformationMessage('No active editor found.');
+    return;
+  }
+
+  const ext = new Ext(editor.document);
+
+  const getLine = (line: number) => ({
+    number: line,
+    range: editor.document.lineAt(line),
+  });
+
+  const documentRange = new vscode.Range(
+    getLine(0).range.range.start,
+    editor.document.lineAt(editor.document.lineCount - 1).range.end,
+  );
+
+  const eighthNoteDuration = bpmToEighthNoteDuration(bpm);
+
+  let newLines: string = '';
+  for (
+    let line = getLine(0);
+    line.number < editor.document.lineCount - 1;
+    line = getLine(line.number + 1)
+  ) {
+    const timestamp = ext.getTimestampFromLine(line.number);
+    if (timestamp === undefined) {
+      newLines += line.range.text + '\n';
+      continue;
+    }
+    const adjustedMs = adjustTimestampToEighthNote(
+      timestamp.milliseconds,
+      eighthNoteDuration,
+    );
+    newLines += `[${formatTimestamp(adjustedMs)}]${timestamp.text}\n`;
+  }
+
+  await editor.edit(editBuilder => {
+    editBuilder.replace(documentRange, newLines);
+  });
+}
+
+// Show input boxes in a loop, and record the time between each input, averaging the last 5 inputs over a sliding window, then calculate the BPM of the average
+async function timeInputBpm() {
+  const timeDifferences: number[] = [500, 500, 500, 500, 500];
+  // assign a weight to the time differences, so that the most recent time differences have more weight
+  const weights = [0.1, 0.1, 0.2, 0.3, 0.3];
+
+  const calculateBPM = () => {
+    // use a weighted average here
+    let avg = 0;
+    for (let i = 0; i < timeDifferences.length; i++) {
+      avg += timeDifferences[i] * weights[i];
+    }
+
+    return Math.floor(60000 / avg);
+  };
+
+  let lastPressTime = Date.now();
+  while (true) {
+    const res = await vscode.window.showInputBox({
+      prompt: `Press enter to record BPM (current BPM: ${calculateBPM()}), enter the final BPM once you know, or press esc to finish`,
+      placeHolder: 'BPM',
+    });
+    if (res === undefined) {
+      return undefined;
+    }
+    if (res !== '') {
+      const resBpm = parseInt(res, 10);
+      if (isNaN(resBpm)) {
+        vscode.window.showErrorMessage('Invalid BPM');
+        continue;
+      }
+      return resBpm;
+    }
+
+    const now = Date.now();
+    const timeDiff = now - lastPressTime;
+    // Add the time difference to the array (limit to last 5 key presses)
+    timeDifferences.shift(); // Remove the oldest time difference
+    timeDifferences.push(timeDiff);
+
+    lastPressTime = now;
+  }
 }
 
 // If the difference to the timestamp on the next line is larger than 10 seconds, underline the next line and show a warning message on hover
@@ -318,7 +416,7 @@ function formatTimestamp(ms: number): string {
   ms %= 60000;
   const seconds = (ms / 1000).toFixed(2);
 
-  return `${String(minutes).padStart(2, '0')}:${seconds}`;
+  return `${String(minutes).padStart(2, '0')}:${seconds.padStart(5, '0')}`;
 }
 
 class ManageWarnings {
