@@ -164,12 +164,6 @@ async function shiftLyricsUp() {
 
 /** first ask the user for the BPM of the track, then quantize the timestamps in the active text editor to the closest eighth note based on the given BPM */
 async function quantizeLrc() {
-  const bpm = await timeInputBpm();
-
-  if (bpm === undefined) {
-    return;
-  }
-
   const editor = vscode.window.activeTextEditor;
 
   if (!editor) {
@@ -178,6 +172,22 @@ async function quantizeLrc() {
   }
 
   const ext = new Ext(editor.document);
+
+  const startBpmStr = ext.findHeader('bpm')?.value;
+  let startBpm;
+  if (startBpmStr !== undefined) {
+    startBpm = parseInt(startBpmStr, 10);
+    if (isNaN(startBpm)) {
+      startBpm = undefined;
+    }
+  }
+  const bpm = await timeInputBpm(startBpm);
+
+  if (bpm === undefined) {
+    return;
+  }
+
+  await ext.writeHeader('bpm', bpm.toString());
 
   const getLine = (line: number) => ({
     number: line,
@@ -214,9 +224,21 @@ async function quantizeLrc() {
   });
 }
 
+// convert the given bpm to miliseconds
+function bpmToMs(bpm: number) {
+  return Math.floor((60 / bpm) * 1000);
+}
+
 // Show input boxes in a loop, and record the time between each input, averaging the last 5 inputs over a sliding window, then calculate the BPM of the average
-async function timeInputBpm() {
-  const timeDifferences: number[] = [500, 500, 500, 500, 500];
+async function timeInputBpm(startBpm?: number) {
+  const startBpmMs = bpmToMs(startBpm ?? 120);
+  const timeDifferences: number[] = [
+    startBpmMs,
+    startBpmMs,
+    startBpmMs,
+    startBpmMs,
+    startBpmMs,
+  ];
   // assign a weight to the time differences, so that the most recent time differences have more weight
   const weights = [0.1, 0.1, 0.2, 0.3, 0.3];
 
@@ -235,6 +257,7 @@ async function timeInputBpm() {
     const res = await vscode.window.showInputBox({
       prompt: `Press enter to record BPM (current BPM: ${calculateBPM()}), enter the final BPM once you know, or press esc to finish`,
       placeHolder: 'BPM',
+      value: startBpm !== undefined ? startBpm.toString() : undefined,
     });
     if (res === undefined) {
       return undefined;
@@ -398,6 +421,77 @@ class Ext {
     const seconds = milliseconds / 1000;
     return { milliseconds, seconds, text };
   }
+
+  // Find a header line of the format
+  // [header:value]
+  // at the beginning of the lrc file (before the first empty line)
+  findHeader(headerName: string) {
+    for (let line = 0; line < this.document.lineCount; line++) {
+      const text = this.document.lineAt(line).text;
+      if (text.trim() === '') {
+        return;
+      }
+      const match = text.match(/^\[(\w+):(.*)\]$/);
+      if (match && match[1] === headerName) {
+        return { key: match[1], value: match[2], line: line };
+      }
+    }
+  }
+
+  // check if the given line is a header line
+  isHeaderLine(line: string) {
+    return (
+      line.trim() !== '' &&
+      line.match(/^\[(\w+):(.*)\]$/) !== null &&
+      line.match(/^\[\d\d:\d\d.\d+\]/) === null
+    );
+  }
+
+  // write the given header to the lrc file, if the header already exists, update the value
+  async writeHeader(headerName: string, value: string) {
+    const header = this.findHeader(headerName);
+    const editor = findActiveEditor(this.document);
+    if (!editor) {
+      return;
+    }
+    if (header) {
+      const lineRange = this.document.lineAt(header.line).range;
+      await editor.edit(editBuilder => {
+        editBuilder.replace(lineRange, `[${headerName}:${value}]`);
+      });
+    } else {
+      // insert before the first timestamp line if no header is found, or after the last header if there are multiple headers
+      let insertLine = 0;
+      let extraNewline = '';
+      for (let line = 0; line < this.document.lineCount; line++) {
+        const text = this.document.lineAt(line).text;
+        // check if header
+        if (this.isHeaderLine(text)) {
+          insertLine = line + 1;
+        } else if (text.trim() === '') {
+          insertLine = line;
+          break;
+        } else {
+          insertLine = line;
+          if (line == 0) {
+            extraNewline = '\n';
+          }
+          break;
+        }
+      }
+      await editor.edit(editBuilder => {
+        editBuilder.insert(
+          new vscode.Position(insertLine, 0),
+          `[${headerName}:${value}]\n${extraNewline}`,
+        );
+      });
+    }
+  }
+}
+
+// find an active editor that has the given document opened
+function findActiveEditor(document: vscode.TextDocument) {
+  return vscode.window.visibleTextEditors.find(editor => editor.document === document);
 }
 
 function parseTimestamp(timestamp: string): number {
