@@ -1,16 +1,16 @@
-import { tapBpm } from "./tap-bpm.js";
+import { tapBpm } from './tap-bpm.js';
 
-async function main() {
+function main() {
   // subcommand for tap-bpm
-  if (process.argv[2] === "tap-bpm") {
-    await tapBpm();
+  if (process.argv[2] === 'tap-bpm') {
+    tapBpm();
   }
 }
 
-await main();
+main();
 
 // sleep in a loop to block nodejs
-console.log("Blocking event loop...");
+console.log('Blocking event loop...');
 while (true) {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+  await new Promise(resolve => setTimeout(resolve, 1000));
 }
