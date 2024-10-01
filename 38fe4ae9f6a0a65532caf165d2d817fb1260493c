@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6f3e3e6_9fd28e71",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-01T14:19:44Z",
+      "side": 1,
+      "message": "fix(tvix/castore/refscan): don\u0027t panic on empty patterns",
+      "revId": "38fe4ae9f6a0a65532caf165d2d817fb1260493c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
