@@ -34,6 +34,21 @@
         "command": "extension.quantizeToEigthNote",
         "title": "Quantize timestamps to nearest eighth note",
         "category": "LRC"
+      },
+      {
+        "command": "extension.fineTuneTimestampDown100MsAndPlay",
+        "title": "Remove 100 ms from current timestamp and play from shortly before the change",
+        "category": "LRC"
+      },
+      {
+        "command": "extension.fineTuneTimestampUp100MsAndPlay",
+        "title": "Add 100 ms to current timestamp and play from shortly before the change",
+        "category": "LRC"
+      },
+      {
+        "command": "extension.uploadLyricsToLrclibDotNet",
+        "title": "Upload Lyrics to lrclib.net",
+        "category": "LRC"
       }
     ],
     "languages": [
