@@ -29,6 +29,11 @@
         "command": "extension.shiftLyricsUp",
         "title": "Shift Lyrics Up from Current Line",
         "category": "LRC"
+      },
+      {
+        "command": "extension.quantizeToEigthNote",
+        "title": "Quantize timestamps to nearest eighth note",
+        "category": "LRC"
       }
     ],
     "languages": [
