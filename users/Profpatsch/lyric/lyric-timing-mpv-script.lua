@@ -36,22 +36,22 @@ function write_timestamp_to_lrc()
     -- [au: Written by Kal Mann / Dave Appell, 1961]
     -- [length: 2:23]
     local file = io.open(lrc_filename, "r+")
-    if file then
-        -- read the file and check whether it only contains whitespace
-        local content = file:read("*all")
-        if content:match("^%s*$") then
-            file:write("[ar: " .. artist .. "]\n")
-            file:write("[al: " .. album .. "]\n")
-            file:write("[ti: " .. title .. "]\n")
-            local duration = mp.get_property_number("duration", 0)
-            local formatted_duration = string.format("%02d:%02d", math.floor(duration / 60), duration % 60)
-            file:write("[length: " .. formatted_duration .. "]\n")
-            file:write("\n")
-        end
-        file:close()
-    else
-        mp.msg.error("Failed to open " .. lrc_filename)
+    if not file then
+        file = io.open(lrc_filename, "w+")
     end
+
+    -- read the file and check whether it only contains whitespace
+    local content = file:read("*all")
+    if content:match("^%s*$") then
+        file:write("[ar: " .. artist .. "]\n")
+        file:write("[al: " .. album .. "]\n")
+        file:write("[ti: " .. title .. "]\n")
+        local duration = mp.get_property_number("duration", 0)
+        local formatted_duration = string.format("%02d:%02d", math.floor(duration / 60), duration % 60)
+        file:write("[length: " .. formatted_duration .. "]\n")
+        file:write("\n")
+    end
+    file:close()
 
     -- Append the timestamp to the LRC file
     local file = io.open(lrc_filename, "a")
