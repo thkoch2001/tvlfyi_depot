@@ -1,6 +1,9 @@
 import * as vscode from 'vscode';
 import * as net from 'net';
 import { adjustTimestampToEighthNote, bpmToEighthNoteDuration } from './quantize-lrc';
+import { publishLyrics, PublishRequest } from './upload-lrc';
+
+const channel_global = vscode.window.createOutputChannel('LRC');
 
 export function activate(context: vscode.ExtensionContext) {
   context.subscriptions.push(...registerCheckLineTimestamp(context));
@@ -8,7 +11,19 @@ export function activate(context: vscode.ExtensionContext) {
     vscode.commands.registerCommand('extension.jumpToLrcPosition', jumpToLrcPosition),
     vscode.commands.registerCommand('extension.shiftLyricsDown', shiftLyricsDown),
     vscode.commands.registerCommand('extension.shiftLyricsUp', shiftLyricsUp),
-    vscode.commands.registerCommand('extension.quantizeToEigthNote', quantizeLrc),
+    vscode.commands.registerCommand('extension.quantizeToEigthNote', quantizeToEigthNote),
+    vscode.commands.registerCommand(
+      'extension.fineTuneTimestampDown100MsAndPlay',
+      fineTuneTimestampAndPlay(-100),
+    ),
+    vscode.commands.registerCommand(
+      'extension.fineTuneTimestampUp100MsAndPlay',
+      fineTuneTimestampAndPlay(100),
+    ),
+    vscode.commands.registerCommand(
+      'extension.uploadLyricsToLrclibDotNet',
+      uploadToLrclibDotNet,
+    ),
   );
 }
 
@@ -39,18 +54,23 @@ function jumpToLrcPosition() {
   const { milliseconds, seconds } = res;
 
   // Prepare JSON command to send to the socket
-  const jsonCommand = {
+  const seekCommand = {
     command: ['seek', seconds, 'absolute'],
+  };
+  const reloadSubtitlesCommand = {
+    command: ['sub-reload'],
   };
 
   const socket = new net.Socket();
 
   const socketPath = process.env.HOME + '/tmp/mpv-socket';
   socket.connect(socketPath, () => {
-    socket.write(JSON.stringify(jsonCommand));
+    socket.write(JSON.stringify(seekCommand));
+    socket.write('\n');
+    socket.write(JSON.stringify(reloadSubtitlesCommand));
     socket.write('\n');
     vscode.window.showInformationMessage(
-      `Sent command to jump to [${formatTimestamp(milliseconds)}].`,
+      `Sent command to jump to [${formatTimestamp(milliseconds)}] and sync subtitles.`,
     );
     socket.end();
   });
@@ -163,7 +183,7 @@ async function shiftLyricsUp() {
 }
 
 /** first ask the user for the BPM of the track, then quantize the timestamps in the active text editor to the closest eighth note based on the given BPM */
-async function quantizeLrc() {
+async function quantizeToEigthNote() {
   const editor = vscode.window.activeTextEditor;
 
   if (!editor) {
@@ -224,6 +244,62 @@ async function quantizeLrc() {
   });
 }
 
+/** fine tune the timestamp of the current line by the given amount (in milliseconds) and play the track at slightly before the new timestamp */
+function fineTuneTimestampAndPlay(amountMs: number) {
+  return async () => {
+    const editor = vscode.window.activeTextEditor;
+
+    if (!editor) {
+      vscode.window.showInformationMessage('No active editor found.');
+      return;
+    }
+
+    const ext = new Ext(editor.document);
+
+    const position = editor.selection.active;
+    const res = ext.getTimestampFromLine(position.line);
+
+    if (!res) {
+      return;
+    }
+    const { milliseconds } = res;
+
+    const newMs = milliseconds + amountMs;
+
+    // adjust the timestamp
+    const documentRange = editor.document.lineAt(position.line).range;
+    await editor.edit(editBuilder => {
+      editBuilder.replace(documentRange, `[${formatTimestamp(newMs)}]${res.text}`);
+    });
+
+    const PLAY_BEFORE_TIMESTAMP_MS = 2000;
+    const seekCommand = {
+      command: ['seek', (newMs - PLAY_BEFORE_TIMESTAMP_MS) / 1000, 'absolute'],
+    };
+    const reloadSubtitlesCommand = {
+      command: ['sub-reload'],
+    };
+
+    const socket = new net.Socket();
+
+    const socketPath = process.env.HOME + '/tmp/mpv-socket';
+    socket.connect(socketPath, () => {
+      socket.write(JSON.stringify(seekCommand));
+      socket.write('\n');
+      socket.write(JSON.stringify(reloadSubtitlesCommand));
+      socket.write('\n');
+      vscode.window.showInformationMessage(
+        `Sent command to jump to [${formatTimestamp(newMs)}] and sync subtitles.`,
+      );
+      socket.end();
+    });
+
+    socket.on('error', err => {
+      vscode.window.showErrorMessage(`Failed to send command: ${err.message}`);
+    });
+  };
+}
+
 // convert the given bpm to miliseconds
 function bpmToMs(bpm: number) {
   return Math.floor((60 / bpm) * 1000);
@@ -253,12 +329,14 @@ async function timeInputBpm(startBpm?: number) {
   };
 
   let lastPressTime = Date.now();
+  let firstLoop = true;
   while (true) {
     const res = await vscode.window.showInputBox({
       prompt: `Press enter to record BPM (current BPM: ${calculateBPM()}), enter the final BPM once you know, or press esc to finish`,
       placeHolder: 'BPM',
-      value: startBpm !== undefined ? startBpm.toString() : undefined,
+      value: startBpm !== undefined && firstLoop ? startBpm.toString() : undefined,
     });
+    firstLoop = false;
     if (res === undefined) {
       return undefined;
     }
@@ -278,6 +356,165 @@ async function timeInputBpm(startBpm?: number) {
     timeDifferences.push(timeDiff);
 
     lastPressTime = now;
+  }
+}
+
+/**
+ * Uploads the lyrics in the active text editor to the LrclibDotNet API.
+ * @remarks
+ * This function requires the following dependencies:
+ * - `vscode` module for accessing the active text editor and displaying messages.
+ * - `fetch` module for making HTTP requests.
+ * @throws {Error} If there is an HTTP error.
+ */
+async function uploadToLrclibDotNet() {
+  const editor = vscode.window.activeTextEditor;
+
+  if (!editor) {
+    vscode.window.showInformationMessage('No active editor found.');
+    return;
+  }
+
+  const ext = new Ext(editor.document);
+
+  const title = ext.findHeader('ti')?.value;
+  const artist = ext.findHeader('ar')?.value;
+  const album = ext.findHeader('al')?.value;
+  const lengthString = ext.findHeader('length')?.value;
+
+  if (
+    title === undefined ||
+    artist === undefined ||
+    album === undefined ||
+    lengthString === undefined
+  ) {
+    vscode.window.showErrorMessage(
+      'Missing required headers: title, artist, album, length',
+    );
+    return;
+  }
+  // parse length as mm:ss
+  const [minutes, seconds] = lengthString?.split(':') ?? [];
+  if (
+    !minutes ||
+    !seconds ||
+    isNaN(parseInt(minutes, 10)) ||
+    isNaN(parseInt(seconds, 10))
+  ) {
+    vscode.window.showErrorMessage('Invalid length header, expected format: mm:ss');
+    return;
+  }
+  const length = parseInt(minutes, 10) * 60 + parseInt(seconds, 10);
+
+  const syncedLyrics = ext.getLyricsPart();
+  const plainLyrics = plainLyricsFromLyrics(syncedLyrics);
+
+  // open a html preview with the lyrics saying
+  //
+  // Uploading these lyrics to lrclib.net:
+  // <metadata as table>
+  // Lyrics:
+  // ```<lyrics>```
+  // Plain lyrics:
+  // ```<plainLyrics>```
+  //
+  // Is this ok?
+  // <button to upload>
+
+  const previewTitle = 'Lyric Preview';
+  const metadataTable = `
+  <table>
+    <tr>
+      <th>Title</th>
+      <td>${title}</td>
+    </tr>
+    <tr>
+      <th>Artist</th>
+      <td>${artist}</td>
+    </tr>
+    <tr>
+      <th>Album</th>
+      <td>${album}</td>
+    </tr>
+    <tr>
+      <th>Length</th>
+      <td>${lengthString}</td>
+    </tr>
+  </table>
+  `;
+  const previewContent = `
+    <p>Uploading these lyrics to lrclib.net:</p>
+    ${metadataTable}
+    <p>Lyrics:</p>
+    <pre>${syncedLyrics}</pre>
+    <p>Plain lyrics:</p>
+    <pre>${plainLyrics}</pre>
+    <p>Is this ok?</p>
+    <button>Upload</button>
+  `;
+
+  const panel = vscode.window.createWebviewPanel(
+    'lyricPreview',
+    previewTitle,
+    vscode.ViewColumn.One,
+    { enableScripts: true },
+  );
+  panel.webview.html = `
+      <!DOCTYPE html>
+    <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Markdown Preview</title>
+    </head>
+    <body>
+      ${previewContent}
+    </body>
+    <script>
+      const vscode = acquireVsCodeApi();
+      document.querySelector('button').addEventListener('click', () => {
+        vscode.postMessage({ command: 'upload' });
+      });
+    </script>
+    </html>
+  `;
+  let isDisposed = false;
+  panel.onDidDispose(() => {
+    isDisposed = true;
+  });
+
+  await new Promise((resolve, _reject) => {
+    panel.webview.onDidReceiveMessage((message: { command: string }) => {
+      if (isDisposed) {
+        return;
+      }
+      if (message.command === 'upload') {
+        panel.dispose();
+        resolve(true);
+      }
+    });
+  });
+
+  const toUpload: PublishRequest = {
+    trackName: title,
+    artistName: artist,
+    albumName: album,
+    duration: length,
+    plainLyrics: plainLyrics,
+    syncedLyrics: syncedLyrics,
+  };
+
+  // log the data to our extension output buffer
+  channel_global.appendLine('Uploading lyrics to LrclibDotNet');
+  const json = JSON.stringify(toUpload, null, 2);
+  channel_global.appendLine(json);
+
+  const res = await publishLyrics(toUpload);
+
+  if (res) {
+    vscode.window.showInformationMessage('Lyrics successfully uploaded.');
+  } else {
+    vscode.window.showErrorMessage('Failed to upload lyrics.');
   }
 }
 
@@ -487,11 +724,44 @@ class Ext {
       });
     }
   }
+
+  // get the lyrics part of the lrc file (after the headers)
+  getLyricsPart() {
+    const first = this.document.lineAt(0).text;
+    let line = 0;
+    if (this.isHeaderLine(first)) {
+      // skip all headers (until the first empty line)
+      for (; line < this.document.lineCount; line++) {
+        const text = this.document.lineAt(line).text;
+        if (text.trim() === '') {
+          line++;
+          break;
+        }
+      }
+    }
+
+    // get the range from the current line to the end of the file
+    const documentRange = new vscode.Range(
+      new vscode.Position(line, 0),
+      this.document.lineAt(this.document.lineCount - 1).range.end,
+    );
+    return this.document.getText(documentRange);
+  }
 }
 
 // find an active editor that has the given document opened
 function findActiveEditor(document: vscode.TextDocument) {
   return vscode.window.visibleTextEditors.find(editor => editor.document === document);
+}
+
+function plainLyricsFromLyrics(lyrics: string) {
+  // remove the timestamp from the beginning of every line
+  return (
+    lyrics
+      .replace(/\[\d\d:\d\d\.\d\d\]\s?/gm, '')
+      // remove empty lines
+      .replace(/\n{2,}/g, '\n')
+  );
 }
 
 function parseTimestamp(timestamp: string): number {
