@@ -40,21 +40,38 @@ fn reap_window(window: u64, workspace: u64) {
     reply.expect("failed to move window to workspace");
 }
 
-fn main() {
-    let workspaces = list_workspaces();
-
-    let active_workspace = workspaces
+fn get_active_workspace(workspaces: &[Workspace]) -> &Workspace {
+    workspaces
         .iter()
         .filter(|w| w.is_focused)
         .next()
-        .expect("expected an active workspace");
+        .expect("expected an active workspace")
+}
+
+fn move_workspace_up() {
+    let (result, _) = sock()
+        .send(Request::Action(Action::MoveWorkspaceUp {}))
+        .expect("failed to send workspace move command");
+
+    result.expect("failed to move workspace up");
+}
+
+fn main() {
+    let mut workspaces = list_workspaces();
+    let mut active_workspace = get_active_workspace(&workspaces);
+
+    // Ensure that the current workspace is the first one, to avoid issues with
+    // indices changing during the window moves.
+    while active_workspace.idx > 1 {
+        move_workspace_up();
+        workspaces = list_workspaces();
+        active_workspace = get_active_workspace(&workspaces);
+    }
 
     let orphan_workspaces = workspaces
         .iter()
         .filter(|w| w.output == active_workspace.output)
-        // Only select workspaces that are further down, to avoid issues with
-        // indices changing during the operation.
-        .filter(|w| w.idx > active_workspace.idx)
+        .filter(|w| w.idx > 1)
         .map(|w| w.id)
         .collect::<Vec<_>>();
 
