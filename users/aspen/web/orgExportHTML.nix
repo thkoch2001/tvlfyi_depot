@@ -8,6 +8,7 @@ opts:
 let
   src = opts.src or opts;
   headline = opts.headline or null;
+  configFile = opts.configFile or ./config.el;
 
   bn = builtins.baseNameOf src;
   filename = elemAt (splitString "." bn) 0;
@@ -37,7 +38,7 @@ runCommand outName { inherit src; } ''
   buildFile() {
     cp "$1" file.org
     ${pkgs.emacs}/bin/emacs --batch \
-      --load ${./config.el} \
+      --load ${configFile} \
       --visit file.org \
       --eval "(progn
         ${escapeDoubleQuotes navToHeadline}
