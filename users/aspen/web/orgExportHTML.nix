@@ -6,8 +6,8 @@ with lib;
 opts:
 
 let
-  src = if isAttrs opts then opts.src else opts;
-  headline = if isAttrs opts then opts.headline else null;
+  src = opts.src or opts;
+  headline = opts.headline or null;
 
   bn = builtins.baseNameOf src;
   filename = elemAt (splitString "." bn) 0;
