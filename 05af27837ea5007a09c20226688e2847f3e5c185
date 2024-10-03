@@ -34,6 +34,24 @@
       "parentUuid": "8303dcb1_801d249c",
       "revId": "05af27837ea5007a09c20226688e2847f3e5c185",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d6fa0f30_4ea24af3",
+        "filename": "tvix/Cargo.lock",
+        "patchSetId": 2
+      },
+      "lineNbr": 3179,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-03T19:22:44Z",
+      "side": 1,
+      "message": "it\u0027s nice context. the pr was https://github.com/cberner/redb/pull/828, included in https://github.com/cberner/redb/releases/tag/v2.1.2.",
+      "parentUuid": "70f32342_1ce186ac",
+      "revId": "05af27837ea5007a09c20226688e2847f3e5c185",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
