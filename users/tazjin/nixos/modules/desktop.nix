@@ -35,12 +35,14 @@
     # support tooling
     alacritty
     fuzzel
+    kanshi
     qt5.qtwayland
     swayidle
     waybar
     wdisplays
     wl-clipboard
     wl-mirror
+    wlr-randr
     xfce.xfce4-appfinder
     depot.users.tazjin.niri-reap
   ];
