@@ -73,7 +73,7 @@
 (use-package s)
 (use-package string-edit-at-point)
 (use-package term-switcher
-  :bind (:map global-map ("<f5>" . #'ts/switch-to-terminal)))
+  :bind (:map global-map ("C-c v" . #'ts/switch-to-terminal)))
 
 (use-package undo-tree
   :config (global-undo-tree-mode)
