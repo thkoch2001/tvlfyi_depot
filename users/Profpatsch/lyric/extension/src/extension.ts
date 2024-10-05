@@ -533,8 +533,10 @@ async function uploadToLrclibDotNet() {
 
   if (res) {
     vscode.window.showInformationMessage('Lyrics successfully uploaded.');
+    channel_global.appendLine('Lyrics successfully uploaded.');
   } else {
     vscode.window.showErrorMessage('Failed to upload lyrics.');
+    channel_global.appendLine('Failed to upload lyrics.');
   }
 }
 
