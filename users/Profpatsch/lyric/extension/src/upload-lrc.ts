@@ -1,5 +1,8 @@
 import * as crypto from 'crypto';
 
+const USER_AGENT =
+  'lyric tool (source: https://code.tvl.fyi/tree/users/Profpatsch/lyric, contact: https://mastodon.xyz/@Profpatsch)';
+
 // Helper function to convert a hex string to a Buffer
 function hexToBytes(hex: string): Buffer {
   return Buffer.from(hex, 'hex');
@@ -48,8 +51,8 @@ async function getUploadNonce() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'User-Agent': 'lyric tool (https://code.tvl.fyi/tree/users/Profpatsch/lyric)',
-        'Lrclib-Client': 'lyric tool (https://code.tvl.fyi/tree/users/Profpatsch/lyric)',
+        'User-Agent': USER_AGENT,
+        'Lrclib-Client': USER_AGENT,
       },
     });
 
@@ -96,8 +99,8 @@ export async function publishLyrics(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'User-Agent': 'lyric tool (https://code.tvl.fyi/tree/users/Profpatsch/lyric)',
-      'Lrclib-Client': 'lyric tool (https://code.tvl.fyi/tree/users/Profpatsch/lyric)',
+      'User-Agent': USER_AGENT,
+      'Lrclib-Client': USER_AGENT,
       'X-Publish-Token': publishToken,
     },
     body: JSON.stringify(requestBody),
