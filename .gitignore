@@ -11,3 +11,7 @@ result-*
 # Nix result symlink used by //nix/buildkite
 /nix-buildkite-extra-step-command-script
 /nix-buildkite-extra-step-command-script-*
+
+
+# ignore all package-locks (for now?)
+package-lock.json
