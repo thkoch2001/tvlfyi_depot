@@ -25,7 +25,6 @@ let
       depot.users.Profpatsch.my-webstuff
       pkgs.haskellPackages.pa-prelude
       pkgs.haskellPackages.pa-label
-      pkgs.haskellPackages.pa-json
       pkgs.haskellPackages.pa-error-tree
       pkgs.haskellPackages.pa-field-parser
       pkgs.haskellPackages.pa-run-command
