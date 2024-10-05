@@ -80,7 +80,6 @@ library
         pa-prelude,
         pa-error-tree,
         pa-label,
-        pa-json,
         pa-field-parser,
         pa-run-command,
         aeson-better-errors,

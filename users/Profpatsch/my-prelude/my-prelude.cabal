@@ -61,6 +61,8 @@ library
       Aeson
       Arg
       AtLeast
+      Json
+      Json.Enc
       Test
       Postgres.Decoder
       Postgres.MonadPostgres
@@ -85,6 +87,7 @@ library
      , pa-field-parser
      , aeson
      , aeson-better-errors
+     , base64-bytestring
      , bytestring
      , containers
      , foldl
