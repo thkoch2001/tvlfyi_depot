@@ -28,7 +28,7 @@ lib.fix (self: {
 
   tvl.cache.enable = true;
 
-  boot = rec {
+  boot = {
     initrd.availableKernelModules = [ "nvme" "ehci_pci" "xhci_pci" "usb_storage" "sd_mod" "rtsx_pci_sdmmc" ];
     initrd.kernelModules = [ ];
 
@@ -38,10 +38,9 @@ lib.fix (self: {
     '';
 
     # Install thinkpad modules for TLP
-    extraModulePackages = [ kernelPackages.acpi_call ];
+    extraModulePackages = [ pkgs.linuxPackages.acpi_call ];
 
-    kernelModules = [ "kvm-amd" "i2c_dev" ];
-    kernelPackages = pkgs.zfsUnstable.latestCompatibleLinuxPackages;
+    kernelModules = [ "acpi_call" "kvm-amd" "i2c_dev" ];
     loader.systemd-boot.enable = true;
     loader.efi.canTouchEfiVariables = true;
   };
@@ -163,13 +162,6 @@ lib.fix (self: {
 
   # android stuff for hacking on Awful.apk
   programs.adb.enable = true;
-
-  # systemd-oomd seems to have been enabled by default around ~
-  # December 2022, and it's really into killing my X session as soon
-  # as I do anything stressful to the machine
-  systemd.services.systemd-oomd.enable = lib.mkForce false;
-
-  environment.systemPackages = [ pkgs.vulkan-tools ];
 
   system.stateVersion = "20.09";
 })

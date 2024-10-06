@@ -14,6 +14,7 @@
       "/var/lib/bluetooth"
       "/var/lib/systemd/coredump"
       "/var/lib/tailscale"
+      "/var/lib/private/yggdrasil"
       "/var/log"
     ];
 
