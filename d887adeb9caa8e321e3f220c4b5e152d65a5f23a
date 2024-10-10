@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a92d378_eccbd03d",
+        "filename": "tvix/castore/Cargo.toml",
+        "patchSetId": 8
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-10T12:25:19Z",
+      "side": 1,
+      "message": "please add to the powerset thing in default.nix.",
+      "revId": "d887adeb9caa8e321e3f220c4b5e152d65a5f23a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
