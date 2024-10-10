@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "685ee8f7_a362b7b8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-10T10:29:05Z",
+      "side": 1,
+      "message": "Can be abandoned, we don\u0027t use sourcegraph anymore.",
+      "revId": "3c85233b371fc962378a6ee5f15b81ab9fdfacca",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
