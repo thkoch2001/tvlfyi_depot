@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "801b584c_b07b328c",
+        "filename": "tvix/glue/src/fetchers/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-10T22:38:18Z",
+      "side": 1,
+      "message": "Done (in a followup CL)",
+      "parentUuid": "3423bde2_32601da2",
+      "revId": "5fe208fd304466fa8c8382ea7e2a13afe3a0b79f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ef3e341e_2d547360",
@@ -70,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "06d572a1_0f3f10cd",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-10T22:38:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02367fe4_1656df0d",
+      "revId": "5fe208fd304466fa8c8382ea7e2a13afe3a0b79f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7271bd01_4bfe9595",
@@ -83,6 +119,24 @@
       "writtenOn": "2024-10-10T20:12:03Z",
       "side": 1,
       "message": "can we pass this owned",
+      "revId": "5fe208fd304466fa8c8382ea7e2a13afe3a0b79f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d33222e9_17a22df1",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-10T22:38:18Z",
+      "side": 1,
+      "message": "Done, and some more cleanups in a followup CL.",
+      "parentUuid": "7271bd01_4bfe9595",
       "revId": "5fe208fd304466fa8c8382ea7e2a13afe3a0b79f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -135,6 +189,24 @@
       "writtenOn": "2024-10-10T20:12:03Z",
       "side": 1,
       "message": "Add docstring for PathInfo",
+      "revId": "5fe208fd304466fa8c8382ea7e2a13afe3a0b79f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ab00a7c3_5bd2334b",
+        "filename": "tvix/store/src/path_info.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-10T22:38:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d90aa32b_5f247ec8",
       "revId": "5fe208fd304466fa8c8382ea7e2a13afe3a0b79f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
