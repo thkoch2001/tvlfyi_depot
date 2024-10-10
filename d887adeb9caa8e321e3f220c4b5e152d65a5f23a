@@ -16,6 +16,24 @@
       "message": "please add to the powerset thing in default.nix.",
       "revId": "d887adeb9caa8e321e3f220c4b5e152d65a5f23a",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e930bdb_6e50f1f5",
+        "filename": "tvix/castore/Cargo.toml",
+        "patchSetId": 8
+      },
+      "lineNbr": 99,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-10-10T12:27:30Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1a92d378_eccbd03d",
+      "revId": "d887adeb9caa8e321e3f220c4b5e152d65a5f23a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
