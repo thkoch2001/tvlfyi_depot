@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d05e92a_bc877bc1",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-10T11:14:04Z",
+      "side": 1,
+      "message": "This should be gated on the experimental feature, so it won\u0027t be possible to accidentially use this in store URLs without the feature being enabled.",
+      "revId": "d75e8a2c2bc12de58cd824cde827558d84b86326",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
