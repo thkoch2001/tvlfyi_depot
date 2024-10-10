@@ -4,7 +4,7 @@ use bytes::Bytes;
 use data_encoding::BASE64;
 // https://github.com/hyperium/tonic/issues/1056
 use nix_compat::{
-    narinfo::Flags,
+    narinfo::{Flags, SignatureError},
     nixhash::{CAHash, NixHash},
     store_path::{self, StorePathRef},
 };
@@ -70,6 +70,18 @@ pub enum ValidatePathInfoError {
     /// The deriver field is invalid.
     #[error("deriver field is invalid: {0}")]
     InvalidDeriverField(store_path::Error),
+
+    /// The narinfo field is missing
+    #[error("The narinfo field is missing")]
+    NarInfoFieldMissing,
+
+    /// The ca field is invalid
+    #[error("The ca field is invalid: {0}")]
+    InvalidCaField(ConvertCAError),
+
+    /// The signature at position is invalid
+    #[error("The signature at position {0} is invalid: {1}")]
+    InvalidSignature(usize, SignatureError),
 }
 
 /// Parses a root node name.
