@@ -4,7 +4,7 @@ use bytes::Bytes;
 use data_encoding::BASE64;
 // https://github.com/hyperium/tonic/issues/1056
 use nix_compat::{
-    narinfo::{Flags, SignatureError},
+    narinfo::{Signature, SignatureError},
     nixhash::{CAHash, NixHash},
     store_path::{self, StorePathRef},
 };
@@ -16,6 +16,8 @@ mod grpc_pathinfoservice_wrapper;
 pub use grpc_pathinfoservice_wrapper::GRPCPathInfoServiceWrapper;
 
 tonic::include_proto!("tvix.store.v1");
+
+use tvix_castore::proto as castorepb;
 
 #[cfg(feature = "tonic-reflection")]
 /// Compiled file descriptors for implementing [gRPC
@@ -190,75 +192,6 @@ impl PathInfo {
         // return the root nix path
         Ok(root_nix_path)
     }
-
-    /// With self and its store path name, this reconstructs a
-    /// [nix_compat::narinfo::NarInfo<'_>].
-    /// It can be used to validate Signatures, or get back a (sparse) NarInfo
-    /// struct to prepare writing it out.
-    ///
-    /// It assumes self to be validated first, and will only return None if the
-    /// `narinfo` field is unpopulated.
-    ///
-    /// It does very little allocation (a Vec each for `signatures` and
-    /// `references`), the rest points to data owned elsewhere.
-    ///
-    /// Keep in mind this is not able to reconstruct all data present in the
-    /// NarInfo<'_>, as some of it is not stored at all:
-    /// - the `system`, `file_hash` and `file_size` fields are set to `None`.
-    /// - the URL is set to an empty string.
-    /// - Compression is set to "none"
-    ///
-    /// If you want to render it out to a string and be able to parse it back
-    /// in, at least URL *must* be set again.
-    pub fn to_narinfo<'a>(
-        &'a self,
-        store_path: store_path::StorePathRef<'a>,
-    ) -> Option<nix_compat::narinfo::NarInfo<'_>> {
-        let narinfo = &self.narinfo.as_ref()?;
-
-        Some(nix_compat::narinfo::NarInfo {
-            flags: Flags::empty(),
-            store_path,
-            nar_hash: narinfo
-                .nar_sha256
-                .as_ref()
-                .try_into()
-                .expect("invalid narhash"),
-            nar_size: narinfo.nar_size,
-            references: narinfo
-                .reference_names
-                .iter()
-                .map(|ref_name| {
-                    // This shouldn't pass validation
-                    StorePathRef::from_bytes(ref_name.as_bytes()).expect("invalid reference")
-                })
-                .collect(),
-            signatures: narinfo
-                .signatures
-                .iter()
-                .map(|sig| {
-                    nix_compat::narinfo::SignatureRef::new(
-                        &sig.name,
-                        // This shouldn't pass validation
-                        sig.data[..].try_into().expect("invalid signature len"),
-                    )
-                })
-                .collect(),
-            ca: narinfo
-                .ca
-                .as_ref()
-                .map(|ca| ca.try_into().expect("invalid ca")),
-            system: None,
-            deriver: narinfo.deriver.as_ref().map(|deriver| {
-                StorePathRef::from_name_and_digest(&deriver.name, &deriver.digest)
-                    .expect("invalid deriver")
-            }),
-            url: "",
-            compression: Some("none"),
-            file_hash: None,
-            file_size: None,
-        })
-    }
 }
 
 /// Errors that can occur when converting from a [nar_info::Ca] to a (stricter)
@@ -353,45 +286,154 @@ impl From<&nix_compat::nixhash::CAHash> for nar_info::Ca {
     }
 }
 
-impl From<&nix_compat::narinfo::NarInfo<'_>> for NarInfo {
-    /// Converts from a NarInfo (returned from the NARInfo parser) to the proto-
-    /// level NarInfo struct.
-    fn from(value: &nix_compat::narinfo::NarInfo<'_>) -> Self {
-        let signatures = value
-            .signatures
-            .iter()
-            .map(|sig| nar_info::Signature {
-                name: sig.name().to_string(),
-                data: Bytes::copy_from_slice(sig.bytes()),
-            })
-            .collect();
-
-        NarInfo {
-            nar_size: value.nar_size,
-            nar_sha256: Bytes::copy_from_slice(&value.nar_hash),
-            signatures,
-            reference_names: value.references.iter().map(|r| r.to_string()).collect(),
-            deriver: value.deriver.as_ref().map(|sp| StorePath {
-                name: (*sp.name()).to_owned(),
-                digest: Bytes::copy_from_slice(sp.digest()),
+impl From<crate::pathinfoservice::PathInfo> for PathInfo {
+    fn from(value: crate::pathinfoservice::PathInfo) -> Self {
+        Self {
+            node: Some(castorepb::Node::from_name_and_node(
+                value.store_path.to_string().into_bytes().into(),
+                value.node,
+            )),
+            references: value
+                .references
+                .iter()
+                .map(|reference| Bytes::copy_from_slice(reference.digest()))
+                .collect(),
+            narinfo: Some(NarInfo {
+                nar_size: value.nar_size,
+                nar_sha256: Bytes::copy_from_slice(&value.nar_sha256),
+                signatures: value
+                    .signatures
+                    .iter()
+                    .map(|sig| nar_info::Signature {
+                        name: sig.name().to_string(),
+                        data: Bytes::copy_from_slice(sig.bytes()),
+                    })
+                    .collect(),
+                reference_names: value.references.iter().map(|r| r.to_string()).collect(),
+                deriver: value.deriver.as_ref().map(|sp| StorePath {
+                    name: (*sp.name()).to_owned(),
+                    digest: Bytes::copy_from_slice(sp.digest()),
+                }),
+                ca: value.ca.as_ref().map(|ca| ca.into()),
             }),
-            ca: value.ca.as_ref().map(|ca| ca.into()),
         }
     }
 }
 
-impl From<&nix_compat::narinfo::NarInfo<'_>> for PathInfo {
-    /// Converts from a NarInfo (returned from the NARInfo parser) to a PathInfo
-    /// struct with the node set to None.
-    fn from(value: &nix_compat::narinfo::NarInfo<'_>) -> Self {
-        Self {
-            node: None,
-            references: value
-                .references
-                .iter()
-                .map(|x| Bytes::copy_from_slice(x.digest()))
-                .collect(),
-            narinfo: Some(value.into()),
+impl TryFrom<PathInfo> for crate::pathinfoservice::PathInfo {
+    type Error = ValidatePathInfoError;
+    fn try_from(value: PathInfo) -> Result<Self, Self::Error> {
+        let narinfo = value
+            .narinfo
+            .ok_or_else(|| ValidatePathInfoError::NarInfoFieldMissing)?;
+
+        // ensure the references have the right number of bytes.
+        for (i, reference) in value.references.iter().enumerate() {
+            if reference.len() != store_path::DIGEST_SIZE {
+                return Err(ValidatePathInfoError::InvalidReferenceDigestLen(
+                    i,
+                    reference.len(),
+                ));
+            }
         }
+
+        // ensure the number of references there matches PathInfo.references count.
+        if narinfo.reference_names.len() != value.references.len() {
+            return Err(ValidatePathInfoError::InconsistentNumberOfReferences(
+                value.references.len(),
+                narinfo.reference_names.len(),
+            ));
+        }
+
+        // parse references in reference_names.
+        let mut references = vec![];
+        for (i, reference_name_str) in narinfo.reference_names.iter().enumerate() {
+            // ensure thy parse as (non-absolute) store path
+            let reference_names_store_path =
+                StorePathRef::from_bytes(reference_name_str.as_bytes()).map_err(|_| {
+                    ValidatePathInfoError::InvalidNarinfoReferenceName(
+                        i,
+                        reference_name_str.to_owned(),
+                    )
+                })?;
+
+            // ensure their digest matches the one at self.references[i].
+            {
+                // This is safe, because we ensured the proper length earlier already.
+                let reference_digest = value.references[i].to_vec().try_into().unwrap();
+
+                if reference_names_store_path.digest() != &reference_digest {
+                    return Err(
+                        ValidatePathInfoError::InconsistentNarinfoReferenceNameDigest(
+                            i,
+                            reference_digest,
+                            *reference_names_store_path.digest(),
+                        ),
+                    );
+                } else {
+                    references.push(reference_names_store_path.to_owned());
+                }
+            }
+        }
+
+        let nar_sha256_length = narinfo.nar_sha256.len();
+
+        // split value.node into the name and node components
+        let (name, node) = value
+            .node
+            .ok_or_else(|| ValidatePathInfoError::NoNodePresent)?
+            .into_name_and_node()
+            .map_err(ValidatePathInfoError::InvalidRootNode)?;
+
+        Ok(Self {
+            // value.node has a valid name according to the castore model but might not parse to a
+            // [StorePath]
+            store_path: nix_compat::store_path::StorePath::from_bytes(name.as_ref()).map_err(
+                |err| ValidatePathInfoError::InvalidNodeName(name.as_ref().to_vec(), err),
+            )?,
+            node,
+            references,
+            nar_size: narinfo.nar_size,
+            nar_sha256: narinfo.nar_sha256.to_vec()[..]
+                .try_into()
+                .map_err(|_| ValidatePathInfoError::InvalidNarSha256DigestLen(nar_sha256_length))?,
+            // If the Deriver field is populated, ensure it parses to a
+            // [StorePath].
+            // We can't check for it to *not* end with .drv, as the .drv files produced by
+            // recursive Nix end with multiple .drv suffixes, and only one is popped when
+            // converting to this field.
+            deriver: narinfo
+                .deriver
+                .map(|deriver| {
+                    nix_compat::store_path::StorePath::from_name_and_digest(
+                        &deriver.name,
+                        &deriver.digest,
+                    )
+                    .map_err(ValidatePathInfoError::InvalidDeriverField)
+                })
+                .transpose()?,
+            ca: narinfo
+                .ca
+                .as_ref()
+                .map(TryFrom::try_from)
+                .transpose()
+                .map_err(ValidatePathInfoError::InvalidCaField)?,
+            signatures: narinfo
+                .signatures
+                .into_iter()
+                .enumerate()
+                .map(|(i, signature)| {
+                    signature.data.to_vec()[..]
+                        .try_into()
+                        .map_err(|_| {
+                            ValidatePathInfoError::InvalidSignature(
+                                i,
+                                SignatureError::InvalidSignatureLen(signature.data.len()),
+                            )
+                        })
+                        .map(|signature_data| Signature::new(signature.name, signature_data))
+                })
+                .collect::<Result<Vec<_>, ValidatePathInfoError>>()?,
+        })
     }
 }
