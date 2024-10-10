@@ -447,7 +447,7 @@ impl TvixStoreIO {
             nar_size,
             nar_sha256,
             Some(ca),
-            output_path.to_string().into(),
+            output_path,
             root_node,
         );
 
