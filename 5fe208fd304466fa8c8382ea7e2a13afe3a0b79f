@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3423bde2_32601da2",
+        "filename": "tvix/glue/src/fetchers/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 558,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-10T20:12:03Z",
+      "side": 1,
+      "message": "TODO(flokli): check types for all store path calculation functions, can we convey whether we want owned or not initially",
+      "revId": "5fe208fd304466fa8c8382ea7e2a13afe3a0b79f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef3e341e_2d547360",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-10T20:12:03Z",
+      "side": 1,
+      "message": "Tvix bug",
+      "revId": "5fe208fd304466fa8c8382ea7e2a13afe3a0b79f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02367fe4_1656df0d",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 409,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-10T20:12:03Z",
+      "side": 1,
+      "message": "same comment wrt store path calculation types",
+      "revId": "5fe208fd304466fa8c8382ea7e2a13afe3a0b79f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7271bd01_4bfe9595",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-10T20:12:03Z",
+      "side": 1,
+      "message": "can we pass this owned",
+      "revId": "5fe208fd304466fa8c8382ea7e2a13afe3a0b79f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b28b5686_3c4fd962",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-10T20:12:03Z",
+      "side": 1,
+      "message": "```suggestion\n/// Constructs a [PathInfo] for a NAR-style object.\n```",
+      "revId": "5fe208fd304466fa8c8382ea7e2a13afe3a0b79f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d90aa32b_5f247ec8",
+        "filename": "tvix/store/src/path_info.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-10T20:12:03Z",
+      "side": 1,
+      "message": "Add docstring for PathInfo",
+      "revId": "5fe208fd304466fa8c8382ea7e2a13afe3a0b79f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e20d834_f7a9a190",
+        "filename": "tvix/store/src/pathinfoservice/redb.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-10T20:12:03Z",
+      "side": 1,
+      "message": "move into the big bag of other imports",
+      "revId": "5fe208fd304466fa8c8382ea7e2a13afe3a0b79f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1ce9a6cd_cab843e8",
+        "filename": "tvix/store/src/pathinfoservice/signing_wrapper.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-10T20:12:03Z",
+      "side": 1,
+      "message": "@tvix-github@sinavir.fr we noticed the general integration tests suddenly failing after touching this. Could it be we introduced a change in behaviour, or something was broken before, but is fixed now?\n\nSee the introduction of `strip_signatures` in `tvix/store/src/pathinfoservice/tests/mod.rs`",
+      "revId": "5fe208fd304466fa8c8382ea7e2a13afe3a0b79f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
