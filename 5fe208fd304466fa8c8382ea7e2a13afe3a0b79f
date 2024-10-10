@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7e3cea5c_71e0cace",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 331,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-10T21:25:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ef3e341e_2d547360",
+      "revId": "5fe208fd304466fa8c8382ea7e2a13afe3a0b79f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "02367fe4_1656df0d",
@@ -86,6 +104,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "31c1a8c8_0aba668d",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 76,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-10T21:25:58Z",
+      "side": 1,
+      "message": "Done, also some more comment updates.",
+      "parentUuid": "b28b5686_3c4fd962",
+      "revId": "5fe208fd304466fa8c8382ea7e2a13afe3a0b79f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d90aa32b_5f247ec8",
@@ -116,6 +152,24 @@
       "writtenOn": "2024-10-10T20:12:03Z",
       "side": 1,
       "message": "move into the big bag of other imports",
+      "revId": "5fe208fd304466fa8c8382ea7e2a13afe3a0b79f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fd11f70c_8764bc77",
+        "filename": "tvix/store/src/pathinfoservice/redb.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-10T21:25:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e20d834_f7a9a190",
       "revId": "5fe208fd304466fa8c8382ea7e2a13afe3a0b79f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
