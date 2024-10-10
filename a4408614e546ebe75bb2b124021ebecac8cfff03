@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd5f7c62_7c19c1f2",
+        "filename": "tvix/store/src/pathinfoservice/nix_http.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 281,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-10T11:02:14Z",
+      "side": 1,
+      "message": "should this gated on the composition feature? Or fail constructing if you pass the parameter but didn\u0027t enable composition?",
+      "revId": "a4408614e546ebe75bb2b124021ebecac8cfff03",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5b56262_1605809c",
+        "filename": "tvix/store/src/pathinfoservice/nix_http.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 284,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-10T11:02:14Z",
+      "side": 1,
+      "message": "I\u0027m unsure on the semantics for multiple query params with the same name. Maybe it\u0027s cleaner to have serde take care of populating the struct? (this might already be a problem for `public_keys`, so ok to deal with it in a followup).",
+      "revId": "a4408614e546ebe75bb2b124021ebecac8cfff03",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
