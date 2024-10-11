@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8ea9d971_7af94d43",
+        "filename": "tvix/eval/src/vm/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 1330,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-11T20:49:51Z",
+      "side": 1,
+      "message": "This should only be introduced in a later CL.",
+      "revId": "bc8783eef6a2fe2e8e01ebe1c8442e93ad330a45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
