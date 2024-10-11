@@ -261,6 +261,24 @@
       "message": "@tvix-github@sinavir.fr we noticed the general integration tests suddenly failing after touching this. Could it be we introduced a change in behaviour, or something was broken before, but is fixed now?\n\nSee the introduction of `strip_signatures` in `tvix/store/src/pathinfoservice/tests/mod.rs`",
       "revId": "5fe208fd304466fa8c8382ea7e2a13afe3a0b79f",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0fa9945e_a8f9a149",
+        "filename": "tvix/store/src/pathinfoservice/signing_wrapper.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000128
+      },
+      "writtenOn": "2024-10-11T15:53:47Z",
+      "side": 1,
+      "message": "The signing service was signing only if the PathInfo contained a NarInfo (which was not required at that time). The test was kinda broken in the sensé that the pathinfo proto struct used for testing was wrong. see https://code.tvl.fyi/tree/tvix/store/src/pathinfoservice/signing_wrapper.rs#n68",
+      "parentUuid": "1ce9a6cd_cab843e8",
+      "revId": "5fe208fd304466fa8c8382ea7e2a13afe3a0b79f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
