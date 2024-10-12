@@ -626,7 +626,8 @@ in
       http-port = 5925; # kycl
       hostname = "auth.tvl.fyi";
       http-relative-path = "/auth";
-      proxy = "edge";
+      proxy-headers = "forwarded|xforwarded";
+      http-enabled = true;
     };
 
     database = {
