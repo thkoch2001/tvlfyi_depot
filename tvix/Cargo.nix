@@ -15523,10 +15523,6 @@ rec {
             packageId = "itertools 0.12.1";
           }
           {
-            name = "lazy_static";
-            packageId = "lazy_static";
-          }
-          {
             name = "lexical-core";
             packageId = "lexical-core";
             features = [ "format" "parse-floats" ];
