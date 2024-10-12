@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cf42b15a_d05ba053",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-10-12T22:39:48Z",
+      "side": 1,
+      "message": "This should\u0027ve probably had a commit message ... I\u0027m moving this out of //tvix.",
+      "revId": "bdda10a2f54974053b1d78b801469f076e90a6da",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
