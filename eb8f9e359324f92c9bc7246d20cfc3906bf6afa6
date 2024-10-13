@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3c79bc5_3debab80",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-13T16:12:37Z",
+      "side": 1,
+      "message": "Let\u0027s give upstream some time to react, we can probably also switch to the other branch instead of duplicating the code here.",
+      "revId": "eb8f9e359324f92c9bc7246d20cfc3906bf6afa6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
