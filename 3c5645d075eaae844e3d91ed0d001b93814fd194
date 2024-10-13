@@ -16,6 +16,24 @@
       "message": "`name` is a eval `Value`. This `to_string()` calls \"display\", which doublequotes for visual representation. That\u0027s not what you want.\n\nYou want to try converting it to a `NixString` (match on `Value::String`), and then check if the inner `NixString` is plain enough to just fit in a `String`.\n\nWithout looking too much at the bigger picture, it might be cleaner to do all this on the callsite and have this constructor be dumb. same applies to the other arguments.",
       "revId": "3c5645d075eaae844e3d91ed0d001b93814fd194",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4754d67d_b0dcb012",
+        "filename": "tvix/tools/tvix-eval-jobs/src/derivation.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-10-13T15:04:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "09d86cdb_8c659af3",
+      "revId": "3c5645d075eaae844e3d91ed0d001b93814fd194",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
