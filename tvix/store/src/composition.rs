@@ -1,17 +1,15 @@
-use lazy_static::lazy_static;
+use std::sync::LazyLock;
 
 pub use tvix_castore::composition::*;
 
-lazy_static! {
-    /// The provided registry of tvix_store, which has all the builtin
-    /// tvix_castore (BlobStore/DirectoryStore) and tvix_store
-    /// (PathInfoService) implementations.
-    pub static ref REG: Registry = {
-        let mut reg = Default::default();
-        add_default_services(&mut reg);
-        reg
-    };
-}
+/// The provided registry of tvix_store, which has all the builtin
+/// tvix_castore (BlobStore/DirectoryStore) and tvix_store
+/// (PathInfoService) implementations.
+pub static REG: LazyLock<Registry> = LazyLock::new(|| {
+    let mut reg = Default::default();
+    add_default_services(&mut reg);
+    reg
+});
 
 /// Register the builtin services of tvix_castore and tvix_store with the given
 /// registry. This is useful for creating your own registry with the builtin
