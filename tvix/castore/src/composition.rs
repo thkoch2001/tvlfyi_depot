@@ -99,16 +99,15 @@
 use erased_serde::deserialize;
 use futures::future::BoxFuture;
 use futures::FutureExt;
-use lazy_static::lazy_static;
 use serde::de::DeserializeOwned;
-use serde_tagged::de::{BoxFnSeed, SeedFactory};
+use serde_tagged::de::SeedFactory;
 use serde_tagged::util::TagString;
 use std::any::{Any, TypeId};
 use std::cell::Cell;
 use std::collections::BTreeMap;
 use std::collections::HashMap;
 use std::marker::PhantomData;
-use std::sync::Arc;
+use std::sync::{Arc, LazyLock};
 use tonic::async_trait;
 
 /// Resolves tag names to the corresponding Config type.
@@ -131,9 +130,9 @@ use tonic::async_trait;
 // lookup.
 // I said it was ugly...
 #[derive(Default)]
-pub struct Registry(BTreeMap<(TypeId, &'static str), Box<dyn Any + Sync>>);
+pub struct Registry(BTreeMap<(TypeId, &'static str), Box<dyn Any + Sync + Send>>);
 pub type FromUrlSeed<T> =
-    Box<dyn Fn(url::Url) -> Result<T, Box<dyn std::error::Error + Send + Sync>> + Sync>;
+    Box<dyn Fn(url::Url) -> Result<T, Box<dyn std::error::Error + Send + Sync>> + Send + Sync>;
 pub struct RegistryEntry<T> {
     serde_deserialize_seed: BoxFnSeed<DeserializeWithRegistry<T>>,
     from_url_seed: FromUrlSeed<DeserializeWithRegistry<T>>,
@@ -151,7 +150,7 @@ impl<'r, 'de: 'r, T: 'static> SeedFactory<'de, TagString<'de>> for RegistryWithF
         E: serde::de::Error,
     {
         // using find() and not get() because of https://github.com/rust-lang/rust/issues/80389
-        let seed: &Box<dyn Any + Sync> = self
+        let seed: &Box<dyn Any + Send + Sync> = self
             .0
              .0
             .iter()
@@ -171,6 +170,45 @@ impl<'r, 'de: 'r, T: 'static> SeedFactory<'de, TagString<'de>> for RegistryWithF
 /// `RegistryWithFakeType<Box<dyn MyTrait>>`, then the types registered for `Box<dyn MyTrait>`
 /// will be used.
 pub struct DeserializeWithRegistry<T>(pub T);
+
+// copy from serde_tagged, but with Send
+// See https://github.com/qzed/serde_tagged/pull/11.
+pub struct BoxFnSeed<V>(
+    Box<dyn serde_tagged::de::FnSeed<V, Output = Result<V, erased_serde::Error>> + Send + Sync>,
+);
+impl<V> BoxFnSeed<V> {
+    /// Creates a new boxed closure from the given closure.
+    pub fn new<F>(func: F) -> Self
+    where
+        F: serde_tagged::de::FnSeed<V> + Send + Sync + 'static,
+    {
+        BoxFnSeed(Box::new(func))
+    }
+}
+
+impl<'de, V> serde::de::DeserializeSeed<'de> for BoxFnSeed<V> {
+    type Value = V;
+
+    fn deserialize<D>(self, deserializer: D) -> Result<Self::Value, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let mut de = <dyn erased_serde::Deserializer>::erase(deserializer);
+        (self.0)(&mut de).map_err(serde::de::Error::custom)
+    }
+}
+
+impl<'de, 'b, V> serde::de::DeserializeSeed<'de> for &'b BoxFnSeed<V> {
+    type Value = V;
+
+    fn deserialize<D>(self, deserializer: D) -> Result<Self::Value, D::Error>
+    where
+        D: serde::Deserializer<'de>,
+    {
+        let mut de = <dyn erased_serde::Deserializer>::erase(deserializer);
+        (self.0)(&mut de).map_err(serde::de::Error::custom)
+    }
+}
 
 impl Registry {
     /// Registers a mapping from type tag to a concrete type into the registry.
@@ -261,14 +299,12 @@ pub fn with_registry<R>(reg: &'static Registry, f: impl FnOnce() -> R) -> R {
     result
 }
 
-lazy_static! {
-    /// The provided registry of tvix_castore, with all builtin BlobStore/DirectoryStore implementations
-    pub static ref REG: Registry = {
-        let mut reg = Default::default();
-        add_default_services(&mut reg);
-        reg
-    };
-}
+/// The provided registry of tvix_castore, with all builtin BlobStore/DirectoryStore implementations
+pub static REG: LazyLock<Registry> = LazyLock::new(|| {
+    let mut reg = Default::default();
+    add_default_services(&mut reg);
+    reg
+});
 
 // ---------- End of generic registry code --------- //
 
