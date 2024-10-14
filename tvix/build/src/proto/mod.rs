@@ -1,7 +1,8 @@
 use std::path::{Path, PathBuf};
+use std::collections::{BTreeMap, HashSet};
 
 use itertools::Itertools;
-use tvix_castore::DirectoryError;
+use tvix_castore::{Node, PathComponent, DirectoryError};
 
 mod grpc_buildservice_wrapper;
 
@@ -201,6 +202,102 @@ impl BuildRequest {
     }
 }
 
+impl TryFrom<BuildRequest> for crate::buildservice::BuildRequest {
+    type Error = ValidateBuildRequestError;
+    fn try_from(value: BuildRequest) -> Result<Self, Self::Error> {
+        // validate names. Make sure they're sorted
+
+        let mut last_name: bytes::Bytes = "".into();
+        let mut inputs: BTreeMap<PathComponent, Node> = BTreeMap::new();
+        for (i, node) in value.inputs.iter().enumerate() {
+            // TODO(flokli): store result somewhere
+            let (name, node) = node
+                .clone()
+                .into_name_and_node()
+                .map_err(|e| ValidateBuildRequestError::InvalidInputNode(i, e))?;
+
+            if name.as_ref() <= last_name.as_ref() {
+                return Err(ValidateBuildRequestError::InputNodesNotSorted);
+            } else {
+                inputs.insert(name.clone(), node);
+                last_name = name.into();
+            }
+        }
+
+        // validate working_dir
+        if !is_clean_relative_path(&value.working_dir) {
+            Err(ValidateBuildRequestError::InvalidWorkingDir)?;
+        }
+
+        // validate scratch paths
+        for (i, p) in value.scratch_paths.iter().enumerate() {
+            if !is_clean_relative_path(p) {
+                Err(ValidateBuildRequestError::InvalidScratchPath(i))?
+            }
+        }
+        if !is_sorted(value.scratch_paths.iter().map(|e| e.as_bytes())) {
+            Err(ValidateBuildRequestError::ScratchPathsNotSorted)?;
+        }
+
+        // validate inputs_dir
+        if !is_clean_relative_path(&value.inputs_dir) {
+            Err(ValidateBuildRequestError::InvalidInputsDir)?;
+        }
+
+        // validate outputs
+        for (i, p) in value.outputs.iter().enumerate() {
+            if !is_clean_relative_path(p) {
+                Err(ValidateBuildRequestError::InvalidOutputPath(i))?
+            }
+        }
+        if !is_sorted(value.outputs.iter().map(|e| e.as_bytes())) {
+            Err(ValidateBuildRequestError::OutputsNotSorted)?;
+        }
+
+        // validate environment_vars.
+        for (i, e) in value.environment_vars.iter().enumerate() {
+            if e.key.is_empty() || e.key.contains('=') {
+                Err(ValidateBuildRequestError::InvalidEnvVar(i))?
+            }
+        }
+        if !is_sorted(value.environment_vars.iter().map(|e| e.key.as_bytes())) {
+            Err(ValidateBuildRequestError::EnvVarNotSorted)?;
+        }
+
+        // validate build constraints
+        let constraints = match value.constraints {
+            None => HashSet::new(),
+            Some(constraints) => 
+                constraints
+                    .try_into()
+                    .map_err(ValidateBuildRequestError::InvalidBuildConstraints)?,
+        };
+
+        // validate additional_files
+        for (i, additional_file) in value.additional_files.iter().enumerate() {
+            if !is_clean_relative_path(&additional_file.path) {
+                Err(ValidateBuildRequestError::InvalidAdditionalFilePath(i))?
+            }
+        }
+        if !is_sorted(value.additional_files.iter().map(|e| e.path.as_bytes())) {
+            Err(ValidateBuildRequestError::AdditionalFilesNotSorted)?;
+        }
+
+        Ok(Self {
+            inputs,
+            command_args: value.command_args,
+            working_dir: value.working_dir,
+            scratch_paths: value.scratch_paths,
+            inputs_dir: value.inputs_dir,
+            outputs: value.outputs,
+            environment_vars: value.environment_vars.into_iter().map(Into::into).collect(),
+            constraints,
+            additional_files: value.additional_files.into_iter().map(Into::into).collect(),
+            refscan_needles: value.refscan_needles,
+        })
+    }
+}
+
 /// Errors that occur during the validation of
 /// [build_request::BuildConstraints] messages.
 #[derive(Debug, thiserror::Error)]
@@ -232,6 +329,69 @@ impl build_request::BuildConstraints {
         }
 
         Ok(())
+    }
+}
+
+impl From<build_request::EnvVar> for crate::buildservice::EnvVar {
+    fn from(value: build_request::EnvVar) -> Self {
+        Self {
+            key: value.key,
+            value: value.value,
+        }
+    }
+}
+
+impl From<crate::buildservice::EnvVar> for build_request::EnvVar {
+    fn from(value: crate::buildservice::EnvVar) -> Self {
+        Self {
+            key: value.key,
+            value: value.value,
+        }
+    }
+}
+
+impl From<build_request::AdditionalFile> for crate::buildservice::AdditionalFile {
+    fn from(value: build_request::AdditionalFile) -> Self {
+        Self {
+            path: value.path,
+            contents: value.contents,
+        }
+    }
+}
+
+impl From<crate::buildservice::AdditionalFile> for build_request::AdditionalFile {
+    fn from(value: crate::buildservice::AdditionalFile) -> Self {
+        Self {
+            path: value.path,
+            contents: value.contents,
+        }
+    }
+}
+
+impl TryFrom<build_request::BuildConstraints> for HashSet<crate::buildservice::BuildConstraints> {
+    type Error = ValidateBuildConstraintsError;
+    fn try_from(value: build_request::BuildConstraints) -> Result<Self, Self::Error> {
+        use crate::buildservice::BuildConstraints;
+
+        // validate system
+        if value.system.is_empty() {
+            Err(ValidateBuildConstraintsError::InvalidSystem)?;
+        }
+        // validate available_ro_paths
+        for (i, p) in value.available_ro_paths.iter().enumerate() {
+            if !is_clean_absolute_path(p) {
+                Err(ValidateBuildConstraintsError::InvalidAvailableRoPaths(i))?
+            }
+        }
+        if !is_sorted(value.available_ro_paths.iter().map(|e| e.as_bytes())) {
+            Err(ValidateBuildConstraintsError::AvailableRoPathsNotSorted)?;
+        }
+
+        let mut build_constraints = HashSet::from([BuildConstraints::System(value.system), BuildConstraints::MinMemory(value.min_memory), BuildConstraints::AvailableReadOnlyPaths(value.available_ro_paths)]);
+
+        if value.network_access { build_constraints.insert(BuildConstraints::NetworkAccess); }
+        if value.provide_bin_sh { build_constraints.insert(BuildConstraints::ProvideBinSh); }
+        Ok(build_constraints)
     }
 }
 
