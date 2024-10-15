@@ -71,6 +71,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8acca42f_aa916f33",
+        "filename": "tvix/build/src/buildservice/build_request.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-10-15T07:55:03Z",
+      "side": 1,
+      "message": "Why? That seems harder to work with",
+      "parentUuid": "a01b09a6_5bf38ea0",
+      "revId": "d5186ce98f1d75a422ba4bc173beed536f77b50b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "94a9ed6b_73b05b1e",
         "filename": "tvix/build/src/buildservice/build_request.rs",
         "patchSetId": 1
