@@ -6,6 +6,7 @@ use std::{
 };
 use tokio::io::{self, AsyncWrite};
 
+use tracing::warn;
 use tvix_castore::{blobservice::BlobService, directoryservice::DirectoryService};
 use url::Url;
 
@@ -204,6 +205,7 @@ pub async fn construct_services_from_configs(
     let nar_calculation_service: Box<dyn NarCalculationService> = path_info_service
         .nar_calculation_service()
         .unwrap_or_else(|| {
+            warn!("Falling back to simple renderer, no more suitable nar calc service found");
             Box::new(SimpleRenderer::new(
                 blob_service.clone(),
                 directory_service.clone(),
