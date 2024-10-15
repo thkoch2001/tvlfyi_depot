@@ -105,6 +105,42 @@
       "parentUuid": "4c470c18_9daf9e5b",
       "revId": "de8101f46c9e3a091d72732556653809b5e60372",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f1180ec8_af12ff27",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-10-15T23:43:10Z",
+      "side": 1,
+      "message": "Oh, I was distracted, this does make sense.",
+      "parentUuid": "6efb88d1_9dccab2b",
+      "revId": "de8101f46c9e3a091d72732556653809b5e60372",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f22d704f_0b9e447d",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-10-15T23:43:10Z",
+      "side": 1,
+      "message": "Oh I was distracted, yeah this does make sense.",
+      "parentUuid": "6efb88d1_9dccab2b",
+      "revId": "de8101f46c9e3a091d72732556653809b5e60372",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
