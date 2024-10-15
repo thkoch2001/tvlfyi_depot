@@ -62,6 +62,8 @@ pub trait PathInfoService: Send + Sync {
     /// [async_trait] generates, but for streams instead of futures.
     fn list(&self) -> BoxStream<'static, Result<PathInfo, Error>>;
 
+    /// Returns a (more) suitable NarCalculationService.
+    /// This can be used to offload NAR calculation to the remote side.
     fn nar_calculation_service(&self) -> Option<Box<dyn NarCalculationService>> {
         None
     }
