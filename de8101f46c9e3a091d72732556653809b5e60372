@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc4c73b5_24654f17",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-15T21:40:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f350a151_4e6adf66",
+      "revId": "de8101f46c9e3a091d72732556653809b5e60372",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "90711dd1_beaea5b2",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "This is an Arc::clone, it\u0027s needed because we use shared references for our services in multi-threaded environments. It\u0027s a cheap clone.",
       "parentUuid": "90711dd1_beaea5b2",
+      "revId": "de8101f46c9e3a091d72732556653809b5e60372",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6efb88d1_9dccab2b",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-15T21:40:00Z",
+      "side": 1,
+      "message": "We can just keep using `\u0026self.blob_service` etc here.",
+      "parentUuid": "4c470c18_9daf9e5b",
       "revId": "de8101f46c9e3a091d72732556653809b5e60372",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
