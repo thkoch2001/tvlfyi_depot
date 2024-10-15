@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e75fde26_1996a63b",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000061
+      },
+      "writtenOn": "2024-10-15T15:59:44Z",
+      "side": 1,
+      "message": "We don\u0027t need to_string here anymore.",
+      "revId": "de8101f46c9e3a091d72732556653809b5e60372",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "90711dd1_beaea5b2",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 546,
+      "author": {
+        "id": 1000061
+      },
+      "writtenOn": "2024-10-15T15:59:44Z",
+      "side": 1,
+      "message": "Do we need clone here?",
+      "revId": "de8101f46c9e3a091d72732556653809b5e60372",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
