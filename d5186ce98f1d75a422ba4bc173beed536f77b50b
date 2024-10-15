@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9e4490b_61c3a02d",
+        "filename": "tvix/build/src/buildservice/build_request.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-15T00:04:49Z",
+      "side": 1,
+      "message": "can be removed here, guaranteed by the btreemap.",
+      "revId": "d5186ce98f1d75a422ba4bc173beed536f77b50b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "88e87932_0e98849b",
+        "filename": "tvix/build/src/buildservice/build_request.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-15T00:04:49Z",
+      "side": 1,
+      "message": "leftover Todo",
+      "revId": "d5186ce98f1d75a422ba4bc173beed536f77b50b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72a28191_1f7badca",
+        "filename": "tvix/build/src/buildservice/build_request.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-15T00:04:49Z",
+      "side": 1,
+      "message": "this needs to be a\n\n`BTreeMap\u003cPathComponent, Node\u003e`, similar to how it\u0027s in `Directory`, so we store the names somewhere.",
+      "revId": "d5186ce98f1d75a422ba4bc173beed536f77b50b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a01b09a6_5bf38ea0",
+        "filename": "tvix/build/src/buildservice/build_request.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-15T00:04:49Z",
+      "side": 1,
+      "message": "this would feel more natural if it were a `HashSet\u003cBuildConstraints\u003e`, with `BuildConstraints` being an enum.",
+      "revId": "d5186ce98f1d75a422ba4bc173beed536f77b50b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94a9ed6b_73b05b1e",
+        "filename": "tvix/build/src/buildservice/build_request.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-15T00:04:49Z",
+      "side": 1,
+      "message": "make this an enum, and have a set of them.",
+      "revId": "d5186ce98f1d75a422ba4bc173beed536f77b50b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4ad305ee_c24c9aa8",
+        "filename": "tvix/build/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-15T00:04:49Z",
+      "side": 1,
+      "message": "this is gonna be key and value to insert into the btreemap.",
+      "revId": "d5186ce98f1d75a422ba4bc173beed536f77b50b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
