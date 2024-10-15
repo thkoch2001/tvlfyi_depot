@@ -89,6 +89,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "05adf3c3_56ba8835",
+        "filename": "tvix/build/src/buildservice/build_request.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-15T08:22:50Z",
+      "side": 1,
+      "message": "I\u0027d assume set operations to be easier/safer.\n\nFor example, to check if you fulfil these constraints on a give node, you could look at each restrictions and \"remove\" them from your list of constraints to still validate.\n\nIf there\u0027s a new constraint defined, it will be left in that set, whereas with the \"one big struct\" approach you could just have forgotten to look in that field and mistakenly schedule it even if the constraint is not satisfied.",
+      "parentUuid": "8acca42f_aa916f33",
+      "revId": "d5186ce98f1d75a422ba4bc173beed536f77b50b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "94a9ed6b_73b05b1e",
         "filename": "tvix/build/src/buildservice/build_request.rs",
         "patchSetId": 1
