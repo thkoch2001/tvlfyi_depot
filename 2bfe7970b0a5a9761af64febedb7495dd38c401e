@@ -16,6 +16,24 @@
       "message": "```suggestion\n    buildservice::BuildRequest::try_from(build_request.clone()).expect(\"must convert\")\n```\n\n(and drop the lines below, it\u0027ll be in the failing assertion anyways)",
       "revId": "2bfe7970b0a5a9761af64febedb7495dd38c401e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35f552af_61098df8",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-16T19:09:58Z",
+      "side": 1,
+      "message": "The assertion is done below. do you still want to panic here? I would remove the debug_assert in that case",
+      "parentUuid": "1a6e88ce_34b82244",
+      "revId": "2bfe7970b0a5a9761af64febedb7495dd38c401e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
