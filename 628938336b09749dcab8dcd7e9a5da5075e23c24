@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c67c8623_b03f28ab",
+        "filename": "tvix/build/src/buildservice/build_request.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-16T18:17:57Z",
+      "side": 1,
+      "message": "yeah, I think that\u0027d be cleaner.",
+      "revId": "628938336b09749dcab8dcd7e9a5da5075e23c24",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e1c7912_24df173b",
+        "filename": "tvix/build/src/buildservice/build_request.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-16T18:17:57Z",
+      "side": 1,
+      "message": "```suggestion\n    AvailableReadOnlyPath(PathBuf),\n```",
+      "revId": "628938336b09749dcab8dcd7e9a5da5075e23c24",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "840ced8d_1e72081f",
+        "filename": "tvix/build/src/proto/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 208,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-16T18:17:57Z",
+      "side": 1,
+      "message": "```suggestion\n        // validate input names. Make sure they\u0027re sorted\n```",
+      "revId": "628938336b09749dcab8dcd7e9a5da5075e23c24",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "29adec1f_e65c73df",
+        "filename": "tvix/build/src/proto/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-16T18:17:57Z",
+      "side": 1,
+      "message": "we now do store it.",
+      "revId": "628938336b09749dcab8dcd7e9a5da5075e23c24",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
