@@ -34,6 +34,24 @@
       "parentUuid": "1a6e88ce_34b82244",
       "revId": "2bfe7970b0a5a9761af64febedb7495dd38c401e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a7a73ec8_431a8110",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-16T19:41:52Z",
+      "side": 1,
+      "message": "I think we should have an assert_eq here, and compare with the expected struct after the conversion (that part of the test is still missing)",
+      "parentUuid": "35f552af_61098df8",
+      "revId": "2bfe7970b0a5a9761af64febedb7495dd38c401e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
