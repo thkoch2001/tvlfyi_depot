@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0decafb_32800925",
+        "filename": "tvix/build/src/buildservice/build_request.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-16T17:00:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f9e4490b_61c3a02d",
+      "revId": "d5186ce98f1d75a422ba4bc173beed536f77b50b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "88e87932_0e98849b",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4634e8a4_2d22fbb9",
+        "filename": "tvix/build/src/buildservice/build_request.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-16T17:00:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88e87932_0e98849b",
+      "revId": "d5186ce98f1d75a422ba4bc173beed536f77b50b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "72a28191_1f7badca",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-10-15T00:04:49Z",
       "side": 1,
       "message": "this needs to be a\n\n`BTreeMap\u003cPathComponent, Node\u003e`, similar to how it\u0027s in `Directory`, so we store the names somewhere.",
+      "revId": "d5186ce98f1d75a422ba4bc173beed536f77b50b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "21cd5fb7_bca88dc0",
+        "filename": "tvix/build/src/buildservice/build_request.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-16T17:00:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "72a28191_1f7badca",
       "revId": "d5186ce98f1d75a422ba4bc173beed536f77b50b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -105,6 +159,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c16713f7_22870455",
+        "filename": "tvix/build/src/buildservice/build_request.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-16T17:00:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "05adf3c3_56ba8835",
+      "revId": "d5186ce98f1d75a422ba4bc173beed536f77b50b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "94a9ed6b_73b05b1e",
@@ -122,6 +194,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f06c9a9_d91e69b9",
+        "filename": "tvix/build/src/buildservice/build_request.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-16T17:00:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "94a9ed6b_73b05b1e",
+      "revId": "d5186ce98f1d75a422ba4bc173beed536f77b50b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4ad305ee_c24c9aa8",
@@ -135,6 +225,24 @@
       "writtenOn": "2024-10-15T00:04:49Z",
       "side": 1,
       "message": "this is gonna be key and value to insert into the btreemap.",
+      "revId": "d5186ce98f1d75a422ba4bc173beed536f77b50b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a2ad7d9_aa7cbb5b",
+        "filename": "tvix/build/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-16T17:00:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4ad305ee_c24c9aa8",
       "revId": "d5186ce98f1d75a422ba4bc173beed536f77b50b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
