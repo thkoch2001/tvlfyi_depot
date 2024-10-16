@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1106f6a7_b4883206",
+        "filename": "tvix/glue/src/builtins/import.rs",
+        "patchSetId": 6
+      },
+      "lineNbr": 166,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-10-16T00:20:18Z",
+      "side": 1,
+      "message": "```suggestion\n                        expected.to_str()?,\n```",
+      "revId": "ca1e628c8573fe4f054af510918b81a378d7eb9a",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
