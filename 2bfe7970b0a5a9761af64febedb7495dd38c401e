@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1a6e88ce_34b82244",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-16T18:20:12Z",
+      "side": 1,
+      "message": "```suggestion\n    buildservice::BuildRequest::try_from(build_request.clone()).expect(\"must convert\")\n```\n\n(and drop the lines below, it\u0027ll be in the failing assertion anyways)",
+      "revId": "2bfe7970b0a5a9761af64febedb7495dd38c401e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
