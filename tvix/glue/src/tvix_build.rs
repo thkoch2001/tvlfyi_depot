@@ -6,6 +6,7 @@ use std::collections::BTreeMap;
 use bytes::Bytes;
 use nix_compat::{derivation::Derivation, nixbase32, store_path::StorePath};
 use sha2::{Digest, Sha256};
+use tvix_build::buildservice;
 use tvix_build::proto::{
     build_request::{AdditionalFile, BuildConstraints, EnvVar},
     BuildRequest,
@@ -141,10 +142,11 @@ pub(crate) fn derivation_to_build_request(
             .collect(),
     };
 
+    let validated_build_request = buildservice::BuildRequest::try_from(build_request.clone());
     debug_assert!(
-        build_request.validate().is_ok(),
+        validated_build_request.is_ok(),
         "invalid BuildRequest: {}",
-        build_request.validate().unwrap_err()
+        validated_build_request.unwrap_err()
     );
 
     Ok(build_request)

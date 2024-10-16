@@ -39,7 +39,7 @@ use tvix_castore::{Node, PathComponent};
 /// FUTUREWORK: We might be introducing another way to refer to inputs, to
 /// support "send all BuildRequest for a nixpkgs eval to a remote builder and put
 /// the laptop to sleep" usecases later.
-#[derive(Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct BuildRequest {
     /// The list of all root nodes that should be visible in `inputs_dir` at the
     /// time of the build.
@@ -98,7 +98,7 @@ pub struct BuildRequest {
     pub refscan_needles: Vec<String>,
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct EnvVar {
     /// name of the environment variable. Must not contain =.
     pub key: String,
@@ -109,7 +109,7 @@ pub struct EnvVar {
 /// Constraints can be things like required architecture and minimum amount of memory.
 /// The required input paths are *not* represented in here, because it
 /// wouldn't be hermetic enough - see the comment around inputs too.
-#[derive(Clone, PartialEq, Eq, Hash)]
+#[derive(Debug, Clone, PartialEq, Eq, Hash)]
 pub enum BuildConstraints {
     /// The system that's needed to execute the build.
     /// Must not be empty.
@@ -128,7 +128,7 @@ pub enum BuildConstraints {
     ProvideBinSh,
 }
 
-#[derive(Clone, PartialEq)]
+#[derive(Debug, Clone, PartialEq)]
 pub struct AdditionalFile {
     pub path: PathBuf,
     pub contents: Bytes,
