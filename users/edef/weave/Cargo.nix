@@ -5633,6 +5633,21 @@ rec {
           "rustc-dep-of-std" = [ "core" "compiler_builtins" ];
         };
       };
+      "rustc-hash" = rec {
+        crateName = "rustc-hash";
+        version = "2.0.0";
+        edition = "2021";
+        sha256 = "0lni0lf846bzrf3jvci6jaf4142n1mdqxvcpczk5ch9pfgyk8c2q";
+        libName = "rustc_hash";
+        authors = [
+          "The Rust Project Developers"
+        ];
+        features = {
+          "default" = [ "std" ];
+          "rand" = [ "dep:rand" "std" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
+      };
       "rustc_version" = rec {
         crateName = "rustc_version";
         version = "0.4.1";
@@ -6991,6 +7006,10 @@ rec {
           {
             name = "rayon";
             packageId = "rayon";
+          }
+          {
+            name = "rustc-hash";
+            packageId = "rustc-hash";
           }
           {
             name = "safer_owning_ref";
