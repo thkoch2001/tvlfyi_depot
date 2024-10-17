@@ -2135,7 +2135,7 @@ rec {
           "rustc-dep-of-std" = [ "nightly" "core" "compiler_builtins" "alloc" "rustc-internal-api" ];
           "serde" = [ "dep:serde" ];
         };
-        resolvedDefaultFeatures = [ "ahash" "allocator-api2" "default" "inline-more" "rayon" ];
+        resolvedDefaultFeatures = [ "ahash" "allocator-api2" "default" "inline-more" "raw" "rayon" ];
       };
       "hashbrown 0.15.0" = rec {
         crateName = "hashbrown";
@@ -2318,6 +2318,20 @@ rec {
         features = {
           "no-panic" = [ "dep:no-panic" ];
         };
+      };
+      "itoap" = rec {
+        crateName = "itoap";
+        version = "1.0.1";
+        edition = "2018";
+        sha256 = "1f48gsd18kbvskwbnwszhqjpk1l4rdmahh7kaz86b432cj9g8a4h";
+        authors = [
+          "Ryohei Machida <orcinus4627@gmail.com>"
+        ];
+        features = {
+          "default" = [ "simd" "std" ];
+          "std" = [ "alloc" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "default" "simd" "std" ];
       };
       "jobserver" = rec {
         crateName = "jobserver";
@@ -3395,7 +3409,7 @@ rec {
           "unique_counts" = [ "polars-ops/unique_counts" "polars-lazy?/unique_counts" ];
           "zip_with" = [ "polars-core/zip_with" ];
         };
-        resolvedDefaultFeatures = [ "csv" "default" "docs" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-slim" "fmt" "parquet" "polars-io" "polars-ops" "polars-time" "temporal" "zip_with" ];
+        resolvedDefaultFeatures = [ "csv" "default" "docs" "dtype-array" "dtype-categorical" "dtype-date" "dtype-datetime" "dtype-decimal" "dtype-duration" "dtype-full" "dtype-i16" "dtype-i8" "dtype-slim" "dtype-struct" "dtype-time" "dtype-u16" "dtype-u8" "fmt" "lazy" "parquet" "polars-io" "polars-lazy" "polars-ops" "polars-time" "streaming" "temporal" "zip_with" ];
       };
       "polars-arrow" = rec {
         crateName = "polars-arrow";
@@ -3418,6 +3432,11 @@ rec {
             packageId = "arrow-format";
             optional = true;
             features = [ "ipc" ];
+          }
+          {
+            name = "atoi";
+            packageId = "atoi";
+            optional = true;
           }
           {
             name = "atoi_simd";
@@ -3574,7 +3593,7 @@ rec {
           "strength_reduce" = [ "dep:strength_reduce" ];
           "zstd" = [ "dep:zstd" ];
         };
-        resolvedDefaultFeatures = [ "arrow-format" "atoi_simd" "compute" "compute_aggregate" "compute_arithmetics" "compute_arithmetics_decimal" "compute_bitwise" "compute_boolean" "compute_boolean_kleene" "compute_cast" "compute_comparison" "compute_concatenate" "compute_filter" "compute_hash" "compute_if_then_else" "compute_take" "compute_temporal" "fast-float" "futures" "io_ipc" "io_ipc_compression" "io_ipc_write_async" "itoa" "lz4" "multiversion" "ryu" "strength_reduce" "strings" "temporal" "zstd" ];
+        resolvedDefaultFeatures = [ "arrow-format" "atoi" "atoi_simd" "compute" "compute_aggregate" "compute_arithmetics" "compute_arithmetics_decimal" "compute_bitwise" "compute_boolean" "compute_boolean_kleene" "compute_cast" "compute_comparison" "compute_concatenate" "compute_filter" "compute_hash" "compute_if_then_else" "compute_take" "compute_temporal" "dtype-array" "dtype-decimal" "fast-float" "futures" "io_ipc" "io_ipc_compression" "io_ipc_write_async" "itoa" "lz4" "multiversion" "ryu" "strength_reduce" "strings" "temporal" "zstd" ];
       };
       "polars-compute" = rec {
         crateName = "polars-compute";
@@ -3615,6 +3634,7 @@ rec {
           }
         ];
         features = { };
+        resolvedDefaultFeatures = [ "dtype-array" ];
       };
       "polars-core" = rec {
         crateName = "polars-core";
@@ -3665,6 +3685,12 @@ rec {
             name = "indexmap";
             packageId = "indexmap";
             features = [ "std" ];
+          }
+          {
+            name = "itoap";
+            packageId = "itoap";
+            optional = true;
+            features = [ "simd" ];
           }
           {
             name = "num-traits";
@@ -3775,7 +3801,7 @@ rec {
           "temporal" = [ "regex" "chrono" "polars-error/regex" ];
           "timezones" = [ "chrono-tz" "arrow/chrono-tz" "arrow/timezones" ];
         };
-        resolvedDefaultFeatures = [ "algorithm_group_by" "chrono" "chunked_ids" "comfy-table" "docs" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-time" "fmt" "lazy" "rand" "rand_distr" "random" "regex" "reinterpret" "rows" "strings" "temporal" "zip_with" ];
+        resolvedDefaultFeatures = [ "algorithm_group_by" "chrono" "chunked_ids" "comfy-table" "docs" "dtype-array" "dtype-categorical" "dtype-date" "dtype-datetime" "dtype-decimal" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-struct" "dtype-time" "dtype-u16" "dtype-u8" "fmt" "lazy" "rand" "rand_distr" "random" "regex" "reinterpret" "rows" "strings" "temporal" "zip_with" ];
       };
       "polars-error" = rec {
         crateName = "polars-error";
@@ -4009,7 +4035,7 @@ rec {
           "url" = [ "dep:url" ];
           "zstd" = [ "dep:zstd" ];
         };
-        resolvedDefaultFeatures = [ "async" "async-trait" "atoi_simd" "chrono" "csv" "dtype-date" "dtype-datetime" "dtype-time" "fast-float" "futures" "ipc" "itoa" "lazy" "parquet" "polars-parquet" "polars-time" "ryu" "simdutf8" "temporal" "tokio" "tokio-util" ];
+        resolvedDefaultFeatures = [ "async" "async-trait" "atoi_simd" "chrono" "csv" "dtype-categorical" "dtype-date" "dtype-datetime" "dtype-decimal" "dtype-struct" "dtype-time" "fast-float" "futures" "ipc" "itoa" "lazy" "parquet" "polars-parquet" "polars-time" "ryu" "simdutf8" "temporal" "tokio" "tokio-util" ];
       };
       "polars-lazy" = rec {
         crateName = "polars-lazy";
@@ -4204,7 +4230,7 @@ rec {
           "true_div" = [ "polars-plan/true_div" ];
           "unique_counts" = [ "polars-plan/unique_counts" ];
         };
-        resolvedDefaultFeatures = [ "abs" "cross_join" "csv" "cum_agg" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-time" "is_in" "log" "meta" "parquet" "polars-time" "regex" "round_series" "strings" "temporal" "trigonometry" ];
+        resolvedDefaultFeatures = [ "abs" "chunked_ids" "cross_join" "csv" "cum_agg" "dtype-array" "dtype-categorical" "dtype-date" "dtype-datetime" "dtype-decimal" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-struct" "dtype-time" "dtype-u16" "dtype-u8" "is_in" "log" "meta" "parquet" "polars-pipe" "polars-time" "regex" "round_series" "streaming" "strings" "temporal" "trigonometry" ];
       };
       "polars-ops" = rec {
         crateName = "polars-ops";
@@ -4356,7 +4382,7 @@ rec {
           "timezones" = [ "chrono-tz" "chrono" ];
           "unicode-reverse" = [ "dep:unicode-reverse" ];
         };
-        resolvedDefaultFeatures = [ "abs" "cross_join" "cum_agg" "dtype-date" "dtype-datetime" "dtype-duration" "is_in" "log" "round_series" "search_sorted" "strings" ];
+        resolvedDefaultFeatures = [ "abs" "chunked_ids" "cross_join" "cum_agg" "dtype-array" "dtype-categorical" "dtype-date" "dtype-datetime" "dtype-decimal" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-struct" "dtype-time" "dtype-u16" "dtype-u8" "is_in" "log" "round_series" "search_sorted" "strings" ];
       };
       "polars-parquet" = rec {
         crateName = "polars-parquet";
@@ -4591,7 +4617,7 @@ rec {
           "test" = [ "polars-core/chunked_ids" ];
           "tokio" = [ "dep:tokio" ];
         };
-        resolvedDefaultFeatures = [ "cross_join" "csv" "dtype-i16" "dtype-i8" "parquet" ];
+        resolvedDefaultFeatures = [ "cross_join" "csv" "dtype-array" "dtype-categorical" "dtype-decimal" "dtype-i16" "dtype-i8" "dtype-u16" "dtype-u8" "parquet" ];
       };
       "polars-plan" = rec {
         crateName = "polars-plan";
@@ -4780,7 +4806,7 @@ rec {
           "top_k" = [ "polars-ops/top_k" ];
           "unique_counts" = [ "polars-ops/unique_counts" ];
         };
-        resolvedDefaultFeatures = [ "abs" "cross_join" "csv" "cum_agg" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-time" "is_in" "log" "meta" "parquet" "polars-parquet" "polars-time" "regex" "round_series" "strings" "temporal" "trigonometry" ];
+        resolvedDefaultFeatures = [ "abs" "chunked_ids" "cross_join" "csv" "cum_agg" "dtype-array" "dtype-categorical" "dtype-date" "dtype-datetime" "dtype-decimal" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-struct" "dtype-time" "dtype-u16" "dtype-u8" "is_in" "log" "meta" "parquet" "polars-parquet" "polars-time" "regex" "round_series" "streaming" "strings" "temporal" "trigonometry" ];
       };
       "polars-row" = rec {
         crateName = "polars-row";
@@ -6781,6 +6807,7 @@ rec {
           {
             name = "hashbrown";
             packageId = "hashbrown 0.14.5";
+            features = [ "raw" ];
           }
           {
             name = "nix-compat";
@@ -6789,7 +6816,7 @@ rec {
           {
             name = "polars";
             packageId = "polars";
-            features = [ "parquet" ];
+            features = [ "parquet" "lazy" "streaming" "dtype-struct" "dtype-full" ];
           }
           {
             name = "rayon";
