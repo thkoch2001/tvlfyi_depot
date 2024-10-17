@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "08df4f87_c913adfc",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 268,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-17T17:24:41Z",
+      "side": 1,
+      "message": "@edef@edef.eu noticed we can just Box::leak here to get the same semantics as `lazy_static`, so we don\u0027t need to do the custom wrapper type.",
+      "revId": "3cf1c7c4106416545ada671f2fa0fe49909b2db1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
