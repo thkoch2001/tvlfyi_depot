@@ -953,6 +953,47 @@ rec {
         };
         resolvedDefaultFeatures = [ "crossterm" "tty" ];
       };
+      "console" = rec {
+        crateName = "console";
+        version = "0.15.8";
+        edition = "2018";
+        sha256 = "1sz4nl9nz8pkmapqni6py7jxzi7nzqjxzb3ya4kxvmkb0zy867qf";
+        authors = [
+          "Armin Ronacher <armin.ronacher@active-4.com>"
+        ];
+        dependencies = [
+          {
+            name = "encode_unicode";
+            packageId = "encode_unicode";
+            target = { target, features }: (target."windows" or false);
+          }
+          {
+            name = "lazy_static";
+            packageId = "lazy_static";
+          }
+          {
+            name = "libc";
+            packageId = "libc";
+          }
+          {
+            name = "unicode-width";
+            packageId = "unicode-width";
+            optional = true;
+          }
+          {
+            name = "windows-sys";
+            packageId = "windows-sys";
+            target = { target, features }: (target."windows" or false);
+            features = [ "Win32_Foundation" "Win32_System_Console" "Win32_Storage_FileSystem" "Win32_UI_Input_KeyboardAndMouse" ];
+          }
+        ];
+        features = {
+          "default" = [ "unicode-width" "ansi-parsing" ];
+          "unicode-width" = [ "dep:unicode-width" ];
+          "windows-console-colors" = [ "ansi-parsing" ];
+        };
+        resolvedDefaultFeatures = [ "ansi-parsing" "unicode-width" ];
+      };
       "const-oid" = rec {
         crateName = "const-oid";
         version = "0.9.6";
@@ -1530,6 +1571,21 @@ rec {
           "serde" = [ "dep:serde" ];
         };
         resolvedDefaultFeatures = [ "default" "use_std" ];
+      };
+      "encode_unicode" = rec {
+        crateName = "encode_unicode";
+        version = "0.3.6";
+        edition = "2015";
+        sha256 = "07w3vzrhxh9lpjgsg2y5bwzfar2aq35mdznvcp3zjl0ssj7d4mx3";
+        authors = [
+          "Torbjørn Birch Moltu <t.b.moltu@lyse.net>"
+        ];
+        features = {
+          "ascii" = [ "dep:ascii" ];
+          "clippy" = [ "dep:clippy" ];
+          "default" = [ "std" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
       };
       "enum-primitive-derive" = rec {
         crateName = "enum-primitive-derive";
@@ -2135,7 +2191,7 @@ rec {
           "rustc-dep-of-std" = [ "nightly" "core" "compiler_builtins" "alloc" "rustc-internal-api" ];
           "serde" = [ "dep:serde" ];
         };
-        resolvedDefaultFeatures = [ "ahash" "allocator-api2" "default" "inline-more" "rayon" ];
+        resolvedDefaultFeatures = [ "ahash" "allocator-api2" "default" "inline-more" "raw" "rayon" ];
       };
       "hashbrown 0.15.0" = rec {
         crateName = "hashbrown";
@@ -2307,6 +2363,72 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "std" ];
       };
+      "indicatif" = rec {
+        crateName = "indicatif";
+        version = "0.17.8";
+        edition = "2021";
+        sha256 = "18xyqxw9i5x4sbpzckhfz3nm984iq9r7nbi2lk76nz888n7mlfkn";
+        dependencies = [
+          {
+            name = "console";
+            packageId = "console";
+            usesDefaultFeatures = false;
+            features = [ "ansi-parsing" ];
+          }
+          {
+            name = "instant";
+            packageId = "instant";
+            target = { target, features }: ("wasm32" == target."arch" or null);
+          }
+          {
+            name = "number_prefix";
+            packageId = "number_prefix";
+          }
+          {
+            name = "portable-atomic";
+            packageId = "portable-atomic";
+          }
+          {
+            name = "unicode-width";
+            packageId = "unicode-width";
+            optional = true;
+          }
+        ];
+        features = {
+          "default" = [ "unicode-width" "console/unicode-width" ];
+          "futures" = [ "dep:futures-core" ];
+          "improved_unicode" = [ "unicode-segmentation" "unicode-width" "console/unicode-width" ];
+          "in_memory" = [ "vt100" ];
+          "rayon" = [ "dep:rayon" ];
+          "tokio" = [ "dep:tokio" ];
+          "unicode-segmentation" = [ "dep:unicode-segmentation" ];
+          "unicode-width" = [ "dep:unicode-width" ];
+          "vt100" = [ "dep:vt100" ];
+        };
+        resolvedDefaultFeatures = [ "default" "unicode-width" ];
+      };
+      "instant" = rec {
+        crateName = "instant";
+        version = "0.1.13";
+        edition = "2018";
+        sha256 = "08h27kzvb5jw74mh0ajv0nv9ggwvgqm8ynjsn2sa9jsks4cjh970";
+        authors = [
+          "sebcrozet <developer@crozet.re>"
+        ];
+        dependencies = [
+          {
+            name = "cfg-if";
+            packageId = "cfg-if";
+          }
+        ];
+        features = {
+          "js-sys" = [ "dep:js-sys" ];
+          "stdweb" = [ "dep:stdweb" ];
+          "wasm-bindgen" = [ "js-sys" "wasm-bindgen_rs" "web-sys" ];
+          "wasm-bindgen_rs" = [ "dep:wasm-bindgen_rs" ];
+          "web-sys" = [ "dep:web-sys" ];
+        };
+      };
       "itoa" = rec {
         crateName = "itoa";
         version = "1.0.11";
@@ -2318,6 +2440,20 @@ rec {
         features = {
           "no-panic" = [ "dep:no-panic" ];
         };
+      };
+      "itoap" = rec {
+        crateName = "itoap";
+        version = "1.0.1";
+        edition = "2018";
+        sha256 = "1f48gsd18kbvskwbnwszhqjpk1l4rdmahh7kaz86b432cj9g8a4h";
+        authors = [
+          "Ryohei Machida <orcinus4627@gmail.com>"
+        ];
+        features = {
+          "default" = [ "simd" "std" ];
+          "std" = [ "alloc" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "default" "simd" "std" ];
       };
       "jobserver" = rec {
         crateName = "jobserver";
@@ -2352,6 +2488,19 @@ rec {
           }
         ];
 
+      };
+      "lazy_static" = rec {
+        crateName = "lazy_static";
+        version = "1.5.0";
+        edition = "2015";
+        sha256 = "1zk6dqqni0193xg6iijh7i3i44sryglwgvx20spdvwk3r6sbrlmv";
+        authors = [
+          "Marvin Löbel <loebel.marvin@gmail.com>"
+        ];
+        features = {
+          "spin" = [ "dep:spin" ];
+          "spin_no_std" = [ "spin" ];
+        };
       };
       "libc" = rec {
         crateName = "libc";
@@ -2951,6 +3100,19 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "libm" "std" ];
       };
+      "number_prefix" = rec {
+        crateName = "number_prefix";
+        version = "0.4.0";
+        edition = "2015";
+        sha256 = "1wvh13wvlajqxkb1filsfzbrnq0vrmrw298v2j3sy82z1rm282w3";
+        authors = [
+          "Benjamin Sago <ogham@bsago.me>"
+        ];
+        features = {
+          "default" = [ "std" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
+      };
       "object" = rec {
         crateName = "object";
         version = "0.36.5";
@@ -3411,7 +3573,7 @@ rec {
           "unique_counts" = [ "polars-ops/unique_counts" "polars-lazy?/unique_counts" ];
           "zip_with" = [ "polars-core/zip_with" ];
         };
-        resolvedDefaultFeatures = [ "csv" "default" "docs" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-slim" "fmt" "parquet" "polars-io" "polars-ops" "polars-time" "temporal" "zip_with" ];
+        resolvedDefaultFeatures = [ "csv" "default" "docs" "dtype-array" "dtype-categorical" "dtype-date" "dtype-datetime" "dtype-decimal" "dtype-duration" "dtype-full" "dtype-i16" "dtype-i8" "dtype-slim" "dtype-struct" "dtype-time" "dtype-u16" "dtype-u8" "fmt" "lazy" "parquet" "polars-io" "polars-lazy" "polars-ops" "polars-time" "streaming" "temporal" "zip_with" ];
       };
       "polars-arrow" = rec {
         crateName = "polars-arrow";
@@ -3434,6 +3596,11 @@ rec {
             packageId = "arrow-format";
             optional = true;
             features = [ "ipc" ];
+          }
+          {
+            name = "atoi";
+            packageId = "atoi";
+            optional = true;
           }
           {
             name = "atoi_simd";
@@ -3590,7 +3757,7 @@ rec {
           "strength_reduce" = [ "dep:strength_reduce" ];
           "zstd" = [ "dep:zstd" ];
         };
-        resolvedDefaultFeatures = [ "arrow-format" "atoi_simd" "compute" "compute_aggregate" "compute_arithmetics" "compute_arithmetics_decimal" "compute_bitwise" "compute_boolean" "compute_boolean_kleene" "compute_cast" "compute_comparison" "compute_concatenate" "compute_filter" "compute_hash" "compute_if_then_else" "compute_take" "compute_temporal" "fast-float" "futures" "io_ipc" "io_ipc_compression" "io_ipc_write_async" "itoa" "lz4" "multiversion" "ryu" "strength_reduce" "strings" "temporal" "zstd" ];
+        resolvedDefaultFeatures = [ "arrow-format" "atoi" "atoi_simd" "compute" "compute_aggregate" "compute_arithmetics" "compute_arithmetics_decimal" "compute_bitwise" "compute_boolean" "compute_boolean_kleene" "compute_cast" "compute_comparison" "compute_concatenate" "compute_filter" "compute_hash" "compute_if_then_else" "compute_take" "compute_temporal" "dtype-array" "dtype-decimal" "fast-float" "futures" "io_ipc" "io_ipc_compression" "io_ipc_write_async" "itoa" "lz4" "multiversion" "ryu" "strength_reduce" "strings" "temporal" "zstd" ];
       };
       "polars-compute" = rec {
         crateName = "polars-compute";
@@ -3631,6 +3798,7 @@ rec {
           }
         ];
         features = { };
+        resolvedDefaultFeatures = [ "dtype-array" ];
       };
       "polars-core" = rec {
         crateName = "polars-core";
@@ -3681,6 +3849,12 @@ rec {
             name = "indexmap";
             packageId = "indexmap";
             features = [ "std" ];
+          }
+          {
+            name = "itoap";
+            packageId = "itoap";
+            optional = true;
+            features = [ "simd" ];
           }
           {
             name = "num-traits";
@@ -3791,7 +3965,7 @@ rec {
           "temporal" = [ "regex" "chrono" "polars-error/regex" ];
           "timezones" = [ "chrono-tz" "arrow/chrono-tz" "arrow/timezones" ];
         };
-        resolvedDefaultFeatures = [ "algorithm_group_by" "chrono" "chunked_ids" "comfy-table" "docs" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-time" "fmt" "lazy" "rand" "rand_distr" "random" "regex" "reinterpret" "rows" "strings" "temporal" "zip_with" ];
+        resolvedDefaultFeatures = [ "algorithm_group_by" "chrono" "chunked_ids" "comfy-table" "docs" "dtype-array" "dtype-categorical" "dtype-date" "dtype-datetime" "dtype-decimal" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-struct" "dtype-time" "dtype-u16" "dtype-u8" "fmt" "lazy" "rand" "rand_distr" "random" "regex" "reinterpret" "rows" "strings" "temporal" "zip_with" ];
       };
       "polars-error" = rec {
         crateName = "polars-error";
@@ -4025,7 +4199,7 @@ rec {
           "url" = [ "dep:url" ];
           "zstd" = [ "dep:zstd" ];
         };
-        resolvedDefaultFeatures = [ "async" "async-trait" "atoi_simd" "chrono" "csv" "dtype-date" "dtype-datetime" "dtype-time" "fast-float" "futures" "ipc" "itoa" "lazy" "parquet" "polars-parquet" "polars-time" "ryu" "simdutf8" "temporal" "tokio" "tokio-util" ];
+        resolvedDefaultFeatures = [ "async" "async-trait" "atoi_simd" "chrono" "csv" "dtype-categorical" "dtype-date" "dtype-datetime" "dtype-decimal" "dtype-struct" "dtype-time" "fast-float" "futures" "ipc" "itoa" "lazy" "parquet" "polars-parquet" "polars-time" "ryu" "simdutf8" "temporal" "tokio" "tokio-util" ];
       };
       "polars-lazy" = rec {
         crateName = "polars-lazy";
@@ -4220,7 +4394,7 @@ rec {
           "true_div" = [ "polars-plan/true_div" ];
           "unique_counts" = [ "polars-plan/unique_counts" ];
         };
-        resolvedDefaultFeatures = [ "abs" "cross_join" "csv" "cum_agg" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-time" "is_in" "log" "meta" "parquet" "polars-time" "regex" "round_series" "strings" "temporal" "trigonometry" ];
+        resolvedDefaultFeatures = [ "abs" "chunked_ids" "cross_join" "csv" "cum_agg" "dtype-array" "dtype-categorical" "dtype-date" "dtype-datetime" "dtype-decimal" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-struct" "dtype-time" "dtype-u16" "dtype-u8" "is_in" "log" "meta" "parquet" "polars-pipe" "polars-time" "regex" "round_series" "streaming" "strings" "temporal" "trigonometry" ];
       };
       "polars-ops" = rec {
         crateName = "polars-ops";
@@ -4372,7 +4546,7 @@ rec {
           "timezones" = [ "chrono-tz" "chrono" ];
           "unicode-reverse" = [ "dep:unicode-reverse" ];
         };
-        resolvedDefaultFeatures = [ "abs" "cross_join" "cum_agg" "dtype-date" "dtype-datetime" "dtype-duration" "is_in" "log" "round_series" "search_sorted" "strings" ];
+        resolvedDefaultFeatures = [ "abs" "chunked_ids" "cross_join" "cum_agg" "dtype-array" "dtype-categorical" "dtype-date" "dtype-datetime" "dtype-decimal" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-struct" "dtype-time" "dtype-u16" "dtype-u8" "is_in" "log" "round_series" "search_sorted" "strings" ];
       };
       "polars-parquet" = rec {
         crateName = "polars-parquet";
@@ -4607,7 +4781,7 @@ rec {
           "test" = [ "polars-core/chunked_ids" ];
           "tokio" = [ "dep:tokio" ];
         };
-        resolvedDefaultFeatures = [ "cross_join" "csv" "dtype-i16" "dtype-i8" "parquet" ];
+        resolvedDefaultFeatures = [ "cross_join" "csv" "dtype-array" "dtype-categorical" "dtype-decimal" "dtype-i16" "dtype-i8" "dtype-u16" "dtype-u8" "parquet" ];
       };
       "polars-plan" = rec {
         crateName = "polars-plan";
@@ -4796,7 +4970,7 @@ rec {
           "top_k" = [ "polars-ops/top_k" ];
           "unique_counts" = [ "polars-ops/unique_counts" ];
         };
-        resolvedDefaultFeatures = [ "abs" "cross_join" "csv" "cum_agg" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-time" "is_in" "log" "meta" "parquet" "polars-parquet" "polars-time" "regex" "round_series" "strings" "temporal" "trigonometry" ];
+        resolvedDefaultFeatures = [ "abs" "chunked_ids" "cross_join" "csv" "cum_agg" "dtype-array" "dtype-categorical" "dtype-date" "dtype-datetime" "dtype-decimal" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-struct" "dtype-time" "dtype-u16" "dtype-u8" "is_in" "log" "meta" "parquet" "polars-parquet" "polars-time" "regex" "round_series" "streaming" "strings" "temporal" "trigonometry" ];
       };
       "polars-row" = rec {
         crateName = "polars-row";
@@ -5039,6 +5213,19 @@ rec {
           "sysinfo" = [ "dep:sysinfo" ];
         };
         resolvedDefaultFeatures = [ "sysinfo" ];
+      };
+      "portable-atomic" = rec {
+        crateName = "portable-atomic";
+        version = "1.9.0";
+        edition = "2018";
+        sha256 = "1cmd87qj90panwsi350djb8lsxdryqkkxmimjcz7a1nsysini76c";
+        libName = "portable_atomic";
+        features = {
+          "critical-section" = [ "dep:critical-section" ];
+          "default" = [ "fallback" ];
+          "serde" = [ "dep:serde" ];
+        };
+        resolvedDefaultFeatures = [ "default" "fallback" ];
       };
       "ppv-lite86" = rec {
         crateName = "ppv-lite86";
@@ -6759,6 +6946,11 @@ rec {
         edition = "2021";
         crateBin = [
           {
+            name = "index";
+            path = "src/bin/index.rs";
+            requiredFeatures = [ ];
+          }
+          {
             name = "swizzle";
             path = "src/bin/swizzle.rs";
             requiredFeatures = [ ];
@@ -6779,6 +6971,11 @@ rec {
           {
             name = "hashbrown";
             packageId = "hashbrown 0.14.5";
+            features = [ "raw" ];
+          }
+          {
+            name = "indicatif";
+            packageId = "indicatif";
           }
           {
             name = "nix-compat";
@@ -6791,7 +6988,7 @@ rec {
           {
             name = "polars";
             packageId = "polars";
-            features = [ "parquet" ];
+            features = [ "parquet" "lazy" "streaming" "dtype-struct" "dtype-full" ];
           }
           {
             name = "rayon";
@@ -7797,7 +7994,7 @@ rec {
           "Win32_Web" = [ "Win32" ];
           "Win32_Web_InternetExplorer" = [ "Win32_Web" ];
         };
-        resolvedDefaultFeatures = [ "Wdk" "Wdk_Foundation" "Wdk_Storage" "Wdk_Storage_FileSystem" "Wdk_System" "Wdk_System_IO" "Win32" "Win32_Foundation" "Win32_Networking" "Win32_Networking_WinSock" "Win32_Security" "Win32_Storage" "Win32_Storage_FileSystem" "Win32_System" "Win32_System_Com" "Win32_System_Console" "Win32_System_IO" "Win32_System_Pipes" "Win32_System_SystemServices" "Win32_System_Threading" "Win32_System_WindowsProgramming" "Win32_UI" "Win32_UI_Shell" "default" ];
+        resolvedDefaultFeatures = [ "Wdk" "Wdk_Foundation" "Wdk_Storage" "Wdk_Storage_FileSystem" "Wdk_System" "Wdk_System_IO" "Win32" "Win32_Foundation" "Win32_Networking" "Win32_Networking_WinSock" "Win32_Security" "Win32_Storage" "Win32_Storage_FileSystem" "Win32_System" "Win32_System_Com" "Win32_System_Console" "Win32_System_IO" "Win32_System_Pipes" "Win32_System_SystemServices" "Win32_System_Threading" "Win32_System_WindowsProgramming" "Win32_UI" "Win32_UI_Input" "Win32_UI_Input_KeyboardAndMouse" "Win32_UI_Shell" "default" ];
       };
       "windows-targets" = rec {
         crateName = "windows-targets";
