@@ -2135,7 +2135,7 @@ rec {
           "rustc-dep-of-std" = [ "nightly" "core" "compiler_builtins" "alloc" "rustc-internal-api" ];
           "serde" = [ "dep:serde" ];
         };
-        resolvedDefaultFeatures = [ "ahash" "allocator-api2" "default" "inline-more" "rayon" ];
+        resolvedDefaultFeatures = [ "ahash" "allocator-api2" "default" "inline-more" "raw" "rayon" ];
       };
       "hashbrown 0.15.0" = rec {
         crateName = "hashbrown";
@@ -3395,7 +3395,7 @@ rec {
           "unique_counts" = [ "polars-ops/unique_counts" "polars-lazy?/unique_counts" ];
           "zip_with" = [ "polars-core/zip_with" ];
         };
-        resolvedDefaultFeatures = [ "csv" "default" "docs" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-slim" "fmt" "parquet" "polars-io" "polars-ops" "polars-time" "temporal" "zip_with" ];
+        resolvedDefaultFeatures = [ "csv" "default" "docs" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-slim" "fmt" "lazy" "parquet" "polars-io" "polars-lazy" "polars-ops" "polars-time" "streaming" "temporal" "zip_with" ];
       };
       "polars-arrow" = rec {
         crateName = "polars-arrow";
@@ -4204,7 +4204,7 @@ rec {
           "true_div" = [ "polars-plan/true_div" ];
           "unique_counts" = [ "polars-plan/unique_counts" ];
         };
-        resolvedDefaultFeatures = [ "abs" "cross_join" "csv" "cum_agg" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-time" "is_in" "log" "meta" "parquet" "polars-time" "regex" "round_series" "strings" "temporal" "trigonometry" ];
+        resolvedDefaultFeatures = [ "abs" "chunked_ids" "cross_join" "csv" "cum_agg" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-time" "is_in" "log" "meta" "parquet" "polars-pipe" "polars-time" "regex" "round_series" "streaming" "strings" "temporal" "trigonometry" ];
       };
       "polars-ops" = rec {
         crateName = "polars-ops";
@@ -4356,7 +4356,7 @@ rec {
           "timezones" = [ "chrono-tz" "chrono" ];
           "unicode-reverse" = [ "dep:unicode-reverse" ];
         };
-        resolvedDefaultFeatures = [ "abs" "cross_join" "cum_agg" "dtype-date" "dtype-datetime" "dtype-duration" "is_in" "log" "round_series" "search_sorted" "strings" ];
+        resolvedDefaultFeatures = [ "abs" "chunked_ids" "cross_join" "cum_agg" "dtype-date" "dtype-datetime" "dtype-duration" "is_in" "log" "round_series" "search_sorted" "strings" ];
       };
       "polars-parquet" = rec {
         crateName = "polars-parquet";
@@ -4780,7 +4780,7 @@ rec {
           "top_k" = [ "polars-ops/top_k" ];
           "unique_counts" = [ "polars-ops/unique_counts" ];
         };
-        resolvedDefaultFeatures = [ "abs" "cross_join" "csv" "cum_agg" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-time" "is_in" "log" "meta" "parquet" "polars-parquet" "polars-time" "regex" "round_series" "strings" "temporal" "trigonometry" ];
+        resolvedDefaultFeatures = [ "abs" "chunked_ids" "cross_join" "csv" "cum_agg" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-time" "is_in" "log" "meta" "parquet" "polars-parquet" "polars-time" "regex" "round_series" "streaming" "strings" "temporal" "trigonometry" ];
       };
       "polars-row" = rec {
         crateName = "polars-row";
@@ -6781,6 +6781,7 @@ rec {
           {
             name = "hashbrown";
             packageId = "hashbrown 0.14.5";
+            features = [ "raw" ];
           }
           {
             name = "nix-compat";
@@ -6789,7 +6790,7 @@ rec {
           {
             name = "polars";
             packageId = "polars";
-            features = [ "parquet" ];
+            features = [ "parquet" "lazy" "streaming" ];
           }
           {
             name = "rayon";
