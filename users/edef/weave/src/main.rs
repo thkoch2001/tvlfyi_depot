@@ -9,8 +9,9 @@ use anyhow::Result;
 use hashbrown::{hash_table, HashTable};
 use nix_compat::nixbase32;
 use rayon::prelude::*;
+use rustc_hash::FxHashSet;
 use std::{
-    collections::{BTreeMap, HashSet},
+    collections::BTreeMap,
     fs::{self, File},
     ops::Index,
     sync::atomic::{AtomicU32, Ordering},
@@ -53,7 +54,7 @@ fn main() -> Result<()> {
         eprintln!("{DONE}");
     }
 
-    let mut todo = HashSet::with_capacity(roots.len());
+    let mut todo = FxHashSet::with_capacity(roots.len());
     {
         let mut unknown_roots = 0usize;
         for (_, idx) in roots.table {
@@ -98,14 +99,14 @@ fn main() -> Result<()> {
             .par_iter()
             .flat_map(|&parent| {
                 if parent == INDEX_NULL {
-                    return vec![];
+                    return FxHashSet::new();
                 }
 
                 ri_array[parent as usize]
                     .iter()
                     .cloned()
                     .filter(|child| !seen.contains(child))
-                    .collect::<Vec<u32>>()
+                    .collect::<FxHashSet<u32>>()
             })
             .collect();
 
