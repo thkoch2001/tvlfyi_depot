@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "643f9e9e_0efbf425",
+        "filename": "tvix/castore/src/fixtures.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-17T18:17:57Z",
+      "side": 1,
+      "message": "can just be a const",
+      "revId": "91d28f95daeed8e1101e23578230b69d48a2151f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
