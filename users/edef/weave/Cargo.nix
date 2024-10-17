@@ -729,9 +729,9 @@ rec {
       };
       "bytemuck" = rec {
         crateName = "bytemuck";
-        version = "1.18.0";
+        version = "1.19.0";
         edition = "2018";
-        sha256 = "1bp2s9wn0gjsaygv21nsbfpf854vl897ll6sqpfn3naaannv1fwl";
+        sha256 = "0ka96agz9kqmsd71q7xpr08bnh2g8x4hivxqpnks0674h5dj2d43";
         authors = [
           "Lokathor <zefria@gmail.com>"
         ];
@@ -746,7 +746,7 @@ rec {
           "bytemuck_derive" = [ "dep:bytemuck_derive" ];
           "derive" = [ "bytemuck_derive" ];
           "extern_crate_std" = [ "extern_crate_alloc" ];
-          "latest_stable_rust" = [ "aarch64_simd" "align_offset" "const_zeroed" "derive" "min_const_generics" "must_cast" "wasm_simd" "zeroable_atomics" "zeroable_maybe_uninit" ];
+          "latest_stable_rust" = [ "aarch64_simd" "align_offset" "const_zeroed" "derive" "min_const_generics" "must_cast" "track_caller" "wasm_simd" "zeroable_atomics" "zeroable_maybe_uninit" ];
         };
         resolvedDefaultFeatures = [ "bytemuck_derive" "derive" "extern_crate_alloc" ];
       };
@@ -804,9 +804,9 @@ rec {
       };
       "cc" = rec {
         crateName = "cc";
-        version = "1.1.29";
+        version = "1.1.30";
         edition = "2018";
-        sha256 = "1ldw40qx2lwk9021f64cdf6d286c5zbb2gk456qqp94l66n09s2q";
+        sha256 = "0icr3vn2r5scpgylbplffd5mh7jcdivqh9dfgsxymnc13fk06s5i";
         authors = [
           "Alex Crichton <alex@alexcrichton.com>"
         ];
@@ -2355,9 +2355,9 @@ rec {
       };
       "libc" = rec {
         crateName = "libc";
-        version = "0.2.159";
+        version = "0.2.160";
         edition = "2015";
-        sha256 = "1i9xpia0hn1y8dws7all8rqng6h3lc8ymlgslnljcvm376jrf7an";
+        sha256 = "0kyf734dm5iplyq5p5jc4x5dqxjnc5jwawq9cngawx0qrl311cph";
         authors = [
           "The Rust Project Developers"
         ];
@@ -5063,9 +5063,9 @@ rec {
       };
       "proc-macro2" = rec {
         crateName = "proc-macro2";
-        version = "1.0.87";
+        version = "1.0.88";
         edition = "2021";
-        sha256 = "16mifsq1nqzk81qm82aszib44jsd23gpqic5z4kbmzpnvjhdmr5k";
+        sha256 = "1ygjzcawivbziakc6sfc816alabvnp6whlm3g6kxamqyvg2pyfkw";
         libName = "proc_macro2";
         authors = [
           "David Tolnay <dtolnay@gmail.com>"
@@ -5477,9 +5477,9 @@ rec {
       };
       "rustversion" = rec {
         crateName = "rustversion";
-        version = "1.0.17";
+        version = "1.0.18";
         edition = "2018";
-        sha256 = "1mm3fckyvb0l2209in1n2k05sws5d9mpkszbnwhq3pkq8apjhpcm";
+        sha256 = "0j2207vmgrcxwwwvknfn3lwv4i8djhjnxlvwdnz8bwijqqmrz08f";
         procMacro = true;
         build = "build/build.rs";
         authors = [
