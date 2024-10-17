@@ -3004,22 +3004,6 @@ rec {
         };
         resolvedDefaultFeatures = [ "alloc" "default" "race" "std" ];
       };
-      "owning_ref" = rec {
-        crateName = "owning_ref";
-        version = "0.4.1";
-        edition = "2015";
-        sha256 = "1kjj9m28wjv452jw49p1mp3d8ql058x78v4bz00avr7rvsnmpxbg";
-        authors = [
-          "Marvin Löbel <loebel.marvin@gmail.com>"
-        ];
-        dependencies = [
-          {
-            name = "stable_deref_trait";
-            packageId = "stable_deref_trait";
-          }
-        ];
-
-      };
       "parking_lot" = rec {
         crateName = "parking_lot";
         version = "0.12.3";
@@ -5499,6 +5483,24 @@ rec {
           "no-panic" = [ "dep:no-panic" ];
         };
       };
+      "safer_owning_ref" = rec {
+        crateName = "safer_owning_ref";
+        version = "0.5.0";
+        edition = "2015";
+        sha256 = "1vrhvra2cr3a6r1vvflawj35n8lq3k443ddm0wfgcrpr5pgbj8dg";
+        libName = "owning_ref";
+        authors = [
+          "Marvin Löbel <loebel.marvin@gmail.com>"
+          "Noam Ta Shma noam.tashma@gmail.com"
+        ];
+        dependencies = [
+          {
+            name = "stable_deref_trait";
+            packageId = "stable_deref_trait";
+          }
+        ];
+
+      };
       "scopeguard" = rec {
         crateName = "scopeguard";
         version = "1.2.0";
@@ -6785,10 +6787,6 @@ rec {
             packageId = "nix-compat";
           }
           {
-            name = "owning_ref";
-            packageId = "owning_ref";
-          }
-          {
             name = "polars";
             packageId = "polars";
             features = [ "parquet" ];
@@ -6796,6 +6794,10 @@ rec {
           {
             name = "rayon";
             packageId = "rayon";
+          }
+          {
+            name = "safer_owning_ref";
+            packageId = "safer_owning_ref";
           }
           {
             name = "tokio";
