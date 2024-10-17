@@ -1,7 +1,13 @@
 use anyhow::Result;
-use owning_ref::ArcRef;
+use owning_ref::{ArcRef, OwningRef};
 use rayon::prelude::*;
-use std::{fs::File, ops::Range, slice};
+use std::{
+    fs::File,
+    mem,
+    ops::{Deref, Range},
+    slice,
+    sync::Arc,
+};
 
 use polars::{
     datatypes::BinaryChunked,
@@ -22,6 +28,16 @@ pub fn hash64(h: &[u8; 20]) -> u64 {
     let mut buf = [0; 8];
     buf.copy_from_slice(&h[..8]);
     u64::from_ne_bytes(buf)
+}
+
+pub fn leak<O, T: ?Sized>(r: OwningRef<Arc<O>, T>) -> &T {
+    // SAFETY: Either `ptr` points into the `Arc`, which lives until `r` is dropped,
+    // or it points at something else entirely which lives at least as long.
+    unsafe {
+        let ptr: *const T = r.deref();
+        mem::forget(r);
+        &*ptr
+    }
 }
 
 /// Read a dense `store_path_hash` array from `narinfo.parquet`,

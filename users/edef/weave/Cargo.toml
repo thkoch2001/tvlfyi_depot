@@ -13,8 +13,7 @@ hashbrown = "0.14.3"
 nix-compat = { version = "0.1.0", path = "../../../tvix/nix-compat" }
 safer_owning_ref = "0.5.0"
 rayon = "1.8.1"
-tokio = { version = "1.36.0", features = ["full"] }
 
 [dependencies.polars]
 version = "0.36.2"
-features = ["parquet"]
+features = ["parquet", "lazy", "streaming"]
