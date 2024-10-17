@@ -22,6 +22,30 @@
       },
       "revId": "d2b47fa3f975016f4b4853162e6fc9444c927fef",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c52bc464_41979240",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-17T16:53:20Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "e3e6dd1e_85495b3c",
+      "range": {
+        "startLine": 108,
+        "startChar": 45,
+        "endLine": 108,
+        "endChar": 63
+      },
+      "revId": "d2b47fa3f975016f4b4853162e6fc9444c927fef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
