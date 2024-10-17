@@ -3,7 +3,7 @@ use polars::export::arrow::buffer::Buffer;
 use std::ops::Deref;
 
 /// An shared `[[u8; N]]` backed by a Polars [Buffer].
-pub type FixedBytes<const N: usize> = OwningRef<Bytes, [[u8; N]]>;
+pub type FixedBytes<const N: usize> = OwningRef<'static, Bytes, [[u8; N]]>;
 
 /// Wrapper struct to make [Buffer] implement [StableAddress].
 /// TODO(edef): upstream the `impl`
@@ -13,7 +13,7 @@ pub struct Bytes(pub Buffer<u8>);
 unsafe impl StableAddress for Bytes {}
 
 impl Bytes {
-    pub fn map<U: ?Sized>(self, f: impl FnOnce(&[u8]) -> &U) -> OwningRef<Self, U> {
+    pub fn map<U: ?Sized>(self, f: impl FnOnce(&[u8]) -> &U) -> OwningRef<'static, Self, U> {
         OwningRef::new(self).map(f)
     }
 }
