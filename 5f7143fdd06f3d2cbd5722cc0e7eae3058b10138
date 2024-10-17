@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6f0f7777_a1a26a6b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-10-17T17:23:10Z",
+      "side": 1,
+      "message": "note to self: need to write up *why* this is a broken idea, and existing writing is wrong about this (ref logseq://graph/Memex?block-id\u003d6711474d-aeac-4c70-aee1-fe289017927d)",
+      "revId": "5f7143fdd06f3d2cbd5722cc0e7eae3058b10138",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
