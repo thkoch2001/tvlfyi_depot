@@ -7,11 +7,10 @@
 
 use anyhow::Result;
 use hashbrown::{hash_table, HashTable};
-use nix_compat::nixbase32;
 use rayon::prelude::*;
 use std::{
     collections::{BTreeMap, HashSet},
-    fs::{self, File},
+    fs::File,
     ops::Index,
     sync::atomic::{AtomicU32, Ordering},
 };
@@ -19,22 +18,24 @@ use std::{
 use polars::{
     datatypes::StaticArray,
     export::arrow::{array::UInt32Array, offset::OffsetsBuffer},
+    lazy::dsl::col,
     prelude::*,
 };
 
-use weave::{hash64, DONE, INDEX_NULL};
+use weave::{as_fixed_binary, hash64, DONE, INDEX_NULL};
 
 fn main() -> Result<()> {
     eprint!("… parse roots\r");
-    let roots: PathSet32 = {
-        let mut roots = Vec::new();
-        fs::read("nixpkgs.roots")?
-            .par_chunks_exact(32 + 1)
-            .map(|e| nixbase32::decode_fixed::<20>(&e[0..32]).unwrap())
-            .collect_into_vec(&mut roots);
-
-        roots.iter().collect()
-    };
+    let roots: PathSet32 = as_fixed_binary::<20>(
+        LazyFrame::scan_parquet("releases.parquet", ScanArgsParquet::default())?
+            .explode([col("store_path_hash")])
+            .select([col("store_path_hash")])
+            .collect()?
+            .column("store_path_hash")?
+            .binary()?,
+    )
+    .flatten()
+    .collect();
     eprintln!("{DONE}");
 
     {
@@ -182,6 +183,7 @@ impl<'a> FromIterator<&'a [u8; 20]> for PathSet32 {
             this.insert(item);
         }
 
+        this.table.shrink_to_fit(|(x, _)| hash64(x));
         this
     }
 }
