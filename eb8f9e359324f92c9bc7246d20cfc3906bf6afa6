@@ -16,6 +16,24 @@
       "message": "Let\u0027s give upstream some time to react, we can probably also switch to the other branch instead of duplicating the code here.",
       "revId": "eb8f9e359324f92c9bc7246d20cfc3906bf6afa6",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d91e7ba4_15c669e5",
+        "filename": "tvix/castore/src/composition.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 175,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-10-17T17:11:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c3c79bc5_3debab80",
+      "revId": "eb8f9e359324f92c9bc7246d20cfc3906bf6afa6",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
