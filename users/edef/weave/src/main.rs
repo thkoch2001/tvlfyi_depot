@@ -19,22 +19,24 @@ use std::{
 use polars::{
     datatypes::StaticArray,
     export::arrow::{array::UInt32Array, offset::OffsetsBuffer},
+    lazy::dsl::col,
     prelude::*,
 };
 
-use weave::{hash64, DONE, INDEX_NULL};
+use weave::{as_fixed_binary, hash64, into_fixed_binary_rechunk, DONE, INDEX_NULL};
 
 fn main() -> Result<()> {
     eprint!("… parse roots\r");
-    let roots: PathSet32 = {
-        let mut roots = Vec::new();
-        fs::read("nixpkgs.roots")?
-            .par_chunks_exact(32 + 1)
-            .map(|e| nixbase32::decode_fixed::<20>(&e[0..32]).unwrap())
-            .collect_into_vec(&mut roots);
-
-        roots.iter().collect()
-    };
+    let roots: PathSet32 = as_fixed_binary::<20>(
+        LazyFrame::scan_parquet("releases.parquet", ScanArgsParquet::default())?
+            .explode([col("store_path_hash")])
+            .select([col("store_path_hash").unique()])
+            .collect()?
+            .column("store_path_hash")?
+            .binary()?,
+    )
+    .flatten()
+    .collect();
     eprintln!("{DONE}");
 
     {
