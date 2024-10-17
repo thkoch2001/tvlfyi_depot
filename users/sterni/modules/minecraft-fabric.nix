@@ -273,7 +273,7 @@ let
       export MCRCON_HOST=localhost
       export MCRCON_PORT=${lib.escapeShellArg instanceCfg.serverProperties."rcon.port"}
       # Unfortunately, mcrcon can't read the password from a file
-      export MCRCON_PASS="$(cat "''${CREDENTIALS_DIRECTORY}/rcon-password")"
+      export MCRCON_PASS="$(cat "''${RCON_PASSWORD}")"
 
       # Send stop request
       "${bins.mcrcon}" 'say Server is stopping' save-all stop
@@ -314,7 +314,7 @@ let
 
       # Create config and set password from credentials (echo hopefully doesn't leak)
       copyFromStore "${serverPropertiesFile name instanceCfg}" server.properties
-      echo "rcon.password=$(cat "$CREDENTIALS_DIRECTORY/rcon-password")" >> server.properties
+      echo "rcon.password=$(cat "$RCON_PASSWORD")" >> server.properties
 
       # Build patched jar
       "${bins.java}" -jar "${fabricInstallerJar}" \
@@ -509,8 +509,13 @@ in
             after = [ "network.target" ];
             inherit (instanceCfg) enable;
 
+            environment = {
+              # Workaround for https://github.com/systemd/systemd/issues/34805
+              "RCON_PASSWORD" = "%d/rcon-password";
+            };
+
             serviceConfig = {
-              Type = "simple";
+              Type = "exec";
               User = instanceCfg.user;
               Group = instanceCfg.group;
               ExecStart = startScript name instanceCfg;
