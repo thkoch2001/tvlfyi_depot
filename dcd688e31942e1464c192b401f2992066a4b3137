@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b811471c_86a2f5b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-10-17T22:25:07Z",
+      "side": 1,
+      "message": "This doesn\u0027t fix the advisory: we need to switch to safer_owning_ref.",
+      "revId": "dcd688e31942e1464c192b401f2992066a4b3137",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
