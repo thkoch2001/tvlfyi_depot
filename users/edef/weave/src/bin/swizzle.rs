@@ -32,21 +32,29 @@
 
 use anyhow::Result;
 use hashbrown::HashTable;
-use polars::prelude::*;
+use polars::{
+    lazy::dsl::{col, SpecialEq},
+    prelude::*,
+};
 use rayon::prelude::*;
-use std::fs::File;
+use std::{fs::File, mem};
 use tokio::runtime::Runtime;
 
 use weave::{as_fixed_binary, hash64, load_ph_array, DONE, INDEX_NULL};
 
 fn main() -> Result<()> {
-    let ph_array = load_ph_array()?;
+    let ph_array: &'static [[u8; 20]] = unsafe {
+        let owned = load_ph_array()?;
+        let ptr = &*owned as *const _;
+        mem::forget(owned);
+        &*ptr
+    };
 
     // TODO(edef): re-parallelise this
     // We originally parallelised on chunks, but ph_array is only a single chunk, due to how Parquet loading works.
     // TODO(edef): outline the 64-bit hash prefix? it's an indirection, but it saves ~2G of memory
     eprint!("… build index\r");
-    let ph_map: HashTable<(u64, u32)> = {
+    let ph_map: &'static HashTable<(u64, u32)> = {
         let mut ph_map = HashTable::with_capacity(ph_array.len());
 
         for (offset, item) in ph_array.iter().enumerate() {
@@ -55,59 +63,58 @@ fn main() -> Result<()> {
             ph_map.insert_unique(hash, (hash, offset), |&(hash, _)| hash);
         }
 
-        ph_map
+        &*Box::leak(Box::new(ph_map))
     };
     eprintln!("{DONE}");
 
     eprint!("… swizzle references\r");
-    let mut pq = ParquetReader::new(File::open("narinfo.parquet")?)
-        .with_columns(Some(vec!["references".into()]))
-        .batched(1 << 16)?;
+    LazyFrame::scan_parquet("narinfo.parquet", ScanArgsParquet::default())?
+        .with_column(
+            col("references")
+                .map(
+                    |series: Series| -> PolarsResult<Option<Series>> {
+                        Ok(Some(
+                            series
+                                .list()?
+                                .apply_to_inner(&|series: Series| -> PolarsResult<Series> {
+                                    let series = series.binary()?;
+                                    let mut out: Vec<u32> = Vec::with_capacity(series.len());
 
-    let mut reference_idxs =
-        Series::new_empty("reference_idxs", &DataType::List(DataType::UInt32.into()));
+                                    out.extend(
+                                        as_fixed_binary::<20>(series).flat_map(|xs| xs).map(
+                                            |key| {
+                                                let hash = hash64(&key);
+                                                ph_map
+                                                    .find(
+                                                        hash,
+                                                        |&(candidate_hash, candidate_index)| {
+                                                            candidate_hash == hash
+                                                                && &ph_array
+                                                                    [candidate_index as usize]
+                                                                    == key
+                                                        },
+                                                    )
+                                                    .map(|&(_, index)| index)
+                                                    .unwrap_or(INDEX_NULL)
+                                            },
+                                        ),
+                                    );
 
-    let mut bounce = vec![];
-    let runtime = Runtime::new()?;
-    while let Some(batches) = runtime.block_on(pq.next_batches(48))? {
-        batches
-            .into_par_iter()
-            .map(|df| -> ListChunked {
-                df.column("references")
-                    .unwrap()
-                    .list()
-                    .unwrap()
-                    .apply_to_inner(&|series: Series| -> PolarsResult<Series> {
-                        let series = series.binary()?;
-                        let mut out: Vec<u32> = Vec::with_capacity(series.len());
-
-                        out.extend(as_fixed_binary::<20>(series).flat_map(|xs| xs).map(|key| {
-                            let hash = hash64(&key);
-                            ph_map
-                                .find(hash, |&(candidate_hash, candidate_index)| {
-                                    candidate_hash == hash
-                                        && &ph_array[candidate_index as usize] == key
-                                })
-                                .map(|&(_, index)| index)
-                                .unwrap_or(INDEX_NULL)
-                        }));
-
-                        Ok(Series::from_vec("reference_idxs", out))
-                    })
-                    .unwrap()
-            })
-            .collect_into_vec(&mut bounce);
-
-        for batch in bounce.drain(..) {
-            reference_idxs.append(&batch.into_series())?;
-        }
-    }
-    eprintln!("{DONE}");
-
-    eprint!("… writing output\r");
-    ParquetWriter::new(File::create("narinfo-references.parquet")?).finish(&mut df! {
-        "reference_idxs" => reference_idxs,
-    }?)?;
+                                    Ok(Series::from_vec("reference_idxs", out))
+                                })?
+                                .into_series(),
+                        ))
+                    },
+                    SpecialEq::from_type(DataType::List(DataType::UInt32.into())),
+                )
+                .alias("reference_idxs"),
+        )
+        .select([col("reference_idxs")])
+        .with_streaming(true)
+        .sink_parquet(
+            "narinfo-references.parquet".into(),
+            ParquetWriteOptions::default(),
+        )?;
     eprintln!("{DONE}");
 
     Ok(())
