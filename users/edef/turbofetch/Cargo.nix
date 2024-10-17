@@ -504,9 +504,9 @@ rec {
       };
       "cc" = rec {
         crateName = "cc";
-        version = "1.1.29";
+        version = "1.1.30";
         edition = "2018";
-        sha256 = "1ldw40qx2lwk9021f64cdf6d286c5zbb2gk456qqp94l66n09s2q";
+        sha256 = "0icr3vn2r5scpgylbplffd5mh7jcdivqh9dfgsxymnc13fk06s5i";
         authors = [
           "Alex Crichton <alex@alexcrichton.com>"
         ];
@@ -1456,9 +1456,9 @@ rec {
       };
       "hyper" = rec {
         crateName = "hyper";
-        version = "0.14.30";
+        version = "0.14.31";
         edition = "2018";
-        sha256 = "1jayxag79yln1nzyzx652kcy1bikgwssn6c4zrrp5v7s3pbdslm1";
+        sha256 = "11bf6mqcpzi0x2758p7q9zk3m877avzpbiw8nx8v2dd3iwp3024c";
         authors = [
           "Sean McArthur <sean@seanmonstar.com>"
         ];
@@ -1904,9 +1904,9 @@ rec {
       };
       "libc" = rec {
         crateName = "libc";
-        version = "0.2.159";
+        version = "0.2.161";
         edition = "2015";
-        sha256 = "1i9xpia0hn1y8dws7all8rqng6h3lc8ymlgslnljcvm376jrf7an";
+        sha256 = "1lc5s3zd0491x9zxrv2kvclai1my1spz950pkkyry4vwh318k54f";
         authors = [
           "The Rust Project Developers"
         ];
@@ -2450,9 +2450,9 @@ rec {
       };
       "proc-macro2" = rec {
         crateName = "proc-macro2";
-        version = "1.0.87";
+        version = "1.0.88";
         edition = "2021";
-        sha256 = "16mifsq1nqzk81qm82aszib44jsd23gpqic5z4kbmzpnvjhdmr5k";
+        sha256 = "1ygjzcawivbziakc6sfc816alabvnp6whlm3g6kxamqyvg2pyfkw";
         libName = "proc_macro2";
         authors = [
           "David Tolnay <dtolnay@gmail.com>"
@@ -3355,9 +3355,9 @@ rec {
       };
       "serde_json" = rec {
         crateName = "serde_json";
-        version = "1.0.128";
+        version = "1.0.129";
         edition = "2021";
-        sha256 = "1n43nia50ybpcfmh3gcw4lcc627qsg9nyakzwgkk9pm10xklbxbg";
+        sha256 = "1clyy0g51mdr7hwxs7qhin2lna8jvlvqhf0rmrkycphjiavzkg3d";
         authors = [
           "Erick Tryzelaar <erick.tryzelaar@gmail.com>"
           "David Tolnay <dtolnay@gmail.com>"
