@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3e6dd1e_85495b3c",
+        "filename": "tvix/store/src/import.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 108,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-10-17T16:52:41Z",
+      "side": 1,
+      "message": "```suggestion\n        store_path::build_ca_path(name, \u0026ca, iter::empty::\u003c\u0026str\u003e(), false).map_err(|_| {\n```",
+      "range": {
+        "startLine": 108,
+        "startChar": 45,
+        "endLine": 108,
+        "endChar": 63
+      },
+      "revId": "d2b47fa3f975016f4b4853162e6fc9444c927fef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
