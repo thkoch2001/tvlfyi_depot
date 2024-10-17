@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bac5f792_69f8ba10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-17T15:40:43Z",
+      "side": 1,
+      "message": "I\u0027d propose putting some of this into a CLI interface, but that can be a followup for sure. nice work!",
+      "revId": "ea085a42d6482f2da8ee5e65be76b1f8bfeb88dd",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
