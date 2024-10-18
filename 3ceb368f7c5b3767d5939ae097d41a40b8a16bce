@@ -22,6 +22,30 @@
       },
       "revId": "3ceb368f7c5b3767d5939ae097d41a40b8a16bce",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1c382b5a_3a511631",
+        "filename": "tvix/store/src/proto/grpc_pathinfoservice_wrapper.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-18T19:51:24Z",
+      "side": 1,
+      "message": "done in cl/12664",
+      "parentUuid": "3c5ef199_22df5195",
+      "range": {
+        "startLine": 82,
+        "startChar": 13,
+        "endLine": 82,
+        "endChar": 37
+      },
+      "revId": "3ceb368f7c5b3767d5939ae097d41a40b8a16bce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
