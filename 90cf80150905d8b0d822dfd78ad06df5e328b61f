@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "65be19eb_63d471ea",
+        "filename": "tvix/build/src/proto/mod.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-18T14:53:21Z",
+      "side": 1,
+      "message": "TODO: add testcases for constraints special cases. The default cases in the protos should result in the constraints not being added. For example min_memory 0 can be omitted.\n\nAlso interesting testcases are \"merging semantics\". MimMemory(1) and MinMemory(100) will result in `mim_memory 100`, multiple AvailableReadOnlyPaths need to be merged. Contradicting system constraints need to fail somewhere (maybe an assertion, as only buggy code can construct it)",
+      "revId": "90cf80150905d8b0d822dfd78ad06df5e328b61f",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
