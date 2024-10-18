@@ -1,6 +1,7 @@
 use crate::composition::{Registry, ServiceBuilder};
 use crate::{B3Digest, Directory, Error};
 
+use auto_impl::auto_impl;
 use futures::stream::BoxStream;
 use tonic::async_trait;
 mod combinators;
@@ -38,6 +39,7 @@ pub use self::bigtable::{BigtableDirectoryService, BigtableParameters};
 /// The base trait all Directory services need to implement.
 /// This is a simple get and put of [Directory], returning their
 /// digest.
+#[auto_impl(&, &mut, Arc, Box)]
 #[async_trait]
 pub trait DirectoryService: Send + Sync {
     /// Looks up a single Directory message by its digest.
@@ -78,31 +80,6 @@ pub trait DirectoryService: Send + Sync {
     /// Allows persisting a closure of [Directory], which is a graph of
     /// connected Directory messages.
     fn put_multiple_start(&self) -> Box<dyn DirectoryPutter>;
-}
-
-#[async_trait]
-impl<A> DirectoryService for A
-where
-    A: AsRef<dyn DirectoryService> + Send + Sync,
-{
-    async fn get(&self, digest: &B3Digest) -> Result<Option<Directory>, Error> {
-        self.as_ref().get(digest).await
-    }
-
-    async fn put(&self, directory: Directory) -> Result<B3Digest, Error> {
-        self.as_ref().put(directory).await
-    }
-
-    fn get_recursive(
-        &self,
-        root_directory_digest: &B3Digest,
-    ) -> BoxStream<'static, Result<Directory, Error>> {
-        self.as_ref().get_recursive(root_directory_digest)
-    }
-
-    fn put_multiple_start(&self) -> Box<dyn DirectoryPutter> {
-        self.as_ref().put_multiple_start()
-    }
 }
 
 /// Provides a handle to put a closure of connected [Directory] elements.
