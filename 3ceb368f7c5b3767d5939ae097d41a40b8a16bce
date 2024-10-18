@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3c5ef199_22df5195",
+        "filename": "tvix/store/src/proto/grpc_pathinfoservice_wrapper.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-10-18T19:29:35Z",
+      "side": 1,
+      "message": "I think we want some form of `try_into_node_anonymous` here (and the `into_*` methods are really `try_into_*` methods)",
+      "range": {
+        "startLine": 82,
+        "startChar": 13,
+        "endLine": 82,
+        "endChar": 37
+      },
+      "revId": "3ceb368f7c5b3767d5939ae097d41a40b8a16bce",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
