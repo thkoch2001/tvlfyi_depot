@@ -52,6 +52,24 @@
       "parentUuid": "35f552af_61098df8",
       "revId": "2bfe7970b0a5a9761af64febedb7495dd38c401e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "27d16333_0f2ff72e",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-18T14:46:03Z",
+      "side": 1,
+      "message": "Solved in sync: I misinterpreted this as a testcase. We changed the imports a bit to make it clear this is still using the proto data structs, and added a FUTUREWORK to clean this up in a future CL.",
+      "parentUuid": "a7a73ec8_431a8110",
+      "revId": "2bfe7970b0a5a9761af64febedb7495dd38c401e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
