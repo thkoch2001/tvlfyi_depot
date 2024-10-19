@@ -127,6 +127,11 @@
     password = "{SSHA}7a85VNhpFElFw+N5xcjgGmt4HnBsaGp4";
   }
   {
+    username = "marijan";
+    email = "marijan.petricevic94@gmail.com";
+    password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$KG+6Kx+qi5FA4JmBgIOBDA$bQm9u/9A5VbpVmNuMDqJa+iDCU0JCyboevQ3eEzlMdE";
+  }
+  {
     username = "mrflos";
     email = "mrflos@yeswiki.pro";
     password = "{ARGON2}$argon2id$v=19$m=19456,t=2,p=1$/D1y+6n3+0GigG9mCMqK8A$9PseWm3+QATxN/M3Wu4JM+CnIppLD/LbQaVEKLItv9o";
