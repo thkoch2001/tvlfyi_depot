@@ -16,6 +16,24 @@
       "message": "This needs updating, no?",
       "revId": "79968f76ef4e8043b1b933caf8ae32469199e540",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6eae2403_cbd3e6f7",
+        "filename": "users/edef/weave/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-10-19T16:31:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7bfd909_3e3325ec",
+      "revId": "79968f76ef4e8043b1b933caf8ae32469199e540",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
