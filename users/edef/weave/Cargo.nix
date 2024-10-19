@@ -953,6 +953,47 @@ rec {
         };
         resolvedDefaultFeatures = [ "crossterm" "tty" ];
       };
+      "console" = rec {
+        crateName = "console";
+        version = "0.15.8";
+        edition = "2018";
+        sha256 = "1sz4nl9nz8pkmapqni6py7jxzi7nzqjxzb3ya4kxvmkb0zy867qf";
+        authors = [
+          "Armin Ronacher <armin.ronacher@active-4.com>"
+        ];
+        dependencies = [
+          {
+            name = "encode_unicode";
+            packageId = "encode_unicode";
+            target = { target, features }: (target."windows" or false);
+          }
+          {
+            name = "lazy_static";
+            packageId = "lazy_static";
+          }
+          {
+            name = "libc";
+            packageId = "libc";
+          }
+          {
+            name = "unicode-width";
+            packageId = "unicode-width";
+            optional = true;
+          }
+          {
+            name = "windows-sys";
+            packageId = "windows-sys";
+            target = { target, features }: (target."windows" or false);
+            features = [ "Win32_Foundation" "Win32_System_Console" "Win32_Storage_FileSystem" "Win32_UI_Input_KeyboardAndMouse" ];
+          }
+        ];
+        features = {
+          "default" = [ "unicode-width" "ansi-parsing" ];
+          "unicode-width" = [ "dep:unicode-width" ];
+          "windows-console-colors" = [ "ansi-parsing" ];
+        };
+        resolvedDefaultFeatures = [ "ansi-parsing" "unicode-width" ];
+      };
       "const-oid" = rec {
         crateName = "const-oid";
         version = "0.9.6";
@@ -1530,6 +1571,21 @@ rec {
           "serde" = [ "dep:serde" ];
         };
         resolvedDefaultFeatures = [ "default" "use_std" ];
+      };
+      "encode_unicode" = rec {
+        crateName = "encode_unicode";
+        version = "0.3.6";
+        edition = "2015";
+        sha256 = "07w3vzrhxh9lpjgsg2y5bwzfar2aq35mdznvcp3zjl0ssj7d4mx3";
+        authors = [
+          "Torbjørn Birch Moltu <t.b.moltu@lyse.net>"
+        ];
+        features = {
+          "ascii" = [ "dep:ascii" ];
+          "clippy" = [ "dep:clippy" ];
+          "default" = [ "std" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
       };
       "enum-primitive-derive" = rec {
         crateName = "enum-primitive-derive";
@@ -2307,6 +2363,72 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "std" ];
       };
+      "indicatif" = rec {
+        crateName = "indicatif";
+        version = "0.17.8";
+        edition = "2021";
+        sha256 = "18xyqxw9i5x4sbpzckhfz3nm984iq9r7nbi2lk76nz888n7mlfkn";
+        dependencies = [
+          {
+            name = "console";
+            packageId = "console";
+            usesDefaultFeatures = false;
+            features = [ "ansi-parsing" ];
+          }
+          {
+            name = "instant";
+            packageId = "instant";
+            target = { target, features }: ("wasm32" == target."arch" or null);
+          }
+          {
+            name = "number_prefix";
+            packageId = "number_prefix";
+          }
+          {
+            name = "portable-atomic";
+            packageId = "portable-atomic";
+          }
+          {
+            name = "unicode-width";
+            packageId = "unicode-width";
+            optional = true;
+          }
+        ];
+        features = {
+          "default" = [ "unicode-width" "console/unicode-width" ];
+          "futures" = [ "dep:futures-core" ];
+          "improved_unicode" = [ "unicode-segmentation" "unicode-width" "console/unicode-width" ];
+          "in_memory" = [ "vt100" ];
+          "rayon" = [ "dep:rayon" ];
+          "tokio" = [ "dep:tokio" ];
+          "unicode-segmentation" = [ "dep:unicode-segmentation" ];
+          "unicode-width" = [ "dep:unicode-width" ];
+          "vt100" = [ "dep:vt100" ];
+        };
+        resolvedDefaultFeatures = [ "default" "unicode-width" ];
+      };
+      "instant" = rec {
+        crateName = "instant";
+        version = "0.1.13";
+        edition = "2018";
+        sha256 = "08h27kzvb5jw74mh0ajv0nv9ggwvgqm8ynjsn2sa9jsks4cjh970";
+        authors = [
+          "sebcrozet <developer@crozet.re>"
+        ];
+        dependencies = [
+          {
+            name = "cfg-if";
+            packageId = "cfg-if";
+          }
+        ];
+        features = {
+          "js-sys" = [ "dep:js-sys" ];
+          "stdweb" = [ "dep:stdweb" ];
+          "wasm-bindgen" = [ "js-sys" "wasm-bindgen_rs" "web-sys" ];
+          "wasm-bindgen_rs" = [ "dep:wasm-bindgen_rs" ];
+          "web-sys" = [ "dep:web-sys" ];
+        };
+      };
       "itoa" = rec {
         crateName = "itoa";
         version = "1.0.11";
@@ -2352,6 +2474,19 @@ rec {
           }
         ];
 
+      };
+      "lazy_static" = rec {
+        crateName = "lazy_static";
+        version = "1.5.0";
+        edition = "2015";
+        sha256 = "1zk6dqqni0193xg6iijh7i3i44sryglwgvx20spdvwk3r6sbrlmv";
+        authors = [
+          "Marvin Löbel <loebel.marvin@gmail.com>"
+        ];
+        features = {
+          "spin" = [ "dep:spin" ];
+          "spin_no_std" = [ "spin" ];
+        };
       };
       "libc" = rec {
         crateName = "libc";
@@ -2951,6 +3086,19 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "libm" "std" ];
       };
+      "number_prefix" = rec {
+        crateName = "number_prefix";
+        version = "0.4.0";
+        edition = "2015";
+        sha256 = "1wvh13wvlajqxkb1filsfzbrnq0vrmrw298v2j3sy82z1rm282w3";
+        authors = [
+          "Benjamin Sago <ogham@bsago.me>"
+        ];
+        features = {
+          "default" = [ "std" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
+      };
       "object" = rec {
         crateName = "object";
         version = "0.36.5";
@@ -3395,7 +3543,7 @@ rec {
           "unique_counts" = [ "polars-ops/unique_counts" "polars-lazy?/unique_counts" ];
           "zip_with" = [ "polars-core/zip_with" ];
         };
-        resolvedDefaultFeatures = [ "csv" "default" "docs" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-slim" "fmt" "lazy" "parquet" "polars-io" "polars-lazy" "polars-ops" "polars-time" "streaming" "temporal" "zip_with" ];
+        resolvedDefaultFeatures = [ "csv" "default" "docs" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-slim" "dtype-struct" "fmt" "lazy" "parquet" "polars-io" "polars-lazy" "polars-ops" "polars-time" "streaming" "temporal" "zip_with" ];
       };
       "polars-arrow" = rec {
         crateName = "polars-arrow";
@@ -3775,7 +3923,7 @@ rec {
           "temporal" = [ "regex" "chrono" "polars-error/regex" ];
           "timezones" = [ "chrono-tz" "arrow/chrono-tz" "arrow/timezones" ];
         };
-        resolvedDefaultFeatures = [ "algorithm_group_by" "chrono" "chunked_ids" "comfy-table" "docs" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-time" "fmt" "lazy" "rand" "rand_distr" "random" "regex" "reinterpret" "rows" "strings" "temporal" "zip_with" ];
+        resolvedDefaultFeatures = [ "algorithm_group_by" "chrono" "chunked_ids" "comfy-table" "docs" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-struct" "dtype-time" "fmt" "lazy" "rand" "rand_distr" "random" "regex" "reinterpret" "rows" "strings" "temporal" "zip_with" ];
       };
       "polars-error" = rec {
         crateName = "polars-error";
@@ -4009,7 +4157,7 @@ rec {
           "url" = [ "dep:url" ];
           "zstd" = [ "dep:zstd" ];
         };
-        resolvedDefaultFeatures = [ "async" "async-trait" "atoi_simd" "chrono" "csv" "dtype-date" "dtype-datetime" "dtype-time" "fast-float" "futures" "ipc" "itoa" "lazy" "parquet" "polars-parquet" "polars-time" "ryu" "simdutf8" "temporal" "tokio" "tokio-util" ];
+        resolvedDefaultFeatures = [ "async" "async-trait" "atoi_simd" "chrono" "csv" "dtype-date" "dtype-datetime" "dtype-struct" "dtype-time" "fast-float" "futures" "ipc" "itoa" "lazy" "parquet" "polars-parquet" "polars-time" "ryu" "simdutf8" "temporal" "tokio" "tokio-util" ];
       };
       "polars-lazy" = rec {
         crateName = "polars-lazy";
@@ -4204,7 +4352,7 @@ rec {
           "true_div" = [ "polars-plan/true_div" ];
           "unique_counts" = [ "polars-plan/unique_counts" ];
         };
-        resolvedDefaultFeatures = [ "abs" "chunked_ids" "cross_join" "csv" "cum_agg" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-time" "is_in" "log" "meta" "parquet" "polars-pipe" "polars-time" "regex" "round_series" "streaming" "strings" "temporal" "trigonometry" ];
+        resolvedDefaultFeatures = [ "abs" "chunked_ids" "cross_join" "csv" "cum_agg" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-struct" "dtype-time" "is_in" "log" "meta" "parquet" "polars-pipe" "polars-time" "regex" "round_series" "streaming" "strings" "temporal" "trigonometry" ];
       };
       "polars-ops" = rec {
         crateName = "polars-ops";
@@ -4356,7 +4504,7 @@ rec {
           "timezones" = [ "chrono-tz" "chrono" ];
           "unicode-reverse" = [ "dep:unicode-reverse" ];
         };
-        resolvedDefaultFeatures = [ "abs" "chunked_ids" "cross_join" "cum_agg" "dtype-date" "dtype-datetime" "dtype-duration" "is_in" "log" "round_series" "search_sorted" "strings" ];
+        resolvedDefaultFeatures = [ "abs" "chunked_ids" "cross_join" "cum_agg" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-struct" "is_in" "log" "round_series" "search_sorted" "strings" ];
       };
       "polars-parquet" = rec {
         crateName = "polars-parquet";
@@ -4780,7 +4928,7 @@ rec {
           "top_k" = [ "polars-ops/top_k" ];
           "unique_counts" = [ "polars-ops/unique_counts" ];
         };
-        resolvedDefaultFeatures = [ "abs" "chunked_ids" "cross_join" "csv" "cum_agg" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-time" "is_in" "log" "meta" "parquet" "polars-parquet" "polars-time" "regex" "round_series" "streaming" "strings" "temporal" "trigonometry" ];
+        resolvedDefaultFeatures = [ "abs" "chunked_ids" "cross_join" "csv" "cum_agg" "dtype-date" "dtype-datetime" "dtype-duration" "dtype-i16" "dtype-i8" "dtype-struct" "dtype-time" "is_in" "log" "meta" "parquet" "polars-parquet" "polars-time" "regex" "round_series" "streaming" "strings" "temporal" "trigonometry" ];
       };
       "polars-row" = rec {
         crateName = "polars-row";
@@ -5023,6 +5171,19 @@ rec {
           "sysinfo" = [ "dep:sysinfo" ];
         };
         resolvedDefaultFeatures = [ "sysinfo" ];
+      };
+      "portable-atomic" = rec {
+        crateName = "portable-atomic";
+        version = "1.9.0";
+        edition = "2018";
+        sha256 = "1cmd87qj90panwsi350djb8lsxdryqkkxmimjcz7a1nsysini76c";
+        libName = "portable_atomic";
+        features = {
+          "critical-section" = [ "dep:critical-section" ];
+          "default" = [ "fallback" ];
+          "serde" = [ "dep:serde" ];
+        };
+        resolvedDefaultFeatures = [ "default" "fallback" ];
       };
       "ppv-lite86" = rec {
         crateName = "ppv-lite86";
@@ -6747,6 +6908,11 @@ rec {
         edition = "2021";
         crateBin = [
           {
+            name = "index";
+            path = "src/bin/index.rs";
+            requiredFeatures = [ ];
+          }
+          {
             name = "swizzle";
             path = "src/bin/swizzle.rs";
             requiredFeatures = [ ];
@@ -6769,13 +6935,17 @@ rec {
             packageId = "hashbrown 0.14.5";
           }
           {
+            name = "indicatif";
+            packageId = "indicatif";
+          }
+          {
             name = "nix-compat";
             packageId = "nix-compat";
           }
           {
             name = "polars";
             packageId = "polars";
-            features = [ "parquet" "lazy" "streaming" ];
+            features = [ "parquet" "lazy" "streaming" "dtype-struct" ];
           }
           {
             name = "rayon";
@@ -6788,6 +6958,10 @@ rec {
           {
             name = "safer_owning_ref";
             packageId = "safer_owning_ref";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
           }
         ];
 
@@ -7784,7 +7958,7 @@ rec {
           "Win32_Web" = [ "Win32" ];
           "Win32_Web_InternetExplorer" = [ "Win32_Web" ];
         };
-        resolvedDefaultFeatures = [ "Wdk" "Wdk_Foundation" "Wdk_Storage" "Wdk_Storage_FileSystem" "Wdk_System" "Wdk_System_IO" "Win32" "Win32_Foundation" "Win32_Networking" "Win32_Networking_WinSock" "Win32_Security" "Win32_Storage" "Win32_Storage_FileSystem" "Win32_System" "Win32_System_Com" "Win32_System_IO" "Win32_System_Pipes" "Win32_System_SystemServices" "Win32_System_Threading" "Win32_System_WindowsProgramming" "Win32_UI" "Win32_UI_Shell" "default" ];
+        resolvedDefaultFeatures = [ "Wdk" "Wdk_Foundation" "Wdk_Storage" "Wdk_Storage_FileSystem" "Wdk_System" "Wdk_System_IO" "Win32" "Win32_Foundation" "Win32_Networking" "Win32_Networking_WinSock" "Win32_Security" "Win32_Storage" "Win32_Storage_FileSystem" "Win32_System" "Win32_System_Com" "Win32_System_Console" "Win32_System_IO" "Win32_System_Pipes" "Win32_System_SystemServices" "Win32_System_Threading" "Win32_System_WindowsProgramming" "Win32_UI" "Win32_UI_Input" "Win32_UI_Input_KeyboardAndMouse" "Win32_UI_Shell" "default" ];
       };
       "windows-targets" = rec {
         crateName = "windows-targets";

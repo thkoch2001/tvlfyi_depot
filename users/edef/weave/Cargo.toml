@@ -10,11 +10,13 @@ members = ["."]
 [dependencies]
 anyhow = { version = "1.0.79", features = ["backtrace"] }
 hashbrown = "0.14.3"
+indicatif = "0.17.8"
 nix-compat = { version = "0.1.0", path = "../../../tvix/nix-compat" }
-safer_owning_ref = "0.5.0"
 rayon = "1.8.1"
 rustc-hash = "2.0.0"
+safer_owning_ref = "0.5.0"
+tokio = "1.40.0"
 
 [dependencies.polars]
 version = "0.36.2"
-features = ["parquet", "lazy", "streaming"]
+features = ["parquet", "lazy", "streaming", "dtype-struct"]
