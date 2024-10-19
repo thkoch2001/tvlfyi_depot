@@ -45,9 +45,11 @@ fn main() -> Result<()> {
         eprint!("… resolve roots\r");
         ph_array.par_iter().enumerate().for_each(|(idx, h)| {
             if let Some(idx_slot) = roots.find(h) {
-                idx_slot
-                    .compare_exchange(INDEX_NULL, idx as u32, Ordering::SeqCst, Ordering::SeqCst)
-                    .expect("duplicate entry");
+                assert_eq!(
+                    idx_slot.swap(idx as u32, Ordering::Relaxed),
+                    INDEX_NULL,
+                    "duplicate entry"
+                );
             }
         });
         eprintln!("{DONE}");
