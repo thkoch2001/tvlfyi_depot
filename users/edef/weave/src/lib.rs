@@ -74,7 +74,7 @@ pub fn as_fixed_binary<const N: usize>(
 
 /// Convert a dense [BinaryChunked] into a single chunk as [FixedBytes],
 /// without taking a reference to the offsets array and validity bitmap.
-fn into_fixed_binary_rechunk<const N: usize>(chunked: &BinaryChunked) -> FixedBytes<N> {
+pub fn into_fixed_binary_rechunk<const N: usize>(chunked: &BinaryChunked) -> FixedBytes<N> {
     let chunked = chunked.rechunk();
     let mut iter = chunked.downcast_iter();
     let array = iter.next().unwrap();
