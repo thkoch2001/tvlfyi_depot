@@ -8,6 +8,7 @@ use std::{
     slice,
     sync::Arc,
 };
+use tracing_indicatif::span_ext::IndicatifSpanExt as _;
 
 use polars::{
     datatypes::BinaryChunked,
@@ -20,7 +21,6 @@ pub type FixedBytes<const N: usize> =
     ArcRef<'static, polars::export::arrow::buffer::Bytes<u8>, [[u8; N]]>;
 
 pub const INDEX_NULL: u32 = !0;
-pub const DONE: &str = "\u{2714}";
 
 /// A terrific hash function, turning 20 bytes of cryptographic hash
 /// into 8 bytes of cryptographic hash.
@@ -42,8 +42,13 @@ pub fn leak<O, T: ?Sized>(r: OwningRef<Arc<O>, T>) -> &T {
 
 /// Read a dense `store_path_hash` array from `narinfo.parquet`,
 /// returning it as an owned [FixedBytes].
+#[tracing::instrument(fields(indicatif.pb_show = tracing::field::Empty))]
 pub fn load_ph_array() -> Result<FixedBytes<20>> {
-    eprint!("… load store_path_hash\r");
+    let span = tracing::Span::current();
+
+    span.pb_set_message("load store_path_hash");
+    span.pb_start();
+
     // TODO(edef): this could use a further pushdown, since polars is more hindrance than help here
     // We know this has to fit in memory (we can't mmap it without further encoding constraints),
     // and we want a single `Vec<[u8; 20]>` of the data.
@@ -57,7 +62,6 @@ pub fn load_ph_array() -> Result<FixedBytes<20>> {
     );
 
     u32::try_from(ph_array.len()).expect("dataset exceeds 2^32");
-    eprintln!("{DONE}");
 
     Ok(ph_array)
 }
