@@ -1,4 +1,5 @@
 use anyhow::Result;
+use owning_ref::ArcRef;
 use rayon::prelude::*;
 use std::{fs::File, ops::Range, slice};
 
@@ -8,8 +9,9 @@ use polars::{
     prelude::{ParquetReader, SerReader},
 };
 
-pub use crate::bytes::*;
-mod bytes;
+/// An shared `[[u8; N]]` backed by a Polars [Buffer].
+pub type FixedBytes<const N: usize> =
+    ArcRef<'static, polars::export::arrow::buffer::Bytes<u8>, [[u8; N]]>;
 
 pub const INDEX_NULL: u32 = !0;
 pub const DONE: &str = "\u{2714}";
@@ -60,10 +62,15 @@ fn into_fixed_binary_rechunk<const N: usize>(chunked: &BinaryChunked) -> FixedBy
     let chunked = chunked.rechunk();
     let mut iter = chunked.downcast_iter();
     let array = iter.next().unwrap();
+    assert!(iter.next().is_none());
 
-    let range = assert_fixed_dense::<N>(array);
-    Bytes(array.values().clone().sliced(range.start, range.len()))
-        .map(|buf| exact_chunks(buf).unwrap())
+    let (buf, off, len) = {
+        let range = assert_fixed_dense::<N>(array);
+        array.values().clone().sliced(range.start, range.len())
+    }
+    .into_inner();
+
+    ArcRef::new(buf).map(|bytes| exact_chunks(&bytes[off..off + len]).unwrap())
 }
 
 /// Ensures that the supplied Arrow array consists of densely packed bytestrings of length `N`.
