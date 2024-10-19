@@ -47,7 +47,7 @@ pub fn load_ph_array() -> Result<FixedBytes<20>> {
 /// Iterator over `&[[u8; N]]` from a dense [BinaryChunked].
 pub fn as_fixed_binary<const N: usize>(
     chunked: &BinaryChunked,
-) -> impl Iterator<Item = &[[u8; N]]> + DoubleEndedIterator {
+) -> impl DoubleEndedIterator<Item = &[[u8; N]]> {
     chunked.downcast_iter().map(|array| {
         let range = assert_fixed_dense::<N>(array);
         exact_chunks(&array.values()[range]).unwrap()
