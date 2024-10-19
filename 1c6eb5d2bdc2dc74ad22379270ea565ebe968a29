@@ -16,6 +16,24 @@
       "message": "Todo",
       "revId": "1c6eb5d2bdc2dc74ad22379270ea565ebe968a29",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "756da5dd_8ae94b6d",
+        "filename": "users/edef/weave/src/main.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-10-19T20:24:43Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "965bf539_49869861",
+      "revId": "1c6eb5d2bdc2dc74ad22379270ea565ebe968a29",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
