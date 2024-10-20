@@ -5,7 +5,7 @@ use std::{
 };
 
 use super::scratch_name;
-use crate::proto::BuildRequest;
+use crate::buildservice::BuildRequest;
 use anyhow::{bail, Context};
 use tracing::{debug, instrument};
 
@@ -65,7 +65,7 @@ pub(crate) fn get_host_output_paths(
         {
             host_output_paths.push(scratch_root.join(scratch_name(mp)).join(relpath));
         } else {
-            bail!("unable to find path {}", output_path);
+            bail!("unable to find path {output_path:?}");
         }
     }
 
@@ -78,15 +78,13 @@ pub(crate) fn get_host_output_paths(
 /// mountpoints must be sorted, so we can iterate over the list from the back
 /// and match on the prefix.
 fn find_path_in_scratchs<'a, 'b>(
-    search_path: &'a str,
-    mountpoints: &'b [String],
-) -> Option<(&'b str, &'a str)> {
-    mountpoints.iter().rev().find_map(|mp| {
-        Some((
-            mp.as_str(),
-            search_path.strip_prefix(mp)?.strip_prefix('/')?,
-        ))
-    })
+    search_path: &'a Path,
+    mountpoints: &'b [PathBuf],
+) -> Option<(&'b Path, &'a Path)> {
+    mountpoints
+        .iter()
+        .rev()
+        .find_map(|mp| Some((mp.as_path(), search_path.strip_prefix(mp).ok()?)))
 }
 
 #[cfg(test)]
@@ -95,7 +93,7 @@ mod tests {
 
     use rstest::rstest;
 
-    use crate::{oci::scratch_name, proto::BuildRequest};
+    use crate::{buildservice::BuildRequest, oci::scratch_name};
 
     use super::{find_path_in_scratchs, get_host_output_paths};
 
@@ -108,7 +106,18 @@ mod tests {
         #[case] mountpoints: &[String],
         #[case] expected: Option<(&str, &str)>,
     ) {
-        assert_eq!(find_path_in_scratchs(search_path, mountpoints), expected);
+        let expected = expected.map(|e| (Path::new(e.0), Path::new(e.1)));
+        assert_eq!(
+            find_path_in_scratchs(
+                Path::new(search_path),
+                mountpoints
+                    .iter()
+                    .map(PathBuf::from)
+                    .collect::<Vec<_>>()
+                    .as_slice()
+            ),
+            expected
+        );
     }
 
     #[test]
@@ -125,7 +134,7 @@ mod tests {
         let mut expected_path = PathBuf::new();
         expected_path.push("bundle-root");
         expected_path.push("scratch");
-        expected_path.push(scratch_name("nix/store"));
+        expected_path.push(scratch_name(Path::new("nix/store")));
         expected_path.push("fhaj6gmwns62s6ypkcldbaj2ybvkhx3p-foo");
 
         assert_eq!(vec![expected_path], paths)
