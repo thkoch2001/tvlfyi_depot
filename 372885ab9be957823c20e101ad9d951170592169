@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "591c5fcd_ccddcdce",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-20T11:03:11Z",
+      "side": 1,
+      "message": "I\u0027d move this down to the struct initialization, and use an additional scope there to dort first before exiting from there. Same probably for the others.",
+      "revId": "372885ab9be957823c20e101ad9d951170592169",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7720fe06_987c45fa",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-20T11:03:11Z",
+      "side": 1,
+      "message": "Tvix bug: Derivation has no out output",
+      "revId": "372885ab9be957823c20e101ad9d951170592169",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6652e928_0c193a5f",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-20T11:03:11Z",
+      "side": 1,
+      "message": "we can keep these around, I\u0027m about to restructure this soon anyways.",
+      "revId": "372885ab9be957823c20e101ad9d951170592169",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "23d669ed_a19c81c7",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-20T11:03:11Z",
+      "side": 1,
+      "message": "same",
+      "revId": "372885ab9be957823c20e101ad9d951170592169",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
