@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4bc98c93_3162b84a",
+        "filename": "tvix/build/src/proto/grpc_buildservice_wrapper.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-20T10:58:29Z",
+      "side": 1,
+      "message": "please address this todo",
+      "revId": "249b0730c5a50f5c201a0860e670fa2beaa56a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "036ec591_13aeff4c",
+        "filename": "tvix/build/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-20T10:58:29Z",
+      "side": 1,
+      "message": "I\u0027d probably inline this here, and make it a TryFrom due to this being able to fail.",
+      "revId": "249b0730c5a50f5c201a0860e670fa2beaa56a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
