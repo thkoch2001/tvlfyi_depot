@@ -1,17 +1,14 @@
 //! This module contains glue code translating from
-//! [nix_compat::derivation::Derivation] to [tvix_build::proto::BuildRequest].
+//! [nix_compat::derivation::Derivation] to [tvix_build::buildservice::BuildRequest].
 
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, HashSet};
+use std::path::PathBuf;
 
 use bytes::Bytes;
 use nix_compat::{derivation::Derivation, nixbase32, store_path::StorePath};
 use sha2::{Digest, Sha256};
-use tvix_build::buildservice::BuildRequest;
-use tvix_build::proto::{
-    self,
-    build_request::{AdditionalFile, BuildConstraints, EnvVar},
-};
-use tvix_castore::Node;
+use tvix_build::buildservice::{AdditionalFile, BuildConstraints, BuildRequest, EnvVar};
+use tvix_castore::{Node, PathComponent};
 
 /// These are the environment variables that Nix sets in its sandbox for every
 /// build.
@@ -31,7 +28,7 @@ const NIX_ENVIRONMENT_VARS: [(&str, &str); 12] = [
 ];
 
 /// Get an iterator of store paths whose nixbase32 hashes will be the needles for refscanning
-/// Importantly, the returned order will match the one used by derivation_to_build_request
+/// Importantly, the returned order will match the one used by [derivation_to_build_request]
 /// so users may use this function to map back from the found needles to a store path
 pub(crate) fn get_refscan_needles(
     derivation: &Derivation,
@@ -44,7 +41,7 @@ pub(crate) fn get_refscan_needles(
         .chain(derivation.input_derivations.keys())
 }
 
-/// Takes a [Derivation] and turns it into a [proto::BuildRequest].
+/// Takes a [Derivation] and turns it into a [buildservice::BuildRequest].
 /// It assumes the Derivation has been validated.
 /// It needs two lookup functions:
 /// - one translating input sources to a castore node
@@ -53,8 +50,8 @@ pub(crate) fn get_refscan_needles(
 ///   castore nodes of the selected outpus (`fn_input_drvs_to_output_nodes`).
 pub(crate) fn derivation_to_build_request(
     derivation: &Derivation,
-    inputs: BTreeMap<bytes::Bytes, Node>,
-) -> std::io::Result<proto::BuildRequest> {
+    inputs: BTreeMap<PathComponent, Node>,
+) -> std::io::Result<BuildRequest> {
     debug_assert!(derivation.validate(true).is_ok(), "drv must validate");
 
     // produce command_args, which is builder and arguments in a Vec.
@@ -63,10 +60,10 @@ pub(crate) fn derivation_to_build_request(
     command_args.extend_from_slice(&derivation.arguments);
 
     // produce output_paths, which is the absolute path of each output (sorted)
-    let mut output_paths: Vec<String> = derivation
+    let mut output_paths: Vec<PathBuf> = derivation
         .outputs
         .values()
-        .map(|e| e.path_str()[1..].to_owned())
+        .map(|e| PathBuf::from(e.path_str()[1..].to_owned()))
         .collect();
 
     // Sort the outputs. We can use sort_unstable, as these are unique strings.
@@ -100,21 +97,22 @@ pub(crate) fn derivation_to_build_request(
     // TODO: handle __json (structured attrs, provide JSON file and source-able bash script)
 
     // Produce constraints.
-    let constraints = Some(BuildConstraints {
-        system: derivation.system.clone(),
-        min_memory: 0,
-        available_ro_paths: vec![],
-        // in case this is a fixed-output derivation, allow network access.
-        network_access: derivation.outputs.len() == 1
-            && derivation
-                .outputs
-                .get("out")
-                .expect("invalid derivation")
-                .is_fixed(),
-        provide_bin_sh: true,
-    });
+    let mut constraints = HashSet::from([
+        BuildConstraints::System(derivation.system.clone()),
+        BuildConstraints::ProvideBinSh,
+    ]);
 
-    let build_request = proto::BuildRequest {
+    if derivation.outputs.len() == 1
+        && derivation
+            .outputs
+            .get("out")
+            .expect("invalid derivation")
+            .is_fixed()
+    {
+        constraints.insert(BuildConstraints::NetworkAccess);
+    }
+
+    Ok(BuildRequest {
         // Importantly, this must match the order of get_refscan_needles, since users may use that
         // function to map back from the found needles to a store path
         refscan_needles: get_refscan_needles(derivation)
@@ -128,27 +126,19 @@ pub(crate) fn derivation_to_build_request(
             .into_iter()
             .map(|(key, value)| EnvVar { key, value })
             .collect(),
-        inputs: inputs
-            .into_iter()
-            .map(|(name, node)| tvix_castore::proto::Node::from_name_and_node(name, node))
-            .collect(),
+        inputs,
         inputs_dir: nix_compat::store_path::STORE_DIR[1..].into(),
         constraints,
         working_dir: "build".into(),
         scratch_paths: vec!["build".into(), "nix/store".into()],
         additional_files: additional_files
             .into_iter()
-            .map(|(path, contents)| AdditionalFile { path, contents })
+            .map(|(path, contents)| AdditionalFile {
+                path: PathBuf::from(path),
+                contents,
+            })
             .collect(),
-    };
-
-    // FUTUREWORK: switch this function to construct the stricter BuildRequest directly.
-    debug_assert!(
-        BuildRequest::try_from(build_request.clone()).is_ok(),
-        "Tvix bug: BuildRequest would not be valid"
-    );
-
-    Ok(build_request)
+    })
 }
 
 /// handle passAsFile, if set.
@@ -213,14 +203,12 @@ fn calculate_pass_as_file_env(k: &str) -> (String, String) {
 mod test {
     use bytes::Bytes;
     use nix_compat::derivation::Derivation;
-    use std::collections::BTreeMap;
+    use std::collections::{BTreeMap, HashSet};
     use std::sync::LazyLock;
-    use tvix_build::proto::{
-        build_request::{AdditionalFile, BuildConstraints, EnvVar},
-        BuildRequest,
-    };
     use tvix_castore::fixtures::DUMMY_DIGEST;
-    use tvix_castore::Node;
+    use tvix_castore::{Node, PathComponent};
+
+    use tvix_build::buildservice::{AdditionalFile, BuildConstraints, BuildRequest, EnvVar};
 
     use crate::tvix_build::NIX_ENVIRONMENT_VARS;
 
@@ -242,7 +230,10 @@ mod test {
 
         let build_request = derivation_to_build_request(
             &derivation,
-            BTreeMap::from([(INPUT_NODE_FOO_NAME.clone(), INPUT_NODE_FOO.clone())]),
+            BTreeMap::from([(
+                PathComponent::try_from(INPUT_NODE_FOO_NAME.clone()).unwrap(),
+                INPUT_NODE_FOO.clone(),
+            )]),
         )
         .expect("must succeed");
 
@@ -281,18 +272,15 @@ mod test {
                 command_args: vec![":".into()],
                 outputs: vec!["nix/store/fhaj6gmwns62s6ypkcldbaj2ybvkhx3p-foo".into()],
                 environment_vars: expected_environment_vars,
-                inputs: vec![tvix_castore::proto::Node::from_name_and_node(
-                    INPUT_NODE_FOO_NAME.clone(),
+                inputs: BTreeMap::from([(
+                    PathComponent::try_from(INPUT_NODE_FOO_NAME.clone()).unwrap(),
                     INPUT_NODE_FOO.clone()
-                )],
+                )]),
                 inputs_dir: "nix/store".into(),
-                constraints: Some(BuildConstraints {
-                    system: derivation.system.clone(),
-                    min_memory: 0,
-                    network_access: false,
-                    available_ro_paths: vec![],
-                    provide_bin_sh: true,
-                }),
+                constraints: HashSet::from([
+                    BuildConstraints::System(derivation.system.clone()),
+                    BuildConstraints::ProvideBinSh
+                ]),
                 additional_files: vec![],
                 working_dir: "build".into(),
                 scratch_paths: vec!["build".into(), "nix/store".into()],
@@ -357,15 +345,13 @@ mod test {
                 command_args: vec![":".to_string()],
                 outputs: vec!["nix/store/4q0pg5zpfmznxscq3avycvf9xdvx50n3-bar".into()],
                 environment_vars: expected_environment_vars,
-                inputs: vec![],
+                inputs: BTreeMap::new(),
                 inputs_dir: "nix/store".into(),
-                constraints: Some(BuildConstraints {
-                    system: derivation.system.clone(),
-                    min_memory: 0,
-                    network_access: true,
-                    available_ro_paths: vec![],
-                    provide_bin_sh: true,
-                }),
+                constraints: HashSet::from([
+                    BuildConstraints::System(derivation.system.clone()),
+                    BuildConstraints::NetworkAccess,
+                    BuildConstraints::ProvideBinSh
+                ]),
                 additional_files: vec![],
                 working_dir: "build".into(),
                 scratch_paths: vec!["build".into(), "nix/store".into()],
@@ -431,15 +417,12 @@ mod test {
                 command_args: vec![":".to_string()],
                 outputs: vec!["nix/store/pp17lwra2jkx8rha15qabg2q3wij72lj-foo".into()],
                 environment_vars: expected_environment_vars,
-                inputs: vec![],
+                inputs: BTreeMap::new(),
                 inputs_dir: "nix/store".into(),
-                constraints: Some(BuildConstraints {
-                    system: derivation.system.clone(),
-                    min_memory: 0,
-                    network_access: false,
-                    available_ro_paths: vec![],
-                    provide_bin_sh: true,
-                }),
+                constraints: HashSet::from([
+                    BuildConstraints::System(derivation.system.clone()),
+                    BuildConstraints::ProvideBinSh,
+                ]),
                 additional_files: vec![
                     // baz env
                     AdditionalFile {
