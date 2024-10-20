@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4655852f_7dce4bb7",
+        "filename": "tvix/build/src/oci/bundle.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-20T10:54:18Z",
+      "side": 1,
+      "message": "this probably wasn\u0027t meant to be here? CI is red currently.",
+      "revId": "04053bacca22203bf2d85616a5fdbf7cc4273489",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c317250_09225691",
+        "filename": "tvix/build/src/oci/bundle.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-20T10:54:18Z",
+      "side": 1,
+      "message": "we can probably even have an impl Iter\u003cItem\u003dP\u003e where P: AsRef\u003cPath\u003e if it doesn\u0027t get too messy with lifetimes (not blocking for this CL, feel free to resolve and push to later)",
+      "revId": "04053bacca22203bf2d85616a5fdbf7cc4273489",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
