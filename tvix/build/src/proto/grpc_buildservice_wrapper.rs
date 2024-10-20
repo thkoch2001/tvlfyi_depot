@@ -27,7 +27,9 @@ where
         &self,
         request: tonic::Request<BuildRequest>,
     ) -> Result<tonic::Response<Build>, tonic::Status> {
-        match self.inner.do_build(request.into_inner()).await {
+        let request = TryInto::<crate::buildservice::BuildRequest>::try_into(request.into_inner())
+            .expect("TODO map error");
+        match self.inner.do_build(request).await {
             Ok(resp) => Ok(tonic::Response::new(resp)),
             Err(e) => Err(tonic::Status::internal(e.to_string())),
         }
