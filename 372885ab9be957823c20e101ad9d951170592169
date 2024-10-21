@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa66c524_071e5719",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-21T21:28:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "591c5fcd_ccddcdce",
+      "revId": "372885ab9be957823c20e101ad9d951170592169",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7720fe06_987c45fa",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-10-20T11:03:11Z",
       "side": 1,
       "message": "Tvix bug: Derivation has no out output",
+      "revId": "372885ab9be957823c20e101ad9d951170592169",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bbfc1253_65534edb",
+        "filename": "tvix/glue/src/tvix_build.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-21T21:28:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7720fe06_987c45fa",
       "revId": "372885ab9be957823c20e101ad9d951170592169",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
