@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "62d46072_410104b3",
+        "filename": "tvix/build/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-21T22:28:14Z",
+      "side": 1,
+      "message": "Tvix Bug: unable to convert Path to String",
+      "parentUuid": "93ae86d3_bd910b7f",
+      "revId": "249b0730c5a50f5c201a0860e670fa2beaa56a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "036ec591_13aeff4c",
         "filename": "tvix/build/src/proto/mod.rs",
         "patchSetId": 1
@@ -66,6 +84,24 @@
       "side": 1,
       "message": "All of these `path_to_string\u0027 calls? I thought it would be convenient instead of having to repeatedly writing out a error message.",
       "parentUuid": "036ec591_13aeff4c",
+      "revId": "249b0730c5a50f5c201a0860e670fa2beaa56a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ad8933c_38b3b8dc",
+        "filename": "tvix/build/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-21T22:28:14Z",
+      "side": 1,
+      "message": "ah, I see, there\u0027s a bunch of. Ok.",
+      "parentUuid": "4e964deb_7ade06f2",
       "revId": "249b0730c5a50f5c201a0860e670fa2beaa56a01",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
