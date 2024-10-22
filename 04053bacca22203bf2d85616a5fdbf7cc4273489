@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a04a8c97_12411d2d",
+        "filename": "tvix/build/src/oci/bundle.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-22T21:12:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4655852f_7dce4bb7",
+      "revId": "04053bacca22203bf2d85616a5fdbf7cc4273489",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6c317250_09225691",
