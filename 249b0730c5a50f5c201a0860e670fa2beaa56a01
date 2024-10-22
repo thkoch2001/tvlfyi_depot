@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe186736_46043fd7",
+        "filename": "tvix/build/src/proto/grpc_buildservice_wrapper.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-22T14:18:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4bc98c93_3162b84a",
+      "revId": "249b0730c5a50f5c201a0860e670fa2beaa56a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "93ae86d3_bd910b7f",
@@ -49,6 +67,24 @@
       "side": 1,
       "message": "Tvix Bug: unable to convert Path to String",
       "parentUuid": "93ae86d3_bd910b7f",
+      "revId": "249b0730c5a50f5c201a0860e670fa2beaa56a01",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8008ec7_573f7b53",
+        "filename": "tvix/build/src/proto/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-22T14:18:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "62d46072_410104b3",
       "revId": "249b0730c5a50f5c201a0860e670fa2beaa56a01",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
