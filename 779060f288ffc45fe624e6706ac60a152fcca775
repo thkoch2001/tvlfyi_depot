@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea10db2f_53dad7c7",
+        "filename": "tvix/build/src/oci/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-22T21:22:50Z",
+      "side": 1,
+      "message": "@flokli@flokli.de do we want to panic here? If yes, with what message",
+      "range": {
+        "startLine": 15,
+        "startChar": 59,
+        "endLine": 15,
+        "endChar": 63
+      },
+      "revId": "779060f288ffc45fe624e6706ac60a152fcca775",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0876fa57_a060bf50",
+        "filename": "tvix/build/src/oci/spec.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-22T21:22:50Z",
+      "side": 1,
+      "message": "@flokli@flokli.de I wasn\u0027t sure here either about what the desired way to handle this would be. It\u0027s not a OciSpecError right?",
+      "revId": "779060f288ffc45fe624e6706ac60a152fcca775",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "676b8e4d_d02c0d94",
+        "filename": "tvix/build/src/oci/spec.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-22T21:22:50Z",
+      "side": 1,
+      "message": "remove todo",
+      "range": {
+        "startLine": 89,
+        "startChar": 33,
+        "endLine": 89,
+        "endChar": 50
+      },
+      "revId": "779060f288ffc45fe624e6706ac60a152fcca775",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c43c1cf_f57771f2",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-22T21:22:50Z",
+      "side": 1,
+      "message": "@flokli@flokli.de wasn\u0027t sure about desired behavior here too",
+      "range": {
+        "startLine": 232,
+        "startChar": 65,
+        "endLine": 232,
+        "endChar": 69
+      },
+      "revId": "779060f288ffc45fe624e6706ac60a152fcca775",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "580ebf63_c12714f9",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-22T21:22:50Z",
+      "side": 1,
+      "message": "@flokli@flokli.de wasn\u0027t sure about desired behavior here too",
+      "range": {
+        "startLine": 265,
+        "startChar": 65,
+        "endLine": 265,
+        "endChar": 69
+      },
+      "revId": "779060f288ffc45fe624e6706ac60a152fcca775",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
