@@ -148,4 +148,10 @@ depot.nix.readTree.drvTargets {
             hash = "sha256-ucTzO2qdN4QkowMVvC3+4pjEVjbwMsB0xFk+bvQxwtQ=";
           };
         }) else super.fuse;
+
+  # somebody renamed 'utillinux' upstream, but didn't rename all use-cases,
+  # leading to some packages being broken.
+  #
+  # temporarily restore the old name to make things work again.
+  utillinux = self.util-linux;
 }
