@@ -22,11 +22,6 @@
 
     settings = {
       server_url = "https://net.tvl.fyi";
-      dns_config.nameservers = [
-        "8.8.8.8"
-        "1.1.1.1"
-        "77.88.8.8"
-      ];
 
       # TLS is handled by nginx
       tls_cert_path = null;
