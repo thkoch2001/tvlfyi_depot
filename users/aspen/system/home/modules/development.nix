@@ -68,9 +68,7 @@ with lib;
 
     nodePackages.prettier
   ] ++ optionals (stdenv.isLinux) [
-    # TODO(aspen): replace with stable again once the current julia debacle
-    # is resolved upstream, see https://github.com/NixOS/nixpkgs/pull/121114
-    julia_16-bin
+    julia-stable-bin
     valgrind
 
     linuxPackages.perf

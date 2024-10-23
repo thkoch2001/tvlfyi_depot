@@ -6,7 +6,7 @@ pkgs.stdenv.mkDerivation {
   buildInputs = with pkgs; [
     nodejs
     # Exposes lscpu for parcel.js
-    utillinux
+    util-linux
   ];
   # parcel.js needs number of CPUs
   PARCEL_WORKERS = "1";
