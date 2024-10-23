@@ -109,7 +109,7 @@ lib.fix (self: {
       corefonts
       dejavu_fonts
       jetbrains-mono
-      noto-fonts-cjk
+      noto-fonts-cjk-sans
       noto-fonts-emoji
     ];
 
