@@ -43,6 +43,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "71dd0440_16733998",
+        "filename": "tvix/build/src/oci/spec.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-23T13:57:42Z",
+      "side": 1,
+      "message": "This determines the host mounts to add, so this part should only look at all `BuildConstraints::AvailableReadOnlyPath` and extract the inner paths.\n\nI\u0027d assume in the future, some outer code would need to ensure all the constraints are understood (and can be fulfilled) before arriving here, but that\u0027s left for later. Maybe add a TODO at the callsite, and only peek at these constraints in here?",
+      "parentUuid": "0876fa57_a060bf50",
+      "revId": "779060f288ffc45fe624e6706ac60a152fcca775",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "676b8e4d_d02c0d94",
         "filename": "tvix/build/src/oci/spec.rs",
         "patchSetId": 4
@@ -89,6 +107,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d33e8238_2499924a",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-23T13:57:42Z",
+      "side": 1,
+      "message": "I\u0027d probably make `inputs` a `BTreeMap\u003c\u0026StorePath\u003c_\u003e, Node\u003e`, and propagate use this type in the argument to `derivation_to_build_request`.\n\nThen you can do the conversion from StorePath to PathComponent once in there (via expect). Replace the \"TODO\" with a \"Tvix bug: unable to convert store path basename to PathComponent\".",
+      "parentUuid": "1c43c1cf_f57771f2",
+      "range": {
+        "startLine": 232,
+        "startChar": 65,
+        "endLine": 232,
+        "endChar": 69
+      },
+      "revId": "779060f288ffc45fe624e6706ac60a152fcca775",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "580ebf63_c12714f9",
         "filename": "tvix/glue/src/tvix_store_io.rs",
         "patchSetId": 4
@@ -100,6 +142,30 @@
       "writtenOn": "2024-10-22T21:22:50Z",
       "side": 1,
       "message": "@flokli@flokli.de wasn\u0027t sure about desired behavior here too",
+      "range": {
+        "startLine": 265,
+        "startChar": 65,
+        "endLine": 265,
+        "endChar": 69
+      },
+      "revId": "779060f288ffc45fe624e6706ac60a152fcca775",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "11a44db9_83628e2b",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-23T13:57:42Z",
+      "side": 1,
+      "message": "Same as above, I\u0027d propose keeping the `StorePath` around and only doing this later in `derivation_to_build_request`.",
+      "parentUuid": "580ebf63_c12714f9",
       "range": {
         "startLine": 265,
         "startChar": 65,

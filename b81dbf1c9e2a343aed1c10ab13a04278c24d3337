@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4317098c_c1f84d7a",
+        "filename": "tvix/build/src/buildservice/oci.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-23T13:57:42Z",
+      "side": 1,
+      "message": "We can drop this entirely I think.",
+      "revId": "b81dbf1c9e2a343aed1c10ab13a04278c24d3337",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "82d39a4c_0f33c491",
+        "filename": "tvix/build/src/buildservice/oci.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-23T13:57:42Z",
+      "side": 1,
+      "message": "This name doesn\u0027t say much.",
+      "revId": "b81dbf1c9e2a343aed1c10ab13a04278c24d3337",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
