@@ -26,6 +26,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "90dd90a8_22707f96",
+        "filename": "tvix/build/src/oci/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-24T17:19:21Z",
+      "side": 1,
+      "message": "can\u0027t you just feed the underlying bytes to the function?",
+      "parentUuid": "ea10db2f_53dad7c7",
+      "range": {
+        "startLine": 15,
+        "startChar": 59,
+        "endLine": 15,
+        "endChar": 63
+      },
+      "revId": "779060f288ffc45fe624e6706ac60a152fcca775",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0876fa57_a060bf50",
         "filename": "tvix/build/src/oci/spec.rs",
         "patchSetId": 4
