@@ -48,6 +48,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "beffaf36_d3bcfeb0",
+        "filename": "tvix/build/src/oci/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-24T17:27:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90dd90a8_22707f96",
+      "range": {
+        "startLine": 15,
+        "startChar": 59,
+        "endLine": 15,
+        "endChar": 63
+      },
+      "revId": "779060f288ffc45fe624e6706ac60a152fcca775",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0876fa57_a060bf50",
@@ -97,6 +121,24 @@
       "side": 1,
       "message": "Actually a filter_map seems appropriate here.",
       "parentUuid": "71dd0440_16733998",
+      "revId": "779060f288ffc45fe624e6706ac60a152fcca775",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b453445_b4fdaa69",
+        "filename": "tvix/build/src/oci/spec.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-24T17:27:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9af8693_e37f1fac",
       "revId": "779060f288ffc45fe624e6706ac60a152fcca775",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
