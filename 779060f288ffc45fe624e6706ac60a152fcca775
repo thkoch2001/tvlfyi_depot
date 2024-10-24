@@ -61,6 +61,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a9af8693_e37f1fac",
+        "filename": "tvix/build/src/oci/spec.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-24T16:41:13Z",
+      "side": 1,
+      "message": "Actually a filter_map seems appropriate here.",
+      "parentUuid": "71dd0440_16733998",
+      "revId": "779060f288ffc45fe624e6706ac60a152fcca775",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "676b8e4d_d02c0d94",
         "filename": "tvix/build/src/oci/spec.rs",
         "patchSetId": 4
@@ -72,6 +90,30 @@
       "writtenOn": "2024-10-22T21:22:50Z",
       "side": 1,
       "message": "remove todo",
+      "range": {
+        "startLine": 89,
+        "startChar": 33,
+        "endLine": 89,
+        "endChar": 50
+      },
+      "revId": "779060f288ffc45fe624e6706ac60a152fcca775",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "14954890_9d1624b6",
+        "filename": "tvix/build/src/oci/spec.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 89,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-24T16:41:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "676b8e4d_d02c0d94",
       "range": {
         "startLine": 89,
         "startChar": 33,
@@ -129,6 +171,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f60d7119_f72cc523",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 232,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-24T16:41:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d33e8238_2499924a",
+      "range": {
+        "startLine": 232,
+        "startChar": 65,
+        "endLine": 232,
+        "endChar": 69
+      },
+      "revId": "779060f288ffc45fe624e6706ac60a152fcca775",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "580ebf63_c12714f9",
@@ -166,6 +232,30 @@
       "side": 1,
       "message": "Same as above, I\u0027d propose keeping the `StorePath` around and only doing this later in `derivation_to_build_request`.",
       "parentUuid": "580ebf63_c12714f9",
+      "range": {
+        "startLine": 265,
+        "startChar": 65,
+        "endLine": 265,
+        "endChar": 69
+      },
+      "revId": "779060f288ffc45fe624e6706ac60a152fcca775",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "18a1c75a_d9f8fa6b",
+        "filename": "tvix/glue/src/tvix_store_io.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 265,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-24T16:41:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "11a44db9_83628e2b",
       "range": {
         "startLine": 265,
         "startChar": 65,

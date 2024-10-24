@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7db961bf_cc28a2c3",
+        "filename": "tvix/build/src/buildservice/oci.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-24T16:41:13Z",
+      "side": 1,
+      "message": "There are more debug outputs in this function. Should they be dropped too?",
+      "parentUuid": "4317098c_c1f84d7a",
+      "revId": "b81dbf1c9e2a343aed1c10ab13a04278c24d3337",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "82d39a4c_0f33c491",
         "filename": "tvix/build/src/buildservice/oci.rs",
         "patchSetId": 5
@@ -31,6 +49,24 @@
       "writtenOn": "2024-10-23T13:57:42Z",
       "side": 1,
       "message": "This name doesn\u0027t say much.",
+      "revId": "b81dbf1c9e2a343aed1c10ab13a04278c24d3337",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be54954d_052ecea7",
+        "filename": "tvix/build/src/buildservice/oci.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000140
+      },
+      "writtenOn": "2024-10-24T16:41:13Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "82d39a4c_0f33c491",
       "revId": "b81dbf1c9e2a343aed1c10ab13a04278c24d3337",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
