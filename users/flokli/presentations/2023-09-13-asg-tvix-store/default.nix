@@ -28,5 +28,9 @@ stdenv.mkDerivation {
     mkdir -p $out
     cp tvix-store-graph-blob-directory.svg $out/
     reveal-md --static $out presentation.md
+
+    CHROME_CONFIG_HOME=/build/.config reveal-md presentation.md --print $out/slides.pdf --puppeteer-chromium-executable="${pkgs.chromium}/bin/chromium"
+    # Above command doesn't fail on error, ensure file has been created
+    [[ -f "$out/slides.pdf" ]] || exit 1
   '';
 }
