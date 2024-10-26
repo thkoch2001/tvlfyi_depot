@@ -18,9 +18,6 @@ stdenv.mkDerivation {
     fontDirectories = with pkgs; [ jetbrains-mono fira fira-code fira-mono lato ];
   };
 
-  PUPPETEER_EXECUTABLE_PATH = "${pkgs.chromium}/bin/chromium";
-  PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "1";
-
   nativeBuildInputs = [ pkgs.reveal-md pkgs.graphviz ];
 
   buildPhase = ''
@@ -30,6 +27,9 @@ stdenv.mkDerivation {
 
     mkdir -p $out
     reveal-md --static $out presentation.md
-    reveal-md --print $out/slides.pdf presentation.md
+
+    CHROME_CONFIG_HOME=/build/.config reveal-md presentation.md --print $out/slides.pdf --puppeteer-chromium-executable="${pkgs.chromium}/bin/chromium"
+    # Above command doesn't fail on error, ensure file has been created
+    [[ -f "$out/slides.pdf" ]] || exit 1
   '';
 }
