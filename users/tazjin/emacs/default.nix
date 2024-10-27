@@ -53,13 +53,14 @@ pkgs.makeOverridable
       browse-kill-ring
       cargo
       clojure-mode
+      company
+      company-prescient
       consult
       deft
       direnv
       elixir-mode
       elm-mode
       erlang
-      depotExwm
       go-mode
       google-c-style
       gruber-darker-theme
@@ -93,6 +94,7 @@ pkgs.makeOverridable
       undo-tree
       uuidgen
       vertico
+      vertico-prescient
       vterm
       web-mode
       websocket
@@ -101,11 +103,6 @@ pkgs.makeOverridable
       yasnippet
       zetteldeft
       zoxide
-
-      # experimental (not otherwise embedded in config yet)
-      orderless
-      corfu
-      eat
 
       # Wonky stuff
       (currentTelega epkgs)
@@ -179,8 +176,6 @@ pkgs.makeOverridable
 
           # Expose telega/tdlib version check as a target that is built in
           # CI.
-          #
-          # TODO(tazjin): uncomment when telega works again
           inherit tdlibCheck;
           meta.ci.targets = [ "tdlibCheck" ];
         };
