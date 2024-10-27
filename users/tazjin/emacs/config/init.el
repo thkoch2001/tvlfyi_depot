@@ -29,6 +29,10 @@
 
 (use-package browse-kill-ring)
 
+(use-package company
+  :config
+  (global-company-mode))
+
 (use-package consult
   :bind
   ("C-c r g" . consult-ripgrep)
@@ -67,6 +71,14 @@
   :config
   (prescient-persist-mode)
   (setq completion-styles '(basic prescient)))
+
+(use-package vertico-prescient
+  :config
+  (vertico-prescient-mode))
+
+(use-package company-prescient
+  :config
+  (company-prescient-mode))
 
 (use-package rainbow-delimiters :hook (prog-mode . rainbow-delimiters-mode))
 (use-package rainbow-mode)
