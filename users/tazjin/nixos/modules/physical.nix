@@ -114,5 +114,14 @@ in
       mosh.enable = true;
       ssh.startAgent = true;
     };
+
+    # Automatically collect garbage from the Nix store.
+    services.depot.automatic-gc = {
+      enable = true;
+      interval = "1 hour";
+      diskThreshold = 16; # GiB
+      maxFreed = 50; # GiB
+      preserveGenerations = "14d";
+    };
   };
 }
