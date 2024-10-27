@@ -130,15 +130,6 @@ lib.fix (self: {
     '';
 
     xserver.videoDrivers = [ "amdgpu" ];
-
-    # Automatically collect garbage from the Nix store.
-    depot.automatic-gc = {
-      enable = true;
-      interval = "1 hour";
-      diskThreshold = 16; # GiB
-      maxFreed = 10; # GiB
-      preserveGenerations = "14d";
-    };
   };
 
   systemd.user.services.lieer-tazjin = {
