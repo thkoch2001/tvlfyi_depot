@@ -210,7 +210,34 @@ impl Scope {
         self.with_stack_size > 0
     }
 
+    /// Look up the stack index of a statically known local.
+    ///
+    /// Unlike `resolve_local`, this method will not mark the local as used and
+    ///   thus does not require a mutable reference to `self`.
+    pub fn lookup_local(&self, name: &str) -> LocalPosition {
+        if let Some(by_name) = self.by_name.get(name) {
+            let idx = by_name.index();
+            let local = self
+                .locals
+                .get(idx.0)
+                .expect("invalid compiler state: indexed local missing");
+
+            // This local is still being initialised, meaning that
+            // we know its final runtime stack position, but it is
+            // not yet on the stack.
+            match local.initialised {
+                false => LocalPosition::Recursive(idx),
+                true => LocalPosition::Known(idx),
+            }
+        } else {
+            LocalPosition::Unknown
+        }
+    }
+
     /// Resolve the stack index of a statically known local.
+    ///
+    /// Unlike `lookup_local`, this method will mark the local as used and
+    ///   thus requires a mutable reference to `self`.
     pub fn resolve_local(&mut self, name: &str) -> LocalPosition {
         if let Some(by_name) = self.by_name.get(name) {
             let idx = by_name.index();
@@ -224,14 +251,13 @@ impl Scope {
             // This local is still being initialised, meaning that
             // we know its final runtime stack position, but it is
             // not yet on the stack.
-            if !local.initialised {
-                return LocalPosition::Recursive(idx);
+            match local.initialised {
+                false => LocalPosition::Recursive(idx),
+                true => LocalPosition::Known(idx),
             }
-
-            return LocalPosition::Known(idx);
+        } else {
+            LocalPosition::Unknown
         }
-
-        LocalPosition::Unknown
     }
 
     /// Declare a local variable that occupies a stack slot and should
