@@ -699,9 +699,9 @@ impl Compiler<'_, '_> {
     }
 
     /// Is the given identifier defined *by the user* in any current scope?
-    pub(super) fn is_user_defined(&mut self, ident: &str) -> bool {
+    pub(super) fn is_user_defined(&self, ident: &str) -> bool {
         matches!(
-            self.scope_mut().resolve_local(ident),
+            self.scope().lookup_local(ident),
             LocalPosition::Known(_) | LocalPosition::Recursive(_)
         )
     }
