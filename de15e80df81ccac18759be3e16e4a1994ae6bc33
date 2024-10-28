@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4814c17c_d83920ae",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-28T21:17:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6cd13cb8_e5b354f5",
+      "revId": "de15e80df81ccac18759be3e16e4a1994ae6bc33",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fc7a8e84_342cac7e",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-10-28T21:08:40Z",
       "side": 1,
       "message": "Can you add the description from the PR to the commit message?",
+      "revId": "de15e80df81ccac18759be3e16e4a1994ae6bc33",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5c30db6_0ccdf31a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-28T21:17:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fc7a8e84_342cac7e",
       "revId": "de15e80df81ccac18759be3e16e4a1994ae6bc33",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
