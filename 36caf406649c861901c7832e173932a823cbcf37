@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ec02b53_a7926a8b",
+        "filename": "tvix/nix-daemon/src/bin/nix-daemon.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-10-29T20:41:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dfb5cd63_e9ae47a7",
+      "revId": "36caf406649c861901c7832e173932a823cbcf37",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "80c1702b_43616fe1",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca10aea6_c2b5beb8",
+        "filename": "tvix/nix-daemon/src/bin/nix-daemon.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-10-29T20:41:40Z",
+      "side": 1,
+      "message": "followed what tvix-store does, but I don\u0027t know what I am doing 😊 ptal",
+      "parentUuid": "80c1702b_43616fe1",
+      "revId": "36caf406649c861901c7832e173932a823cbcf37",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7d14d592_fa2f535c",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-10-29T18:41:16Z",
       "side": 1,
       "message": "this can be removed for now?",
+      "revId": "36caf406649c861901c7832e173932a823cbcf37",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c2c97de3_db8ac1ff",
+        "filename": "tvix/nix-daemon/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-10-29T20:41:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d14d592_fa2f535c",
       "revId": "36caf406649c861901c7832e173932a823cbcf37",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
