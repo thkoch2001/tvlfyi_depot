@@ -1,0 +1,18 @@
+[package]
+name = "nix-daemon"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+async-trait = "0.1.83"
+clap = { workspace = true, features = ["derive", "env"] }
+futures = { workspace = true }
+mimalloc = { workspace = true }
+nix-compat = { path = "../nix-compat" }
+tvix-castore = { path = "../castore" }
+tvix-store = { path = "../store" }
+tokio = { workspace = true, features = ["fs", "macros", "net", "rt", "rt-multi-thread", "signal"] }
+tokio-listener = { workspace = true }
+
+[lints]
+workspace = true
