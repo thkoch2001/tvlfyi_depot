@@ -7426,8 +7426,10 @@ rec {
             packageId = "trybuild";
           }
         ];
-        features = { };
-        resolvedDefaultFeatures = [ "compile-tests" ];
+        features = {
+          "default" = [ "compile-tests" ];
+        };
+        resolvedDefaultFeatures = [ "compile-tests" "default" ];
       };
       "nix-daemon" = rec {
         crateName = "nix-daemon";
@@ -7462,6 +7464,10 @@ rec {
           {
             name = "nix-compat";
             packageId = "nix-compat";
+          }
+          {
+            name = "nix-compat-derive";
+            packageId = "nix-compat-derive";
           }
           {
             name = "tokio";

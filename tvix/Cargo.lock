@@ -2352,6 +2352,7 @@ dependencies = [
  "futures",
  "mimalloc",
  "nix-compat",
+ "nix-compat-derive",
  "tokio",
  "tokio-listener",
  "tracing",
