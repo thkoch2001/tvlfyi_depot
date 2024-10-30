@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "539e5d34_52ef1925",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000162
+      },
+      "writtenOn": "2024-10-30T21:59:59Z",
+      "side": 1,
+      "message": "I also considered passing along the original nixhash Error into the InvalidHash, but this requires a dependency from eval to nixhash (with a change to Cargo.toml). Since other eval Errors also seemed to use strings, I opted for this as well.",
+      "revId": "549a958382eba7b6abd9e4da3de51897ba78451b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
