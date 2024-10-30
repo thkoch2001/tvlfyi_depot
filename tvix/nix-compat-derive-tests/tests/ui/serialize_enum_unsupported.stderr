@@ -1,0 +1,7 @@
+error: derive(NixSerialize) does not support enums (yet?).
+ --> tests/ui/serialize_enum_unsupported.rs:3:10
+  |
+3 | #[derive(NixSerialize)]
+  |          ^^^^^^^^^^^^
+  |
+  = note: this error originates in the derive macro `NixSerialize` (in Nightly builds, run with -Z macro-backtrace for more info)
