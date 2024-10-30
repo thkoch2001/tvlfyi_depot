@@ -33,6 +33,24 @@
       "message": "```suggestion\n                builder \u003d builder.enable_otlp(\"tvix.daemon\");\n```\n\nthis is the service name",
       "revId": "07bfb9ad5bedaa34dc80e8f8f304050ee1caf6a8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d864180e_3cde93d5",
+        "filename": "tvix/nix-daemon/src/bin/nix-daemon.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-10-30T15:00:26Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "c8d65ebc_c33e39cf",
+      "revId": "07bfb9ad5bedaa34dc80e8f8f304050ee1caf6a8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
