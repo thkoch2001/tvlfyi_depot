@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06ca1a00_6f28b8b1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-10-30T21:16:19Z",
+      "side": 1,
+      "message": "I have actually already made serialization support as well as definitions for all types used by the protocol. Before I could make it into a CL I just got really bad tennis elbow and had to stop using a computer and phone. That was 2 months ago.\n\nMine has enum support (it errors if you don\u0027t use enum that matches the protocol version) as well as serializing using into, try_into and display traits.",
+      "revId": "6c70aed4ff865a0984fbe5f226590404ffa47ee3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
