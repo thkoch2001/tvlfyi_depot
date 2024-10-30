@@ -1,8 +1,12 @@
 use std::str::FromStr;
 
+use hex_literal::hex;
 use nix_compat::nix_daemon::de::mock::{Builder, Error};
 use nix_compat::nix_daemon::de::NixRead;
-use nix_compat_derive::NixDeserialize;
+use nix_compat::nix_daemon::en::writer::NixWriter;
+use nix_compat::nix_daemon::en::NixWrite;
+use nix_compat::ProtocolVersion;
+use nix_compat_derive::{NixDeserialize, NixSerialize};
 
 #[derive(Debug, PartialEq, Eq, NixDeserialize)]
 pub struct UnitTest;
@@ -19,7 +23,7 @@ pub struct StructTest {
 #[derive(Debug, PartialEq, Eq, NixDeserialize)]
 pub struct TupleTest(u64, String);
 
-#[derive(Debug, PartialEq, Eq, NixDeserialize)]
+#[derive(Debug, PartialEq, Eq, NixDeserialize, NixSerialize)]
 pub struct StructVersionTest {
     test: u64,
     #[nix(version = "20..")]
@@ -98,6 +102,40 @@ async fn read_struct_without_version() {
         },
         v
     );
+}
+
+#[tokio::test]
+async fn write_struct_without_version() {
+    let mock = tokio_test::io::Builder::new()
+        .write(&hex!("5900 0000 0000 0000"))
+        .build();
+    let mut writer = NixWriter::new(mock, ProtocolVersion::from_parts(1, 19));
+
+    writer
+        .write(StructVersionTest {
+            test: 89,
+            hello: "hello".into(),
+        })
+        .await
+        .unwrap();
+}
+
+#[tokio::test]
+async fn write_struct_with_version() {
+    let mock = tokio_test::io::Builder::new()
+        .write(&hex!(
+            "5900 0000 0000 0000 0500 0000 0000 0000 6865 6C6C 6F00 0000"
+        ))
+        .build();
+    let mut writer = NixWriter::new(mock, ProtocolVersion::from_parts(1, 20));
+
+    writer
+        .write(StructVersionTest {
+            test: 89,
+            hello: "hello".into(),
+        })
+        .await
+        .unwrap();
 }
 
 #[tokio::test]
