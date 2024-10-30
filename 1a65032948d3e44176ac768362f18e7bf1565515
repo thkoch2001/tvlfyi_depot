@@ -16,6 +16,24 @@
       "message": "Isn\u0027t [-/stdio](https://docs.rs/tokio-listener/latest/tokio_listener/enum.ListenerAddress.html#variant.Inetd) useful for ssh usecases, or [sd-listen](https://docs.rs/tokio-listener/latest/tokio_listener/enum.ListenerAddress.html#variant.FromFdNamed) for socket-activated units? Or why would these not work?",
       "revId": "1a65032948d3e44176ac768362f18e7bf1565515",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "534d74c0_1ab63f3b",
+        "filename": "tvix/nix-daemon/src/bin/nix-daemon.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-10-30T14:36:21Z",
+      "side": 1,
+      "message": "fair enough, I don\u0027t know all the modes that the clients can connect to it in different setups. removed this comment not to confuse anyone.",
+      "parentUuid": "e756e251_d819d05d",
+      "revId": "1a65032948d3e44176ac768362f18e7bf1565515",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
