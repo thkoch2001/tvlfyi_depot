@@ -16,6 +16,58 @@
       "message": "I also considered passing along the original nixhash Error into the InvalidHash, but this requires a dependency from eval to nixhash (with a change to Cargo.toml). Since other eval Errors also seemed to use strings, I opted for this as well.",
       "revId": "549a958382eba7b6abd9e4da3de51897ba78451b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9d88090_f0328019",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-30T22:07:36Z",
+      "side": 1,
+      "message": "it\u0027s correct as-is. we probably are gonna end up with some nicer boxing of original errors, but that\u0027s part of a larger effort.",
+      "parentUuid": "539e5d34_52ef1925",
+      "revId": "549a958382eba7b6abd9e4da3de51897ba78451b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9377542_0b9a4690",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-30T22:07:36Z",
+      "side": 1,
+      "message": "does it make sense to use this new error when constructing derivations too?",
+      "revId": "549a958382eba7b6abd9e4da3de51897ba78451b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "975cf435_dc1e3ab0",
+        "filename": "views/tvix/workspace.josh",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-10-30T22:07:36Z",
+      "side": 1,
+      "message": "did you checkout only the josh view and re-push that, and josh screwed this up? or is this an unintended edit?",
+      "revId": "549a958382eba7b6abd9e4da3de51897ba78451b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
