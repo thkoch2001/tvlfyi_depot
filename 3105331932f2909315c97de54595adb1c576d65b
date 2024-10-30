@@ -16,6 +16,24 @@
       "message": "👀",
       "revId": "3105331932f2909315c97de54595adb1c576d65b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d50b8cdd_198c1e7f",
+        "filename": "tvix/nix-compat/src/nix_daemon/en/writer.rs",
+        "patchSetId": 5
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-10-30T16:06:46Z",
+      "side": 1,
+      "message": "oops, removed",
+      "parentUuid": "9d63a11a_740d430a",
+      "revId": "3105331932f2909315c97de54595adb1c576d65b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
