@@ -16,6 +16,23 @@
       "message": "I have actually already made serialization support as well as definitions for all types used by the protocol. Before I could make it into a CL I just got really bad tennis elbow and had to stop using a computer and phone. That was 2 months ago.\n\nMine has enum support (it errors if you don\u0027t use enum that matches the protocol version) as well as serializing using into, try_into and display traits.",
       "revId": "6c70aed4ff865a0984fbe5f226590404ffa47ee3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9be8beb_1eb4e2c6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-10-30T21:31:00Z",
+      "side": 1,
+      "message": "I can still only use a computer for a limited time each day but I can at least use it some now. So if you want to take over or at least look at what I have locally I can arrange that and get it into a couple of CLs. I can also do pair programming as long as I don\u0027t have to use mouse or keyboard a bunch.\n\nIf you are not interested in that I will review this CL as it stands.",
+      "revId": "6c70aed4ff865a0984fbe5f226590404ffa47ee3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
