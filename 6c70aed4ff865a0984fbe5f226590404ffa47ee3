@@ -33,6 +33,24 @@
       "message": "I can still only use a computer for a limited time each day but I can at least use it some now. So if you want to take over or at least look at what I have locally I can arrange that and get it into a couple of CLs. I can also do pair programming as long as I don\u0027t have to use mouse or keyboard a bunch.\n\nIf you are not interested in that I will review this CL as it stands.",
       "revId": "6c70aed4ff865a0984fbe5f226590404ffa47ee3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "44645b1a_7056fe82",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-10-31T02:49:04Z",
+      "side": 1,
+      "message": "Hey @me@griff.name. Sure, would like to take a look at what you have, especially interested in the shape of your `NixSerializer` interface as I had to bend over backwards to make rustc happy and I don\u0027t have much experience with generic async rust, or rust in general tbh\n\nNot sure I will have time to pair live this week, but happy to start async in this or your cls. thanks",
+      "parentUuid": "a9be8beb_1eb4e2c6",
+      "revId": "6c70aed4ff865a0984fbe5f226590404ffa47ee3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
