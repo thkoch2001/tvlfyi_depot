@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e76761ac_1c24b272",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000162
+      },
+      "writtenOn": "2024-11-01T22:20:55Z",
+      "side": 1,
+      "message": "Very good point. It seemed that derivation.rs already has `DerivationError::InvalidOutputHash`, so the eval errors do not seem to apply there.\n\nHowever, builtins.path did use the same mechanism as builtins.fetchurl, so I applied the change there.\n\nThanks for the suggestion :+1:",
+      "parentUuid": "a9377542_0b9a4690",
+      "revId": "549a958382eba7b6abd9e4da3de51897ba78451b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "975cf435_dc1e3ab0",
         "filename": "views/tvix/workspace.josh",
         "patchSetId": 1
@@ -66,6 +84,24 @@
       "writtenOn": "2024-10-30T22:07:36Z",
       "side": 1,
       "message": "did you checkout only the josh view and re-push that, and josh screwed this up? or is this an unintended edit?",
+      "revId": "549a958382eba7b6abd9e4da3de51897ba78451b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4b9b98f0_bb98177a",
+        "filename": "views/tvix/workspace.josh",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000162
+      },
+      "writtenOn": "2024-11-01T22:20:55Z",
+      "side": 1,
+      "message": "\u003e did you checkout only the josh view and re-push that, and josh screwed this up? or is this an unintended edit?\n\nI\u0027m not used to Gerrit, but this change (workspace.josh) was not part of my original commit. I guess it was added when I changed the message inside of Gerrit afterwards.\n\n---\n\nAh I see now josh has something to do with the workspace. I\u0027m using https://code.tvl.fyi/depot.git:workspace\u003dviews/tvix.git as the remote. I guess I should be using the full monorepo to make contributions? I\u0027ll give that a go tomorrow. Or is the workspace.josh a blocker?",
+      "parentUuid": "975cf435_dc1e3ab0",
       "revId": "549a958382eba7b6abd9e4da3de51897ba78451b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
