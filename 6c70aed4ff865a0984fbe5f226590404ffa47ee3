@@ -51,6 +51,24 @@
       "parentUuid": "a9be8beb_1eb4e2c6",
       "revId": "6c70aed4ff865a0984fbe5f226590404ffa47ee3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3093337_b1473184",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-02T17:05:57Z",
+      "side": 1,
+      "message": "Since I haven\u0027t heard back I continued working on this and already have a bunch of cls that depend on this. I\u0027ve cleaned up the interfaces a bit and added basic enum suppport(no version validation yet). ptal when you get a chance, thanks",
+      "parentUuid": "44645b1a_7056fe82",
+      "revId": "6c70aed4ff865a0984fbe5f226590404ffa47ee3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
