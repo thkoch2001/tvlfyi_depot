@@ -67,14 +67,14 @@ where
     R: AsyncReadExt + AsyncWriteExt + Unpin + std::fmt::Debug,
 {
     match server_handshake_client(&mut conn, "2.18.2", Trust::Trusted).await {
-        Ok(client_protocol_version) => {
+        Ok(picked_protocol_version) => {
             let mut client_connection = ClientConnection {
                 conn,
-                version: client_protocol_version,
+                version: picked_protocol_version,
                 client_settings: None,
             };
             debug!("Client hanshake succeeded");
-            debug!(client_protocol_version = ?client_protocol_version);
+            debug!(picked_protocol_version = ?picked_protocol_version);
             // TODO: implement logging. For now, we'll just send
             // STDERR_LAST, which is good enough to get Nix respond to
             // us.
