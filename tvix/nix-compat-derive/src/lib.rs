@@ -17,20 +17,20 @@
 //! ## Overview
 //!
 //! This crate contains derive macros and function-like macros for implementing
-//! `NixDeserialize` with less boilerplate.
+//! `NixDeserialize` and `NixSerialize` with less boilerplate.
 //!
 //! ### Examples
 //! ```rust
-//! # use nix_compat_derive::NixDeserialize;
+//! # use nix_compat_derive::{NixDeserialize, NixSerialize};
 //! #
-//! #[derive(NixDeserialize)]
+//! #[derive(NixDeserialize, NixSerialize)]
 //! struct Unnamed(u64, String);
 //! ```
 //!
 //! ```rust
 //! # use nix_compat_derive::NixDeserialize;
 //! #
-//! #[derive(NixDeserialize)]
+//! #[derive(NixDeserialize, NixSerialize)]
 //! struct Fields {
 //!     number: u64,
 //!     message: String,
@@ -40,7 +40,7 @@
 //! ```rust
 //! # use nix_compat_derive::NixDeserialize;
 //! #
-//! #[derive(NixDeserialize)]
+//! #[derive(NixDeserialize, NixSerialize)]
 //! struct Ignored;
 //! ```
 //!
@@ -259,6 +259,7 @@ use proc_macro::TokenStream;
 use syn::{parse_quote, DeriveInput};
 
 mod de;
+mod en;
 mod internal;
 
 #[proc_macro_derive(NixDeserialize, attributes(nix))]
@@ -266,6 +267,15 @@ pub fn derive_nix_deserialize(item: TokenStream) -> TokenStream {
     let mut input = syn::parse_macro_input!(item as DeriveInput);
     let nnixrs: syn::Path = parse_quote!(::nix_compat);
     de::expand_nix_deserialize(nnixrs, &mut input)
+        .unwrap_or_else(syn::Error::into_compile_error)
+        .into()
+}
+
+#[proc_macro_derive(NixSerialize, attributes(nix))]
+pub fn derive_nix_serialize(item: TokenStream) -> TokenStream {
+    let mut input = syn::parse_macro_input!(item as DeriveInput);
+    let nnixrs: syn::Path = parse_quote!(::nix_compat);
+    en::expand_nix_serialize(nnixrs, &mut input)
         .unwrap_or_else(syn::Error::into_compile_error)
         .into()
 }
