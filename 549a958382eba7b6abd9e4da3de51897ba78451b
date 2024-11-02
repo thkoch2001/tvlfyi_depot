@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d21f94ee_54fb0393",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000001
+      },
+      "writtenOn": "2024-11-02T19:56:53Z",
+      "side": 1,
+      "message": "\u003e passing along the original nixhash Error into the InvalidHash\n\nYou could still do this using a trait object if you think it adds valuable information (that would be something that can be automatically acted on), but this is probably fine. Not adding a dependency is the right call in general.",
+      "parentUuid": "d9d88090_f0328019",
+      "revId": "549a958382eba7b6abd9e4da3de51897ba78451b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a9377542_0b9a4690",
