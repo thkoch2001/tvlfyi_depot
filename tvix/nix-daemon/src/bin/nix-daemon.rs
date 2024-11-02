@@ -1,7 +1,14 @@
 use clap::Parser;
 use mimalloc::MiMalloc;
+use nix_compat::{
+    nix_daemon::{
+        de::{NixRead, NixReader},
+        en::writer::NixWriter,
+    },
+    worker_protocol::{read_client_settings, server_handshake_client, Trust},
+};
 use std::error::Error;
-use tokio::io::AsyncWriteExt;
+use tokio::io::{split, AsyncWriteExt};
 use tokio_listener::SystemOptions;
 use tvix_store::utils::{construct_services, ServiceUrlsGrpc};
 
@@ -76,14 +83,14 @@ async fn run(cli: Cli) -> Result<(), Box<dyn std::error::Error + Send + Sync>> {
 
     while let Ok((mut connection, _)) = listener.accept().await {
         tokio::spawn(async move {
-            let ucred = connection
-                .try_borrow_unix()
-                .and_then(|u| u.peer_cred().ok());
-
-            // For now we just write the connected process credentials into the connection.
-            let _ = connection
-                .write_all(format!("Hello {:?}", ucred).as_bytes())
-                .await;
+            let proto_version =
+                server_handshake_client(&mut connection, "2.18.1", Trust::Trusted).await?;
+            let (reader, writer) = split(connection);
+            read_client_settings(&mut connection, proto_version);
+            let mut reader = NixReader::builder()
+                .set_version(proto_version)
+                .build(reader);
+            let mut writer = NixWriter::new(writer, proto_version);
         });
     }
     Ok(())
