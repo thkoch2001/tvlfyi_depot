@@ -16,6 +16,24 @@
       "message": "can you update https://code.tvl.fyi/tree/users/picnoir/tvix-daemon/src/main.rs#n70 too? Talking about the variable name in there.",
       "revId": "43777e44be4fe4786415fb172abf089f5b8d8d81",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3282f66f_b4f6da47",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-02T17:32:47Z",
+      "side": 1,
+      "message": "sure, done",
+      "parentUuid": "76b10ce4_e7910d5c",
+      "revId": "43777e44be4fe4786415fb172abf089f5b8d8d81",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
