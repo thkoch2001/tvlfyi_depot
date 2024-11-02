@@ -71,6 +71,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "60415738_7f587672",
+        "filename": "tvix/glue/src/builtins/fetchers.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-02T00:00:23Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "e76761ac_1c24b272",
+      "revId": "549a958382eba7b6abd9e4da3de51897ba78451b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "975cf435_dc1e3ab0",
@@ -102,6 +120,24 @@
       "side": 1,
       "message": "\u003e did you checkout only the josh view and re-push that, and josh screwed this up? or is this an unintended edit?\n\nI\u0027m not used to Gerrit, but this change (workspace.josh) was not part of my original commit. I guess it was added when I changed the message inside of Gerrit afterwards.\n\n---\n\nAh I see now josh has something to do with the workspace. I\u0027m using https://code.tvl.fyi/depot.git:workspace\u003dviews/tvix.git as the remote. I guess I should be using the full monorepo to make contributions? I\u0027ll give that a go tomorrow. Or is the workspace.josh a blocker?",
       "parentUuid": "975cf435_dc1e3ab0",
+      "revId": "549a958382eba7b6abd9e4da3de51897ba78451b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c3a2ffa3_0c03d04c",
+        "filename": "views/tvix/workspace.josh",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-02T00:00:23Z",
+      "side": 1,
+      "message": "you seem to be running into the same bug as https://b.tvl.fyi/issues/320. unfortunately there\u0027s been no update on the upstream bug either. \n\nI think you unfortunately need to get the full checkout and cherry-pick/ re-apply this commit to prevent this workspace.josh file from appearing as being changed. This otherwise might change behavior for the inverse direction :-/",
+      "parentUuid": "4b9b98f0_bb98177a",
       "revId": "549a958382eba7b6abd9e4da3de51897ba78451b",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
