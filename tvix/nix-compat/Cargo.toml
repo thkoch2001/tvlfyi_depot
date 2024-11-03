@@ -14,6 +14,7 @@ test = []
 default = ["async", "wire", "nix-compat-derive"]
 
 [dependencies]
+anyhow = "1.0"
 bitflags = { workspace = true }
 bstr = { workspace = true, features = ["alloc", "unicode", "serde"] }
 data-encoding = { workspace = true }
@@ -32,6 +33,8 @@ tracing = { workspace = true }
 bytes = { workspace = true, optional = true }
 tokio = { workspace = true, features = ["io-util", "macros"], optional = true }
 pin-project-lite = { workspace = true, optional = true }
+async-trait = "0.1.83"
+derive_more = { version = "1.0.0", features = ["full"] }
 
 [dependencies.nix-compat-derive]
 path = "../nix-compat-derive"

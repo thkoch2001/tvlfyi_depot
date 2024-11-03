@@ -9,6 +9,7 @@ clap = { workspace = true, features = ["derive", "env"] }
 futures = { workspace = true }
 mimalloc = { workspace = true }
 nix-compat = { path = "../nix-compat" }
+nix-compat-derive = { path = "../nix-compat-derive" }
 tvix-castore = { path = "../castore" }
 tvix-store = { path = "../store" }
 tvix-tracing = { path = "../tracing" }
