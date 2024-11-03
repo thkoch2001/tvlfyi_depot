@@ -22,6 +22,30 @@
       },
       "revId": "f15ac604aff4327f30a46e4c7122c3db6781b5a9",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3d9f8c42_4033f6e3",
+        "filename": "tvix/nix-compat/src/nix_daemon/worker_protocol.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-03T20:57:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6fb658eb_de206196",
+      "range": {
+        "startLine": 42,
+        "startChar": 74,
+        "endLine": 42,
+        "endChar": 76
+      },
+      "revId": "f15ac604aff4327f30a46e4c7122c3db6781b5a9",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
