@@ -132,6 +132,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "94b29ae6_dec1675c",
+        "filename": "tvix/nix-compat/src/nix_daemon/ser/writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-03T23:42:17Z",
+      "side": 1,
+      "message": "stray commented-out code, or should this be a dbg_assert?",
+      "revId": "966d47a6651f1005ccfa31da17be82c550649e85",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b23e0a96_4933574f",
         "filename": "tvix/nix-compat/src/nix_daemon/ser/writer.rs",
         "patchSetId": 4
@@ -173,6 +190,23 @@
         "endLine": 275,
         "endChar": 22
       },
+      "revId": "966d47a6651f1005ccfa31da17be82c550649e85",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "10240482_da698453",
+        "filename": "tvix/nix-compat/src/nix_daemon/ser/writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-03T23:42:17Z",
+      "side": 1,
+      "message": "same",
       "revId": "966d47a6651f1005ccfa31da17be82c550649e85",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
