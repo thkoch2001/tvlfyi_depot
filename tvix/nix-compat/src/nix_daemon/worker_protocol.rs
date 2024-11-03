@@ -1,10 +1,11 @@
 use std::{
     cmp::min,
-    collections::HashMap,
+    collections::BTreeMap,
     io::{Error, ErrorKind},
 };
 
 use enum_primitive_derive::Primitive;
+use nix_compat_derive::{NixDeserialize, NixSerialize};
 use num_traits::{FromPrimitive, ToPrimitive};
 use tokio::io::{AsyncReadExt, AsyncWriteExt};
 
@@ -15,6 +16,7 @@ use super::ProtocolVersion;
 static WORKER_MAGIC_1: u64 = 0x6e697863; // "nixc"
 static WORKER_MAGIC_2: u64 = 0x6478696f; // "dxio"
 pub static STDERR_LAST: u64 = 0x616c7473; // "alts"
+pub static STDERR_ERROR: u64 = 0x63787470; // "cxtp"
 
 /// | Nix version     | Protocol |
 /// |-----------------|----------|
@@ -55,7 +57,8 @@ pub static MAX_SETTING_SIZE: usize = 1024;
 /// Note: for now, we're using the Nix 2.20 operation description. The
 /// operations marked as obsolete are obsolete for Nix 2.20, not
 /// necessarily for Nix 2.3. We'll revisit this later on.
-#[derive(Debug, PartialEq, Primitive)]
+#[derive(Debug, PartialEq, Primitive, NixDeserialize)]
+#[nix(try_from = "u64")]
 pub enum Operation {
     IsValidPath = 1,
     HasSubstitutes = 3,
@@ -106,7 +109,8 @@ pub enum Operation {
 /// Log verbosity. In the Nix wire protocol, the client requests a
 /// verbosity level to the daemon, which in turns does not produce any
 /// log below this verbosity.
-#[derive(Debug, PartialEq, Primitive)]
+#[derive(Debug, PartialEq, Primitive, NixDeserialize, NixSerialize)]
+#[nix(try_from = "u64")]
 pub enum Verbosity {
     LvlError = 0,
     LvlWarn = 1,
@@ -120,78 +124,29 @@ pub enum Verbosity {
 
 /// Settings requested by the client. These settings are applied to a
 /// connection to between the daemon and a client.
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, NixDeserialize)]
 pub struct ClientSettings {
-    pub keep_failed: bool,
-    pub keep_going: bool,
-    pub try_fallback: bool,
-    pub verbosity: Verbosity,
-    pub max_build_jobs: u64,
-    pub max_silent_time: u64,
-    pub verbose_build: bool,
-    pub build_cores: u64,
-    pub use_substitutes: bool,
+    keep_failed: bool,
+    keep_going: bool,
+    try_fallback: bool,
+    verbosity: u64,
+    max_build_jobs: u64,
+    max_silent_time: u64,
+    use_build_hook: bool,
+    verbose_build: u64,
+    log_type: u64,
+    print_build_trace: u64,
+    build_cores: u64,
+    use_substitutes: bool,
+
     /// Key/Value dictionary in charge of overriding the settings set
     /// by the Nix config file.
     ///
     /// Some settings can be safely overidden,
     /// some other require the user running the Nix client to be part
     /// of the trusted users group.
-    pub overrides: HashMap<String, String>,
-}
-
-/// Reads the client settings from the wire.
-///
-/// Note: this function **only** reads the settings. It does not
-/// manage the log state with the daemon. You'll have to do that on
-/// your own. A minimal log implementation will consist in sending
-/// back [STDERR_LAST] to the client after reading the client
-/// settings.
-///
-/// FUTUREWORK: write serialization.
-pub async fn read_client_settings<R: AsyncReadExt + Unpin>(
-    r: &mut R,
-    client_version: ProtocolVersion,
-) -> std::io::Result<ClientSettings> {
-    let keep_failed = r.read_u64_le().await? != 0;
-    let keep_going = r.read_u64_le().await? != 0;
-    let try_fallback = r.read_u64_le().await? != 0;
-    let verbosity_uint = r.read_u64_le().await?;
-    let verbosity = Verbosity::from_u64(verbosity_uint).ok_or_else(|| {
-        Error::new(
-            ErrorKind::InvalidData,
-            format!("Can't convert integer {} to verbosity", verbosity_uint),
-        )
-    })?;
-    let max_build_jobs = r.read_u64_le().await?;
-    let max_silent_time = r.read_u64_le().await?;
-    _ = r.read_u64_le().await?; // obsolete useBuildHook
-    let verbose_build = r.read_u64_le().await? != 0;
-    _ = r.read_u64_le().await?; // obsolete logType
-    _ = r.read_u64_le().await?; // obsolete printBuildTrace
-    let build_cores = r.read_u64_le().await?;
-    let use_substitutes = r.read_u64_le().await? != 0;
-    let mut overrides = HashMap::new();
-    if client_version.minor() >= 12 {
-        let num_overrides = r.read_u64_le().await?;
-        for _ in 0..num_overrides {
-            let name = wire::read_string(r, 0..=MAX_SETTING_SIZE).await?;
-            let value = wire::read_string(r, 0..=MAX_SETTING_SIZE).await?;
-            overrides.insert(name, value);
-        }
-    }
-    Ok(ClientSettings {
-        keep_failed,
-        keep_going,
-        try_fallback,
-        verbosity,
-        max_build_jobs,
-        max_silent_time,
-        verbose_build,
-        build_cores,
-        use_substitutes,
-        overrides,
-    })
+    #[nix(version = "12..")]
+    overrides: BTreeMap<String, String>,
 }
 
 /// Performs the initial handshake the server is sending to a connecting client.
@@ -390,100 +345,5 @@ mod tests {
             .unwrap();
 
         assert_eq!(picked_version, ProtocolVersion::from_parts(1, 24))
-    }
-
-    #[tokio::test]
-    async fn test_read_client_settings_without_overrides() {
-        // Client settings bits captured from a Nix 2.3.17 run w/ sockdump (protocol version 21).
-        let wire_bits = hex!(
-            "00 00 00 00 00 00 00 00 \
-             00 00 00 00 00 00 00 00 \
-             00 00 00 00 00 00 00 00 \
-             02 00 00 00 00 00 00 00 \
-             10 00 00 00 00 00 00 00 \
-             00 00 00 00 00 00 00 00 \
-             01 00 00 00 00 00 00 00 \
-             00 00 00 00 00 00 00 00 \
-             00 00 00 00 00 00 00 00 \
-             00 00 00 00 00 00 00 00 \
-             00 00 00 00 00 00 00 00 \
-             01 00 00 00 00 00 00 00 \
-             00 00 00 00 00 00 00 00"
-        );
-        let mut mock = Builder::new().read(&wire_bits).build();
-        let settings = read_client_settings(&mut mock, ProtocolVersion::from_parts(1, 21))
-            .await
-            .expect("should parse");
-        let expected = ClientSettings {
-            keep_failed: false,
-            keep_going: false,
-            try_fallback: false,
-            verbosity: Verbosity::LvlNotice,
-            max_build_jobs: 16,
-            max_silent_time: 0,
-            verbose_build: false,
-            build_cores: 0,
-            use_substitutes: true,
-            overrides: HashMap::new(),
-        };
-        assert_eq!(settings, expected);
-    }
-
-    #[tokio::test]
-    async fn test_read_client_settings_with_overrides() {
-        // Client settings bits captured from a Nix 2.3.17 run w/ sockdump (protocol version 21).
-        let wire_bits = hex!(
-            "00 00 00 00 00 00 00 00 \
-             00 00 00 00 00 00 00 00 \
-             00 00 00 00 00 00 00 00 \
-             02 00 00 00 00 00 00 00 \
-             10 00 00 00 00 00 00 00 \
-             00 00 00 00 00 00 00 00 \
-             01 00 00 00 00 00 00 00 \
-             00 00 00 00 00 00 00 00 \
-             00 00 00 00 00 00 00 00 \
-             00 00 00 00 00 00 00 00 \
-             00 00 00 00 00 00 00 00 \
-             01 00 00 00 00 00 00 00 \
-             02 00 00 00 00 00 00 00 \
-             0c 00 00 00 00 00 00 00 \
-             61 6c 6c 6f 77 65 64 2d \
-             75 72 69 73 00 00 00 00 \
-             1e 00 00 00 00 00 00 00 \
-             68 74 74 70 73 3a 2f 2f \
-             62 6f 72 64 65 61 75 78 \
-             2e 67 75 69 78 2e 67 6e \
-             75 2e 6f 72 67 2f 00 00 \
-             0d 00 00 00 00 00 00 00 \
-             61 6c 6c 6f 77 65 64 2d \
-             75 73 65 72 73 00 00 00 \
-             0b 00 00 00 00 00 00 00 \
-             6a 65 61 6e 20 70 69 65 \
-             72 72 65 00 00 00 00 00"
-        );
-        let mut mock = Builder::new().read(&wire_bits).build();
-        let settings = read_client_settings(&mut mock, ProtocolVersion::from_parts(1, 21))
-            .await
-            .expect("should parse");
-        let overrides = HashMap::from([
-            (
-                String::from("allowed-uris"),
-                String::from("https://bordeaux.guix.gnu.org/"),
-            ),
-            (String::from("allowed-users"), String::from("jean pierre")),
-        ]);
-        let expected = ClientSettings {
-            keep_failed: false,
-            keep_going: false,
-            try_fallback: false,
-            verbosity: Verbosity::LvlNotice,
-            max_build_jobs: 16,
-            max_silent_time: 0,
-            verbose_build: false,
-            build_cores: 0,
-            use_substitutes: true,
-            overrides,
-        };
-        assert_eq!(settings, expected);
     }
 }
