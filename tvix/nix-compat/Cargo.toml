@@ -8,7 +8,7 @@ edition = "2021"
 async = ["tokio"]
 # code emitting low-level packets used in the daemon protocol.
 wire = ["tokio", "pin-project-lite", "bytes"]
-test = []
+test = ["proptest"]
 
 # Enable all features by default.
 default = ["async", "wire", "nix-compat-derive"]
@@ -24,6 +24,7 @@ glob = { workspace = true }
 mimalloc = { workspace = true }
 nom = { workspace = true }
 num-traits = { workspace = true }
+proptest = { workspace = true, features = ["std", "alloc", "tempfile"], optional = true }
 serde = { workspace = true, features = ["derive"] }
 serde_json = { workspace = true }
 sha2 = { workspace = true }
@@ -43,6 +44,7 @@ futures = { workspace = true }
 hex-literal = { workspace = true }
 mimalloc = { workspace = true }
 pretty_assertions = { workspace = true }
+proptest = { workspace = true, features = ["std", "alloc", "tempfile"] }
 rstest = { workspace = true }
 serde_json = { workspace = true }
 smol_str = { workspace = true }
