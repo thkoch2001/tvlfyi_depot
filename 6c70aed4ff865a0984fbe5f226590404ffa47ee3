@@ -123,6 +123,24 @@
       "parentUuid": "8e9c1e16_1f496955",
       "revId": "6c70aed4ff865a0984fbe5f226590404ffa47ee3",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0bdd97ac_d50691d0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-03T23:15:14Z",
+      "side": 1,
+      "message": "@me@griff.name thanks for uploading https://cl.tvl.fyi/c/depot/+/12729 , it\u0027s definitely much more comprehensive than my implementation, will abandon mine and base my work on top of yours",
+      "parentUuid": "83bbb012_3e20c14e",
+      "revId": "6c70aed4ff865a0984fbe5f226590404ffa47ee3",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
