@@ -2348,6 +2348,8 @@ rec {
           "default" = [ "async" "wire" "nix-compat-derive" ];
           "nix-compat-derive" = [ "dep:nix-compat-derive" ];
           "pin-project-lite" = [ "dep:pin-project-lite" ];
+          "proptest" = [ "dep:proptest" ];
+          "test" = [ "proptest" ];
           "tokio" = [ "dep:tokio" ];
           "wire" = [ "tokio" "pin-project-lite" "bytes" ];
         };

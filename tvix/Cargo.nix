@@ -7249,6 +7249,13 @@ rec {
             optional = true;
           }
           {
+            name = "proptest";
+            packageId = "proptest";
+            optional = true;
+            usesDefaultFeatures = false;
+            features = [ "std" "alloc" "tempfile" ];
+          }
+          {
             name = "serde";
             packageId = "serde";
             features = [ "derive" ];
@@ -7299,6 +7306,12 @@ rec {
             packageId = "pretty_assertions";
           }
           {
+            name = "proptest";
+            packageId = "proptest";
+            usesDefaultFeatures = false;
+            features = [ "std" "alloc" "tempfile" ];
+          }
+          {
             name = "rstest";
             packageId = "rstest";
           }
@@ -7325,10 +7338,12 @@ rec {
           "default" = [ "async" "wire" "nix-compat-derive" ];
           "nix-compat-derive" = [ "dep:nix-compat-derive" ];
           "pin-project-lite" = [ "dep:pin-project-lite" ];
+          "proptest" = [ "dep:proptest" ];
+          "test" = [ "proptest" ];
           "tokio" = [ "dep:tokio" ];
           "wire" = [ "tokio" "pin-project-lite" "bytes" ];
         };
-        resolvedDefaultFeatures = [ "async" "bytes" "default" "nix-compat-derive" "pin-project-lite" "test" "tokio" "wire" ];
+        resolvedDefaultFeatures = [ "async" "bytes" "default" "nix-compat-derive" "pin-project-lite" "proptest" "test" "tokio" "wire" ];
       };
       "nix-compat-derive" = rec {
         crateName = "nix-compat-derive";
@@ -7368,6 +7383,12 @@ rec {
           {
             name = "pretty_assertions";
             packageId = "pretty_assertions";
+          }
+          {
+            name = "proptest";
+            packageId = "proptest";
+            usesDefaultFeatures = false;
+            features = [ "std" "alloc" "tempfile" ];
           }
           {
             name = "rstest";
