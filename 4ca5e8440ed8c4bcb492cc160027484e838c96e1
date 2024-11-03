@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9a2c5380_44fbb5b0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-03T21:11:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c7581a32_6f6defd9",
+      "revId": "4ca5e8440ed8c4bcb492cc160027484e838c96e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d899e9db_d5a6ada9",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-11-03T20:45:48Z",
       "side": 1,
       "message": "do we want to make this conditional on macos?",
+      "revId": "4ca5e8440ed8c4bcb492cc160027484e838c96e1",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e1a4426_7b5ba3c7",
+        "filename": "tvix/build/src/buildservice/from_addr.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-03T21:11:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d899e9db_d5a6ada9",
       "revId": "4ca5e8440ed8c4bcb492cc160027484e838c96e1",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
