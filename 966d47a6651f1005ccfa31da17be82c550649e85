@@ -1,0 +1,90 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5448594_6e9ca3bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-03T23:13:37Z",
+      "side": 1,
+      "message": "This looks great! I am going to abandon my cl and rebase my code on top of yours, hopefully it gets merged soon.\n\nA few questions/nits below, overall lgtm! thanks",
+      "revId": "966d47a6651f1005ccfa31da17be82c550649e85",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1ab3cac_4ac52ba7",
+        "filename": "tvix/nix-compat-derive/src/ser.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-03T23:13:37Z",
+      "side": 1,
+      "message": "not 100% sure, but this may end up with a literal \"#indent\" string, as opposed to what is intended. iiuc something like this should work:\n```suggestion\n            return Err(W::Error::invalid_enum(format!(\"{} is not valid for version {}\", stringify!(#ident), writer.version())));\n```",
+      "range": {
+        "startLine": 179,
+        "startChar": 88,
+        "endLine": 179,
+        "endChar": 95
+      },
+      "revId": "966d47a6651f1005ccfa31da17be82c550649e85",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50a9988a_81f2f2e9",
+        "filename": "tvix/nix-compat/src/nix_daemon/ser/writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-03T23:13:37Z",
+      "side": 1,
+      "message": "Potentially dumb question: why deal with buffering manually as opposed to using something like tokio::io::BufWriter?\n```suggestion\n            inner: tokio::io::BufWriter::with_capacity(\n                self.max_buf_size,\n                writer\n            ),\n```",
+      "range": {
+        "startLine": 62,
+        "startChar": 19,
+        "endLine": 62,
+        "endChar": 25
+      },
+      "revId": "966d47a6651f1005ccfa31da17be82c550649e85",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b23e0a96_4933574f",
+        "filename": "tvix/nix-compat/src/nix_daemon/ser/writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-03T23:13:37Z",
+      "side": 1,
+      "message": "will manual flushing be required or will it be somehow handled automatically?\n\nalso what\u0027s going to happen to unflushed data when the writer is dropped? worth flushing in `impl Drop`?",
+      "range": {
+        "startLine": 275,
+        "startChar": 15,
+        "endLine": 275,
+        "endChar": 22
+      },
+      "revId": "966d47a6651f1005ccfa31da17be82c550649e85",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
