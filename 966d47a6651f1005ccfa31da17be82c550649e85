@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e9ad56c_f275981b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-03T23:29:48Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c5448594_6e9ca3bf",
+      "revId": "966d47a6651f1005ccfa31da17be82c550649e85",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e1ab3cac_4ac52ba7",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-11-03T23:13:37Z",
       "side": 1,
       "message": "not 100% sure, but this may end up with a literal \"#indent\" string, as opposed to what is intended. iiuc something like this should work:\n```suggestion\n            return Err(W::Error::invalid_enum(format!(\"{} is not valid for version {}\", stringify!(#ident), writer.version())));\n```",
+      "range": {
+        "startLine": 179,
+        "startChar": 88,
+        "endLine": 179,
+        "endChar": 95
+      },
+      "revId": "966d47a6651f1005ccfa31da17be82c550649e85",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22ad226b_bfb01f3e",
+        "filename": "tvix/nix-compat-derive/src/ser.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-03T23:29:48Z",
+      "side": 1,
+      "message": "I will write a test for it and then we will see what it does.",
+      "parentUuid": "e1ab3cac_4ac52ba7",
       "range": {
         "startLine": 179,
         "startChar": 88,
@@ -64,6 +106,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4415b14b_0311ded2",
+        "filename": "tvix/nix-compat/src/nix_daemon/ser/writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-03T23:29:48Z",
+      "side": 1,
+      "message": "Because of `write_display`. In order to get the potential benefit of not writing `Display` values to a newly created string before writing them to the writer we need access to the buffer and in a way where we can expand it and reclaim space.\n\nIt also opens up the possibility of having a buffer pool that connections can take a buffer from and use for the writer when a new connection is made. That is a trick that hyper does.",
+      "parentUuid": "50a9988a_81f2f2e9",
+      "range": {
+        "startLine": 62,
+        "startChar": 19,
+        "endLine": 62,
+        "endChar": 25
+      },
+      "revId": "966d47a6651f1005ccfa31da17be82c550649e85",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b23e0a96_4933574f",
@@ -77,6 +143,30 @@
       "writtenOn": "2024-11-03T23:13:37Z",
       "side": 1,
       "message": "will manual flushing be required or will it be somehow handled automatically?\n\nalso what\u0027s going to happen to unflushed data when the writer is dropped? worth flushing in `impl Drop`?",
+      "range": {
+        "startLine": 275,
+        "startChar": 15,
+        "endLine": 275,
+        "endChar": 22
+      },
+      "revId": "966d47a6651f1005ccfa31da17be82c550649e85",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "96f0085e_8271b7f8",
+        "filename": "tvix/nix-compat/src/nix_daemon/ser/writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 275,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-03T23:29:48Z",
+      "side": 1,
+      "message": "When the buffer is too full for a write it flushes. Just like BufWriter.\n\nUnflushed data is lost. Generally you must call `shutdown` (which also flushes) on an `AsyncWrite` when done with it or you are likely to loose data.\n\nYou can\u0027t flush in `Drop` since flush is async.",
+      "parentUuid": "b23e0a96_4933574f",
       "range": {
         "startLine": 275,
         "startChar": 15,
