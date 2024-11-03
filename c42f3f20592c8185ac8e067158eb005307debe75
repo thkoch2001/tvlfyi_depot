@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f9d56903_de4f6fe7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-11-03T22:48:52Z",
+      "side": 1,
+      "message": "I think it\u0027s a better solution to remove the logic relating to `used` from `resolve_local`. `is_user_defined` is not the only spurious use of `resolve_locals`, just look at the useless inherit warning.\n\n- You can\u0027t really tell what the difference between `lookup_local` and `resolve_local` is supposed to be and they share a lot of code.\n- It is surprising that `resolve_local` does more than just resolve the local.\n- It is reasonable that the compiler would resolve locals independently from actually compiling local access for warnings and optimisations.",
+      "revId": "c42f3f20592c8185ac8e067158eb005307debe75",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
