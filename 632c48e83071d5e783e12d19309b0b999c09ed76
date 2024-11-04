@@ -81,6 +81,41 @@
       "parentUuid": "c30d3620_3cdf8ecb",
       "revId": "632c48e83071d5e783e12d19309b0b999c09ed76",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c56e1d96_a62c755c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-11-04T11:39:15Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "4eede4bf_44aee4b7",
+      "revId": "632c48e83071d5e783e12d19309b0b999c09ed76",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1591c892_6f0cb2ed",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-11-04T11:39:15Z",
+      "side": 1,
+      "message": "Okay, I guess the dilemma is sort of this:\n\n- Adding a new `postBuild` thing is a bit weird and confusing – what the hell is this additional thing?\n- An alternative would be to add a new flag to `extraSteps` like `runInBuildStep` so that `extraSteps` marked like that would be executed in the same manner as `postBuild` is here (in lexical order or whatever). This has the problem that it makes the `extraSteps` logic even more confusing and complex…\n\nWhat do you think?\n\n(I sometimes feel like we should redesign //nix/buildkite from scratch and figure out a whole new paradigm to integrate the CD features we added later in a neater and simpler fashion…)",
+      "revId": "632c48e83071d5e783e12d19309b0b999c09ed76",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
