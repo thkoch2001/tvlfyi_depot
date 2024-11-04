@@ -83,6 +83,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7f2ad3f1_94aa6a3d",
+        "filename": "tvix/nix-compat-derive/src/ser.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 179,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-04T00:00:36Z",
+      "side": 1,
+      "message": "You were right it was wrong and your fix was right. Tested and changed.",
+      "parentUuid": "22ad226b_bfb01f3e",
+      "range": {
+        "startLine": 179,
+        "startChar": 88,
+        "endLine": 179,
+        "endChar": 95
+      },
+      "revId": "966d47a6651f1005ccfa31da17be82c550649e85",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "50a9988a_81f2f2e9",
@@ -147,6 +171,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4cbd633_479a8256",
+        "filename": "tvix/nix-compat/src/nix_daemon/ser/writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 274,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-04T00:00:36Z",
+      "side": 1,
+      "message": "Removed that one.",
+      "parentUuid": "94b29ae6_dec1675c",
+      "revId": "966d47a6651f1005ccfa31da17be82c550649e85",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b23e0a96_4933574f",
@@ -207,6 +249,24 @@
       "writtenOn": "2024-11-03T23:42:17Z",
       "side": 1,
       "message": "same",
+      "revId": "966d47a6651f1005ccfa31da17be82c550649e85",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fb2dc4b_b2d1f0cb",
+        "filename": "tvix/nix-compat/src/nix_daemon/ser/writer.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 305,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-04T00:00:36Z",
+      "side": 1,
+      "message": "Uncommented that one.",
+      "parentUuid": "10240482_da698453",
       "revId": "966d47a6651f1005ccfa31da17be82c550649e85",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
