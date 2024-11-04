@@ -50,6 +50,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fb2a7cfe_89a1adb4",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1000034
+      },
+      "writtenOn": "2024-11-04T11:40:03Z",
+      "side": 1,
+      "message": "So I guess the problem you are trying to solve is to prevent the builder having to fetch the build output from cache/another machine in order to run the extraStep?",
+      "parentUuid": "a8add773_8178acbd",
+      "range": {
+        "startLine": 14,
+        "startChar": 54,
+        "endLine": 14,
+        "endChar": 58
+      },
+      "revId": "632c48e83071d5e783e12d19309b0b999c09ed76",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c30d3620_3cdf8ecb",
         "filename": "/PATCHSET_LEVEL",
         "patchSetId": 4
