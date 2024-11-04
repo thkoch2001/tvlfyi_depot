@@ -16,6 +16,24 @@
       "message": "why isn\u0027t it enough to have this in dev-dependencies only? if so, add a comment before it to explain.",
       "revId": "bca688391ba6f4ffe2ba60901e25bfe7b8f8c303",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f978aeb6_01c50e22",
+        "filename": "tvix/nix-compat/Cargo.toml",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-04T18:44:24Z",
+      "side": 1,
+      "message": "It is from a pattern in Nix.rs where proptests were used a lot. One of the things that takes some thought and effort is writing the generators for the test data. These are usually helper methods or implementations of the trait for your custom types. When you have a library crate like `nix-compat` with many types it is helpfull to be able to share those generators, behind a feature flag, with downstream crates for their proptests so they don\u0027t have to reimplement them.\n\nIn the case for this CL the generators are not exported and are only for MockWriter and so maybe not that useful to downstream crates. So I will remove this line and use `#cfg(test)` to disable the generators.",
+      "parentUuid": "49238dab_babc7d02",
+      "revId": "bca688391ba6f4ffe2ba60901e25bfe7b8f8c303",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
