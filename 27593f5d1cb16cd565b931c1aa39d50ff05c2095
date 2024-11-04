@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "494378c9_edf0ab86",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-04T00:03:23Z",
+      "side": 1,
+      "message": "@flokli@flokli.de do you known why the build failed? Looks spurious but I am not entirely sure how to kick it to rebuild.",
+      "revId": "27593f5d1cb16cd565b931c1aa39d50ff05c2095",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
