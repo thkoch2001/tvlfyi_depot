@@ -34,6 +34,24 @@
       "parentUuid": "49238dab_babc7d02",
       "revId": "bca688391ba6f4ffe2ba60901e25bfe7b8f8c303",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9229436_35dc46f8",
+        "filename": "tvix/nix-compat/Cargo.toml",
+        "patchSetId": 7
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-04T19:07:56Z",
+      "side": 1,
+      "message": "Ok, mark as resolved when updated, happy to land this then.",
+      "parentUuid": "f978aeb6_01c50e22",
+      "revId": "bca688391ba6f4ffe2ba60901e25bfe7b8f8c303",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
