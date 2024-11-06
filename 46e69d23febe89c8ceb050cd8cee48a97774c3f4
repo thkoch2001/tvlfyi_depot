@@ -144,6 +144,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "649b22b3_df807239",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-06T20:17:47Z",
+      "side": 1,
+      "message": "Yes, but it\u0027s mostly only useful if `L` is not the same type, in which case it introduces boxing and dynamic dispatch(slow): https://docs.rs/tracing-subscriber/latest/tracing_subscriber/layer/index.html#:~:text\u003dthose%20Layers%20have%20different%20types\n\n\nBut my point was that we can still pass in \"multiple\" layers in by composing them into a single layer, and still get static dispatch, i.e.:\n\n```\nbuild_with_additional(fmt::layer()\n  .and_then(some_other_layer)\n  .and_then(otlp_layer)\n  .with_filter(my_filter)\n);\n```",
+      "parentUuid": "3aab7540_99cec482",
+      "revId": "46e69d23febe89c8ceb050cd8cee48a97774c3f4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bcb67f03_a28ea6da",
         "filename": "tvix/tracing/src/lib.rs",
         "patchSetId": 1

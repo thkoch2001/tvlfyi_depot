@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "64364910_abf3c16e",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-06T20:17:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3d2ee694_6b0575b8",
+      "revId": "de04a1ab1a9156a5b47e2fe4f0aeb96ad5c46b45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c31af0b_2912c618",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f634b8e4_60bf79b5",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-06T20:17:47Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "9c31af0b_2912c618",
+      "revId": "de04a1ab1a9156a5b47e2fe4f0aeb96ad5c46b45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2e970961_4327bc52",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-11-06T18:59:33Z",
       "side": 1,
       "message": "Is this comment still accurate? All types should be known, no?",
+      "revId": "de04a1ab1a9156a5b47e2fe4f0aeb96ad5c46b45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f29bbd17_713c8668",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-06T20:17:47Z",
+      "side": 1,
+      "message": "It *is* still relevant, and if I do something like the following, then no events will be recorded at all even for the default layer chain:\n\n```\ntvix_tracing::TracingBuilder::default().build_with_additional(filter_fn(|_| false);\n```\n\nI think it\u0027s a minor issue, but can be addressed separately if we want to safeguard against it.\n\n\n\u003e All types should be known, no?\n\nThe issue is that the type is different depending on the features that are enabled(otlp, tracy), which makes it impossible to specify the type of `L` in `fn build_with_additional\u003cL\u003e(self, additional_layer: L)`. But if we pass `L` first, then `L`\u0027s type is always the same.\n\ntracing\u0027s api could have been much cleaner (sigh) if they did not care so much about performance, which they justifiably do",
+      "parentUuid": "2e970961_4327bc52",
       "revId": "de04a1ab1a9156a5b47e2fe4f0aeb96ad5c46b45",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
