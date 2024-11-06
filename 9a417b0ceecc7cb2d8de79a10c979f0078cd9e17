@@ -16,6 +16,24 @@
       "message": "I don\u0027t think we can write trace events at all times over the Nix daemon connection - there\u0027s no framing it multiplexing, and the client side might be in a state expecting some other date.\n\nI didn\u0027t think too much about getting trace events sent back to clients yet, but I think it\u0027s gonna be tricky.",
       "revId": "9a417b0ceecc7cb2d8de79a10c979f0078cd9e17",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1c9912b_789a2acf",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-06T14:22:51Z",
+      "side": 1,
+      "message": "It is not going to be written at all times, if you look at the next cl, it activates tracing only when the client expects STDERR_NEXT and deactivates immediately before returning the response.\n\nThis is done with\n\n```\ntrace_into_writer(level, writer, async move {\n  // traces go into the socket only now\n})\n```\n\nThe implementation uses a task-local which is \"empty\" mmost of the time so the writing tracing into it is a noop, but writes into the nix client connection while `trace_into_writer` is running.\n\nI\u0027ve got a test below that verifies that behavior, also tested it at this https://cl.tvl.fyi/c/depot/+/12736 manually by running:\n\n```\n# Terminal 1\ncargo run -p nix-daemon -- --unix-listen-unlink\n```\n\n```\n# Terminal2\n\n# Only error logs are propagated\nnix-store --store unix:///tmp/tvix-daemon.sock --query --requisites /nix/store/c5d4awbnz9r9iddnijvakzw424cmr7ra-docs\n\n# Trace logs are propagates\nnix-store --store unix:///tmp/tvix-daemon.sock --query --requisites /nix/store/c5d4awbnz9r9iddnijvakzw424cmr7ra-docs -vvvv\n```",
+      "parentUuid": "47c9f5a6_38a9f604",
+      "revId": "9a417b0ceecc7cb2d8de79a10c979f0078cd9e17",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
