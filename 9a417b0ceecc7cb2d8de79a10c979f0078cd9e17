@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47c9f5a6_38a9f604",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-06T08:41:22Z",
+      "side": 1,
+      "message": "I don\u0027t think we can write trace events at all times over the Nix daemon connection - there\u0027s no framing it multiplexing, and the client side might be in a state expecting some other date.\n\nI didn\u0027t think too much about getting trace events sent back to clients yet, but I think it\u0027s gonna be tricky.",
+      "revId": "9a417b0ceecc7cb2d8de79a10c979f0078cd9e17",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
