@@ -15,6 +15,8 @@ use super::ProtocolVersion;
 static WORKER_MAGIC_1: u64 = 0x6e697863; // "nixc"
 static WORKER_MAGIC_2: u64 = 0x6478696f; // "dxio"
 pub static STDERR_LAST: u64 = 0x616c7473; // "alts"
+pub static STDERR_ERROR: u64 = 0x63787470; // "cxtp"
+pub static STDERR_NEXT: u64 = 0x6f6c6d67; // "olmg"
 
 /// | Nix version     | Protocol |
 /// |-----------------|----------|

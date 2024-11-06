@@ -2976,11 +2976,19 @@ rec {
             name = "tokio";
             packageId = "tokio";
             optional = true;
-            features = [ "io-util" "macros" ];
+            features = [ "io-util" "macros" "sync" "time" "rt" ];
           }
           {
             name = "tracing";
             packageId = "tracing";
+          }
+          {
+            name = "tracing-core";
+            packageId = "tracing-core";
+          }
+          {
+            name = "tracing-subscriber";
+            packageId = "tracing-subscriber";
           }
         ];
         devDependencies = [

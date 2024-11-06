@@ -1,5 +1,6 @@
 use clap::Parser;
 use mimalloc::MiMalloc;
+use nix_compat::nix_daemon::server::client_writer::client_layer;
 use std::error::Error;
 use tokio::io::AsyncWriteExt;
 use tokio_listener::SystemOptions;
@@ -37,7 +38,7 @@ async fn main() -> Result<(), Box<dyn Error + Send + Sync>> {
                 builder = builder.enable_otlp("tvix.daemon");
             }
         }
-        builder.build()?
+        builder.build_with_additional(client_layer())?
     };
 
     tokio::select! {
