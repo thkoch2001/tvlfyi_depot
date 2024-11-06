@@ -34,6 +34,24 @@
       "parentUuid": "47c9f5a6_38a9f604",
       "revId": "9a417b0ceecc7cb2d8de79a10c979f0078cd9e17",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78b2b68b_60c61feb",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-06T18:48:53Z",
+      "side": 1,
+      "message": "Ok, this is good to hear, but some of this really should end up in commit messages and docstrings 😜\n\nI\u0027m still not 100% convinced we should use the tracing system to send \"internal log events\" from tvix daemon internals to the nix client, but I didn\u0027t stare enough at dumps to know if and how these kinds of things get sent usually when Nix is being used on the server sides.\nWhen talking about building with Tvix, build, build logs almost certainly will to be sent over via another mechanism. They come as a stream of events from a builder (that part is still missing in the code), and we probably don\u0027t want to emit all build logs into the otlp collector as well.\n\nRegarding this code: if we we document this enough, and put it behind a feature flag it should be fine to (also) have this.",
+      "parentUuid": "d1c9912b_789a2acf",
+      "revId": "9a417b0ceecc7cb2d8de79a10c979f0078cd9e17",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
