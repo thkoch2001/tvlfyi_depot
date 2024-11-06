@@ -51,6 +51,108 @@
       "parentUuid": "ba9a571c_426df7d6",
       "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "42bc7354_bf1ef85e",
+        "filename": "tvix/nix-compat/src/nix_daemon/containers.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-06T15:55:21Z",
+      "side": 1,
+      "message": "why this hack instead of just implementing `NixSerialize` and `NixDeserialize` on `Option\u003cUnkeyedValidPathInfo\u003e`?\nIf you worry about redundant code use this macro:\n\n```\nmacro_rules! optional_info {\n    ($sub:ty) \u003d\u003e {\n        impl NixDeserialize for Option\u003c$sub\u003e {\n            fn try_deserialize\u003cR\u003e(\n                reader: \u0026mut R,\n            ) -\u003e impl std::future::Future\u003cOutput \u003d Result\u003cOption\u003cSelf\u003e, R::Error\u003e\u003e + Send + \u0027_\n            where\n                R: ?Sized + NixRead + Send,\n            {\n                async move {\n                    if let Some(found) \u003d reader.try_read_value::\u003cbool\u003e().await? {\n                        if found {\n                            Ok(Some(Some(reader.read_value().await?)))\n                        } else {\n                            Ok(Some(None))\n                        }\n                    } else {\n                        Ok(None)\n                    }\n                }\n            }\n        }\n        impl NixSerialize for Option\u003c$sub\u003e {\n            async fn serialize\u003cW\u003e(\u0026self, writer: \u0026mut W) -\u003e Result\u003c(), W::Error\u003e\n                where W: NixWrite\n            {\n                if let Some(value) \u003d self.as_ref() {\n                    writer.write_value(\u0026true).await?;\n                    writer.write_value(value).await\n                } else {\n                    writer.write_value(\u0026false).await\n                }\n            }\n        }\n    };\n}\noptional_info!(UnkeyedValidPathInfo);\n```",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5da25bea_6cf2ae46",
+        "filename": "tvix/nix-compat/src/nix_daemon/containers.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-06T15:55:21Z",
+      "side": 1,
+      "message": "Same question as above?\nWith a macro for it as well:\n```\nmacro_rules! optional_string {\n    ($sub:ty) \u003d\u003e {\n        impl NixDeserialize for Option\u003c$sub\u003e {\n            fn try_deserialize\u003cR\u003e(\n                reader: \u0026mut R,\n            ) -\u003e impl std::future::Future\u003cOutput \u003d Result\u003cOption\u003cSelf\u003e, R::Error\u003e\u003e + Send + \u0027_\n            where\n                R: ?Sized + NixRead + Send,\n            {\n                async move {\n                    if let Some(buf) \u003d reader.try_read_bytes().await? {\n                        let s \u003d std::str::from_utf8(\u0026buf).map_err(R::Error::invalid_data)?;\n                        if s \u003d\u003d \"\" {\n                            Ok(Some(None))\n                        } else {\n                            Ok(Some(Some(s.parse().map_err(R::Error::invalid_data)?)))\n                        }    \n                    } else {\n                        Ok(None)\n                    }\n                }\n            }\n        }\n        impl NixSerialize for Option\u003c$sub\u003e {\n            async fn serialize\u003cW\u003e(\u0026self, writer: \u0026mut W) -\u003e Result\u003c(), W::Error\u003e\n                where W: NixWrite\n            {\n                if let Some(value) \u003d self.as_ref() {\n                    writer.write_value(value).await\n                } else {\n                    writer.write_slice(b\"\").await\n                }\n            }\n        }\n    };\n}\noptional_string!(StorePath);\n```",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f02c8112_9b6dcc96",
+        "filename": "tvix/nix-compat/src/nix_daemon/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-06T15:55:21Z",
+      "side": 1,
+      "message": "Why use `async_trait` here since it boxes all futures when there is now support for async traits directly in rust?",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "87b354be_0970ea00",
+        "filename": "tvix/nix-compat/src/nix_daemon/types.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-06T15:55:21Z",
+      "side": 1,
+      "message": "This is always zero and ignored when read. That concept can be implemented generally like this:\n```\n#[derive(Clone, Debug)]\n#[derive(NixDeserialize, NixSerialize)]\n#[nix(from \u003d \"u64\", into \u003d \"u64\")]\npub struct IgnoredZero;\nimpl From\u003cu64\u003e for IgnoredZero {\n    fn from(_: u64) -\u003e Self {\n        IgnoredZero\n    }\n}\n\nimpl From\u003cIgnoredZero\u003e for u64 {\n    fn from(_: IgnoredZero) -\u003e Self {\n        0\n    }\n}\n```\n\nAnd then this line is just:\n```suggestion\n    _have_pos: IgnoredZero,\n```",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "26e51693_2d5db3c5",
+        "filename": "tvix/nix-compat/src/nix_daemon/worker_protocol.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-06T15:55:21Z",
+      "side": 1,
+      "message": "@flokli@flokli.de can we please switch to the `num_enum` crate instead since with that we don\u0027t need this hack",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6119f57e_e8076f8a",
+        "filename": "tvix/nix-compat/src/nix_daemon/worker_protocol.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-06T15:55:21Z",
+      "side": 1,
+      "message": "@flokli@flokli.de or this hack",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
