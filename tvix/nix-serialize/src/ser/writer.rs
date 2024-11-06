@@ -8,11 +8,15 @@ use bytes::{Buf, BufMut, BytesMut};
 use pin_project_lite::pin_project;
 use tokio::io::{AsyncWrite, AsyncWriteExt};
 
-use crate::nix_daemon::ProtocolVersion;
-use crate::wire::padding_len;
-use crate::wire::EMPTY_BYTES;
-
 use super::{Error, NixWrite};
+use crate::{ProtocolVersion, EMPTY_BYTES};
+
+/// Computes the number of bytes we should add to len (a length in
+/// bytes) to be aligned on 64 bits (8 bytes).
+fn padding_len(len: u64) -> u8 {
+    let aligned = len.wrapping_add(7) & !7;
+    aligned.wrapping_sub(len) as u8
+}
 
 pub struct NixWriterBuilder {
     buf: Option<BytesMut>,
@@ -70,7 +74,7 @@ impl NixWriterBuilder {
 pin_project! {
     pub struct NixWriter<W> {
         #[pin]
-        inner: W,
+        pub(crate) inner: W,
         buf: BytesMut,
         reserved_buf_size: usize,
         max_buf_size: usize,
@@ -225,7 +229,7 @@ mod test {
     use tokio::io::AsyncWriteExt as _;
     use tokio_test::io::Builder;
 
-    use crate::nix_daemon::ser::NixWrite;
+    use crate::NixWrite;
 
     use super::NixWriter;
 

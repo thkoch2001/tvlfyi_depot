@@ -1,10 +1,7 @@
+use nix_serialize::{NixSerialize, NixWrite};
 use std::fmt;
 
-use nix_compat::nix_daemon::ser::{
-    mock::{Builder, Error},
-    NixWrite as _,
-};
-use nix_compat_derive::NixSerialize;
+use nix_serialize::ser_mock::{Builder, Error};
 
 #[derive(Debug, PartialEq, Eq, NixSerialize)]
 pub struct UnitTest;
