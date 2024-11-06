@@ -126,6 +126,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3aab7540_99cec482",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-06T18:59:33Z",
+      "side": 1,
+      "message": "But `Vec\u003cL\u003e where L: Layer` also implements `Layer`, so we can actually pass multiple layers like this, no?",
+      "parentUuid": "9a09cfd2_d276d01f",
+      "revId": "46e69d23febe89c8ceb050cd8cee48a97774c3f4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bcb67f03_a28ea6da",
         "filename": "tvix/tracing/src/lib.rs",
         "patchSetId": 1

@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d2ee694_6b0575b8",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 184,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-06T18:59:33Z",
+      "side": 1,
+      "message": "Document `additional_layer` (and maybe mention this can also be a Vec or Option, maybe link to the docs).",
+      "revId": "de04a1ab1a9156a5b47e2fe4f0aeb96ad5c46b45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9c31af0b_2912c618",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 213,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-06T18:59:33Z",
+      "side": 1,
+      "message": "This comment got lost\n\n```\n// Setup otlp if a service_name is configured\n```",
+      "revId": "de04a1ab1a9156a5b47e2fe4f0aeb96ad5c46b45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e970961_4327bc52",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 234,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-06T18:59:33Z",
+      "side": 1,
+      "message": "Is this comment still accurate? All types should be known, no?",
+      "revId": "de04a1ab1a9156a5b47e2fe4f0aeb96ad5c46b45",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
