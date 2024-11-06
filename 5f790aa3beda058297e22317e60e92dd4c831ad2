@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4d0e25bb_cd36331a",
+        "filename": "tvix/nix-compat/Cargo.toml",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-06T15:59:42Z",
+      "side": 1,
+      "message": "I don\u0027t think you can do that because proc-crates can\u0027t export traits and structs like that. I might be wrong thought.",
+      "parentUuid": "3f85ae7d_3d1883f4",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "42bc7354_bf1ef85e",
         "filename": "tvix/nix-compat/src/nix_daemon/containers.rs",
         "patchSetId": 4
