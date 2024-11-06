@@ -2365,6 +2365,19 @@ rec {
         ];
 
       };
+      "lazy_static" = rec {
+        crateName = "lazy_static";
+        version = "1.5.0";
+        edition = "2015";
+        sha256 = "1zk6dqqni0193xg6iijh7i3i44sryglwgvx20spdvwk3r6sbrlmv";
+        authors = [
+          "Marvin Löbel <loebel.marvin@gmail.com>"
+        ];
+        features = {
+          "spin" = [ "dep:spin" ];
+          "spin_no_std" = [ "spin" ];
+        };
+      };
       "libc" = rec {
         crateName = "libc";
         version = "0.2.150";
@@ -2457,6 +2470,7 @@ rec {
           "sval_ref" = [ "dep:sval_ref" ];
           "value-bag" = [ "dep:value-bag" ];
         };
+        resolvedDefaultFeatures = [ "std" ];
       };
       "lz4" = rec {
         crateName = "lz4";
@@ -2866,11 +2880,19 @@ rec {
             name = "tokio";
             packageId = "tokio";
             optional = true;
-            features = [ "io-util" "macros" ];
+            features = [ "io-util" "macros" "sync" "time" "rt" ];
           }
           {
             name = "tracing";
             packageId = "tracing";
+          }
+          {
+            name = "tracing-core";
+            packageId = "tracing-core";
+          }
+          {
+            name = "tracing-subscriber";
+            packageId = "tracing-subscriber";
           }
         ];
         devDependencies = [
@@ -2985,6 +3007,35 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "user" ];
       };
+      "nu-ansi-term" = rec {
+        crateName = "nu-ansi-term";
+        version = "0.46.0";
+        edition = "2018";
+        sha256 = "115sywxh53p190lyw97alm14nc004qj5jm5lvdj608z84rbida3p";
+        libName = "nu_ansi_term";
+        authors = [
+          "ogham@bsago.me"
+          "Ryan Scheel (Havvy) <ryan.havvy@gmail.com>"
+          "Josh Triplett <josh@joshtriplett.org>"
+          "The Nushell Project Developers"
+        ];
+        dependencies = [
+          {
+            name = "overload";
+            packageId = "overload";
+          }
+          {
+            name = "winapi";
+            packageId = "winapi";
+            target = { target, features }: ("windows" == target."os" or null);
+            features = [ "consoleapi" "errhandlingapi" "fileapi" "handleapi" "processenv" ];
+          }
+        ];
+        features = {
+          "derive_serde_style" = [ "serde" ];
+          "serde" = [ "dep:serde" ];
+        };
+      };
       "num-traits" = rec {
         crateName = "num-traits";
         version = "0.2.19";
@@ -3062,6 +3113,16 @@ rec {
           "std" = [ "alloc" ];
         };
         resolvedDefaultFeatures = [ "alloc" "default" "race" "std" "unstable" ];
+      };
+      "overload" = rec {
+        crateName = "overload";
+        version = "0.1.1";
+        edition = "2018";
+        sha256 = "0fdgbaqwknillagy1xq7xfgv60qdbk010diwl7s1p0qx7hb16n5i";
+        authors = [
+          "Daniel Salvadori <danaugrs@gmail.com>"
+        ];
+
       };
       "parquet-format-safe" = rec {
         crateName = "parquet-format-safe";
@@ -5708,6 +5769,25 @@ rec {
         };
         resolvedDefaultFeatures = [ "default" "std" ];
       };
+      "sharded-slab" = rec {
+        crateName = "sharded-slab";
+        version = "0.1.7";
+        edition = "2018";
+        sha256 = "1xipjr4nqsgw34k7a2cgj9zaasl2ds6jwn89886kww93d32a637l";
+        libName = "sharded_slab";
+        authors = [
+          "Eliza Weisman <eliza@buoyant.io>"
+        ];
+        dependencies = [
+          {
+            name = "lazy_static";
+            packageId = "lazy_static";
+          }
+        ];
+        features = {
+          "loom" = [ "dep:loom" ];
+        };
+      };
       "signature" = rec {
         crateName = "signature";
         version = "2.2.0";
@@ -5764,6 +5844,21 @@ rec {
           "serde" = [ "dep:serde" ];
         };
         resolvedDefaultFeatures = [ "default" "std" ];
+      };
+      "smallvec" = rec {
+        crateName = "smallvec";
+        version = "1.13.2";
+        edition = "2018";
+        sha256 = "0rsw5samawl3wsw6glrsb127rx6sh89a8wyikicw6dkdcjd1lpiw";
+        authors = [
+          "The Servo Project Developers"
+        ];
+        features = {
+          "arbitrary" = [ "dep:arbitrary" ];
+          "const_new" = [ "const_generics" ];
+          "drain_keep_rest" = [ "drain_filter" ];
+          "serde" = [ "dep:serde" ];
+        };
       };
       "smartstring" = rec {
         crateName = "smartstring";
@@ -6219,6 +6314,26 @@ rec {
         ];
 
       };
+      "thread_local" = rec {
+        crateName = "thread_local";
+        version = "1.1.8";
+        edition = "2021";
+        sha256 = "173i5lyjh011gsimk21np9jn8al18rxsrkjli20a7b8ks2xgk7lb";
+        authors = [
+          "Amanieu d'Antras <amanieu@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "cfg-if";
+            packageId = "cfg-if";
+          }
+          {
+            name = "once_cell";
+            packageId = "once_cell";
+          }
+        ];
+        features = { };
+      };
       "tokio" = rec {
         crateName = "tokio";
         version = "1.40.0";
@@ -6476,6 +6591,13 @@ rec {
             packageId = "once_cell";
             optional = true;
           }
+          {
+            name = "valuable";
+            packageId = "valuable";
+            optional = true;
+            usesDefaultFeatures = false;
+            target = { target, features }: (target."tracing_unstable" or false);
+          }
         ];
         features = {
           "default" = [ "std" "valuable/std" ];
@@ -6483,7 +6605,120 @@ rec {
           "std" = [ "once_cell" ];
           "valuable" = [ "dep:valuable" ];
         };
-        resolvedDefaultFeatures = [ "once_cell" "std" ];
+        resolvedDefaultFeatures = [ "default" "once_cell" "std" "valuable" ];
+      };
+      "tracing-log" = rec {
+        crateName = "tracing-log";
+        version = "0.2.0";
+        edition = "2018";
+        sha256 = "1hs77z026k730ij1a9dhahzrl0s073gfa2hm5p0fbl0b80gmz1gf";
+        libName = "tracing_log";
+        authors = [
+          "Tokio Contributors <team@tokio.rs>"
+        ];
+        dependencies = [
+          {
+            name = "log";
+            packageId = "log";
+          }
+          {
+            name = "once_cell";
+            packageId = "once_cell";
+          }
+          {
+            name = "tracing-core";
+            packageId = "tracing-core";
+          }
+        ];
+        features = {
+          "ahash" = [ "dep:ahash" ];
+          "default" = [ "log-tracer" "std" ];
+          "interest-cache" = [ "lru" "ahash" ];
+          "lru" = [ "dep:lru" ];
+          "std" = [ "log/std" ];
+        };
+        resolvedDefaultFeatures = [ "log-tracer" "std" ];
+      };
+      "tracing-subscriber" = rec {
+        crateName = "tracing-subscriber";
+        version = "0.3.18";
+        edition = "2018";
+        sha256 = "12vs1bwk4kig1l2qqjbbn2nm5amwiqmkcmnznylzmnfvjy6083xd";
+        libName = "tracing_subscriber";
+        authors = [
+          "Eliza Weisman <eliza@buoyant.io>"
+          "David Barsky <me@davidbarsky.com>"
+          "Tokio Contributors <team@tokio.rs>"
+        ];
+        dependencies = [
+          {
+            name = "nu-ansi-term";
+            packageId = "nu-ansi-term";
+            optional = true;
+          }
+          {
+            name = "sharded-slab";
+            packageId = "sharded-slab";
+            optional = true;
+          }
+          {
+            name = "smallvec";
+            packageId = "smallvec";
+            optional = true;
+          }
+          {
+            name = "thread_local";
+            packageId = "thread_local";
+            optional = true;
+          }
+          {
+            name = "tracing-core";
+            packageId = "tracing-core";
+            usesDefaultFeatures = false;
+          }
+          {
+            name = "tracing-log";
+            packageId = "tracing-log";
+            optional = true;
+            usesDefaultFeatures = false;
+            features = [ "log-tracer" "std" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "tracing-log";
+            packageId = "tracing-log";
+          }
+        ];
+        features = {
+          "ansi" = [ "fmt" "nu-ansi-term" ];
+          "chrono" = [ "dep:chrono" ];
+          "default" = [ "smallvec" "fmt" "ansi" "tracing-log" "std" ];
+          "env-filter" = [ "matchers" "regex" "once_cell" "tracing" "std" "thread_local" ];
+          "fmt" = [ "registry" "std" ];
+          "json" = [ "tracing-serde" "serde" "serde_json" ];
+          "local-time" = [ "time/local-offset" ];
+          "matchers" = [ "dep:matchers" ];
+          "nu-ansi-term" = [ "dep:nu-ansi-term" ];
+          "once_cell" = [ "dep:once_cell" ];
+          "parking_lot" = [ "dep:parking_lot" ];
+          "regex" = [ "dep:regex" ];
+          "registry" = [ "sharded-slab" "thread_local" "std" ];
+          "serde" = [ "dep:serde" ];
+          "serde_json" = [ "dep:serde_json" ];
+          "sharded-slab" = [ "dep:sharded-slab" ];
+          "smallvec" = [ "dep:smallvec" ];
+          "std" = [ "alloc" "tracing-core/std" ];
+          "thread_local" = [ "dep:thread_local" ];
+          "time" = [ "dep:time" ];
+          "tracing" = [ "dep:tracing" ];
+          "tracing-log" = [ "dep:tracing-log" ];
+          "tracing-serde" = [ "dep:tracing-serde" ];
+          "valuable" = [ "tracing-core/valuable" "valuable_crate" "valuable-serde" "tracing-serde/valuable" ];
+          "valuable-serde" = [ "dep:valuable-serde" ];
+          "valuable_crate" = [ "dep:valuable_crate" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "ansi" "default" "fmt" "nu-ansi-term" "registry" "sharded-slab" "smallvec" "std" "thread_local" "tracing-log" ];
       };
       "typenum" = rec {
         crateName = "typenum";
@@ -6510,6 +6745,19 @@ rec {
           "David Tolnay <dtolnay@gmail.com>"
         ];
 
+      };
+      "valuable" = rec {
+        crateName = "valuable";
+        version = "0.1.0";
+        edition = "2018";
+        sha256 = "0v9gp3nkjbl30z0fd56d8mx7w1csk86wwjhfjhr400wh9mfpw2w3";
+        features = {
+          "default" = [ "std" ];
+          "derive" = [ "valuable-derive" ];
+          "std" = [ "alloc" ];
+          "valuable-derive" = [ "dep:valuable-derive" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "std" ];
       };
       "version_check" = rec {
         crateName = "version_check";
@@ -6714,7 +6962,7 @@ rec {
         features = {
           "debug" = [ "impl-debug" ];
         };
-        resolvedDefaultFeatures = [ "cfg" "evntrace" "in6addr" "inaddr" "minwinbase" "ntsecapi" "windef" "winioctl" ];
+        resolvedDefaultFeatures = [ "cfg" "consoleapi" "errhandlingapi" "evntrace" "fileapi" "handleapi" "in6addr" "inaddr" "minwinbase" "ntsecapi" "processenv" "windef" "winioctl" ];
       };
       "winapi-i686-pc-windows-gnu" = rec {
         crateName = "winapi-i686-pc-windows-gnu";
