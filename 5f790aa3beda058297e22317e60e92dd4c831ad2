@@ -283,6 +283,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f752c89d_dc996b1f",
+        "filename": "tvix/nix-compat/src/nix_daemon/types.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-06T19:03:02Z",
+      "side": 1,
+      "message": "Hmmh, it\u0027s a bit annoying we have our own type here.\n\nI assume it won\u0027t be easy to allow deserializing into `nix_compat::store_path::StorePath`, would it?",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "26e51693_2d5db3c5",
         "filename": "tvix/nix-compat/src/nix_daemon/worker_protocol.rs",
         "patchSetId": 4
