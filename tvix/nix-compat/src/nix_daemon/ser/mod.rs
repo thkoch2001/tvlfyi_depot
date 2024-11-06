@@ -122,3 +122,12 @@ pub trait NixSerialize {
     where
         W: NixWrite;
 }
+
+impl NixSerialize for () {
+    async fn serialize<W>(&self, _writer: &mut W) -> Result<(), W::Error>
+    where
+        W: NixWrite,
+    {
+        Ok(())
+    }
+}

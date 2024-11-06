@@ -1,5 +1,7 @@
+use data_encoding::HEXLOWER;
 use nix_compat::{
     narinfo::{Flags, Signature},
+    nix_daemon::types,
     nixhash::CAHash,
     store_path::StorePath,
 };
@@ -83,5 +85,27 @@ impl PathInfo {
             file_hash: None,
             file_size: None,
         }
+    }
+}
+
+impl From<PathInfo> for types::UnkeyedValidPathInfo {
+    fn from(value: PathInfo) -> Self {
+        types::UnkeyedValidPathInfo::new(
+            value
+                .deriver
+                .map(|p| types::StorePath::new(p.to_absolute_path()))
+                .into(),
+            HEXLOWER.encode(&value.nar_sha256),
+            value
+                .references
+                .iter()
+                .map(|r| types::StorePath::new(r.to_absolute_path()))
+                .collect::<Vec<_>>(),
+            0,
+            value.nar_size,
+            false,
+            value.signatures.iter().map(|s| format!("{}", s)).collect(),
+            value.ca.map(|c| c.to_nix_nixbase32_string()).into(),
+        )
     }
 }
