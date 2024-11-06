@@ -162,6 +162,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6195a015_0cfcb14f",
+        "filename": "tvix/nix-compat/Cargo.toml",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-06T20:47:36Z",
+      "side": 1,
+      "message": "Ok, now I see the problem. I wonder if it would make sense to just move the docs into nix-compat? Seems much simpler than dealing with an additional feature where every `#[derive(NixSerializer]` needs to be gated with it. wdyt?\n\nAlso in general what do you think of https://cl.tvl.fyi/c/depot/+/12738 ? I am happy to proceed with it if you don\u0027t think it\u0027s a bad idea in principle.",
+      "parentUuid": "b0197779_dc7c72c7",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "42bc7354_bf1ef85e",
         "filename": "tvix/nix-compat/src/nix_daemon/containers.rs",
         "patchSetId": 4
