@@ -7275,6 +7275,14 @@ rec {
             name = "tracing";
             packageId = "tracing";
           }
+          {
+            name = "tracing-core";
+            packageId = "tracing-core";
+          }
+          {
+            name = "tracing-subscriber";
+            packageId = "tracing-subscriber";
+          }
         ];
         devDependencies = [
           {

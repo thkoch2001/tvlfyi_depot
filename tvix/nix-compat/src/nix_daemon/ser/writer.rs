@@ -70,7 +70,7 @@ impl NixWriterBuilder {
 pin_project! {
     pub struct NixWriter<W> {
         #[pin]
-        inner: W,
+        pub(crate) inner: W,
         buf: BytesMut,
         reserved_buf_size: usize,
         max_buf_size: usize,
