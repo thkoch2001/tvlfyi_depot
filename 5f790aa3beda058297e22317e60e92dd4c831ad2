@@ -180,6 +180,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "edfc62ed_d8fffbb3",
+        "filename": "tvix/nix-compat/Cargo.toml",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-06T23:45:49Z",
+      "side": 1,
+      "message": "Not every `#[derive(NixSerializer]` needs to be feature gated. You can instead feature gate the containing module. With some planing of where types live most cases should be implementable with a module feature gate. \n\nAnd even if you move traits and derivers to other crates, `nix-compat` will still likely need a feature for `nix-serialize` since the crate of `nix-compat` with no default features is kept minimal on purpose and the dependencies that `nix-serialize` pulls in might be deemed too many or too big by some of the others to be allowed into the list of non-optional dependencies. And if that feature is there anyway you will still need to feature gate a `#[derive(NixSerializer]` for something like `nix_compat::store_path::StorePath` anyway.\n\nAs I have said I am not against any reorganization of the code as long as it provides a clear benefit in terms of usage ergonomics, clarity or legibility.",
+      "parentUuid": "6195a015_0cfcb14f",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "42bc7354_bf1ef85e",
         "filename": "tvix/nix-compat/src/nix_daemon/containers.rs",
         "patchSetId": 4
@@ -330,6 +348,24 @@
       "writtenOn": "2024-11-06T19:03:02Z",
       "side": 1,
       "message": "Hmmh, it\u0027s a bit annoying we have our own type here.\n\nI assume it won\u0027t be easy to allow deserializing into `nix_compat::store_path::StorePath`, would it?",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa43323a_0ba68406",
+        "filename": "tvix/nix-compat/src/nix_daemon/types.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-06T23:45:49Z",
+      "side": 1,
+      "message": "you can derive deserialization for `nix_compat::store_path::StorePath` via `FromStr` either at the definition of `nix_compat::store_path::StorePath` or via `nix_deserialize_remote!(#[nix(from_str)] StorePath)`",
+      "parentUuid": "f752c89d_dc996b1f",
       "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
