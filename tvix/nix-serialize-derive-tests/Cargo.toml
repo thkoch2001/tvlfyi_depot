@@ -1,5 +1,5 @@
 [package]
-name = "nix-compat-derive-tests"
+name = "nix-serialize-derive-tests"
 version = "0.1.0"
 edition = "2021"
 
@@ -14,11 +14,4 @@ tokio-test = { workspace = true }
 trybuild = { workspace = true }
 tokio = { workspace = true, features = ["io-util", "macros"] }
 
-[dev-dependencies.nix-compat]
-version = "0.1.0"
-path = "../nix-compat"
-features = ["test", "wire"]
-
-[dev-dependencies.nix-compat-derive]
-version = "0.1.0"
-path = "../nix-compat-derive"
+nix-serialize = { path = "../nix-serialize", features = ["derive", "test"]}

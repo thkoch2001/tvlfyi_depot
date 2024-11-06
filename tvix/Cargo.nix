@@ -55,30 +55,40 @@ rec {
       # File a bug if you depend on any for non-debug work!
       debug = internal.debugCrate { inherit packageId; };
     };
-    "nix-compat-derive" = rec {
-      packageId = "nix-compat-derive";
-      build = internal.buildRustCrateWithFeatures {
-        packageId = "nix-compat-derive";
-      };
-
-      # Debug support which might change between releases.
-      # File a bug if you depend on any for non-debug work!
-      debug = internal.debugCrate { inherit packageId; };
-    };
-    "nix-compat-derive-tests" = rec {
-      packageId = "nix-compat-derive-tests";
-      build = internal.buildRustCrateWithFeatures {
-        packageId = "nix-compat-derive-tests";
-      };
-
-      # Debug support which might change between releases.
-      # File a bug if you depend on any for non-debug work!
-      debug = internal.debugCrate { inherit packageId; };
-    };
     "nix-daemon" = rec {
       packageId = "nix-daemon";
       build = internal.buildRustCrateWithFeatures {
         packageId = "nix-daemon";
+      };
+
+      # Debug support which might change between releases.
+      # File a bug if you depend on any for non-debug work!
+      debug = internal.debugCrate { inherit packageId; };
+    };
+    "nix-serialize" = rec {
+      packageId = "nix-serialize";
+      build = internal.buildRustCrateWithFeatures {
+        packageId = "nix-serialize";
+      };
+
+      # Debug support which might change between releases.
+      # File a bug if you depend on any for non-debug work!
+      debug = internal.debugCrate { inherit packageId; };
+    };
+    "nix-serialize-derive" = rec {
+      packageId = "nix-serialize-derive";
+      build = internal.buildRustCrateWithFeatures {
+        packageId = "nix-serialize-derive";
+      };
+
+      # Debug support which might change between releases.
+      # File a bug if you depend on any for non-debug work!
+      debug = internal.debugCrate { inherit packageId; };
+    };
+    "nix-serialize-derive-tests" = rec {
+      packageId = "nix-serialize-derive-tests";
+      build = internal.buildRustCrateWithFeatures {
+        packageId = "nix-serialize-derive-tests";
       };
 
       # Debug support which might change between releases.
@@ -7231,9 +7241,8 @@ rec {
             packageId = "mimalloc";
           }
           {
-            name = "nix-compat-derive";
-            packageId = "nix-compat-derive";
-            optional = true;
+            name = "nix-serialize";
+            packageId = "nix-serialize";
           }
           {
             name = "nom";
@@ -7328,118 +7337,12 @@ rec {
         features = {
           "async" = [ "tokio" ];
           "bytes" = [ "dep:bytes" ];
-          "default" = [ "async" "wire" "nix-compat-derive" ];
-          "nix-compat-derive" = [ "dep:nix-compat-derive" ];
+          "default" = [ "async" "wire" ];
           "pin-project-lite" = [ "dep:pin-project-lite" ];
           "tokio" = [ "dep:tokio" ];
           "wire" = [ "tokio" "pin-project-lite" "bytes" ];
         };
-        resolvedDefaultFeatures = [ "async" "bytes" "default" "nix-compat-derive" "pin-project-lite" "test" "tokio" "wire" ];
-      };
-      "nix-compat-derive" = rec {
-        crateName = "nix-compat-derive";
-        version = "0.1.0";
-        edition = "2021";
-        src = lib.cleanSourceWith { filter = sourceFilter; src = ./nix-compat-derive; };
-        procMacro = true;
-        libName = "nix_compat_derive";
-        dependencies = [
-          {
-            name = "proc-macro2";
-            packageId = "proc-macro2";
-            features = [ "proc-macro" ];
-          }
-          {
-            name = "quote";
-            packageId = "quote";
-            features = [ "proc-macro" ];
-          }
-          {
-            name = "syn";
-            packageId = "syn 2.0.79";
-            features = [ "full" "extra-traits" ];
-          }
-        ];
-        devDependencies = [
-          {
-            name = "hex-literal";
-            packageId = "hex-literal";
-          }
-          {
-            name = "nix-compat";
-            packageId = "nix-compat";
-            usesDefaultFeatures = false;
-            features = [ "async" "wire" "test" ];
-          }
-          {
-            name = "pretty_assertions";
-            packageId = "pretty_assertions";
-          }
-          {
-            name = "proptest";
-            packageId = "proptest";
-            usesDefaultFeatures = false;
-            features = [ "std" "alloc" "tempfile" ];
-          }
-          {
-            name = "rstest";
-            packageId = "rstest";
-          }
-          {
-            name = "tokio";
-            packageId = "tokio";
-            features = [ "io-util" "macros" ];
-          }
-          {
-            name = "tokio-test";
-            packageId = "tokio-test";
-          }
-        ];
-
-      };
-      "nix-compat-derive-tests" = rec {
-        crateName = "nix-compat-derive-tests";
-        version = "0.1.0";
-        edition = "2021";
-        src = lib.cleanSourceWith { filter = sourceFilter; src = ./nix-compat-derive-tests; };
-        devDependencies = [
-          {
-            name = "hex-literal";
-            packageId = "hex-literal";
-          }
-          {
-            name = "nix-compat";
-            packageId = "nix-compat";
-            features = [ "test" "wire" ];
-          }
-          {
-            name = "nix-compat-derive";
-            packageId = "nix-compat-derive";
-          }
-          {
-            name = "pretty_assertions";
-            packageId = "pretty_assertions";
-          }
-          {
-            name = "rstest";
-            packageId = "rstest";
-          }
-          {
-            name = "tokio";
-            packageId = "tokio";
-            features = [ "io-util" "macros" ];
-          }
-          {
-            name = "tokio-test";
-            packageId = "tokio-test";
-          }
-          {
-            name = "trybuild";
-            packageId = "trybuild";
-          }
-        ];
-        features = { };
-        resolvedDefaultFeatures = [ "compile-tests" ];
+        resolvedDefaultFeatures = [ "async" "bytes" "default" "pin-project-lite" "test" "tokio" "wire" ];
       };
       "nix-daemon" = rec {
         crateName = "nix-daemon";
@@ -7506,6 +7409,168 @@ rec {
           "otlp" = [ "tvix-tracing/otlp" ];
         };
         resolvedDefaultFeatures = [ "default" "otlp" ];
+      };
+      "nix-serialize" = rec {
+        crateName = "nix-serialize";
+        version = "0.1.0";
+        edition = "2021";
+        src = lib.cleanSourceWith { filter = sourceFilter; src = ./nix-serialize; };
+        libName = "nix_serialize";
+        dependencies = [
+          {
+            name = "bytes";
+            packageId = "bytes";
+          }
+          {
+            name = "nix-serialize-derive";
+            packageId = "nix-serialize-derive";
+            optional = true;
+          }
+          {
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
+          }
+          {
+            name = "thiserror";
+            packageId = "thiserror";
+            optional = true;
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "io-util" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "hex-literal";
+            packageId = "hex-literal";
+          }
+          {
+            name = "proptest";
+            packageId = "proptest";
+            usesDefaultFeatures = false;
+            features = [ "std" "alloc" "tempfile" ];
+          }
+          {
+            name = "rstest";
+            packageId = "rstest";
+          }
+          {
+            name = "thiserror";
+            packageId = "thiserror";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "macros" "rt" ];
+          }
+          {
+            name = "tokio-test";
+            packageId = "tokio-test";
+          }
+        ];
+        features = {
+          "derive" = [ "nix-serialize-derive" ];
+          "nix-serialize-derive" = [ "dep:nix-serialize-derive" ];
+          "test" = [ "dep:thiserror" ];
+        };
+        resolvedDefaultFeatures = [ "default" "derive" "nix-serialize-derive" "test" ];
+      };
+      "nix-serialize-derive" = rec {
+        crateName = "nix-serialize-derive";
+        version = "0.1.0";
+        edition = "2021";
+        src = lib.cleanSourceWith { filter = sourceFilter; src = ./nix-serialize-derive; };
+        procMacro = true;
+        libName = "nix_serialize_derive";
+        dependencies = [
+          {
+            name = "proc-macro2";
+            packageId = "proc-macro2";
+            features = [ "proc-macro" ];
+          }
+          {
+            name = "quote";
+            packageId = "quote";
+            features = [ "proc-macro" ];
+          }
+          {
+            name = "syn";
+            packageId = "syn 2.0.79";
+            features = [ "full" "extra-traits" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "hex-literal";
+            packageId = "hex-literal";
+          }
+          {
+            name = "pretty_assertions";
+            packageId = "pretty_assertions";
+          }
+          {
+            name = "proptest";
+            packageId = "proptest";
+            usesDefaultFeatures = false;
+            features = [ "std" "alloc" "tempfile" ];
+          }
+          {
+            name = "rstest";
+            packageId = "rstest";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "io-util" "macros" ];
+          }
+          {
+            name = "tokio-test";
+            packageId = "tokio-test";
+          }
+        ];
+
+      };
+      "nix-serialize-derive-tests" = rec {
+        crateName = "nix-serialize-derive-tests";
+        version = "0.1.0";
+        edition = "2021";
+        src = lib.cleanSourceWith { filter = sourceFilter; src = ./nix-serialize-derive-tests; };
+        devDependencies = [
+          {
+            name = "hex-literal";
+            packageId = "hex-literal";
+          }
+          {
+            name = "nix-serialize";
+            packageId = "nix-serialize";
+            features = [ "derive" "test" ];
+          }
+          {
+            name = "pretty_assertions";
+            packageId = "pretty_assertions";
+          }
+          {
+            name = "rstest";
+            packageId = "rstest";
+          }
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "io-util" "macros" ];
+          }
+          {
+            name = "tokio-test";
+            packageId = "tokio-test";
+          }
+          {
+            name = "trybuild";
+            packageId = "trybuild";
+          }
+        ];
+        features = { };
+        resolvedDefaultFeatures = [ "compile-tests" ];
       };
       "nohash-hasher" = rec {
         crateName = "nohash-hasher";
