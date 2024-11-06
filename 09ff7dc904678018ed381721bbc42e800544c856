@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e99fdf47_92559539",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-06T22:53:12Z",
+      "side": 1,
+      "message": "Your before is misleading since your example does not use any derivers or `NixDeserialize` and so they are just redundant and unused imports.",
+      "revId": "09ff7dc904678018ed381721bbc42e800544c856",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e9f6122_ac2a02c7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-06T22:53:12Z",
+      "side": 1,
+      "message": "I am not against doing this if it actually improves the ergonomics of using nix serialization and derivers. I just haven\u0027t seen it demonstrated that this actually improves ergonomics.",
+      "revId": "09ff7dc904678018ed381721bbc42e800544c856",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
