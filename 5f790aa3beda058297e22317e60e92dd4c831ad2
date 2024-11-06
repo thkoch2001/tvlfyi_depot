@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f7ef3872_3d189254",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-06T18:53:10Z",
+      "side": 1,
+      "message": "The log says:\n\n\u003e error: stack overflow (possible infinite recursion)\n\nYou can render the pipeline locally by running `nix-build -A ops.pipelines.depot -o pipeline`",
+      "parentUuid": "8ce79f94_4834be72",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "ba9a571c_426df7d6",
         "filename": "tvix/nix-compat/Cargo.toml",
         "patchSetId": 4
@@ -276,6 +294,24 @@
       "writtenOn": "2024-11-06T15:55:21Z",
       "side": 1,
       "message": "@flokli@flokli.de can we please switch to the `num_enum` crate instead since with that we don\u0027t need this hack",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "01eba5d7_640a1b40",
+        "filename": "tvix/nix-compat/src/nix_daemon/worker_protocol.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-06T18:53:10Z",
+      "side": 1,
+      "message": "I\u0027m not the author of this CL, but I don\u0027t really see a reason why not. @v.kryachko@gmail.com?",
+      "parentUuid": "26e51693_2d5db3c5",
       "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
