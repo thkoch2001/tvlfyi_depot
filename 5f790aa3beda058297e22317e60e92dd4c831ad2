@@ -16,6 +16,23 @@
       "message": "@flokli@flokli.de I am seeing \"llama\" failing for the second time but not sure how to repro this locally, any suggestions? thanks",
       "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ba9a571c_426df7d6",
+        "filename": "tvix/nix-compat/Cargo.toml",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-06T15:39:22Z",
+      "side": 1,
+      "message": "this will most likely break the nix build because of a circular dependency between nix-compat -\u003e nix-compat-derive -\u003e nix-compat\nIt works with cargo because it allows this because nix-compat-derive -\u003e nix-compat is a dev-dependency but crate2nix does not allow this.\n\nI believe nix-compat-derive depends on nix-compat for doctests.",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
