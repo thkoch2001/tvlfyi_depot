@@ -108,6 +108,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "2d60c0f1_9bfe99eb",
+        "filename": "tvix/nix-compat/Cargo.toml",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-06T18:14:58Z",
+      "side": 1,
+      "message": "I think this should remove the dep cycle and improve ergonomics a bit https://cl.tvl.fyi/c/depot/+/12738 . wdyt?",
+      "parentUuid": "89b8c46d_ed4e78e2",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "42bc7354_bf1ef85e",
         "filename": "tvix/nix-compat/src/nix_daemon/containers.rs",
         "patchSetId": 4
@@ -119,6 +137,24 @@
       "writtenOn": "2024-11-06T15:55:21Z",
       "side": 1,
       "message": "why this hack instead of just implementing `NixSerialize` and `NixDeserialize` on `Option\u003cUnkeyedValidPathInfo\u003e`?\nIf you worry about redundant code use this macro:\n\n```\nmacro_rules! optional_info {\n    ($sub:ty) \u003d\u003e {\n        impl NixDeserialize for Option\u003c$sub\u003e {\n            fn try_deserialize\u003cR\u003e(\n                reader: \u0026mut R,\n            ) -\u003e impl std::future::Future\u003cOutput \u003d Result\u003cOption\u003cSelf\u003e, R::Error\u003e\u003e + Send + \u0027_\n            where\n                R: ?Sized + NixRead + Send,\n            {\n                async move {\n                    if let Some(found) \u003d reader.try_read_value::\u003cbool\u003e().await? {\n                        if found {\n                            Ok(Some(Some(reader.read_value().await?)))\n                        } else {\n                            Ok(Some(None))\n                        }\n                    } else {\n                        Ok(None)\n                    }\n                }\n            }\n        }\n        impl NixSerialize for Option\u003c$sub\u003e {\n            async fn serialize\u003cW\u003e(\u0026self, writer: \u0026mut W) -\u003e Result\u003c(), W::Error\u003e\n                where W: NixWrite\n            {\n                if let Some(value) \u003d self.as_ref() {\n                    writer.write_value(\u0026true).await?;\n                    writer.write_value(value).await\n                } else {\n                    writer.write_value(\u0026false).await\n                }\n            }\n        }\n    };\n}\noptional_info!(UnkeyedValidPathInfo);\n```",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba2f168b_2b0e965f",
+        "filename": "tvix/nix-compat/src/nix_daemon/containers.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-06T18:14:58Z",
+      "side": 1,
+      "message": "Oh, that\u0027s a great point will do",
+      "parentUuid": "42bc7354_bf1ef85e",
       "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -140,6 +176,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "8fd835fc_c0e6516d",
+        "filename": "tvix/nix-compat/src/nix_daemon/containers.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-06T18:14:58Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "5da25bea_6cf2ae46",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f02c8112_9b6dcc96",
@@ -153,6 +207,24 @@
       "writtenOn": "2024-11-06T15:55:21Z",
       "side": 1,
       "message": "Why use `async_trait` here since it boxes all futures when there is now support for async traits directly in rust?",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5ee27d7_8d4d5478",
+        "filename": "tvix/nix-compat/src/nix_daemon/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-06T18:14:58Z",
+      "side": 1,
+      "message": "\u003e now support for async traits directly in rust\n\nSuch traits are not object-safe and I am using Arc\u003cdyn NixDaemonIO\u003e throughout, I can look more into this and make NixDaemon(server) generic over NixDaemonIO though.",
+      "parentUuid": "f02c8112_9b6dcc96",
       "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
