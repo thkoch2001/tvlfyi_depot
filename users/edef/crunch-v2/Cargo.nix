@@ -4129,9 +4129,8 @@ rec {
             packageId = "mimalloc";
           }
           {
-            name = "nix-compat-derive";
-            packageId = "nix-compat-derive";
-            optional = true;
+            name = "nix-serialize";
+            packageId = "nix-serialize";
           }
           {
             name = "nom";
@@ -4187,39 +4186,47 @@ rec {
         features = {
           "async" = [ "tokio" ];
           "bytes" = [ "dep:bytes" ];
-          "default" = [ "async" "wire" "nix-compat-derive" ];
-          "nix-compat-derive" = [ "dep:nix-compat-derive" ];
+          "default" = [ "async" "wire" ];
           "pin-project-lite" = [ "dep:pin-project-lite" ];
           "tokio" = [ "dep:tokio" ];
           "wire" = [ "tokio" "pin-project-lite" "bytes" ];
         };
-        resolvedDefaultFeatures = [ "async" "bytes" "default" "nix-compat-derive" "pin-project-lite" "tokio" "wire" ];
+        resolvedDefaultFeatures = [ "async" "bytes" "default" "pin-project-lite" "tokio" "wire" ];
       };
-      "nix-compat-derive" = rec {
-        crateName = "nix-compat-derive";
+      "nix-serialize" = rec {
+        crateName = "nix-serialize";
         version = "0.1.0";
         edition = "2021";
-        src = lib.cleanSourceWith { filter = sourceFilter; src = ../../../tvix/nix-compat-derive; };
-        procMacro = true;
-        libName = "nix_compat_derive";
+        src = lib.cleanSourceWith { filter = sourceFilter; src = ../../../tvix/nix-serialize; };
+        libName = "nix_serialize";
         dependencies = [
           {
-            name = "proc-macro2";
-            packageId = "proc-macro2";
-            features = [ "proc-macro" ];
+            name = "bytes";
+            packageId = "bytes";
           }
           {
-            name = "quote";
-            packageId = "quote";
-            features = [ "proc-macro" ];
+            name = "pin-project-lite";
+            packageId = "pin-project-lite";
           }
           {
-            name = "syn";
-            packageId = "syn 2.0.79";
-            features = [ "full" "extra-traits" ];
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "io-util" ];
           }
         ];
-
+        devDependencies = [
+          {
+            name = "tokio";
+            packageId = "tokio";
+            features = [ "macros" "rt" ];
+          }
+        ];
+        features = {
+          "derive" = [ "nix-serialize-derive" ];
+          "nix-serialize-derive" = [ "dep:nix-serialize-derive" ];
+          "test" = [ "dep:thiserror" ];
+        };
+        resolvedDefaultFeatures = [ "default" ];
       };
       "nom" = rec {
         crateName = "nom";

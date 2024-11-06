@@ -63,11 +63,11 @@
         };
       };
 
-      nix-compat-derive = prev: {
+      nix-serialize-derive = prev: {
         src = depot.tvix.utils.filterRustCrateSrc { root = prev.src.origSrc; };
       };
 
-      nix-compat-derive-tests = prev: {
+      nix-serialize-derive-tests = prev: {
         src = depot.tvix.utils.filterRustCrateSrc { root = prev.src.origSrc; };
       };
 

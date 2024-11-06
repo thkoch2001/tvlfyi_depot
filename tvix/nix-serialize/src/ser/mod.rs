@@ -6,8 +6,6 @@ use super::ProtocolVersion;
 
 mod bytes;
 mod collections;
-#[cfg(feature = "nix-compat-derive")]
-mod display;
 mod int;
 #[cfg(any(test, feature = "test"))]
 pub mod mock;
@@ -121,4 +119,13 @@ pub trait NixSerialize {
     fn serialize<W>(&self, writer: &mut W) -> impl Future<Output = Result<(), W::Error>> + Send
     where
         W: NixWrite;
+}
+
+impl NixSerialize for () {
+    async fn serialize<W>(&self, _writer: &mut W) -> Result<(), W::Error>
+    where
+        W: NixWrite,
+    {
+        Ok(())
+    }
 }
