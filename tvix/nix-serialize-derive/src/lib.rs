@@ -26,14 +26,14 @@
 //! ### Examples
 //!
 //! ```rust
-//! # use nix_compat_derive::{NixDeserialize, NixSerialize};
+//! # use nix_serialize::{NixDeserialize, NixSerialize};
 //! #
 //! #[derive(NixDeserialize, NixSerialize)]
 //! struct Unnamed(u64, String);
 //! ```
 //!
 //! ```rust
-//! # use nix_compat_derive::{NixDeserialize, NixSerialize};
+//! # use nix_serialize::{NixDeserialize, NixSerialize};
 //! #
 //! #[derive(NixDeserialize, NixSerialize)]
 //! struct Fields {
@@ -43,7 +43,7 @@
 //! ```
 //!
 //! ```rust
-//! # use nix_compat_derive::{NixDeserialize, NixSerialize};
+//! # use nix_serialize::{NixDeserialize, NixSerialize};
 //! #
 //! #[derive(NixDeserialize, NixSerialize)]
 //! struct Ignored;
@@ -56,10 +56,10 @@
 //! to containers, fields and variants.
 //!
 //! ```rust
-//! # use nix_compat_derive::NixDeserialize;
+//! # use nix_serialize::NixDeserialize;
 //! #
 //! #[derive(NixDeserialize)]
-//! #[nix(crate="nix_compat")] // <-- This is a container attribute
+//! #[nix(crate="nix_serialize")] // <-- This is a container attribute
 //! struct Fields {
 //!     number: u64,
 //!     #[nix(version="..20")] // <-- This is a field attribute
@@ -67,7 +67,7 @@
 //! };
 //!
 //! #[derive(NixDeserialize)]
-//! #[nix(crate="nix_compat")] // <-- This is also a container attribute
+//! #[nix(crate="nix_serialize")] // <-- This is also a container attribute
 //! enum E {
 //!     #[nix(version="..10")] // <-- This is a variant attribute
 //!     A(u64),
@@ -90,7 +90,7 @@
 //! ###### Example
 //!
 //! ```rust
-//! # use nix_compat_derive::NixDeserialize;
+//! # use nix_serialize::NixDeserialize;
 //! #
 //! #[derive(NixDeserialize)]
 //! #[nix(from_str)]
@@ -119,7 +119,7 @@
 //! ###### Example
 //!
 //! ```rust
-//! # use nix_compat_derive::NixDeserialize;
+//! # use nix_serialize::NixDeserialize;
 //! #
 //! #[derive(NixDeserialize)]
 //! #[nix(from="usize")]
@@ -144,7 +144,7 @@
 //! ###### Example
 //!
 //! ```rust
-//! # use nix_compat_derive::NixDeserialize;
+//! # use nix_serialize::NixDeserialize;
 //! #
 //! #[derive(NixDeserialize)]
 //! #[nix(try_from="usize")]
@@ -174,7 +174,7 @@
 //! ###### Example
 //!
 //! ```rust
-//! # use nix_compat_derive::NixSerialize;
+//! # use nix_serialize::NixSerialize;
 //! #
 //! #[derive(Clone, NixSerialize)]
 //! #[nix(into="usize")]
@@ -200,7 +200,7 @@
 //! ###### Example
 //!
 //! ```rust
-//! # use nix_compat_derive::NixSerialize;
+//! # use nix_serialize::NixSerialize;
 //! #
 //! #[derive(Clone, NixSerialize)]
 //! #[nix(try_into="usize")]
@@ -226,7 +226,7 @@
 //! ###### Example
 //!
 //! ```rust
-//! # use nix_compat_derive::NixSerialize;
+//! # use nix_serialize::NixSerialize;
 //! # use std::fmt::{Display, Result, Formatter};
 //! #
 //! #[derive(NixSerialize)]
@@ -251,7 +251,7 @@
 //! ###### Example
 //!
 //! ```rust
-//! # use nix_compat_derive::NixSerialize;
+//! # use nix_serialize::NixSerialize;
 //! # use std::fmt::{Display, Result, Formatter};
 //! #
 //! #[derive(NixSerialize)]
@@ -287,7 +287,7 @@
 //! ###### Example
 //!
 //! ```rust
-//! # use nix_compat_derive::NixDeserialize;
+//! # use nix_serialize::NixDeserialize;
 //! #
 //! #[derive(NixDeserialize)]
 //! enum Testing {
@@ -310,7 +310,7 @@
 //! ###### Example
 //!
 //! ```rust
-//! # use nix_compat_derive::NixDeserialize;
+//! # use nix_serialize::NixDeserialize;
 //! #
 //! #[derive(NixDeserialize)]
 //! struct Field {
@@ -331,7 +331,7 @@
 //! ###### Example
 //!
 //! ```rust
-//! # use nix_compat_derive::NixDeserialize;
+//! # use nix_serialize::NixDeserialize;
 //! #
 //! #[derive(NixDeserialize)]
 //! struct Field {
@@ -354,7 +354,7 @@
 //! ###### Example
 //!
 //! ```rust
-//! # use nix_compat_derive::NixDeserialize;
+//! # use nix_serialize::NixDeserialize;
 //! #
 //! #[derive(NixDeserialize)]
 //! struct Field {
@@ -379,7 +379,7 @@ mod ser;
 #[proc_macro_derive(NixDeserialize, attributes(nix))]
 pub fn derive_nix_deserialize(item: TokenStream) -> TokenStream {
     let mut input = syn::parse_macro_input!(item as DeriveInput);
-    let crate_path: syn::Path = parse_quote!(::nix_compat);
+    let crate_path: syn::Path = parse_quote!(::nix_serialize);
     de::expand_nix_deserialize(crate_path, &mut input)
         .unwrap_or_else(syn::Error::into_compile_error)
         .into()
@@ -388,7 +388,7 @@ pub fn derive_nix_deserialize(item: TokenStream) -> TokenStream {
 #[proc_macro_derive(NixSerialize, attributes(nix))]
 pub fn derive_nix_serialize(item: TokenStream) -> TokenStream {
     let mut input = syn::parse_macro_input!(item as DeriveInput);
-    let crate_path: syn::Path = parse_quote!(::nix_compat);
+    let crate_path: syn::Path = parse_quote!(::nix_serialize);
     ser::expand_nix_serialize(crate_path, &mut input)
         .unwrap_or_else(syn::Error::into_compile_error)
         .into()
@@ -405,7 +405,7 @@ pub fn derive_nix_serialize(item: TokenStream) -> TokenStream {
 /// #### Example
 ///
 /// ```rust
-/// # use nix_compat_derive::nix_deserialize_remote;
+/// # use nix_serialize::nix_deserialize_remote;
 /// #
 /// struct MyU64(u64);
 ///
@@ -420,7 +420,7 @@ pub fn derive_nix_serialize(item: TokenStream) -> TokenStream {
 #[proc_macro]
 pub fn nix_deserialize_remote(item: TokenStream) -> TokenStream {
     let input = syn::parse_macro_input!(item as RemoteInput);
-    let crate_path = parse_quote!(::nix_compat);
+    let crate_path = parse_quote!(::nix_serialize);
     de::expand_nix_deserialize_remote(crate_path, &input)
         .unwrap_or_else(syn::Error::into_compile_error)
         .into()
@@ -437,7 +437,7 @@ pub fn nix_deserialize_remote(item: TokenStream) -> TokenStream {
 /// #### Example
 ///
 /// ```rust
-/// # use nix_compat_derive::nix_serialize_remote;
+/// # use nix_serialize::nix_serialize_remote;
 /// #
 /// #[derive(Clone)]
 /// struct MyU64(u64);
@@ -453,7 +453,7 @@ pub fn nix_deserialize_remote(item: TokenStream) -> TokenStream {
 #[proc_macro]
 pub fn nix_serialize_remote(item: TokenStream) -> TokenStream {
     let input = syn::parse_macro_input!(item as RemoteInput);
-    let crate_path = parse_quote!(::nix_compat);
+    let crate_path = parse_quote!(::nix_serialize);
     ser::expand_nix_serialize_remote(crate_path, &input)
         .unwrap_or_else(syn::Error::into_compile_error)
         .into()

@@ -55,13 +55,13 @@ fn nix_serialize_impl(
 
     quote! {
         #[automatically_derived]
-        impl #impl_generics #crate_path::nix_daemon::ser::NixSerialize for #ty #ty_generics
+        impl #impl_generics #crate_path::NixSerialize for #ty #ty_generics
             #where_clause
         {
             async fn serialize<W>(&self, writer: &mut W) -> std::result::Result<(), W::Error>
-                where W: #crate_path::nix_daemon::ser::NixWrite
+                where W: #crate_path::NixWrite
             {
-                use #crate_path::nix_daemon::ser::Error as _;
+                use #crate_path::SerializeError as _;
                 #body
             }
         }
@@ -207,8 +207,8 @@ fn nix_serialize_try_into(crate_path: &Path, ty: &Type) -> TokenStream {
     quote_spanned! {
         ty.span() =>
         {
-            use #crate_path::nix_daemon::ser::Error;
-            let other : #ty = <Self as Clone>::clone(self).try_into().map_err(Error::unsupported_data)?;
+            use #crate_path::SerializeError;
+            let other : #ty = <Self as Clone>::clone(self).try_into().map_err(SerializeError::unsupported_data)?;
             writer.write_value(&other).await
         }
     }
