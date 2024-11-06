@@ -11,17 +11,19 @@ wire = ["tokio", "pin-project-lite", "bytes"]
 test = []
 
 # Enable all features by default.
-default = ["async", "wire", "nix-compat-derive"]
+default = ["async", "wire"]
 
 [dependencies]
 bitflags = { workspace = true }
 bstr = { workspace = true, features = ["alloc", "unicode", "serde"] }
 data-encoding = { workspace = true }
+derive_more = { version = "1.0.0", features = ["full"] }
 ed25519 = { workspace = true }
 ed25519-dalek = { workspace = true }
 enum-primitive-derive = { workspace = true }
 glob = { workspace = true }
 mimalloc = { workspace = true }
+nix-compat-derive = { path = "../nix-compat-derive" }
 nom = { workspace = true }
 num-traits = { workspace = true }
 serde = { workspace = true, features = ["derive"] }
@@ -33,15 +35,12 @@ tracing-subscriber = { workspace = true }
 bytes = { workspace = true, optional = true }
 tokio = { workspace = true, features = ["io-util", "macros", "sync", "time", "rt"], optional = true }
 pin-project-lite = { workspace = true, optional = true }
+async-trait = "0.1.83"
+futures.workspace = true
 tracing-core = "0.1.32"
-
-[dependencies.nix-compat-derive]
-path = "../nix-compat-derive"
-optional = true
 
 [dev-dependencies]
 criterion = { workspace = true, features = ["html_reports"] }
-futures = { workspace = true }
 hex-literal = { workspace = true }
 mimalloc = { workspace = true }
 pretty_assertions = { workspace = true }
