@@ -73,6 +73,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "89b8c46d_ed4e78e2",
+        "filename": "tvix/nix-compat/Cargo.toml",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-06T16:05:59Z",
+      "side": 1,
+      "message": "Also nix-serialization is really only useful for Nix Daemon protocol, maybe Nix worker protocol (but that is legacy) and potentially NAR reading and writing (but that uses its own implementations in twix).\n\nAnd to implement the nix daemon protocol you need types that really mostly live in `nix-compat`.\n\nMoving would also not solve this problem as you would still need a `nix-serialization` crate and a `nix-serialization-derive` crate.",
+      "parentUuid": "4d0e25bb_cd36331a",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "42bc7354_bf1ef85e",
         "filename": "tvix/nix-compat/src/nix_daemon/containers.rs",
         "patchSetId": 4
