@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "76951130_2fae9666",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-06T14:10:15Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "318a242b_5e6a2de1",
+      "revId": "46e69d23febe89c8ceb050cd8cee48a97774c3f4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a69c6ea4_b4d57cc2",
@@ -37,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "09edc607_c6251f79",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 181,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-06T14:10:15Z",
+      "side": 1,
+      "message": "this is actually also left-over, sorry about that, removed.\n\nI decided against using a Vec due to how much slower it will be because of boxing and dynamic dispatch",
+      "parentUuid": "a69c6ea4_b4d57cc2",
+      "revId": "46e69d23febe89c8ceb050cd8cee48a97774c3f4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bd31c274_bad65cda",
         "filename": "tvix/tracing/src/lib.rs",
         "patchSetId": 1
@@ -48,6 +84,24 @@
       "writtenOn": "2024-11-06T08:35:13Z",
       "side": 1,
       "message": "is the build_with_additional only there to avoid boxing if we only add one?",
+      "revId": "46e69d23febe89c8ceb050cd8cee48a97774c3f4",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9a09cfd2_d276d01f",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-06T14:10:15Z",
+      "side": 1,
+      "message": "This is the only method I intended to add, sorry about the noise above. But that\u0027s right, with this method all layers will be statically dispatched.\n\nWhile `build_with_additional` only allows passing in one layer, it itself can be `Layered`.",
+      "parentUuid": "bd31c274_bad65cda",
       "revId": "46e69d23febe89c8ceb050cd8cee48a97774c3f4",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
