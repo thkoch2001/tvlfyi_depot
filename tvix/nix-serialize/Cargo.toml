@@ -1,0 +1,34 @@
+[package]
+name = "nix-serialize"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bytes = { workspace = true }
+nix-serialize-derive = { optional = true, path = "../nix-serialize-derive" }
+pin-project-lite = { workspace = true }
+tokio = { workspace = true, features = ["io-util"] }
+thiserror = { workspace = true, optional = true }
+
+[dev-dependencies]
+rstest = { workspace = true }
+hex-literal = { workspace = true }
+tokio = { workspace = true, features = ["macros", "rt"] }
+tokio-test = { workspace = true }
+thiserror = { workspace = true }
+proptest = { workspace = true, features = ["std", "alloc", "tempfile"] }
+
+[features]
+default = []
+
+test = ["dep:thiserror"]
+
+# Provide derive(NixSerialize, NixDeserialize) macros.
+derive = ["nix-serialize-derive"]
+
+[lints]
+workspace = true
+
+
+[package.metadata.docs.rs]
+features = ["derive", "test"]

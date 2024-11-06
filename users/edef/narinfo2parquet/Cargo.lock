@@ -964,7 +964,7 @@ dependencies = [
  "enum-primitive-derive",
  "glob",
  "mimalloc",
- "nix-compat-derive",
+ "nix-serialize",
  "nom",
  "num-traits",
  "pin-project-lite",
@@ -977,12 +977,12 @@ dependencies = [
 ]
 
 [[package]]
-name = "nix-compat-derive"
+name = "nix-serialize"
 version = "0.1.0"
 dependencies = [
- "proc-macro2",
- "quote",
- "syn 2.0.79",
+ "bytes",
+ "pin-project-lite",
+ "tokio",
 ]
 
 [[package]]

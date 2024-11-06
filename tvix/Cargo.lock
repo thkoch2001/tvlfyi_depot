@@ -2297,7 +2297,7 @@ dependencies = [
  "glob",
  "hex-literal",
  "mimalloc",
- "nix-compat-derive",
+ "nix-serialize",
  "nom",
  "num-traits",
  "pin-project-lite",
@@ -2316,36 +2316,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "nix-compat-derive"
-version = "0.1.0"
-dependencies = [
- "hex-literal",
- "nix-compat",
- "pretty_assertions",
- "proc-macro2",
- "proptest",
- "quote",
- "rstest",
- "syn 2.0.79",
- "tokio",
- "tokio-test",
-]
-
-[[package]]
-name = "nix-compat-derive-tests"
-version = "0.1.0"
-dependencies = [
- "hex-literal",
- "nix-compat",
- "nix-compat-derive",
- "pretty_assertions",
- "rstest",
- "tokio",
- "tokio-test",
- "trybuild",
-]
-
-[[package]]
 name = "nix-daemon"
 version = "0.1.0"
 dependencies = [
@@ -2360,6 +2330,49 @@ dependencies = [
  "tvix-castore",
  "tvix-store",
  "tvix-tracing",
+]
+
+[[package]]
+name = "nix-serialize"
+version = "0.1.0"
+dependencies = [
+ "bytes",
+ "hex-literal",
+ "nix-serialize-derive",
+ "pin-project-lite",
+ "proptest",
+ "rstest",
+ "thiserror",
+ "tokio",
+ "tokio-test",
+]
+
+[[package]]
+name = "nix-serialize-derive"
+version = "0.1.0"
+dependencies = [
+ "hex-literal",
+ "pretty_assertions",
+ "proc-macro2",
+ "proptest",
+ "quote",
+ "rstest",
+ "syn 2.0.79",
+ "tokio",
+ "tokio-test",
+]
+
+[[package]]
+name = "nix-serialize-derive-tests"
+version = "0.1.0"
+dependencies = [
+ "hex-literal",
+ "nix-serialize",
+ "pretty_assertions",
+ "rstest",
+ "tokio",
+ "tokio-test",
+ "trybuild",
 ]
 
 [[package]]
@@ -4809,6 +4822,7 @@ dependencies = [
  "lru",
  "mimalloc",
  "nix-compat",
+ "nix-serialize",
  "parking_lot",
  "pin-project-lite",
  "prost",

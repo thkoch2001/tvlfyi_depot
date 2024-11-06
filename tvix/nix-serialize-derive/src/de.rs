@@ -58,12 +58,12 @@ fn nix_deserialize_impl(
 
     quote! {
         #[automatically_derived]
-        impl #impl_generics #crate_path::nix_daemon::de::NixDeserialize for #ty #ty_generics
+        impl #impl_generics #crate_path::NixDeserialize for #ty #ty_generics
             #where_clause
         {
             #[allow(clippy::manual_async_fn)]
             fn try_deserialize<R>(reader: &mut R) -> impl ::std::future::Future<Output=Result<Option<Self>, R::Error>> + Send + '_
-                where R: ?Sized + #crate_path::nix_daemon::de::NixRead + Send,
+                where R: ?Sized + #crate_path::NixRead + Send,
             {
                 #body
             }
@@ -253,10 +253,10 @@ fn nix_deserialize_try_from(crate_path: &Path, ty: &Type) -> TokenStream {
     quote_spanned! {
         ty.span() =>
         async move {
-            use #crate_path::nix_daemon::de::Error;
+            use #crate_path::DeserializeError;
             if let Some(item) = reader.try_read_value::<#ty>().await? {
                 <Self as ::std::convert::TryFrom<#ty>>::try_from(item)
-                    .map_err(Error::invalid_data)
+                    .map_err(DeserializeError::invalid_data)
                     .map(Some)
             } else {
                 Ok(None)
@@ -269,12 +269,12 @@ fn nix_deserialize_from_str(crate_path: &Path, span: Span) -> TokenStream {
     quote_spanned! {
         span =>
         async move {
-            use #crate_path::nix_daemon::de::Error;
+            use #crate_path::DeserializeError;
             if let Some(buf) = reader.try_read_bytes().await? {
                 let s = ::std::str::from_utf8(&buf)
-                    .map_err(Error::invalid_data)?;
+                    .map_err(DeserializeError::invalid_data)?;
                 <Self as ::std::str::FromStr>::from_str(s)
-                    .map_err(Error::invalid_data)
+                    .map_err(DeserializeError::invalid_data)
                     .map(Some)
             } else {
                 Ok(None)
