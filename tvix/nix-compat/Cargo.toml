@@ -9,6 +9,7 @@ async = ["tokio"]
 # code emitting low-level packets used in the daemon protocol.
 wire = ["tokio", "pin-project-lite", "bytes"]
 test = []
+fetchtree = ["url"]
 
 # Enable all features by default.
 default = ["async", "wire", "nix-compat-derive"]
@@ -32,6 +33,7 @@ tracing = { workspace = true }
 bytes = { workspace = true, optional = true }
 tokio = { workspace = true, features = ["io-util", "macros"], optional = true }
 pin-project-lite = { workspace = true, optional = true }
+url = { workspace = true, optional = true }
 
 [dependencies.nix-compat-derive]
 path = "../nix-compat-derive"
