@@ -196,6 +196,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "088aab48_7697c5f2",
+        "filename": "tvix/nix-compat/Cargo.toml",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-07T02:36:21Z",
+      "side": 1,
+      "message": "That makes sense, thanks for explaining. Indeed it seems like a dedicated feature is the way to go anyway. I also realized that it\u0027s possible to make ergonomics better even without factoring out the traits into a separate crate, I am going to abandon https://cl.tvl.fyi/c/depot/+/12738 for now and continue on improving this cl",
+      "parentUuid": "edfc62ed_d8fffbb3",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "42bc7354_bf1ef85e",
@@ -419,6 +437,24 @@
       "side": 1,
       "message": "@v.kryachko@gmail.com if you want to implement it with `num_enum` it would look something like this:\n```\n#[derive(\n    Debug, Clone, Copy, PartialEq, Eq, PartialOrd, Ord, Hash, FromPrimitive, IntoPrimitive, NixDeserialize, NixSerialize\n)]\n#[nix(from \u003d \"u16\", into \u003d \"u16\")]\n#[repr(u16)]\npub enum Verbosity {\n    #[num_enum(default)]\n    Error \u003d 0,\n    Warn \u003d 1,\n    Notice \u003d 2,\n    Info \u003d 3,\n    Talkative \u003d 4,\n    Chatty \u003d 5,\n    Debug \u003d 6,\n    #[num_enum(catch_all)]\n    Vomit \u003d 7,\n}\n```",
       "parentUuid": "01eba5d7_640a1b40",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d312889c_8105b0df",
+        "filename": "tvix/nix-compat/src/nix_daemon/worker_protocol.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-07T02:36:21Z",
+      "side": 1,
+      "message": "Nice! will switch to it",
+      "parentUuid": "e9d7eab5_58f719c4",
       "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
