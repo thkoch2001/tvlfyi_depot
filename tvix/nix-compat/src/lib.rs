@@ -6,6 +6,7 @@ pub mod nar;
 pub mod narinfo;
 pub mod nix_http;
 pub mod nixbase32;
+pub mod fetchtree;
 pub mod nixcpp;
 pub mod nixhash;
 pub mod path_info;
