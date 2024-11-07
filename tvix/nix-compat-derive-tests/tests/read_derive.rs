@@ -1,8 +1,8 @@
 use std::str::FromStr;
 
-use nix_compat::nix_daemon::de::mock::{Builder, Error};
-use nix_compat::nix_daemon::de::NixRead;
-use nix_compat_derive::NixDeserialize;
+use nix_compat::nix_daemon::de_mock::{Builder, Error};
+use nix_compat::nix_daemon::NixDeserialize;
+use nix_compat::nix_daemon::NixRead;
 
 #[derive(Debug, PartialEq, Eq, NixDeserialize)]
 pub struct UnitTest;
