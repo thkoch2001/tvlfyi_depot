@@ -1,6 +1,23 @@
 {
   "comments": [
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "902f4af0_fe6a5d81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000162
+      },
+      "writtenOn": "2024-11-07T20:33:32Z",
+      "side": 1,
+      "message": "Really cool to see initial work on fetchTree 👍\nI don\u0027t know how compatible this should be with how Nix parses URLs. It probably changes over time and there seems to be a difference between how CLI URLs are parsed and how fetchTree parses URLs. If the focus is fetchTree, then it is stricter on local file/directory paths.\n\nLooking at the tests, it seems there could be quite a few of them. Maybe not for this change, but would https://insta.rs/ be an option to check the full structs, instead of individual hand-picked fields to assert?",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "681f6f98_f8b442fc",
@@ -128,6 +145,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "256fc198_06df07e1",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1000162
+      },
+      "writtenOn": "2024-11-07T20:33:32Z",
+      "side": 1,
+      "message": "Nix only explicitly seems to be supporting `git+https`, `git+ssh`, `git+file` and `git`.\n`git+git`, `git+path`, `git+something` are not (`error: input \u0027git+path:./nixos/nixpkgs\u0027 is unsupported`).\n\nMight be ok to only use direct schemes here? (so there is no need for splitting)",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "c4799bf8_d1980906",
         "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
         "patchSetId": 2
@@ -139,6 +173,30 @@
       "writtenOn": "2024-11-07T19:23:35Z",
       "side": 1,
       "message": "```suggestion\n            _ if {\n                const VALID_EXTENSIONS: [\u0026str; 7] \u003d [\n                    \".zip\", \".tar\", \".tgz\", \".tar.gz\", \".tar.xz\", \".tar.bz2\", \".tar.zst\",\n                ];\n                VALID_EXTENSIONS\n                    .iter()\n                    .any(|\u0026ext| url.path().ends_with(ext))\n            } \u003d\u003e\n```",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 54
+      },
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "15b5b733_3ee49d62",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000162
+      },
+      "writtenOn": "2024-11-07T20:33:32Z",
+      "side": 1,
+      "message": "From what I can see Nix doesn\u0027t support file-URLs as-is. For instance:\n\n```\n$ nix build ~/Downloads/a.zip\nerror: path \u0027/home/bob.vanderlinden/Downloads/a.zip\u0027 is not a flake (because it\u0027s not a directory)\n```\n\nFor `fetchTree` it\u0027ll just not parse the URL at all:\n\n```\n$ nix eval --expr \u0027builtins.fetchTree \"/some/path\"\u0027\nerror:\n       … while calling the \u0027fetchTree\u0027 builtin\n         at «string»:1:1:\n            1| builtins.fetchTree \"/some/path\"\n             | ^\n\n       error: \u0027/some/path\u0027 is not a valid URL\n```\n\nMaybe it\u0027s best to return `UrlParseError` for all other protocols for now?\nOr is there another use-case where it does support these URLs explicitly?",
+      "parentUuid": "c4799bf8_d1980906",
       "range": {
         "startLine": 126,
         "startChar": 0,
@@ -230,6 +288,23 @@
       "writtenOn": "2024-11-07T18:36:33Z",
       "side": 1,
       "message": "Can all this stuff be customized using url params? If so, let\u0027s add a TODO in here.",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b197263f_16b1c94e",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000162
+      },
+      "writtenOn": "2024-11-07T20:33:32Z",
+      "side": 1,
+      "message": "I think each of these need their own parsing. For instance, Nix itself strictly doesn\u0027t allow `github:something`, but `github:something/else` is allowed (it extracts the owner and repo separately).\n\nFor ref specifically in combination with GitHub it conflicts with the branch of `github:owner/repo/branch`. Nix explicitly disallows this (`   error: URL \u0027github:nixos/nixpkgs/nixpkgs-unstable?ref\u003dnixos-24.05\u0027 contains multiple branch/tag names`).",
       "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
