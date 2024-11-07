@@ -32,6 +32,7 @@ tracing = { workspace = true }
 bytes = { workspace = true, optional = true }
 tokio = { workspace = true, features = ["io-util", "macros"], optional = true }
 pin-project-lite = { workspace = true, optional = true }
+url = { workspace = true }
 
 [dependencies.nix-compat-derive]
 path = "../nix-compat-derive"
