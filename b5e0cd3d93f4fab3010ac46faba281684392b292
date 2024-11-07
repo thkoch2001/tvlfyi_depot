@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "413b9f5a_34bf4778",
+        "filename": "tvix/tracing/src/lib.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-07T08:37:29Z",
+      "side": 1,
+      "message": "```suggestion\n    /// This method is generic over the `Layer` to avoid the runtime cost of dynamic dispatch.\n```",
+      "revId": "b5e0cd3d93f4fab3010ac46faba281684392b292",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
