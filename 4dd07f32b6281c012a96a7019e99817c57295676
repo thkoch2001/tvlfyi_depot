@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7933a89d_b8a4b620",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-07T18:41:25Z",
+      "side": 1,
+      "message": "We probably don\u0027t need to do this at all inside this helpers. If we need to pass along arguments this can just be done inside the builtin implementation.",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "3b842a4d_56a6e396",
         "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
         "patchSetId": 2
@@ -54,6 +71,23 @@
       "writtenOn": "2024-11-07T18:38:21Z",
       "side": 1,
       "message": "```suggestion\n    UrlParseError(#[from] url::ParseError),\n```",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f0cc4da6_680e3bf1",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-07T18:41:25Z",
+      "side": 1,
+      "message": "```suggestion\n    let mut url \u003d Url::parse(url)?;\n```",
       "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
