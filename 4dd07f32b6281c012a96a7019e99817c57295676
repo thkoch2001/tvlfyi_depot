@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "681f6f98_f8b442fc",
+        "filename": "tvix/nix-compat/Cargo.toml",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-07T18:45:32Z",
+      "side": 1,
+      "message": "Make this `optional \u003d true`, and add a nondefault `fetchtree` feature flag above, which pulls in `url`.\n\nThat way `nix-compat` consumers don\u0027t need to pull in their `Cargo.lock` and `Cargo.nix` to pull in `url` (which is what\u0027s currently causing CI to fail).",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "7933a89d_b8a4b620",
         "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
         "patchSetId": 2
