@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7bbd5ebf_527f219b",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-07T18:38:21Z",
+      "side": 1,
+      "message": "```suggestion\n    UrlParseError(#[from] url::ParseError),\n```",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "5ba623ab_655ff88d",
         "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
         "patchSetId": 2
@@ -48,6 +65,23 @@
       "writtenOn": "2024-11-07T18:36:33Z",
       "side": 1,
       "message": "add a comment explaining the url crate doesn\u0027t let us set the scheme, similar to other places in tvix.",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccd949cd_44eacad1",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-07T18:38:21Z",
+      "side": 1,
+      "message": "```suggestion\n        url \u003d Url::parse(\u0026url_str)?;\n```\n\nThe `#[from]` above automatically does implement `Into`, and `?` tries the conversion.",
       "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
