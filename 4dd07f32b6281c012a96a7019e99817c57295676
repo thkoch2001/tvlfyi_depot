@@ -209,6 +209,29 @@
       "message": "Can all this stuff be customized using url params? If so, let\u0027s add a TODO in here.",
       "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d4411d3_081f0b7d",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-11-07T18:57:34Z",
+      "side": 1,
+      "message": "```suggestion\n    Ok(match fetch_type {\n        FetchType::File \u003d\u003e FetchTreeArgs::File {\n            url,\n            nar_hash: None,\n            rev: rev_param,\n            rev_count: None,\n            last_modified: None,\n        },\n        FetchType::Tarball \u003d\u003e FetchTreeArgs::Tarball {\n            url,\n            nar_hash: None,\n            rev: rev_param,\n            rev_count: None,\n            last_modified: None,\n        },\n        FetchType::Indirect \u003d\u003e FetchTreeArgs::Indirect {\n            id: url.path().to_string(),\n            rev: rev_param,\n            r#ref: ref_param,\n        },\n        FetchType::Git \u003d\u003e FetchTreeArgs::Git {\n            url,\n            r#ref: ref_param,\n            rev: rev_param,\n            keytype: None,\n            public_key: None,\n            public_keys: None,\n            shallow: true,\n            submodules: submodules_param,\n            export_ignore: false,\n            all_refs: false,\n            verify_commit: false,\n        },\n        FetchType::Path \u003d\u003e FetchTreeArgs::Path {\n            path: PathBuf::from(url.path()),\n            rev: rev_param,\n            nar_hash: None,\n            rev_count: None,\n            last_modified: None,\n        },\n        FetchType::GitHub \u003d\u003e FetchTreeArgs::GitHub {\n            r#ref: ref_param,\n            rev: rev_param,\n            keytype: None,\n            public_key: None,\n            public_keys: None,\n        },\n        FetchType::GitLab \u003d\u003e FetchTreeArgs::GitLab {\n            r#ref: ref_param,\n            rev: rev_param,\n            keytype: None,\n            public_key: None,\n            public_keys: None,\n        },\n        FetchType::SourceHut \u003d\u003e FetchTreeArgs::SourceHut {\n            r#ref: ref_param,\n            rev: rev_param,\n            keytype: None,\n            public_key: None,\n            public_keys: None,\n        },\n    })\n```",
+      "range": {
+        "startLine": 159,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 5
+      },
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
