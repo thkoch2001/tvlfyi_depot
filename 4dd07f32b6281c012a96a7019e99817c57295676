@@ -128,6 +128,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c4799bf8_d1980906",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-11-07T19:23:35Z",
+      "side": 1,
+      "message": "```suggestion\n            _ if {\n                const VALID_EXTENSIONS: [\u0026str; 7] \u003d [\n                    \".zip\", \".tar\", \".tgz\", \".tar.gz\", \".tar.xz\", \".tar.bz2\", \".tar.zst\",\n                ];\n                VALID_EXTENSIONS\n                    .iter()\n                    .any(|\u0026ext| url.path().ends_with(ext))\n            } \u003d\u003e\n```",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 54
+      },
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2911c4fb_94888614",
         "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
         "patchSetId": 2
