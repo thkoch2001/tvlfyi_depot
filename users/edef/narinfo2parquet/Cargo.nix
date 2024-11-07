@@ -2887,9 +2887,11 @@ rec {
           "async" = [ "tokio" ];
           "bytes" = [ "dep:bytes" ];
           "default" = [ "async" "wire" "nix-compat-derive" ];
+          "fetchtree" = [ "url" ];
           "nix-compat-derive" = [ "dep:nix-compat-derive" ];
           "pin-project-lite" = [ "dep:pin-project-lite" ];
           "tokio" = [ "dep:tokio" ];
+          "url" = [ "dep:url" ];
           "wire" = [ "tokio" "pin-project-lite" "bytes" ];
         };
         resolvedDefaultFeatures = [ "async" "bytes" "default" "nix-compat-derive" "pin-project-lite" "tokio" "wire" ];
