@@ -52,6 +52,24 @@
       "parentUuid": "d1c9912b_789a2acf",
       "revId": "9a417b0ceecc7cb2d8de79a10c979f0078cd9e17",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6581bc60_0b2af542",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-07T02:40:50Z",
+      "side": 1,
+      "message": "Fair enough, tbh I got a bit carried away with this change as I used it as an excuse to learn tracing and get more comfortable with the language as rust is pretty new to me.\n\nThat said, I also did this since afaict nix-cpp does exactly this, namely they hijack into their global logger and stream everything into the connection.\n\nI think what I will eventually do is move this code into nix-daemon crate and gate behind a feature, but will first focus on merging the nix-daemon protocol changes required for the local-overlay store.",
+      "parentUuid": "78b2b68b_60c61feb",
+      "revId": "9a417b0ceecc7cb2d8de79a10c979f0078cd9e17",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
