@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "cc7b8ae4_5a4f325b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-07T00:21:56Z",
+      "side": 1,
+      "message": "doh, sorry about that. Updated the examples. ptal",
+      "parentUuid": "e99fdf47_92559539",
+      "revId": "09ff7dc904678018ed381721bbc42e800544c856",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "1e9f6122_ac2a02c7",
