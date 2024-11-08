@@ -277,6 +277,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "eb0e9470_2fa446bc",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-08T15:47:28Z",
+      "side": 1,
+      "message": "This allows `github+github:flokli/nixpkgs`, which doesn\u0027t actually work in Nix:\n\n```\nnix-repl\u003e builtins.fetchTree \"github:flokli/nixpkgs\"\n[12.2 MiB DL] copying \u0027«github:flokli/nixpkgs/7e31aef88a03b32c31f2965bf532e07564ec5b2d»/\u0027 to the store{\n  lastModified \u003d 1509555488;\n  lastModifiedDate \u003d \"20171101165808\";\n  narHash \u003d \"sha256-RT2l+kHTmMgeSe2jjzditquSMQQ2j4j6ewysQ9ou9tY\u003d\";\n  outPath \u003d \"/nix/store/sg9978mshjpl0hxf1qahcnj1n9prk9b0-source\";\n  rev \u003d \"7e31aef88a03b32c31f2965bf532e07564ec5b2d\";\n  shortRev \u003d \"7e31aef\";\n}\n\nnix-repl\u003e builtins.fetchTree \"github+github:flokli/nixpkgs\"\nerror:\n       … while calling the \u0027fetchTree\u0027 builtin\n         at «string»:1:1:\n            1| builtins.fetchTree \"github+github:flokli/nixpkgs\"\n             | ^\n\n       error: input \u0027github+github:flokli/nixpkgs\u0027 is unsupported\n```",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "256fc198_06df07e1",
         "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
         "patchSetId": 2
