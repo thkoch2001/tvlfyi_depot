@@ -1319,6 +1319,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "hashbrown"
+version = "0.15.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3a9bfc1af68b1726ea47d3d5109de126281def866b33970e10fbab11b5dafab3"
+
+[[package]]
 name = "heck"
 version = "0.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1474,12 +1480,12 @@ dependencies = [
 
 [[package]]
 name = "indexmap"
-version = "2.2.3"
+version = "2.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "233cf39063f058ea2caae4091bf4a3ef70a653afbc026f5c4a4135d114e3c177"
+checksum = "707907fe3c25f5424cce2cb7e1cbcafee6bdbe735ca90ef77c29e84591e5b9da"
 dependencies = [
  "equivalent",
- "hashbrown",
+ "hashbrown 0.15.1",
 ]
 
 [[package]]
@@ -1693,6 +1699,7 @@ dependencies = [
  "nix-compat-derive",
  "nom",
  "num-traits",
+ "num_enum",
  "pin-project-lite",
  "serde",
  "serde_json",
@@ -1762,6 +1769,27 @@ checksum = "071dfc062690e90b734c0b2273ce72ad0ffa95f0c74596bc250dcfd960262841"
 dependencies = [
  "autocfg",
  "libm",
+]
+
+[[package]]
+name = "num_enum"
+version = "0.7.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4e613fc340b2220f734a8595782c551f1250e969d87d3be1ae0579e8d4065179"
+dependencies = [
+ "num_enum_derive",
+]
+
+[[package]]
+name = "num_enum_derive"
+version = "0.7.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "af1844ef2428cc3e1cb900be36181049ef3d3193c63e43026cfe202983b27a56"
+dependencies = [
+ "proc-macro-crate",
+ "proc-macro2",
+ "quote",
+ "syn 2.0.79",
 ]
 
 [[package]]
@@ -1934,7 +1962,7 @@ dependencies = [
  "foreign_vec",
  "futures",
  "getrandom",
- "hashbrown",
+ "hashbrown 0.14.3",
  "itoa",
  "lz4",
  "multiversion",
@@ -1974,7 +2002,7 @@ dependencies = [
  "chrono",
  "comfy-table",
  "either",
- "hashbrown",
+ "hashbrown 0.14.3",
  "indexmap",
  "num-traits",
  "once_cell",
@@ -2073,7 +2101,7 @@ dependencies = [
  "argminmax",
  "bytemuck",
  "either",
- "hashbrown",
+ "hashbrown 0.14.3",
  "indexmap",
  "memchr",
  "num-traits",
@@ -2123,7 +2151,7 @@ dependencies = [
  "crossbeam-channel",
  "crossbeam-queue",
  "enum_dispatch",
- "hashbrown",
+ "hashbrown 0.14.3",
  "num-traits",
  "polars-arrow",
  "polars-compute",
@@ -2217,7 +2245,7 @@ checksum = "b174ca4a77ad47d7b91a0460aaae65bbf874c8bfbaaa5308675dadef3976bbda"
 dependencies = [
  "ahash",
  "bytemuck",
- "hashbrown",
+ "hashbrown 0.14.3",
  "indexmap",
  "num-traits",
  "once_cell",
@@ -2245,6 +2273,15 @@ name = "ppv-lite86"
 version = "0.2.17"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5b40af805b3121feab8a3c29f04d8ad262fa8e0561883e7653e024ae4479e6de"
+
+[[package]]
+name = "proc-macro-crate"
+version = "3.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8ecf48c7ca261d60b74ab1a7b20da18bede46776b2e55535cb958eb595c5fa7b"
+dependencies = [
+ "toml_edit",
+]
 
 [[package]]
 name = "proc-macro2"
@@ -2915,6 +2952,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "toml_datetime"
+version = "0.6.8"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "0dd7358ecb8fc2f8d014bf86f6f638ce72ba252a2c3a2572f2a795f1d23efb41"
+
+[[package]]
+name = "toml_edit"
+version = "0.22.22"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "4ae48d6208a266e853d946088ed816055e556cc6028c5e8e2b84d9fa5dd7c7f5"
+dependencies = [
+ "indexmap",
+ "toml_datetime",
+ "winnow",
+]
+
+[[package]]
 name = "tower-service"
 version = "0.3.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3263,6 +3317,15 @@ name = "windows_x86_64_msvc"
 version = "0.52.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0770833d60a970638e989b3fa9fd2bb1aaadcf88963d1659fd7d9990196ed2d6"
+
+[[package]]
+name = "winnow"
+version = "0.6.20"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "36c1fec1a2bb5866f07c25f68c26e565c4c200aebb96d7e55710c19d3e8ac49b"
+dependencies = [
+ "memchr",
+]
 
 [[package]]
 name = "xmlparser"
