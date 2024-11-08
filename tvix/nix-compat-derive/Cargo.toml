@@ -22,4 +22,4 @@ tokio = { workspace = true, features = ["io-util", "macros"] }
 [dev-dependencies.nix-compat]
 path = "../nix-compat"
 default-features = false
-features = ["async", "wire", "test"]
+features = ["async", "test"]
