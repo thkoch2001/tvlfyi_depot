@@ -319,6 +319,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "06ffdb56_57b44490",
+        "filename": "tvix/nix-compat/src/nix_daemon/mod.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 15,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-08T17:02:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5ee27d7_8d4d5478",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "87b354be_0970ea00",
@@ -336,6 +354,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "229f41a3_c82ac519",
+        "filename": "tvix/nix-compat/src/nix_daemon/types.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-08T17:02:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "87b354be_0970ea00",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5afe2788_23aa0052",
@@ -349,6 +385,24 @@
       "writtenOn": "2024-11-06T16:23:32Z",
       "side": 1,
       "message": "This is very much not always a UTF-8 string in the protocol. So while our daemon might not send anything other than UTF-8, a client that talks to CppNix would not be so lucky.",
+      "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ec754ca4_61dd66b1",
+        "filename": "tvix/nix-compat/src/nix_daemon/types.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-08T17:02:50Z",
+      "side": 1,
+      "message": "Given that it\u0027s currently used only to send to the client, I think it\u0027s an ok limitation to have for now?",
+      "parentUuid": "5afe2788_23aa0052",
       "revId": "5f790aa3beda058297e22317e60e92dd4c831ad2",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
