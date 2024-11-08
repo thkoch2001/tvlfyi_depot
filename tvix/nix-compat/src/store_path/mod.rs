@@ -256,6 +256,23 @@ where
     }
 }
 
+// Custom implementation since FromStr does not use from_absolute_path
+#[cfg(feature = "nix-compat-derive")]
+impl crate::nix_daemon::de::NixDeserialize for StorePath<String> {
+    async fn try_deserialize<R>(reader: &mut R) -> Result<Option<Self>, R::Error>
+    where
+        R: ?Sized + crate::nix_daemon::de::NixRead + Send,
+    {
+        use crate::nix_daemon::de::Error;
+        if let Some(buf) = reader.try_read_bytes().await? {
+            let result = StorePath::<String>::from_absolute_path(&buf);
+            result.map(Some).map_err(R::Error::invalid_data)
+        } else {
+            Ok(None)
+        }
+    }
+}
+
 /// NAME_CHARS contains `true` for bytes that are valid in store path names.
 static NAME_CHARS: [bool; 256] = {
     let mut tbl = [false; 256];
