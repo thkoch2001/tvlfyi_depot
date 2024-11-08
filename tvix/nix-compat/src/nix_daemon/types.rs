@@ -1,4 +1,12 @@
+use derive_more::derive::Constructor;
 use nix_compat_derive::{NixDeserialize, NixSerialize};
+
+use crate::{
+    narinfo::Signature,
+    nix_daemon::{de::NixDeserialize, ser::NixSerialize},
+    nixhash::CAHash,
+    store_path::{StorePath, STORE_DIR_WITH_SLASH},
+};
 
 /// Marker type that consumes/sends and ignores a u64.
 #[derive(Clone, Debug, NixDeserialize, NixSerialize)]
@@ -60,3 +68,92 @@ impl NixError {
         }
     }
 }
+
+#[derive(NixSerialize, Debug, Constructor)]
+pub struct UnkeyedValidPathInfo {
+    pub deriver: Option<StorePath<String>>,
+    pub nar_hash: String,
+    pub references: Vec<StorePath<String>>,
+    pub registration_time: u64,
+    pub nar_size: u64,
+    pub ultimate: bool,
+    pub signatures: Vec<Signature<String>>,
+    pub ca: Option<CAHash>,
+}
+
+nix_compat_derive::nix_serialize_remote!(#[nix(display)] Signature<String>);
+nix_compat_derive::nix_serialize_remote!(
+    #[nix(display)]
+    CAHash
+);
+
+impl NixSerialize for Option<CAHash> {
+    async fn serialize<W>(&self, writer: &mut W) -> Result<(), W::Error>
+    where
+        W: super::ser::NixWrite,
+    {
+        match self {
+            Some(value) => writer.write_value(value).await,
+            None => writer.write_value("").await,
+        }
+    }
+}
+
+impl NixSerialize for Option<UnkeyedValidPathInfo> {
+    async fn serialize<W>(&self, writer: &mut W) -> Result<(), W::Error>
+    where
+        W: super::ser::NixWrite,
+    {
+        match self {
+            Some(value) => {
+                writer.write_value(&true).await?;
+                writer.write_value(value).await
+            }
+            None => writer.write_value(&false).await,
+        }
+    }
+}
+
+// Custom implementation since FromStr does not use from_absolute_path
+impl NixDeserialize for StorePath<String> {
+    async fn try_deserialize<R>(reader: &mut R) -> Result<Option<Self>, R::Error>
+    where
+        R: ?Sized + crate::nix_daemon::de::NixRead + Send,
+    {
+        use crate::nix_daemon::de::Error;
+        if let Some(buf) = reader.try_read_bytes().await? {
+            let result = StorePath::<String>::from_absolute_path(&buf);
+            result.map(Some).map_err(R::Error::invalid_data)
+        } else {
+            Ok(None)
+        }
+    }
+}
+
+// Custom implementation since Display does not use absolute paths.
+impl NixSerialize for StorePath<String> {
+    async fn serialize<W>(&self, writer: &mut W) -> Result<(), W::Error>
+    where
+        W: crate::nix_daemon::ser::NixWrite,
+    {
+        writer
+            .write_value(&format!("{STORE_DIR_WITH_SLASH}{self}"))
+            .await
+    }
+}
+
+// Writes store-path or an empty string.
+impl NixSerialize for Option<StorePath<String>> {
+    async fn serialize<W>(&self, writer: &mut W) -> Result<(), W::Error>
+    where
+        W: crate::nix_daemon::ser::NixWrite,
+    {
+        match self {
+            Some(value) => writer.write_value(value).await,
+            None => writer.write_value("").await,
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {}

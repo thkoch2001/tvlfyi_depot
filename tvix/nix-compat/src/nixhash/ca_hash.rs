@@ -1,5 +1,6 @@
 use crate::nixbase32;
 use crate::nixhash::{HashAlgo, NixHash};
+use core::fmt;
 use serde::de::Unexpected;
 use serde::ser::SerializeMap;
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
@@ -171,6 +172,17 @@ impl CAHash {
         } else {
             Ok(Some(Self::Flat(hash)))
         }
+    }
+}
+
+impl fmt::Display for CAHash {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{}:{}",
+            self.algo_str(),
+            nixbase32::encode(self.hash().digest_as_bytes())
+        )
     }
 }
 
