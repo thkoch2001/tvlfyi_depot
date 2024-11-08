@@ -16,6 +16,24 @@
       "message": "this line is too long, maybe just\"services\"?",
       "revId": "60487338490619364de80d12bae4d0f84b0e5763",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7cf658fd_9dedc7d2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1000162
+      },
+      "writtenOn": "2024-11-08T20:16:36Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "c3cdb965_a62de22e",
+      "revId": "60487338490619364de80d12bae4d0f84b0e5763",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
