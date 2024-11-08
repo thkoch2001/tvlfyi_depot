@@ -35,6 +35,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10ecb88a_73cd2859",
+        "filename": "tvix/nix-compat/Cargo.toml",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1000139
+      },
+      "writtenOn": "2024-11-08T15:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "681f6f98_f8b442fc",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7933a89d_b8a4b620",
@@ -52,6 +70,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0dffa19_14b4f87e",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1000139
+      },
+      "writtenOn": "2024-11-08T15:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7933a89d_b8a4b620",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3b842a4d_56a6e396",
@@ -65,6 +101,24 @@
       "writtenOn": "2024-11-07T18:36:33Z",
       "side": 1,
       "message": "Can the enum kinds be sorted alphabetically, or grouped semantically (and alphabetically sorted inside each group)",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e5750dc_19282c44",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1000139
+      },
+      "writtenOn": "2024-11-08T15:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3b842a4d_56a6e396",
       "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -92,6 +146,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e4bba0e_7d91f334",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1000139
+      },
+      "writtenOn": "2024-11-08T15:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f643066d_5f7b67ff",
+      "range": {
+        "startLine": 87,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 9
+      },
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7bbd5ebf_527f219b",
@@ -105,6 +183,24 @@
       "writtenOn": "2024-11-07T18:38:21Z",
       "side": 1,
       "message": "```suggestion\n    UrlParseError(#[from] url::ParseError),\n```",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6a496297_42af24c8",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 1000139
+      },
+      "writtenOn": "2024-11-08T15:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7bbd5ebf_527f219b",
       "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -126,6 +222,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9bed5eae_afa6701a",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 1000139
+      },
+      "writtenOn": "2024-11-08T15:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0cc4da6_680e3bf1",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ba623ab_655ff88d",
@@ -139,6 +253,24 @@
       "writtenOn": "2024-11-07T18:36:33Z",
       "side": 1,
       "message": "Add a comment explaining that Nix always uses the fetch type before a `+` in the scheme if exists, using the rest as URL.",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c3bc3e55_0415da25",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000139
+      },
+      "writtenOn": "2024-11-08T15:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ba623ab_655ff88d",
       "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -207,6 +339,30 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a8c2c975_0290a63b",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000139
+      },
+      "writtenOn": "2024-11-08T15:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "15b5b733_3ee49d62",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 132,
+        "endChar": 54
+      },
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2911c4fb_94888614",
@@ -220,6 +376,24 @@
       "writtenOn": "2024-11-07T18:36:33Z",
       "side": 1,
       "message": "add a comment explaining the url crate doesn\u0027t let us set the scheme, similar to other places in tvix.",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "37e3e480_b17687f3",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 1000139
+      },
+      "writtenOn": "2024-11-08T15:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2911c4fb_94888614",
       "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -241,6 +415,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed6b3020_6d287f8d",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000139
+      },
+      "writtenOn": "2024-11-08T15:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ccd949cd_44eacad1",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e754dace_e4aeb3fe",
@@ -254,6 +446,24 @@
       "writtenOn": "2024-11-07T18:36:33Z",
       "side": 1,
       "message": "If you call these two `r#ref` and `rev`, you can use shorthand struct initialization below.",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "250fbfc9_578c64d2",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 1000139
+      },
+      "writtenOn": "2024-11-08T15:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e754dace_e4aeb3fe",
       "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -275,6 +485,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "138d487b_3aab93ab",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1000139
+      },
+      "writtenOn": "2024-11-08T15:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0f8f2051_f3357a13",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "989269bb_cae95ab8",
@@ -288,6 +516,24 @@
       "writtenOn": "2024-11-07T18:36:33Z",
       "side": 1,
       "message": "Can all this stuff be customized using url params? If so, let\u0027s add a TODO in here.",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "26d3df35_6fa5e1ff",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1000139
+      },
+      "writtenOn": "2024-11-08T15:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "989269bb_cae95ab8",
       "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -309,6 +555,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "38b0f4de_fa7578a6",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 1000139
+      },
+      "writtenOn": "2024-11-08T15:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b197263f_16b1c94e",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4d4411d3_081f0b7d",
@@ -322,6 +586,30 @@
       "writtenOn": "2024-11-07T18:57:34Z",
       "side": 1,
       "message": "```suggestion\n    Ok(match fetch_type {\n        FetchType::File \u003d\u003e FetchTreeArgs::File {\n            url,\n            nar_hash: None,\n            rev: rev_param,\n            rev_count: None,\n            last_modified: None,\n        },\n        FetchType::Tarball \u003d\u003e FetchTreeArgs::Tarball {\n            url,\n            nar_hash: None,\n            rev: rev_param,\n            rev_count: None,\n            last_modified: None,\n        },\n        FetchType::Indirect \u003d\u003e FetchTreeArgs::Indirect {\n            id: url.path().to_string(),\n            rev: rev_param,\n            r#ref: ref_param,\n        },\n        FetchType::Git \u003d\u003e FetchTreeArgs::Git {\n            url,\n            r#ref: ref_param,\n            rev: rev_param,\n            keytype: None,\n            public_key: None,\n            public_keys: None,\n            shallow: true,\n            submodules: submodules_param,\n            export_ignore: false,\n            all_refs: false,\n            verify_commit: false,\n        },\n        FetchType::Path \u003d\u003e FetchTreeArgs::Path {\n            path: PathBuf::from(url.path()),\n            rev: rev_param,\n            nar_hash: None,\n            rev_count: None,\n            last_modified: None,\n        },\n        FetchType::GitHub \u003d\u003e FetchTreeArgs::GitHub {\n            r#ref: ref_param,\n            rev: rev_param,\n            keytype: None,\n            public_key: None,\n            public_keys: None,\n        },\n        FetchType::GitLab \u003d\u003e FetchTreeArgs::GitLab {\n            r#ref: ref_param,\n            rev: rev_param,\n            keytype: None,\n            public_key: None,\n            public_keys: None,\n        },\n        FetchType::SourceHut \u003d\u003e FetchTreeArgs::SourceHut {\n            r#ref: ref_param,\n            rev: rev_param,\n            keytype: None,\n            public_key: None,\n            public_keys: None,\n        },\n    })\n```",
+      "range": {
+        "startLine": 159,
+        "startChar": 0,
+        "endLine": 220,
+        "endChar": 5
+      },
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "daf4f582_839e7c94",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 220,
+      "author": {
+        "id": 1000139
+      },
+      "writtenOn": "2024-11-08T15:35:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4d4411d3_081f0b7d",
       "range": {
         "startLine": 159,
         "startChar": 0,
