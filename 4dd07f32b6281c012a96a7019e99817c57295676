@@ -294,6 +294,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7a63f40d_a7045474",
+        "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1000139
+      },
+      "writtenOn": "2024-11-08T17:24:02Z",
+      "side": 1,
+      "message": "I recommend we merge this and I\u0027ll add test cases once I start testing it with the real implementation",
+      "parentUuid": "eb0e9470_2fa446bc",
+      "revId": "4dd07f32b6281c012a96a7019e99817c57295676",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "256fc198_06df07e1",
         "filename": "tvix/nix-compat/src/fetchtree/mod.rs",
         "patchSetId": 2
