@@ -7244,6 +7244,10 @@ rec {
             packageId = "num-traits";
           }
           {
+            name = "num_enum";
+            packageId = "num_enum";
+          }
+          {
             name = "pin-project-lite";
             packageId = "pin-project-lite";
             optional = true;
@@ -7269,7 +7273,7 @@ rec {
             name = "tokio";
             packageId = "tokio";
             optional = true;
-            features = [ "io-util" "macros" ];
+            features = [ "io-util" "macros" "sync" ];
           }
           {
             name = "tracing";
@@ -7453,6 +7457,7 @@ rec {
           }
         ];
         src = lib.cleanSourceWith { filter = sourceFilter; src = ./nix-daemon; };
+        libName = "nix_daemon";
         dependencies = [
           {
             name = "async-trait";
@@ -7655,6 +7660,76 @@ rec {
           }
         ];
 
+      };
+      "num_enum" = rec {
+        crateName = "num_enum";
+        version = "0.7.3";
+        edition = "2021";
+        sha256 = "0yai0vafhy85mvhknzfqd7lm04hzaln7i5c599rhy8mj831kyqaf";
+        authors = [
+          "Daniel Wagner-Hall <dawagner@gmail.com>"
+          "Daniel Henry-Mantilla <daniel.henry.mantilla@gmail.com>"
+          "Vincent Esche <regexident@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "num_enum_derive";
+            packageId = "num_enum_derive";
+            usesDefaultFeatures = false;
+          }
+        ];
+        features = {
+          "complex-expressions" = [ "num_enum_derive/complex-expressions" ];
+          "default" = [ "std" ];
+          "std" = [ "num_enum_derive/std" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
+      };
+      "num_enum_derive" = rec {
+        crateName = "num_enum_derive";
+        version = "0.7.3";
+        edition = "2021";
+        sha256 = "0mksna1jj87ydh146gn6jcqkvvs920c3dgh0p4f3xk184kpl865g";
+        procMacro = true;
+        authors = [
+          "Daniel Wagner-Hall <dawagner@gmail.com>"
+          "Daniel Henry-Mantilla <daniel.henry.mantilla@gmail.com>"
+          "Vincent Esche <regexident@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "proc-macro-crate";
+            packageId = "proc-macro-crate";
+            optional = true;
+          }
+          {
+            name = "proc-macro2";
+            packageId = "proc-macro2";
+          }
+          {
+            name = "quote";
+            packageId = "quote";
+          }
+          {
+            name = "syn";
+            packageId = "syn 2.0.79";
+            features = [ "parsing" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "syn";
+            packageId = "syn 2.0.79";
+            features = [ "extra-traits" "parsing" ];
+          }
+        ];
+        features = {
+          "complex-expressions" = [ "syn/full" ];
+          "default" = [ "std" ];
+          "proc-macro-crate" = [ "dep:proc-macro-crate" ];
+          "std" = [ "proc-macro-crate" ];
+        };
+        resolvedDefaultFeatures = [ "proc-macro-crate" "std" ];
       };
       "number_prefix" = rec {
         crateName = "number_prefix";
@@ -9032,6 +9107,23 @@ rec {
         features = {
           "verbatim" = [ "syn/parsing" ];
         };
+      };
+      "proc-macro-crate" = rec {
+        crateName = "proc-macro-crate";
+        version = "3.2.0";
+        edition = "2021";
+        sha256 = "0yzsqnavb3lmrcsmbrdjfrky9vcbl46v59xi9avn0796rb3likwf";
+        libName = "proc_macro_crate";
+        authors = [
+          "Bastian Köcher <git@kchr.de>"
+        ];
+        dependencies = [
+          {
+            name = "toml_edit";
+            packageId = "toml_edit 0.22.22";
+          }
+        ];
+
       };
       "proc-macro-error-attr2" = rec {
         crateName = "proc-macro-error-attr2";
@@ -13746,7 +13838,7 @@ rec {
           "perf" = [ "dep:kstring" ];
           "serde" = [ "dep:serde" "toml_datetime/serde" "dep:serde_spanned" ];
         };
-        resolvedDefaultFeatures = [ "display" "parse" "serde" ];
+        resolvedDefaultFeatures = [ "default" "display" "parse" "serde" ];
       };
       "tonic" = rec {
         crateName = "tonic";
