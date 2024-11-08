@@ -2062,7 +2062,7 @@ rec {
         ];
 
       };
-      "hashbrown" = rec {
+      "hashbrown 0.14.2" = rec {
         crateName = "hashbrown";
         version = "0.14.2";
         edition = "2021";
@@ -2110,7 +2110,29 @@ rec {
           "rustc-dep-of-std" = [ "nightly" "core" "compiler_builtins" "alloc" "rustc-internal-api" ];
           "serde" = [ "dep:serde" ];
         };
-        resolvedDefaultFeatures = [ "ahash" "allocator-api2" "default" "inline-more" "raw" "rayon" ];
+        resolvedDefaultFeatures = [ "ahash" "allocator-api2" "default" "inline-more" "rayon" ];
+      };
+      "hashbrown 0.15.1" = rec {
+        crateName = "hashbrown";
+        version = "0.15.1";
+        edition = "2021";
+        sha256 = "1czsvasi3azv2079fcvbhvpisa16w6fi1mfk8zm2c5wbyqdgr6rs";
+        authors = [
+          "Amanieu d'Antras <amanieu@gmail.com>"
+        ];
+        features = {
+          "alloc" = [ "dep:alloc" ];
+          "allocator-api2" = [ "dep:allocator-api2" ];
+          "compiler_builtins" = [ "dep:compiler_builtins" ];
+          "core" = [ "dep:core" ];
+          "default" = [ "default-hasher" "inline-more" "allocator-api2" "equivalent" "raw-entry" ];
+          "default-hasher" = [ "dep:foldhash" ];
+          "equivalent" = [ "dep:equivalent" ];
+          "nightly" = [ "allocator-api2?/nightly" "bumpalo/allocator_api" ];
+          "rayon" = [ "dep:rayon" ];
+          "rustc-dep-of-std" = [ "nightly" "core" "compiler_builtins" "alloc" "rustc-internal-api" "raw-entry" ];
+          "serde" = [ "dep:serde" ];
+        };
       };
       "heck" = rec {
         crateName = "heck";
@@ -2226,9 +2248,9 @@ rec {
       };
       "indexmap" = rec {
         crateName = "indexmap";
-        version = "2.1.0";
+        version = "2.6.0";
         edition = "2021";
-        sha256 = "07rxrqmryr1xfnmhrjlz8ic6jw28v6h5cig3ws2c9d0wifhy2c6m";
+        sha256 = "1nmrwn8lbs19gkvhxaawffzbvrpyrb5y3drcrr645x957kz0fybh";
         dependencies = [
           {
             name = "equivalent";
@@ -2237,13 +2259,13 @@ rec {
           }
           {
             name = "hashbrown";
-            packageId = "hashbrown";
+            packageId = "hashbrown 0.15.1";
             usesDefaultFeatures = false;
-            features = [ "raw" ];
           }
         ];
         features = {
           "arbitrary" = [ "dep:arbitrary" ];
+          "borsh" = [ "dep:borsh" ];
           "default" = [ "std" ];
           "quickcheck" = [ "dep:quickcheck" ];
           "rayon" = [ "dep:rayon" ];
@@ -2841,6 +2863,10 @@ rec {
             packageId = "num-traits";
           }
           {
+            name = "num_enum";
+            packageId = "num_enum";
+          }
+          {
             name = "pin-project-lite";
             packageId = "pin-project-lite";
             optional = true;
@@ -2866,7 +2892,7 @@ rec {
             name = "tokio";
             packageId = "tokio";
             optional = true;
-            features = [ "io-util" "macros" ];
+            features = [ "io-util" "macros" "sync" ];
           }
           {
             name = "tracing";
@@ -2890,7 +2916,7 @@ rec {
           "nix-compat-derive" = [ "dep:nix-compat-derive" ];
           "pin-project-lite" = [ "dep:pin-project-lite" ];
           "tokio" = [ "dep:tokio" ];
-          "wire" = [ "tokio" "pin-project-lite" "bytes" ];
+          "wire" = [ "tokio" "pin-project-lite" "bytes" "nix-compat-derive" ];
         };
         resolvedDefaultFeatures = [ "async" "bytes" "default" "nix-compat-derive" "pin-project-lite" "tokio" "wire" ];
       };
@@ -3012,6 +3038,76 @@ rec {
           "libm" = [ "dep:libm" ];
         };
         resolvedDefaultFeatures = [ "default" "libm" "std" ];
+      };
+      "num_enum" = rec {
+        crateName = "num_enum";
+        version = "0.7.3";
+        edition = "2021";
+        sha256 = "0yai0vafhy85mvhknzfqd7lm04hzaln7i5c599rhy8mj831kyqaf";
+        authors = [
+          "Daniel Wagner-Hall <dawagner@gmail.com>"
+          "Daniel Henry-Mantilla <daniel.henry.mantilla@gmail.com>"
+          "Vincent Esche <regexident@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "num_enum_derive";
+            packageId = "num_enum_derive";
+            usesDefaultFeatures = false;
+          }
+        ];
+        features = {
+          "complex-expressions" = [ "num_enum_derive/complex-expressions" ];
+          "default" = [ "std" ];
+          "std" = [ "num_enum_derive/std" ];
+        };
+        resolvedDefaultFeatures = [ "default" "std" ];
+      };
+      "num_enum_derive" = rec {
+        crateName = "num_enum_derive";
+        version = "0.7.3";
+        edition = "2021";
+        sha256 = "0mksna1jj87ydh146gn6jcqkvvs920c3dgh0p4f3xk184kpl865g";
+        procMacro = true;
+        authors = [
+          "Daniel Wagner-Hall <dawagner@gmail.com>"
+          "Daniel Henry-Mantilla <daniel.henry.mantilla@gmail.com>"
+          "Vincent Esche <regexident@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "proc-macro-crate";
+            packageId = "proc-macro-crate";
+            optional = true;
+          }
+          {
+            name = "proc-macro2";
+            packageId = "proc-macro2";
+          }
+          {
+            name = "quote";
+            packageId = "quote";
+          }
+          {
+            name = "syn";
+            packageId = "syn 2.0.79";
+            features = [ "parsing" ];
+          }
+        ];
+        devDependencies = [
+          {
+            name = "syn";
+            packageId = "syn 2.0.79";
+            features = [ "extra-traits" "parsing" ];
+          }
+        ];
+        features = {
+          "complex-expressions" = [ "syn/full" ];
+          "default" = [ "std" ];
+          "proc-macro-crate" = [ "dep:proc-macro-crate" ];
+          "std" = [ "proc-macro-crate" ];
+        };
+        resolvedDefaultFeatures = [ "proc-macro-crate" "std" ];
       };
       "object" = rec {
         crateName = "object";
@@ -3455,7 +3551,7 @@ rec {
           }
           {
             name = "hashbrown";
-            packageId = "hashbrown";
+            packageId = "hashbrown 0.14.2";
             features = [ "rayon" "ahash" ];
           }
           {
@@ -3638,7 +3734,7 @@ rec {
           }
           {
             name = "hashbrown";
-            packageId = "hashbrown";
+            packageId = "hashbrown 0.14.2";
             features = [ "rayon" "ahash" ];
           }
           {
@@ -4179,7 +4275,7 @@ rec {
           }
           {
             name = "hashbrown";
-            packageId = "hashbrown";
+            packageId = "hashbrown 0.14.2";
             features = [ "rayon" "ahash" ];
           }
           {
@@ -4445,7 +4541,7 @@ rec {
           }
           {
             name = "hashbrown";
-            packageId = "hashbrown";
+            packageId = "hashbrown 0.14.2";
             features = [ "rayon" "ahash" ];
           }
           {
@@ -4919,7 +5015,7 @@ rec {
           }
           {
             name = "hashbrown";
-            packageId = "hashbrown";
+            packageId = "hashbrown 0.14.2";
             features = [ "rayon" "ahash" ];
           }
           {
@@ -4979,6 +5075,23 @@ rec {
           "default" = [ "std" ];
         };
         resolvedDefaultFeatures = [ "simd" "std" ];
+      };
+      "proc-macro-crate" = rec {
+        crateName = "proc-macro-crate";
+        version = "3.2.0";
+        edition = "2021";
+        sha256 = "0yzsqnavb3lmrcsmbrdjfrky9vcbl46v59xi9avn0796rb3likwf";
+        libName = "proc_macro_crate";
+        authors = [
+          "Bastian Köcher <git@kchr.de>"
+        ];
+        dependencies = [
+          {
+            name = "toml_edit";
+            packageId = "toml_edit";
+          }
+        ];
+
       };
       "proc-macro2" = rec {
         crateName = "proc-macro2";
@@ -6394,6 +6507,51 @@ rec {
           "tracing" = [ "dep:tracing" ];
         };
         resolvedDefaultFeatures = [ "default" "io" "io-util" ];
+      };
+      "toml_datetime" = rec {
+        crateName = "toml_datetime";
+        version = "0.6.8";
+        edition = "2021";
+        sha256 = "0hgv7v9g35d7y9r2afic58jvlwnf73vgd1mz2k8gihlgrf73bmqd";
+        authors = [
+          "Alex Crichton <alex@alexcrichton.com>"
+        ];
+        features = {
+          "serde" = [ "dep:serde" ];
+        };
+      };
+      "toml_edit" = rec {
+        crateName = "toml_edit";
+        version = "0.22.22";
+        edition = "2021";
+        sha256 = "1xf7sxfzmnc45f75x302qrn5aph52vc8w226v59yhrm211i8vr2a";
+        authors = [
+          "Andronik Ordian <write@reusable.software>"
+          "Ed Page <eopage@gmail.com>"
+        ];
+        dependencies = [
+          {
+            name = "indexmap";
+            packageId = "indexmap";
+            features = [ "std" ];
+          }
+          {
+            name = "toml_datetime";
+            packageId = "toml_datetime";
+          }
+          {
+            name = "winnow";
+            packageId = "winnow";
+            optional = true;
+          }
+        ];
+        features = {
+          "default" = [ "parse" "display" ];
+          "parse" = [ "dep:winnow" ];
+          "perf" = [ "dep:kstring" ];
+          "serde" = [ "dep:serde" "toml_datetime/serde" "dep:serde_spanned" ];
+        };
+        resolvedDefaultFeatures = [ "default" "display" "parse" ];
       };
       "tracing" = rec {
         crateName = "tracing";
@@ -8232,6 +8390,28 @@ rec {
           "Microsoft"
         ];
 
+      };
+      "winnow" = rec {
+        crateName = "winnow";
+        version = "0.6.20";
+        edition = "2021";
+        sha256 = "16y4i8z9vh8hazjxg5mvmq0c5i35wlk8rxi5gkq6cn5vlb0zxh9n";
+        dependencies = [
+          {
+            name = "memchr";
+            packageId = "memchr";
+            optional = true;
+            usesDefaultFeatures = false;
+          }
+        ];
+        features = {
+          "debug" = [ "std" "dep:anstream" "dep:anstyle" "dep:is-terminal" "dep:terminal_size" ];
+          "default" = [ "std" ];
+          "simd" = [ "dep:memchr" ];
+          "std" = [ "alloc" "memchr?/std" ];
+          "unstable-doc" = [ "alloc" "std" "simd" "unstable-recover" ];
+        };
+        resolvedDefaultFeatures = [ "alloc" "default" "std" ];
       };
       "xxhash-rust" = rec {
         crateName = "xxhash-rust";
