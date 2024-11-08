@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa6abe2d_1c870d71",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 6
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-08T16:37:35Z",
+      "side": 1,
+      "message": "This change is a subset of https://cl.tvl.fyi/c/depot/+/12736, with the goal to make the change smaller and easier to merge. The operations will will be implemented in a separate cl(s).",
+      "revId": "ce0955b1086fbded97cf41249d308f349687695c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
