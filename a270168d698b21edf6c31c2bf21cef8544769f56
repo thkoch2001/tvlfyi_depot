@@ -16,6 +16,24 @@
       "message": "Only tested the last example, still need to test the others.\n\nAlso, we should probably pick either local/remote or near/far, not have this mix we currently have. Personally prefer near/far.",
       "revId": "a270168d698b21edf6c31c2bf21cef8544769f56",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b02dacb1_cbd8b467",
+        "filename": "tvix/docs/src/castore/store-configuration.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-09T20:04:25Z",
+      "side": 1,
+      "message": "Done in cl/12750.",
+      "parentUuid": "b79ab6ed_ad4e1cee",
+      "revId": "a270168d698b21edf6c31c2bf21cef8544769f56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
