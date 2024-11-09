@@ -1,0 +1,140 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f902f69f_e9fc5c98",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-11-09T13:06:50Z",
+      "side": 1,
+      "message": "Eq nits aside, this seems solid.",
+      "revId": "be4ac7558b4974ed18d387bd7ec2b8619f1e1e75",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d22a502c_4cb003c7",
+        "filename": "tvix/nix-compat/src/derivation/write.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-11-09T13:06:50Z",
+      "side": 1,
+      "message": "```suggestion\n    S: AsRef\u003cstr\u003e,\n```",
+      "revId": "be4ac7558b4974ed18d387bd7ec2b8619f1e1e75",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e1d52f7_19a2b570",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 241,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-11-09T13:06:50Z",
+      "side": 1,
+      "message": "We\u0027re not being consistent about the Eq bound here (we drop it everywhere else in this module, including in our Eq impl)\n\n```suggestion\n    S: AsRef\u003cstr\u003e + From\u003c\u0026\u0027a str\u003e,\n```",
+      "revId": "be4ac7558b4974ed18d387bd7ec2b8619f1e1e75",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1db2ac5_d6fc3e99",
+        "filename": "tvix/nix-compat/src/store_path/mod.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 263,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-11-09T13:06:50Z",
+      "side": 1,
+      "message": "We\u0027re not being consistent about the Eq bound here (we drop it everywhere else in this module, including in our Eq impl)\n\n```suggestion\n    S: AsRef\u003cstr\u003e + From\u003c\u0026\u0027a str\u003e,\n```",
+      "revId": "be4ac7558b4974ed18d387bd7ec2b8619f1e1e75",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cee12539_2aa33a17",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-11-09T13:06:50Z",
+      "side": 1,
+      "message": "```suggestion\n    SP: AsRef\u003cstr\u003e + std::convert::From\u003c\u0026\u0027a str\u003e,\n```",
+      "revId": "be4ac7558b4974ed18d387bd7ec2b8619f1e1e75",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b80a8838_360e4bed",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-11-09T13:06:50Z",
+      "side": 1,
+      "message": "```suggestion\n    SP: AsRef\u003cstr\u003e + std::convert::From\u003c\u0026\u0027a str\u003e,\n```",
+      "revId": "be4ac7558b4974ed18d387bd7ec2b8619f1e1e75",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1b1013e_9fb982f3",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 132,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-11-09T13:06:50Z",
+      "side": 1,
+      "message": "```suggestion\n    SP: AsRef\u003cstr\u003e + std::convert::From\u003c\u0026\u0027a str\u003e,\n```",
+      "revId": "be4ac7558b4974ed18d387bd7ec2b8619f1e1e75",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d4102b97_3391bbc5",
+        "filename": "tvix/nix-compat/src/store_path/utils.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 157,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-11-09T13:06:50Z",
+      "side": 1,
+      "message": "```suggestion\n    SP: AsRef\u003cstr\u003e + std::convert::From\u003c\u0026\u0027a str\u003e,\n```",
+      "revId": "be4ac7558b4974ed18d387bd7ec2b8619f1e1e75",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
