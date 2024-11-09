@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b7b80a2c_6b4ba304",
+        "filename": "tvix/store/src/composition.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-09T20:03:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8c1b5bb_ab23af3f",
+      "revId": "4fb496478ac850401023cf87ffcaef940e866ae8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f37302e1_5ecb3d26",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-11-09T15:37:38Z",
       "side": 1,
       "message": "```suggestion\n/// Deserializes service addresses into composition config, configuring each\n```",
+      "revId": "4fb496478ac850401023cf87ffcaef940e866ae8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d6144e1e_d9fff05e",
+        "filename": "tvix/store/src/utils.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-09T20:03:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f37302e1_5ecb3d26",
       "revId": "4fb496478ac850401023cf87ffcaef940e866ae8",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
