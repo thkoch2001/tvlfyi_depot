@@ -71,6 +71,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b77f1233_2bf9f38c",
+        "filename": "tvix/nix-compat/src/nix_daemon/types.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-09T19:43:12Z",
+      "side": 1,
+      "message": "I was mostly curious about using smolstr for some store paths, not \u0026str.\n\nBut you\u0027re right, we can deal with this when/if we need it.",
+      "parentUuid": "4da6bd5f_b557199c",
+      "revId": "a17556e4886e703ebc70a630b194e48c92aa758e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f5f40b6b_d0a04666",
