@@ -9,7 +9,7 @@
   meta.ci.targets = [ "integration-tests" ] ++ lib.filter (x: lib.hasPrefix "with-features" x || x == "no-features") (lib.attrNames passthru);
   passthru = (depot.tvix.utils.mkFeaturePowerset {
     inherit (old) crateName;
-    features = ([ "cloud" "fuse" "tonic-reflection" "xp-store-composition" ]
+    features = ([ "cloud" "fuse" "tonic-reflection" "xp-composition-url-refs" ]
       # virtiofs feature currently fails to build on Darwin
       ++ lib.optional pkgs.stdenv.isLinux "virtiofs");
     override.testPreRun = ''
