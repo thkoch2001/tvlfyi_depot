@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "1c4f4231_80cb8b85",
+        "filename": "tvix/nix-compat-derive/Cargo.toml",
+        "patchSetId": 10
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-09T22:13:43Z",
+      "side": 0,
+      "message": "hm, I assumed they would run as part of presubmit, but you\u0027re right they are apparently failing when invoked manually. Given that it does not block presubmits, are you ok with me addressing this in a follow up?\n\nalso, just ran `cargo test -p nix-compat-derive-tests --features compile-tests` and looks like one of the tests has been broken for a while",
+      "parentUuid": "b8c787f9_bea42ce8",
+      "revId": "951d25676b8a61f3068d7d54958695739a71aa68",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "05307e2b_391db1c1",
