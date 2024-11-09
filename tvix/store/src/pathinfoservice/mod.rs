@@ -1,4 +1,4 @@
-mod combinators;
+mod cache;
 mod from_addr;
 mod grpc;
 mod lru;
@@ -22,9 +22,7 @@ use tvix_castore::Error;
 use crate::nar::NarCalculationService;
 pub use crate::path_info::PathInfo;
 
-pub use self::combinators::{
-    Cache as CachePathInfoService, CacheConfig as CachePathInfoServiceConfig,
-};
+pub use self::cache::{Cache as CachePathInfoService, CacheConfig as CachePathInfoServiceConfig};
 pub use self::from_addr::from_addr;
 pub use self::grpc::{GRPCPathInfoService, GRPCPathInfoServiceConfig};
 pub use self::lru::{LruPathInfoService, LruPathInfoServiceConfig};
@@ -77,7 +75,7 @@ pub(crate) fn register_pathinfo_services(reg: &mut Registry) {
     reg.register::<Box<dyn ServiceBuilder<Output = dyn PathInfoService>>, GRPCPathInfoServiceConfig>("grpc");
     reg.register::<Box<dyn ServiceBuilder<Output = dyn PathInfoService>>, LruPathInfoServiceConfig>("lru");
     reg.register::<Box<dyn ServiceBuilder<Output = dyn PathInfoService>>, MemoryPathInfoServiceConfig>("memory");
-    reg.register::<Box<dyn ServiceBuilder<Output = dyn PathInfoService>>, NixHTTPPathInfoServiceConfig>("nix");
+    reg.register::<Box<dyn ServiceBuilder<Output = dyn PathInfoService>>, NixHTTPPathInfoServiceConfig>("nix-http");
     reg.register::<Box<dyn ServiceBuilder<Output = dyn PathInfoService>>, RedbPathInfoServiceConfig>("redb");
     reg.register::<Box<dyn ServiceBuilder<Output = dyn PathInfoService>>, KeyFileSigningPathInfoServiceConfig>("keyfile-signing");
     #[cfg(feature = "cloud")]
