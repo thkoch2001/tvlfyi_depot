@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4da6bd5f_b557199c",
+        "filename": "tvix/nix-compat/src/nix_daemon/types.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-09T16:56:50Z",
+      "side": 1,
+      "message": "I may be wrong but from what I can tell it\u0027s non-trivial to implement NixDeserialize for anything other than `String` or `bytes::Bytes`, i.e. it\u0027s not possible to deserialize into StorePath\u003c\u0026str\u003e due to the fact that the `buf` returned from the reader does not outlive the body of try_deserialize(), so it has to be an owning type and I wonder if any type other than String would be useful in practice. But I may be missing something.\n\nThe other thing is, I generally tend to implement things when(and more importantly if) the need arises, how about we punt on this for now and see if we need it in the future?",
+      "parentUuid": "22fd0547_285c79a6",
+      "revId": "a17556e4886e703ebc70a630b194e48c92aa758e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f5f40b6b_d0a04666",
         "filename": "tvix/nix-compat/src/nix_daemon/types.rs",
         "patchSetId": 1
@@ -66,6 +84,24 @@
       "writtenOn": "2024-11-09T00:51:47Z",
       "side": 1,
       "message": "same",
+      "revId": "a17556e4886e703ebc70a630b194e48c92aa758e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c5c9491_04ed82e2",
+        "filename": "tvix/nix-compat/src/nix_daemon/types.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-09T16:56:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5f40b6b_d0a04666",
       "revId": "a17556e4886e703ebc70a630b194e48c92aa758e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
