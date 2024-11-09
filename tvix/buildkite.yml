@@ -8,3 +8,5 @@ steps:
     command: |
       nix-shell --run "cargo build && cargo test"
     timeout_in_minutes: 10
+  - label: ":docker: docker build"
+    command: docker build .
