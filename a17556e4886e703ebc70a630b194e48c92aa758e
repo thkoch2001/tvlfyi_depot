@@ -1,0 +1,106 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bca8f875_8881ff6d",
+        "filename": "tvix/nix-compat/src/nix_daemon/types.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-09T00:51:47Z",
+      "side": 1,
+      "message": "I\u0027d probably move this much further down, below all the base types contained in the struct.",
+      "revId": "a17556e4886e703ebc70a630b194e48c92aa758e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "22fd0547_285c79a6",
+        "filename": "tvix/nix-compat/src/nix_daemon/types.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 118,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-09T00:51:47Z",
+      "side": 1,
+      "message": "can we be a bit more generic on which StorePath\u003c\u003e this works with?\n\nwe don\u0027t need to thread it though to UnkeyedValidPathInfo, but NixSerialize / NixDeserialize should work with more than just StorePath\u003cString\u003e.\n\nAlso see https://cl.tvl.fyi/c/depot/+/12744, in case you need to copy trait bounds from there.",
+      "revId": "a17556e4886e703ebc70a630b194e48c92aa758e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5f40b6b_d0a04666",
+        "filename": "tvix/nix-compat/src/nix_daemon/types.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 134,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-09T00:51:47Z",
+      "side": 1,
+      "message": "same",
+      "revId": "a17556e4886e703ebc70a630b194e48c92aa758e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1aef725_06fce61d",
+        "filename": "tvix/nix-compat/src/nix_daemon/types.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-09T00:51:47Z",
+      "side": 1,
+      "message": "```suggestion\n// Writes StorePath or an empty string.\n```",
+      "revId": "a17556e4886e703ebc70a630b194e48c92aa758e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fb82091_56d50d33",
+        "filename": "tvix/nix-compat/src/nixhash/ca_hash.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-09T00:51:47Z",
+      "side": 1,
+      "message": "isn\u0027t this to_nixbase32_string?\n\nSee https://code.tvl.fyi/tree/tvix/nix-compat/src/narinfo/mod.rs#n362, I\u0027d prefer making this explicit on the callsite rather than introducing more Display for hashes, there\u0027s just too many different formats.",
+      "revId": "a17556e4886e703ebc70a630b194e48c92aa758e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2eea7385_054d7ea0",
+        "filename": "tvix/nix-daemon/src/lib.rs",
+        "patchSetId": 1
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-09T00:51:47Z",
+      "side": 1,
+      "message": "```suggestion\n            Some(path_info) \u003d\u003e Ok(Some(into_unkeyed_path_info(path_info))),\n```\n\nconsistency with other places",
+      "revId": "a17556e4886e703ebc70a630b194e48c92aa758e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
