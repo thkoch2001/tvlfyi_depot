@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8c1b5bb_ab23af3f",
+        "filename": "tvix/store/src/composition.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-11-09T15:37:38Z",
+      "side": 1,
+      "message": "Not only PathInfo, but also Blob/Directory.\nAlso, it\u0027s concerned with _types_ of services and their Builder structs, not the instantiations themselves.",
+      "revId": "4fb496478ac850401023cf87ffcaef940e866ae8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f37302e1_5ecb3d26",
+        "filename": "tvix/store/src/utils.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 131,
+      "author": {
+        "id": 1000106
+      },
+      "writtenOn": "2024-11-09T15:37:38Z",
+      "side": 1,
+      "message": "```suggestion\n/// Deserializes service addresses into composition config, configuring each\n```",
+      "revId": "4fb496478ac850401023cf87ffcaef940e866ae8",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
