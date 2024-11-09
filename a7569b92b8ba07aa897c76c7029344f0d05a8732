@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e1aaf96f_2562b5f1",
+        "filename": "tvix/nix-compat/src/nix_daemon/handler.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-09T01:05:38Z",
+      "side": 1,
+      "message": "```suggestion\n    /// This is a helper method, awaiting on the passed in future and then\n```",
+      "revId": "a7569b92b8ba07aa897c76c7029344f0d05a8732",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8d93212f_1abbbe43",
+        "filename": "tvix/nix-compat/src/nix_daemon/handler.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-09T01:05:38Z",
+      "side": 1,
+      "message": "```suggestion\n    /// handling log lines/activities as described above.\n```",
+      "revId": "a7569b92b8ba07aa897c76c7029344f0d05a8732",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6a32bed_97c45a33",
+        "filename": "tvix/nix-compat/src/nix_daemon/handler.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-09T01:05:38Z",
+      "side": 1,
+      "message": "```suggestion\n                // by sending STDERR_LAST and then the response.\n```",
+      "revId": "a7569b92b8ba07aa897c76c7029344f0d05a8732",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bc9cd82e_257cd166",
+        "filename": "tvix/nix-compat/src/nix_daemon/handler.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-09T01:05:38Z",
+      "side": 1,
+      "message": "stray leftover",
+      "revId": "a7569b92b8ba07aa897c76c7029344f0d05a8732",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}

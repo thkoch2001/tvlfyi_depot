@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05307e2b_391db1c1",
+        "filename": "tvix/nix-compat/src/nix_daemon/worker_protocol.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 143,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-09T01:05:38Z",
+      "side": 0,
+      "message": "nice, very happy about this being much shorter now.",
+      "revId": "951d25676b8a61f3068d7d54958695739a71aa68",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
