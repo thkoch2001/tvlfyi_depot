@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce6eaab0_0f69fa52",
+        "filename": "tvix/nix-compat/src/nix_daemon/handler.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-09T15:54:18Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "e1aaf96f_2562b5f1",
+      "revId": "a7569b92b8ba07aa897c76c7029344f0d05a8732",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8d93212f_1abbbe43",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-11-09T01:05:38Z",
       "side": 1,
       "message": "```suggestion\n    /// handling log lines/activities as described above.\n```",
+      "revId": "a7569b92b8ba07aa897c76c7029344f0d05a8732",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "824bf51a_e986956d",
+        "filename": "tvix/nix-compat/src/nix_daemon/handler.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-09T15:54:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8d93212f_1abbbe43",
       "revId": "a7569b92b8ba07aa897c76c7029344f0d05a8732",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -52,6 +88,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0eb3633_fa07c768",
+        "filename": "tvix/nix-compat/src/nix_daemon/handler.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-09T15:54:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6a32bed_97c45a33",
+      "revId": "a7569b92b8ba07aa897c76c7029344f0d05a8732",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bc9cd82e_257cd166",
@@ -65,6 +119,24 @@
       "writtenOn": "2024-11-09T01:05:38Z",
       "side": 1,
       "message": "stray leftover",
+      "revId": "a7569b92b8ba07aa897c76c7029344f0d05a8732",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "571aef53_dc53e935",
+        "filename": "tvix/nix-compat/src/nix_daemon/handler.rs",
+        "patchSetId": 7
+      },
+      "lineNbr": 230,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-09T15:54:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc9cd82e_257cd166",
       "revId": "a7569b92b8ba07aa897c76c7029344f0d05a8732",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
