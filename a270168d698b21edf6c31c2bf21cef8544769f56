@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b79ab6ed_ad4e1cee",
+        "filename": "tvix/docs/src/castore/store-configuration.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-09T14:31:26Z",
+      "side": 1,
+      "message": "Only tested the last example, still need to test the others.\n\nAlso, we should probably pick either local/remote or near/far, not have this mix we currently have. Personally prefer near/far.",
+      "revId": "a270168d698b21edf6c31c2bf21cef8544769f56",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
