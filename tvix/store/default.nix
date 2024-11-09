@@ -37,7 +37,7 @@ in
   };
   passthru = old.passthru // (depot.tvix.utils.mkFeaturePowerset {
     inherit (old) crateName;
-    features = ([ "cloud" "fuse" "otlp" "tonic-reflection" "xp-store-composition" ]
+    features = ([ "cloud" "fuse" "otlp" "tonic-reflection" "xp-composition-cli" ]
       # virtiofs feature currently fails to build on Darwin
       ++ lib.optional pkgs.stdenv.isLinux "virtiofs");
     override.testPreRun = ''
