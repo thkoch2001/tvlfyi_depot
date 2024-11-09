@@ -36,6 +36,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "d5a984fe_d1a819de",
+        "filename": "tvix/nix-compat-derive/Cargo.toml",
+        "patchSetId": 10
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-09T22:50:11Z",
+      "side": 0,
+      "message": "crate2nix can\u0027t run doctests. That is why doctests are not part of presubmit. It is annoying but it is what it is.\n\nFixing the doctests will require messing with the features and probably reverting them back to how they were before this CL as well as either making parts of the code in this CL conditional on the `nix-compat-derive` feature or moving code around. So I would prefer that you fixed that before submitting this CL.\n\n`compile-tests` are a different matter. I made most of them while first writing the deriver and using `cargo` to build. It was only later that I discovered that they failed when flokli ran them on his machine and that it would require a major effort to get them to work with crate2nix so that nix could be the output they compared against. That is why they are behind a feature flag and only ever used by me. Just ignore them.",
+      "parentUuid": "1c4f4231_80cb8b85",
+      "revId": "951d25676b8a61f3068d7d54958695739a71aa68",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "05307e2b_391db1c1",
