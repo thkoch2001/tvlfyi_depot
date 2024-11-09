@@ -16,6 +16,24 @@
       "message": "Not sure how Buildkite will handle this",
       "revId": "04c8ce074eff47f4062c24998e42d25b666a5126",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c2983c9a_693aa6b2",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-09T20:17:21Z",
+      "side": 1,
+      "message": "We wont\u0027 be able to test this this way, as the `tvix` pipeline is only run /after/ this CL would be pushed to `canon`. If we want to go this path, it would need to be added to the global pipeline.\n\nI\u0027m wondering though, why don\u0027t we use the Nix build we already have and wrap it into a container image?",
+      "parentUuid": "09edb178_11c206cd",
+      "revId": "04c8ce074eff47f4062c24998e42d25b666a5126",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
