@@ -12,7 +12,7 @@ revealOptions:
 
 ![Tvix Logo](tvix-logo.png)
 
-2023-10-25
+2024-10-25
 
 Florian Klink (flokli)
 
