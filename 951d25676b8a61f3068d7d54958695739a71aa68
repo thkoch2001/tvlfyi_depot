@@ -54,6 +54,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b1d0263_67aaae7b",
+        "filename": "tvix/nix-compat-derive/Cargo.toml",
+        "patchSetId": 10
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-10T16:59:51Z",
+      "side": 0,
+      "message": "Makes sense, here\u0027s my attempt to move code around https://cl.tvl.fyi/c/depot/+/12761\n\nThe current cl is now based on that one. wdyt?",
+      "parentUuid": "d5a984fe_d1a819de",
+      "revId": "951d25676b8a61f3068d7d54958695739a71aa68",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "05307e2b_391db1c1",
