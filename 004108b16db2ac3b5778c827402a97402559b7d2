@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9b86d23d_883a6ce9",
+        "filename": "users/picnoir/tvix-daemon/src/main.rs",
+        "patchSetId": 15
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-10T19:59:55Z",
+      "side": 1,
+      "message": "cc @picnoir@alternativebit.fr",
+      "revId": "004108b16db2ac3b5778c827402a97402559b7d2",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
