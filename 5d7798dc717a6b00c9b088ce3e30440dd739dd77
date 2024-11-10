@@ -34,6 +34,24 @@
       "parentUuid": "787928c5_7842b782",
       "revId": "5d7798dc717a6b00c9b088ce3e30440dd739dd77",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ccce169a_0c5e828d",
+        "filename": "tvix/nix-compat/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-10T17:42:35Z",
+      "side": 1,
+      "message": "Good point, having looked around, apparently it\u0027s not used outside of the nix_compat crate currently, so at least removing this re-export seems like a good idea.\n\nAs for where to place the type inside the crate, one reason I moved it into `wire` is because both NixRead and NixWrite depend on it and moving the type close to where it\u0027s heavily used seemed appropriate.\n\n\u003e crate::wire::de::{NixRead, NixReader} looks ok, NAR uses the \"same\" wire encoding after all, so it\u0027s not daemon protocol specific.\n\nhm, given what I mentioned above, doesn\u0027t it make NixRead/NixWrite very daemon protocol specific?",
+      "parentUuid": "787928c5_7842b782",
+      "revId": "5d7798dc717a6b00c9b088ce3e30440dd739dd77",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
