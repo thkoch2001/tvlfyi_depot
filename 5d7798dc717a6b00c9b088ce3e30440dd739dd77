@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "787928c5_7842b782",
+        "filename": "tvix/nix-compat/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-10T17:20:39Z",
+      "side": 1,
+      "message": "Does it make sense to move/export strictly daemon protocol related things (like ProtocolVersion) into/from a mod named appropriately? nix_compat::ProtocolVersion is placed a bit too far up for external users for my taste.\n\ncrate::wire::de::{NixRead, NixReader} looks ok, NAR uses the \"same\" wire encoding after all, so it\u0027s not daemon protocol specific.",
+      "revId": "5d7798dc717a6b00c9b088ce3e30440dd739dd77",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
