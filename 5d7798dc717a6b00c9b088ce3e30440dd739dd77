@@ -52,6 +52,24 @@
       "parentUuid": "787928c5_7842b782",
       "revId": "5d7798dc717a6b00c9b088ce3e30440dd739dd77",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4066e25f_2c60b23f",
+        "filename": "tvix/nix-compat/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-10T17:46:55Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "ccce169a_0c5e828d",
+      "revId": "5d7798dc717a6b00c9b088ce3e30440dd739dd77",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
