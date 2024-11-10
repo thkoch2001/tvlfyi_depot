@@ -3,8 +3,8 @@ use tokio::io::{AsyncReadExt, AsyncWriteExt};
 use tokio_listener::{self, SystemOptions, UserOptions};
 use tracing::{debug, error, info, instrument, Level};
 
+use nix_compat::wire::ProtocolVersion;
 use nix_compat::worker_protocol::{self, server_handshake_client, ClientSettings, Trust};
-use nix_compat::ProtocolVersion;
 
 #[derive(Parser, Debug)]
 struct Cli {
