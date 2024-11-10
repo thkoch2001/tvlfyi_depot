@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "256e2356_812ae2e7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-10T08:46:34Z",
+      "side": 1,
+      "message": "We currently pick the tag from the scheme of the URL (or the part before a `+` if present). Changing this isn\u0027t really trivial without having to be specific about different implementations, and probably not worth it.\n\nIt\u0027d probably make more sense to handle Nix HTTP Binary Cache protocol and Nix Daemon Protocol substitution in some NixPathInfoService, (potentially factoring the daemon- and HTTP-specific parts in a helper lib) and dispatching based on the full scheme, but let\u0027s leave that for later once we have client code.",
+      "revId": "c46f73c004a85a7353321ccd5e8f1d41a0e046ba",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
