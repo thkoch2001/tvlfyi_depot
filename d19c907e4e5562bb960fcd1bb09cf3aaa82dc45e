@@ -16,6 +16,24 @@
       "message": "```suggestion\n                debug!(\"IO error\", err\u003d%e);\n```",
       "revId": "d19c907e4e5562bb960fcd1bb09cf3aaa82dc45e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "16d4ab3b_0effaac6",
+        "filename": "tvix/nix-compat/src/nix_daemon/handler.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-11T14:33:59Z",
+      "side": 1,
+      "message": "Fix applied. But I switched to `err\u003d?e` as it\u0027s useful to see the causal chain as opposed to the string representation of the top level error.",
+      "parentUuid": "5b3cf61f_ddccfb77",
+      "revId": "d19c907e4e5562bb960fcd1bb09cf3aaa82dc45e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
