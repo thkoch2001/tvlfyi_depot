@@ -34,6 +34,24 @@
       "parentUuid": "5b3cf61f_ddccfb77",
       "revId": "d19c907e4e5562bb960fcd1bb09cf3aaa82dc45e",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4fa342af_d20989ed",
+        "filename": "tvix/nix-compat/src/nix_daemon/handler.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-11T15:09:14Z",
+      "side": 1,
+      "message": "ok",
+      "parentUuid": "16d4ab3b_0effaac6",
+      "revId": "d19c907e4e5562bb960fcd1bb09cf3aaa82dc45e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
