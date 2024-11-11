@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b3cf61f_ddccfb77",
+        "filename": "tvix/nix-compat/src/nix_daemon/handler.rs",
+        "patchSetId": 16
+      },
+      "lineNbr": 159,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-11T08:21:20Z",
+      "side": 1,
+      "message": "```suggestion\n                debug!(\"IO error\", err\u003d%e);\n```",
+      "revId": "d19c907e4e5562bb960fcd1bb09cf3aaa82dc45e",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
