@@ -74,6 +74,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "01d2ac47_ebf52712",
+        "filename": "tvix/nix-compat-derive/Cargo.toml",
+        "patchSetId": 10
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1000082
+      },
+      "writtenOn": "2024-11-11T01:34:15Z",
+      "side": 0,
+      "message": "Looks good",
+      "parentUuid": "2b1d0263_67aaae7b",
+      "revId": "951d25676b8a61f3068d7d54958695739a71aa68",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "05307e2b_391db1c1",
         "filename": "tvix/nix-compat/src/nix_daemon/worker_protocol.rs",
         "patchSetId": 7
