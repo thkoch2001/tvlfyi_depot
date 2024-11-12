@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e0b2f71a_ddd46008",
+        "filename": "tvix/eval/src/value/string/context.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-11-12T14:08:04Z",
+      "side": 1,
+      "message": "Similar concerns to `Interner::alloc` apply here, wrt untruthful `\u0027static` lifetimes.\n\nI\u0027d probably prefer if we kept an `struct InternedStr(NonNull\u003cstr\u003e);` in here, and only created references when necessary, with more constrained lifetimes.",
+      "range": {
+        "startLine": 15,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 27
+      },
+      "revId": "a06d6cc4d40893752d581c6d027be64f6f31c29c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2439de4_56f59f48",
+        "filename": "tvix/eval/src/value/string/context.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-11-12T14:08:04Z",
+      "side": 1,
+      "message": "This feels a bit iffy. I\u0027d feel more comfortable doing this more directly, rather than using String and then having to work around the automatic capacity growth.\n\n`Box\u003cUnsafeCell\u003c[MaybeUninit\u003cu8\u003e]\u003e\u003e` would do the trick, but just dealing with alloc and a `*mut u8` might be more straightforward overall.\n\nAlternatively, `typed_arena::Arena::\u003cu8\u003e::alloc_str()` might be exactly what we want here.",
+      "range": {
+        "startLine": 53,
+        "startChar": 0,
+        "endLine": 58,
+        "endChar": 9
+      },
+      "revId": "a06d6cc4d40893752d581c6d027be64f6f31c29c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fdcb69c4_286508b1",
+        "filename": "tvix/eval/src/value/string/context.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1000005
+      },
+      "writtenOn": "2024-11-12T14:08:04Z",
+      "side": 1,
+      "message": "I\u0027m not totally sure this holds up: we might be invoking UB the moment we *create* the reference, depending on how the unsafe code guidelines evolve.\n\nStyle-wise, I\u0027d rather return a `ptr::NonNull\u003cstr\u003e` or `*const str` and have `Interner::lookup` take responsibility for the deref/borrow safety.",
+      "range": {
+        "startLine": 73,
+        "startChar": 0,
+        "endLine": 75,
+        "endChar": 36
+      },
+      "revId": "a06d6cc4d40893752d581c6d027be64f6f31c29c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
