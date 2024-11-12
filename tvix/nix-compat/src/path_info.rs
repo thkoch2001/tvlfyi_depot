@@ -15,7 +15,7 @@ pub struct ExportedPathInfo<'a> {
     #[serde(
         rename = "narHash",
         serialize_with = "to_nix_nixbase32_string",
-        deserialize_with = "from_nix_nixbase32_string"
+        deserialize_with = "from_nix_hash_string"
     )]
     pub nar_sha256: [u8; 32],
 
@@ -24,6 +24,10 @@ pub struct ExportedPathInfo<'a> {
 
     #[serde(borrow)]
     pub path: StorePathRef<'a>,
+
+    #[serde(borrow)]
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub deriver: Option<StorePathRef<'a>>,
 
     /// The list of other Store Paths this Store Path refers to.
     /// StorePathRef does Ord by the nixbase32-encoded string repr, so this is correct.
@@ -56,18 +60,49 @@ where
 /// The length of a sha256 digest, nixbase32-encoded.
 const NIXBASE32_SHA256_ENCODE_LEN: usize = nixbase32::encode_len(32);
 
-fn from_nix_nixbase32_string<'de, D>(deserializer: D) -> Result<[u8; 32], D::Error>
+fn from_nix_hash_string<'de, D>(deserializer: D) -> Result<[u8; 32], D::Error>
 where
     D: serde::Deserializer<'de>,
 {
     let str: &'de str = Deserialize::deserialize(deserializer)?;
+    if let Some(digest_str) = str.strip_prefix("sha256:") {
+        return from_nix_nixbase32_string::<D>(digest_str);
+    }
+    if let Some(digest_str) = str.strip_prefix("sha256-") {
+        return from_sri_string::<D>(digest_str);
+    }
+    Err(serde::de::Error::invalid_value(
+        serde::de::Unexpected::Str(str),
+        &"extected a valid nixbase32 or sri narHash",
+    ))
+}
 
-    let digest_str = str.strip_prefix("sha256:").ok_or_else(|| {
-        serde::de::Error::invalid_value(serde::de::Unexpected::Str(str), &"sha256:…")
-    })?;
+fn from_sri_string<'de, D>(str: &str) -> Result<[u8; 32], D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
+    let digest: [u8; 32] = data_encoding::BASE64
+        .decode(str.as_bytes())
+        .map_err(|_| {
+            serde::de::Error::invalid_value(
+                serde::de::Unexpected::Str(str),
+                &"valid base64 encoded string",
+            )
+        })?
+        .try_into()
+        .map_err(|_| {
+            serde::de::Error::invalid_value(serde::de::Unexpected::Str(str), &"valid digest len")
+        })?;
 
+    Ok(digest)
+}
+
+fn from_nix_nixbase32_string<'de, D>(str: &str) -> Result<[u8; 32], D::Error>
+where
+    D: serde::Deserializer<'de>,
+{
     let digest_str: [u8; NIXBASE32_SHA256_ENCODE_LEN] =
-        digest_str.as_bytes().try_into().map_err(|_| {
+        str.as_bytes().try_into().map_err(|_| {
             serde::de::Error::invalid_value(serde::de::Unexpected::Str(str), &"valid digest len")
         })?;
 
@@ -110,8 +145,45 @@ mod tests {
                     b"7n0mbqydcipkpbxm24fab066lxk68aqk-libunistring-1.1"
                 )
                 .expect("must parse"),
+                deriver: None,
                 references: BTreeSet::from_iter([StorePathRef::from_bytes(
                     b"7n0mbqydcipkpbxm24fab066lxk68aqk-libunistring-1.1"
+                )
+                .unwrap()]),
+            },
+            deserialized.first().unwrap()
+        );
+    }
+
+    /// Ensure we can parse output from `nix path-info --json``
+    #[test]
+    fn serialize_deserialize_from_path_info() {
+        // JSON extracted from
+        // nix path-info /nix/store/zmzarv9pn8mi1acr2i7g4qmwka3kl27h-rust_rand_core-0.6.4-lib --json --closure-size
+        let pathinfos_str_json = r#"[{"closureSize":178936,"deriver":"/nix/store/lgw3xwapipmqgxfgjqvr8p6fzckhl75z-rust_rand_core-0.6.4.drv","narHash":"sha256-hVLDi2kw9pnON5NKEBKtIx5d7gyjWlSp/cqPeni5U/4=","narSize":178840,"path":"/nix/store/zmzarv9pn8mi1acr2i7g4qmwka3kl27h-rust_rand_core-0.6.4-lib","references":["/nix/store/66gxkfn164kh19wkkk6hmys1k9bh1g30-rust_rand_core-0.6.4"],"registrationTime":1730861057,"ultimate":true,"valid":true}]"#;
+
+        let deserialized: BTreeSet<ExportedPathInfo> =
+            serde_json::from_str(pathinfos_str_json).expect("must serialize");
+
+        assert_eq!(
+            &ExportedPathInfo {
+                closure_size: 178936,
+                nar_sha256: hex!(
+                    "8552c38b6930f699ce37934a1012ad231e5dee0ca35a54a9fdca8f7a78b953fe"
+                ),
+                nar_size: 178840,
+                path: StorePathRef::from_bytes(
+                    b"zmzarv9pn8mi1acr2i7g4qmwka3kl27h-rust_rand_core-0.6.4-lib"
+                )
+                .expect("must parse"),
+                deriver: Some(
+                    StorePathRef::from_bytes(
+                        b"lgw3xwapipmqgxfgjqvr8p6fzckhl75z-rust_rand_core-0.6.4.drv"
+                    )
+                    .expect("must parse")
+                ),
+                references: BTreeSet::from_iter([StorePathRef::from_bytes(
+                    b"66gxkfn164kh19wkkk6hmys1k9bh1g30-rust_rand_core-0.6.4"
                 )
                 .unwrap()]),
             },

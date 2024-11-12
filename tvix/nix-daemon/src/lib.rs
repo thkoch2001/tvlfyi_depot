@@ -5,6 +5,7 @@ use nix_compat::{
     nixbase32,
     store_path::StorePath,
 };
+use tracing::info;
 use tvix_store::{path_info::PathInfo, pathinfoservice::PathInfoService};
 
 #[allow(dead_code)]
@@ -24,9 +25,16 @@ impl NixDaemonIO for TvixDaemon {
         &self,
         path: &StorePath<String>,
     ) -> Result<Option<UnkeyedValidPathInfo>> {
+        info!(path = ?path.to_absolute_path(), "querying path");
         match self.path_info_service.get(*path.digest()).await? {
-            Some(path_info) => Ok(Some(into_unkeyed_path_info(path_info))),
-            None => Ok(None),
+            Some(path_info) => {
+                info!("found");
+                Ok(Some(into_unkeyed_path_info(path_info)))
+            }
+            None => {
+                info!("not found");
+                Ok(None)
+            }
         }
     }
 }
