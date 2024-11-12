@@ -22,6 +22,30 @@
       },
       "revId": "626f729e25661c18f30156c2a8bf39308de46179",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bc21279f_27f40d20",
+        "filename": "tvix/nix-compat/src/nix_daemon/types.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-12T17:03:25Z",
+      "side": 1,
+      "message": "We might need to move some of the io.query_path_info() calls to more explicit trait methods in the future, and then can expose this as a boolean in the function signature. But this can indeed happen at a later point.",
+      "parentUuid": "e20a52bd_fb7f92d6",
+      "range": {
+        "startLine": 176,
+        "startChar": 8,
+        "endLine": 176,
+        "endChar": 25
+      },
+      "revId": "626f729e25661c18f30156c2a8bf39308de46179",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }

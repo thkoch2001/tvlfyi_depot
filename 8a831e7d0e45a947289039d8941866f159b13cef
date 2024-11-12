@@ -108,6 +108,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a928d3e5_97205b11",
+        "filename": "tvix/nix-compat/src/nix_daemon/handler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-12T17:03:25Z",
+      "side": 1,
+      "message": "I\u0027m fine with having some noop impl here to make it work with the overlay usecase, but I think we should move it into a separate commit (and log a warn! or something whenever this is called). These are two separate things.",
+      "parentUuid": "7cab4d9f_13b8ced2",
+      "revId": "8a831e7d0e45a947289039d8941866f159b13cef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d51a0268_0943ae52",
         "filename": "tvix/nix-compat/src/nix_daemon/types.rs",
         "patchSetId": 2
