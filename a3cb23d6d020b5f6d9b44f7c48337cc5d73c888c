@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1597b0b_b7c7731b",
+        "filename": "tvix/nix-daemon/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-12T15:25:22Z",
+      "side": 1,
+      "message": "#instrument the method to add the path field, and maybe use ret with debug level instead of all the info calls?\n\nProbably unrelated to this CL too.",
+      "revId": "a3cb23d6d020b5f6d9b44f7c48337cc5d73c888c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "69323bbc_6f30b448",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-12T15:25:22Z",
+      "side": 1,
+      "message": "stray debug leftover",
+      "revId": "a3cb23d6d020b5f6d9b44f7c48337cc5d73c888c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b27feb6f_6a4606ab",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-12T15:25:22Z",
+      "side": 1,
+      "message": "huh, was this a bug? if so, make this a separate fix CL please.",
+      "revId": "a3cb23d6d020b5f6d9b44f7c48337cc5d73c888c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
