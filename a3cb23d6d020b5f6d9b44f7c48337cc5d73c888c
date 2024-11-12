@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "563e2870_9d91ecfc",
+        "filename": "tvix/nix-daemon/src/lib.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-12T15:37:40Z",
+      "side": 1,
+      "message": "oops, removed",
+      "parentUuid": "c1597b0b_b7c7731b",
+      "revId": "a3cb23d6d020b5f6d9b44f7c48337cc5d73c888c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "69323bbc_6f30b448",
@@ -35,6 +53,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ce7cc819_2b9b93cd",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-12T15:37:40Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "69323bbc_6f30b448",
+      "revId": "a3cb23d6d020b5f6d9b44f7c48337cc5d73c888c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b27feb6f_6a4606ab",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-11-12T15:25:22Z",
       "side": 1,
       "message": "huh, was this a bug? if so, make this a separate fix CL please.",
+      "revId": "a3cb23d6d020b5f6d9b44f7c48337cc5d73c888c",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f9f4f4ac_dc4b7114",
+        "filename": "tvix/store/src/bin/tvix-store.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 448,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-12T15:37:40Z",
+      "side": 1,
+      "message": "That\u0027s what I thought too, but then I read this [1], where it mentions that the deriver is always empty in `exportReferencesGraph`. So from that perspective it\u0027s a new feature, since `nix path-info` does return the deriver.\n\nAlso just added signature ingestion as well\n\n[1] https://nix.dev/manual/nix/2.18/language/advanced-attributes#adv-attr-exportReferencesGraph",
+      "parentUuid": "b27feb6f_6a4606ab",
       "revId": "a3cb23d6d020b5f6d9b44f7c48337cc5d73c888c",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
