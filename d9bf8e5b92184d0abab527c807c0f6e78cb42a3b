@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "76ad3e31_a064d51b",
+        "filename": "tvix/docs/src/castore/store-configuration.md",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1000090
+      },
+      "writtenOn": "2024-11-12T00:38:35Z",
+      "side": 1,
+      "message": "```suggestion\n   (`ServiceUrls`).\n```\n\nIt uses ServiceUrls actually not ServiceUrlsMemory",
+      "revId": "d9bf8e5b92184d0abab527c807c0f6e78cb42a3b",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
