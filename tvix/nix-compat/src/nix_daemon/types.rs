@@ -153,7 +153,7 @@ impl NixSerialize for Option<StorePath<String>> {
     }
 }
 
-#[derive(NixSerialize, Debug)]
+#[derive(NixSerialize, Debug, Clone, Default, PartialEq)]
 pub struct UnkeyedValidPathInfo {
     pub deriver: Option<StorePath<String>>,
     pub nar_hash: String,
@@ -165,5 +165,13 @@ pub struct UnkeyedValidPathInfo {
     pub ca: Option<CAHash>,
 }
 
-#[cfg(test)]
-mod tests {}
+/// Request tupe for [super::worker_protocol::Operation::QueryValidPaths]
+#[derive(NixDeserialize)]
+pub struct QueryValidPaths {
+    // Paths to query
+    pub paths: Vec<StorePath<String>>,
+
+    // Whether to try and substitute the paths.
+    #[nix(version = "27..")]
+    pub substitute: bool,
+}

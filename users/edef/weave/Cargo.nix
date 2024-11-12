@@ -2930,6 +2930,11 @@ rec {
             packageId = "enum-primitive-derive";
           }
           {
+            name = "futures";
+            packageId = "futures";
+            optional = true;
+          }
+          {
             name = "glob";
             packageId = "glob";
           }
@@ -2989,6 +2994,10 @@ rec {
         ];
         devDependencies = [
           {
+            name = "futures";
+            packageId = "futures";
+          }
+          {
             name = "mimalloc";
             packageId = "mimalloc";
           }
@@ -3000,14 +3009,15 @@ rec {
         features = {
           "async" = [ "tokio" ];
           "bytes" = [ "dep:bytes" ];
-          "daemon" = [ "tokio" "nix-compat-derive" ];
+          "daemon" = [ "tokio" "nix-compat-derive" "futures" ];
           "default" = [ "async" "daemon" "wire" "nix-compat-derive" ];
+          "futures" = [ "dep:futures" ];
           "nix-compat-derive" = [ "dep:nix-compat-derive" ];
           "pin-project-lite" = [ "dep:pin-project-lite" ];
           "tokio" = [ "dep:tokio" ];
           "wire" = [ "tokio" "pin-project-lite" "bytes" ];
         };
-        resolvedDefaultFeatures = [ "async" "bytes" "daemon" "default" "nix-compat-derive" "pin-project-lite" "tokio" "wire" ];
+        resolvedDefaultFeatures = [ "async" "bytes" "daemon" "default" "futures" "nix-compat-derive" "pin-project-lite" "tokio" "wire" ];
       };
       "nix-compat-derive" = rec {
         crateName = "nix-compat-derive";
