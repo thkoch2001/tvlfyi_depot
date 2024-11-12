@@ -70,6 +70,24 @@
       "parentUuid": "cced63f4_59af561c",
       "revId": "04c8ce074eff47f4062c24998e42d25b666a5126",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8003d8d_fc5236b0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-12T09:00:53Z",
+      "side": 1,
+      "message": "\u003e Are there any plans to make the Nix builds work in https://github.com/tvlfyi/tvix?\n\nYes, I\u0027d like this to work, but making the Nix code work requires some custom fixpoint magic when setting up the readTree hierarchy, and ensuring everything used from depot is actually exported in the josh export too.\n\n\u003e any repo users can now easily build the project, even if they are not familiar with Nix yet.\n\nI\u0027m not sure supporting \"building without Nix installed\" is a goal right now - there\u0027s too many moving variables on how this could break.\nI\u0027d rather spend some time getting the Nix expressions to work in the export, then there\u0027ll be one canonical build.\n\nWe can start having the dockerTools call just inside the tvix/nar-bridge/default.nix, and once the Nix expressions are exported too, ensure this works as well.",
+      "parentUuid": "f2dbdac0_b8e61cbd",
+      "revId": "04c8ce074eff47f4062c24998e42d25b666a5126",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
