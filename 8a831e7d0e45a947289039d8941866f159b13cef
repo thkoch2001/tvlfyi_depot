@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3cf0ab89_1ad61227",
+        "filename": "tvix/nix-compat/Cargo.toml",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-12T11:55:06Z",
+      "side": 1,
+      "message": "Can be gated on the `daemon` feature, otherwise fine with the dependency.",
+      "revId": "8a831e7d0e45a947289039d8941866f159b13cef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cf4ea915_c72c1e8d",
+        "filename": "tvix/nix-compat/src/nix_daemon/handler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-12T11:55:06Z",
+      "side": 1,
+      "message": "Can we add a docstring here mentioning this needs to maintain order, and that\u0027s why we use try_join_all.",
+      "revId": "8a831e7d0e45a947289039d8941866f159b13cef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "72b57066_84669802",
+        "filename": "tvix/nix-compat/src/nix_daemon/handler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-12T11:55:06Z",
+      "side": 1,
+      "message": "Let\u0027s leave `Operation::QueryReferrers | Operation::QueryRealisation` for a followup CL, this one can just leave it unimplemented (slightly updating the commit message of course, as it mentions that\u0027s all for local overlay store)",
+      "revId": "8a831e7d0e45a947289039d8941866f159b13cef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d51a0268_0943ae52",
+        "filename": "tvix/nix-compat/src/nix_daemon/types.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-12T11:55:06Z",
+      "side": 1,
+      "message": "Add a docstring here that this is the request from the QueryValidPaths option, and mention that the returned responses need to match request order in paths.",
+      "revId": "8a831e7d0e45a947289039d8941866f159b13cef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
