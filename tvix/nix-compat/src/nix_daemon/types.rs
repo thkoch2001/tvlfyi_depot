@@ -165,5 +165,10 @@ pub struct UnkeyedValidPathInfo {
     pub ca: Option<CAHash>,
 }
 
-#[cfg(test)]
-mod tests {}
+#[derive(NixDeserialize)]
+pub struct QueryValidPaths {
+    pub paths: Vec<StorePath<String>>,
+
+    #[nix(version = "27..")]
+    pub substitute: bool,
+}
