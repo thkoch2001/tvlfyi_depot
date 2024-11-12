@@ -124,6 +124,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd32b3ff_4b5045cc",
+        "filename": "tvix/nix-compat/src/nix_daemon/handler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-12T17:33:22Z",
+      "side": 1,
+      "message": "sg, removed from this cl for now",
+      "parentUuid": "a928d3e5_97205b11",
+      "revId": "8a831e7d0e45a947289039d8941866f159b13cef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d51a0268_0943ae52",
