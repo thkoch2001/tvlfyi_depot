@@ -52,6 +52,24 @@
       "parentUuid": "c2983c9a_693aa6b2",
       "revId": "04c8ce074eff47f4062c24998e42d25b666a5126",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f2dbdac0_b8e61cbd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1000058
+      },
+      "writtenOn": "2024-11-12T08:33:46Z",
+      "side": 1,
+      "message": "Are there any plans to make the Nix builds work in https://github.com/tvlfyi/tvix? That\u0027s why I went with the Dockerfile: any repo users can now easily build the project, even if they are not familiar with Nix yet.\n\nAs a follow-up, I could add a .github/workflows/docker-push.yml that gets triggered on pushes to master, builds, and publishes the images to Github. It won\u0027t be tested on Gerrit, though.",
+      "parentUuid": "cced63f4_59af561c",
+      "revId": "04c8ce074eff47f4062c24998e42d25b666a5126",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }
   ]
 }
