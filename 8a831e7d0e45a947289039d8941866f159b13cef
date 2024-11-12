@@ -18,6 +18,24 @@
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d0512407_be93a7a8",
+        "filename": "tvix/nix-compat/Cargo.toml",
+        "patchSetId": 2
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-12T13:52:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3cf0ab89_1ad61227",
+      "revId": "8a831e7d0e45a947289039d8941866f159b13cef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf4ea915_c72c1e8d",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-11-12T11:55:06Z",
       "side": 1,
       "message": "Can we add a docstring here mentioning this needs to maintain order, and that\u0027s why we use try_join_all.",
+      "revId": "8a831e7d0e45a947289039d8941866f159b13cef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "824f104c_b1d81575",
+        "filename": "tvix/nix-compat/src/nix_daemon/handler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 144,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-12T13:52:05Z",
+      "side": 1,
+      "message": "If I am reading the docs correctly, both join_all and try_join_all preserve the order, additionally I am not sure that nix requires for the response to have the paths in the same order as received(even though it will be the case here).\n\nAdded a comment explaining the use of try_join_all() instead of join_all()",
+      "parentUuid": "cf4ea915_c72c1e8d",
       "revId": "8a831e7d0e45a947289039d8941866f159b13cef",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     },
@@ -54,6 +90,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "7cab4d9f_13b8ced2",
+        "filename": "tvix/nix-compat/src/nix_daemon/handler.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-12T13:52:05Z",
+      "side": 1,
+      "message": "I\u0027d prefer to actually have these ops not to return the \"not implemented\" error to the client as explained in the updated comment. wdyt?",
+      "parentUuid": "72b57066_84669802",
+      "revId": "8a831e7d0e45a947289039d8941866f159b13cef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d51a0268_0943ae52",
         "filename": "tvix/nix-compat/src/nix_daemon/types.rs",
         "patchSetId": 2
@@ -65,6 +119,24 @@
       "writtenOn": "2024-11-12T11:55:06Z",
       "side": 1,
       "message": "Add a docstring here that this is the request from the QueryValidPaths option, and mention that the returned responses need to match request order in paths.",
+      "revId": "8a831e7d0e45a947289039d8941866f159b13cef",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c371ed2c_f080c465",
+        "filename": "tvix/nix-compat/src/nix_daemon/types.rs",
+        "patchSetId": 2
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-12T13:52:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d51a0268_0943ae52",
       "revId": "8a831e7d0e45a947289039d8941866f159b13cef",
       "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
     }

@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e20a52bd_fb7f92d6",
+        "filename": "tvix/nix-compat/src/nix_daemon/types.rs",
+        "patchSetId": 3
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 1000161
+      },
+      "writtenOn": "2024-11-12T13:52:05Z",
+      "side": 1,
+      "message": "Unsure how this will work in the future, but for now it\u0027s ignored.",
+      "range": {
+        "startLine": 176,
+        "startChar": 8,
+        "endLine": 176,
+        "endChar": 25
+      },
+      "revId": "626f729e25661c18f30156c2a8bf39308de46179",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
