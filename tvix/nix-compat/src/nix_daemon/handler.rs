@@ -1,5 +1,6 @@
 use std::{future::Future, sync::Arc};
 
+use futures::future::try_join_all;
 use tokio::{
     io::{split, AsyncReadExt, AsyncWriteExt, ReadHalf, WriteHalf},
     sync::Mutex,
@@ -7,6 +8,7 @@ use tokio::{
 use tracing::debug;
 
 use super::{
+    types::{QueryValidPaths, UnkeyedValidPathInfo},
     worker_protocol::{server_handshake_client, ClientSettings, Operation, Trust, STDERR_LAST},
     NixDaemonIO,
 };
@@ -126,6 +128,52 @@ where
                     Operation::IsValidPath => {
                         let path: StorePath<String> = self.reader.read_value().await?;
                         self.handle(async { Ok(io.query_path_info(&path).await?.is_some()) })
+                            .await?
+                    }
+                    Operation::QueryPathFromHashPart => {
+                        let hash: String = self.reader.read_value().await?;
+                        let store_path = format!("{hash}-ignored");
+                        let path = StorePath::<String>::from_bytes(store_path.as_bytes())
+                            .map_err(|e| std::io::Error::other(e.to_string()))?;
+
+                        self.handle(io.query_path_info(&path)).await?
+                    }
+                    Operation::QueryValidPaths => {
+                        let query: QueryValidPaths = self.reader.read_value().await?;
+                        self.handle(async {
+                            // Using try_join_all here to avoid returning partial results to the client.
+                            // The only reason query_path_info can fail is due to transient IO errors,
+                            // so we return such errors to the client as opposed to only returning paths
+                            // that succeeded.
+                            let result = try_join_all(
+                                query.paths.iter().map(|path| io.query_path_info(path)),
+                            )
+                            .await?;
+                            let result: Vec<UnkeyedValidPathInfo> =
+                                result.into_iter().flatten().collect();
+                            Ok(result)
+                        })
+                        .await?
+                    }
+                    Operation::QueryValidDerivers => {
+                        let path: StorePath<String> = self.reader.read_value().await?;
+                        self.handle(async {
+                            let result = io.query_path_info(&path).await?;
+                            let result: Vec<_> =
+                                result.into_iter().filter_map(|info| info.deriver).collect();
+                            Ok(result)
+                        })
+                        .await?
+                    }
+                    // FUTUREWORK: These are just stubs that return an empty list.
+                    // It's important not to return an error for the local-overlay:// store
+                    // to work properly. While it will not see certain referrers and realizations
+                    // it will not fail on various operations like gc and optimize store. At the
+                    // same time, returning an empty list here shouldn't break any of local-overlay store's
+                    // invariants.
+                    Operation::QueryReferrers | Operation::QueryRealisation => {
+                        let _: String = self.reader.read_value().await?;
+                        self.handle(async move { Ok(Vec::<StorePath<String>>::new()) })
                             .await?
                     }
                     _ => {

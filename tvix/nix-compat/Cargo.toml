@@ -23,6 +23,7 @@ data-encoding = { workspace = true }
 ed25519 = { workspace = true }
 ed25519-dalek = { workspace = true }
 enum-primitive-derive = { workspace = true }
+futures = { workspace = true }
 glob = { workspace = true }
 mimalloc = { workspace = true }
 nom = { workspace = true }

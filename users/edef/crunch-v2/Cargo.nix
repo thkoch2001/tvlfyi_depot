@@ -4121,6 +4121,10 @@ rec {
             packageId = "enum-primitive-derive";
           }
           {
+            name = "futures";
+            packageId = "futures";
+          }
+          {
             name = "glob";
             packageId = "glob";
           }
@@ -4179,6 +4183,10 @@ rec {
           }
         ];
         devDependencies = [
+          {
+            name = "futures";
+            packageId = "futures";
+          }
           {
             name = "mimalloc";
             packageId = "mimalloc";
