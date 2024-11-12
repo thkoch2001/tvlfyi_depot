@@ -1008,6 +1008,7 @@ dependencies = [
  "ed25519",
  "ed25519-dalek",
  "enum-primitive-derive",
+ "futures",
  "glob",
  "mimalloc",
  "nix-compat-derive",
