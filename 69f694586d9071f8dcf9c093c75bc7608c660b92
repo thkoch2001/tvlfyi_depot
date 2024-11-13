@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cd34c6c6_c23ce4a1",
+        "filename": "tvix/nix-compat/src/nix_daemon/handler.rs",
+        "patchSetId": 4
+      },
+      "lineNbr": 154,
+      "author": {
+        "id": 1000036
+      },
+      "writtenOn": "2024-11-13T21:29:36Z",
+      "side": 1,
+      "message": "I\u0027d rather prefer this to be calling out to other methods from NixDaemonIO, and do all the necessary serialization/deserialization here, but as a stopgap this is probably fine.",
+      "revId": "69f694586d9071f8dcf9c093c75bc7608c660b92",
+      "serverId": "4fdfa107-4df9-4596-8e0a-1d2bbdd96e36"
+    }
+  ]
+}
