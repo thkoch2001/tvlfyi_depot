@@ -61,6 +61,10 @@ let
 
     # mypaint is broken on stable (2024-09-05)
     mypaint = stableNixpkgs.mypaint;
+
+    # pcsclite doesn't recognise yubikeys on unstable (2024-10-30)
+    libfido2 = stableNixpkgs.libfido2;
+    pcsclite = stableNixpkgs.pcsclite;
   };
 
   # Overlay to expose the nixpkgs commits we are using to other Nix code.
